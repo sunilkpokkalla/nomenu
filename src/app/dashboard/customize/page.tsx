@@ -50,6 +50,8 @@ export default async function CustomizePage({
           theme_style: restaurant.theme_style,
           wifi_password: restaurant.wifi_password,
           plan: restaurant.plan,
+          address: restaurant.address,
+          phone: restaurant.phone,
         }}
         action={updateRestaurantBranding}
         successMessage={searchParams.success}

@@ -18,6 +18,8 @@ interface BrandingFormProps {
     theme_style: string | null;
     wifi_password: string | null;
     plan: string | null;
+    address: string | null;
+    phone: string | null;
   };
   action: (formData: FormData) => Promise<void>;
   successMessage?: string;
