@@ -13,11 +13,11 @@ export default async function SignupPage(
 ) {
   const searchParams = await props.searchParams;
   return (
-    <main className="flex min-h-screen bg-[#FFF4ED]">
+    <main className="flex min-h-screen bg-slate-50">
       {/* LEFT SIDE - SOCIAL PROOF */}
       <div className="hidden lg:flex lg:w-[55%] flex-col justify-center items-center relative overflow-hidden p-12">
         {/* Soft glowing orb behind */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-400/20 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px]" />
         
         <div className="relative z-10 w-full max-w-lg text-center space-y-16">
           {/* Main Review */}
@@ -28,7 +28,7 @@ export default async function SignupPage(
 
           {/* Review 1 */}
           <div className="space-y-4">
-            <div className="flex justify-center items-center gap-1.5 text-[#F97316]">
+            <div className="flex justify-center items-center gap-1.5 text-amber-400">
               <Star className="w-6 h-6 fill-current" />
               <Star className="w-6 h-6 fill-current" />
               <Star className="w-6 h-6 fill-current" />
@@ -43,7 +43,7 @@ export default async function SignupPage(
 
           {/* Review 2 */}
           <div className="space-y-4 pt-4">
-            <div className="flex justify-center items-center gap-1 text-[#F97316]">
+            <div className="flex justify-center items-center gap-1 text-amber-400">
               <Star className="w-5 h-5 fill-current" />
               <Star className="w-5 h-5 fill-current" />
               <Star className="w-5 h-5 fill-current" />
@@ -83,15 +83,15 @@ export default async function SignupPage(
         {/* White Card */}
         <div className="w-full max-w-[480px] bg-white rounded-xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 sm:p-12 z-10">
           <div className="flex flex-col items-center mb-8">
-            <div className="flex items-center gap-3 text-[#F97316] mb-8">
-              <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#F97316] text-white shadow-sm">
+            <div className="flex items-center gap-3 text-primary mb-8">
+              <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-white shadow-sm">
                 <QrCode className="h-7 w-7" />
               </span>
-              <span className="text-2xl font-bold text-[#F97316]">NoMenu</span>
+              <span className="text-2xl font-bold text-primary">NoMenu</span>
             </div>
             <h1 className="text-[1.75rem] font-normal text-slate-800 mb-3">Sign Up for Free</h1>
             <p className="text-center text-sm text-slate-500 px-4">
-              By clicking Continue, you agree to our <Link href="#" className="text-[#F97316] hover:underline">Terms of Service</Link> and our <Link href="#" className="text-[#F97316] hover:underline">Privacy Policy</Link>.
+              By clicking Continue, you agree to our <Link href="#" className="text-primary hover:underline">Terms of Service</Link> and our <Link href="#" className="text-primary hover:underline">Privacy Policy</Link>.
             </p>
           </div>
 
@@ -101,16 +101,15 @@ export default async function SignupPage(
             </div>
           )}
 
-
           <form action={signup} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="restaurantName" className="text-slate-600 font-normal">Restaurant Name</Label>
-              <Input id="restaurantName" name="restaurantName" placeholder="My Awesome Restaurant" className="h-12 shadow-sm border-slate-200 focus-visible:ring-[#F97316] text-base px-4" required />
+              <Input id="restaurantName" name="restaurantName" placeholder="My Awesome Restaurant" className="h-12 shadow-sm border-slate-200 focus-visible:ring-primary text-base px-4" required />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-slate-600 font-normal">Email Address</Label>
-              <Input id="email" name="email" type="email" placeholder="name@email.com" className="h-12 shadow-sm border-slate-200 focus-visible:ring-[#F97316] text-base px-4" required />
+              <Input id="email" name="email" type="email" placeholder="name@email.com" className="h-12 shadow-sm border-slate-200 focus-visible:ring-primary text-base px-4" required />
             </div>
 
             <div className="space-y-2">
@@ -120,20 +119,20 @@ export default async function SignupPage(
                 name="password"
                 type="password"
                 placeholder="••••••••"
-                className="h-12 shadow-sm border-slate-200 focus-visible:ring-[#F97316] text-base px-4"
+                className="h-12 shadow-sm border-slate-200 focus-visible:ring-primary text-base px-4"
                 minLength={8}
                 required
               />
             </div>
 
-            <Button type="submit" className="w-full h-12 bg-[#F97316] hover:bg-[#EA580C] text-white font-medium text-base mt-4 shadow-sm">
+            <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-medium text-base mt-4 shadow-sm">
               CONTINUE
             </Button>
           </form>
 
           <p className="mt-8 text-center text-sm text-slate-800 font-medium">
             Already have an account?{" "}
-            <Link href="/login" className="text-[#F97316] hover:underline font-medium">
+            <Link href="/login" className="text-primary hover:underline font-medium">
               Log in
             </Link>
           </p>
@@ -141,4 +140,3 @@ export default async function SignupPage(
       </div>
     </main>
   );
-}
