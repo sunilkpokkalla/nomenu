@@ -67,7 +67,7 @@ export default async function LoginPage(
         
         {/* Footer info */}
         <div className="absolute bottom-8 left-12 text-slate-400 text-sm">
-          ©NoMenu LLC
+          ©AmBrightTech LLC
         </div>
       </div>
 
