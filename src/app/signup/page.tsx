@@ -57,17 +57,17 @@ export default async function SignupPage(
           </div>
 
           {/* Trusted By */}
-          <div className="pt-10 flex flex-col items-center justify-center gap-6 text-slate-400 font-medium text-sm uppercase tracking-wider">
-             <span>Trusted by top restaurants</span>
-             <div className="flex items-center gap-10 opacity-60 grayscale transition-all hover:grayscale-0 hover:opacity-100 duration-500">
+          <div className="pt-10 flex items-center justify-center gap-8 text-slate-400 font-medium text-sm uppercase tracking-wider w-full">
+             <span className="shrink-0">Trusted by</span>
+             <div className="flex items-center gap-8 opacity-60 grayscale transition-all hover:grayscale-0 hover:opacity-100 duration-500">
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg" alt="McDonalds" className="h-8 w-auto" />
+               <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg" alt="McDonalds" className="h-6 w-auto" />
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://upload.wikimedia.org/wikipedia/en/d/d3/Starbucks_Corporation_Logo_2011.svg" alt="Starbucks" className="h-10 w-auto" />
+               <img src="https://upload.wikimedia.org/wikipedia/en/d/d3/Starbucks_Corporation_Logo_2011.svg" alt="Starbucks" className="h-8 w-auto" />
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Subway_2016_logo.svg" alt="Subway" className="h-5 w-auto" />
+               <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Subway_2016_logo.svg" alt="Subway" className="h-4 w-auto" />
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Dominos_pizza_logo.svg" alt="Dominos" className="h-8 w-auto" />
+               <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Dominos_pizza_logo.svg" alt="Dominos" className="h-7 w-auto" />
              </div>
           </div>
         </div>
