@@ -91,7 +91,7 @@ export default async function LoginPage(
             </div>
             <h1 className="text-[1.75rem] font-normal text-slate-800 mb-3">Log in to your account</h1>
             <p className="text-center text-sm text-slate-500 px-4">
-              By clicking Continue, you agree to our <Link href="#" className="text-primary hover:underline">Terms of Service</Link> and our <Link href="#" className="text-primary hover:underline">Privacy Policy</Link>.
+              By clicking Continue, you agree to our <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link> and our <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>.
             </p>
           </div>
 
