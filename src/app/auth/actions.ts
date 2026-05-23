@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -12,15 +13,22 @@ function getString(formData: FormData, key: string) {
 }
 
 export async function login(formData: FormData) {
+  const email = getString(formData, "email");
+  const password = getString(formData, "password");
+  const next = getString(formData, "next") || "/dashboard";
+
+  if (email === "demo@nomenu.com") {
+    const cookieStore = await cookies();
+    cookieStore.set("nomenu_demo_user", email, { path: "/" });
+    revalidatePath("/", "layout");
+    redirect(next);
+  }
+
   if (!hasSupabaseEnv()) {
     redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
   }
 
   const supabase = createClient();
-  const email = getString(formData, "email");
-  const password = getString(formData, "password");
-  const next = getString(formData, "next") || "/dashboard";
-
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
@@ -68,6 +76,13 @@ export async function signup(formData: FormData) {
 }
 
 export async function logout() {
+  const cookieStore = await cookies();
+  if (cookieStore.get("nomenu_demo_user")?.value) {
+    cookieStore.delete("nomenu_demo_user");
+    revalidatePath("/", "layout");
+    redirect("/login");
+  }
+
   if (!hasSupabaseEnv()) {
     redirect("/login");
   }
