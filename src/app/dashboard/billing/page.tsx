@@ -52,11 +52,12 @@ const PLANS = [
   },
 ];
 
-export default async function BillingPage({
-  searchParams,
-}: {
-  searchParams: { message?: string; success?: string };
-}) {
+export default async function BillingPage(
+  props: {
+    searchParams: Promise<{ message?: string; success?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const {
     data: { user },

@@ -4,11 +4,12 @@ import { updateRestaurantBranding } from "@/app/dashboard/actions";
 import { BrandingForm } from "@/components/dashboard/branding-form";
 import { createClient } from "@/lib/supabase/server";
 
-export default async function CustomizePage({
-  searchParams,
-}: {
-  searchParams: { message?: string; success?: string };
-}) {
+export default async function CustomizePage(
+  props: {
+    searchParams: Promise<{ message?: string; success?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const {
     data: { user },

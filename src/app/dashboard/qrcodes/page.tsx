@@ -20,11 +20,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
 
-export default async function QrCodesPage({
-  searchParams,
-}: {
-  searchParams: { message?: string };
-}) {
+export default async function QrCodesPage(
+  props: {
+    searchParams: Promise<{ message?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const {
     data: { user },
@@ -65,7 +66,7 @@ export default async function QrCodesPage({
   const qrCodesList = qrCodes || [];
 
   // Determine site URL on the server
-  const host = headers().get("host") || "localhost:3000";
+  const host = (await headers()).get("host") || "localhost:3000";
   const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
   const baseUrl = `${protocol}://${host}`;
 

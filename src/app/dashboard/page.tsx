@@ -21,11 +21,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams: { message?: string };
-}) {
+export default async function DashboardPage(
+  props: {
+    searchParams: Promise<{ message?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   if (!hasSupabaseEnv()) {
     return null;
   }
@@ -268,7 +269,7 @@ export default async function DashboardPage({
   });
 
   const hasRealScans = scansList.length > 0;
-  
+
   // Custom mock database points if no scans recorded yet (prevent empty graphs)
   const chartData = hasRealScans 
     ? dailyScans 
@@ -283,7 +284,7 @@ export default async function DashboardPage({
       ];
 
   const maxVal = Math.max(...chartData.map(d => d.count), 5);
-  
+
   // Calculate SVG plot nodes inside 500x120 viewport
   const svgPoints = chartData.map((d, i) => {
     const x = 15 + (i / 6) * 470;

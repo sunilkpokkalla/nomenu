@@ -19,11 +19,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
 
-export default async function ItemsPage({
-  searchParams,
-}: {
-  searchParams: { menuId?: string; categoryId?: string; message?: string };
-}) {
+export default async function ItemsPage(
+  props: {
+    searchParams: Promise<{ menuId?: string; categoryId?: string; message?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const {
     data: { user },

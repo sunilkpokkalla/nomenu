@@ -4,13 +4,14 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MenuClientView } from "@/components/menu/menu-client-view";
 
-export default async function PublicMenuPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { qr?: string };
-}) {
+export default async function PublicMenuPage(
+  props: {
+    params: Promise<{ id: string }>;
+    searchParams: Promise<{ qr?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const menuId = params.id;
   const qrCodeId = searchParams.qr;
 
@@ -58,7 +59,7 @@ export default async function PublicMenuPage({
 
   // 5. Track scan analytics if accessed via QR code
   if (qrCodeId) {
-    const userAgent = headers().get("user-agent") || "";
+    const userAgent = (await headers()).get("user-agent") || "";
     let deviceType = "Desktop";
     if (/android/i.test(userAgent)) {
       deviceType = "Android";
@@ -71,7 +72,7 @@ export default async function PublicMenuPage({
       qr_code_id: qrCodeId,
       restaurant_id: restaurant.id,
       device_type: deviceType,
-      country: headers().get("x-vercel-ip-country") || "US",
+      country: (await headers()).get("x-vercel-ip-country") || "US",
     });
 
     // Increment scan count on QR code record

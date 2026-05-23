@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { cookies, type UnsafeUnwrappedCookies } from "next/headers";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
 import { getSupabaseEnv } from "@/lib/env";
@@ -7,7 +7,7 @@ import { createMockClient } from "./mock";
 
 export function createClient() {
   if (process.env.DEMO_MODE === "true" || process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
-    const cookieStore = cookies();
+    const cookieStore = (cookies() as unknown as UnsafeUnwrappedCookies);
     return createMockClient({
       getCookie: (name) => cookieStore.get(name)?.value,
       setCookie: (name, value) => {
@@ -27,7 +27,7 @@ export function createClient() {
     }) as unknown as ReturnType<typeof createServerClient<Database>>;
   }
 
-  const cookieStore = cookies();
+  const cookieStore = (cookies() as unknown as UnsafeUnwrappedCookies);
   const { url, anonKey } = getSupabaseEnv();
 
   return createServerClient<Database>(
