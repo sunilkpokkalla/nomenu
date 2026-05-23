@@ -35,10 +35,10 @@ export default async function SignupPage(
               <Star className="w-6 h-6 fill-current" />
               <Star className="w-6 h-6 fill-current" />
             </div>
-            <p className="text-xl font-medium text-slate-800 leading-relaxed">
-              “The best of the rest for much less money!”
+            <p className="text-xl font-medium text-slate-800 leading-relaxed px-4">
+              “Since switching to NoMenu, our tables turn 15% faster. The QR codes are lightning fast!”
             </p>
-            <p className="text-sm text-slate-500 font-medium">— Christian W, Quality Manager</p>
+            <p className="text-sm text-slate-500 font-medium">— Sarah J., General Manager</p>
           </div>
 
           {/* Review 2 */}
@@ -50,18 +50,25 @@ export default async function SignupPage(
               <Star className="w-5 h-5 fill-current" />
               <Star className="w-5 h-5 fill-current" />
             </div>
-            <p className="text-lg font-medium text-slate-800 leading-relaxed">
-              “Quick, efficient and does exactly what you tell it to.”
+            <p className="text-lg font-medium text-slate-800 leading-relaxed px-8">
+              “Updating our menu used to mean reprinting 100 pages. Now I just click a button. Absolute game-changer.”
             </p>
-            <p className="text-sm text-slate-500 font-medium">— Ezra E, IT Manager</p>
+            <p className="text-sm text-slate-500 font-medium">— David C., Restaurant Owner</p>
           </div>
 
           {/* Trusted By */}
-          <div className="pt-12 flex items-center justify-center gap-10 text-slate-400 font-medium text-base">
-             <span>Trusted by</span>
-             <span className="text-slate-500 font-bold text-xl tracking-tighter">Adobe</span>
-             <span className="text-slate-500 font-bold text-xl tracking-tighter italic">Ford</span>
-             <span className="text-slate-500 font-bold text-xl tracking-tighter">adidas</span>
+          <div className="pt-10 flex flex-col items-center justify-center gap-6 text-slate-400 font-medium text-sm uppercase tracking-wider">
+             <span>Trusted by top restaurants</span>
+             <div className="flex items-center gap-10 opacity-60 grayscale transition-all hover:grayscale-0 hover:opacity-100 duration-500">
+               {/* eslint-disable-next-line @next/next/no-img-element */}
+               <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg" alt="McDonalds" className="h-8 w-auto" />
+               {/* eslint-disable-next-line @next/next/no-img-element */}
+               <img src="https://upload.wikimedia.org/wikipedia/en/d/d3/Starbucks_Corporation_Logo_2011.svg" alt="Starbucks" className="h-10 w-auto" />
+               {/* eslint-disable-next-line @next/next/no-img-element */}
+               <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Subway_2016_logo.svg" alt="Subway" className="h-5 w-auto" />
+               {/* eslint-disable-next-line @next/next/no-img-element */}
+               <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Dominos_pizza_logo.svg" alt="Dominos" className="h-8 w-auto" />
+             </div>
           </div>
         </div>
         
