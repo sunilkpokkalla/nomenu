@@ -27,8 +27,15 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NoMenu",
-  description: "Digital menu QR generator for restaurants",
+  title: {
+    default: "NoMenu | Digital QR Menus for Restaurants",
+    template: "%s | NoMenu"
+  },
+  description: "Create and manage beautiful digital QR code menus for your restaurant in minutes. Fast, contactless, and easy to update.",
+  keywords: ["QR menu", "restaurant menu app", "digital menu", "contactless menu", "restaurant technology", "menu generator", "NoMenu"],
+  authors: [{ name: "AmBrightTech LLC" }],
+  creator: "AmBrightTech LLC",
+  publisher: "AmBrightTech LLC",
 };
 
 export default function RootLayout({
