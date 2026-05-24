@@ -17,18 +17,6 @@ export async function login(formData: FormData) {
   const password = getString(formData, "password");
   const next = getString(formData, "next") || "/dashboard";
 
-  if (email.toLowerCase() === "demo@nomenu.com" && password === "demo123") {
-    const cookieStore = await cookies();
-    cookieStore.set({
-      name: "nomenu_demo_user",
-      value: "demo@nomenu.com",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-    });
-    revalidatePath("/", "layout");
-    redirect(next);
-  }
-
   if (!hasSupabaseEnv()) {
     redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
   }
@@ -89,4 +77,26 @@ export async function logout() {
   await supabase.auth.signOut();
   revalidatePath("/", "layout");
   redirect("/login");
+}
+
+export async function loginWithGoogle() {
+  if (!hasSupabaseEnv()) {
+    redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    redirect(`/login?message=${encodeURIComponent(error.message)}`);
+  }
+
+  if (data.url) {
+    redirect(data.url);
+  }
 }

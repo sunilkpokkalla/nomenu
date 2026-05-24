@@ -3,35 +3,9 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
 import { getSupabaseEnv } from "@/lib/env";
 import type { Database } from "@/types/database";
-import { createMockClient } from "./mock";
 
 export async function createClient() {
   const cookieStore = await cookies();
-  const isDemoEnv = process.env.DEMO_MODE === "true" || process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-  // Check if a real Supabase auth session cookie exists
-  const hasRealAuthCookie = cookieStore.getAll().some(c => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
-  const hasDemoCookie = !!cookieStore.get("nomenu_demo_user")?.value;
-
-  if (isDemoEnv || (hasDemoCookie && !hasRealAuthCookie)) {
-    return createMockClient({
-      getCookie: (name) => cookieStore.get(name)?.value,
-      setCookie: (name, value) => {
-        try {
-          cookieStore.set({ name, value, path: "/" });
-        } catch {
-          // Ignore error on server components
-        }
-      },
-      deleteCookie: (name) => {
-        try {
-          cookieStore.set({ name, value: "", path: "/", maxAge: -1 });
-        } catch {
-          // Ignore error on server components
-        }
-      }
-    }) as unknown as ReturnType<typeof createServerClient<Database>>;
-  }
-
   const { url, anonKey } = getSupabaseEnv();
 
   return createServerClient<Database>(

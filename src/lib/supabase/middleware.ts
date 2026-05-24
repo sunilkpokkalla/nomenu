@@ -8,44 +8,6 @@ export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
   const pathname = request.nextUrl.pathname;
 
-  const isDemoEnv = process.env.DEMO_MODE === "true" || process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-  const hasRealAuthCookie = request.cookies.getAll().some(c => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
-  const userCookie = request.cookies.get("nomenu_demo_user")?.value;
-  const hasDemoCookie = !!userCookie;
-
-  if (isDemoEnv || (hasDemoCookie && !hasRealAuthCookie)) {
-    const isDashboard = pathname.startsWith("/dashboard");
-    const isAuthPage = pathname === "/login" || pathname === "/signup";
-
-    if (isDashboard && !userCookie) {
-      const responseWithCookie = NextResponse.next({ request });
-      responseWithCookie.cookies.set({
-        name: "nomenu_demo_user",
-        value: "demo@nomenu.com",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-      });
-      return responseWithCookie;
-    }
-
-    if (isAuthPage) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/dashboard";
-      const redirectResponse = NextResponse.redirect(url);
-      if (!userCookie) {
-        redirectResponse.cookies.set({
-          name: "nomenu_demo_user",
-          value: "demo@nomenu.com",
-          path: "/",
-          maxAge: 60 * 60 * 24 * 30, // 30 days
-        });
-      }
-      return redirectResponse;
-    }
-
-    return response;
-  }
-
   if (!hasSupabaseEnv()) {
     if (pathname.startsWith("/dashboard")) {
       const url = request.nextUrl.clone();
@@ -58,16 +20,6 @@ export async function updateSession(request: NextRequest) {
     }
 
     return response;
-  }
-
-  // Clear demo cookies in live mode ONLY if a real Supabase session exists
-  if (request.cookies.has("nomenu_demo_user") && hasRealAuthCookie) {
-    response.cookies.set({
-      name: "nomenu_demo_user",
-      value: "",
-      path: "/",
-      maxAge: -1,
-    });
   }
 
   const { url, anonKey } = getSupabaseEnv();
