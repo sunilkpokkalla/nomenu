@@ -46,14 +46,17 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
+  console.log("Middleware checking path:", pathname);
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  console.log("Middleware user status:", { userExists: !!user, email: user?.email });
 
   const isDashboard = pathname.startsWith("/dashboard");
   const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   if (isDashboard && !user) {
+    console.log("Middleware: Redirecting unauthenticated user from dashboard to login");
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", pathname);
@@ -61,6 +64,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (isAuthPage && user) {
+    console.log("Middleware: Redirecting authenticated user from login/signup to dashboard");
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);

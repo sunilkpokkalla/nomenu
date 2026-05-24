@@ -17,18 +17,24 @@ export async function login(formData: FormData) {
   const password = getString(formData, "password");
   const next = getString(formData, "next") || "/dashboard";
 
+  console.log("Login action starting...", { email });
+
   if (!hasSupabaseEnv()) {
+    console.error("Login action: Missing Supabase Env vars");
     redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+  console.log("Login action result:", { user: data?.user?.id, error: error?.message });
 
   if (error) {
     redirect(`/login?message=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/", "layout");
+  console.log("Login action redirecting to:", next);
   redirect(next);
 }
 
