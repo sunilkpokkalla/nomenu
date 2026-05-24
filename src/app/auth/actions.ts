@@ -42,6 +42,9 @@ export async function signup(formData: FormData) {
   const password = getString(formData, "password");
   const restaurantName = getString(formData, "restaurantName");
 
+  const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const cleanAppUrl = rawAppUrl.endsWith("/") ? rawAppUrl.slice(0, -1) : rawAppUrl;
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -49,7 +52,7 @@ export async function signup(formData: FormData) {
       data: {
         restaurant_name: restaurantName,
       },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/auth/callback`,
+      emailRedirectTo: `${cleanAppUrl}/auth/callback`,
     },
   });
 
@@ -87,14 +90,18 @@ export async function loginWithGoogle() {
     redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
   }
 
+  const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const cleanAppUrl = rawAppUrl.endsWith("/") ? rawAppUrl.slice(0, -1) : rawAppUrl;
+  const redirectToUrl = `${cleanAppUrl}/auth/callback`;
+
   console.log("loginWithGoogle starting...", {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/auth/callback`
+    redirectTo: redirectToUrl
   });
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/auth/callback`,
+      redirectTo: redirectToUrl,
     },
   });
   console.log("loginWithGoogle result:", { data, error });
