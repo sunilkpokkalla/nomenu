@@ -85,11 +85,13 @@ alter table public.menu_items enable row level security;
 alter table public.qr_codes enable row level security;
 alter table public.menu_scans enable row level security;
 
+drop policy if exists "Owners can manage restaurants" on public.restaurants;
 create policy "Owners can manage restaurants"
   on public.restaurants for all
   using (auth.uid() = owner_id)
   with check (auth.uid() = owner_id);
 
+drop policy if exists "Owners can manage menus" on public.menus;
 create policy "Owners can manage menus"
   on public.menus for all
   using (
@@ -107,6 +109,7 @@ create policy "Owners can manage menus"
     )
   );
 
+drop policy if exists "Owners can manage categories" on public.categories;
 create policy "Owners can manage categories"
   on public.categories for all
   using (
@@ -128,6 +131,7 @@ create policy "Owners can manage categories"
     )
   );
 
+drop policy if exists "Owners can manage menu items" on public.menu_items;
 create policy "Owners can manage menu items"
   on public.menu_items for all
   using (
@@ -145,6 +149,7 @@ create policy "Owners can manage menu items"
     )
   );
 
+drop policy if exists "Owners can manage QR codes" on public.qr_codes;
 create policy "Owners can manage QR codes"
   on public.qr_codes for all
   using (
@@ -162,6 +167,7 @@ create policy "Owners can manage QR codes"
     )
   );
 
+drop policy if exists "Owners can read menu scans" on public.menu_scans;
 create policy "Owners can read menu scans"
   on public.menu_scans for select
   using (
@@ -172,10 +178,12 @@ create policy "Owners can read menu scans"
     )
   );
 
+drop policy if exists "Public can read active menus" on public.menus;
 create policy "Public can read active menus"
   on public.menus for select
   using (is_active = true);
 
+drop policy if exists "Public can read menu categories" on public.categories;
 create policy "Public can read menu categories"
   on public.categories for select
   using (
@@ -186,14 +194,17 @@ create policy "Public can read menu categories"
     )
   );
 
+drop policy if exists "Public can read available menu items" on public.menu_items;
 create policy "Public can read available menu items"
   on public.menu_items for select
   using (is_available = true);
 
+drop policy if exists "Public can read restaurant branding" on public.restaurants;
 create policy "Public can read restaurant branding"
   on public.restaurants for select
   using (true);
 
+drop policy if exists "Public can insert scan analytics" on public.menu_scans;
 create policy "Public can insert scan analytics"
   on public.menu_scans for insert
   with check (true);

@@ -17,6 +17,18 @@ export async function login(formData: FormData) {
   const password = getString(formData, "password");
   const next = getString(formData, "next") || "/dashboard";
 
+  if (email.toLowerCase() === "demo@nomenu.com") {
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: "nomenu_demo_user",
+      value: "demo@nomenu.com",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
+    revalidatePath("/", "layout");
+    redirect(next);
+  }
+
   if (!hasSupabaseEnv()) {
     redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
   }

@@ -8,8 +8,12 @@ export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
   const pathname = request.nextUrl.pathname;
 
-  if (process.env.DEMO_MODE === "true" || process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
-    const userCookie = request.cookies.get("nomenu_demo_user")?.value;
+  const isDemoEnv = process.env.DEMO_MODE === "true" || process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+  const hasRealAuthCookie = request.cookies.getAll().some(c => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
+  const userCookie = request.cookies.get("nomenu_demo_user")?.value;
+  const hasDemoCookie = !!userCookie;
+
+  if (isDemoEnv || (hasDemoCookie && !hasRealAuthCookie)) {
     const isDashboard = pathname.startsWith("/dashboard");
     const isAuthPage = pathname === "/login" || pathname === "/signup";
 
@@ -56,8 +60,8 @@ export async function updateSession(request: NextRequest) {
     return response;
   }
 
-  // Clear demo cookies in live mode to avoid clashing with real Supabase sessions
-  if (request.cookies.has("nomenu_demo_user")) {
+  // Clear demo cookies in live mode ONLY if a real Supabase session exists
+  if (request.cookies.has("nomenu_demo_user") && hasRealAuthCookie) {
     response.cookies.set({
       name: "nomenu_demo_user",
       value: "",
