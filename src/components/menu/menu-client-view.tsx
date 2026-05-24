@@ -13,7 +13,8 @@ import {
   Grid, 
   List, 
   X, 
-  Info
+  Info,
+  Clock
 } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -54,6 +55,7 @@ interface MenuItem {
   is_spicy: boolean;
   allergens?: string[] | null;
   calories?: number | null;
+  cooking_time?: number | null;
 }
 
 interface MenuClientViewProps {
@@ -675,6 +677,11 @@ export function MenuClientView({ restaurant, categories, items }: MenuClientView
                                   {item.is_popular && (
                                     <span className="text-[9px] font-sans text-[#D4AF37] font-bold uppercase tracking-widest">
                                       ★ Chef's Special
+                                    </span>
+                                  )}
+                                  {item.cooking_time && (
+                                    <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm flex items-center gap-1">
+                                      <Clock className="h-2.5 w-2.5" /> {item.cooking_time}m
                                     </span>
                                   )}
                                   {item.is_vegetarian && (
@@ -1342,13 +1349,22 @@ export function MenuClientView({ restaurant, categories, items }: MenuClientView
                 </div>
               )}
 
-              {/* Calories & Allergens if available */}
-              {(selectedItem.calories || (selectedItem.allergens && selectedItem.allergens.length > 0)) && (
+              {/* Calories, Cooking Time & Allergens if available */}
+              {(selectedItem.calories || selectedItem.cooking_time || (selectedItem.allergens && selectedItem.allergens.length > 0)) && (
                 <div className={`grid gap-4 py-4 border-y ${themeStyle === "luxury" ? "border-zinc-900" : themeStyle === "vibrant" ? "border-black border-y-2" : "border-slate-100"}`}>
                   {selectedItem.calories && (
                     <div className="flex justify-between items-center text-xs">
                       <span className={`${themeStyle === "luxury" ? "text-zinc-500" : "text-slate-400"} font-medium`}>Energy Value</span>
                       <span className="font-bold">{selectedItem.calories} kcal</span>
+                    </div>
+                  )}
+
+                  {selectedItem.cooking_time && (
+                    <div className="flex justify-between items-center text-xs">
+                      <span className={`${themeStyle === "luxury" ? "text-zinc-500" : "text-slate-400"} font-medium`}>Prep Time</span>
+                      <span className="font-bold flex items-center gap-1">
+                        <Clock className="h-3.5 w-3.5" /> {selectedItem.cooking_time} mins
+                      </span>
                     </div>
                   )}
 

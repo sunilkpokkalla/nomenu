@@ -1,4 +1,4 @@
-import { Flame, Leaf, Award, ShieldAlert, Sparkles, Trash2, Plus } from "lucide-react";
+import { Flame, Leaf, Award, ShieldAlert, Sparkles, Trash2, Plus, Clock } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -211,6 +211,11 @@ export default async function ItemsPage(
                           </p>
                           {/* Dietary tags */}
                           <div className="flex flex-wrap gap-1.5 pt-1">
+                            {item.cooking_time && (
+                              <span className="inline-flex items-center gap-1 rounded bg-slate-50 px-2 py-0.5 text-xs font-semibold text-slate-700 border border-slate-200">
+                                <Clock className="h-3 w-3" /> {item.cooking_time} mins
+                              </span>
+                            )}
                             {item.is_popular && (
                               <span className="inline-flex items-center gap-1 rounded bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700 border border-amber-200">
                                 <Award className="h-3 w-3" /> Popular
@@ -340,6 +345,17 @@ export default async function ItemsPage(
                         ))}
                       </select>
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="cookingTime">Cooking Time (minutes) — Optional</Label>
+                    <Input
+                      id="cookingTime"
+                      name="cookingTime"
+                      type="number"
+                      min="0"
+                      placeholder="e.g. 15"
+                    />
                   </div>
 
                   <div className="space-y-2 border-t pt-3">

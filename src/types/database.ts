@@ -128,6 +128,7 @@ export interface Database {
           is_spicy: boolean;
           allergens: string[] | null;
           calories: number | null;
+          cooking_time: number | null;
           sort_order: number;
           created_at: string | null;
         };
@@ -147,6 +148,7 @@ export interface Database {
           is_spicy?: boolean;
           allergens?: string[] | null;
           calories?: number | null;
+          cooking_time?: number | null;
           sort_order?: number;
           created_at?: string | null;
         };

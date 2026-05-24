@@ -206,6 +206,8 @@ export async function createMenuItem(formData: FormData) {
   const isGlutenFree = formData.get("isGlutenFree") === "true";
   const isSpicy = formData.get("isSpicy") === "true";
   const imageUrl = field(formData, "imageUrl");
+  const cookingTimeStr = field(formData, "cookingTime");
+  const cookingTime = cookingTimeStr ? parseInt(cookingTimeStr, 10) : null;
 
   const { error } = await supabase.from("menu_items").insert({
     category_id: categoryId,
@@ -220,6 +222,7 @@ export async function createMenuItem(formData: FormData) {
     is_gluten_free: isGlutenFree,
     is_spicy: isSpicy,
     image_url: imageUrl,
+    cooking_time: cookingTime && !isNaN(cookingTime) ? cookingTime : null,
   });
 
   if (error) {

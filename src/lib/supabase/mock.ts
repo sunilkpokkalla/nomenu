@@ -45,6 +45,7 @@ interface MenuItem {
   is_gluten_free: boolean;
   is_spicy: boolean;
   image_url?: string | null;
+  cooking_time?: number | null;
   created_at?: string;
 }
 
@@ -124,6 +125,7 @@ if (!globalForDemo.demoDb) {
       is_vegan: false,
       is_gluten_free: false,
       is_spicy: false,
+      cooking_time: 15,
       created_at: new Date().toISOString()
     },
     {
@@ -139,6 +141,7 @@ if (!globalForDemo.demoDb) {
       is_vegan: false,
       is_gluten_free: true,
       is_spicy: false,
+      cooking_time: 10,
       created_at: new Date().toISOString()
     },
     // Lunch Mains
@@ -155,6 +158,7 @@ if (!globalForDemo.demoDb) {
       is_vegan: false,
       is_gluten_free: false,
       is_spicy: false,
+      cooking_time: 12,
       created_at: new Date().toISOString()
     },
     {
@@ -170,6 +174,7 @@ if (!globalForDemo.demoDb) {
       is_vegan: false,
       is_gluten_free: true,
       is_spicy: false,
+      cooking_time: 15,
       created_at: new Date().toISOString()
     },
     // Dinner Entrees
@@ -186,6 +191,7 @@ if (!globalForDemo.demoDb) {
       is_vegan: false,
       is_gluten_free: true,
       is_spicy: false,
+      cooking_time: 20,
       created_at: new Date().toISOString()
     },
     {
@@ -201,6 +207,7 @@ if (!globalForDemo.demoDb) {
       is_vegan: false,
       is_gluten_free: false,
       is_spicy: false,
+      cooking_time: 25,
       created_at: new Date().toISOString()
     },
     // Dinner Desserts
@@ -217,6 +224,7 @@ if (!globalForDemo.demoDb) {
       is_vegan: false,
       is_gluten_free: true,
       is_spicy: false,
+      cooking_time: 8,
       created_at: new Date().toISOString()
     }
   ];
