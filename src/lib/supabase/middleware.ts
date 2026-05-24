@@ -56,6 +56,16 @@ export async function updateSession(request: NextRequest) {
     return response;
   }
 
+  // Clear demo cookies in live mode to avoid clashing with real Supabase sessions
+  if (request.cookies.has("nomenu_demo_user")) {
+    response.cookies.set({
+      name: "nomenu_demo_user",
+      value: "",
+      path: "/",
+      maxAge: -1,
+    });
+  }
+
   const { url, anonKey } = getSupabaseEnv();
 
   const supabase = createServerClient<Database>(

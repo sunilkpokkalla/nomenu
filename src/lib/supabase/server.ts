@@ -8,9 +8,11 @@ import { createMockClient } from "./mock";
 export async function createClient() {
   const cookieStore = await cookies();
   const isDemoEnv = process.env.DEMO_MODE === "true" || process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+  // Check if a real Supabase auth session cookie exists
+  const hasRealAuthCookie = cookieStore.getAll().some(c => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
   const hasDemoCookie = !!cookieStore.get("nomenu_demo_user")?.value;
 
-  if (isDemoEnv || hasDemoCookie) {
+  if (isDemoEnv || (hasDemoCookie && !hasRealAuthCookie)) {
     return createMockClient({
       getCookie: (name) => cookieStore.get(name)?.value,
       setCookie: (name, value) => {
