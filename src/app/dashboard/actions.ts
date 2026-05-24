@@ -10,7 +10,7 @@ function field(formData: FormData, key: string) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-async function getRestaurantForUser(supabase: ReturnType<typeof createClient>, userId: string) {
+async function getRestaurantForUser(supabase: Awaited<ReturnType<typeof createClient>>, userId: string) {
   const { data: restaurant } = await supabase
     .from("restaurants")
     .select("*")
@@ -22,7 +22,7 @@ async function getRestaurantForUser(supabase: ReturnType<typeof createClient>, u
 }
 
 export async function createRestaurant(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -57,7 +57,7 @@ export async function createRestaurant(formData: FormData) {
 
 // MENU ACTIONS
 export async function createMenu(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -95,7 +95,7 @@ export async function createMenu(formData: FormData) {
 }
 
 export async function toggleMenuStatus(menuId: string, currentStatus: boolean) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -118,7 +118,7 @@ export async function toggleMenuStatus(menuId: string, currentStatus: boolean) {
 }
 
 export async function deleteMenu(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -144,7 +144,7 @@ export async function deleteMenu(formData: FormData) {
 
 // MENU ITEM ACTIONS
 export async function createMenuItem(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -231,7 +231,7 @@ export async function createMenuItem(formData: FormData) {
 }
 
 export async function toggleMenuItemStatus(itemId: string, currentStatus: boolean) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -254,7 +254,7 @@ export async function toggleMenuItemStatus(itemId: string, currentStatus: boolea
 }
 
 export async function deleteMenuItem(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -280,7 +280,7 @@ export async function deleteMenuItem(formData: FormData) {
 
 // QR CODE ACTIONS
 export async function createQrCode(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -317,7 +317,7 @@ export async function createQrCode(formData: FormData) {
 }
 
 export async function deleteQrCode(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -342,7 +342,7 @@ export async function deleteQrCode(formData: FormData) {
 }
 
 export async function updateRestaurantSettings(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -382,7 +382,7 @@ export async function updateRestaurantSettings(formData: FormData) {
 }
 
 export async function updateRestaurantBranding(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -428,7 +428,7 @@ export async function updateRestaurantBranding(formData: FormData) {
 }
 
 export async function updateRestaurantPlan(formData: FormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

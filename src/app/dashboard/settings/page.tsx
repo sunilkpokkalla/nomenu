@@ -15,7 +15,7 @@ export default async function SettingsPage(
   }
 ) {
   const searchParams = await props.searchParams;
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

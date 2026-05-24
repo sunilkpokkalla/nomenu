@@ -15,7 +15,7 @@ export default async function PublicMenuPage(
   const menuId = params.id;
   const qrCodeId = searchParams.qr;
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // 1. Fetch menu details
   const { data: menu } = await supabase

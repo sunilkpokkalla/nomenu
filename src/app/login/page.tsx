@@ -101,7 +101,7 @@ export default async function LoginPage(
             </div>
           )}
 
-          {/* Social Logins */}
+          {/* Demo Login Button */}
           <div className="space-y-3 mb-6">
             <form action={login}>
               <input type="hidden" name="next" value={searchParams.next ?? "/dashboard"} />

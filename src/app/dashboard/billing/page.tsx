@@ -58,7 +58,7 @@ export default async function BillingPage(
   }
 ) {
   const searchParams = await props.searchParams;
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -110,10 +110,10 @@ export default async function BillingPage(
               <ShieldCheck className="h-6 w-6" />
             </span>
             <div>
-              <p className="font-semibold text-slate-900 flex items-center gap-2">
+              <div className="font-semibold text-slate-900 flex items-center gap-2">
                 Active Plan: <span className="capitalize text-primary font-extrabold">{currentPlan}</span>
                 <Badge variant="success">Active</Badge>
-              </p>
+              </div>
               <p className="text-xs text-slate-500 mt-1">
                 Your restaurant is linked to the {currentPlan} subscription. Custom coloring and detailed analytics require a paid tier.
               </p>

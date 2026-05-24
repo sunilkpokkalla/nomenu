@@ -1,12 +1,12 @@
-import { cookies, type UnsafeUnwrappedCookies } from "next/headers";
+import { cookies } from "next/headers";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
 import { getSupabaseEnv } from "@/lib/env";
 import type { Database } from "@/types/database";
 import { createMockClient } from "./mock";
 
-export function createClient() {
-  const cookieStore = (cookies() as unknown as UnsafeUnwrappedCookies);
+export async function createClient() {
+  const cookieStore = await cookies();
   const isDemoEnv = process.env.DEMO_MODE === "true" || process.env.NEXT_PUBLIC_DEMO_MODE === "true";
   const hasDemoCookie = !!cookieStore.get("nomenu_demo_user")?.value;
 

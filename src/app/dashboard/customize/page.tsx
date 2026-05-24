@@ -10,7 +10,7 @@ export default async function CustomizePage(
   }
 ) {
   const searchParams = await props.searchParams;
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
