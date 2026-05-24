@@ -126,6 +126,7 @@ if (!globalForDemo.demoDb) {
       is_gluten_free: false,
       is_spicy: false,
       cooking_time: 15,
+      image_url: "https://images.unsplash.com/photo-1620418029653-8d07cf8516d2?q=80&w=800&auto=format&fit=crop",
       created_at: new Date().toISOString()
     },
     {
@@ -142,6 +143,7 @@ if (!globalForDemo.demoDb) {
       is_gluten_free: true,
       is_spicy: false,
       cooking_time: 10,
+      image_url: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=800&auto=format&fit=crop",
       created_at: new Date().toISOString()
     },
     // Lunch Mains
@@ -159,6 +161,7 @@ if (!globalForDemo.demoDb) {
       is_gluten_free: false,
       is_spicy: false,
       cooking_time: 12,
+      image_url: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80&w=800&auto=format&fit=crop",
       created_at: new Date().toISOString()
     },
     {
@@ -175,6 +178,7 @@ if (!globalForDemo.demoDb) {
       is_gluten_free: true,
       is_spicy: false,
       cooking_time: 15,
+      image_url: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=800&auto=format&fit=crop",
       created_at: new Date().toISOString()
     },
     // Dinner Entrees
@@ -192,6 +196,7 @@ if (!globalForDemo.demoDb) {
       is_gluten_free: true,
       is_spicy: false,
       cooking_time: 20,
+      image_url: "https://images.unsplash.com/photo-1544025162-811114215b74?q=80&w=800&auto=format&fit=crop",
       created_at: new Date().toISOString()
     },
     {
@@ -208,6 +213,7 @@ if (!globalForDemo.demoDb) {
       is_gluten_free: false,
       is_spicy: false,
       cooking_time: 25,
+      image_url: "https://images.unsplash.com/photo-1534939561126-855b8675edd7?q=80&w=800&auto=format&fit=crop",
       created_at: new Date().toISOString()
     },
     // Dinner Desserts
@@ -225,6 +231,7 @@ if (!globalForDemo.demoDb) {
       is_gluten_free: true,
       is_spicy: false,
       cooking_time: 8,
+      image_url: "https://images.unsplash.com/photo-1516685018646-549198525c1b?q=80&w=800&auto=format&fit=crop",
       created_at: new Date().toISOString()
     }
   ];
