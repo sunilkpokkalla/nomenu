@@ -14,16 +14,29 @@ export async function updateSession(request: NextRequest) {
     const isAuthPage = pathname === "/login" || pathname === "/signup";
 
     if (isDashboard && !userCookie) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/login";
-      url.searchParams.set("next", pathname);
-      return NextResponse.redirect(url);
+      const responseWithCookie = NextResponse.next({ request });
+      responseWithCookie.cookies.set({
+        name: "nomenu_demo_user",
+        value: "demo@nomenu.com",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      });
+      return responseWithCookie;
     }
 
-    if (isAuthPage && userCookie) {
+    if (isAuthPage) {
       const url = request.nextUrl.clone();
       url.pathname = "/dashboard";
-      return NextResponse.redirect(url);
+      const redirectResponse = NextResponse.redirect(url);
+      if (!userCookie) {
+        redirectResponse.cookies.set({
+          name: "nomenu_demo_user",
+          value: "demo@nomenu.com",
+          path: "/",
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+        });
+      }
+      return redirectResponse;
     }
 
     return response;
