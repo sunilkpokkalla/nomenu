@@ -17,7 +17,7 @@ export async function login(formData: FormData) {
   const password = getString(formData, "password");
   const next = getString(formData, "next") || "/dashboard";
 
-  if (email.toLowerCase() === "demo@nomenu.com") {
+  if (email.toLowerCase() === "demo@nomenu.com" && password === "demo123") {
     const cookieStore = await cookies();
     cookieStore.set({
       name: "nomenu_demo_user",
