@@ -57,15 +57,18 @@ export async function signup(formData: FormData) {
     redirect(`/signup?message=${encodeURIComponent(error.message)}`);
   }
 
-  if (data.user && data.session && restaurantName) {
-    await supabase.from("restaurants").insert({
-      owner_id: data.user.id,
-      name: restaurantName,
-    });
+  if (data.user && data.session) {
+    if (restaurantName) {
+      await supabase.from("restaurants").insert({
+        owner_id: data.user.id,
+        name: restaurantName,
+      });
+    }
+    revalidatePath("/", "layout");
+    redirect("/dashboard");
+  } else {
+    redirect("/login?message=Account%20created!%20Please%20check%20your%20email%20to%20confirm%20and%20activate%20your%20account.");
   }
-
-  revalidatePath("/", "layout");
-  redirect("/dashboard");
 }
 
 export async function logout() {
