@@ -84,6 +84,9 @@ export async function loginWithGoogle() {
     redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
   }
 
+  console.log("loginWithGoogle starting...", {
+    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/auth/callback`
+  });
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -91,12 +94,17 @@ export async function loginWithGoogle() {
       redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/auth/callback`,
     },
   });
+  console.log("loginWithGoogle result:", { data, error });
 
   if (error) {
+    console.error("loginWithGoogle error redirecting:", error);
     redirect(`/login?message=${encodeURIComponent(error.message)}`);
   }
 
   if (data.url) {
+    console.log("loginWithGoogle redirecting to:", data.url);
     redirect(data.url);
+  } else {
+    console.warn("loginWithGoogle: No redirect URL returned by Supabase.");
   }
 }
