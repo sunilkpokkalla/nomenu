@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
+import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { createMockClient } from "@/lib/supabase/mock";
 import { MenuClientView } from "@/components/menu/menu-client-view";
 
 export default async function PublicMenuPage(
@@ -15,13 +18,15 @@ export default async function PublicMenuPage(
   const menuId = params.id;
   const qrCodeId = searchParams.qr;
 
-  const supabase = await createClient();
+  const isSample = menuId === "sample" || menuId === "menu-lunch-111" || !hasSupabaseEnv();
+  const targetMenuId = (menuId === "sample" || !hasSupabaseEnv()) ? "menu-lunch-111" : menuId;
+  const supabase = (isSample ? createMockClient() : await createClient()) as any;
 
   // 1. Fetch menu details
   const { data: menu } = await supabase
     .from("menus")
     .select("*")
-    .eq("id", menuId)
+    .eq("id", targetMenuId)
     .maybeSingle();
 
   if (!menu) {

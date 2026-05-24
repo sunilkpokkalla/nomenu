@@ -157,7 +157,7 @@ export default function Home() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full font-bold text-sm px-8 py-6 bg-white/50 backdrop-blur-sm border-slate-200/80 hover:bg-slate-100/80 transition-all duration-300 active:scale-[0.98]">
-              <Link href="/login">View Live Demo</Link>
+              <Link href="/menu/sample" target="_blank">View Sample Menu</Link>
             </Button>
           </div>
 
