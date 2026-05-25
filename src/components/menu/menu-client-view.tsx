@@ -63,9 +63,10 @@ interface MenuClientViewProps {
   categories: Category[];
   items: MenuItem[];
   tableNumber?: string;
+  qrCodeId?: string;
 }
 
-export function MenuClientView({ restaurant, categories, items, tableNumber }: MenuClientViewProps) {
+export function MenuClientView({ restaurant, categories, items, tableNumber, qrCodeId }: MenuClientViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("");
   const [layoutMode, setLayoutMode] = useState<"list" | "grid">("list");
@@ -1466,7 +1467,7 @@ export function MenuClientView({ restaurant, categories, items, tableNumber }: M
       )}
 
       {/* Feedback Button */}
-      <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} />
+      <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />
     </div>
   );
 }

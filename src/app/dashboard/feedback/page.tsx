@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, MapPin, Mail } from "lucide-react";
+import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, MapPin, Mail, QrCode } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
@@ -40,7 +40,7 @@ export default async function FeedbackPage() {
   // Fetch feedback
   const { data: feedbacks, error } = await supabase
     .from("customer_feedback")
-    .select("*")
+    .select("*, qr_codes(label)")
     .eq("restaurant_id", restaurant.id)
     .order("created_at", { ascending: false });
 
@@ -180,7 +180,7 @@ export default async function FeedbackPage() {
                 </div>
 
                 {/* Footer: Customer Info & Table Info */}
-                {(feedback.customer_name || feedback.contact_info || feedback.table_number) && (
+                {(feedback.customer_name || feedback.contact_info || feedback.table_number || feedback.qr_codes?.label) && (
                   <div className="mt-1 flex flex-wrap items-center gap-4 pt-3 border-t border-slate-100">
                     {feedback.customer_name && (
                       <div className="flex items-center gap-1.5 text-xs text-slate-600">
@@ -198,6 +198,12 @@ export default async function FeedbackPage() {
                       <div className="flex items-center gap-1.5 text-xs text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100 ml-auto">
                         <MapPin className="w-3 h-3" />
                         Table {feedback.table_number}
+                      </div>
+                    )}
+                    {feedback.qr_codes?.label && (
+                      <div className="flex items-center gap-1.5 text-xs text-fuchsia-700 font-semibold bg-fuchsia-50 px-2 py-0.5 rounded border border-fuchsia-100 ml-auto">
+                        <QrCode className="w-3 h-3" />
+                        {feedback.qr_codes.label}
                       </div>
                     )}
                   </div>

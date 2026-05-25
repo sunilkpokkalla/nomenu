@@ -7,9 +7,10 @@ import { submitFeedback } from "@/app/menu/[id]/actions";
 interface FeedbackFABProps {
   restaurantId: string;
   tableNumber?: string;
+  qrCodeId?: string;
 }
 
-export function FeedbackFAB({ restaurantId, tableNumber }: FeedbackFABProps) {
+export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFABProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
@@ -30,7 +31,7 @@ export function FeedbackFAB({ restaurantId, tableNumber }: FeedbackFABProps) {
     setIsSubmitting(true);
     setError("");
 
-    const result = await submitFeedback(restaurantId, rating, comment, customerName, contactInfo, tableNumber);
+    const result = await submitFeedback(restaurantId, rating, comment, customerName, contactInfo, tableNumber, qrCodeId);
 
     setIsSubmitting(false);
 

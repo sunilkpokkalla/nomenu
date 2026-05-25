@@ -109,6 +109,7 @@ export default async function PublicMenuPage(
       categories={categoriesList}
       items={itemsList}
       tableNumber={tableNumber}
+      qrCodeId={qrCodeId}
     />
   );
 }

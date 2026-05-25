@@ -8,7 +8,8 @@ export async function submitFeedback(
   comment?: string,
   customerName?: string,
   contactInfo?: string,
-  tableNumber?: string
+  tableNumber?: string,
+  qrCodeId?: string
 ) {
   const supabase = await createClient();
 
@@ -23,6 +24,7 @@ export async function submitFeedback(
     customer_name: customerName?.trim() || null,
     contact_info: contactInfo?.trim() || null,
     table_number: tableNumber?.trim() || null,
+    qr_code_id: qrCodeId?.trim() || null,
   });
 
   if (error) {
