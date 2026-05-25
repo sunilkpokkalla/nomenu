@@ -3,6 +3,7 @@ import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, Ma
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
+import { FeedbackAnalytics } from "./feedback-analytics";
 
 export const metadata = {
   title: "Customer Feedback | NoMenu Dashboard",
@@ -49,15 +50,6 @@ export default async function FeedbackPage() {
   }
 
   const allFeedbacks = feedbacks || [];
-  
-  // Calculate analytics
-  const totalFeedback = allFeedbacks.length;
-  const averageRating = totalFeedback > 0 
-    ? (allFeedbacks.reduce((sum, item) => sum + item.rating, 0) / totalFeedback).toFixed(1) 
-    : "0.0";
-    
-  const positiveCount = allFeedbacks.filter(f => f.rating >= 4).length;
-  const positivePercentage = totalFeedback > 0 ? Math.round((positiveCount / totalFeedback) * 100) : 0;
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -66,46 +58,7 @@ export default async function FeedbackPage() {
         <p className="text-slate-500">See what your customers are saying about your menu.</p>
       </div>
 
-      {/* Analytics Cards */}
-      <div className="grid gap-6 md:grid-cols-3">
-        <div className="bg-white rounded-2xl p-6 border shadow-sm">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-              <MessageSquare className="w-5 h-5" />
-            </div>
-            <h3 className="font-medium text-slate-600">Total Feedback</h3>
-          </div>
-          <p className="text-3xl font-bold text-slate-900">{totalFeedback}</p>
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 border shadow-sm">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-amber-50 text-amber-500 rounded-lg">
-              <Star className="w-5 h-5 fill-amber-500" />
-            </div>
-            <h3 className="font-medium text-slate-600">Average Rating</h3>
-          </div>
-          <p className="text-3xl font-bold text-slate-900 flex items-baseline gap-2">
-            {averageRating} <span className="text-sm font-medium text-slate-500">/ 5.0</span>
-          </p>
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 border shadow-sm">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
-              <TrendingUp className="w-5 h-5" />
-            </div>
-            <h3 className="font-medium text-slate-600">Positive Sentiment</h3>
-          </div>
-          <div className="flex items-end justify-between">
-            <p className="text-3xl font-bold text-slate-900">{positivePercentage}%</p>
-            <div className="flex items-center text-sm text-emerald-600 font-medium">
-              <ArrowUpRight className="w-4 h-4 mr-1" />
-              4 & 5 Stars
-            </div>
-          </div>
-        </div>
-      </div>
+      <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone} />
 
       {/* Feedback List */}
       <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
@@ -128,8 +81,8 @@ export default async function FeedbackPage() {
             {allFeedbacks.map((feedback) => (
               <div key={feedback.id} className="p-5 flex flex-col gap-3 hover:bg-slate-50/50 transition-colors">
                 {/* Header: Stars, Sentiment, Time */}
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                  <div className="flex items-center gap-3 flex-wrap">
                     {/* Stars */}
                     <div className="flex gap-0.5">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -161,9 +114,9 @@ export default async function FeedbackPage() {
                     </div>
                   </div>
                   {/* Time Ago */}
-                  <span className="text-xs text-slate-500 font-medium">
+                  <div className="text-xs text-slate-500 font-medium shrink-0">
                     {feedback.created_at ? formatTimeAgoWithExact(feedback.created_at, restaurant.timezone) : "Unknown date"}
-                  </span>
+                  </div>
                 </div>
 
                 {/* Body: Comment */}
