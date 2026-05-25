@@ -4,6 +4,8 @@ import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
 import { FeedbackAnalytics } from "./feedback-analytics";
+import { toZonedTime } from "date-fns-tz";
+import { format, isToday, isYesterday } from "date-fns";
 
 export const metadata = {
   title: "Customer Feedback | NoMenu Dashboard",
@@ -77,9 +79,33 @@ export default async function FeedbackPage() {
             </p>
           </div>
         ) : (
-          <div className="divide-y">
-            {allFeedbacks.map((feedback) => (
-              <div key={feedback.id} className="p-5 flex flex-col gap-3 hover:bg-slate-50/50 transition-colors">
+          (() => {
+            const groupedFeedbacks: Record<string, typeof allFeedbacks> = {};
+            
+            allFeedbacks.forEach(feedback => {
+              if (!feedback.created_at) return;
+              const date = toZonedTime(new Date(feedback.created_at), restaurant.timezone || "UTC");
+              let dateStr = "";
+              if (isToday(date)) {
+                dateStr = "Today";
+              } else if (isYesterday(date)) {
+                dateStr = "Yesterday";
+              } else {
+                dateStr = format(date, "EEEE, MMMM d, yyyy");
+              }
+              
+              if (!groupedFeedbacks[dateStr]) groupedFeedbacks[dateStr] = [];
+              groupedFeedbacks[dateStr].push(feedback);
+            });
+
+            return Object.entries(groupedFeedbacks).map(([dateLabel, feedbacksForDay]) => (
+              <div key={dateLabel} className="border-b last:border-b-0 border-slate-100">
+                <div className="px-6 py-2.5 bg-slate-50/80 border-y border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider sticky top-0 z-10 backdrop-blur-sm">
+                  {dateLabel}
+                </div>
+                <div className="divide-y divide-slate-100">
+                  {feedbacksForDay.map((feedback) => (
+                    <div key={feedback.id} className="p-5 flex flex-col gap-3 hover:bg-slate-50/50 transition-colors">
                 {/* Header: Stars, Sentiment, Time */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                   <div className="flex items-center gap-3 flex-wrap">
@@ -163,8 +189,10 @@ export default async function FeedbackPage() {
                 )}
               </div>
             ))}
+            </div>
           </div>
-        )}
+        ))
+      })()}
       </div>
     </div>
   );
