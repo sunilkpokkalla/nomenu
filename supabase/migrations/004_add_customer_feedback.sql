@@ -26,6 +26,6 @@ ON customer_feedback FOR SELECT
 TO authenticated 
 USING (
     restaurant_id IN (
-        SELECT id FROM restaurants WHERE user_id = auth.uid()
+        SELECT id FROM restaurants WHERE owner_id = auth.uid()
     )
 );
