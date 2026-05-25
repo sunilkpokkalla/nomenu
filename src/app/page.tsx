@@ -636,13 +636,16 @@ export default function Home() {
                       <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Unlimited</strong> Items & QRs
                     </li>
                     <li className="flex items-center gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Private Customer Feedback System</strong>
+                    </li>
+                    <li className="flex items-center gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Global Dish Auto-Fill Library</strong>
+                    </li>
+                    <li className="flex items-center gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Full Theme Customization</strong>
                     </li>
                     <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> Brand logo & custom colors
-                    </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> Detailed Scan Analytics
+                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> Detailed Scan Analytics & Timezones
                     </li>
                     <li className="flex items-center gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> Priority Customer Support
@@ -680,10 +683,10 @@ export default function Home() {
                       <Check className="h-4 w-4 text-indigo-400" /> Multi-Location Profiles
                     </li>
                     <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400" /> White-labeled Branding
+                      <Check className="h-4 w-4 text-indigo-400" /> Automated Negative Feedback Alerts
                     </li>
                     <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400" /> Stripe Table-side Payments (Beta)
+                      <Check className="h-4 w-4 text-indigo-400" /> White-labeled Branding
                     </li>
                     <li className="flex items-center gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-400" /> 24/7 Dedicated Account Manager

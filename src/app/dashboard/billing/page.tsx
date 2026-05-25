@@ -31,9 +31,10 @@ const PLANS = [
     features: [
       "Unlimited Digital Menus",
       "Unlimited Menu Items",
-      "Unlimited QR Code Generation",
-      "Full Theme Customization (Colors, Brand logo)",
-      "Detailed Analytics (Device types, Locations, Scans)",
+      "Private Customer Feedback System",
+      "Global Dish Auto-Fill Library",
+      "Full Theme Customization",
+      "Detailed Scan Analytics & Timezones",
       "Priority Customer Support",
     ],
   },
@@ -46,8 +47,8 @@ const PLANS = [
     features: [
       "Everything in Pro",
       "Multi-Location Restaurant Profiles",
+      "Automated Negative Feedback Alerts",
       "White-labeled Branding (No 'Powered by NoMenu')",
-      "Stripe Table-side Payments (Beta)",
       "24/7 Dedicated Account Manager",
     ],
   },
