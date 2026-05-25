@@ -569,15 +569,15 @@ export default function Home() {
 
           <div className="grid gap-6 lg:grid-cols-3 max-w-6xl mx-auto items-stretch">
             
-            {/* Free Starter */}
+            {/* Starter Plan */}
             <div className="rounded-[2.2rem] border border-slate-800 bg-slate-950 p-2.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
-                  <span className="text-xs uppercase font-extrabold tracking-[0.15em] text-slate-500">Free Tier</span>
-                  <h4 className="text-3xl font-black">Free Starter</h4>
+                  <span className="text-xs uppercase font-extrabold tracking-[0.15em] text-slate-500">Starter Tier</span>
+                  <h4 className="text-3xl font-black">Starter Plan</h4>
                   <p className="text-sm text-slate-400 font-medium">Perfect for testing digital menus or starting new businesses.</p>
                   <div className="pt-4 flex items-baseline">
-                    <span className="text-5xl font-black">$0</span>
+                    <span className="text-5xl font-black">$19</span>
                     <span className="text-xs text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
                   
@@ -604,13 +604,13 @@ export default function Home() {
 
                 <div className="mt-10 pt-4">
                   <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-12 text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
-                    <Link href="/signup">Create Free Account</Link>
+                    <Link href="/signup">Start Starter Plan</Link>
                   </Button>
                 </div>
               </div>
             </div>
 
-            {/* Growth Plan */}
+            {/* Pro Plan */}
             <div className="rounded-[2.2rem] border-2 border-indigo-650 bg-slate-950 p-2.5 flex flex-col justify-between relative shadow-2xl shadow-indigo-650/5 hover:border-indigo-500 transition-colors">
               <div className="absolute top-0 right-10 -translate-y-1/2 rounded-full bg-indigo-650 px-4 py-1 text-[9px] font-black uppercase tracking-wider text-white flex items-center gap-1 shadow-md">
                 <Zap className="h-3 w-3 fill-white" /> Popular
@@ -618,11 +618,11 @@ export default function Home() {
 
               <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
-                  <span className="text-xs uppercase font-extrabold tracking-[0.15em] text-indigo-400">Growth Experience</span>
-                  <h4 className="text-3xl font-black text-white">Growth Plan</h4>
+                  <span className="text-xs uppercase font-extrabold tracking-[0.15em] text-indigo-400">Professional</span>
+                  <h4 className="text-3xl font-black text-white">Pro Plan</h4>
                   <p className="text-sm text-slate-400 font-medium">Ideal for growing full-service restaurants.</p>
                   <div className="pt-4 flex items-baseline">
-                    <span className="text-5xl font-black text-white">$29</span>
+                    <span className="text-5xl font-black text-white">$49</span>
                     <span className="text-xs text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
 
@@ -652,21 +652,21 @@ export default function Home() {
 
                 <div className="mt-10 pt-4">
                   <Button asChild className="w-full bg-indigo-650 hover:bg-indigo-600 text-white rounded-full font-extrabold h-12 text-xs uppercase tracking-wider shadow-lg shadow-indigo-650/15 active:scale-[0.98] transition-all">
-                    <Link href="/signup">Get Growth Plan</Link>
+                    <Link href="/signup">Get Pro Plan</Link>
                   </Button>
                 </div>
               </div>
             </div>
 
-            {/* Pro Premium */}
+            {/* Elite Plan */}
             <div className="rounded-[2.2rem] border border-slate-800 bg-slate-950 p-2.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
                   <span className="text-xs uppercase font-extrabold tracking-[0.15em] text-slate-500">Premium Venue</span>
-                  <h4 className="text-3xl font-black text-white">Pro Premium Plan</h4>
+                  <h4 className="text-3xl font-black text-white">Elite Plan</h4>
                   <p className="text-sm text-slate-400 font-medium">Designed for premium venues and multi-location groups.</p>
                   <div className="pt-4 flex items-baseline">
-                    <span className="text-5xl font-black text-white">$79</span>
+                    <span className="text-5xl font-black text-white">$129</span>
                     <span className="text-xs text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
 
@@ -674,7 +674,7 @@ export default function Home() {
 
                   <ul className="space-y-3 text-sm text-slate-300 font-medium">
                     <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400" /> Everything in Growth Plan
+                      <Check className="h-4 w-4 text-indigo-400" /> Everything in Pro Plan
                     </li>
                     <li className="flex items-center gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-400" /> Multi-Location Profiles
@@ -693,7 +693,7 @@ export default function Home() {
 
                 <div className="mt-10 pt-4">
                   <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-12 text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
-                    <Link href="/signup">Get Pro Premium</Link>
+                    <Link href="/signup">Get Elite Plan</Link>
                   </Button>
                 </div>
               </div>
