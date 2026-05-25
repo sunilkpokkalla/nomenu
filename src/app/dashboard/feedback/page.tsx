@@ -128,20 +128,39 @@ export default async function FeedbackPage() {
             {allFeedbacks.map((feedback) => (
               <div key={feedback.id} className="p-6 flex flex-col md:flex-row gap-4 md:gap-8 hover:bg-slate-50/50 transition-colors">
                 {/* Left Col: Rating & Time */}
-                <div className="flex md:flex-col items-center md:items-start justify-between md:w-48 shrink-0 gap-2">
-                  <div className="flex gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`w-5 h-5 ${
-                          star <= feedback.rating 
-                            ? "fill-amber-400 text-amber-400" 
-                            : "fill-slate-100 text-slate-200"
-                        }`}
-                      />
-                    ))}
+                <div className="flex md:flex-col items-center md:items-start justify-between md:w-48 shrink-0 gap-3">
+                  <div className="flex flex-col gap-2 md:gap-3">
+                    {/* Sentiment Badge */}
+                    <div>
+                      {feedback.rating >= 4 ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase tracking-wider">
+                          <ArrowUpRight className="w-3 h-3" /> Positive
+                        </span>
+                      ) : feedback.rating === 3 ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 uppercase tracking-wider">
+                          Neutral
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 uppercase tracking-wider">
+                          <ArrowDownRight className="w-3 h-3" /> Needs Attention
+                        </span>
+                      )}
+                    </div>
+                    {/* Stars */}
+                    <div className="flex gap-0.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`w-5 h-5 ${
+                            star <= feedback.rating 
+                              ? "fill-amber-400 text-amber-400" 
+                              : "fill-slate-100 text-slate-200"
+                          }`}
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <span className="text-sm text-slate-500 font-medium whitespace-nowrap">
+                  <span className="text-sm text-slate-500 font-medium whitespace-nowrap md:mt-1">
                     {feedback.created_at ? formatTimeAgoWithExact(feedback.created_at, restaurant.timezone) : "Unknown date"}
                   </span>
                 </div>
@@ -181,23 +200,6 @@ export default async function FeedbackPage() {
                       )}
                     </div>
                   )}
-                  
-                  {/* Sentiment Badge */}
-                  <div className="mt-3">
-                    {feedback.rating >= 4 ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <ArrowUpRight className="w-3.5 h-3.5" /> Positive
-                      </span>
-                    ) : feedback.rating === 3 ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                        Neutral
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
-                        <ArrowDownRight className="w-3.5 h-3.5" /> Needs Attention
-                      </span>
-                    )}
-                  </div>
                 </div>
               </div>
             ))}
