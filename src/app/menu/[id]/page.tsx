@@ -7,7 +7,7 @@ import { MenuClientView } from "@/components/menu/menu-client-view";
 export default async function PublicMenuPage(
   props: {
     params: Promise<{ id: string }>;
-    searchParams: Promise<{ qr?: string }>;
+    searchParams: Promise<{ qr?: string; table?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;

@@ -51,7 +51,7 @@ export default async function FeedbackPage() {
     console.error("Error fetching feedback:", error);
   }
 
-  const allFeedbacks = feedbacks || [];
+  const allFeedbacks: any[] = feedbacks || [];
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -60,7 +60,7 @@ export default async function FeedbackPage() {
         <p className="text-slate-500">See what your customers are saying about your menu.</p>
       </div>
 
-      <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone} />
+      <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
 
       {/* Feedback List */}
       <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
@@ -80,7 +80,7 @@ export default async function FeedbackPage() {
           </div>
         ) : (
           (() => {
-            const groupedFeedbacks: Record<string, typeof allFeedbacks> = {};
+            const groupedFeedbacks: Record<string, any[]> = {};
             
             allFeedbacks.forEach(feedback => {
               if (!feedback.created_at) return;
@@ -191,8 +191,9 @@ export default async function FeedbackPage() {
             ))}
             </div>
           </div>
-        ))
-      })()}
+        ));
+      })()
+        )}
       </div>
     </div>
   );
