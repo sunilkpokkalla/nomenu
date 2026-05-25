@@ -538,6 +538,7 @@ export default async function DashboardPage(
                           ? new Date(scan.scanned_at).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
+                              timeZone: restaurant.timezone || undefined,
                             })
                           : "N/A"}
                       </span>
