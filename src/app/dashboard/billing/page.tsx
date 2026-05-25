@@ -9,9 +9,10 @@ import { createClient } from "@/lib/supabase/server";
 
 const PLANS = [
   {
-    id: "free",
-    name: "Free Starter",
-    price: "$0",
+    id: "free", // Kept ID as free for backward compatibility in db, but renamed UI
+    name: "Starter Plan",
+    price: "$19",
+    period: "/mo",
     description: "Perfect for testing or small pop-up menus.",
     features: [
       "1 Active Digital Menu",
@@ -22,9 +23,9 @@ const PLANS = [
     ],
   },
   {
-    id: "growth",
-    name: "Growth Plan",
-    price: "$29",
+    id: "growth", // Kept ID for backward compatibility
+    name: "Pro Plan",
+    price: "$49",
     period: "/mo",
     description: "Ideal for growing full-service restaurants.",
     features: [
@@ -37,13 +38,13 @@ const PLANS = [
     ],
   },
   {
-    id: "pro",
-    name: "Pro Premium",
-    price: "$79",
+    id: "pro", // Kept ID for backward compatibility
+    name: "Elite Plan",
+    price: "$129",
     period: "/mo",
     description: "Designed for premium venues and multi-location groups.",
     features: [
-      "Everything in Growth",
+      "Everything in Pro",
       "Multi-Location Restaurant Profiles",
       "White-labeled Branding (No 'Powered by NoMenu')",
       "Stripe Table-side Payments (Beta)",
