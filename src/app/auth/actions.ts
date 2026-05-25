@@ -97,11 +97,15 @@ export async function loginWithGoogle() {
   }
 
   const headersList = await headers();
+  const origin = headersList.get("origin");
   const host = headersList.get("host");
   const protocol = headersList.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
   
   let cleanAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  if (host) {
+  
+  if (origin) {
+    cleanAppUrl = origin;
+  } else if (host) {
     cleanAppUrl = `${protocol}://${host}`;
   } else if (cleanAppUrl.endsWith("/")) {
     cleanAppUrl = cleanAppUrl.slice(0, -1);
@@ -110,7 +114,9 @@ export async function loginWithGoogle() {
   const redirectToUrl = `${cleanAppUrl}/auth/callback`;
 
   console.log("loginWithGoogle starting...", {
-    redirectTo: redirectToUrl
+    redirectTo: redirectToUrl,
+    origin,
+    host
   });
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
