@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -96,8 +96,17 @@ export async function loginWithGoogle() {
     redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
   }
 
-  const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const cleanAppUrl = rawAppUrl.endsWith("/") ? rawAppUrl.slice(0, -1) : rawAppUrl;
+  const headersList = await headers();
+  const host = headersList.get("host");
+  const protocol = headersList.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
+  
+  let cleanAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  if (host) {
+    cleanAppUrl = `${protocol}://${host}`;
+  } else if (cleanAppUrl.endsWith("/")) {
+    cleanAppUrl = cleanAppUrl.slice(0, -1);
+  }
+
   const redirectToUrl = `${cleanAppUrl}/auth/callback`;
 
   console.log("loginWithGoogle starting...", {
