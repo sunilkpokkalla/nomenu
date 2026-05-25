@@ -2,7 +2,14 @@
 
 import { createClient } from "@/lib/supabase/server";
 
-export async function submitFeedback(restaurantId: string, rating: number, comment?: string) {
+export async function submitFeedback(
+  restaurantId: string, 
+  rating: number, 
+  comment?: string,
+  customerName?: string,
+  contactInfo?: string,
+  tableNumber?: string
+) {
   const supabase = await createClient();
 
   // Basic validation
@@ -13,6 +20,9 @@ export async function submitFeedback(restaurantId: string, rating: number, comme
     restaurant_id: restaurantId,
     rating,
     comment: comment?.trim() || null,
+    customer_name: customerName?.trim() || null,
+    contact_info: contactInfo?.trim() || null,
+    table_number: tableNumber?.trim() || null,
   });
 
   if (error) {

@@ -14,6 +14,7 @@ export default async function PublicMenuPage(
   const params = await props.params;
   const menuId = params.id;
   const qrCodeId = searchParams.qr;
+  const tableNumber = searchParams.table;
 
   const supabase = await createClient();
 
@@ -107,6 +108,7 @@ export default async function PublicMenuPage(
       }}
       categories={categoriesList}
       items={itemsList}
+      tableNumber={tableNumber}
     />
   );
 }

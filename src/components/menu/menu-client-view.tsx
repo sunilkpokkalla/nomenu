@@ -62,9 +62,10 @@ interface MenuClientViewProps {
   restaurant: Restaurant;
   categories: Category[];
   items: MenuItem[];
+  tableNumber?: string;
 }
 
-export function MenuClientView({ restaurant, categories, items }: MenuClientViewProps) {
+export function MenuClientView({ restaurant, categories, items, tableNumber }: MenuClientViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("");
   const [layoutMode, setLayoutMode] = useState<"list" | "grid">("list");
@@ -1465,7 +1466,7 @@ export function MenuClientView({ restaurant, categories, items }: MenuClientView
       )}
 
       {/* Feedback Button */}
-      <FeedbackFAB restaurantId={restaurant.id} />
+      <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} />
     </div>
   );
 }

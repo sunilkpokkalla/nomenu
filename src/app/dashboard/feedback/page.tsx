@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
+import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, MapPin, Mail } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
@@ -156,6 +156,30 @@ export default async function FeedbackPage() {
                     <p className="text-slate-400 italic text-[15px]">
                       No written comment provided.
                     </p>
+                  )}
+                  
+                  {/* Customer Info & Table Info */}
+                  {(feedback.customer_name || feedback.contact_info || feedback.table_number) && (
+                    <div className="mt-4 flex flex-wrap gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                      {feedback.customer_name && (
+                        <div className="flex items-center gap-1.5 text-sm text-slate-600">
+                          <User className="w-4 h-4 text-slate-400" />
+                          <span className="font-medium">{feedback.customer_name}</span>
+                        </div>
+                      )}
+                      {feedback.contact_info && (
+                        <div className="flex items-center gap-1.5 text-sm text-slate-600">
+                          <Mail className="w-4 h-4 text-slate-400" />
+                          <span>{feedback.contact_info}</span>
+                        </div>
+                      )}
+                      {feedback.table_number && (
+                        <div className="flex items-center gap-1.5 text-sm text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100 ml-auto">
+                          <MapPin className="w-3.5 h-3.5" />
+                          Table {feedback.table_number}
+                        </div>
+                      )}
+                    </div>
                   )}
                   
                   {/* Sentiment Badge */}

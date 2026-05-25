@@ -6,13 +6,16 @@ import { submitFeedback } from "@/app/menu/[id]/actions";
 
 interface FeedbackFABProps {
   restaurantId: string;
+  tableNumber?: string;
 }
 
-export function FeedbackFAB({ restaurantId }: FeedbackFABProps) {
+export function FeedbackFAB({ restaurantId, tableNumber }: FeedbackFABProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [comment, setComment] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [contactInfo, setContactInfo] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -27,7 +30,7 @@ export function FeedbackFAB({ restaurantId }: FeedbackFABProps) {
     setIsSubmitting(true);
     setError("");
 
-    const result = await submitFeedback(restaurantId, rating, comment);
+    const result = await submitFeedback(restaurantId, rating, comment, customerName, contactInfo, tableNumber);
 
     setIsSubmitting(false);
 
@@ -129,6 +132,29 @@ export function FeedbackFAB({ restaurantId }: FeedbackFABProps) {
                       placeholder="Tell us what you liked or what we can improve..."
                       className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:border-slate-400 focus:ring-slate-400 transition-colors resize-none"
                     />
+                  </div>
+
+                  {/* Optional Contact Info */}
+                  <div className="space-y-3 pt-2 border-t border-slate-100">
+                    <p className="text-xs text-slate-500 font-medium">
+                      Want us to follow up? Leave your details below (Optional).
+                    </p>
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="Your Name"
+                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:border-slate-400 focus:ring-slate-400 transition-colors"
+                      />
+                      <input
+                        type="text"
+                        value={contactInfo}
+                        onChange={(e) => setContactInfo(e.target.value)}
+                        placeholder="Email or Phone Number"
+                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:border-slate-400 focus:ring-slate-400 transition-colors"
+                      />
+                    </div>
                   </div>
 
                   {error && (
