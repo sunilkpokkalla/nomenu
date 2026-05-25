@@ -126,10 +126,23 @@ export default async function FeedbackPage() {
         ) : (
           <div className="divide-y">
             {allFeedbacks.map((feedback) => (
-              <div key={feedback.id} className="p-6 flex flex-col md:flex-row gap-4 md:gap-8 hover:bg-slate-50/50 transition-colors">
-                {/* Left Col: Rating & Time */}
-                <div className="flex md:flex-col items-center md:items-start justify-between md:w-48 shrink-0 gap-3">
-                  <div className="flex flex-col gap-2 md:gap-3">
+              <div key={feedback.id} className="p-5 flex flex-col gap-3 hover:bg-slate-50/50 transition-colors">
+                {/* Header: Stars, Sentiment, Time */}
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    {/* Stars */}
+                    <div className="flex gap-0.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`w-4 h-4 ${
+                            star <= feedback.rating 
+                              ? "fill-amber-400 text-amber-400" 
+                              : "fill-slate-100 text-slate-200"
+                          }`}
+                        />
+                      ))}
+                    </div>
                     {/* Sentiment Badge */}
                     <div>
                       {feedback.rating >= 4 ? (
@@ -146,61 +159,49 @@ export default async function FeedbackPage() {
                         </span>
                       )}
                     </div>
-                    {/* Stars */}
-                    <div className="flex gap-0.5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          className={`w-5 h-5 ${
-                            star <= feedback.rating 
-                              ? "fill-amber-400 text-amber-400" 
-                              : "fill-slate-100 text-slate-200"
-                          }`}
-                        />
-                      ))}
-                    </div>
                   </div>
-                  <span className="text-sm text-slate-500 font-medium whitespace-nowrap md:mt-1">
+                  {/* Time Ago */}
+                  <span className="text-xs text-slate-500 font-medium">
                     {feedback.created_at ? formatTimeAgoWithExact(feedback.created_at, restaurant.timezone) : "Unknown date"}
                   </span>
                 </div>
 
-                {/* Right Col: Comment */}
-                <div className="flex-1">
+                {/* Body: Comment */}
+                <div>
                   {feedback.comment ? (
-                    <p className="text-slate-700 leading-relaxed text-[15px]">
+                    <p className="text-slate-700 leading-relaxed text-[14px]">
                       "{feedback.comment}"
                     </p>
                   ) : (
-                    <p className="text-slate-400 italic text-[15px]">
+                    <p className="text-slate-400 italic text-[14px]">
                       No written comment provided.
                     </p>
                   )}
-                  
-                  {/* Customer Info & Table Info */}
-                  {(feedback.customer_name || feedback.contact_info || feedback.table_number) && (
-                    <div className="mt-4 flex flex-wrap gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                      {feedback.customer_name && (
-                        <div className="flex items-center gap-1.5 text-sm text-slate-600">
-                          <User className="w-4 h-4 text-slate-400" />
-                          <span className="font-medium">{feedback.customer_name}</span>
-                        </div>
-                      )}
-                      {feedback.contact_info && (
-                        <div className="flex items-center gap-1.5 text-sm text-slate-600">
-                          <Mail className="w-4 h-4 text-slate-400" />
-                          <span>{feedback.contact_info}</span>
-                        </div>
-                      )}
-                      {feedback.table_number && (
-                        <div className="flex items-center gap-1.5 text-sm text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100 ml-auto">
-                          <MapPin className="w-3.5 h-3.5" />
-                          Table {feedback.table_number}
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </div>
+
+                {/* Footer: Customer Info & Table Info */}
+                {(feedback.customer_name || feedback.contact_info || feedback.table_number) && (
+                  <div className="mt-1 flex flex-wrap items-center gap-4 pt-3 border-t border-slate-100">
+                    {feedback.customer_name && (
+                      <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                        <User className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="font-medium">{feedback.customer_name}</span>
+                      </div>
+                    )}
+                    {feedback.contact_info && (
+                      <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                        <Mail className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{feedback.contact_info}</span>
+                      </div>
+                    )}
+                    {feedback.table_number && (
+                      <div className="flex items-center gap-1.5 text-xs text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100 ml-auto">
+                        <MapPin className="w-3 h-3" />
+                        Table {feedback.table_number}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
