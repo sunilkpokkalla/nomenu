@@ -16,6 +16,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
+import {
+  GLOBAL_MENU_TYPES,
+  REGIONAL_MENU_TYPES,
+  SPECIALTY_MENU_TYPES,
+  getChefRecommendations
+} from "@/lib/menu-type-options";
 
 export default async function MenusPage(
   props: {
@@ -43,6 +49,8 @@ export default async function MenusPage(
   if (!restaurant) {
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
   }
+
+  const chefRecommendations = getChefRecommendations(restaurant.cuisine_type);
 
   const { data: menus } = await supabase
     .from("menus")
@@ -96,8 +104,17 @@ export default async function MenusPage(
                           </Button>
                         </form>
                       </div>
-                      <CardTitle className="mt-4 text-xl">{menu.name}</CardTitle>
-                      <CardDescription className="line-clamp-2 min-h-[40px]">
+                      <div className="flex flex-col gap-1 mt-4">
+                        <CardTitle className="text-xl flex flex-wrap items-center gap-2">
+                          {menu.name}
+                          {menu.menu_type && (
+                            <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-semibold text-slate-800 border border-slate-200 uppercase tracking-wider">
+                              {menu.menu_type}
+                            </span>
+                          )}
+                        </CardTitle>
+                      </div>
+                      <CardDescription className="line-clamp-2 min-h-[40px] mt-2">
                         {menu.description || "No description provided."}
                       </CardDescription>
                     </CardHeader>
@@ -170,6 +187,51 @@ export default async function MenusPage(
                 <div className="space-y-2">
                   <Label htmlFor="name">Menu Name</Label>
                   <Input id="name" name="name" placeholder="e.g. Lunch Specials, Wine List" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="menuType">Menu Format / Type</Label>
+                  <select
+                    id="menuType"
+                    name="menuType"
+                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 h-10 cursor-pointer"
+                    required
+                  >
+                    <option value="">Select Format...</option>
+                    
+                    {chefRecommendations.length > 0 && (
+                      <optgroup label="👨‍🍳 Chef's Recommendations for your Cuisine">
+                        {chefRecommendations.map((c) => (
+                          <option key={`rec-${c.value}`} value={c.value}>
+                            {c.label}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )}
+
+                    <optgroup label="🌍 Global Formats">
+                      {GLOBAL_MENU_TYPES.map((c) => (
+                        <option key={`global-${c.value}`} value={c.value}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </optgroup>
+
+                    <optgroup label="🎌 Regional & Cultural Formats">
+                      {REGIONAL_MENU_TYPES.map((c) => (
+                        <option key={`regional-${c.value}`} value={c.value}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </optgroup>
+
+                    <optgroup label="✨ Specialty Formats">
+                      {SPECIALTY_MENU_TYPES.map((c) => (
+                        <option key={`specialty-${c.value}`} value={c.value}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>

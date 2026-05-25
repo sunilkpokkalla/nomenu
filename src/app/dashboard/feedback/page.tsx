@@ -1,0 +1,185 @@
+import { redirect } from "next/navigation";
+import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
+import { formatTimeAgoWithExact } from "@/lib/date-utils";
+
+import { createClient } from "@/lib/supabase/server";
+
+export const metadata = {
+  title: "Customer Feedback | NoMenu Dashboard",
+  description: "View and manage customer feedback.",
+};
+
+export default async function FeedbackPage() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  // Get user's restaurant
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("id, timezone")
+    .eq("owner_id", user.id)
+    .single();
+
+  if (!restaurant) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 text-center h-[50vh]">
+        <MessageSquare className="h-12 w-12 text-slate-300 mb-4" />
+        <h2 className="text-xl font-semibold text-slate-700">No Restaurant Found</h2>
+        <p className="text-slate-500 mt-2">Please set up your restaurant profile first.</p>
+      </div>
+    );
+  }
+
+  // Fetch feedback
+  const { data: feedbacks, error } = await supabase
+    .from("customer_feedback")
+    .select("*")
+    .eq("restaurant_id", restaurant.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching feedback:", error);
+  }
+
+  const allFeedbacks = feedbacks || [];
+  
+  // Calculate analytics
+  const totalFeedback = allFeedbacks.length;
+  const averageRating = totalFeedback > 0 
+    ? (allFeedbacks.reduce((sum, item) => sum + item.rating, 0) / totalFeedback).toFixed(1) 
+    : "0.0";
+    
+  const positiveCount = allFeedbacks.filter(f => f.rating >= 4).length;
+  const positivePercentage = totalFeedback > 0 ? Math.round((positiveCount / totalFeedback) * 100) : 0;
+
+  return (
+    <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Customer Feedback</h1>
+        <p className="text-slate-500">See what your customers are saying about your menu.</p>
+      </div>
+
+      {/* Analytics Cards */}
+      <div className="grid gap-6 md:grid-cols-3">
+        <div className="bg-white rounded-2xl p-6 border shadow-sm">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+              <MessageSquare className="w-5 h-5" />
+            </div>
+            <h3 className="font-medium text-slate-600">Total Feedback</h3>
+          </div>
+          <p className="text-3xl font-bold text-slate-900">{totalFeedback}</p>
+        </div>
+
+        <div className="bg-white rounded-2xl p-6 border shadow-sm">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-amber-50 text-amber-500 rounded-lg">
+              <Star className="w-5 h-5 fill-amber-500" />
+            </div>
+            <h3 className="font-medium text-slate-600">Average Rating</h3>
+          </div>
+          <p className="text-3xl font-bold text-slate-900 flex items-baseline gap-2">
+            {averageRating} <span className="text-sm font-medium text-slate-500">/ 5.0</span>
+          </p>
+        </div>
+
+        <div className="bg-white rounded-2xl p-6 border shadow-sm">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <h3 className="font-medium text-slate-600">Positive Sentiment</h3>
+          </div>
+          <div className="flex items-end justify-between">
+            <p className="text-3xl font-bold text-slate-900">{positivePercentage}%</p>
+            <div className="flex items-center text-sm text-emerald-600 font-medium">
+              <ArrowUpRight className="w-4 h-4 mr-1" />
+              4 & 5 Stars
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Feedback List */}
+      <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
+        <div className="p-6 border-b bg-slate-50/50 flex justify-between items-center">
+          <h2 className="font-semibold text-slate-900 text-lg">Recent Responses</h2>
+        </div>
+        
+        {allFeedbacks.length === 0 ? (
+          <div className="p-12 text-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageSquare className="w-8 h-8 text-slate-400" />
+            </div>
+            <h3 className="text-lg font-medium text-slate-900">No feedback yet</h3>
+            <p className="text-slate-500 max-w-sm mx-auto mt-2">
+              When customers leave feedback on your digital menu, it will appear here.
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y">
+            {allFeedbacks.map((feedback) => (
+              <div key={feedback.id} className="p-6 flex flex-col md:flex-row gap-4 md:gap-8 hover:bg-slate-50/50 transition-colors">
+                {/* Left Col: Rating & Time */}
+                <div className="flex md:flex-col items-center md:items-start justify-between md:w-48 shrink-0 gap-2">
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`w-5 h-5 ${
+                          star <= feedback.rating 
+                            ? "fill-amber-400 text-amber-400" 
+                            : "fill-slate-100 text-slate-200"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm text-slate-500 font-medium whitespace-nowrap">
+                    {feedback.created_at ? formatTimeAgoWithExact(feedback.created_at, restaurant.timezone) : "Unknown date"}
+                  </span>
+                </div>
+
+                {/* Right Col: Comment */}
+                <div className="flex-1">
+                  {feedback.comment ? (
+                    <p className="text-slate-700 leading-relaxed text-[15px]">
+                      "{feedback.comment}"
+                    </p>
+                  ) : (
+                    <p className="text-slate-400 italic text-[15px]">
+                      No written comment provided.
+                    </p>
+                  )}
+                  
+                  {/* Sentiment Badge */}
+                  <div className="mt-3">
+                    {feedback.rating >= 4 ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <ArrowUpRight className="w-3.5 h-3.5" /> Positive
+                      </span>
+                    ) : feedback.rating === 3 ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                        Neutral
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                        <ArrowDownRight className="w-3.5 h-3.5" /> Needs Attention
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

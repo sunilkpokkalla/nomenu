@@ -3,7 +3,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { createMenuItem, deleteMenuItem, toggleMenuItemStatus } from "@/app/dashboard/actions";
-import { ImageUploader } from "@/components/dashboard/image-uploader";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,10 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
+import { CreateItemForm } from "@/components/dashboard/create-item-form";
 
 export default async function ItemsPage(
   props: {
@@ -313,130 +310,12 @@ export default async function ItemsPage(
                   </Button>
                 </div>
               ) : (
-                <form action={createMenuItem} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Item Name</Label>
-                    <Input id="name" name="name" placeholder="e.g. Ribeye Steak, Cappuccino" required />
-                  </div>
-                  <div className="grid gap-4 grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="price">Price</Label>
-                      <Input
-                        id="price"
-                        name="price"
-                        type="number"
-                        step="0.01"
-                        placeholder="0.00"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="menuId">Assign to Menu</Label>
-                      <select
-                        id="menuId"
-                        name="menuId"
-                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                        required
-                      >
-                        {menusList.map((m) => (
-                          <option key={m.id} value={m.id}>
-                            {m.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="cookingTime">Cooking Time (minutes) — Optional</Label>
-                    <Input
-                      id="cookingTime"
-                      name="cookingTime"
-                      type="number"
-                      min="0"
-                      placeholder="e.g. 15"
-                    />
-                  </div>
-
-                  <div className="space-y-2 border-t pt-3">
-                    <Label htmlFor="categoryId">Category</Label>
-                    <select
-                      id="categoryId"
-                      name="categoryId"
-                      className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                    >
-                      <option value="">— Create New Category (Enter below) —</option>
-                      {restaurantCategories.map((cat) => {
-                        const m = menusList.find((menu) => menu.id === cat.menu_id);
-                        return (
-                          <option key={cat.id} value={cat.id}>
-                            {cat.name} ({m?.name || "Menu"})
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="newCategoryName">Or Create New Category</Label>
-                    <Input
-                      id="newCategoryName"
-                      name="newCategoryName"
-                      placeholder="e.g. Starters, Desserts, Cocktails"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Creates category in the chosen menu if select above is set to create new.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2 border-t pt-3">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      name="description"
-                      placeholder="e.g. Served with seasonal roasted vegetables and fresh garlic herb butter."
-                    />
-                  </div>
-
-                  <div className="space-y-2 border-t pt-3">
-                    <Label>Dietary & Marketing Labels</Label>
-                    <div className="grid grid-cols-2 gap-2 pt-1 text-sm">
-                      <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-                        <input type="checkbox" name="isPopular" value="true" className="rounded text-primary focus:ring-primary h-4 w-4" />
-                        Popular / Chef Spec
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-                        <input type="checkbox" name="isVegetarian" value="true" className="rounded text-primary focus:ring-primary h-4 w-4" />
-                        Vegetarian
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-                        <input type="checkbox" name="isVegan" value="true" className="rounded text-primary focus:ring-primary h-4 w-4" />
-                        Vegan
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-                        <input type="checkbox" name="isGlutenFree" value="true" className="rounded text-primary focus:ring-primary h-4 w-4" />
-                        Gluten Free
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-                        <input type="checkbox" name="isSpicy" value="true" className="rounded text-primary focus:ring-primary h-4 w-4" />
-                        Spicy
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-                        <input type="checkbox" name="isAvailable" value="true" defaultChecked className="rounded text-primary focus:ring-primary h-4 w-4" />
-                        In Stock / Available
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 border-t pt-3">
-                    <ImageUploader />
-                  </div>
-
-                  <Button type="submit" className="w-full">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Save Menu Item
-                  </Button>
-                </form>
+                <CreateItemForm
+                  cuisineType={restaurant.cuisine_type}
+                  menus={menusList}
+                  categories={restaurantCategories}
+                  createAction={createMenuItem}
+                />
               )}
             </CardContent>
           </Card>

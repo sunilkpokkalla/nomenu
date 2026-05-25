@@ -53,7 +53,7 @@ export async function updateSession(request: NextRequest) {
   console.log("Middleware user status:", { userExists: !!user, email: user?.email });
 
   const isDashboard = pathname.startsWith("/dashboard");
-  const isAuthPage = pathname === "/login" || pathname === "/signup";
+  const isAuthPage = pathname === "/login" || pathname === "/signup" || pathname === "/forgot-password";
 
   if (isDashboard && !user) {
     console.log("Middleware: Redirecting unauthenticated user from dashboard to login");

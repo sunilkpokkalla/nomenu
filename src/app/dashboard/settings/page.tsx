@@ -2,12 +2,44 @@ import { Building2, Save } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { updateRestaurantSettings } from "@/app/dashboard/actions";
+import { CuisineSelect } from "@/components/dashboard/cuisine-select";
+import { CURRENCY_OPTIONS } from "@/lib/currency-options";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
+
+
+const COMMON_TIMEZONES = [
+  { tz: "Pacific/Midway", label: "(UTC-11:00) Midway Island, Samoa" },
+  { tz: "Pacific/Honolulu", label: "(UTC-10:00) Hawaii" },
+  { tz: "America/Anchorage", label: "(UTC-09:00) Alaska" },
+  { tz: "America/Los_Angeles", label: "(UTC-08:00) Pacific Time (US & Canada)" },
+  { tz: "America/Denver", label: "(UTC-07:00) Mountain Time (US & Canada)" },
+  { tz: "America/Chicago", label: "(UTC-06:00) Central Time (US & Canada)" },
+  { tz: "America/New_York", label: "(UTC-05:00) Eastern Time (US & Canada)" },
+  { tz: "America/Caracas", label: "(UTC-04:00) Caracas, La Paz" },
+  { tz: "America/Buenos_Aires", label: "(UTC-03:00) Buenos Aires, Brazil" },
+  { tz: "Atlantic/South_Georgia", label: "(UTC-02:00) Mid-Atlantic" },
+  { tz: "Atlantic/Azores", label: "(UTC-01:00) Azores, Cape Verde" },
+  { tz: "UTC", label: "(UTC+00:00) Coordinated Universal Time" },
+  { tz: "Europe/London", label: "(UTC+00:00) London, Edinburgh (UK)" },
+  { tz: "Europe/Paris", label: "(UTC+01:00) Central European Time (Paris, Berlin)" },
+  { tz: "Europe/Athens", label: "(UTC+02:00) Eastern European Time (Athens, Cairo)" },
+  { tz: "Europe/Moscow", label: "(UTC+03:00) Moscow, St. Petersburg" },
+  { tz: "Asia/Dubai", label: "(UTC+04:00) Abu Dhabi, Muscat, Dubai" },
+  { tz: "Asia/Karachi", label: "(UTC+05:00) Islamabad, Karachi" },
+  { tz: "Asia/Kolkata", label: "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi (India)" },
+  { tz: "Asia/Dhaka", label: "(UTC+06:00) Astana, Dhaka (Bangladesh)" },
+  { tz: "Asia/Bangkok", label: "(UTC+07:00) Bangkok, Hanoi, Jakarta" },
+  { tz: "Asia/Hong_Kong", label: "(UTC+08:00) Beijing, Hong Kong, Singapore" },
+  { tz: "Asia/Tokyo", label: "(UTC+09:00) Osaka, Sapporo, Tokyo (Japan)" },
+  { tz: "Australia/Sydney", label: "(UTC+10:00) Canberra, Melbourne, Sydney" },
+  { tz: "Asia/Magadan", label: "(UTC+11:00) Magadan, Solomon Is., New Caledonia" },
+  { tz: "Pacific/Auckland", label: "(UTC+12:00) Auckland, Wellington (New Zealand)" },
+];
 
 export default async function SettingsPage(
   props: {
@@ -35,6 +67,8 @@ export default async function SettingsPage(
   if (!restaurant) {
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
   }
+
+  const hasCustomLegacyCurrency = restaurant.currency && !CURRENCY_OPTIONS.some((c) => c.code === restaurant.currency);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 lg:px-8">
@@ -74,8 +108,8 @@ export default async function SettingsPage(
                 <Input id="name" name="name" defaultValue={restaurant.name} placeholder="Le Bistrot Parisien" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cuisineType">Cuisine Type</Label>
-                <Input id="cuisineType" name="cuisineType" defaultValue={restaurant.cuisine_type || ""} placeholder="e.g. French Bistro, Italian" />
+                <Label htmlFor="cuisineSelect">Cuisine / Service Style</Label>
+                <CuisineSelect defaultValue={restaurant.cuisine_type || ""} />
               </div>
             </div>
 
@@ -86,13 +120,48 @@ export default async function SettingsPage(
               </div>
               <div className="space-y-2">
                 <Label htmlFor="currency">Currency Code</Label>
-                <Input id="currency" name="currency" defaultValue={restaurant.currency || "USD"} maxLength={3} placeholder="USD, EUR, GBP" required />
+                <select
+                  id="currency"
+                  name="currency"
+                  defaultValue={restaurant.currency || "USD"}
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 h-10 cursor-pointer"
+                  required
+                >
+                  {hasCustomLegacyCurrency && (
+                    <option value={restaurant.currency!}>
+                      {restaurant.currency} (Custom)
+                    </option>
+                  )}
+                  {CURRENCY_OPTIONS.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="address">Physical Address</Label>
-              <Textarea id="address" name="address" defaultValue={restaurant.address || ""} placeholder="75 Rue de l'Université, Paris, France" rows={3} />
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="address">Physical Address</Label>
+                <Textarea id="address" name="address" defaultValue={restaurant.address || ""} placeholder="75 Rue de l'Université, Paris, France" rows={3} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="timezone">Timezone</Label>
+                <select
+                  id="timezone"
+                  name="timezone"
+                  defaultValue={restaurant.timezone || "UTC"}
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 h-10 cursor-pointer"
+                >
+                  {COMMON_TIMEZONES.map(({ tz, label }) => (
+                    <option key={tz} value={tz}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[10px] text-muted-foreground">Used for analytics and feedback timestamps.</p>
+              </div>
             </div>
 
             <Button type="submit" className="w-full sm:w-auto">

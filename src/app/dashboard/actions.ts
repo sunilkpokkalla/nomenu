@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/types/database";
 
 function field(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -78,12 +79,14 @@ export async function createMenu(formData: FormData) {
 
   const description = field(formData, "description");
   const isActive = formData.get("isActive") === "true";
+  const menuType = field(formData, "menuType");
 
   const { error } = await supabase.from("menus").insert({
     restaurant_id: restaurant.id,
     name,
     description,
     is_active: isActive,
+    menu_type: menuType,
   });
 
   if (error) {
@@ -206,10 +209,8 @@ export async function createMenuItem(formData: FormData) {
   const isGlutenFree = formData.get("isGlutenFree") === "true";
   const isSpicy = formData.get("isSpicy") === "true";
   const imageUrl = field(formData, "imageUrl");
-  const cookingTimeStr = field(formData, "cookingTime");
-  const cookingTime = cookingTimeStr ? parseInt(cookingTimeStr, 10) : null;
 
-  const { error } = await supabase.from("menu_items").insert({
+  const insertPayload: Database["public"]["Tables"]["menu_items"]["Insert"] = {
     category_id: categoryId,
     restaurant_id: restaurant.id,
     name,
@@ -222,8 +223,9 @@ export async function createMenuItem(formData: FormData) {
     is_gluten_free: isGlutenFree,
     is_spicy: isSpicy,
     image_url: imageUrl,
-    cooking_time: cookingTime && !isNaN(cookingTime) ? cookingTime : null,
-  });
+  };
+
+  const { error } = await supabase.from("menu_items").insert(insertPayload);
 
   if (error) {
     redirect(`/dashboard/items?message=${encodeURIComponent(error.message)}`);
@@ -372,6 +374,7 @@ export async function updateRestaurantSettings(formData: FormData) {
       address: field(formData, "address"),
       phone: field(formData, "phone"),
       currency: field(formData, "currency") ?? "USD",
+      timezone: field(formData, "timezone") ?? "UTC",
     })
     .eq("id", restaurant.id);
 

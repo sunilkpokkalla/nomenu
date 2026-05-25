@@ -28,6 +28,7 @@ export interface Database {
           subscription_status: string | null;
           stripe_customer_id: string | null;
           stripe_subscription_id: string | null;
+          timezone: string | null;
           created_at: string | null;
         };
         Insert: {
@@ -48,6 +49,7 @@ export interface Database {
           subscription_status?: string | null;
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
+          timezone?: string | null;
           created_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
@@ -63,6 +65,7 @@ export interface Database {
           schedule_type: string | null;
           schedule_start: string | null;
           schedule_end: string | null;
+          menu_type: string | null;
           created_at: string | null;
         };
         Insert: {
@@ -74,6 +77,7 @@ export interface Database {
           schedule_type?: string | null;
           schedule_start?: string | null;
           schedule_end?: string | null;
+          menu_type?: string | null;
           created_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["menus"]["Insert"]>;
@@ -228,6 +232,31 @@ export interface Database {
           },
           {
             foreignKeyName: "menu_scans_restaurant_id_fkey";
+            columns: ["restaurant_id"];
+            referencedRelation: "restaurants";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      customer_feedback: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          rating: number;
+          comment: string | null;
+          created_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          rating: number;
+          comment?: string | null;
+          created_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["customer_feedback"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "customer_feedback_restaurant_id_fkey";
             columns: ["restaurant_id"];
             referencedRelation: "restaurants";
             referencedColumns: ["id"];

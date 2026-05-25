@@ -124,3 +124,57 @@ export async function loginWithGoogle() {
     console.warn("loginWithGoogle: No redirect URL returned by Supabase.");
   }
 }
+
+export async function forgotPassword(formData: FormData) {
+  if (!hasSupabaseEnv()) {
+    redirect("/forgot-password?message=Configure%20Supabase%20env%20vars%20first");
+  }
+
+  const email = getString(formData, "email");
+  if (!email) {
+    redirect("/forgot-password?message=Please%20provide%20a%20valid%20email%20address");
+  }
+
+  const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const cleanAppUrl = rawAppUrl.endsWith("/") ? rawAppUrl.slice(0, -1) : rawAppUrl;
+  const redirectTo = `${cleanAppUrl}/auth/callback?next=/reset-password`;
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo,
+  });
+
+  if (error) {
+    redirect(`/forgot-password?message=${encodeURIComponent(error.message)}`);
+  }
+
+  redirect("/forgot-password?message=Check%20your%20email%20for%20a%20password%20reset%20link.");
+}
+
+export async function resetPassword(formData: FormData) {
+  if (!hasSupabaseEnv()) {
+    redirect("/reset-password?message=Configure%20Supabase%20env%20vars%20first");
+  }
+
+  const password = getString(formData, "password");
+  const confirmPassword = getString(formData, "confirmPassword");
+
+  if (!password) {
+    redirect("/reset-password?message=Password%20is%20required");
+  }
+
+  if (password !== confirmPassword) {
+    redirect("/reset-password?message=Passwords%20do%20not%20match");
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({
+    password,
+  });
+
+  if (error) {
+    redirect(`/reset-password?message=${encodeURIComponent(error.message)}`);
+  }
+
+  redirect("/login?message=Password%20has%20been%20reset%20successfully.%20Please%20log%20in%20with%20your%20new%20password.");
+}

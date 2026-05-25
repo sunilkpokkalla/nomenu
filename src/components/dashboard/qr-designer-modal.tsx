@@ -268,7 +268,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl }: QRDesignerMod
                 </div>
 
                 {/* COLOR PRESETS */}
-                {template !== "minimalist" && template !== "polaroid" && (
+                {template !== "minimalist" && template !== "polaroid" && template !== "bistrogold" && (
                   <div className="space-y-2">
                     <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Color Theme Preset</Label>
                     <div className="grid grid-cols-3 gap-1.5">

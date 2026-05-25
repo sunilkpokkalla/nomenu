@@ -16,8 +16,8 @@ import {
   Info,
   Clock
 } from "lucide-react";
-
 import { Card, CardContent } from "@/components/ui/card";
+import { FeedbackFAB } from "./feedback-fab";
 
 interface Restaurant {
   id: string;
@@ -1463,6 +1463,9 @@ export function MenuClientView({ restaurant, categories, items }: MenuClientView
           </div>
         </div>
       )}
+
+      {/* Feedback Button */}
+      <FeedbackFAB restaurantId={restaurant.id} />
     </div>
   );
 }

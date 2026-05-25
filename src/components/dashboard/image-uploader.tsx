@@ -1,17 +1,43 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Upload, Link as LinkIcon, X, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function ImageUploader() {
+interface ImageUploaderProps {
+  value?: string;
+  onChange?: (value: string) => void;
+}
+
+export function ImageUploader({ value: externalValue, onChange }: ImageUploaderProps) {
   const [mode, setMode] = useState<"file" | "url">("file");
-  const [value, setValue] = useState<string>("");
+  const [internalValue, setInternalValue] = useState<string>("");
   const [preview, setPreview] = useState<string>("");
   const [error, setError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const value = externalValue !== undefined ? externalValue : internalValue;
+
+  useEffect(() => {
+    if (externalValue !== undefined) {
+      setPreview(externalValue);
+      // If external value is a URL, switch to URL mode
+      if (externalValue && externalValue.startsWith("http")) {
+        setMode("url");
+      }
+    }
+  }, [externalValue]);
+
+  const updateValue = (newValue: string) => {
+    if (onChange) {
+      onChange(newValue);
+    } else {
+      setInternalValue(newValue);
+    }
+    setPreview(newValue);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError("");
@@ -21,8 +47,7 @@ export function ImageUploader() {
     // Check size limit: 2.5MB
     if (file.size > 2.5 * 1024 * 1024) {
       setError("File size exceeds 2.5MB limit. Please choose a smaller image.");
-      setValue("");
-      setPreview("");
+      updateValue("");
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
@@ -30,8 +55,7 @@ export function ImageUploader() {
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64String = reader.result as string;
-      setValue(base64String);
-      setPreview(base64String);
+      updateValue(base64String);
     };
     reader.readAsDataURL(file);
   };
@@ -39,13 +63,11 @@ export function ImageUploader() {
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError("");
     const url = e.target.value.trim();
-    setValue(url);
-    setPreview(url);
+    updateValue(url);
   };
 
   const handleRemove = () => {
-    setValue("");
-    setPreview("");
+    updateValue("");
     setError("");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
@@ -163,3 +185,4 @@ export function ImageUploader() {
     </div>
   );
 }
+

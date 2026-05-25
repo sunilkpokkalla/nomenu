@@ -1,0 +1,137 @@
+export interface CuisineOption {
+  value: string;
+  label: string;
+}
+
+export interface CuisineGroup {
+  label: string;
+  options: CuisineOption[];
+}
+
+export const CUISINE_GROUPS: CuisineGroup[] = [
+  {
+    label: "🍽️ Service Style",
+    options: [
+      { value: "Fine Dining", label: "Fine Dining – Formal, upscale, multi-course" },
+      { value: "Casual Dining", label: "Casual Dining – Relaxed, table service, mid-range" },
+      { value: "Fast Food / QSR", label: "Fast Food / Quick Service (QSR) – Counter service" },
+      { value: "Fast Casual", label: "Fast Casual – High quality fast food, customizable" },
+      { value: "Buffet", label: "Buffet / All-You-Can-Eat – Self-serve, fixed price" },
+      { value: "Cafeteria", label: "Cafeteria – Tray-line self-service" },
+      { value: "Bistro", label: "Bistro – Small, informal French-style" },
+      { value: "Brasserie", label: "Brasserie – Larger French café-restaurant" },
+      { value: "Gastropub", label: "Gastropub – Pub with high-quality food" },
+      { value: "Pop-up", label: "Pop-up – Temporary, event-based" },
+      { value: "Ghost Kitchen", label: "Ghost Kitchen – Delivery-only, no dine-in" },
+      { value: "Food Truck", label: "Food Truck / Street Food Stall" },
+      { value: "Supper Club", label: "Supper Club – Private, membership or ticketed" },
+      { value: "Chef's Table", label: "Chef's Table – Exclusive, kitchen-adjacent" },
+    ],
+  },
+  {
+    label: "🌍 Major World Cuisines",
+    options: [
+      { value: "Italian", label: "Italian" },
+      { value: "French", label: "French" },
+      { value: "Chinese", label: "Chinese" },
+      { value: "Japanese", label: "Japanese" },
+      { value: "Indian", label: "Indian" },
+      { value: "Mexican", label: "Mexican" },
+      { value: "Thai", label: "Thai" },
+      { value: "Greek", label: "Greek" },
+      { value: "Spanish", label: "Spanish" },
+      { value: "Lebanese / Middle Eastern", label: "Lebanese/Middle Eastern" },
+      { value: "American", label: "American" },
+      { value: "Korean", label: "Korean" },
+      { value: "Vietnamese", label: "Vietnamese" },
+      { value: "Turkish", label: "Turkish" },
+      { value: "Moroccan", label: "Moroccan" },
+      { value: "Ethiopian", label: "Ethiopian" },
+      { value: "Brazilian", label: "Brazilian" },
+      { value: "Peruvian", label: "Peruvian" },
+      { value: "German", label: "German" },
+      { value: "Caribbean", label: "Caribbean" },
+    ],
+  },
+  {
+    label: "🌪️ Popular Fusion Cuisines",
+    options: [
+      { value: "Indo-Chinese", label: "Indo-Chinese" },
+      { value: "Indo-Japanese", label: "Indo-Japanese" },
+      { value: "Tex-Mex", label: "Tex-Mex (Texan + Mexican)" },
+      { value: "Korean-Mexican", label: "Korean-Mexican" },
+      { value: "Japanese-Peruvian (Nikkei)", label: "Japanese-Peruvian (Nikkei)" },
+      { value: "Franco-Japanese", label: "Franco-Japanese" },
+      { value: "Asian-Fusion", label: "Asian-Fusion" },
+      { value: "Mediterranean-Asian", label: "Mediterranean-Asian" },
+      { value: "Afro-Asian", label: "Afro-Asian" },
+      { value: "Euro-Asian", label: "Euro-Asian" },
+      { value: "Latin-Asian", label: "Latin-Asian" },
+      { value: "Indo-Italian", label: "Indo-Italian" },
+      { value: "Chinese-American", label: "Chinese-American" },
+      { value: "Japanese-Brazilian", label: "Japanese-Brazilian" },
+      { value: "Middle Eastern-Mediterranean", label: "Middle Eastern-Mediterranean" },
+    ],
+  },
+  {
+    label: "🥩 Food Specialty",
+    options: [
+      { value: "Steakhouse", label: "Steakhouse" },
+      { value: "Seafood", label: "Seafood" },
+      { value: "Sushi / Raw Bar", label: "Sushi / Raw Bar" },
+      { value: "Oyster Bar", label: "Oyster Bar" },
+      { value: "Pizzeria", label: "Pizzeria" },
+      { value: "Burger Joint", label: "Burger Joint" },
+      { value: "Sandwich / Deli", label: "Sandwich Shop / Deli" },
+      { value: "Noodle / Ramen Bar", label: "Noodle Bar / Ramen Shop" },
+      { value: "Dumpling House", label: "Dumpling House" },
+      { value: "Hot Pot", label: "Hot Pot" },
+      { value: "Shabu-Shabu", label: "Shabu-Shabu" },
+      { value: "Fondue", label: "Fondue" },
+      { value: "Rotisserie / Grill", label: "Rotisserie / Grill" },
+      { value: "Wing Bar", label: "Wing Bar" },
+      { value: "Taco Shop", label: "Taco Shop" },
+      { value: "Poke Bowl Bar", label: "Poke Bowl Bar" },
+      { value: "Salad Bar", label: "Salad Bar" },
+      { value: "Crepe Café", label: "Crepe Café" },
+      { value: "Bakery-Café", label: "Bakery-Café" },
+      { value: "Dessert Bar", label: "Patisserie / Dessert Bar" },
+      { value: "Gelateria", label: "Ice Cream Parlor / Gelateria" },
+    ],
+  },
+  {
+    label: "🌱 Dietary Focus",
+    options: [
+      { value: "Vegetarian", label: "Vegetarian" },
+      { value: "Vegan", label: "Vegan" },
+      { value: "Raw Food", label: "Raw Food" },
+      { value: "Gluten-Free", label: "Gluten-Free" },
+      { value: "Kosher", label: "Kosher" },
+      { value: "Halal", label: "Halal" },
+      { value: "Organic / Farm-to-Table", label: "Organic / Farm-to-Table" },
+    ],
+  },
+  {
+    label: "🎭 Experience / Theme",
+    options: [
+      { value: "Themed Restaurant", label: "Themed Restaurant (medieval, space, jungle)" },
+      { value: "Dinner Theater", label: "Dinner Theater" },
+      { value: "Teppanyaki / Hibachi", label: "Teppanyaki / Hibachi" },
+      { value: "Omakase", label: "Omakase (Chef's Choice)" },
+      { value: "Blind Dining", label: "Blind Dining / Dark Restaurant" },
+      { value: "Rooftop / Scenic Dining", label: "Treehouse / Rooftop / Scenic Restaurant" },
+      { value: "Concept Restaurant", label: "Instagrammable / Concept Restaurant" },
+    ],
+  },
+  {
+    label: "☕ Café & Drink-Led",
+    options: [
+      { value: "Coffee Shop / Café", label: "Coffee Shop / Café" },
+      { value: "Tea House / Tea Room", label: "Tea House / Tea Room" },
+      { value: "Wine Bar", label: "Wine Bar" },
+      { value: "Cocktail Bar", label: "Cocktail Bar with Food" },
+      { value: "Taproom / Brewpub", label: "Taproom / Brewpub" },
+      { value: "Juice / Smoothie Bar", label: "Juice / Smoothie Bar" },
+    ],
+  },
+];

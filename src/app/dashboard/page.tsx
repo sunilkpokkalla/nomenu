@@ -14,6 +14,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { createRestaurant } from "@/app/dashboard/actions";
+import { CuisineSelect } from "@/components/dashboard/cuisine-select";
+import { CURRENCY_OPTIONS } from "@/lib/currency-options";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -150,13 +152,8 @@ export default async function DashboardPage(
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="cuisineType" className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Cuisine Type</Label>
-                <Input 
-                  id="cuisineType" 
-                  name="cuisineType" 
-                  placeholder="e.g. Italian, Modern Fusion" 
-                  className="rounded-xl border-slate-200 focus:border-primary focus:ring-primary h-11 text-sm bg-slate-50/50"
-                />
+                <Label htmlFor="cuisineSelect" className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Cuisine / Service Style</Label>
+                <CuisineSelect />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -172,13 +169,19 @@ export default async function DashboardPage(
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="currency" className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Currency</Label>
-                  <Input 
-                    id="currency" 
-                    name="currency" 
-                    defaultValue="USD" 
-                    maxLength={3} 
-                    className="rounded-xl border-slate-200 focus:border-primary focus:ring-primary h-11 text-sm bg-slate-50/50 uppercase"
-                  />
+                  <select
+                    id="currency"
+                    name="currency"
+                    defaultValue="USD"
+                    className="w-full rounded-xl border border-slate-200 focus:border-primary focus:ring-primary h-11 text-sm bg-slate-50/50 px-3 outline-none cursor-pointer"
+                    required
+                  >
+                    {CURRENCY_OPTIONS.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
