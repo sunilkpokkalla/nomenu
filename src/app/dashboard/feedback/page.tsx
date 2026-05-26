@@ -61,7 +61,7 @@ export default async function FeedbackPage() {
 
       <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
 
-      <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
+      <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} />
     </div>
   );
 }
