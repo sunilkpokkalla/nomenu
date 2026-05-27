@@ -23,6 +23,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
+const TIMEZONE_OPTIONS = [
+  { code: "America/New_York", name: "Eastern Time (US & Canada)" },
+  { code: "America/Chicago", name: "Central Time (US & Canada)" },
+  { code: "America/Denver", name: "Mountain Time (US & Canada)" },
+  { code: "America/Los_Angeles", name: "Pacific Time (US & Canada)" },
+  { code: "Europe/London", name: "London (GMT/BST)" },
+  { code: "Australia/Sydney", name: "Sydney (AEST/AEDT)" },
+  { code: "UTC", name: "UTC / Universal Time" },
+];
+
 export default async function DashboardPage(
   props: {
     searchParams: Promise<{ message?: string }>;
@@ -71,7 +81,7 @@ export default async function DashboardPage(
           {/* Main Onboarding pitch */}
           <div className="relative z-10 space-y-6 my-auto max-w-[45ch]">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-primary">
-              <Sparkles className="h-3.5 w-3.5 text-amber-500 fill-amber-500/20" strokeWidth={1.5} /> Phase 1 Setup
+              <Sparkles className="h-3.5 w-3.5 text-amber-500 fill-amber-500/20" strokeWidth={1.5} /> Restaurant Profile
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1] font-sans-vibrant">
               Create a digital menu guests will love.
@@ -183,6 +193,23 @@ export default async function DashboardPage(
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="timezone" className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Timezone</Label>
+                <select
+                  id="timezone"
+                  name="timezone"
+                  defaultValue="America/New_York"
+                  className="w-full rounded-xl border border-slate-200 focus:border-primary focus:ring-primary h-11 text-sm bg-slate-50/50 px-3 outline-none cursor-pointer"
+                  required
+                >
+                  {TIMEZONE_OPTIONS.map((tz) => (
+                    <option key={tz.code} value={tz.code}>
+                      {tz.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="space-y-1.5">

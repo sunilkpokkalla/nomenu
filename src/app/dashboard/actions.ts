@@ -44,6 +44,7 @@ export async function createRestaurant(formData: FormData) {
     address: field(formData, "address"),
     phone: field(formData, "phone"),
     currency: field(formData, "currency") ?? "USD",
+    timezone: field(formData, "timezone") ?? "UTC",
     primary_color: "#2563EB",
     accent_color: "#F59E0B",
     theme_style: "minimalist",
