@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 
 export async function submitFeedback(
   restaurantId: string, 
@@ -11,7 +11,10 @@ export async function submitFeedback(
   tableNumber?: string,
   qrCodeId?: string
 ) {
-  const supabase = await createClient();
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  );
 
   // Basic validation
   if (!restaurantId) return { error: "Restaurant ID is required." };
@@ -51,7 +54,10 @@ export async function submitOrder(data: {
     customer_notes: string | null;
   }[];
 }) {
-  const supabase = await createClient();
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  );
 
   // 1. Insert Order
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
