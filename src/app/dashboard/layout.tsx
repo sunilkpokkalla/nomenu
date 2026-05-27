@@ -25,26 +25,37 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("id")
+    .eq("owner_id", user.id)
+    .limit(1)
+    .maybeSingle();
+
+  const hasRestaurant = !!restaurant;
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex">
-        <Sidebar />
+        {hasRestaurant && <Sidebar />}
         <main className="min-h-screen flex-1">
-          <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-white/95 px-4 backdrop-blur lg:hidden">
-            <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white">
-                <QrCode className="h-4 w-4" />
-              </span>
-              <span className="font-bold">NoMenu</span>
-            </div>
-            <button
-              type="button"
-              aria-label="Open navigation"
-              className="rounded-lg border p-2 text-slate-600"
-            >
-              <Menu className="h-5 w-5" />
-            </button>
-          </header>
+          {hasRestaurant && (
+            <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-white/95 px-4 backdrop-blur lg:hidden">
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white">
+                  <QrCode className="h-4 w-4" />
+                </span>
+                <span className="font-bold">NoMenu</span>
+              </div>
+              <button
+                type="button"
+                aria-label="Open navigation"
+                className="rounded-lg border p-2 text-slate-600"
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+            </header>
+          )}
           {children}
         </main>
       </div>

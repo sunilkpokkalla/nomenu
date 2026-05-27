@@ -133,7 +133,7 @@ export default async function DashboardPage(
               </p>
             </div>
 
-            {searchParams.message ? (
+            {searchParams.message && !searchParams.message.toLowerCase().includes('first') ? (
               <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
                 {searchParams.message}
               </div>
