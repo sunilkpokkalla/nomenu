@@ -34,6 +34,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Fetch orders for a specific date when the date changes
   useEffect(() => {
@@ -286,8 +291,8 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                         )}
 
                         {/* Timestamp (Very Small) */}
-                        <div className="text-[10px] font-medium text-slate-400 flex items-center justify-between" suppressHydrationWarning>
-                          <span>{formatTimeAgoWithExact(order.created_at, timezone)}</span>
+                        <div className="text-[10px] font-medium text-slate-400 flex items-center justify-between">
+                          <span>{mounted ? formatTimeAgoWithExact(order.created_at, timezone) : "..."}</span>
                         </div>
 
                         {/* Actions */}

@@ -25,6 +25,11 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
   
   // Real-time state
   const [liveFeedbacks, setLiveFeedbacks] = useState<FeedbackData[]>(feedbacks);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Group toggle state
   // We'll store open state like "Today-Lunch": true or "Yesterday-Dinner": true
@@ -309,8 +314,8 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
                                         )}
                                       </div>
                                     </div>
-                                    <div className="text-xs text-slate-500 font-medium shrink-0" suppressHydrationWarning>
-                                      {feedback.created_at ? formatTimeAgoWithExact(feedback.created_at, timezone) : "Unknown date"}
+                                    <div className="text-xs text-slate-500 font-medium shrink-0">
+                                      {mounted ? (feedback.created_at ? formatTimeAgoWithExact(feedback.created_at, timezone) : "Unknown date") : "..."}
                                     </div>
                                   </div>
 
