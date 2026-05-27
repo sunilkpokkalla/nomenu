@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { format, isToday } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
-import { createClient } from "@/lib/supabase/client";
+import { createBrowserClient } from "@supabase/ssr";
 import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X } from "lucide-react";
 import { updateOrderStatus } from "./actions";
 
@@ -30,7 +30,7 @@ type Order = {
   order_items?: OrderItem[];
 };
 
-export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initialOrders: Order[], restaurantId: string, timezone: string }) {
+export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
@@ -48,7 +48,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
     }
 
     const fetchOrders = async () => {
-      const supabase = createClient();
+      const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
       
       const [y, m, d] = selectedDateStr.split("-").map(Number);
       // We want orders from start of the selected day to end of selected day in restaurant timezone
@@ -84,10 +84,10 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
     };
 
     fetchOrders();
-  }, [selectedDateStr, restaurantId, initialOrders, timezone]);
+  }, [selectedDateStr, restaurantId, initialOrders, timezone, supabaseUrl, supabaseAnonKey]);
 
   useEffect(() => {
-    const supabase = createClient();
+    const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
 
     const channel = supabase.channel(`orders-${restaurantId}`)
       .on(
@@ -139,7 +139,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [restaurantId]);
+  }, [restaurantId, supabaseUrl, supabaseAnonKey]);
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
     // Optimistic UI update

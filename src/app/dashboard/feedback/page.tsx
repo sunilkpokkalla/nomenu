@@ -3,6 +3,7 @@ import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, Ma
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
+import { getSupabaseEnv } from "@/lib/env";
 import { FeedbackAnalytics, FeedbackData } from "./feedback-analytics";
 import { FeedbackList } from "./feedback-list";
 
@@ -80,7 +81,7 @@ export default async function FeedbackPage() {
           </div>
         )}
         <div className={!restaurant.plan || restaurant.plan.toLowerCase() === "free" ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all" : ""}>
-          <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} />
+          <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
           <div className="mt-8">
             <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
           </div>

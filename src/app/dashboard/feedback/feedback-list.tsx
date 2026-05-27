@@ -5,7 +5,7 @@ import { format, isSameDay, subDays } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, Mail, QrCode, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Clock } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
-import { createClient } from "@/lib/supabase/client";
+import { createBrowserClient } from "@supabase/ssr";
 
 interface FeedbackData {
   id: string;
@@ -20,7 +20,7 @@ interface FeedbackData {
   qr_codes?: { label: string | null } | null;
 }
 
-export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string }) {
+export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string }) {
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   
   // Real-time state
@@ -50,7 +50,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
 
   // Setup Supabase real-time subscription
   useEffect(() => {
-    const supabase = createClient();
+    const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
     
     const channel = supabase.channel(`feedbacks-${restaurantId}`)
       .on(
@@ -99,7 +99,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [restaurantId, timezone]);
+  }, [restaurantId, timezone, supabaseUrl, supabaseAnonKey]);
 
   if (liveFeedbacks.length === 0) {
     return (

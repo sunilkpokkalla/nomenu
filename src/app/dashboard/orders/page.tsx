@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getSupabaseEnv } from "@/lib/env";
 import { OrdersBoard } from "./orders-board";
 import { ClipboardList } from "lucide-react";
 
@@ -82,7 +83,7 @@ export default async function OrdersPage() {
           </div>
         )}
         <div className={!restaurant.plan || restaurant.plan.toLowerCase() !== "elite" ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all h-[500px] overflow-hidden" : ""}>
-          <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} />
+          <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
         </div>
       </div>
     </div>
