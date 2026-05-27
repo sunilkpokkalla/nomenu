@@ -26,6 +26,8 @@ const spaceMono = Space_Mono({
   variable: "--font-space-mono" 
 });
 
+import { ClientErrorLogger } from "@/components/client-error-logger";
+
 export const metadata: Metadata = {
   title: {
     default: "NoMenu | Digital QR Menus for Restaurants",
@@ -46,6 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${lora.variable} ${montserrat.variable} ${cormorant.variable} ${poppins.variable} ${outfit.variable} ${spaceMono.variable} font-sans antialiased`}>
+        <ClientErrorLogger />
         {children}
       </body>
     </html>
