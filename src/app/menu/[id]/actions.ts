@@ -24,13 +24,9 @@ export async function submitFeedback(
     restaurant_id: restaurantId,
     rating,
     comment: comment?.trim() || null,
-    // @ts-expect-error: Missing from Supabase generated types
     customer_name: customerName?.trim() || null,
-    // @ts-expect-error: Missing from Supabase generated types
     contact_info: contactInfo?.trim() || null,
-    // @ts-expect-error: Missing from Supabase generated types
     table_number: tableNumber?.trim() || null,
-    // @ts-expect-error: Missing from Supabase generated types
     qr_code_id: qrCodeId?.trim() || null,
   });
 
