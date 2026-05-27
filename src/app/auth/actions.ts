@@ -63,7 +63,11 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    redirect(`/signup?message=${encodeURIComponent(error.message)}`);
+    let errorMessage = error.message;
+    if (errorMessage.toLowerCase().includes("user already registered")) {
+      errorMessage = "Account already exists! Please log in instead.";
+    }
+    redirect(`/signup?message=${encodeURIComponent(errorMessage)}`);
   }
 
   if (data.user && data.session) {

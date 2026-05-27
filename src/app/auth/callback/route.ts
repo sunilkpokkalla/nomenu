@@ -15,7 +15,14 @@ export async function GET(request: Request) {
       return NextResponse.redirect(redirectUrl);
     } else {
       console.error("Auth callback exchange error:", error.message);
-      return NextResponse.redirect(new URL(`/login?message=${encodeURIComponent(error.message)}`, request.url));
+      
+      let errorMessage = error.message;
+      // The dreaded PKCE error usually happens when opening a link on a different device or clicking an old link
+      if (errorMessage.includes("PKCE") || errorMessage.includes("code verifier")) {
+        errorMessage = "Account already exists or link expired. Please log in to continue.";
+      }
+      
+      return NextResponse.redirect(new URL(`/login?message=${encodeURIComponent(errorMessage)}`, request.url));
     }
   }
 
