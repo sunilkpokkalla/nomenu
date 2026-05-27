@@ -235,7 +235,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                       </div>
                       <div className="flex flex-col items-end gap-1">
                         <div className="font-bold text-lg text-slate-900">
-                          ${order.total_amount.toFixed(2)}
+                          ${Number(order.total_amount).toFixed(2)}
                         </div>
                         {isCollapsedColumn && (
                           <div className="text-slate-400">

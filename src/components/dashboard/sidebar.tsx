@@ -19,11 +19,11 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/dashboard/menus", label: "My Menus", icon: Menu },
   { href: "/dashboard/items", label: "Menu Items", icon: Utensils },
-  { href: "/dashboard/orders", label: "Orders", icon: ShoppingBag },
+  { href: "/dashboard/orders", label: "Orders", icon: ShoppingBag, badge: "ELITE" },
   { href: "/dashboard/qrcodes", label: "QR Codes", icon: QrCode },
-  { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare },
-  { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/dashboard/customize", label: "Customize", icon: Palette },
+  { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "STARTER+" },
+  { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },
+  { href: "/dashboard/customize", label: "Customize", icon: Palette, badge: "PRO" },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];
@@ -51,10 +51,17 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center gap-3.5 rounded-xl px-3 py-3 text-sm font-semibold text-slate-550 transition-all duration-200 ease-in-out hover:bg-slate-100/80 hover:text-slate-950 hover:translate-x-1"
+              className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-slate-550 transition-all duration-200 ease-in-out hover:bg-slate-100/80 hover:text-slate-950 hover:translate-x-1"
             >
-              <Icon className="h-4 w-4" />
-              {item.label}
+              <div className="flex items-center gap-3.5">
+                <Icon className="h-4 w-4" />
+                {item.label}
+              </div>
+              {item.badge && (
+                <span className="rounded-md bg-rose-50 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-rose-600 shadow-sm border border-rose-100/50">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           );
         })}

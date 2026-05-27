@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { format, isToday, isYesterday } from "date-fns";
+import { format, isSameDay, subDays } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, Mail, QrCode, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Clock } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
@@ -136,11 +136,12 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
   filteredFeedbacks.forEach(feedback => {
     if (!feedback.created_at) return;
     const date = toZonedTime(new Date(feedback.created_at), timezone);
+    const zonedNow = toZonedTime(new Date(), timezone);
     
     // Determine Date Label
     let dateStr = "";
-    if (isToday(date)) dateStr = "Today";
-    else if (isYesterday(date)) dateStr = "Yesterday";
+    if (isSameDay(date, zonedNow)) dateStr = "Today";
+    else if (isSameDay(date, subDays(zonedNow, 1))) dateStr = "Yesterday";
     else dateStr = format(date, "EEEE, MMMM d, yyyy");
     
     // Determine Shift Label based on 24hr hour
