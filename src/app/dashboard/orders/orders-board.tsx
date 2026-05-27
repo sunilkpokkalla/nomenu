@@ -213,16 +213,16 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                 </div>
               ) : (
                 colOrders.map(order => {
-                  const isCollapsedColumn = col.id === "completed" || col.id === "cancelled";
-                  const isExpanded = expandedOrders.has(order.id);
-                  const showFullCard = !isCollapsedColumn || isExpanded;
+                  const isActiveColumn = col.id === "pending" || col.id === "preparing";
+                  const isToggled = expandedOrders.has(order.id);
+                  const showFullCard = isActiveColumn ? !isToggled : isToggled;
 
                   return (
                   <div key={order.id} className="bg-white border border-slate-200 shadow-sm rounded-xl flex flex-col gap-3 overflow-hidden">
                     {/* Header: Order Number and Price */}
                     <div 
-                      onClick={() => isCollapsedColumn && toggleExpand(order.id)}
-                      className={`p-3.5 flex justify-between items-start ${isCollapsedColumn ? "cursor-pointer hover:bg-slate-50 transition-colors" : ""}`}
+                      onClick={() => toggleExpand(order.id)}
+                      className="p-3.5 flex justify-between items-start cursor-pointer hover:bg-slate-50 transition-colors"
                     >
                       <div className="flex flex-col gap-1.5">
                         <span className={`text-sm font-black px-2.5 py-1 rounded-md w-fit tracking-wide shadow-sm ${
@@ -237,11 +237,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                         <div className="font-bold text-lg text-slate-900">
                           ${Number(order.total_amount).toFixed(2)}
                         </div>
-                        {isCollapsedColumn && (
-                          <div className="text-slate-400 mt-1">
-                            {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                          </div>
-                        )}
+                        <div className="text-slate-400 mt-1">
+                          {showFullCard ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                        </div>
                       </div>
                     </div>
 
@@ -249,20 +247,21 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                       <div className="px-3.5 pb-3.5 flex flex-col gap-4">
                         
                         {/* Items (Primary Focus) */}
-                        <div className="flex flex-col gap-3 py-1">
+                        <div className="flex flex-col gap-1.5 py-1">
                           {order.order_items?.map((item: OrderItem, idx: number) => {
                             const menuItem = Array.isArray(item.menu_items) ? item.menu_items[0] : item.menu_items;
                             return (
-                              <div key={idx} className="flex justify-between items-start">
-                                <div className="flex gap-3">
-                                  <span className="font-black text-lg text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md h-fit">{item.quantity}x</span>
-                                  <div className="flex flex-col mt-0.5">
-                                    <span className="font-bold text-base text-slate-800 leading-tight">{menuItem?.name || "Unknown Item"}</span>
-                                    {item.customer_notes && (
-                                      <span className="text-xs text-rose-600 font-medium italic mt-1 bg-rose-50 px-2 py-1 rounded-md w-fit">Note: {item.customer_notes}</span>
-                                    )}
+                              <div key={idx} className="flex flex-col text-sm text-slate-700">
+                                <div className="flex justify-between items-center w-full">
+                                  <div className="flex items-center gap-1.5 truncate">
+                                    <span className="text-slate-400 font-medium">{idx + 1}.</span>
+                                    <span className="font-medium truncate">{menuItem?.name || "Unknown Item"}</span>
                                   </div>
+                                  <span className="font-bold ml-2 whitespace-nowrap text-indigo-700">x{item.quantity}</span>
                                 </div>
+                                {item.customer_notes && (
+                                  <span className="text-[11px] text-rose-600 font-medium italic ml-4">Note: {item.customer_notes}</span>
+                                )}
                               </div>
                             );
                           })}
