@@ -229,7 +229,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                         }`}>
                           #{String(order.daily_order_number).padStart(3, '0')}
                         </span>
-                        <div className="text-sm font-medium text-slate-500 flex items-center gap-2">
+                        <div className="text-sm font-medium text-slate-500 flex items-center gap-2" suppressHydrationWarning>
                           {formatTimeAgoWithExact(order.created_at, timezone)}
                         </div>
                       </div>

@@ -309,7 +309,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
                                         )}
                                       </div>
                                     </div>
-                                    <div className="text-xs text-slate-500 font-medium shrink-0">
+                                    <div className="text-xs text-slate-500 font-medium shrink-0" suppressHydrationWarning>
                                       {feedback.created_at ? formatTimeAgoWithExact(feedback.created_at, timezone) : "Unknown date"}
                                     </div>
                                   </div>
