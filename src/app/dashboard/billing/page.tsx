@@ -9,47 +9,59 @@ import { createClient } from "@/lib/supabase/server";
 
 const PLANS = [
   {
-    id: "free", // Kept ID as free for backward compatibility in db, but renamed UI
-    name: "Starter Plan",
-    price: "$19",
+    id: "free",
+    name: "Free Plan",
+    price: "$0",
     period: "/mo",
     description: "Perfect for testing or small pop-up menus.",
     features: [
       "1 Active Digital Menu",
       "Up to 20 Menu Items",
-      "3 Generated QR Codes",
+      "1 Generated QR Code",
       "Standard Guest View",
-      "Basic Weekly Scan Statistics",
     ],
   },
   {
-    id: "growth", // Kept ID for backward compatibility
-    name: "Pro Plan",
-    price: "$49",
+    id: "starter",
+    name: "Starter Plan",
+    price: "$19",
     period: "/mo",
-    description: "Ideal for growing full-service restaurants.",
+    description: "Ideal for growing independent restaurants.",
     features: [
-      "Unlimited Digital Menus",
-      "Unlimited Menu Items",
+      "Up to 3 Active Menus",
+      "Up to 25 Menu Items",
+      "3 Generated QR Codes",
       "Private Customer Feedback System",
-      "Global Dish Auto-Fill Library",
-      "Full Theme Customization",
-      "Detailed Scan Analytics & Timezones",
-      "Priority Customer Support",
+      "Basic Scan Statistics",
     ],
   },
   {
     id: "pro", // Kept ID for backward compatibility
-    name: "Elite Plan",
-    price: "$129",
+    name: "Pro Plan",
+    price: "$49",
     period: "/mo",
-    description: "Designed for premium venues and multi-location groups.",
+    description: "Unlimited flexibility for high-volume venues.",
+    features: [
+      "Unlimited Digital Menus",
+      "Unlimited Menu Items",
+      "Unlimited QR Codes",
+      "Private Customer Feedback System",
+      "Full Theme Customization",
+      "Detailed Scan Analytics & Timezones",
+    ],
+  },
+  {
+    id: "elite",
+    name: "Elite Plan",
+    price: "$99",
+    period: "/mo",
+    description: "Real-time ordering for premium venues and groups.",
     features: [
       "Everything in Pro",
+      "Real-Time Live Ordering Dashboard",
       "Multi-Location Restaurant Profiles",
       "Automated Negative Feedback Alerts",
       "White-labeled Branding (No 'Powered by NoMenu')",
-      "24/7 Dedicated Account Manager",
     ],
   },
 ];
@@ -128,7 +140,7 @@ export default async function BillingPage(
       </Card>
 
       {/* Pricing Cards */}
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {PLANS.map((plan) => {
           const isActive = currentPlan.toLowerCase() === plan.id.toLowerCase();
           return (

@@ -3,7 +3,7 @@ import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, Ma
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
-import { FeedbackAnalytics } from "./feedback-analytics";
+import { FeedbackAnalytics, FeedbackData } from "./feedback-analytics";
 import { FeedbackList } from "./feedback-list";
 
 export const metadata = {
@@ -25,7 +25,7 @@ export default async function FeedbackPage() {
   // Get user's restaurant
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id, timezone")
+    .select("id, timezone, plan")
     .eq("owner_id", user.id)
     .single();
 
@@ -50,7 +50,7 @@ export default async function FeedbackPage() {
     console.error("Error fetching feedback:", error);
   }
 
-  const allFeedbacks: any[] = feedbacks || [];
+  const allFeedbacks: FeedbackData[] = (feedbacks || []) as FeedbackData[];
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -59,9 +59,33 @@ export default async function FeedbackPage() {
         <p className="text-slate-500">See what your customers are saying about your menu.</p>
       </div>
 
-      <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
-
-      <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} />
+      <div className="relative">
+        {(!restaurant.plan || restaurant.plan.toLowerCase() === "free") && (
+          <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-50/80 backdrop-blur-sm rounded-2xl border border-slate-100">
+            <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-center max-w-sm">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                <Star className="h-8 w-8 fill-amber-500" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">Feedback Locked</h3>
+              <p className="mt-3 text-sm text-slate-500 mb-6 font-medium">
+                Upgrade to the Pro Plan to collect, manage, and analyze private customer feedback and ratings.
+              </p>
+              <a
+                href="/dashboard/billing"
+                className="inline-block w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm hover:bg-slate-800 transition"
+              >
+                Upgrade to Pro Plan
+              </a>
+            </div>
+          </div>
+        )}
+        <div className={!restaurant.plan || restaurant.plan.toLowerCase() === "free" ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all" : ""}>
+          <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} />
+          <div className="mt-8">
+            <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

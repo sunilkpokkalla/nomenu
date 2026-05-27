@@ -567,44 +567,82 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-3 max-w-6xl mx-auto items-stretch">
+          <div className="grid gap-4 lg:grid-cols-4 max-w-7xl mx-auto items-stretch">
             
-            {/* Starter Plan */}
+            {/* Free Plan */}
             <div className="rounded-[2.2rem] border border-slate-800 bg-slate-950 p-2.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
-              <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-8 flex flex-col h-full justify-between">
+              <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-6 lg:p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
-                  <span className="text-xs uppercase font-extrabold tracking-[0.15em] text-slate-500">Starter Tier</span>
-                  <h4 className="text-3xl font-black">Starter Plan</h4>
-                  <p className="text-sm text-slate-400 font-medium">Perfect for testing digital menus or starting new businesses.</p>
-                  <div className="pt-4 flex items-baseline">
-                    <span className="text-5xl font-black">$19</span>
-                    <span className="text-xs text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                  <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-slate-500">Basic</span>
+                  <h4 className="text-2xl lg:text-3xl font-black">Free Plan</h4>
+                  <p className="text-xs text-slate-400 font-medium">Perfect for testing or small pop-up menus.</p>
+                  <div className="pt-2 flex items-baseline">
+                    <span className="text-4xl lg:text-5xl font-black">$0</span>
+                    <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
                   
                   <hr className="border-slate-800" />
                   
-                  <ul className="space-y-3 text-sm text-slate-350 font-medium">
-                    <li className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400" /> 1 Active Digital Menu
+                  <ul className="space-y-3 text-xs text-slate-350 font-medium">
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 1 Active Digital Menu
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400" /> Up to 20 Menu Items
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 20 Menu Items
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400" /> 3 Generated QR Codes
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 1 Generated QR Code
                     </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400" /> Standard Guest View
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400" /> Basic scan statistics
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Standard Guest View
                     </li>
                   </ul>
                 </div>
 
-                <div className="mt-10 pt-4">
-                  <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-12 text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
-                    <Link href="/signup">Start Starter Plan</Link>
+                <div className="mt-8 pt-4">
+                  <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-10 text-[10px] lg:text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
+                    <Link href="/signup">Start Free</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Starter Plan */}
+            <div className="rounded-[2.2rem] border border-slate-800 bg-slate-950 p-2.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-6 lg:p-8 flex flex-col h-full justify-between">
+                <div className="space-y-5">
+                  <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-slate-500">Growth</span>
+                  <h4 className="text-2xl lg:text-3xl font-black">Starter Plan</h4>
+                  <p className="text-xs text-slate-400 font-medium">Ideal for growing independent restaurants.</p>
+                  <div className="pt-2 flex items-baseline">
+                    <span className="text-4xl lg:text-5xl font-black">$19</span>
+                    <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                  </div>
+                  
+                  <hr className="border-slate-800" />
+                  
+                  <ul className="space-y-3 text-xs text-slate-350 font-medium">
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 3 Active Menus
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 25 Menu Items
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 3 Generated QR Codes
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Private Customer Feedback System
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Basic Scan Statistics
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="mt-8 pt-4">
+                  <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-10 text-[10px] lg:text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
+                    <Link href="/signup">Start Starter</Link>
                   </Button>
                 </div>
               </div>
@@ -612,50 +650,44 @@ export default function Home() {
 
             {/* Pro Plan */}
             <div className="rounded-[2.2rem] border-2 border-indigo-650 bg-slate-950 p-2.5 flex flex-col justify-between relative shadow-2xl shadow-indigo-650/5 hover:border-indigo-500 transition-colors">
-              <div className="absolute top-0 right-10 -translate-y-1/2 rounded-full bg-indigo-650 px-4 py-1 text-[9px] font-black uppercase tracking-wider text-white flex items-center gap-1 shadow-md">
+              <div className="absolute top-0 right-6 -translate-y-1/2 rounded-full bg-indigo-650 px-3 py-1 text-[8px] font-black uppercase tracking-wider text-white flex items-center gap-1 shadow-md">
                 <Zap className="h-3 w-3 fill-white" /> Popular
               </div>
 
-              <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-8 flex flex-col h-full justify-between">
+              <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-6 lg:p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
-                  <span className="text-xs uppercase font-extrabold tracking-[0.15em] text-indigo-400">Professional</span>
-                  <h4 className="text-3xl font-black text-white">Pro Plan</h4>
-                  <p className="text-sm text-slate-400 font-medium">Ideal for growing full-service restaurants.</p>
-                  <div className="pt-4 flex items-baseline">
-                    <span className="text-5xl font-black text-white">$49</span>
-                    <span className="text-xs text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                  <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-indigo-400">Professional</span>
+                  <h4 className="text-2xl lg:text-3xl font-black text-white">Pro Plan</h4>
+                  <p className="text-xs text-slate-400 font-medium">Unlimited flexibility for high-volume venues.</p>
+                  <div className="pt-2 flex items-baseline">
+                    <span className="text-4xl lg:text-5xl font-black text-white">$49</span>
+                    <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
 
                   <hr className="border-slate-800" />
 
-                  <ul className="space-y-3 text-sm text-slate-300 font-medium">
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Unlimited</strong> Digital Menus
+                  <ul className="space-y-3 text-xs text-slate-300 font-medium">
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Unlimited</strong> Digital Menus
                     </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Unlimited</strong> Items & QRs
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Unlimited</strong> Items & QRs
                     </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Private Customer Feedback System</strong>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Private Feedback System</strong>
                     </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Global Dish Auto-Fill Library</strong>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Full Theme Customization</strong>
                     </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> <strong>Full Theme Customization</strong>
-                    </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> Detailed Scan Analytics & Timezones
-                    </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455" strokeWidth={3} /> Priority Customer Support
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> Detailed Analytics & Timezones
                     </li>
                   </ul>
                 </div>
 
-                <div className="mt-10 pt-4">
-                  <Button asChild className="w-full bg-indigo-650 hover:bg-indigo-600 text-white rounded-full font-extrabold h-12 text-xs uppercase tracking-wider shadow-lg shadow-indigo-650/15 active:scale-[0.98] transition-all">
-                    <Link href="/signup">Get Pro Plan</Link>
+                <div className="mt-8 pt-4">
+                  <Button asChild className="w-full bg-indigo-650 hover:bg-indigo-600 text-white rounded-full font-extrabold h-10 text-[10px] lg:text-xs uppercase tracking-wider shadow-lg shadow-indigo-650/15 active:scale-[0.98] transition-all">
+                    <Link href="/signup">Get Pro</Link>
                   </Button>
                 </div>
               </div>
@@ -663,40 +695,40 @@ export default function Home() {
 
             {/* Elite Plan */}
             <div className="rounded-[2.2rem] border border-slate-800 bg-slate-950 p-2.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
-              <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-8 flex flex-col h-full justify-between">
+              <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-6 lg:p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
-                  <span className="text-xs uppercase font-extrabold tracking-[0.15em] text-slate-500">Premium Venue</span>
-                  <h4 className="text-3xl font-black text-white">Elite Plan</h4>
-                  <p className="text-sm text-slate-400 font-medium">Designed for premium venues and multi-location groups.</p>
-                  <div className="pt-4 flex items-baseline">
-                    <span className="text-5xl font-black text-white">$129</span>
-                    <span className="text-xs text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                  <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-slate-500">Premium</span>
+                  <h4 className="text-2xl lg:text-3xl font-black text-white">Elite Plan</h4>
+                  <p className="text-xs text-slate-400 font-medium">Real-time ordering for premium venues.</p>
+                  <div className="pt-2 flex items-baseline">
+                    <span className="text-4xl lg:text-5xl font-black text-white">$99</span>
+                    <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
 
                   <hr className="border-slate-800" />
 
-                  <ul className="space-y-3 text-sm text-slate-300 font-medium">
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400" /> Everything in Pro Plan
+                  <ul className="space-y-3 text-xs text-slate-300 font-medium">
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Everything in Pro
                     </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400" /> Multi-Location Profiles
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> <strong>Live Ordering Dashboard</strong>
                     </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400" /> Automated Negative Feedback Alerts
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Multi-Location Profiles
                     </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400" /> White-labeled Branding
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> White-labeled Branding
                     </li>
-                    <li className="flex items-center gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400" /> 24/7 Dedicated Account Manager
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Automated Negative Alerts
                     </li>
                   </ul>
                 </div>
 
-                <div className="mt-10 pt-4">
-                  <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-12 text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
-                    <Link href="/signup">Get Elite Plan</Link>
+                <div className="mt-8 pt-4">
+                  <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-10 text-[10px] lg:text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
+                    <Link href="/signup">Get Elite</Link>
                   </Button>
                 </div>
               </div>

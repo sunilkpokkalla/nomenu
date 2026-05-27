@@ -46,6 +46,7 @@ export async function createRestaurant(formData: FormData) {
     currency: field(formData, "currency") ?? "USD",
     primary_color: "#2563EB",
     accent_color: "#F59E0B",
+    theme_style: "minimalist",
   });
 
   if (error) {
@@ -80,6 +81,19 @@ export async function createMenu(formData: FormData) {
   const description = field(formData, "description");
   const isActive = formData.get("isActive") === "true";
   const menuType = field(formData, "menuType");
+
+  const currentPlan = restaurant.plan || "free";
+  if (currentPlan === "free" || currentPlan === "starter") {
+    const { count: menuCount } = await supabase
+      .from("menus")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+      
+    const limit = currentPlan === "free" ? 1 : 3;
+    if (menuCount !== null && menuCount >= limit) {
+      redirect(`/dashboard/menus?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20menu(s).%20Upgrade%20your%20plan%20to%20create%20more.`);
+    }
+  }
 
   const { error } = await supabase.from("menus").insert({
     restaurant_id: restaurant.id,
@@ -176,6 +190,19 @@ export async function createMenuItem(formData: FormData) {
     redirect("/dashboard/items?message=Invalid%20price%20format");
   }
 
+  const currentPlan = restaurant.plan || "free";
+  if (currentPlan === "free" || currentPlan === "starter") {
+    const { count: itemCount } = await supabase
+      .from("menu_items")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+      
+    const limit = currentPlan === "free" ? 20 : 25;
+    if (itemCount !== null && itemCount >= limit) {
+      redirect(`/dashboard/items?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20items.%20Upgrade%20your%20plan%20to%20add%20more.`);
+    }
+  }
+
   // If a new category is specified, create it first
   if (newCategoryName && menuId) {
     const { data: newCat, error: catErr } = await supabase
@@ -222,8 +249,16 @@ export async function createMenuItem(formData: FormData) {
     is_vegan: isVegan,
     is_gluten_free: isGlutenFree,
     is_spicy: isSpicy,
-    image_url: imageUrl,
+    image_url: imageUrl || null,
   };
+
+  const caloriesStr = field(formData, "calories");
+  if (caloriesStr) {
+    const calories = parseInt(caloriesStr, 10);
+    if (!isNaN(calories)) {
+      insertPayload.calories = calories;
+    }
+  }
 
   const { error } = await supabase.from("menu_items").insert(insertPayload);
 
@@ -304,6 +339,19 @@ export async function createQrCode(formData: FormData) {
 
   if (!label || !menuId) {
     redirect("/dashboard/qrcodes?message=Label%20and%20Menu%20are%20required");
+  }
+
+  const currentPlan = restaurant.plan || "free";
+  if (currentPlan === "free" || currentPlan === "starter") {
+    const { count: qrCount } = await supabase
+      .from("qr_codes")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+      
+    const limit = currentPlan === "free" ? 1 : 3;
+    if (qrCount !== null && qrCount >= limit) {
+      redirect(`/dashboard/qrcodes?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20QR%20codes.%20Upgrade%20your%20plan%20to%20create%20more.`);
+    }
   }
 
   const { error } = await supabase.from("qr_codes").insert({
@@ -404,11 +452,11 @@ export async function updateRestaurantBranding(formData: FormData) {
 
   const primaryColor = field(formData, "primaryColor") ?? "#2563EB";
   const accentColor = field(formData, "accentColor") ?? "#F59E0B";
-  const themeStyle = field(formData, "themeStyle") ?? "bistro";
+  const themeStyle = field(formData, "themeStyle") ?? "minimalist";
   const wifiPassword = field(formData, "wifiPassword");
 
   // Premium theme style gating
-  const isPremiumTheme = themeStyle !== "bistro";
+  const isPremiumTheme = themeStyle !== "minimalist";
   const currentPlan = restaurant.plan || "free";
   if (isPremiumTheme && currentPlan === "free") {
     redirect("/dashboard/customize?message=Upgrade%20to%20Growth%20or%20Pro%20plan%20to%20use%20premium%2520layouts.");

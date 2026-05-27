@@ -30,6 +30,10 @@ body {
   min-height: 100vh;
   color: hsl(var(--foreground));
   background: hsl(var(--background));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
 }
 
 @layer utilities {

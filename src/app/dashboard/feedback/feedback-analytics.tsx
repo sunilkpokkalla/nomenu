@@ -18,11 +18,23 @@ import { format, subDays, startOfWeek, addDays, subMonths, isAfter, isSameDay } 
 import { toZonedTime } from "date-fns-tz";
 import { Star, TrendingUp, MessageSquare, Calendar } from "lucide-react";
 
+export interface FeedbackData {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  customer_name?: string | null;
+  contact_info?: string | null;
+  table_number?: string | null;
+  created_at: string;
+  is_public?: boolean;
+  status?: string;
+}
+
 export function FeedbackAnalytics({
   feedbacks,
   timezone,
 }: {
-  feedbacks: any[];
+  feedbacks: FeedbackData[];
   timezone: string;
 }) {
   const [historyRange, setHistoryRange] = useState(6);
@@ -38,7 +50,6 @@ export function FeedbackAnalytics({
     positivePercent,
     positivePercentLastWeek,
     bestDay,
-    topKeywords,
     dailyChartData,
     weeklyChartData,
     historyChartData,
@@ -64,9 +75,9 @@ export function FeedbackAnalytics({
       return d >= lastWeekStart && d <= lastWeekEnd;
     });
 
-    const calcAvg = (arr: any[]) =>
+    const calcAvg = (arr: FeedbackData[]) =>
       arr.length > 0 ? arr.reduce((acc, f) => acc + f.rating, 0) / arr.length : 0;
-    const calcPos = (arr: any[]) =>
+    const calcPos = (arr: FeedbackData[]) =>
       arr.length > 0 ? (arr.filter((f) => f.rating >= 4).length / arr.length) * 100 : 0;
 
     const totalFeedback = validFeedbacks.length;
@@ -98,23 +109,7 @@ export function FeedbackAnalytics({
       }
     });
 
-    // Keywords
-    const stopWords = new Set(["the", "and", "is", "in", "it", "to", "a", "of", "for", "on", "was", "very", "i", "we", "at", "but", "with", "this", "that", "they", "my", "our", "had", "so"]);
-    const wordCounts: Record<string, number> = {};
-    validFeedbacks.forEach((f) => {
-      if (!f.comment) return;
-      const words = f.comment.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/);
-      words.forEach((w: string) => {
-        if (w.length > 2 && !stopWords.has(w)) {
-          wordCounts[w] = (wordCounts[w] || 0) + 1;
-        }
-      });
-    });
-    const topKeywords = Object.entries(wordCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10);
-
-    // Daily Chart (Today's Hours)
+    // Keywords calculation removed
     const hourlyData = Array.from({ length: 24 }, (_, i) => ({
       hour: `${i.toString().padStart(2, "0")}:00`,
       count: 0,
@@ -191,7 +186,6 @@ export function FeedbackAnalytics({
       positivePercent,
       positivePercentLastWeek,
       bestDay,
-      topKeywords,
       dailyChartData: hourlyData,
       weeklyChartData: weekData,
       historyChartData,
@@ -210,7 +204,7 @@ export function FeedbackAnalytics({
   return (
     <div className="space-y-8 animate-in fade-in duration-500 mb-8">
       {/* Summary Cards */}
-      <div className="grid gap-6 md:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-3">
         <div className="bg-white rounded-2xl p-6 border shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -267,22 +261,6 @@ export function FeedbackAnalytics({
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border shadow-sm flex flex-col justify-between">
-          <div>
-            <h3 className="font-medium text-slate-600 mb-3">Top Keywords</h3>
-            <div className="flex flex-wrap gap-2">
-              {topKeywords.length > 0 ? (
-                topKeywords.map(([word, count]) => (
-                  <span key={word} className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs font-semibold capitalize">
-                    {word} <span className="opacity-50 ml-1">{count}</span>
-                  </span>
-                ))
-              ) : (
-                <span className="text-slate-400 text-sm italic">Not enough data</span>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">

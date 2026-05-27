@@ -22,6 +22,7 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction }:
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [calories, setCalories] = useState("");
   const [menuId, setMenuId] = useState(menus[0]?.id || "");
   const [categoryId, setCategoryId] = useState("");
   const [newCategoryName, setNewCategoryName] = useState("");
@@ -108,6 +109,19 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction }:
             />
           </div>
           <div className="space-y-2">
+            <Label htmlFor="calories">Calories (kcal)</Label>
+            <Input
+              id="calories"
+              name="calories"
+              type="number"
+              placeholder="e.g. 450"
+              value={calories}
+              onChange={(e) => setCalories(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
             <Label htmlFor="menuId">Assign to Menu</Label>
             <select
               id="menuId"
@@ -127,7 +141,6 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction }:
               ))}
             </select>
           </div>
-        </div>
 
         <div className="space-y-2 border-t pt-3">
           <Label htmlFor="categoryId">Category</Label>

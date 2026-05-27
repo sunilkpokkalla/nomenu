@@ -29,7 +29,7 @@ interface BrandingFormProps {
 export function BrandingForm({ restaurant, action, successMessage, errorMessage }: BrandingFormProps) {
   const [primaryColor, setPrimaryColor] = useState(restaurant.primary_color || "#2563EB");
   const [accentColor, setAccentColor] = useState(restaurant.accent_color || "#F59E0B");
-  const [themeStyle, setThemeStyle] = useState(restaurant.theme_style || "bistro");
+  const [themeStyle, setThemeStyle] = useState(restaurant.theme_style || "minimalist");
   const [wifiPassword, setWifiPassword] = useState(restaurant.wifi_password || "");
   const [isPending, setIsPending] = useState(false);
 

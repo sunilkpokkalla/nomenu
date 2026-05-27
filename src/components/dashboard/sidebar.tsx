@@ -8,6 +8,7 @@ import {
   MessageSquare,
   QrCode,
   Settings,
+  ShoppingBag,
   Utensils,
 } from "lucide-react";
 
@@ -18,6 +19,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/dashboard/menus", label: "My Menus", icon: Menu },
   { href: "/dashboard/items", label: "Menu Items", icon: Utensils },
+  { href: "/dashboard/orders", label: "Orders", icon: ShoppingBag },
   { href: "/dashboard/qrcodes", label: "QR Codes", icon: QrCode },
   { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
@@ -39,14 +41,17 @@ export function Sidebar() {
         </div>
       </Link>
 
-      <nav className="flex flex-1 flex-col gap-1">
+      <nav className="flex flex-1 flex-col gap-2 mt-6">
+        <div className="px-3 mb-2">
+          <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Main Menu</p>
+        </div>
         {navItems.map((item) => {
           const Icon = item.icon;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950"
+              className="flex items-center gap-3.5 rounded-xl px-3 py-3 text-sm font-semibold text-slate-550 transition-all duration-200 ease-in-out hover:bg-slate-100/80 hover:text-slate-950 hover:translate-x-1"
             >
               <Icon className="h-4 w-4" />
               {item.label}
@@ -55,11 +60,13 @@ export function Sidebar() {
         })}
       </nav>
 
-      <form action={logout}>
-        <Button variant="outline" className="w-full">
-          Sign out
-        </Button>
-      </form>
+      <div className="mt-auto pt-8 border-t border-slate-100">
+        <form action={logout}>
+          <Button variant="ghost" className="w-full justify-start text-slate-500 hover:text-slate-900 hover:bg-slate-100/80 font-semibold rounded-xl">
+            Sign out
+          </Button>
+        </form>
+      </div>
     </aside>
   );
 }

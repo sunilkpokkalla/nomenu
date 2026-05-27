@@ -263,6 +263,70 @@ export interface Database {
           }
         ];
       };
+      orders: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          table_number: string | null;
+          customer_name: string | null;
+          total_amount: number;
+          status: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          table_number?: string | null;
+          customer_name?: string | null;
+          total_amount: number;
+          status?: string;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["orders"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "orders_restaurant_id_fkey";
+            columns: ["restaurant_id"];
+            referencedRelation: "restaurants";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      order_items: {
+        Row: {
+          id: string;
+          order_id: string;
+          menu_item_id: string;
+          quantity: number;
+          price_at_time_of_order: number;
+          customer_notes: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          order_id: string;
+          menu_item_id: string;
+          quantity?: number;
+          price_at_time_of_order: number;
+          customer_notes?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["order_items"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey";
+            columns: ["order_id"];
+            referencedRelation: "orders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "order_items_menu_item_id_fkey";
+            columns: ["menu_item_id"];
+            referencedRelation: "menu_items";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

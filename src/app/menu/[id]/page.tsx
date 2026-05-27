@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { MenuClientView } from "@/components/menu/menu-client-view";
+import { CartProvider } from "@/components/menu/cart-context";
+import { FloatingCart } from "@/components/menu/floating-cart";
 
 export default async function PublicMenuPage(
   props: {
@@ -92,25 +94,36 @@ export default async function PublicMenuPage(
   }
 
   return (
-    <MenuClientView 
-      restaurant={{
-        id: restaurant.id,
-        name: restaurant.name,
-        cuisine_type: restaurant.cuisine_type,
-        address: restaurant.address,
-        phone: restaurant.phone,
-        wifi_password: restaurant.wifi_password,
-        primary_color: restaurant.primary_color,
-        accent_color: restaurant.accent_color,
-        theme_style: restaurant.theme_style,
-        currency: restaurant.currency,
-        plan: restaurant.plan
-      }}
-      categories={categoriesList}
-      items={itemsList}
-      tableNumber={tableNumber}
-      qrCodeId={qrCodeId}
-    />
+    <CartProvider>
+      <MenuClientView 
+        restaurant={{
+          id: restaurant.id,
+          name: restaurant.name,
+          cuisine_type: restaurant.cuisine_type,
+          address: restaurant.address,
+          phone: restaurant.phone,
+          wifi_password: restaurant.wifi_password,
+          primary_color: restaurant.primary_color,
+          accent_color: restaurant.accent_color,
+          theme_style: restaurant.theme_style,
+          currency: restaurant.currency,
+          plan: restaurant.plan
+        }}
+        categories={categoriesList}
+        items={itemsList}
+        tableNumber={tableNumber}
+        qrCodeId={qrCodeId}
+      />
+      {restaurant.plan?.toLowerCase() === "elite" && (
+        <FloatingCart 
+          restaurantId={restaurant.id}
+          tableNumber={tableNumber}
+          themeStyle={restaurant.theme_style || "bistro"}
+          primaryColor={restaurant.primary_color || "#000"}
+          currencySymbol={restaurant.currency || "USD"}
+        />
+      )}
+    </CartProvider>
   );
 }
 

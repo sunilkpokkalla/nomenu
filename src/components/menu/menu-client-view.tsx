@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { FeedbackFAB } from "./feedback-fab";
+import { useCart } from "./cart-context";
 
 interface Restaurant {
   id: string;
@@ -40,7 +41,7 @@ interface Category {
   sort_order: number;
 }
 
-interface MenuItem {
+export interface MenuItem {
   id: string;
   category_id: string;
   name: string;
@@ -79,6 +80,19 @@ export function MenuClientView({ restaurant, categories, items, tableNumber, qrC
 
   // Selected item for details modal
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  
+  // Cart state for the modal
+  const { addToCart } = useCart();
+  const [orderQuantity, setOrderQuantity] = useState(1);
+  const [orderNotes, setOrderNotes] = useState("");
+
+  // Reset modal state when selected item changes
+  useEffect(() => {
+    if (selectedItem) {
+      setOrderQuantity(1);
+      setOrderNotes("");
+    }
+  }, [selectedItem]);
 
   // Amenities Modal
   const [showAmenities, setShowAmenities] = useState(false);
@@ -87,8 +101,14 @@ export function MenuClientView({ restaurant, categories, items, tableNumber, qrC
   let themeStyle = restaurant.theme_style || "bistro";
   const currencySymbol = restaurant.currency || "USD";
 
-  const isFreePlan = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
-  const isProPlan = restaurant.plan?.toLowerCase() === "pro";
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const isFreePlan = currentPlan === "free";
+  const isStarterPlan = currentPlan === "starter";
+  const isProPlan = currentPlan === "pro" || currentPlan === "growth";
+  const isElitePlan = currentPlan === "elite";
+
+  const canOrder = isElitePlan;
+  const canFeedback = !isFreePlan;
 
   // Downgrade theme if on Free plan and trying to use a Premium theme
   if (isFreePlan && themeStyle !== "minimalist") {
@@ -1387,20 +1407,75 @@ export function MenuClientView({ restaurant, categories, items, tableNumber, qrC
                 </div>
               )}
 
-              <button
-                onClick={() => setSelectedItem(null)}
-                className={`w-full py-3 rounded-full text-xs font-extrabold shadow-sm transition-all hover:shadow-md cursor-pointer ${
-                  themeStyle === "vibrant" 
-                    ? "bg-[#FFD166] text-black border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" 
-                    : ""
-                }`}
-                style={themeStyle !== "vibrant" ? {
-                  backgroundColor: themeStyle === "luxury" ? "#F59E0B" : themeStyle === "bistro" ? "#5C4033" : primaryColor,
-                  color: themeStyle === "luxury" ? "#000" : "#fff"
-                } : {}}
-              >
-                Back to Menu
-              </button>
+              {/* Ordering Controls */}
+              {canOrder ? (
+                <div className="space-y-4 pt-4 mt-4 border-t border-slate-100">
+                  <div className="flex items-center justify-between">
+                    <span className={`text-sm font-bold ${themeStyle === "luxury" ? "text-zinc-300" : "text-slate-700"}`}>Quantity</span>
+                    <div className={`flex items-center gap-4 px-3 py-1.5 rounded-full ${themeStyle === "luxury" ? "bg-zinc-900 border border-zinc-800" : "bg-slate-100"}`}>
+                      <button onClick={() => setOrderQuantity(Math.max(1, orderQuantity - 1))} className="p-1 hover:opacity-70">
+                        <div className="w-4 h-0.5 bg-current rounded-full"></div>
+                      </button>
+                      <span className="font-bold text-base w-4 text-center">{orderQuantity}</span>
+                      <button onClick={() => setOrderQuantity(orderQuantity + 1)} className="p-1 hover:opacity-70 flex items-center justify-center">
+                        <div className="w-4 h-4 relative flex items-center justify-center">
+                          <div className="absolute w-4 h-0.5 bg-current rounded-full"></div>
+                          <div className="absolute h-4 w-0.5 bg-current rounded-full"></div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className={`text-xs font-bold uppercase tracking-wider ${themeStyle === "luxury" ? "text-zinc-500" : "text-slate-400"}`}>Special Instructions</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. No onions, extra spicy..."
+                      value={orderNotes}
+                      onChange={e => setOrderNotes(e.target.value)}
+                      className={`w-full px-4 py-3 text-sm rounded-xl focus:outline-none ${
+                        themeStyle === "luxury" 
+                          ? "bg-zinc-900/50 border border-zinc-800 text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500" 
+                          : "bg-slate-50 border border-slate-200 text-slate-800 focus:border-slate-400 focus:ring-1 focus:ring-slate-400"
+                      }`}
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      addToCart(selectedItem, orderQuantity, orderNotes);
+                      setSelectedItem(null);
+                    }}
+                    className={`w-full py-3.5 rounded-xl text-sm font-bold shadow-sm transition-all hover:opacity-90 active:scale-[0.98] cursor-pointer ${
+                      themeStyle === "vibrant" 
+                        ? "bg-[#FF5A5F] text-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" 
+                        : ""
+                    }`}
+                    style={themeStyle !== "vibrant" ? {
+                      backgroundColor: themeStyle === "luxury" ? "#F59E0B" : themeStyle === "bistro" ? "#5C4033" : primaryColor,
+                      color: themeStyle === "luxury" ? "#000" : "#fff"
+                    } : {}}
+                  >
+                    Add {orderQuantity} to Order • {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price * orderQuantity).toFixed(2)}
+                  </button>
+                  
+                  <button
+                    onClick={() => setSelectedItem(null)}
+                    className={`w-full py-2 text-xs font-bold opacity-60 hover:opacity-100 transition-opacity`}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-4 mt-4 border-t border-slate-100">
+                  <button
+                    onClick={() => setSelectedItem(null)}
+                    className={`w-full py-3.5 rounded-xl text-sm font-bold shadow-sm transition-all hover:opacity-90 active:scale-[0.98] cursor-pointer bg-slate-100 text-slate-700 hover:bg-slate-200`}
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
             </div>
 
           </div>
@@ -1467,7 +1542,9 @@ export function MenuClientView({ restaurant, categories, items, tableNumber, qrC
       )}
 
       {/* Feedback Button */}
-      <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />
+      {canFeedback && (
+        <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />
+      )}
     </div>
   );
 }

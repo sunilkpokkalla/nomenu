@@ -7,11 +7,24 @@ import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, Mail, 
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createClient } from "@/lib/supabase/client";
 
-export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks: any[], timezone: string, restaurantId: string }) {
+interface FeedbackData {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  customer_name?: string | null;
+  contact_info?: string | null;
+  table_number?: string | null;
+  created_at: string;
+  is_public?: boolean;
+  status?: string;
+  qr_codes?: { label: string | null } | null;
+}
+
+export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string }) {
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   
   // Real-time state
-  const [liveFeedbacks, setLiveFeedbacks] = useState<any[]>(feedbacks);
+  const [liveFeedbacks, setLiveFeedbacks] = useState<FeedbackData[]>(feedbacks);
 
   // Group toggle state
   // We'll store open state like "Today-Lunch": true or "Yesterday-Dinner": true
@@ -55,7 +68,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
             .single();
 
           if (fullFeedback) {
-            const fb: any = fullFeedback;
+            const fb = fullFeedback as FeedbackData;
             // Append to top of the list
             setLiveFeedbacks(prev => [fb, ...prev]);
             
@@ -67,7 +80,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
             else if (hour >= 12 && hour < 16) shift = "Lunch";
             else if (hour >= 18 && hour < 23) shift = "Dinner";
             
-            let dateStr = "Today"; // Usually new feedback is "Today"
+            const dateStr = "Today"; // Usually new feedback is "Today"
             setOpenGroups(prev => ({
               ...prev,
               [dateStr]: true,
@@ -118,7 +131,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId }: { feedbacks:
   }
 
   // 2. Group by date string (Today, Yesterday, etc) AND then by Shift
-  const groupedFeedbacks: Record<string, Record<string, any[]>> = {};
+  const groupedFeedbacks: Record<string, Record<string, FeedbackData[]>> = {};
   
   filteredFeedbacks.forEach(feedback => {
     if (!feedback.created_at) return;
