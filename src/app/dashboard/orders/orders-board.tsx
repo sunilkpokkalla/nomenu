@@ -252,12 +252,12 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                             const menuItem = Array.isArray(item.menu_items) ? item.menu_items[0] : item.menu_items;
                             return (
                               <div key={idx} className="flex flex-col text-sm text-slate-700">
-                                <div className="flex justify-between items-center w-full">
-                                  <div className="flex items-center gap-1.5 truncate">
+                                <div className="flex justify-between items-start w-full gap-2">
+                                  <div className="flex items-start gap-1.5">
                                     <span className="text-slate-400 font-medium">{idx + 1}.</span>
-                                    <span className="font-medium truncate">{menuItem?.name || "Unknown Item"}</span>
+                                    <span className="font-medium leading-tight pt-0.5">{menuItem?.name || "Unknown Item"}</span>
                                   </div>
-                                  <span className="font-bold ml-2 whitespace-nowrap text-indigo-700">x{item.quantity}</span>
+                                  <span className="font-bold whitespace-nowrap text-indigo-700 pt-0.5">x{item.quantity}</span>
                                 </div>
                                 {item.customer_notes && (
                                   <span className="text-[11px] text-rose-600 font-medium italic ml-4">Note: {item.customer_notes}</span>
