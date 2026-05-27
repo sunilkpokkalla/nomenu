@@ -5,10 +5,11 @@ import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { 
   MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, 
-  Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter 
+  Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send
 } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
+import { getRandomOfferForDay } from "@/lib/retention-offers";
 
 interface FeedbackData {
   id: string;
@@ -39,6 +40,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   
   // Expanded Rows State
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [retentionOffers, setRetentionOffers] = useState<Record<string, ReturnType<typeof getRandomOfferForDay>>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -114,11 +116,22 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     }
   };
 
-  const toggleRow = (id: string) => {
+  const toggleRow = (fb: FeedbackData) => {
+    const id = fb.id;
     setExpandedRows(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+        // Generate a retention offer if it's a poor rating and we don't have one yet
+        if (fb.rating <= 3 && !retentionOffers[id]) {
+          setRetentionOffers(currentOffers => ({
+            ...currentOffers,
+            [id]: getRandomOfferForDay(fb.created_at)
+          }));
+        }
+      }
       return next;
     });
   };
@@ -206,7 +219,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                 return (
                   <React.Fragment key={fb.id}>
                     <tr 
-                      onClick={() => toggleRow(fb.id)} 
+                      onClick={() => toggleRow(fb)} 
                       className={`hover:bg-slate-50 transition-colors cursor-pointer group ${isExpanded ? "bg-slate-50" : ""}`}
                     >
                       {/* Date */}
@@ -297,27 +310,68 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                       <tr>
                         <td colSpan={5} className="px-0 py-0 border-b-2 border-slate-100">
                           <div className="bg-slate-50/50 px-6 py-5 border-t border-slate-100 whitespace-normal">
-                            <div className="flex flex-col gap-4">
-                              <div>
-                                <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Customer Comment</h4>
-                                {fb.comment ? (
-                                  <p className="text-slate-700 text-[14px] leading-relaxed max-w-3xl border-l-2 border-indigo-200 pl-4 py-1">
-                                    "{fb.comment}"
-                                  </p>
-                                ) : (
-                                  <p className="text-slate-400 italic text-sm">No written comment provided.</p>
+                            <div className="flex flex-col md:flex-row gap-6 lg:gap-12 w-full">
+                              
+                              {/* Left Side: Original Feedback */}
+                              <div className="flex flex-col gap-4 flex-1">
+                                <div>
+                                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Customer Comment</h4>
+                                  {fb.comment ? (
+                                    <p className="text-slate-700 text-[14px] leading-relaxed max-w-3xl border-l-2 border-indigo-200 pl-4 py-1">
+                                      "{fb.comment}"
+                                    </p>
+                                  ) : (
+                                    <p className="text-slate-400 italic text-sm">No written comment provided.</p>
+                                  )}
+                                </div>
+                                
+                                {fb.contact_info && (
+                                  <div>
+                                    <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Contact Info</h4>
+                                    <div className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-white border border-slate-200 px-3 py-2 rounded-lg w-fit shadow-sm">
+                                      <Mail className="w-4 h-4 text-slate-400" />
+                                      {fb.contact_info}
+                                    </div>
+                                  </div>
                                 )}
                               </div>
-                              
-                              {fb.contact_info && (
-                                <div>
-                                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Contact Info</h4>
-                                  <div className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-white border border-slate-200 px-3 py-2 rounded-lg w-fit shadow-sm">
-                                    <Mail className="w-4 h-4 text-slate-400" />
-                                    {fb.contact_info}
+
+                              {/* Right Side: Retention Strategy (Only if Rating <= 3) */}
+                              {fb.rating <= 3 && retentionOffers[fb.id] && (
+                                <div className="flex-1 max-w-lg">
+                                  <div className="bg-white border-2 border-rose-100 rounded-xl overflow-hidden shadow-sm relative">
+                                    <div className="bg-rose-50 px-4 py-2.5 border-b border-rose-100 flex items-center justify-between">
+                                      <div className="flex items-center gap-1.5 text-rose-700 font-bold text-xs uppercase tracking-wider">
+                                        <Sparkles className="w-4 h-4" />
+                                        Retention Strategy
+                                      </div>
+                                      <span className="text-[10px] font-bold bg-white text-rose-600 px-2 py-0.5 rounded-full border border-rose-100">
+                                        {retentionOffers[fb.id].category.toUpperCase()} OFFER
+                                      </span>
+                                    </div>
+                                    <div className="p-4 flex flex-col gap-3">
+                                      <p className="text-sm text-slate-600 font-medium">
+                                        Don't let this customer leave unhappy. Win them back by sending this exact offer right now:
+                                      </p>
+                                      <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg text-slate-800 text-sm italic font-medium leading-relaxed">
+                                        "{retentionOffers[fb.id].text}"
+                                      </div>
+                                      
+                                      {fb.contact_info ? (
+                                        <button className="w-full mt-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm">
+                                          <Send className="w-4 h-4" />
+                                          Send Offer to Customer
+                                        </button>
+                                      ) : (
+                                        <div className="mt-1 text-center py-2 text-xs text-rose-500 font-medium bg-rose-50 rounded-lg">
+                                          No contact info provided to send offer.
+                                        </div>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               )}
+
                             </div>
                           </div>
                         </td>
