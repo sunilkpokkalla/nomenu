@@ -5,7 +5,7 @@ export function ClientErrorLogger() {
   useEffect(() => {
     window.onerror = (msg, src, line, col, err) => {
       console.error("CAUGHT CLIENT ERROR:", msg, err);
-      // Optional: you can also log this to an external service if needed
+      alert("CLIENT CRASH LOG: " + msg + "\n\nPlease copy this exact message and send it to the developer.");
     };
   }, []);
 
