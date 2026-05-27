@@ -64,7 +64,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
           )
         `)
         .eq("restaurant_id", restaurantId)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: true });
         
       if (data) {
         const selectedDate = new Date(y, m - 1, d);
@@ -120,7 +120,8 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                 audio.play().catch(e => console.log('Audio play prevented', e));
               } catch (e) {}
               
-              setOrders(prev => [newOrder as Order, ...prev]);
+              // Add to the end (newest orders at the bottom)
+              setOrders(prev => [...prev, newOrder as Order]);
             }
           } else if (payload.eventType === "UPDATE") {
             // Just update the status or relevant fields
@@ -218,45 +219,66 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
 
                   return (
                   <div key={order.id} className="bg-white border border-slate-200 shadow-sm rounded-xl flex flex-col gap-3 overflow-hidden">
-                    {/* Collapsed Header - Always visible, acts as toggle if in collapsed column */}
+                    {/* Header: Order Number and Price */}
                     <div 
                       onClick={() => isCollapsedColumn && toggleExpand(order.id)}
-                      className={`p-4 flex justify-between items-start ${isCollapsedColumn ? "cursor-pointer hover:bg-slate-50 transition-colors" : ""}`}
+                      className={`p-3.5 flex justify-between items-start ${isCollapsedColumn ? "cursor-pointer hover:bg-slate-50 transition-colors" : ""}`}
                     >
-                      <div className="flex flex-col gap-1">
-                        <span className={`text-sm font-bold px-2 py-0.5 rounded-md w-fit ${
-                          col.id === "cancelled" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-slate-800"
+                      <div className="flex flex-col gap-1.5">
+                        <span className={`text-sm font-black px-2.5 py-1 rounded-md w-fit tracking-wide shadow-sm ${
+                          col.id === "cancelled" ? "bg-rose-100 text-rose-800" : 
+                          col.id === "completed" ? "bg-emerald-100 text-emerald-800" :
+                          "bg-indigo-100 text-indigo-900"
                         }`}>
                           #{String(order.daily_order_number).padStart(3, '0')}
                         </span>
-                        <div className="text-sm font-medium text-slate-500 flex items-center gap-2" suppressHydrationWarning>
-                          {formatTimeAgoWithExact(order.created_at, timezone)}
-                        </div>
                       </div>
                       <div className="flex flex-col items-end gap-1">
                         <div className="font-bold text-lg text-slate-900">
                           ${Number(order.total_amount).toFixed(2)}
                         </div>
                         {isCollapsedColumn && (
-                          <div className="text-slate-400">
-                            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                          <div className="text-slate-400 mt-1">
+                            {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                           </div>
                         )}
                       </div>
                     </div>
 
                     {showFullCard && (
-                      <div className="px-4 pb-4 flex flex-col gap-3 border-t border-slate-50 pt-3">
+                      <div className="px-3.5 pb-3.5 flex flex-col gap-4">
+                        
+                        {/* Items (Primary Focus) */}
+                        <div className="flex flex-col gap-3 py-1">
+                          {order.order_items?.map((item: OrderItem, idx: number) => {
+                            const menuItem = Array.isArray(item.menu_items) ? item.menu_items[0] : item.menu_items;
+                            return (
+                              <div key={idx} className="flex justify-between items-start">
+                                <div className="flex gap-3">
+                                  <span className="font-black text-lg text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md h-fit">{item.quantity}x</span>
+                                  <div className="flex flex-col mt-0.5">
+                                    <span className="font-bold text-base text-slate-800 leading-tight">{menuItem?.name || "Unknown Item"}</span>
+                                    {item.customer_notes && (
+                                      <span className="text-xs text-rose-600 font-medium italic mt-1 bg-rose-50 px-2 py-1 rounded-md w-fit">Note: {item.customer_notes}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* Customer Info (Bottom) */}
                         {(order.customer_name || order.table_number) && (
-                          <div className="flex gap-3 text-xs bg-slate-50 p-2 rounded-lg border border-slate-100">
+                          <div className="flex gap-3 text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100 mt-2">
                             {order.customer_name && (
-                              <div className="flex items-center gap-1.5 text-slate-700 font-medium">
+                              <div className="flex items-center gap-1.5 text-slate-600 font-semibold uppercase tracking-wide">
                                 <User className="w-3.5 h-3.5 text-slate-400" />
                                 {order.customer_name}
                               </div>
                             )}
                             {order.table_number && (
-                              <div className="flex items-center gap-1.5 text-indigo-700 font-bold ml-auto">
+                              <div className="flex items-center gap-1.5 text-indigo-700 font-bold ml-auto bg-indigo-100/50 px-2 py-0.5 rounded-full">
                                 <MapPin className="w-3 h-3" />
                                 Table {order.table_number}
                               </div>
@@ -264,23 +286,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone }: { initial
                           </div>
                         )}
 
-                        <div className="flex flex-col gap-2 mt-1">
-                          {order.order_items?.map((item: OrderItem, idx: number) => {
-                            const menuItem = Array.isArray(item.menu_items) ? item.menu_items[0] : item.menu_items;
-                            return (
-                              <div key={idx} className="flex justify-between items-start text-sm">
-                                <div className="flex gap-2">
-                                  <span className="font-bold text-slate-700">{item.quantity}x</span>
-                                  <div className="flex flex-col">
-                                    <span className="font-medium text-slate-900">{menuItem?.name || "Unknown Item"}</span>
-                                    {item.customer_notes && (
-                                      <span className="text-xs text-rose-600 font-medium italic mt-0.5">Note: {item.customer_notes}</span>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
+                        {/* Timestamp (Very Small) */}
+                        <div className="text-[10px] font-medium text-slate-400 flex items-center justify-between" suppressHydrationWarning>
+                          <span>{formatTimeAgoWithExact(order.created_at, timezone)}</span>
                         </div>
 
                         {/* Actions */}
