@@ -18,7 +18,11 @@ import {
   TrendingUp,
   Flame,
   Zap,
-  ChevronRight
+  ChevronRight,
+  LayoutDashboard,
+  MessageSquare,
+  Heart,
+  ShieldAlert
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -131,19 +135,19 @@ export default function Home() {
           {/* Eyebrow Badge */}
           <div className="inline-flex items-center gap-2 rounded-full border border-indigo-150 bg-indigo-50/50 px-4 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-600 mb-8 animate-fade-in">
             <Sparkles className="h-3.5 w-3.5 text-indigo-500 fill-indigo-500/10" strokeWidth={1.5} />
-            <span>Interactive Designer Canvas & Presets</span>
+            <span>The Complete Restaurant Operating System</span>
           </div>
 
           {/* Main Headings */}
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-950 sm:text-6xl md:text-7xl leading-[1.05] max-w-5xl mx-auto">
-            Your digital menu. <br className="hidden sm:inline" />
+            Run your entire restaurant. <br className="hidden sm:inline" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-violet-600 to-amber-500 font-serif-luxury italic font-medium capitalize">
-              one brand-aligned scan away.
+              from one single scan.
             </span>
           </h1>
 
           <p className="mx-auto mt-8 max-w-2xl text-base sm:text-lg text-slate-500 leading-relaxed font-medium">
-            Ditch generic, boring black-and-white QR code prints. Create custom restaurant menus, tweak brand colors, embed logos, and download gorgeous high-resolution print-ready cards.
+            Not just beautiful QR menus. We've built a full suite: a drag-and-drop Kitchen Display System, a real-time ordering engine, and an AI-powered Feedback System that actively wins back lost customers.
           </p>
 
           {/* CTAs */}
@@ -223,73 +227,74 @@ export default function Home() {
           {/* Asymmetric Bento Grid */}
           <div className="grid gap-6 md:grid-cols-3">
             
-            {/* Bento Card 1 (Col span 2): Custom brand colors */}
+            {/* Bento Card 1 (Col span 2): Premium KDS */}
             <div className="md:col-span-2 group rounded-[2rem] border border-slate-800 bg-slate-950 p-2 transition-all duration-300 hover:border-slate-700">
               <div className="bg-slate-900/50 rounded-[calc(2rem-0.5rem)] p-6 lg:p-10 flex flex-col justify-between h-full min-h-[320px]">
                 <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
                   <div className="space-y-3 max-w-md">
                     <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                      <Palette className="h-5 w-5" strokeWidth={1.5} />
+                      <LayoutDashboard className="h-5 w-5" strokeWidth={1.5} />
                     </div>
-                    <h4 className="font-extrabold text-xl text-white">Custom Brand Color Presets</h4>
+                    <h4 className="font-extrabold text-xl text-white">Smart Kitchen Display System</h4>
                     <p className="text-sm text-slate-400 leading-relaxed font-medium">
-                      Configure custom color palettes or gradients. Reflect your physical restaurant atmosphere directly inside the browser viewport.
+                      Manage high-volume service with our real-time Drag & Drop KDS. Track preparation times, automatically advance order states, and keep the front-of-house perfectly synced with the kitchen.
                     </p>
                   </div>
 
                   {/* Visual preview widget inside card */}
-                  <div className="flex gap-2 bg-slate-950/80 border border-slate-800 rounded-2xl p-4 shrink-0 self-start">
-                    {["bg-blue-600", "bg-rose-500", "bg-amber-500", "bg-emerald-600", "bg-slate-950 border border-white/20"].map((color, idx) => (
-                      <div key={idx} className={`w-8 h-8 rounded-full ${color} flex items-center justify-center cursor-pointer hover:scale-110 transition-transform`}>
-                        {idx === 0 && <Check className="h-4 w-4 text-white" strokeWidth={2.5} />}
-                      </div>
-                    ))}
+                  <div className="flex flex-col gap-2 bg-slate-950/80 border border-slate-800 rounded-xl p-3 shrink-0 self-start w-48">
+                    <div className="bg-amber-500/20 border border-amber-500/30 text-amber-400 text-[10px] uppercase font-bold py-1.5 px-2 rounded-lg flex items-center justify-between">
+                      <span>Preparing</span> <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    </div>
+                    <div className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] uppercase font-bold py-1.5 px-2 rounded-lg flex items-center justify-between">
+                      <span>Ready</span> <CheckCircle2 className="h-3 w-3" />
+                    </div>
                   </div>
                 </div>
                 
                 <div className="mt-8 flex gap-6 text-xs font-semibold text-slate-400">
-                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-indigo-400" /> Palette Hex pickers</div>
-                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-indigo-400" /> Gradient presets</div>
+                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-indigo-400" /> Live Sync</div>
+                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-indigo-400" /> Drag & Drop Flow</div>
                 </div>
               </div>
             </div>
 
-            {/* Bento Card 2 (Col span 1): Zero App Mobile View */}
-            <div className="group rounded-[2rem] border border-slate-800 bg-slate-950 p-2 transition-all duration-300 hover:border-slate-700">
+            {/* Bento Card 2 (Col span 1): AI Retention */}
+            <div className="group rounded-[2rem] border border-slate-800 bg-slate-950 p-2 transition-all duration-300 hover:border-rose-900/50 hover:bg-rose-950/10">
               <div className="bg-slate-900/50 rounded-[calc(2rem-0.5rem)] p-6 lg:p-8 flex flex-col justify-between h-full min-h-[320px]">
                 <div className="space-y-4">
-                  <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20">
-                    <Smartphone className="h-5 w-5" strokeWidth={1.5} />
+                  <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                    <ShieldAlert className="h-5 w-5" strokeWidth={1.5} />
                   </div>
-                  <h4 className="font-extrabold text-xl text-white">Instant Responsive View</h4>
+                  <h4 className="font-extrabold text-xl text-white">AI Retention Engine</h4>
                   <p className="text-sm text-slate-400 leading-relaxed font-medium">
-                    Render menus instantly in mobile browsers without downloads. Guests scan, filters update, and orders flow.
+                    Intercept 1-3 star reviews before they hit Yelp. The AI instantly generates tailored, day-specific win-back offers to save angry customers.
                   </p>
                 </div>
 
                 <div className="pt-6 border-t border-slate-800 mt-6">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">Performance</span>
-                  <span className="text-xs font-bold text-white mt-1 block">99/100 Core Web Vitals Rating</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-rose-500 block">Intercept</span>
+                  <span className="text-xs font-bold text-white mt-1 block">50+ Win-Back Strategies</span>
                 </div>
               </div>
             </div>
 
-            {/* Bento Card 3 (Col span 1): Guest WiFi */}
-            <div className="group rounded-[2rem] border border-slate-800 bg-slate-950 p-2 transition-all duration-300 hover:border-slate-700">
+            {/* Bento Card 3 (Col span 1): Loyalty Engine */}
+            <div className="group rounded-[2rem] border border-slate-800 bg-slate-950 p-2 transition-all duration-300 hover:border-emerald-900/50 hover:bg-emerald-950/10">
               <div className="bg-slate-900/50 rounded-[calc(2rem-0.5rem)] p-6 lg:p-8 flex flex-col justify-between h-full min-h-[320px]">
                 <div className="space-y-4">
-                  <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                    <Wifi className="h-5 w-5" strokeWidth={1.5} />
+                  <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <Heart className="h-5 w-5" strokeWidth={1.5} />
                   </div>
-                  <h4 className="font-extrabold text-xl text-white">Automatic WiFi Details</h4>
+                  <h4 className="font-extrabold text-xl text-white">VIP Loyalty Engine</h4>
                   <p className="text-sm text-slate-400 leading-relaxed font-medium">
-                    Incorporate SSID & credentials onto the QR card base, giving diners immediate access without service disruptions.
+                    Turn happy diners into raving regulars. Get instant suggestions on how to reward 4-5 star reviewers based on the exact day of the week.
                   </p>
                 </div>
 
                 <div className="pt-6 border-t border-slate-800 mt-6">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">Integration</span>
-                  <span className="text-xs font-bold text-white mt-1 block">Printed credentials summary card</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-500 block">Convert</span>
+                  <span className="text-xs font-bold text-white mt-1 block">100+ VIP Experiences</span>
                 </div>
               </div>
             </div>
@@ -299,24 +304,24 @@ export default function Home() {
               <div className="bg-slate-900/50 rounded-[calc(2rem-0.5rem)] p-6 lg:p-10 flex flex-col justify-between h-full min-h-[320px]">
                 <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
                   <div className="space-y-3 max-w-md">
-                    <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                      <Printer className="h-5 w-5" strokeWidth={1.5} />
+                    <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-900 border border-slate-200">
+                      <QrCode className="h-5 w-5" strokeWidth={1.5} />
                     </div>
-                    <h4 className="font-extrabold text-xl text-white">High-DPI Print Downloads</h4>
+                    <h4 className="font-extrabold text-xl text-white">Custom Brand QR Menus</h4>
                     <p className="text-sm text-slate-400 leading-relaxed font-medium">
-                      Select layout sizes, configure table stand tents, or download beautiful high-contrast Instagram-ready squares at 2x resolution.
+                      Build fully customized digital menus. Print beautiful, high-res table tents with automatic guest WiFi credentials and logo integrations. No apps required for diners.
                     </p>
                   </div>
 
                   <div className="flex items-center gap-2 bg-slate-950 border border-slate-800 rounded-xl p-3 shrink-0 self-start text-xs font-semibold text-slate-300">
-                    <QrCode className="h-4 w-4 text-emerald-450" />
-                    <span>2X PNG & PDF Export</span>
+                    <Palette className="h-4 w-4 text-slate-400" />
+                    <span>Brand Colors & PDF Export</span>
                   </div>
                 </div>
 
                 <div className="mt-8 flex gap-6 text-xs font-semibold text-slate-400">
-                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-emerald-450" /> Crop marks ready</div>
-                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-emerald-450" /> Standard tent cut outlines</div>
+                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-slate-400" /> Zero App Required</div>
+                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-slate-400" /> Fast Page Loads</div>
                 </div>
               </div>
             </div>
@@ -674,10 +679,10 @@ export default function Home() {
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Unlimited</strong> Items & QRs
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Private Feedback System</strong>
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>AI Retention Engine</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Full Theme Customization</strong>
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>VIP Loyalty Engine</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> Detailed Analytics & Timezones
@@ -699,7 +704,7 @@ export default function Home() {
                 <div className="space-y-5">
                   <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-slate-500">Premium</span>
                   <h4 className="text-2xl lg:text-3xl font-black text-white">Elite Plan</h4>
-                  <p className="text-xs text-slate-400 font-medium">Real-time ordering for premium venues.</p>
+                  <p className="text-xs text-slate-400 font-medium">Full restaurant OS for premium venues.</p>
                   <div className="pt-2 flex items-baseline">
                     <span className="text-4xl lg:text-5xl font-black text-white">$99</span>
                     <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
@@ -712,10 +717,10 @@ export default function Home() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Everything in Pro
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> <strong>Live Ordering Dashboard</strong>
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Live Drag & Drop KDS</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Multi-Location Profiles
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Real-time Kitchen Sync</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> White-labeled Branding
