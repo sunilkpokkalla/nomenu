@@ -81,10 +81,10 @@ export default async function FeedbackPage() {
           </div>
         )}
         <div className={!restaurant.plan || restaurant.plan.toLowerCase() === "free" ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all" : ""}>
-          <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
-          <div className="mt-8">
+          <div className="mb-8">
             <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
           </div>
+          <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
         </div>
       </div>
     </div>
