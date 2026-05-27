@@ -10,6 +10,7 @@ import {
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
 import { getRandomOfferForDay } from "@/lib/retention-offers";
+import { getRandomLoyaltyIdeaForDay } from "@/lib/loyalty-offers";
 
 interface FeedbackData {
   id: string;
@@ -41,6 +42,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   // Expanded Rows State
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [retentionOffers, setRetentionOffers] = useState<Record<string, ReturnType<typeof getRandomOfferForDay>>>({});
+  const [loyaltyIdeas, setLoyaltyIdeas] = useState<Record<string, ReturnType<typeof getRandomLoyaltyIdeaForDay>>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -129,6 +131,13 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
           setRetentionOffers(currentOffers => ({
             ...currentOffers,
             [id]: getRandomOfferForDay(fb.created_at)
+          }));
+        }
+        // Generate a loyalty idea if it's a great rating and we don't have one yet
+        if (fb.rating >= 4 && !loyaltyIdeas[id]) {
+          setLoyaltyIdeas(currentIdeas => ({
+            ...currentIdeas,
+            [id]: getRandomLoyaltyIdeaForDay(fb.created_at)
           }));
         }
       }
@@ -336,7 +345,9 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                 )}
                               </div>
 
-                              {/* Right Side: Retention Strategy (Only if Rating <= 3) */}
+                              {/* Right Side: Strategy Engine (Retention OR Loyalty) */}
+                              
+                              {/* Negative Feedback: Retention Strategy */}
                               {fb.rating <= 3 && retentionOffers[fb.id] && (
                                 <div className="flex-1 max-w-lg">
                                   <div className="bg-white border-2 border-rose-100 rounded-xl overflow-hidden shadow-sm relative">
@@ -365,6 +376,42 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                       ) : (
                                         <div className="mt-1 text-center py-2 text-xs text-rose-500 font-medium bg-rose-50 rounded-lg">
                                           No contact info provided to send offer.
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Positive Feedback: Loyalty Strategy */}
+                              {fb.rating >= 4 && loyaltyIdeas[fb.id] && (
+                                <div className="flex-1 max-w-lg">
+                                  <div className="bg-white border-2 border-emerald-100 rounded-xl overflow-hidden shadow-sm relative">
+                                    <div className="bg-emerald-50 px-4 py-2.5 border-b border-emerald-100 flex items-center justify-between">
+                                      <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs uppercase tracking-wider">
+                                        <Sparkles className="w-4 h-4" />
+                                        Loyalty Strategy
+                                      </div>
+                                      <span className="text-[10px] font-bold bg-white text-emerald-600 px-2 py-0.5 rounded-full border border-emerald-100">
+                                        {loyaltyIdeas[fb.id].category.toUpperCase()} IDEA
+                                      </span>
+                                    </div>
+                                    <div className="p-4 flex flex-col gap-3">
+                                      <p className="text-sm text-slate-600 font-medium">
+                                        This customer loves you! Turn them into a raving regular by sending them this special surprise:
+                                      </p>
+                                      <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg text-slate-800 text-sm italic font-medium leading-relaxed">
+                                        "{loyaltyIdeas[fb.id].text}"
+                                      </div>
+                                      
+                                      {fb.contact_info ? (
+                                        <button className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm">
+                                          <Send className="w-4 h-4" />
+                                          Send Reward to Customer
+                                        </button>
+                                      ) : (
+                                        <div className="mt-1 text-center py-2 text-xs text-emerald-600 font-medium bg-emerald-50 rounded-lg">
+                                          No contact info provided to send reward.
                                         </div>
                                       )}
                                     </div>
