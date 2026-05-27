@@ -58,7 +58,7 @@ export function Sidebar() {
                 {item.label}
               </div>
               {item.badge && (
-                <span className="rounded-md bg-rose-50 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-rose-600 shadow-sm border border-rose-100/50">
+                <span className="rounded-md bg-indigo-50 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-indigo-600 shadow-sm border border-indigo-100/50">
                   {item.badge}
                 </span>
               )}
