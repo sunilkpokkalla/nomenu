@@ -20,7 +20,20 @@ export function formatTimeAgoWithExact(dateString: string | null | undefined, ti
   if (!dateString) return "Unknown date";
   
   const date = new Date(dateString);
-  const timeAgo = formatDistanceToNow(date, { addSuffix: true });
+  let timeAgo = formatDistanceToNow(date, { addSuffix: false });
+  
+  if (timeAgo.includes('less than a minute')) {
+    timeAgo = 'Just now';
+  } else {
+    timeAgo = timeAgo
+      .replace(/about |almost |over /g, '')
+      .replace(/ minutes?/g, 'min')
+      .replace(/ hours?/g, 'h')
+      .replace(/ days?/g, 'd')
+      .replace(/ months?/g, 'mo')
+      .replace(/ years?/g, 'y') + ' ago';
+  }
+
   const exactTime = formatTimezone(dateString, timezone);
 
   return `${timeAgo} (${exactTime})`;
