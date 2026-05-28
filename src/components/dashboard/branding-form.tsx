@@ -363,7 +363,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                 </div>
               </div>
               <div className="w-full h-[80px] relative border-t border-[#D4AF37]/30 shadow-inner">
-                <img src="https://images.unsplash.com/photo-1544025162-811114215b74?q=80&w=400&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=400&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/50 to-transparent"></div>
               </div>
             </div>
@@ -476,7 +476,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
 
             <div className={`flex justify-between items-center pb-2 border-b gap-3 ${previewTheme.itemBorder}`}>
               <div className={`w-12 h-12 rounded-lg overflow-hidden shrink-0 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rotate-[2deg]" : "border border-slate-200"}`}>
-                <img src="https://images.unsplash.com/photo-1599813580521-820712a4df03?w=100&h=100&fit=crop" alt="Escargots" className="w-full h-full object-cover" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Equitaxe_-_20131111_-_Paris_-_01.jpg" alt="Escargots" className="w-full h-full object-cover" />
               </div>
               <div className="space-y-0.5 flex-grow">
                 <div className="flex items-center gap-1.5">

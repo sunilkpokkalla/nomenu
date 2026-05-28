@@ -341,7 +341,7 @@ export function MenuClientView({ restaurant, categories, items, tableNumber, qrC
             </div>
             {/* The Hero Image Cover */}
             <div className="w-full h-[220px] relative border-t-2 border-[#D4AF37]/30 shadow-inner">
-              <img src="https://images.unsplash.com/photo-1544025162-811114215b74?q=80&w=800&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" />
+              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/30 to-transparent"></div>
             </div>
           </div>
