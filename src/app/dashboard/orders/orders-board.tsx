@@ -37,8 +37,45 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [mounted, setMounted] = useState(false);
   const [isKdsMode, setIsKdsMode] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const playNotificationSound = () => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      
+      // First note
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(880, ctx.currentTime);
+      gain1.gain.setValueAtTime(0, ctx.currentTime);
+      gain1.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.05);
+      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.5);
+      
+      // Second note
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(1108.73, ctx.currentTime + 0.1);
+      gain2.gain.setValueAtTime(0, ctx.currentTime + 0.1);
+      gain2.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.15);
+      gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(ctx.currentTime + 0.1);
+      osc2.stop(ctx.currentTime + 0.8);
+    } catch(e) {
+      console.error("Audio playback failed", e);
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -91,10 +128,18 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
               .single();
             
             if (newOrder) {
-              try {
-                const audio = new Audio('/notification.mp3');
-                audio.play().catch(e => console.log('Audio play prevented', e));
-              } catch (e) {}
+              playNotificationSound();
+              setNotification({
+                id: newOrder.id,
+                title: `New Order #${String(newOrder.daily_order_number || 0).padStart(3, '0')}`,
+                subtitle: newOrder.table_number ? `Table ${newOrder.table_number}` : (newOrder.customer_name || 'Anonymous')
+              });
+              
+              // Auto-dismiss notification
+              setTimeout(() => {
+                setNotification(prev => prev?.id === newOrder.id ? null : prev);
+              }, 6000);
+
               setOrders(prev => [...prev, newOrder as Order]);
             }
           } else if (payload.eventType === "UPDATE") {
@@ -200,6 +245,27 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
           </button>
         </div>
       </div>
+
+      {/* Visual Notification Toast */}
+      {notification && (
+        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-4 fade-in duration-300">
+          <div className="bg-indigo-600 text-white px-6 py-4 rounded-2xl shadow-2xl shadow-indigo-600/30 flex items-center gap-4 min-w-[300px]">
+            <div className="bg-white/20 p-2 rounded-xl">
+              <ChefHat className="w-6 h-6 text-white animate-pulse" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-black text-lg tracking-tight">{notification.title}</span>
+              <span className="text-indigo-200 font-medium text-sm">{notification.subtitle}</span>
+            </div>
+            <button 
+              onClick={() => setNotification(null)}
+              className="ml-auto bg-white/10 hover:bg-white/20 p-2 rounded-lg transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* BOARD */}
       <DragDropContext onDragEnd={onDragEnd}>
