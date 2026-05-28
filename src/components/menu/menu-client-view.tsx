@@ -8,6 +8,8 @@ import { RetroTheme } from "./themes/RetroTheme";
 import { SpeakeasyTheme } from "./themes/SpeakeasyTheme";
 import { CyberpunkTheme } from "./themes/CyberpunkTheme";
 import { BoutiqueTheme } from "./themes/BoutiqueTheme";
+import { BotanicalTheme } from "./themes/BotanicalTheme";
+import { MolecularTheme } from "./themes/MolecularTheme";
 
 import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps } from "./types";
 
@@ -37,6 +39,10 @@ export function MenuClientView(props: MenuClientViewProps) {
       return <CyberpunkTheme {...props} />;
     case "boutique":
       return <BoutiqueTheme {...props} />;
+    case "botanical":
+      return <BotanicalTheme {...props} />;
+    case "molecular":
+      return <MolecularTheme {...props} />;
     case "bistro":
     case "minimalist":
     case "luxury":

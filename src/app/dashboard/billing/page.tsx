@@ -38,7 +38,7 @@ const PLANS = [
   {
     id: "pro", // Kept ID for backward compatibility
     name: "Pro Plan",
-    price: "$49",
+    price: "$39",
     period: "/mo",
     description: "Unlimited flexibility for high-volume venues.",
     features: [
@@ -53,7 +53,7 @@ const PLANS = [
   {
     id: "elite",
     name: "Elite Plan",
-    price: "$99",
+    price: "$79",
     period: "/mo",
     description: "Real-time ordering for premium venues and groups.",
     features: [
@@ -62,6 +62,21 @@ const PLANS = [
       "Multi-Location Restaurant Profiles",
       "Automated Negative Feedback Alerts",
       "White-labeled Branding (No 'Powered by NoMenu')",
+    ],
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise Plan",
+    price: "$119",
+    period: "/mo",
+    description: "Full commerce suite with direct payouts.",
+    features: [
+      "Everything in Elite",
+      "Order & Pay via Apple Pay / Credit Card",
+      "Direct Bank Payouts (Stripe Connect)",
+      "0% Platform Transaction Fees",
+      "POS & KDS System Integration",
+      "Dedicated Account Manager",
     ],
   },
 ];
@@ -140,7 +155,7 @@ export default async function BillingPage(
       </Card>
 
       {/* Pricing Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-5">
         {PLANS.map((plan) => {
           const isActive = currentPlan.toLowerCase() === plan.id.toLowerCase();
           return (
