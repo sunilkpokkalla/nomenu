@@ -52,7 +52,7 @@ export default async function OrdersPage() {
       )
     `)
     .eq("restaurant_id", restaurant.id)
-    .gte("created_at", today.toISOString())
+    .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
     .order("created_at", { ascending: false });
 
   return (

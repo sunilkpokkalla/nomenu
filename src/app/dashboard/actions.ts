@@ -82,6 +82,9 @@ export async function createMenu(formData: FormData) {
   const description = field(formData, "description");
   const isActive = formData.get("isActive") === "true";
   const menuType = field(formData, "menuType");
+  const taxRate = parseFloat(field(formData, "taxRate") || "0") || 0;
+  const serviceCharge = parseFloat(field(formData, "serviceCharge") || "0") || 0;
+  const serviceChargeType = field(formData, "serviceChargeType") || "percentage";
 
   const currentPlan = restaurant.plan || "free";
   if (currentPlan === "free" || currentPlan === "starter") {
@@ -102,6 +105,9 @@ export async function createMenu(formData: FormData) {
     description,
     is_active: isActive,
     menu_type: menuType,
+    tax_rate: taxRate,
+    service_charge: serviceCharge,
+    service_charge_type: serviceChargeType,
   });
 
   if (error) {
@@ -524,23 +530,25 @@ export async function updateMenuBranding(menuId: string, formData: FormData) {
   if (!user) throw new Error("Unauthorized");
 
   const useCustomDesign = formData.get("use_custom_design") === "true";
-  const primaryColor = formData.get("primary_color") as string;
-  const accentColor = formData.get("accent_color") as string;
-  const themeStyle = formData.get("theme_style") as string;
+  
+  let design_config = null;
+  if (useCustomDesign) {
+    design_config = {
+      primary_color: formData.get("primaryColor") as string,
+      accent_color: formData.get("accentColor") as string,
+      theme_style: formData.get("themeStyle") as string,
+    };
+  }
 
   const { error } = await supabase
     .from("menus")
-    .update({
-      use_custom_design: useCustomDesign,
-      primary_color: primaryColor || null,
-      accent_color: accentColor || null,
-      theme_style: themeStyle || null,
-    })
+    .update({ design_config })
     .eq("id", menuId);
 
   if (error) {
-    redirect(`/dashboard/menus/${menuId}/customize?error=${encodeURIComponent(error.message)}`);
+    redirect(`/dashboard/customize?message=${encodeURIComponent(error.message)}`);
   }
 
-  redirect(`/dashboard/menus/${menuId}/customize?success=Menu design updated successfully`);
+  revalidatePath("/dashboard/customize");
+  redirect(`/dashboard/customize?success=Menu design updated successfully`);
 }

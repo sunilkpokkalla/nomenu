@@ -579,7 +579,7 @@ export function MenuClientView({ restaurant, categories, items, tableNumber, qrC
                   className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-bold border whitespace-nowrap transition-all cursor-pointer ${
                     active ? theme.pillActive : theme.pillInactive
                   }`}
-                  style={active && themeStyle !== "luxury" && themeStyle !== "vibrant" ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}
+                  style={active && themeStyle !== "luxury" && themeStyle !== "vibrant" ? { backgroundColor: primaryColor, borderColor: primaryColor, color: '#fff' } : {}}
                 >
                   <Icon className="h-3 w-3 shrink-0" />
                   <span>{diet.label}</span>
@@ -629,7 +629,7 @@ export function MenuClientView({ restaurant, categories, items, tableNumber, qrC
                   id={`nav-pill-${cat.id}`}
                   onClick={() => scrollToCategory(cat.id)}
                   className={`inline-block rounded-full px-3.5 py-1 text-[11px] font-bold border transition-all whitespace-nowrap cursor-pointer ${tabClasses}`}
-                  style={active && themeStyle !== "luxury" && themeStyle !== "vibrant" && themeStyle !== "bistro" && themeStyle !== "minimalist" ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}
+                  style={active && themeStyle !== "luxury" && themeStyle !== "vibrant" ? { backgroundColor: primaryColor, borderColor: primaryColor, color: '#fff' } : {}}
                 >
                   {cat.name}
                 </button>
@@ -678,49 +678,60 @@ export function MenuClientView({ restaurant, categories, items, tableNumber, qrC
                               onClick={() => setSelectedItem(item)}
                               className="group py-4 px-2 cursor-pointer transition-colors duration-150 hover:bg-[#F5F0E6]/60"
                             >
-                              <div className="flex gap-0 items-start flex-col">
-                                <div className="w-full flex items-baseline justify-between gap-2">
-                                  <h3 className="font-serif font-bold text-[17px] text-[#1C1917] group-hover:text-[#D4AF37] transition-colors tracking-wide">
-                                    {item.name}
-                                  </h3>
-                                  <span className="flex-grow border-b-[2px] border-dotted border-[#D6D3D1] mx-2 relative top-[-6px]"></span>
-                                  <span className="font-sans font-bold text-[15px] text-[#1C1917] shrink-0">
-                                    {price}
-                                  </span>
-                                </div>
-                                
-                                {item.description && (
-                                  <p className="text-[12px] font-sans font-light text-[#78716C] mt-1.5 leading-relaxed line-clamp-2 max-w-[85%]">
-                                    {item.description}
-                                  </p>
+                              <div className="flex gap-4 items-center">
+                                {item.image_url && (
+                                  <div className="h-16 w-16 rounded-lg overflow-hidden border border-[#D6D3D1]/40 shrink-0 bg-[#F5F0E6] relative flex items-center justify-center shadow-sm">
+                                    <img 
+                                      src={item.image_url} 
+                                      alt={item.name} 
+                                      className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" 
+                                    />
+                                  </div>
                                 )}
-                                
-                                <div className="flex flex-wrap gap-2 pt-2.5">
-                                  {item.is_popular && (
-                                    <span className="text-[9px] font-sans text-[#D4AF37] font-bold uppercase tracking-widest">
-                                      ★ Chef's Special
+                                <div className="flex gap-0 items-start flex-col flex-grow min-w-0">
+                                  <div className="w-full flex items-baseline justify-between gap-2">
+                                    <h3 className="font-serif font-bold text-[17px] text-[#1C1917] group-hover:text-[#D4AF37] transition-colors tracking-wide truncate">
+                                      {item.name}
+                                    </h3>
+                                    <span className="flex-grow border-b-[2px] border-dotted border-[#D6D3D1] mx-1 relative top-[-6px]"></span>
+                                    <span className="font-sans font-bold text-[15px] text-[#1C1917] shrink-0">
+                                      {price}
                                     </span>
+                                  </div>
+                                  
+                                  {item.description && (
+                                    <p className="text-[12px] font-sans font-light text-[#78716C] mt-1.5 leading-relaxed line-clamp-2 w-full pr-4">
+                                      {item.description}
+                                    </p>
                                   )}
-                                  {item.cooking_time && (
-                                    <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm flex items-center gap-1">
-                                      <Clock className="h-2.5 w-2.5" /> {item.cooking_time}m
-                                    </span>
-                                  )}
-                                  {item.is_vegetarian && (
-                                    <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm">
-                                      V
-                                    </span>
-                                  )}
-                                  {item.is_vegan && (
-                                    <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm">
-                                      VG
-                                    </span>
-                                  )}
-                                  {item.is_gluten_free && (
-                                    <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm">
-                                      GF
-                                    </span>
-                                  )}
+                                  
+                                  <div className="flex flex-wrap gap-2 pt-2.5">
+                                    {item.is_popular && (
+                                      <span className="text-[9px] font-sans text-[#D4AF37] font-bold uppercase tracking-widest">
+                                        ★ Chef's Special
+                                      </span>
+                                    )}
+                                    {item.cooking_time && (
+                                      <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm flex items-center gap-1">
+                                        <Clock className="h-2.5 w-2.5" /> {item.cooking_time}m
+                                      </span>
+                                    )}
+                                    {item.is_vegetarian && (
+                                      <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm">
+                                        V
+                                      </span>
+                                    )}
+                                    {item.is_vegan && (
+                                      <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm">
+                                        VG
+                                      </span>
+                                    )}
+                                    {item.is_gluten_free && (
+                                      <span className="text-[9px] font-sans text-[#78716C] border border-[#D6D3D1] px-1.5 py-0.5 uppercase tracking-widest rounded-sm">
+                                        GF
+                                      </span>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>

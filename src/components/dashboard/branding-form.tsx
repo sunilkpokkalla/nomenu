@@ -29,7 +29,6 @@ interface BrandingFormProps {
   errorMessage?: string;
 }
 
-import { Switch } from "@/components/ui/switch";
 
 export function BrandingForm({ entity, type, action, successMessage, errorMessage }: BrandingFormProps) {
   const [useCustomDesign, setUseCustomDesign] = useState(type === "menu" ? (entity.use_custom_design || false) : true);
@@ -127,12 +126,17 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                     Use a custom design specifically for this menu.
                   </p>
                 </div>
-                <Switch 
-                  name="use_custom_design"
-                  checked={useCustomDesign} 
-                  onCheckedChange={setUseCustomDesign} 
-                  value="true"
-                />
+                <label className="relative inline-flex items-center cursor-pointer">
+  <input 
+    type="checkbox" 
+    name="use_custom_design" 
+    value="true" 
+    className="sr-only peer"
+    checked={useCustomDesign}
+    onChange={(e) => setUseCustomDesign(e.target.checked)}
+  />
+  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+</label>
               </div>
             )}
 
@@ -434,50 +438,56 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           )}
 
           {/* Sticky Tab Filters */}
-          <div className={`py-2 flex gap-1.5 overflow-x-auto px-3 mt-3 scrollbar-none border-b ${themeStyle === "luxury" ? "border-zinc-900 bg-zinc-950/40" : "bg-white"}`}>
+          <div className={`py-2 flex gap-1.5 overflow-x-auto px-3 mt-3 scrollbar-none border-b ${themeStyle === "luxury" ? "border-zinc-900 bg-zinc-950/40" : themeStyle === "vibrant" ? "bg-white border-black border-b-2" : "bg-white"}`}>
             <span
-              className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold text-white transition-all`}
-              style={{ backgroundColor: themeStyle === "luxury" ? "#F59E0B" : primaryColor }}
+              className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold transition-all ${themeStyle === "vibrant" ? "border-2 border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] text-black" : themeStyle === "luxury" ? "text-amber-400 border border-amber-400/50" : "text-white"}`}
+              style={themeStyle !== "luxury" && themeStyle !== "vibrant" ? { backgroundColor: primaryColor, borderColor: primaryColor } : { backgroundColor: themeStyle === "vibrant" ? "#06D6A0" : "rgba(245,158,11,0.2)" }}
             >
               Appetizers
             </span>
-            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : "text-slate-600 bg-slate-100"}`}>
+            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
               Mains
             </span>
-            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : "text-slate-600 bg-slate-100"}`}>
+            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
               Desserts
             </span>
           </div>
 
           {/* Simulated Items */}
           <div className="p-3 space-y-3 flex-grow overflow-y-auto">
-            <div className={`flex justify-between items-start pb-2 border-b ${previewTheme.itemBorder}`}>
-              <div className="space-y-0.5">
+            <div className={`flex justify-between items-center pb-2 border-b gap-3 ${previewTheme.itemBorder}`}>
+              <div className={`w-12 h-12 rounded-lg overflow-hidden shrink-0 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rotate-[-2deg]" : "border border-slate-200"}`}>
+                <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=100&h=100&fit=crop" alt="Soup" className="w-full h-full object-cover" />
+              </div>
+              <div className="space-y-0.5 flex-grow">
                 <div className="flex items-center gap-1.5">
-                  <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : "text-slate-800"}`}>French Onion Soup</h4>
+                  <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : themeStyle === "vibrant" ? "text-black font-black" : "text-slate-800"}`}>French Onion Soup</h4>
                   <span
-                    className={`text-[7px] font-extrabold px-1 rounded ${themeStyle === "luxury" ? "bg-amber-950/40 text-amber-400 border border-amber-900/30" : "text-white"}`}
-                    style={themeStyle !== "luxury" ? { backgroundColor: accentColor, borderColor: accentColor } : {}}
+                    className={`text-[7px] font-extrabold px-1 rounded ${themeStyle === "luxury" ? "bg-amber-950/40 text-amber-400 border border-amber-900/30" : themeStyle === "vibrant" ? "bg-amber-300 text-black border border-black" : "text-white"}`}
+                    style={themeStyle !== "luxury" && themeStyle !== "vibrant" ? { backgroundColor: accentColor, borderColor: accentColor } : {}}
                   >
                     POPULAR
                   </span>
                 </div>
-                <p className={`text-[8px] line-clamp-1 ${previewTheme.textSecondary}`}>Rich beef broth with caramelized onions & Gruyère.</p>
+                <p className={`text-[8px] line-clamp-1 ${previewTheme.textSecondary}`}>Rich beef broth with caramelized onions.</p>
               </div>
-              <span className={`text-[10px] font-extrabold ${themeStyle === "luxury" ? "text-amber-400 font-serif" : "text-slate-900"}`}>$12.00</span>
+              <span className={`text-[10px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif" : themeStyle === "vibrant" ? "bg-rose-500 text-white border border-black px-1.5 py-0.5 rounded rotate-2 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" : "text-slate-900"}`}>$12.00</span>
             </div>
 
-            <div className={`flex justify-between items-start pb-2 border-b ${previewTheme.itemBorder}`}>
-              <div className="space-y-0.5">
+            <div className={`flex justify-between items-center pb-2 border-b gap-3 ${previewTheme.itemBorder}`}>
+              <div className={`w-12 h-12 rounded-lg overflow-hidden shrink-0 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rotate-[2deg]" : "border border-slate-200"}`}>
+                <img src="https://images.unsplash.com/photo-1599813580521-820712a4df03?w=100&h=100&fit=crop" alt="Escargots" className="w-full h-full object-cover" />
+              </div>
+              <div className="space-y-0.5 flex-grow">
                 <div className="flex items-center gap-1.5">
-                  <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : "text-slate-800"}`}>Escargots de Bourgogne</h4>
+                  <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : themeStyle === "vibrant" ? "text-black font-black" : "text-slate-800"}`}>Escargots de Bourgogne</h4>
                 </div>
                 <p className={`text-[8px] line-clamp-1 ${previewTheme.textSecondary}`}>Baked in garlic, parsley & herb butter.</p>
-                <span className={`inline-block border rounded px-1 text-[7px] font-bold ${previewTheme.accentBg}`}>
+                <span className={`inline-block border rounded px-1 text-[7px] font-bold ${themeStyle === "vibrant" ? "bg-[#06D6A0] text-black border-black" : previewTheme.accentBg}`}>
                   VEG
                 </span>
               </div>
-              <span className={`text-[10px] font-extrabold ${themeStyle === "luxury" ? "text-amber-400 font-serif" : "text-slate-900"}`}>$15.00</span>
+              <span className={`text-[10px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif" : themeStyle === "vibrant" ? "bg-rose-500 text-white border border-black px-1.5 py-0.5 rounded rotate-2 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" : "text-slate-900"}`}>$15.00</span>
             </div>
           </div>
 

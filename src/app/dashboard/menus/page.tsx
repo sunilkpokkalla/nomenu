@@ -1,4 +1,4 @@
-import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils, Palette } from "lucide-react";
+import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -138,12 +138,6 @@ export default async function MenusPage(
                             QR
                           </Link>
                         </Button>
-                        <Button variant="outline" size="sm" className="flex-1" asChild>
-                          <Link href={`/dashboard/menus/${menu.id}/customize`}>
-                            <Palette className="mr-1.5 h-3.5 w-3.5" />
-                            Design
-                          </Link>
-                        </Button>
                       </div>
                       <div className="mt-4 flex justify-end">
                         <DeleteConfirmForm
@@ -247,6 +241,30 @@ export default async function MenusPage(
                     placeholder="e.g. Served from 11 AM to 4 PM. French classics and seasonal specialties."
                   />
                 </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="taxRate">Tax Rate (%)</Label>
+                    <Input id="taxRate" name="taxRate" type="number" step="0.01" min="0" placeholder="e.g. 8.5" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="serviceCharge">Service Fee</Label>
+                    <Input id="serviceCharge" name="serviceCharge" type="number" step="0.01" min="0" placeholder="e.g. 10" />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="serviceChargeType">Service Fee Type</Label>
+                  <select
+                    id="serviceChargeType"
+                    name="serviceChargeType"
+                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  >
+                    <option value="percentage">Percentage (%)</option>
+                    <option value="flat">Flat Amount ($)</option>
+                  </select>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="isActive">Status</Label>
                   <select

@@ -5,7 +5,7 @@ import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { differenceInMinutes } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
-import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle } from "lucide-react";
+import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink } from "lucide-react";
 import { updateOrderStatus } from "./actions";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
@@ -31,11 +31,11 @@ type Order = {
   order_items?: OrderItem[];
 };
 
-export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string }) {
+export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [isKdsMode, setIsKdsMode] = useState(false);
+  const [isKdsMode, setIsKdsMode] = useState(isStandalone);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
 
@@ -111,29 +111,29 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
   const fetchLatestOrders = async () => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
-    const { data } = await supabase
+    let query = supabase
       .from("orders")
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
       .order("created_at", { ascending: true });
       
-    if (!data) return;
-    
-    let nextOrders = data as unknown as Order[];
-
-    // If a specific date is selected, filter the fetched data
     if (selectedDateStr) {
+      // Archive Mode: Fetch all orders for the exact selected date
       const [y, m, d] = selectedDateStr.split("-").map(Number);
-      const selectedDate = new Date(y, m - 1, d);
-      nextOrders = nextOrders.filter(order => {
-        const orderDate = toZonedTime(new Date(order.created_at), timezone);
-        return orderDate.getFullYear() === selectedDate.getFullYear() && 
-               orderDate.getMonth() === selectedDate.getMonth() && 
-               orderDate.getDate() === selectedDate.getDate();
-      });
+      const startOfDay = new Date(y, m - 1, d, 0, 0, 0);
+      const endOfDay = new Date(y, m - 1, d, 23, 59, 59, 999);
+      query = query.gte("created_at", startOfDay.toISOString()).lte("created_at", endOfDay.toISOString());
+    } else {
+      // Live Mode: Fetch active tickets OR tickets created today
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      query = query.or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`);
     }
 
-    setOrders(nextOrders);
+    const { data } = await query;
+    if (!data) return;
+    
+    setOrders(data as unknown as Order[]);
   };
 
   // Initial load or date filter change
@@ -188,11 +188,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      if (!document.fullscreenElement) setIsKdsMode(false);
+      if (!document.fullscreenElement && !isStandalone) setIsKdsMode(false);
     };
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, []);
+  }, [isStandalone]);
 
   const toggleKdsMode = () => {
     if (!document.fullscreenElement) {
@@ -267,6 +267,15 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
             </div>
           )}
           
+          {!isKdsMode && !isStandalone && (
+            <button 
+              onClick={() => window.open('/kds', 'KDS', 'width=1280,height=800,menubar=no,toolbar=no')}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Pop-out KDS
+            </button>
+          )}
           <button 
             onClick={toggleKdsMode}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
@@ -282,6 +291,13 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       </div>
 
       {/* Visual Notification Toast */}
+      {selectedDateStr && (
+        <div className="bg-amber-100 border border-amber-200 text-amber-900 px-4 py-2 rounded-xl flex justify-center items-center font-semibold text-sm shadow-sm gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-600" />
+          Archive Mode: You are viewing orders from {selectedDateStr}. Modifying orders is disabled.
+        </div>
+      )}
+
       {notification && (
         <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top-4 fade-in duration-300">
           <div className="bg-indigo-600 text-white px-6 py-4 rounded-2xl shadow-2xl shadow-indigo-600/30 flex items-center gap-4 min-w-[300px]">
@@ -349,7 +365,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                           const urgency = getUrgency(order.created_at, col.id);
 
                           return (
-                            <Draggable key={order.id} draggableId={order.id} index={index}>
+                            <Draggable key={order.id} draggableId={order.id} index={index} isDragDisabled={!!selectedDateStr}>
                               {(provided, snapshot) => (
                                 <div
                                   ref={provided.innerRef}
@@ -445,8 +461,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                     </div>
 
                                     {/* Right Side: Quick Action Button (Light mode only to keep KDS clean, or maybe keep everywhere) */}
-                                    <div className="flex items-center gap-2 ml-auto">
-                                      {col.id === "pending" && (
+                                    {!selectedDateStr && (
+                                      <div className="flex items-center gap-2 ml-auto">
+                                        {col.id === "pending" && (
                                         <button 
                                           onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "preparing"); }} 
                                           className="bg-amber-500 text-amber-950 hover:bg-amber-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
@@ -471,9 +488,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                         >
                                           Cancel
                                         </button>
-                                      )}
-                                    </div>
-                                    
+                                        )}
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               )}

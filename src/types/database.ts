@@ -66,11 +66,11 @@ export interface Database {
           schedule_start: string | null;
           schedule_end: string | null;
           menu_type: string | null;
+          design_config: Json | null;
+          tax_rate: number | null;
+          service_charge: number | null;
+          service_charge_type: string | null;
           created_at: string | null;
-          use_custom_design: boolean | null;
-          theme_style: string | null;
-          primary_color: string | null;
-          accent_color: string | null;
         };
         Insert: {
           id?: string;
@@ -82,28 +82,13 @@ export interface Database {
           schedule_start?: string | null;
           schedule_end?: string | null;
           menu_type?: string | null;
+          design_config?: Json | null;
+          tax_rate?: number | null;
+          service_charge?: number | null;
+          service_charge_type?: string | null;
           created_at?: string | null;
-          use_custom_design?: boolean | null;
-          theme_style?: string | null;
-          primary_color?: string | null;
-          accent_color?: string | null;
         };
-        Update: {
-          id?: string;
-          restaurant_id?: string;
-          name?: string;
-          description?: string | null;
-          is_active?: boolean;
-          schedule_type?: string | null;
-          schedule_start?: string | null;
-          schedule_end?: string | null;
-          menu_type?: string | null;
-          created_at?: string | null;
-          use_custom_design?: boolean | null;
-          theme_style?: string | null;
-          primary_color?: string | null;
-          accent_color?: string | null;
-        };
+        Update: Partial<Database["public"]["Tables"]["menus"]["Insert"]>;
         Relationships: [
           {
             foreignKeyName: "menus_restaurant_id_fkey";

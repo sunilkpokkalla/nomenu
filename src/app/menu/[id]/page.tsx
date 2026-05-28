@@ -94,11 +94,14 @@ export default async function PublicMenuPage(
   }
 
   // 6. Theme Fallback Logic (Paywall Enforced)
-  const canUseCustomDesign = ['pro', 'elite'].includes(restaurant.plan?.toLowerCase() || '') && menu.use_custom_design;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const designConfig = (menu.design_config as any) || {};
+  const hasCustomDesign = Object.keys(designConfig).length > 0;
+  const canUseCustomDesign = ['pro', 'elite'].includes(restaurant.plan?.toLowerCase() || '') && hasCustomDesign;
 
-  const activeThemeStyle = canUseCustomDesign && menu.theme_style ? menu.theme_style : restaurant.theme_style;
-  const activePrimaryColor = canUseCustomDesign && menu.primary_color ? menu.primary_color : restaurant.primary_color;
-  const activeAccentColor = canUseCustomDesign && menu.accent_color ? menu.accent_color : restaurant.accent_color;
+  const activeThemeStyle = canUseCustomDesign && designConfig.theme_style ? designConfig.theme_style : restaurant.theme_style;
+  const activePrimaryColor = canUseCustomDesign && designConfig.primary_color ? designConfig.primary_color : restaurant.primary_color;
+  const activeAccentColor = canUseCustomDesign && designConfig.accent_color ? designConfig.accent_color : restaurant.accent_color;
 
   return (
     <CartProvider>
@@ -124,10 +127,14 @@ export default async function PublicMenuPage(
       {restaurant.plan?.toLowerCase() === "elite" && (
         <FloatingCart 
           restaurantId={restaurant.id}
+          menuId={menu.id}
           tableNumber={tableNumber}
           themeStyle={activeThemeStyle || "bistro"}
           primaryColor={activePrimaryColor || "#000"}
           currencySymbol={restaurant.currency || "USD"}
+          taxRate={menu.tax_rate || 0}
+          serviceCharge={menu.service_charge || 0}
+          serviceChargeType={menu.service_charge_type || "percentage"}
         />
       )}
     </CartProvider>

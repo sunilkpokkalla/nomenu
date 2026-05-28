@@ -5,12 +5,16 @@ import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed } from "lucide-react";
 import { submitOrder } from "@/app/menu/[id]/actions";
 
-export function FloatingCart({ restaurantId, tableNumber, themeStyle, primaryColor, currencySymbol }: {
+export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage" }: {
   restaurantId: string;
+  menuId: string;
   tableNumber?: string;
   themeStyle: string;
   primaryColor: string;
   currencySymbol: string;
+  taxRate?: number;
+  serviceCharge?: number;
+  serviceChargeType?: string;
 }) {
   const { items, totalItems, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +41,7 @@ export function FloatingCart({ restaurantId, tableNumber, themeStyle, primaryCol
 
       const res = await submitOrder({
         restaurantId,
+        menuId,
         tableNumber: table || null,
         customerName: customerName || null,
         totalAmount: totalPrice,
@@ -62,6 +67,12 @@ export function FloatingCart({ restaurantId, tableNumber, themeStyle, primaryCol
 
   const btnColor = themeStyle === "luxury" ? "#F59E0B" : themeStyle === "bistro" ? "#5C4033" : themeStyle === "vibrant" ? "#FF5A5F" : primaryColor;
   const textColor = (themeStyle === "luxury" || themeStyle === "vibrant") ? "#000" : "#fff";
+
+  // Calculate totals
+  const subtotal = totalPrice;
+  const taxAmount = subtotal * (taxRate / 100);
+  const serviceFeeAmount = serviceChargeType === "flat" ? serviceCharge : subtotal * (serviceCharge / 100);
+  const finalTotal = subtotal + taxAmount + serviceFeeAmount;
 
   // Success Screen
   if (successOrder) {
@@ -117,7 +128,7 @@ export function FloatingCart({ restaurantId, tableNumber, themeStyle, primaryCol
               <span>View Order</span>
             </div>
             <div className="font-bold">
-              {formatPrice(totalPrice)}
+              {formatPrice(finalTotal)}
             </div>
           </button>
         </div>
@@ -168,9 +179,27 @@ export function FloatingCart({ restaurantId, tableNumber, themeStyle, primaryCol
             </div>
 
             <div className="p-4 sm:p-6 border-t bg-black/5 space-y-4">
-              <div className="flex justify-between font-bold text-xl">
+              <div className="space-y-1.5 border-b border-black/10 pb-4">
+                <div className="flex justify-between text-sm font-semibold opacity-70">
+                  <span>Subtotal</span>
+                  <span>{formatPrice(subtotal)}</span>
+                </div>
+                {taxRate > 0 && (
+                  <div className="flex justify-between text-sm font-semibold opacity-70">
+                    <span>Tax ({taxRate}%)</span>
+                    <span>{formatPrice(taxAmount)}</span>
+                  </div>
+                )}
+                {serviceCharge > 0 && (
+                  <div className="flex justify-between text-sm font-semibold opacity-70">
+                    <span>Service Fee {serviceChargeType === 'percentage' ? `(${serviceCharge}%)` : ''}</span>
+                    <span>{formatPrice(serviceFeeAmount)}</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-between font-bold text-xl pt-1">
                 <span>Total</span>
-                <span>{formatPrice(totalPrice)}</span>
+                <span>{formatPrice(finalTotal)}</span>
               </div>
 
               {error && <div className="text-rose-500 text-sm font-bold text-center bg-rose-50 p-2 rounded-lg">{error}</div>}

@@ -1,8 +1,6 @@
 import { redirect } from "next/navigation";
-
-import { updateRestaurantBranding } from "@/app/dashboard/actions";
-import { BrandingForm } from "@/components/dashboard/branding-form";
 import { createClient } from "@/lib/supabase/server";
+import { CustomizeDashboardClient } from "./customize-client";
 
 export default async function CustomizePage(
   props: {
@@ -31,6 +29,13 @@ export default async function CustomizePage(
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
   }
 
+  // Fetch menus for the scope dropdown
+  const { data: menus } = await supabase
+    .from("menus")
+    .select("*")
+    .eq("restaurant_id", restaurant.id)
+    .order("created_at", { ascending: true });
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
       {/* Header */}
@@ -41,23 +46,22 @@ export default async function CustomizePage(
         </p>
       </div>
 
-      <BrandingForm type="restaurant"
-        entity={{
-          id: restaurant.id,
-          name: restaurant.name,
-          cuisine_type: restaurant.cuisine_type,
-          primary_color: restaurant.primary_color,
-          accent_color: restaurant.accent_color,
-          theme_style: restaurant.theme_style,
-          wifi_password: restaurant.wifi_password,
-          plan: restaurant.plan,
-          address: restaurant.address,
-          phone: restaurant.phone,
-        }}
-        action={updateRestaurantBranding}
-        successMessage={searchParams.success}
-        errorMessage={searchParams.message}
+      <CustomizeDashboardClient 
+        restaurant={restaurant} 
+        menus={menus || []} 
       />
+      
+      {/* Toast Messages */}
+      {searchParams.success && (
+        <div className="fixed bottom-4 right-4 bg-emerald-50 text-emerald-800 px-4 py-3 rounded-lg border border-emerald-200 shadow-lg z-50 animate-in fade-in slide-in-from-bottom-4">
+          {searchParams.success}
+        </div>
+      )}
+      {searchParams.message && (
+        <div className="fixed bottom-4 right-4 bg-red-50 text-red-800 px-4 py-3 rounded-lg border border-red-200 shadow-lg z-50 animate-in fade-in slide-in-from-bottom-4">
+          {searchParams.message}
+        </div>
+      )}
     </div>
   );
 }
