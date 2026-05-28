@@ -1,4 +1,4 @@
-import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils } from "lucide-react";
+import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils, Palette } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -136,6 +136,12 @@ export default async function MenusPage(
                           <Link href="/dashboard/qrcodes">
                             <QrCode className="mr-1.5 h-3.5 w-3.5" />
                             QR
+                          </Link>
+                        </Button>
+                        <Button variant="outline" size="sm" className="flex-1" asChild>
+                          <Link href={`/dashboard/menus/${menu.id}/customize`}>
+                            <Palette className="mr-1.5 h-3.5 w-3.5" />
+                            Design
                           </Link>
                         </Button>
                       </div>

@@ -9,28 +9,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface BrandingFormProps {
-  restaurant: {
+  entity: {
     id: string;
     name: string;
-    cuisine_type: string | null;
-    primary_color: string | null;
-    accent_color: string | null;
-    theme_style: string | null;
-    wifi_password: string | null;
-    plan: string | null;
-    address: string | null;
-    phone: string | null;
+    cuisine_type?: string | null;
+    primary_color?: string | null;
+    accent_color?: string | null;
+    theme_style?: string | null;
+    wifi_password?: string | null;
+    plan?: string | null;
+    address?: string | null;
+    phone?: string | null;
+    // Menu specific
+    use_custom_design?: boolean | null;
   };
+  type: "restaurant" | "menu";
   action: (formData: FormData) => Promise<void>;
   successMessage?: string;
   errorMessage?: string;
 }
 
-export function BrandingForm({ restaurant, action, successMessage, errorMessage }: BrandingFormProps) {
-  const [primaryColor, setPrimaryColor] = useState(restaurant.primary_color || "#2563EB");
-  const [accentColor, setAccentColor] = useState(restaurant.accent_color || "#F59E0B");
-  const [themeStyle, setThemeStyle] = useState(restaurant.theme_style || "minimalist");
-  const [wifiPassword, setWifiPassword] = useState(restaurant.wifi_password || "");
+import { Switch } from "@/components/ui/switch";
+
+export function BrandingForm({ entity, type, action, successMessage, errorMessage }: BrandingFormProps) {
+  const [useCustomDesign, setUseCustomDesign] = useState(type === "menu" ? (entity.use_custom_design || false) : true);
+  const [primaryColor, setPrimaryColor] = useState(entity.primary_color || "#2563EB");
+  const [accentColor, setAccentColor] = useState(entity.accent_color || "#F59E0B");
+  const [themeStyle, setThemeStyle] = useState(entity.theme_style || "minimalist");
+  const [wifiPassword, setWifiPassword] = useState(entity.wifi_password || "");
   const [isPending, setIsPending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -113,6 +119,24 @@ export function BrandingForm({ restaurant, action, successMessage, errorMessage 
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
+            {type === "menu" && (
+              <div className="flex items-center justify-between rounded-lg border p-4 bg-muted/50">
+                <div className="space-y-0.5">
+                  <Label className="text-base">Override Global Theme</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Use a custom design specifically for this menu.
+                  </p>
+                </div>
+                <Switch 
+                  name="use_custom_design"
+                  checked={useCustomDesign} 
+                  onCheckedChange={setUseCustomDesign} 
+                  value="true"
+                />
+              </div>
+            )}
+
+            <div className={type === "menu" && !useCustomDesign ? "opacity-50 pointer-events-none transition-opacity" : "transition-opacity"}>
             {successMessage && (
               <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
                 {successMessage}
@@ -267,8 +291,9 @@ export function BrandingForm({ restaurant, action, successMessage, errorMessage 
               </div>
             </div>
 
+            </div>
             {/* Gating Logic warning alert & premium upgrade CTA */}
-            {themeStyle !== "minimalist" && (!restaurant.plan || restaurant.plan.toLowerCase() === "free") ? (
+            {themeStyle !== "minimalist" && (!entity.plan || entity.plan.toLowerCase() === "free") ? (
               <div className="space-y-4">
                 <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-4 space-y-2 flex items-start gap-3">
                   <div className="bg-amber-100 p-2 rounded-lg text-amber-700 shrink-0">
@@ -324,11 +349,11 @@ export function BrandingForm({ restaurant, action, successMessage, errorMessage 
           {themeStyle === "bistro" ? (
             <div className="text-center relative bg-[#1C1917] overflow-hidden shrink-0 flex flex-col">
               <div className="pt-6 pb-4 px-4 z-10 space-y-0.5">
-                <h1 className="text-xl font-serif text-[#D4AF37] tracking-wider uppercase drop-shadow-md">{restaurant.name}</h1>
+                <h1 className="text-xl font-serif text-[#D4AF37] tracking-wider uppercase drop-shadow-md">{entity.name}</h1>
                 <div className="flex items-center justify-center gap-2 mt-1">
                   <span className="h-px w-6 bg-gradient-to-r from-transparent to-[#D4AF37]/60"></span>
                   <span className="text-[7px] text-[#D4AF37] uppercase tracking-[0.3em] font-sans font-medium">
-                    {restaurant.cuisine_type || "Menu"}
+                    {entity.cuisine_type || "Menu"}
                   </span>
                   <span className="h-px w-6 bg-gradient-to-l from-transparent to-[#D4AF37]/60"></span>
                 </div>
@@ -340,9 +365,9 @@ export function BrandingForm({ restaurant, action, successMessage, errorMessage 
             </div>
           ) : themeStyle === "luxury" ? (
             <div className="pt-6 pb-4 px-4 text-center">
-              <h1 className="text-lg font-bold tracking-widest uppercase text-amber-400 font-serif">{restaurant.name}</h1>
+              <h1 className="text-lg font-bold tracking-widest uppercase text-amber-400 font-serif">{entity.name}</h1>
               <p className="text-[8px] opacity-60 mt-0.5 tracking-wider uppercase text-zinc-400">
-                {restaurant.cuisine_type || "Fine Dining"}
+                {entity.cuisine_type || "Fine Dining"}
               </p>
               <div className="w-12 h-0.5 bg-amber-500/40 mx-auto mt-2.5"></div>
             </div>
@@ -350,10 +375,10 @@ export function BrandingForm({ restaurant, action, successMessage, errorMessage 
             <div className="pt-8 pb-6 px-4 text-center border-b-2 border-black relative bg-[#FFD166] shrink-0">
               <div className="text-center z-10 space-y-1">
                 <h1 className="text-xl font-black tracking-tight text-black font-sans uppercase drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
-                  {restaurant.name}
+                  {entity.name}
                 </h1>
                 <span className="inline-block bg-black text-[#FEFCE8] text-[8px] font-black uppercase tracking-wider px-2 py-0.5 border border-black rounded-md transform -rotate-1">
-                  {restaurant.cuisine_type || "Diner Pop"}
+                  {entity.cuisine_type || "Diner Pop"}
                 </span>
               </div>
             </div>
@@ -365,9 +390,9 @@ export function BrandingForm({ restaurant, action, successMessage, errorMessage 
               }}
             >
               <div className="text-center z-10">
-                <h1 className="text-sm font-bold tracking-tight">{restaurant.name}</h1>
+                <h1 className="text-sm font-bold tracking-tight">{entity.name}</h1>
                 <p className="text-[9px] opacity-90 font-medium tracking-wide uppercase">
-                  {restaurant.cuisine_type || "Fine Dining"}
+                  {entity.cuisine_type || "Fine Dining"}
                 </p>
               </div>
             </div>
@@ -377,27 +402,27 @@ export function BrandingForm({ restaurant, action, successMessage, errorMessage 
           {themeStyle === "bistro" ? (
             <div className="px-4 py-2 z-20 shrink-0 bg-[#FDFBF7] border-b border-[#E7E5E4] shadow-sm text-center flex flex-col items-center gap-1">
               <p className="font-sans text-[8px] uppercase tracking-widest text-[#78716C]">
-                📍 {restaurant.address}
+                📍 {entity.address}
               </p>
               <div className="flex justify-center items-center gap-4 text-[8px] uppercase tracking-widest text-[#57534E] font-medium">
-                <span>📞 {restaurant.phone}</span>
+                <span>📞 {entity.phone}</span>
                 {wifiPassword && <span className="text-[#D4AF37] font-bold">📶 WiFi: {wifiPassword}</span>}
               </div>
             </div>
           ) : themeStyle === "luxury" || themeStyle === "minimalist" || themeStyle === "vibrant" ? (
             <div className="px-4 py-1 text-center text-[8px] text-zinc-500 space-y-0.5 mt-2">
-              <p>📍 {restaurant.address}</p>
+              <p>📍 {entity.address}</p>
               <div className="flex justify-center gap-3">
-                <span>📞 {restaurant.phone}</span>
+                <span>📞 {entity.phone}</span>
                 {wifiPassword && <span className="text-amber-500/70">📶 WiFi: {wifiPassword}</span>}
               </div>
             </div>
           ) : (
             <div className="px-3 -mt-3 z-10">
               <div className={`${previewTheme.cardBg} space-y-1 text-[9px] ${previewTheme.textSecondary}`}>
-                <p className="line-clamp-1">📍 {restaurant.address}</p>
+                <p className="line-clamp-1">📍 {entity.address}</p>
                 <div className="flex justify-between text-[8px] font-semibold">
-                  <span>📞 {restaurant.phone}</span>
+                  <span>📞 {entity.phone}</span>
                   {wifiPassword && (
                     <span style={{ color: primaryColor }}>
                       📶 WiFi: {wifiPassword}

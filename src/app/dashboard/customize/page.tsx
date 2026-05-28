@@ -41,8 +41,8 @@ export default async function CustomizePage(
         </p>
       </div>
 
-      <BrandingForm
-        restaurant={{
+      <BrandingForm type="restaurant"
+        entity={{
           id: restaurant.id,
           name: restaurant.name,
           cuisine_type: restaurant.cuisine_type,
