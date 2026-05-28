@@ -220,9 +220,9 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                 {[
                   {
                     id: "bistro",
-                    name: "Lumina Premium",
-                    description: "High-end cinematic gold",
-                    emoji: "✨",
+                    name: "Bistro Classic",
+                    description: "Clean, warm cafe styling",
+                    emoji: "☕",
                     isPremium: true
                   },
                   {
@@ -234,8 +234,8 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                   },
                   {
                     id: "luxury",
-                    name: "Luxury Dark",
-                    description: "Gold text & glassmorphism",
+                    name: "Lumina Premium",
+                    description: "High-end cinematic dark gold",
                     emoji: "✨",
                     isPremium: true
                   },
@@ -244,6 +244,48 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                     name: "Vibrant Diner",
                     description: "Neo-brutalism bold cards",
                     emoji: "🍔",
+                    isPremium: true
+                  },
+                  {
+                    id: "omakase",
+                    name: "Omakase",
+                    description: "Zen Minimalist Dark",
+                    emoji: "🍣",
+                    isPremium: true
+                  },
+                  {
+                    id: "brutalist",
+                    name: "Brutalist",
+                    description: "Raw oversized typography",
+                    emoji: "🖤",
+                    isPremium: true
+                  },
+                  {
+                    id: "retro",
+                    name: "Y2K Retro",
+                    description: "Windows 98 arcade style",
+                    emoji: "👾",
+                    isPremium: true
+                  },
+                  {
+                    id: "speakeasy",
+                    name: "Speakeasy",
+                    description: "Dark jazz club gold",
+                    emoji: "🍸",
+                    isPremium: true
+                  },
+                  {
+                    id: "cyberpunk",
+                    name: "Cyberpunk",
+                    description: "Neon glitch matrix",
+                    emoji: "🦾",
+                    isPremium: true
+                  },
+                  {
+                    id: "boutique",
+                    name: "Boutique Cafe",
+                    description: "Soft girl dreamcore",
+                    emoji: "🎀",
                     isPremium: true
                   }
                 ].map((theme) => (
@@ -368,7 +410,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
               </div>
             </div>
           ) : themeStyle === "luxury" ? (
-            <div className="pt-6 pb-4 px-4 text-center">
+            <div className="pt-6 pb-4 px-4 text-center bg-black">
               <h1 className="text-lg font-bold tracking-widest uppercase text-amber-400 font-serif">{entity.name}</h1>
               <p className="text-[8px] opacity-60 mt-0.5 tracking-wider uppercase text-zinc-400">
                 {entity.cuisine_type || "Fine Dining"}
@@ -384,6 +426,37 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                 <span className="inline-block bg-black text-[#FEFCE8] text-[8px] font-black uppercase tracking-wider px-2 py-0.5 border border-black rounded-md transform -rotate-1">
                   {entity.cuisine_type || "Diner Pop"}
                 </span>
+              </div>
+            </div>
+          ) : themeStyle === "omakase" ? (
+            <div className="pt-10 pb-6 px-4 text-center bg-[#0F0F0F] text-[#E0E0E0] shrink-0">
+              <h1 className="text-xl tracking-[0.2em] font-light uppercase text-white mb-2">{entity.name}</h1>
+              <div className="w-[1px] h-6 bg-gradient-to-b from-transparent via-[#4A4A4A] to-transparent mx-auto"></div>
+              <p className="mt-2 text-[6px] tracking-[0.2em] text-[#888888] uppercase">{entity.cuisine_type || "Tasting Menu"}</p>
+            </div>
+          ) : themeStyle === "brutalist" ? (
+            <div className="p-4 border-b-4 border-black bg-white text-black shrink-0 font-mono">
+              <h1 className="text-3xl font-black uppercase tracking-tighter leading-none break-words">{entity.name}</h1>
+              <div className="mt-4 border-t-2 border-black pt-2 flex justify-between">
+                <p className="text-[8px] font-bold uppercase bg-black text-white px-1 py-0.5">{entity.cuisine_type || "MENU"}</p>
+              </div>
+            </div>
+          ) : themeStyle === "retro" ? (
+            <div className="p-2 border-b-2 border-black bg-[#C0C0C0] text-black shrink-0 font-mono">
+              <div className="bg-[#000080] text-white px-1 py-0.5 text-[8px] flex justify-between font-bold mb-2">
+                <span>{entity.name}.exe</span>
+                <span>X</span>
+              </div>
+              <h1 className="text-xl font-black uppercase text-[#FF00FF]">{entity.name}</h1>
+            </div>
+          ) : themeStyle === "speakeasy" ? (
+            <div className="pt-8 pb-4 px-4 text-center bg-[#0A0A0A] border-b border-[#D4AF37]/20 shrink-0 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-50"></div>
+              <h1 className="text-xl tracking-[0.2em] uppercase text-[#F3E5AB] font-light mb-2">{entity.name}</h1>
+              <div className="flex items-center justify-center gap-2 w-full max-w-[150px] mx-auto opacity-60">
+                <div className="h-px bg-[#D4AF37] flex-1"></div>
+                <p className="text-[6px] tracking-[0.3em] uppercase text-[#D4AF37]">{entity.cuisine_type || "Provisions"}</p>
+                <div className="h-px bg-[#D4AF37] flex-1"></div>
               </div>
             </div>
           ) : (
@@ -421,6 +494,24 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                 {wifiPassword && <span className="text-amber-500/70">📶 WiFi: {wifiPassword}</span>}
               </div>
             </div>
+          ) : themeStyle === "omakase" ? (
+            <div className="bg-[#0F0F0F] text-[#666666] text-[7px] tracking-[0.1em] text-center p-2 uppercase">
+               📍 {entity.address} | 📞 {entity.phone}
+            </div>
+          ) : themeStyle === "brutalist" ? (
+            <div className="bg-yellow-300 border-b-4 border-black text-black text-[9px] font-bold uppercase p-2 flex justify-between font-mono">
+               <span>{entity.address}</span> <span>{entity.phone}</span>
+            </div>
+          ) : themeStyle === "retro" ? (
+            <div className="bg-[#C0C0C0] border-b-[2px] border-r-[2px] border-b-black border-r-black border-t-[2px] border-l-[2px] border-t-white border-l-white text-black text-[8px] font-mono p-1 m-2">
+              <div className="border border-inset border-gray-500 bg-white p-1">
+                {entity.address}
+              </div>
+            </div>
+          ) : themeStyle === "speakeasy" ? (
+            <div className="bg-[#0A0A0A] border-b border-[#D4AF37]/20 text-[#D4AF37]/60 text-[7px] tracking-[0.2em] font-serif p-2 text-center">
+              A SECRET LOCATION
+            </div>
           ) : (
             <div className="px-3 -mt-3 z-10">
               <div className={`${previewTheme.cardBg} space-y-1 text-[9px] ${previewTheme.textSecondary}`}>
@@ -437,44 +528,72 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
             </div>
           )}
 
-          {/* Sticky Tab Filters */}
+          {/* Dietary Filters */}
           <div className={`py-2 flex gap-1.5 overflow-x-auto px-3 mt-3 scrollbar-none border-b ${themeStyle === "luxury" ? "border-zinc-900 bg-zinc-950/40" : themeStyle === "vibrant" ? "bg-white border-black border-b-2" : "bg-white"}`}>
             <span
-              className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold transition-all ${themeStyle === "vibrant" ? "border-2 border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] text-black" : themeStyle === "luxury" ? "text-amber-400 border border-amber-400/50" : "text-white"}`}
+              className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold transition-all flex items-center gap-1 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] text-black" : themeStyle === "luxury" ? "text-amber-400 border border-amber-400/50" : "text-white"}`}
               style={themeStyle !== "luxury" && themeStyle !== "vibrant" ? { backgroundColor: primaryColor, borderColor: primaryColor } : { backgroundColor: themeStyle === "vibrant" ? "#06D6A0" : "rgba(245,158,11,0.2)" }}
             >
-              Appetizers
+              🌿 Vegetarian
             </span>
-            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
-              Mains
+            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold flex items-center gap-1 ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
+              🌱 Vegan
             </span>
-            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
-              Desserts
+            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold flex items-center gap-1 ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
+              🌾 GF
+            </span>
+            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold flex items-center gap-1 ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
+              🌶️ Spicy
             </span>
           </div>
 
-          {/* Simulated Items */}
-          <div className="p-3 space-y-3 flex-grow overflow-y-auto">
-            <div className={`flex justify-between items-center pb-2 border-b gap-3 ${previewTheme.itemBorder}`}>
-              <div className={`w-12 h-12 rounded-lg overflow-hidden shrink-0 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rotate-[-2deg]" : "border border-slate-200"}`}>
-                <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=100&h=100&fit=crop" alt="Soup" className="w-full h-full object-cover" />
-              </div>
-              <div className="space-y-0.5 flex-grow">
-                <div className="flex items-center gap-1.5">
-                  <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : themeStyle === "vibrant" ? "text-black font-black" : "text-slate-800"}`}>French Onion Soup</h4>
-                  <span
-                    className={`text-[7px] font-extrabold px-1 rounded ${themeStyle === "luxury" ? "bg-amber-950/40 text-amber-400 border border-amber-900/30" : themeStyle === "vibrant" ? "bg-amber-300 text-black border border-black" : "text-white"}`}
-                    style={themeStyle !== "luxury" && themeStyle !== "vibrant" ? { backgroundColor: accentColor, borderColor: accentColor } : {}}
-                  >
-                    POPULAR
-                  </span>
+          {/* Category Tabs */}
+          <div className={`py-2 flex gap-1.5 overflow-x-auto px-3 mt-3 scrollbar-none border-b ${themeStyle === "luxury" ? "border-zinc-900 bg-zinc-950/40" : themeStyle === "vibrant" ? "bg-white border-black border-b-2" : themeStyle === "omakase" ? "bg-[#0F0F0F] border-[#222]" : themeStyle === "brutalist" ? "bg-white border-black border-b-4" : themeStyle === "retro" ? "bg-[#C0C0C0] border-gray-500" : themeStyle === "speakeasy" ? "bg-[#0A0A0A] border-[#D4AF37]/20" : themeStyle === "cyberpunk" ? "bg-[#050510] border-[#0ff]/50" : themeStyle === "boutique" ? "bg-[#FFF0F5] border-[#FFB6C1]" : "bg-white"}`}>
+            <span 
+              className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold transition-all ${themeStyle === "vibrant" ? "border-2 border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] text-black" : themeStyle === "luxury" ? "text-amber-400 border border-amber-400/50" : themeStyle === "omakase" ? "text-white tracking-widest" : themeStyle === "brutalist" ? "text-white bg-black border-r-2 border-black rounded-none" : themeStyle === "retro" ? "text-black bg-[#C0C0C0] border-[1px] border-outset border-t-white border-l-white border-r-black border-b-black rounded-none" : themeStyle === "speakeasy" ? "text-[#F3E5AB] border-b border-[#F3E5AB] rounded-none tracking-[0.2em] font-serif uppercase" : themeStyle === "cyberpunk" ? "text-[#0ff] border border-[#0ff] bg-[#0ff]/10 rounded-none uppercase" : themeStyle === "boutique" ? "text-white bg-[#DDA0DD] shadow-sm" : "text-white"}`}
+              style={themeStyle !== "luxury" && themeStyle !== "vibrant" && themeStyle !== "omakase" && themeStyle !== "brutalist" && themeStyle !== "retro" && themeStyle !== "speakeasy" && themeStyle !== "cyberpunk" && themeStyle !== "boutique" ? { backgroundColor: primaryColor, borderColor: primaryColor } : { backgroundColor: themeStyle === "vibrant" ? "#06D6A0" : themeStyle === "omakase" ? "transparent" : themeStyle === "brutalist" ? "#000" : themeStyle === "speakeasy" ? "transparent" : themeStyle === "retro" ? "#C0C0C0" : themeStyle === "cyberpunk" ? "transparent" : themeStyle === "boutique" ? "#DDA0DD" : "rgba(245,158,11,0.2)" }}
+            >
+              APPETIZERS
+            </span>
+            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : themeStyle === "omakase" ? "text-[#666] tracking-widest" : themeStyle === "brutalist" ? "text-black rounded-none" : themeStyle === "retro" ? "text-gray-600 border-[1px] border-outset border-t-white border-l-white border-r-gray-500 border-b-gray-500 rounded-none bg-[#C0C0C0]" : themeStyle === "speakeasy" ? "text-[#D4AF37]/50 rounded-none tracking-[0.2em] font-serif uppercase" : themeStyle === "cyberpunk" ? "text-[#f0f]/50 border border-[#f0f]/30 rounded-none" : themeStyle === "boutique" ? "text-[#D8BFD8] bg-[#FFF0F5]/50 border border-white" : "text-slate-600 bg-slate-100"}`}>
+              MAINS
+            </span>
+            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : themeStyle === "omakase" ? "text-[#666] tracking-widest" : themeStyle === "brutalist" ? "text-black rounded-none" : themeStyle === "retro" ? "text-gray-600 border-[1px] border-outset border-t-white border-l-white border-r-gray-500 border-b-gray-500 rounded-none bg-[#C0C0C0]" : themeStyle === "speakeasy" ? "text-[#D4AF37]/50 rounded-none tracking-[0.2em] font-serif uppercase" : themeStyle === "cyberpunk" ? "text-[#f0f]/50 border border-[#f0f]/30 rounded-none" : themeStyle === "boutique" ? "text-[#D8BFD8] bg-[#FFF0F5]/50 border border-white" : "text-slate-600 bg-slate-100"}`}>
+              DESSERTS
+            </span>
+          </div>
+
+          {/* Menu Items List */}
+          <div className={`p-3 space-y-3 flex-grow overflow-y-auto ${themeStyle === "luxury" ? "bg-[#0C0C0E]" : themeStyle === "vibrant" ? "bg-[#FEF3C7]" : themeStyle === "omakase" ? "bg-[#0F0F0F]" : themeStyle === "brutalist" ? "bg-white" : themeStyle === "retro" ? "bg-[#C0C0C0]" : themeStyle === "speakeasy" ? "bg-[#0A0A0A]" : themeStyle === "cyberpunk" ? "bg-[#050510]" : themeStyle === "boutique" ? "bg-[#FFF0F5]" : "bg-slate-50/50"}`}>
+            <div className={`flex gap-3 p-2 rounded-lg ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl" : themeStyle === "omakase" ? "bg-transparent rounded-none" : themeStyle === "brutalist" ? "border-4 border-black bg-white rounded-none flex-col" : themeStyle === "retro" ? "border-[2px] border-outset border-gray-300 bg-[#E0E0E0] rounded-none flex-col" : themeStyle === "speakeasy" ? "bg-transparent rounded-none flex-col gap-1 border-b border-dotted border-[#D4AF37]/30 pb-4" : themeStyle === "cyberpunk" ? "bg-[#001] border border-[#0ff]/30 rounded-none flex-col gap-1" : themeStyle === "boutique" ? "bg-white/70 rounded-2xl border border-white shadow-sm flex-col" : "bg-white shadow-sm border border-slate-100"}`}>
+              <div className={`w-12 h-12 bg-slate-200 shrink-0 ${themeStyle === "bistro" ? "rounded" : themeStyle === "luxury" ? "rounded-md opacity-80" : themeStyle === "vibrant" ? "rounded-lg border-2 border-black" : themeStyle === "omakase" ? "rounded-none grayscale" : themeStyle === "brutalist" ? "w-full h-16 grayscale contrast-150 border-2 border-black" : themeStyle === "retro" ? "hidden" : themeStyle === "speakeasy" ? "hidden" : themeStyle === "cyberpunk" ? "hidden" : themeStyle === "boutique" ? "w-full h-16 rounded-xl bg-[#FFE4E1]" : "rounded-md"}`}></div>
+              <div className="flex-1 space-y-1">
+                <div className={`flex ${themeStyle === "speakeasy" ? "justify-between items-baseline gap-2" : "justify-between items-start"}`}>
+                  <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : themeStyle === "vibrant" ? "text-black font-black uppercase" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "brutalist" ? "text-black font-black text-xs uppercase" : themeStyle === "retro" ? "text-black text-sm font-bold font-mono" : themeStyle === "speakeasy" ? "text-[#F3E5AB] tracking-wider font-serif" : "text-slate-800"}`}>French Onion Soup</h4>
+                  {themeStyle === "speakeasy" && <div className="flex-1 border-b border-dotted border-[#D4AF37]/30 mx-1"></div>}
+                  {themeStyle !== "speakeasy" && themeStyle !== "retro" && themeStyle === "bistro" && (
+                    <span 
+                      className="text-[7px] font-extrabold px-1 rounded text-white"
+                      style={{ backgroundColor: accentColor, borderColor: accentColor }}
+                    >
+                      POPULAR
+                    </span>
+                  )}
+                  {themeStyle === "speakeasy" && (
+                    <span className="text-[10px] text-[#D4AF37] font-serif">$12.00</span>
+                  )}
+                  {themeStyle === "retro" && (
+                    <span className="text-[10px] font-bold text-[#000080] font-mono">$12.00</span>
+                  )}
                 </div>
-                <p className={`text-[8px] line-clamp-1 ${previewTheme.textSecondary}`}>Rich beef broth with caramelized onions.</p>
+                <p className={`text-[8px] leading-tight ${themeStyle === "luxury" ? "text-zinc-400" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light" : themeStyle === "brutalist" ? "text-black font-bold uppercase" : themeStyle === "retro" ? "text-gray-700 font-mono" : themeStyle === "speakeasy" ? "text-[#D4AF37]/60 font-serif italic" : "text-slate-500"}`}>Classic beef broth, caramelized onions, gruyere.</p>
               </div>
-              <span className={`text-[10px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif" : themeStyle === "vibrant" ? "bg-rose-500 text-white border border-black px-1.5 py-0.5 rounded rotate-2 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" : "text-slate-900"}`}>$12.00</span>
+              {themeStyle !== "speakeasy" && themeStyle !== "retro" && (
+                <span className={`text-[10px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif" : themeStyle === "vibrant" ? "bg-rose-500 text-white border border-black px-1.5 py-0.5 rounded rotate-2 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "brutalist" ? "bg-black text-white px-1.5 text-xs font-black" : "text-slate-900"}`}>$12.00</span>
+              )}
             </div>
 
-            <div className={`flex justify-between items-center pb-2 border-b gap-3 ${previewTheme.itemBorder}`}>
+            <div className={`flex justify-between items-center pb-2 border-b gap-3 ${previewTheme.itemBorder} ${themeStyle === "retro" || themeStyle === "speakeasy" ? "hidden" : ""}`}>
               <div className={`w-12 h-12 rounded-lg overflow-hidden shrink-0 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rotate-[2deg]" : "border border-slate-200"}`}>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Equitaxe_-_20131111_-_Paris_-_01.jpg" alt="Escargots" className="w-full h-full object-cover" />
               </div>
@@ -492,8 +611,8 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           </div>
 
           {/* Footer */}
-          <div className={`text-center py-2.5 border-t text-[8px] text-slate-400 bg-slate-50/50 ${themeStyle === "luxury" ? "bg-zinc-950/80 border-zinc-900 text-zinc-600" : themeStyle === "bistro" ? "bg-[#FDFBF7] border-[#E7E5E4] text-[#A8A29E]" : "bg-slate-50/50"}`}>
-            POWERED BY <span className={`font-bold ${themeStyle === "luxury" ? "text-zinc-500" : themeStyle === "bistro" ? "text-[#5C4033]" : "text-slate-500"}`}>NOMENU</span>
+          <div className={`text-center py-2.5 border-t text-[8px] text-slate-400 bg-slate-50/50 ${themeStyle === "luxury" ? "bg-zinc-950/80 border-zinc-900 text-zinc-600" : themeStyle === "bistro" ? "bg-[#FDFBF7] border-[#E7E5E4] text-[#A8A29E]" : themeStyle === "retro" ? "bg-[#C0C0C0] border-gray-500 text-gray-600 font-mono" : themeStyle === "speakeasy" ? "bg-[#0A0A0A] border-[#D4AF37]/20 text-[#D4AF37]/40 tracking-widest font-serif" : "bg-slate-50/50"}`}>
+            POWERED BY <span className={`font-bold ${themeStyle === "luxury" ? "text-zinc-500" : themeStyle === "bistro" ? "text-[#5C4033]" : themeStyle === "retro" ? "text-black" : themeStyle === "speakeasy" ? "text-[#D4AF37]" : "text-slate-500"}`}>NOMENU</span>
           </div>
         </div>
       </div>
