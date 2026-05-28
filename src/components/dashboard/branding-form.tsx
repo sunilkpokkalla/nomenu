@@ -609,7 +609,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
 
             <div className={`flex justify-between items-center pb-2 border-b gap-3 ${previewTheme.itemBorder} ${themeStyle === "retro" || themeStyle === "speakeasy" ? "hidden" : ""}`}>
               <div className={`w-12 h-12 rounded-lg overflow-hidden shrink-0 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rotate-[2deg]" : "border border-slate-200"}`}>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Equitaxe_-_20131111_-_Paris_-_01.jpg" alt="Escargots" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1481070555726-e2fe83477d56?q=80&w=800&auto=format&fit=crop" alt="Escargots" className="w-full h-full object-cover" />
               </div>
               <div className="space-y-0.5 flex-grow">
                 <div className="flex items-center gap-1.5">
