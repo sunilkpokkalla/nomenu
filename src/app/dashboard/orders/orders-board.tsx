@@ -40,9 +40,35 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const knownOrderIds = useRef<Set<string>>(new Set(initialOrders.map(o => o.id)));
+
+  useEffect(() => {
+    if (selectedDateStr) return; // Only notify on live "Today" view
+    
+    const newOrders = orders.filter(o => !knownOrderIds.current.has(o.id));
+    
+    if (newOrders.length > 0) {
+      const latestNew = newOrders[newOrders.length - 1];
+      
+      // Don't play sound on initial mount if they were already there
+      // Wait, initialOrders are already in knownOrderIds, so this only triggers on NEW orders arriving after mount.
+      playNotificationSound();
+      setNotification({
+        id: latestNew.id,
+        title: `New Order #${String(latestNew.daily_order_number || 0).padStart(3, '0')}`,
+        subtitle: latestNew.table_number ? `Table ${latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
+      });
+      
+      setTimeout(() => setNotification(null), 6000);
+      
+      // Add to known IDs
+      newOrders.forEach(o => knownOrderIds.current.add(o.id));
+    }
+  }, [orders, selectedDateStr]);
 
   const playNotificationSound = () => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
       if (!AudioContext) return;
       const ctx = new AudioContext();
@@ -107,26 +133,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       });
     }
 
-    setOrders(prevOrders => {
-      // If we are looking at live orders (no date selected), check for new ones to trigger notifications
-      if (!selectedDateStr) {
-        const prevIds = new Set(prevOrders.map(o => o.id));
-        const newOrders = nextOrders.filter(o => !prevIds.has(o.id));
-        
-        if (newOrders.length > 0) {
-          const latestNew = newOrders[newOrders.length - 1];
-          playNotificationSound();
-          setNotification({
-            id: latestNew.id,
-            title: `New Order #${String(latestNew.daily_order_number || 0).padStart(3, '0')}`,
-            subtitle: latestNew.table_number ? `Table ${latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
-          });
-          setTimeout(() => setNotification(null), 6000);
-        }
-      }
-      // Return fresh data from server to guarantee sync
-      return nextOrders;
-    });
+    setOrders(nextOrders);
   };
 
   // Initial load or date filter change
@@ -138,15 +145,18 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     } else {
       fetchLatestOrders();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDateStr, initialOrders]);
 
   // Polling Auto-Refresh Fallback (runs every 15 seconds)
   useEffect(() => {
     const interval = setInterval(fetchLatestOrders, 15000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDateStr, restaurantId, timezone, supabaseUrl, supabaseAnonKey]);
 
   // WebSockets Realtime (Fastest)
+  useEffect(() => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
     const channel = supabase.channel(`orders-${restaurantId}`)
       .on(
@@ -161,19 +171,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
               .single();
             
             if (newOrder) {
-              playNotificationSound();
-              setNotification({
-                id: newOrder.id,
-                title: `New Order #${String(newOrder.daily_order_number || 0).padStart(3, '0')}`,
-                subtitle: newOrder.table_number ? `Table ${newOrder.table_number}` : (newOrder.customer_name || 'Anonymous')
+              setOrders(prev => {
+                // Prevent duplicate insertions if polling already grabbed it
+                if (prev.some(o => o.id === newOrder.id)) return prev;
+                return [...prev, newOrder as Order];
               });
-              
-              // Auto-dismiss notification
-              setTimeout(() => {
-                setNotification(prev => prev?.id === newOrder.id ? null : prev);
-              }, 6000);
-
-              setOrders(prev => [...prev, newOrder as Order]);
             }
           } else if (payload.eventType === "UPDATE") {
             setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));
