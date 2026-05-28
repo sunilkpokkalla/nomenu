@@ -83,37 +83,70 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     return () => clearInterval(interval);
   }, []);
 
+  const fetchLatestOrders = async () => {
+    const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+    const { data } = await supabase
+      .from("orders")
+      .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
+      .eq("restaurant_id", restaurantId)
+      .order("created_at", { ascending: true });
+      
+    if (!data) return;
+    
+    let nextOrders = data as unknown as Order[];
+
+    // If a specific date is selected, filter the fetched data
+    if (selectedDateStr) {
+      const [y, m, d] = selectedDateStr.split("-").map(Number);
+      const selectedDate = new Date(y, m - 1, d);
+      nextOrders = nextOrders.filter(order => {
+        const orderDate = toZonedTime(new Date(order.created_at), timezone);
+        return orderDate.getFullYear() === selectedDate.getFullYear() && 
+               orderDate.getMonth() === selectedDate.getMonth() && 
+               orderDate.getDate() === selectedDate.getDate();
+      });
+    }
+
+    setOrders(prevOrders => {
+      // If we are looking at live orders (no date selected), check for new ones to trigger notifications
+      if (!selectedDateStr) {
+        const prevIds = new Set(prevOrders.map(o => o.id));
+        const newOrders = nextOrders.filter(o => !prevIds.has(o.id));
+        
+        if (newOrders.length > 0) {
+          const latestNew = newOrders[newOrders.length - 1];
+          playNotificationSound();
+          setNotification({
+            id: latestNew.id,
+            title: `New Order #${String(latestNew.daily_order_number || 0).padStart(3, '0')}`,
+            subtitle: latestNew.table_number ? `Table ${latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
+          });
+          setTimeout(() => setNotification(null), 6000);
+        }
+      }
+      // Return fresh data from server to guarantee sync
+      return nextOrders;
+    });
+  };
+
+  // Initial load or date filter change
   useEffect(() => {
     if (!selectedDateStr) {
       setOrders(initialOrders);
-      return;
+      // Fetch latest immediately just in case
+      fetchLatestOrders();
+    } else {
+      fetchLatestOrders();
     }
+  }, [selectedDateStr, initialOrders]);
 
-    const fetchOrders = async () => {
-      const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
-      const [y, m, d] = selectedDateStr.split("-").map(Number);
-      const { data } = await supabase
-        .from("orders")
-        .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
-        .eq("restaurant_id", restaurantId)
-        .order("created_at", { ascending: true });
-        
-      if (data) {
-        const selectedDate = new Date(y, m - 1, d);
-        const filtered = data.filter(order => {
-          const orderDate = toZonedTime(new Date(order.created_at), timezone);
-          return orderDate.getFullYear() === selectedDate.getFullYear() && 
-                 orderDate.getMonth() === selectedDate.getMonth() && 
-                 orderDate.getDate() === selectedDate.getDate();
-        });
-        setOrders(filtered as unknown as Order[]);
-      }
-    };
-
-    fetchOrders();
-  }, [selectedDateStr, restaurantId, initialOrders, timezone, supabaseUrl, supabaseAnonKey]);
-
+  // Polling Auto-Refresh Fallback (runs every 15 seconds)
   useEffect(() => {
+    const interval = setInterval(fetchLatestOrders, 15000);
+    return () => clearInterval(interval);
+  }, [selectedDateStr, restaurantId, timezone, supabaseUrl, supabaseAnonKey]);
+
+  // WebSockets Realtime (Fastest)
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
     const channel = supabase.channel(`orders-${restaurantId}`)
       .on(
