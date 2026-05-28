@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { format, isToday, isYesterday } from "date-fns";
+import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { 
   MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, 
-  Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send,
-  ChevronLeft, ChevronRight
+  Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send
 } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
@@ -40,10 +39,6 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const [sortColumn, setSortColumn] = useState<SortColumn>("date");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   
-  // Pagination State
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  
   // Expanded Rows State
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [retentionOffers, setRetentionOffers] = useState<Record<string, ReturnType<typeof getRandomOfferForDay>>>({});
@@ -52,11 +47,6 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  // Reset to page 1 when filters or sorting change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, ratingFilter, sortColumn, sortDirection]);
 
   // Real-time subscription
   useEffect(() => {
@@ -119,10 +109,6 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     return result;
   }, [liveFeedbacks, ratingFilter, searchQuery, sortColumn, sortDirection]);
 
-  // Pagination logic
-  const totalPages = Math.ceil(processedFeedbacks.length / itemsPerPage);
-  const paginatedFeedbacks = processedFeedbacks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
   const handleSort = (col: SortColumn) => {
     if (sortColumn === col) {
       setSortDirection(prev => prev === "desc" ? "asc" : "desc");
@@ -160,8 +146,6 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   };
 
   if (!mounted) return null;
-
-  let lastDateStr = "";
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
@@ -226,7 +210,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 bg-white">
-            {paginatedFeedbacks.length === 0 ? (
+            {processedFeedbacks.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-6 py-12 text-center">
                   <div className="flex flex-col items-center justify-center">
@@ -237,31 +221,12 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                 </td>
               </tr>
             ) : (
-              paginatedFeedbacks.map((fb) => {
+              processedFeedbacks.map((fb) => {
                 const isExpanded = expandedRows.has(fb.id);
                 const fbDate = toZonedTime(new Date(fb.created_at), timezone);
-                const dateStr = format(fbDate, "MMM d, yyyy");
-                
-                let dateHeader = null;
-                // Only show date groupings if we are sorting by date
-                if (sortColumn === "date" && dateStr !== lastDateStr) {
-                  lastDateStr = dateStr;
-                  let headerText = dateStr;
-                  if (isToday(fbDate)) headerText = "Today";
-                  else if (isYesterday(fbDate)) headerText = "Yesterday";
-                  
-                  dateHeader = (
-                    <tr key={`header-${dateStr}`} className="bg-slate-100/60 border-b border-slate-200">
-                      <td colSpan={5} className="px-6 py-2.5 text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                        {headerText}
-                      </td>
-                    </tr>
-                  );
-                }
                 
                 return (
                   <React.Fragment key={fb.id}>
-                    {dateHeader}
                     <tr 
                       onClick={() => toggleRow(fb)} 
                       className={`hover:bg-slate-50 transition-colors cursor-pointer group ${isExpanded ? "bg-slate-50" : ""}`}
@@ -466,53 +431,6 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
           </tbody>
         </table>
       </div>
-
-      {/* Pagination Footer */}
-      {processedFeedbacks.length > 0 && (
-        <div className="border-t border-slate-200 p-4 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-sm text-slate-500">
-            Showing <span className="font-medium text-slate-900">{((currentPage - 1) * itemsPerPage) + 1}</span> to <span className="font-medium text-slate-900">{Math.min(currentPage * itemsPerPage, processedFeedbacks.length)}</span> of <span className="font-medium text-slate-900">{processedFeedbacks.length}</span> results
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="p-2 border border-slate-200 rounded-lg bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            
-            <div className="text-sm font-medium text-slate-700 px-2">
-              Page {currentPage} of {totalPages || 1}
-            </div>
-            
-            <button 
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage >= totalPages}
-              className="p-2 border border-slate-200 rounded-lg bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-          
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            Show
-            <select 
-              value={itemsPerPage}
-              onChange={(e) => {
-                setItemsPerPage(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-              className="border border-slate-200 rounded-md bg-white py-1 pl-2 pr-6 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none appearance-none cursor-pointer"
-            >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
