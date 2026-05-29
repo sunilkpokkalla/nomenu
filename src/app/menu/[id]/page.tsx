@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { MenuClientView } from "@/components/menu/menu-client-view";
 import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
@@ -66,6 +67,11 @@ export default async function PublicMenuPage(
 
   // 5. Track scan analytics if accessed via QR code
   if (qrCodeId) {
+    const supabaseAdmin = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_KEY!
+    );
+
     const userAgent = (await headers()).get("user-agent") || "";
     let deviceType = "Desktop";
     if (/android/i.test(userAgent)) {
@@ -74,23 +80,23 @@ export default async function PublicMenuPage(
       deviceType = "iOS";
     }
 
-    // Insert scan log
-    await supabase.from("menu_scans").insert({
+    // Insert scan log securely bypassing RLS
+    await supabaseAdmin.from("menu_scans").insert({
       qr_code_id: qrCodeId,
       restaurant_id: restaurant.id,
       device_type: deviceType,
       country: (await headers()).get("x-vercel-ip-country") || "US",
     });
 
-    // Increment scan count on QR code record
-    const { data: qrRecord } = await supabase
+    // Increment scan count on QR code record securely
+    const { data: qrRecord } = await supabaseAdmin
       .from("qr_codes")
       .select("scan_count")
       .eq("id", qrCodeId)
       .maybeSingle();
 
     if (qrRecord) {
-      await supabase
+      await supabaseAdmin
         .from("qr_codes")
         .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
         .eq("id", qrCodeId);
