@@ -20,7 +20,9 @@ export async function POST(req: Request) {
       .from("restaurants")
       .select("id, stripe_account_id")
       .eq("owner_id", user.id)
-      .single();
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const restaurant = _restaurantData as any;

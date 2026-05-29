@@ -38,6 +38,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [isKdsMode, setIsKdsMode] = useState(isStandalone);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
+  const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
 
   const containerRef = useRef<HTMLDivElement>(null);
   const knownOrderIds = useRef<Set<string>>(new Set(initialOrders.map(o => o.id)));
@@ -143,6 +144,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       // Fetch latest immediately just in case
       fetchLatestOrders();
     } else {
+      setExpandedOrders(new Set()); // Collapse all when date changes
       fetchLatestOrders();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -366,7 +368,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
                           return (
                             <Draggable key={order.id} draggableId={order.id} index={index} isDragDisabled={!!selectedDateStr}>
-                              {(provided, snapshot) => (
+                              {(provided, snapshot) => {
+                                const isExpanded = !selectedDateStr || expandedOrders.has(order.id);
+                                return (
                                 <div
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
@@ -383,14 +387,31 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                   {urgency === "warning" && <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-amber-400" />}
 
                                   {/* Header: Order Number & Price */}
-                                  <div className="flex justify-between items-start">
-                                    <span className={`text-2xl font-black tracking-tighter font-mono ${
-                                      col.id === "cancelled" ? "text-rose-500" : 
-                                      col.id === "completed" ? "text-emerald-500" :
-                                      (isKdsMode ? "text-slate-100" : "text-slate-900")
-                                    }`}>
-                                      #{String(order.daily_order_number).padStart(3, '0')}
-                                    </span>
+                                  <div 
+                                    className={`flex justify-between items-start ${selectedDateStr ? "cursor-pointer" : ""}`}
+                                    onClick={() => {
+                                      if (selectedDateStr) {
+                                        setExpandedOrders(prev => {
+                                          const next = new Set(prev);
+                                          if (next.has(order.id)) next.delete(order.id);
+                                          else next.add(order.id);
+                                          return next;
+                                        });
+                                      }
+                                    }}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <span className={`text-2xl font-black tracking-tighter font-mono ${
+                                        col.id === "cancelled" ? "text-rose-500" : 
+                                        col.id === "completed" ? "text-emerald-500" :
+                                        (isKdsMode ? "text-slate-100" : "text-slate-900")
+                                      }`}>
+                                        #{String(order.daily_order_number).padStart(3, '0')}
+                                      </span>
+                                      {selectedDateStr && (
+                                        isExpanded ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />
+                                      )}
+                                    </div>
                                     {urgency !== "critical" && (
                                       <span className={`font-bold ${isKdsMode ? "text-slate-400" : "text-slate-400"}`}>
                                         ${Number(order.total_amount).toFixed(2)}
@@ -398,7 +419,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                     )}
                                   </div>
 
-                                  {/* Items List */}
+                                  {isExpanded && (
+                                    <>
+                                      {/* Items List */}
                                   <div className="flex flex-col gap-3 mt-1">
                                     {order.order_items?.map((item: OrderItem, idx: number) => {
                                       const menuItem = Array.isArray(item.menu_items) ? item.menu_items[0] : item.menu_items;
@@ -492,8 +515,10 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                       </div>
                                     )}
                                   </div>
+                                    </>
+                                  )}
                                 </div>
-                              )}
+                              )}}
                             </Draggable>
                           );
                         })

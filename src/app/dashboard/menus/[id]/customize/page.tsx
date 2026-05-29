@@ -26,7 +26,9 @@ export default async function MenuCustomizePage(
     .from("restaurants")
     .select("id, plan")
     .eq("owner_id", user.id)
-    .single();
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
 
   if (!restaurant) redirect("/dashboard");
 

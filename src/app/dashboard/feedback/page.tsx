@@ -28,7 +28,9 @@ export default async function FeedbackPage() {
     .from("restaurants")
     .select("id, timezone, plan")
     .eq("owner_id", user.id)
-    .single();
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
 
   if (!restaurant) {
     return (

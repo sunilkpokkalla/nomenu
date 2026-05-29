@@ -23,7 +23,9 @@ export default async function PayoutsPage(
     .from("restaurants")
     .select("*")
     .eq("owner_id", user.id)
-    .single();
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
 
   if (!restaurant) {
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
