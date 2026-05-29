@@ -189,7 +189,7 @@ export default async function QrCodesPage(
 
         {/* Add QR Code Form */}
         <div>
-          <Card className="sticky top-6">
+          <Card className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
             <CardHeader>
               <CardTitle>Generate QR Code</CardTitle>
               <CardDescription>

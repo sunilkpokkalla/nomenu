@@ -35,10 +35,13 @@ export function useMenuLogic(categories: Category[], items: MenuItem[]) {
   // References for categories to detect scroll position
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const categoryNavRef = useRef<HTMLDivElement>(null);
+  const isScrolling = useRef(false);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Set up active category scrolling highlights
   useEffect(() => {
     const handleScroll = () => {
+      if (isScrolling.current) return;
       const scrollPosition = window.scrollY + 200; // Offset for sticky bar
       
       let currentCategory = "";
@@ -72,6 +75,13 @@ export function useMenuLogic(categories: Category[], items: MenuItem[]) {
   // Smooth scroll handler to categories
   const scrollToCategory = (catId: string) => {
     setActiveCategory(catId);
+    isScrolling.current = true;
+    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    
+    scrollTimeout.current = setTimeout(() => {
+      isScrolling.current = false;
+    }, 1000);
+
     const el = categoryRefs.current[catId];
     if (el) {
       const offset = el.offsetTop - 140; // Offset for banner header / sticky nav

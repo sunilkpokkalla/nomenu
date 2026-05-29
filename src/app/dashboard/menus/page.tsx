@@ -134,7 +134,7 @@ export default async function MenusPage(
                           </Link>
                         </Button>
                         <Button variant="outline" size="sm" className="flex-1" asChild>
-                          <Link href="/dashboard/items">
+                          <Link href={`/dashboard/items?menuId=${menu.id}&categoryId=all`}>
                             <Utensils className="mr-1.5 h-3.5 w-3.5" />
                             Items
                           </Link>
@@ -180,7 +180,7 @@ export default async function MenusPage(
 
         {/* Add Menu Form */}
         <div>
-          <Card className="sticky top-6">
+          <Card className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
             <CardHeader>
               <CardTitle>Create Menu</CardTitle>
               <CardDescription>

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   BarChart3,
   CreditCard,
@@ -40,6 +43,8 @@ const navItems = [
 ];
 
 export function Sidebar({ plan = "Free" }: { plan?: string }) {
+  const pathname = usePathname();
+  
   const planLevels: Record<string, number> = {
     free: 0,
     pro: 1,
@@ -73,10 +78,12 @@ export function Sidebar({ plan = "Free" }: { plan?: string }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-all duration-200 ease-in-out hover:bg-slate-100/80 hover:translate-x-1 ${
-                isLocked 
-                  ? "opacity-60 grayscale hover:text-slate-600 text-slate-500" 
-                  : "text-slate-550 hover:text-slate-950"
+              className={`flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors duration-200 ease-in-out hover:bg-slate-100 ${
+                pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(item.href))
+                  ? "bg-slate-100 text-primary"
+                  : isLocked 
+                    ? "opacity-60 grayscale hover:text-slate-600 text-slate-500" 
+                    : "text-slate-600 hover:text-slate-900"
               }`}
             >
               <div className="flex items-center gap-3.5">

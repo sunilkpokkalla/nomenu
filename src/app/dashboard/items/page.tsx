@@ -304,7 +304,7 @@ export default async function ItemsPage(
 
         {/* Add Item Form */}
         <div>
-          <Card className="sticky top-6">
+          <Card className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
             <CardHeader>
               <CardTitle>Create Menu Item</CardTitle>
               <CardDescription>
