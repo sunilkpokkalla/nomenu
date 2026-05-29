@@ -6,6 +6,7 @@ import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
+import Image from "next/image";
 
 export function SpeakeasyTheme(props: MenuThemeProps) {
   const { restaurant, categories, items } = props;
@@ -165,7 +166,7 @@ export function SpeakeasyTheme(props: MenuThemeProps) {
                     {layoutMode === "list" && item.image_url && (
                       <div className="w-full sm:w-32 aspect-square border border-[#D4AF37]/20 relative group-hover:border-[#D4AF37]/40 transition-colors p-1 shrink-0">
                         <div className="w-full h-full relative overflow-hidden">
-                          <img src={item.image_url} alt={item.name} className="w-full h-full object-cover grayscale sepia-[0.3] contrast-125 opacity-80" />
+                          <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover grayscale sepia-[0.3] contrast-125 opacity-80" fill />
                           <div className="absolute inset-0 bg-[#D4AF37] mix-blend-overlay opacity-10"></div>
                         </div>
                       </div>
@@ -227,7 +228,7 @@ export function SpeakeasyTheme(props: MenuThemeProps) {
               {selectedItem.image_url && (
                 <div className="w-full aspect-square border border-[#D4AF37]/20 mb-8 relative group p-2">
                   <div className="w-full h-full relative overflow-hidden">
-                    <img src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale sepia-[0.3] contrast-125 opacity-80" />
+                    <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale sepia-[0.3] contrast-125 opacity-80" fill />
                     <div className="absolute inset-0 bg-[#D4AF37] mix-blend-overlay opacity-10"></div>
                   </div>
                 </div>

@@ -17,15 +17,24 @@ import { logout } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
+  // Overview
   { href: "/dashboard", label: "Dashboard", icon: Home },
+  
+  // Menu Content
   { href: "/dashboard/menus", label: "My Menus", icon: Menu },
   { href: "/dashboard/items", label: "Menu Items", icon: Utensils },
+  { href: "/dashboard/customize", label: "Customize", icon: Palette, badge: "PRO" },
+  
+  // Distribution
   { href: "/dashboard/qrcodes", label: "QR Codes", icon: QrCode },
+  
+  // Operations & Insights
   { href: "/dashboard/orders", label: "Orders", icon: ShoppingBag, badge: "ELITE" },
+  { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT." },
   { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO" },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },
-  { href: "/dashboard/customize", label: "Customize", icon: Palette, badge: "PRO" },
-  { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT." },
+  
+  // Account
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];

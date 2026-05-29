@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 
 interface ImageUploaderProps {
   value?: string;
@@ -191,11 +192,12 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
       {preview && (
         <div className="relative rounded-xl border border-slate-200 p-2 bg-white flex items-center gap-3">
           <div className="h-12 w-12 rounded-lg overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center">
-            <img
+            <Image
               src={preview}
               alt="Preview"
               className="w-full h-full object-cover"
               onError={() => setError("Unable to load preview. Please verify URL.")}
+              fill
             />
           </div>
           <div className="min-w-0 flex-1">

@@ -2,6 +2,7 @@ import { MenuThemeProps } from "../types";
 import { Plus, Minus, Beaker, Hexagon, Fingerprint } from "lucide-react";
 import { FeedbackFAB } from "../feedback-fab";
 import { useState } from "react";
+import Image from "next/image";
 
 type OrderItem = {
   item_id: string;
@@ -146,11 +147,11 @@ export function MolecularTheme({ restaurant, categories: rawCategories, items }:
                   
                   {item.image_url && (
                     <div className="w-full aspect-square border-2 border-[#1a1f2e] mb-4 bg-slate-50 relative overflow-hidden p-1">
-                      <img
+                      <Image
                         src={item.image_url}
                         alt={item.name}
                         className="w-full h-full object-cover filter grayscale contrast-125"
-                      />
+                      fill />
                       {/* Scanner effect line */}
                       <div className="absolute top-0 left-0 w-full h-1 bg-[#00E5FF] opacity-50 animate-[scan_4s_ease-in-out_infinite]"></div>
                     </div>

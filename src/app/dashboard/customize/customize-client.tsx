@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label";
 export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: any, menus: any[] }) {
   const [selectedScope, setSelectedScope] = useState<string>("global");
 
-  const isPro = restaurant.plan === "pro" || restaurant.plan === "elite";
+  const userPlan = (restaurant.plan || "free").toLowerCase();
+  const isPro = userPlan === "pro" || userPlan === "elite" || userPlan === "enterprise";
 
   const handleScopeChange = (val: string) => {
     setSelectedScope(val);

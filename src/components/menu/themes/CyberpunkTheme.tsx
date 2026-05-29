@@ -4,6 +4,7 @@ import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
+import Image from "next/image";
 
 export function CyberpunkTheme(props: MenuThemeProps) {
   const { restaurant, categories, items } = props;
@@ -140,7 +141,7 @@ export function CyberpunkTheme(props: MenuThemeProps) {
 
                       {layoutMode === "list" && item.image_url && (
                         <div className="w-full sm:w-40 h-40 relative overflow-hidden bg-[#000] shrink-0 border-r border-[#0ff]/20">
-                          <img src={item.image_url} alt={item.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 mix-blend-screen" />
+                          <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 mix-blend-screen" fill />
                           <div className="absolute inset-0 bg-[#0ff]/10 group-hover:bg-transparent transition-colors pointer-events-none"></div>
                         </div>
                       )}
@@ -206,7 +207,7 @@ export function CyberpunkTheme(props: MenuThemeProps) {
               {selectedItem.image_url && (
                 <div className="w-full h-56 border border-[#f0f] mb-6 relative overflow-hidden group">
                   <div className="absolute top-0 left-0 w-full h-full bg-[#f0f]/20 mix-blend-overlay z-10"></div>
-                  <img src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale contrast-150" />
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale contrast-150" fill />
                   <div className="absolute bottom-2 right-2 text-[10px] bg-black/80 text-[#f0f] px-2 py-1 border border-[#f0f] z-20 uppercase">
                     VISUAL_DATA_LINK
                   </div>

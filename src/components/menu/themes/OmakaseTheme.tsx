@@ -7,6 +7,7 @@ import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
 
 import { FeedbackFAB } from "../feedback-fab";
+import Image from "next/image";
 
 export function OmakaseTheme(props: MenuThemeProps) {
   const { restaurant, categories, items } = props;
@@ -112,12 +113,12 @@ export function OmakaseTheme(props: MenuThemeProps) {
                     className={`group cursor-pointer flex ${layoutMode === "grid" ? "flex-col gap-4 text-center items-center" : "flex-col md:flex-row gap-6 items-center md:items-start"}`}
                   >
                     {item.image_url && (
-                      <div className={`shrink-0 overflow-hidden bg-[#1A1A1A] ${layoutMode === "grid" ? "w-full aspect-square" : "w-full md:w-32 h-32 md:h-32"}`}>
-                        <img 
+                      <div className={`shrink-0 overflow-hidden bg-[#1A1A1A] relative ${layoutMode === "grid" ? "w-full aspect-square" : "w-full md:w-32 h-32 md:h-32"}`}>
+                        <Image 
                           src={item.image_url} 
                           alt={item.name} 
                           className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 grayscale group-hover:grayscale-0" 
-                        />
+                        fill />
                       </div>
                     )}
                     
@@ -163,8 +164,8 @@ export function OmakaseTheme(props: MenuThemeProps) {
             <div className="p-8 sm:p-12 flex flex-col flex-grow overflow-y-auto">
               
               {selectedItem.image_url && (
-                <div className="w-full h-64 mb-10 overflow-hidden bg-[#1A1A1A]">
-                  <img src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale opacity-90" />
+                <div className="w-full h-64 mb-10 overflow-hidden bg-[#1A1A1A] relative">
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale opacity-90" fill />
                 </div>
               )}
               

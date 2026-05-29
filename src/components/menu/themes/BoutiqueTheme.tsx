@@ -4,6 +4,7 @@ import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
+import Image from "next/image";
 
 export function BoutiqueTheme(props: MenuThemeProps) {
   const { restaurant, categories, items } = props;
@@ -119,8 +120,8 @@ export function BoutiqueTheme(props: MenuThemeProps) {
                       className={`group cursor-pointer bg-white/70 backdrop-blur-sm rounded-[32px] p-4 flex hover:bg-white hover:shadow-[0_15px_35px_rgba(255,182,193,0.3)] hover:-translate-y-1 transition-all duration-300 border border-white ${layoutMode === "list" ? "flex-col sm:flex-row gap-6 items-center" : "flex-col"}`}
                     >
                       {item.image_url && (
-                        <div className={`w-full ${layoutMode === "list" ? "sm:w-32 h-32" : "h-48 mb-4"} rounded-[24px] overflow-hidden shrink-0 shadow-inner bg-[#FFF0F5]`}>
-                          <img src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <div className={`w-full ${layoutMode === "list" ? "sm:w-32 h-32" : "h-48 mb-4"} rounded-[24px] overflow-hidden shrink-0 shadow-inner bg-[#FFF0F5] relative`}>
+                          <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" fill />
                         </div>
                       )}
                       
@@ -165,7 +166,7 @@ export function BoutiqueTheme(props: MenuThemeProps) {
             
             {selectedItem.image_url ? (
               <div className="w-full h-64 relative">
-                <img src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" />
+                <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" fill />
                 <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
               </div>
             ) : (

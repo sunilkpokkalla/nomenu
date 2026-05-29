@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { GLOBAL_DISH_LIBRARY, LibraryDish } from "@/lib/global-dish-library";
 import { createMenuItem } from "@/app/dashboard/actions";
+import Image from "next/image";
 
 interface ChefLibraryModalProps {
   cuisineType: string | null | undefined;
@@ -328,7 +329,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                           >
                             <div className="flex gap-4">
                               <div className="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100 border relative">
-                                <img 
+                                <Image 
                                   src={dish.imageUrl || `https://loremflickr.com/400/300/${encodeURIComponent(dish.name.replace(/ /g, ''))},food/all`} 
                                   alt={dish.name}
                                   className="w-full h-full object-cover"
@@ -336,6 +337,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src = `https://loremflickr.com/400/300/food,dish/all?random=${index}`;
                                   }}
+                                  fill
                                 />
                               </div>
                               <div className="space-y-1.5 flex-1">

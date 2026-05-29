@@ -2,6 +2,7 @@ import { MenuThemeProps } from "../types";
 import { Plus, Minus, ShoppingBag, Leaf, Info } from "lucide-react";
 import { FeedbackFAB } from "../feedback-fab";
 import { useState } from "react";
+import Image from "next/image";
 
 type OrderItem = {
   item_id: string;
@@ -130,11 +131,11 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items }:
                 <div key={item.id} className="group flex flex-col">
                   {item.image_url ? (
                     <div className="w-full aspect-[4/3] overflow-hidden rounded-t-full mb-6 border border-[#EAE3D2] relative">
-                      <img
+                      <Image
                         src={item.image_url}
                         alt={item.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
+                      fill />
                       <div className="absolute inset-0 border-[4px] border-[#FDFBF7] rounded-t-full rounded-b-sm pointer-events-none z-10"></div>
                     </div>
                   ) : null}

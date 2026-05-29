@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toPng } from "html-to-image";
 import { TEMPLATES, TEMPLATE_OPTIONS, TemplateKey } from "./qr-templates";
+import Image from "next/image";
 
 interface QRDesignerModalProps {
   qr: {
@@ -150,7 +151,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl }: QRDesignerMod
             </style>
           </head>
           <body>
-            <img src="${dataUrl}" alt="QR Print Card" />
+            <Image src="${dataUrl}" alt="QR Print Card" fill />
             <script>
               window.onload = function() {
                 setTimeout(function() {

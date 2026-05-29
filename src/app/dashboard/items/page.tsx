@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { CreateItemForm } from "@/components/dashboard/create-item-form";
+import { EditItemModal } from "@/components/dashboard/edit-item-modal";
 
 export default async function ItemsPage(
   props: {
@@ -263,6 +264,11 @@ export default async function ItemsPage(
                               {item.is_available ? "In Stock" : "Sold Out"}
                             </Button>
                           </form>
+                          <EditItemModal 
+                            item={item} 
+                            menus={menusList} 
+                            categories={restaurantCategories} 
+                          />
                            <DeleteConfirmForm
                             action={deleteMenuItem}
                             confirmMessage={`Are you sure you want to delete "${item.name}"?`}

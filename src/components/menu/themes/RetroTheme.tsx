@@ -6,6 +6,7 @@ import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
+import Image from "next/image";
 
 export function RetroTheme(props: MenuThemeProps) {
   const { restaurant, categories, items } = props;
@@ -166,7 +167,7 @@ export function RetroTheme(props: MenuThemeProps) {
                     {layoutMode === "list" && item.image_url && (
                       <div className="w-full sm:w-32 h-32 border-[2px] border-inset border-gray-500 bg-black overflow-hidden relative shrink-0">
                         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] pointer-events-none z-10" />
-                        <img src={item.image_url} alt={item.name} className="w-full h-full object-cover opacity-80 mix-blend-screen" style={{ filter: "contrast(1.5) saturate(1.5) sepia(0.5) hue-rotate(-50deg)" }} />
+                        <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover opacity-80 mix-blend-screen" style={{ filter: "contrast(1.5) saturate(1.5) sepia(0.5) hue-rotate(-50deg)" }} fill />
                       </div>
                     )}
                     <div className="flex-grow w-full flex flex-col h-full">
@@ -217,7 +218,7 @@ export function RetroTheme(props: MenuThemeProps) {
               {selectedItem.image_url && (
                 <div className="w-full h-48 border-[2px] border-inset border-gray-500 mb-4 bg-black overflow-hidden relative">
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] pointer-events-none z-10" />
-                  <img src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover opacity-80 mix-blend-screen" style={{ filter: "contrast(1.5) saturate(1.5) sepia(0.5) hue-rotate(-50deg)" }} />
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover opacity-80 mix-blend-screen" style={{ filter: "contrast(1.5) saturate(1.5) sepia(0.5) hue-rotate(-50deg)" }} fill />
                 </div>
               )}
               

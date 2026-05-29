@@ -21,6 +21,7 @@ import { FeedbackFAB } from "../feedback-fab";
 import { useCart } from "../cart-context";
 
 import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps } from "../types";
+import Image from "next/image";
 
 export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuClientViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -296,7 +297,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
             </div>
             {/* The Hero Image Cover */}
             <div className="w-full h-[220px] relative border-t-2 border-[#D4AF37]/30 shadow-inner">
-              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" />
+              <Image src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" fill />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/30 to-transparent"></div>
             </div>
           </div>
@@ -636,11 +637,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                               <div className="flex gap-4 items-center">
                                 {item.image_url && (
                                   <div className="h-16 w-16 rounded-lg overflow-hidden border border-[#D6D3D1]/40 shrink-0 bg-[#F5F0E6] relative flex items-center justify-center shadow-sm">
-                                    <img 
+                                    <Image 
                                       src={item.image_url} 
                                       alt={item.name} 
                                       className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" 
-                                    />
+                                    fill />
                                   </div>
                                 )}
                                 <div className="flex gap-0 items-start flex-col flex-grow min-w-0">
@@ -703,11 +704,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                               <div className="flex gap-4 items-center">
                                 {item.image_url && (
                                   <div className="h-14 w-14 rounded-none overflow-hidden border border-zinc-200 shrink-0 bg-zinc-50 relative flex items-center justify-center">
-                                    <img 
+                                    <Image 
                                       src={item.image_url} 
                                       alt={item.name} 
                                       className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
-                                    />
+                                    fill />
                                   </div>
                                 )}
                                 <div className="flex-grow min-w-0">
@@ -764,11 +765,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                               <div className="flex gap-4 items-center">
                                 {item.image_url && (
                                   <div className="h-16 w-16 rounded-lg overflow-hidden border border-zinc-800 shrink-0 bg-zinc-950 relative flex items-center justify-center shadow-lg">
-                                    <img 
+                                    <Image 
                                       src={item.image_url} 
                                       alt={item.name} 
                                       className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" 
-                                    />
+                                    fill />
                                   </div>
                                 )}
                                 <div className="flex-grow min-w-0">
@@ -832,11 +833,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                               <div className="flex gap-4 items-center">
                                 {item.image_url && (
                                   <div className="h-16 w-16 rounded-xl overflow-hidden border-2 border-black shrink-0 bg-slate-100 relative flex items-center justify-center -rotate-2 group-hover:rotate-2 transition-transform duration-300">
-                                    <img 
+                                    <Image 
                                       src={item.image_url} 
                                       alt={item.name} 
                                       className="w-full h-full object-cover" 
-                                    />
+                                    fill />
                                   </div>
                                 )}
                                 <div className="flex-grow min-w-0">
@@ -900,11 +901,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                             <div className="flex gap-4 items-center flex-grow min-w-0">
                               {item.image_url && (
                                 <div className="h-14 w-14 rounded-lg overflow-hidden border border-slate-200 shrink-0 bg-slate-50 relative flex items-center justify-center">
-                                  <img 
+                                  <Image 
                                     src={item.image_url} 
                                     alt={item.name} 
                                     className="w-full h-full object-cover" 
-                                  />
+                                  fill />
                                 </div>
                               )}
                               <div className="space-y-1 flex-grow min-w-0 pr-1">
@@ -934,11 +935,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                             >
                               <div className="h-28 w-full relative overflow-hidden bg-slate-100 shrink-0">
                                 {item.image_url ? (
-                                  <img
+                                  <Image
                                     src={item.image_url}
                                     alt={item.name}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                  />
+                                  fill />
                                 ) : (
                                   <div
                                     className="w-full h-full flex items-center justify-center text-amber-950 font-serif-bistro font-bold text-lg opacity-70 group-hover:scale-105 transition-transform duration-300"
@@ -985,11 +986,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                             >
                               <div className="h-28 w-full relative overflow-hidden bg-zinc-50 shrink-0 border-b border-zinc-200">
                                 {item.image_url ? (
-                                  <img
+                                  <Image
                                     src={item.image_url}
                                     alt={item.name}
                                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                                  />
+                                  fill />
                                 ) : (
                                   <div
                                     className="w-full h-full flex items-center justify-center text-zinc-400 font-sans-minimalist text-lg font-light tracking-widest group-hover:bg-zinc-100 transition-colors duration-300"
@@ -1033,11 +1034,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                             >
                               <div className="h-28 w-full relative overflow-hidden bg-[#0C0C0E] shrink-0 border-b border-zinc-900/60">
                                 {item.image_url ? (
-                                  <img
+                                  <Image
                                     src={item.image_url}
                                     alt={item.name}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100"
-                                  />
+                                  fill />
                                 ) : (
                                   <div
                                     className="w-full h-full flex items-center justify-center text-amber-400 font-serif-luxury text-xl font-medium tracking-widest group-hover:scale-105 transition-transform duration-300 opacity-60 group-hover:opacity-80"
@@ -1083,11 +1084,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                             >
                               <div className="h-28 w-full relative overflow-hidden bg-slate-100 shrink-0 border-b-2 border-black">
                                 {item.image_url ? (
-                                  <img
+                                  <Image
                                     src={item.image_url}
                                     alt={item.name}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                  />
+                                  fill />
                                 ) : (
                                   <div
                                     className="w-full h-full flex items-center justify-center text-black font-sans-vibrant font-black text-2xl group-hover:scale-105 transition-transform duration-300"
@@ -1133,11 +1134,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                           >
                             <div className="h-28 w-full relative overflow-hidden bg-slate-100 shrink-0">
                               {item.image_url ? (
-                                <img
+                                <Image
                                   src={item.image_url}
                                   alt={item.name}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                />
+                                fill />
                               ) : (
                                 <div
                                   className="w-full h-full flex items-center justify-center text-slate-400 text-lg font-bold opacity-75"
@@ -1224,11 +1225,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
             {/* Header image/placeholder */}
             <div className={`h-56 w-full relative bg-slate-100 ${themeStyle === "vibrant" ? "border-b-4 border-black" : ""}`}>
               {selectedItem.image_url ? (
-                <img
+                <Image
                   src={selectedItem.image_url}
                   alt={selectedItem.name}
                   className="w-full h-full object-cover"
-                />
+                fill />
               ) : (
                 <div
                   className="w-full h-full flex items-center justify-center text-white font-extrabold text-5xl tracking-widest opacity-80"

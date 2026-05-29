@@ -5,6 +5,7 @@ import { login, loginWithGoogle } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 export default async function LoginPage(
   props: {
@@ -60,14 +61,13 @@ export default async function LoginPage(
           <div className="pt-10 flex items-center justify-center gap-8 text-slate-400 font-medium text-sm uppercase tracking-wider w-full">
              <span className="shrink-0">Trusted by</span>
              <div className="flex items-center gap-8 opacity-60 grayscale transition-all hover:grayscale-0 hover:opacity-100 duration-500">
+               <Image src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg" alt="McDonalds" className="h-6 w-auto object-contain" width={100} height={24} />
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg" alt="McDonalds" className="h-6 w-auto" />
+               <Image src="https://upload.wikimedia.org/wikipedia/en/d/d3/Starbucks_Corporation_Logo_2011.svg" alt="Starbucks" className="h-8 w-auto object-contain" width={100} height={32} />
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://upload.wikimedia.org/wikipedia/en/d/d3/Starbucks_Corporation_Logo_2011.svg" alt="Starbucks" className="h-8 w-auto" />
+               <Image src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Subway_2016_logo.svg" alt="Subway" className="h-4 w-auto object-contain" width={100} height={16} />
                {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Subway_2016_logo.svg" alt="Subway" className="h-4 w-auto" />
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Dominos_pizza_logo.svg" alt="Dominos" className="h-7 w-auto" />
+               <Image src="https://upload.wikimedia.org/wikipedia/commons/7/74/Dominos_pizza_logo.svg" alt="Dominos" className="h-7 w-auto object-contain" width={100} height={28} />
              </div>
           </div>
         </div>

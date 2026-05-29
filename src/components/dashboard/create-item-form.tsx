@@ -10,31 +10,49 @@ import { ImageUploader } from "@/components/dashboard/image-uploader";
 import { ChefLibraryModal } from "@/components/dashboard/chef-library-modal";
 import { LibraryDish } from "@/lib/global-dish-library";
 
+export interface MenuItemData {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  calories: number | null;
+  category_id: string;
+  image_url: string | null;
+  is_available: boolean;
+  is_popular: boolean;
+  is_vegetarian: boolean;
+  is_vegan: boolean;
+  is_gluten_free: boolean;
+  is_spicy: boolean;
+}
+
 interface CreateItemFormProps {
   cuisineType?: string | null;
   menus: { id: string; name: string }[];
   categories: { id: string; name: string; menu_id: string }[];
   createAction: (formData: FormData) => Promise<void>;
+  initialData?: MenuItemData;
 }
 
-export function CreateItemForm({ cuisineType, menus, categories, createAction }: CreateItemFormProps) {
+export function CreateItemForm({ cuisineType, menus, categories, createAction, initialData }: CreateItemFormProps) {
   // Form state
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [calories, setCalories] = useState("");
-  const [menuId, setMenuId] = useState(menus[0]?.id || "");
-  const [categoryId, setCategoryId] = useState("");
+  const [name, setName] = useState(initialData?.name || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [price, setPrice] = useState(initialData ? initialData.price.toString() : "");
+  const [calories, setCalories] = useState(initialData?.calories?.toString() || "");
+  const initialCategory = categories.find(c => c.id === initialData?.category_id);
+  const [menuId, setMenuId] = useState(initialCategory?.menu_id || menus[0]?.id || "");
+  const [categoryId, setCategoryId] = useState(initialData?.category_id || "");
   const [newCategoryName, setNewCategoryName] = useState("");
   
   // Dietary states
-  const [isPopular, setIsPopular] = useState(false);
-  const [isVegetarian, setIsVegetarian] = useState(false);
-  const [isVegan, setIsVegan] = useState(false);
-  const [isGlutenFree, setIsGlutenFree] = useState(false);
-  const [isSpicy, setIsSpicy] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(true);
-  const [imageUrl, setImageUrl] = useState("");
+  const [isPopular, setIsPopular] = useState(initialData?.is_popular ?? false);
+  const [isVegetarian, setIsVegetarian] = useState(initialData?.is_vegetarian ?? false);
+  const [isVegan, setIsVegan] = useState(initialData?.is_vegan ?? false);
+  const [isGlutenFree, setIsGlutenFree] = useState(initialData?.is_gluten_free ?? false);
+  const [isSpicy, setIsSpicy] = useState(initialData?.is_spicy ?? false);
+  const [isAvailable, setIsAvailable] = useState(initialData?.is_available ?? true);
+  const [imageUrl, setImageUrl] = useState(initialData?.image_url || "");
 
   const filteredCategories = categories.filter(cat => cat.menu_id === menuId);
 
@@ -82,6 +100,7 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction }:
       </div>
 
       <form action={createAction} className="space-y-4">
+        {initialData && <input type="hidden" name="itemId" value={initialData.id} />}
         <div className="space-y-2">
           <Label htmlFor="name">Item Name</Label>
           <Input 
@@ -220,8 +239,8 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction }:
         </div>
 
         <Button type="submit" className="w-full">
-          <Plus className="mr-2 h-4 w-4" />
-          Save Menu Item
+          {initialData ? null : <Plus className="mr-2 h-4 w-4" />}
+          {initialData ? "Save Changes" : "Save Menu Item"}
         </Button>
       </form>
     </div>

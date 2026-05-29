@@ -1,8 +1,10 @@
 import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { createMenu, deleteMenu, toggleMenuStatus } from "@/app/dashboard/actions";
+import { MenuQrModal } from "@/components/dashboard/menu-qr-modal";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Button } from "@/components/ui/button";
 import {
@@ -59,6 +61,11 @@ export default async function MenusPage(
     .order("created_at", { ascending: false });
 
   const menusList = menus || [];
+
+  // Determine site URL on the server
+  const host = (await headers()).get("host") || "localhost:3000";
+  const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
+  const baseUrl = `${protocol}://${host}`;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -132,12 +139,10 @@ export default async function MenusPage(
                             Items
                           </Link>
                         </Button>
-                        <Button variant="outline" size="sm" className="flex-1" asChild>
-                          <Link href="/dashboard/qrcodes">
-                            <QrCode className="mr-1.5 h-3.5 w-3.5" />
-                            QR
-                          </Link>
-                        </Button>
+                        <MenuQrModal 
+                          menuName={menu.name} 
+                          publicUrl={`${baseUrl}/menu/${menu.id}`} 
+                        />
                       </div>
                       <div className="mt-4 flex justify-end">
                         <DeleteConfirmForm

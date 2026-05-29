@@ -7,6 +7,7 @@ import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
 
 import { FeedbackFAB } from "../feedback-fab";
+import Image from "next/image";
 
 export function BrutalistTheme(props: MenuThemeProps) {
   const { restaurant, categories, items } = props;
@@ -145,8 +146,8 @@ export function BrutalistTheme(props: MenuThemeProps) {
                     className={`group cursor-pointer border-4 border-black p-4 flex hover:bg-black hover:text-white transition-colors duration-0 ${layoutMode === "list" ? "flex-col sm:flex-row gap-6 items-start" : "flex-col"}`}
                   >
                     {layoutMode === "list" && item.image_url && (
-                      <div className="w-full sm:w-48 h-48 border-4 border-black bg-gray-200 shrink-0">
-                        <img src={item.image_url} alt={item.name} className="w-full h-full object-cover grayscale contrast-150" />
+                      <div className="w-full sm:w-48 h-48 border-4 border-black bg-gray-200 shrink-0 relative">
+                        <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover grayscale contrast-150" fill />
                       </div>
                     )}
                     <div className="flex-grow w-full flex flex-col h-full">
@@ -203,7 +204,7 @@ export function BrutalistTheme(props: MenuThemeProps) {
               
               {selectedItem.image_url && (
                 <div className="w-full aspect-video border-4 border-black mb-8 relative">
-                  <img src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale contrast-150" />
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale contrast-150" fill />
                   <div className="absolute top-4 -right-4 bg-yellow-400 text-black border-4 border-black px-4 py-2 font-black text-2xl uppercase transform rotate-3 shadow-[4px_4px_0px_#000]">
                     LOOK
                   </div>

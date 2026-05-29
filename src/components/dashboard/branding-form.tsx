@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 interface BrandingFormProps {
   entity: {
@@ -419,7 +420,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                 </div>
               </div>
               <div className="w-full h-[80px] relative border-t border-[#D4AF37]/30 shadow-inner">
-                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=400&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" />
+                <Image src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=400&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" fill />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/50 to-transparent"></div>
               </div>
             </div>
@@ -592,8 +593,8 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
               { name: "Crème Brûlée", desc: "Madagascar vanilla, caramelized sugar crust.", price: "$9.00", img: "https://images.unsplash.com/photo-1472555794301-77353b152fb7?q=80&w=400&auto=format&fit=crop", tags: [] }
             ].map((item, idx) => (
               <div key={idx} className={`flex gap-3 p-2 rounded-lg ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl" : themeStyle === "omakase" ? "bg-transparent rounded-none" : themeStyle === "brutalist" ? "border-4 border-black bg-white rounded-none flex-col" : themeStyle === "retro" ? "border-[2px] border-outset border-gray-300 bg-[#E0E0E0] rounded-none flex-col" : themeStyle === "speakeasy" ? "bg-transparent rounded-none flex-col gap-1 border-b border-dotted border-[#D4AF37]/30 pb-4" : themeStyle === "cyberpunk" ? "bg-[#001] border border-[#0ff]/30 rounded-none flex-col gap-1" : themeStyle === "boutique" ? "bg-white/70 rounded-2xl border border-white shadow-sm flex-col" : themeStyle === "botanical" ? "bg-transparent border-b border-[#EAE3D2] rounded-none flex-col gap-1 pb-3" : themeStyle === "molecular" ? "bg-white border border-[#1a1f2e] rounded-none flex-col shadow-[2px_2px_0px_0px_rgba(26,31,46,1)]" : "bg-white shadow-sm border border-slate-100"}`}>
-                <div className={`shrink-0 overflow-hidden ${themeStyle === "bistro" ? "w-14 h-14 rounded" : themeStyle === "luxury" ? "w-14 h-14 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-16 h-16 rounded-lg border-2 border-black rotate-[1deg]" : themeStyle === "omakase" ? "w-14 h-14 rounded-none grayscale" : themeStyle === "brutalist" ? "w-full h-24 grayscale contrast-150 border-2 border-black" : themeStyle === "retro" ? "hidden" : themeStyle === "speakeasy" ? "hidden" : themeStyle === "cyberpunk" ? "hidden" : themeStyle === "boutique" ? "w-full h-20 rounded-xl" : themeStyle === "botanical" ? "w-full h-20 rounded-t-[2rem]" : themeStyle === "molecular" ? "hidden" : "w-12 h-12 rounded-md"}`}>
-                  <img src={item.img} alt={item.name} className="w-full h-full object-cover" />
+                <div className={`shrink-0 overflow-hidden relative ${themeStyle === "bistro" ? "w-14 h-14 rounded" : themeStyle === "luxury" ? "w-14 h-14 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-16 h-16 rounded-lg border-2 border-black rotate-[1deg]" : themeStyle === "omakase" ? "w-14 h-14 rounded-none grayscale" : themeStyle === "brutalist" ? "w-full h-24 grayscale contrast-150 border-2 border-black" : themeStyle === "retro" ? "hidden" : themeStyle === "speakeasy" ? "hidden" : themeStyle === "cyberpunk" ? "hidden" : themeStyle === "boutique" ? "w-full h-20 rounded-xl" : themeStyle === "botanical" ? "w-full h-20 rounded-t-[2rem]" : themeStyle === "molecular" ? "hidden" : "w-12 h-12 rounded-md"}`}>
+                  <Image src={item.img} alt={item.name} className="w-full h-full object-cover" fill />
                 </div>
                 <div className="flex-1 space-y-1">
                   <div className={`flex ${themeStyle === "speakeasy" ? "justify-between items-baseline gap-2" : "justify-between items-start"}`}>

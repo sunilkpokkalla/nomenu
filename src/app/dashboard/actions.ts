@@ -277,6 +277,109 @@ export async function createMenuItem(formData: FormData) {
   redirect("/dashboard/items");
 }
 
+export async function editMenuItem(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  const itemId = field(formData, "itemId");
+  if (!itemId) {
+    redirect("/dashboard/items?message=Item%20ID%20is%20required");
+  }
+
+  const name = field(formData, "name");
+  const priceStr = field(formData, "price");
+  let categoryId = field(formData, "categoryId");
+  const newCategoryName = field(formData, "newCategoryName");
+  const menuId = field(formData, "menuId");
+
+  if (!name || !priceStr) {
+    redirect("/dashboard/items?message=Name%20and%20Price%20are%20required");
+  }
+
+  const price = parseFloat(priceStr);
+  if (isNaN(price)) {
+    redirect("/dashboard/items?message=Invalid%20price%20format");
+  }
+
+  // If a new category is specified, create it first
+  if (newCategoryName && menuId) {
+    const { data: newCat, error: catErr } = await supabase
+      .from("categories")
+      .insert({
+        menu_id: menuId,
+        name: newCategoryName,
+        sort_order: 10,
+      })
+      .select()
+      .single();
+
+    if (catErr) {
+      redirect(`/dashboard/items?message=${encodeURIComponent(catErr.message)}`);
+    }
+
+    if (newCat) {
+      categoryId = newCat.id;
+    }
+  }
+
+  if (!categoryId) {
+    redirect("/dashboard/items?message=Category%20is%20required");
+  }
+
+  const description = field(formData, "description");
+  const isAvailable = formData.get("isAvailable") === "true";
+  const isPopular = formData.get("isPopular") === "true";
+  const isVegetarian = formData.get("isVegetarian") === "true";
+  const isVegan = formData.get("isVegan") === "true";
+  const isGlutenFree = formData.get("isGlutenFree") === "true";
+  const isSpicy = formData.get("isSpicy") === "true";
+  const imageUrl = field(formData, "imageUrl");
+
+  const updatePayload: Database["public"]["Tables"]["menu_items"]["Update"] = {
+    category_id: categoryId,
+    name,
+    description,
+    price,
+    is_available: isAvailable,
+    is_popular: isPopular,
+    is_vegetarian: isVegetarian,
+    is_vegan: isVegan,
+    is_gluten_free: isGlutenFree,
+    is_spicy: isSpicy,
+    image_url: imageUrl || null,
+  };
+
+  const caloriesStr = field(formData, "calories");
+  if (caloriesStr) {
+    const calories = parseInt(caloriesStr, 10);
+    if (!isNaN(calories)) {
+      updatePayload.calories = calories;
+    }
+  } else {
+    updatePayload.calories = null;
+  }
+
+  const { error } = await supabase.from("menu_items").update(updatePayload).eq("id", itemId).eq("restaurant_id", restaurant.id);
+
+  if (error) {
+    redirect(`/dashboard/items?message=${encodeURIComponent(error.message)}`);
+  }
+
+  revalidatePath("/dashboard/items");
+  redirect("/dashboard/items");
+}
+
 export async function toggleMenuItemStatus(itemId: string, currentStatus: boolean) {
   const supabase = await createClient();
   const {

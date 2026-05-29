@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Wifi } from "lucide-react";
+import Image from "next/image";
 
 export interface QrTemplateProps {
   brandName: string;

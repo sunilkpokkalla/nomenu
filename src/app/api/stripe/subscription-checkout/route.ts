@@ -36,6 +36,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
     }
 
+    // Demo Mode Override: Bypass Stripe completely
+    if (process.env.DEMO_MODE === 'true') {
+      // Instantly upgrade the user in the database
+      await supabase
+        .from("restaurants")
+        .update({ plan: planId.toLowerCase() })
+        .eq("id", restaurant.id);
+        
+      const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      return NextResponse.json({ url: `${origin}/dashboard/billing?success=Demo%20Upgrade%20Successful!%20Plan%20set%20to%20${planId}` });
+    }
+
     // Map plans to Stripe Price IDs
     const priceMap: Record<string, string | undefined> = {
       pro: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO,
