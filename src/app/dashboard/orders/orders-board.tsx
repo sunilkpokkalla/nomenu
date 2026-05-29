@@ -369,7 +369,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                           return (
                             <Draggable key={order.id} draggableId={order.id} index={index} isDragDisabled={!!selectedDateStr}>
                               {(provided, snapshot) => {
-                                const isExpanded = !selectedDateStr || expandedOrders.has(order.id);
+                                const isInactiveStatus = col.id === "completed" || col.id === "cancelled";
+                                const shouldDefaultCollapse = !!selectedDateStr || isInactiveStatus;
+                                const isExpanded = !shouldDefaultCollapse || expandedOrders.has(order.id);
                                 return (
                                 <div
                                   ref={provided.innerRef}
@@ -388,9 +390,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
                                   {/* Header: Order Number & Price */}
                                   <div 
-                                    className={`flex justify-between items-start ${selectedDateStr ? "cursor-pointer" : ""}`}
+                                    className={`flex justify-between items-start ${shouldDefaultCollapse ? "cursor-pointer" : ""}`}
                                     onClick={() => {
-                                      if (selectedDateStr) {
+                                      if (shouldDefaultCollapse) {
                                         setExpandedOrders(prev => {
                                           const next = new Set(prev);
                                           if (next.has(order.id)) next.delete(order.id);
@@ -408,7 +410,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                       }`}>
                                         #{String(order.daily_order_number).padStart(3, '0')}
                                       </span>
-                                      {selectedDateStr && (
+                                      {shouldDefaultCollapse && (
                                         isExpanded ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />
                                       )}
                                     </div>
