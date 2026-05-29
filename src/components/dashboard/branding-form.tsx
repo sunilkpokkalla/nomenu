@@ -578,50 +578,53 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           </div>
 
           {/* Menu Items List */}
-          <div className={`p-3 space-y-3 flex-grow overflow-y-auto ${themeStyle === "luxury" ? "bg-[#0C0C0E]" : themeStyle === "vibrant" ? "bg-[#FEF3C7]" : themeStyle === "omakase" ? "bg-[#0F0F0F]" : themeStyle === "brutalist" ? "bg-white" : themeStyle === "retro" ? "bg-[#C0C0C0]" : themeStyle === "speakeasy" ? "bg-[#0A0A0A]" : themeStyle === "cyberpunk" ? "bg-[#050510]" : themeStyle === "boutique" ? "bg-[#FFF0F5]" : themeStyle === "botanical" ? "bg-[#FDFBF7]" : themeStyle === "molecular" ? "bg-[#F0F2F5]" : "bg-slate-50/50"}`}>
-            <div className={`flex gap-3 p-2 rounded-lg ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl" : themeStyle === "omakase" ? "bg-transparent rounded-none" : themeStyle === "brutalist" ? "border-4 border-black bg-white rounded-none flex-col" : themeStyle === "retro" ? "border-[2px] border-outset border-gray-300 bg-[#E0E0E0] rounded-none flex-col" : themeStyle === "speakeasy" ? "bg-transparent rounded-none flex-col gap-1 border-b border-dotted border-[#D4AF37]/30 pb-4" : themeStyle === "cyberpunk" ? "bg-[#001] border border-[#0ff]/30 rounded-none flex-col gap-1" : themeStyle === "boutique" ? "bg-white/70 rounded-2xl border border-white shadow-sm flex-col" : themeStyle === "botanical" ? "bg-transparent border-b border-[#EAE3D2] rounded-none flex-col gap-1 pb-3" : themeStyle === "molecular" ? "bg-white border border-[#1a1f2e] rounded-none flex-col shadow-[2px_2px_0px_0px_rgba(26,31,46,1)]" : "bg-white shadow-sm border border-slate-100"}`}>
-              <div className={`w-12 h-12 bg-slate-200 shrink-0 ${themeStyle === "bistro" ? "rounded" : themeStyle === "luxury" ? "rounded-md opacity-80" : themeStyle === "vibrant" ? "rounded-lg border-2 border-black" : themeStyle === "omakase" ? "rounded-none grayscale" : themeStyle === "brutalist" ? "w-full h-16 grayscale contrast-150 border-2 border-black" : themeStyle === "retro" ? "hidden" : themeStyle === "speakeasy" ? "hidden" : themeStyle === "cyberpunk" ? "hidden" : themeStyle === "boutique" ? "w-full h-16 rounded-xl bg-[#FFE4E1]" : themeStyle === "botanical" ? "w-full h-16 rounded-t-full bg-[#EAE3D2]" : themeStyle === "molecular" ? "hidden" : "rounded-md"}`}></div>
-              <div className="flex-1 space-y-1">
-                <div className={`flex ${themeStyle === "speakeasy" ? "justify-between items-baseline gap-2" : "justify-between items-start"}`}>
-                  <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : themeStyle === "vibrant" ? "text-black font-black uppercase" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "brutalist" ? "text-black font-black text-xs uppercase" : themeStyle === "retro" ? "text-black text-sm font-bold font-mono" : themeStyle === "speakeasy" ? "text-[#F3E5AB] tracking-wider font-serif" : themeStyle === "botanical" ? "text-[#2C3B29] font-serif font-medium" : themeStyle === "molecular" ? "text-[#1a1f2e] font-mono font-bold uppercase" : "text-slate-800"}`}>French Onion Soup</h4>
-                  {themeStyle === "speakeasy" && <div className="flex-1 border-b border-dotted border-[#D4AF37]/30 mx-1"></div>}
-                  {themeStyle !== "speakeasy" && themeStyle !== "retro" && themeStyle === "bistro" && (
-                    <span 
-                      className="text-[7px] font-extrabold px-1 rounded text-white"
-                      style={{ backgroundColor: accentColor, borderColor: accentColor }}
-                    >
-                      POPULAR
-                    </span>
-                  )}
-                  {themeStyle === "speakeasy" && (
-                    <span className="text-[10px] text-[#D4AF37] font-serif">$12.00</span>
-                  )}
-                  {themeStyle === "retro" && (
-                    <span className="text-[10px] font-bold text-[#000080] font-mono">$12.00</span>
-                  )}
+          <div className={`p-3 space-y-3 flex-grow overflow-y-auto scrollbar-hide ${themeStyle === "luxury" ? "bg-[#0C0C0E]" : themeStyle === "vibrant" ? "bg-[#FEF3C7]" : themeStyle === "omakase" ? "bg-[#0F0F0F]" : themeStyle === "brutalist" ? "bg-white" : themeStyle === "retro" ? "bg-[#C0C0C0]" : themeStyle === "speakeasy" ? "bg-[#0A0A0A]" : themeStyle === "cyberpunk" ? "bg-[#050510]" : themeStyle === "boutique" ? "bg-[#FFF0F5]" : themeStyle === "botanical" ? "bg-[#FDFBF7]" : themeStyle === "molecular" ? "bg-[#F0F2F5]" : "bg-slate-50/50"}`}>
+            {[
+              { name: "French Onion Soup", desc: "Classic beef broth, caramelized onions, gruyere.", price: "$12.00", img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
+              { name: "Escargots de Bourgogne", desc: "Baked in garlic, parsley & herb butter.", price: "$15.00", img: "https://images.unsplash.com/photo-1481070555726-e2fe83477d56?q=80&w=400&auto=format&fit=crop", tags: ["VEG"] },
+              { name: "Steak Frites", desc: "Prime ribeye, truffle fries, peppercorn sauce.", price: "$32.00", img: "https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
+              { name: "Truffle Risotto", desc: "Arborio rice, wild mushrooms, parmesan.", price: "$24.00", img: "https://images.unsplash.com/photo-1633964913295-ceb4382688ce?q=80&w=400&auto=format&fit=crop", tags: ["VEG", "GF"] },
+              { name: "Lobster Bisque", desc: "Rich cream, cognac, chives.", price: "$18.00", img: "https://images.unsplash.com/photo-1548943487-a2e4d43b4850?q=80&w=400&auto=format&fit=crop", tags: [] },
+              { name: "Seared Scallops", desc: "Cauliflower purée, brown butter capers.", price: "$28.00", img: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?q=80&w=400&auto=format&fit=crop", tags: ["GF"] },
+              { name: "Duck Confit", desc: "Crispy leg, braised lentils, orange glaze.", price: "$30.00", img: "https://images.unsplash.com/photo-1627286400578-8314bb3f0111?q=80&w=400&auto=format&fit=crop", tags: [] },
+              { name: "Burrata Salad", desc: "Heirloom tomatoes, balsamic glaze, basil.", price: "$16.00", img: "https://images.unsplash.com/photo-1608897013039-887f214b985c?q=80&w=400&auto=format&fit=crop", tags: ["VEG"] },
+              { name: "Chocolate Lava Cake", desc: "Warm ganache center, vanilla bean ice cream.", price: "$10.00", img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
+              { name: "Crème Brûlée", desc: "Madagascar vanilla, caramelized sugar crust.", price: "$9.00", img: "https://images.unsplash.com/photo-1472555794301-77353b152fb7?q=80&w=400&auto=format&fit=crop", tags: [] }
+            ].map((item, idx) => (
+              <div key={idx} className={`flex gap-3 p-2 rounded-lg ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl" : themeStyle === "omakase" ? "bg-transparent rounded-none" : themeStyle === "brutalist" ? "border-4 border-black bg-white rounded-none flex-col" : themeStyle === "retro" ? "border-[2px] border-outset border-gray-300 bg-[#E0E0E0] rounded-none flex-col" : themeStyle === "speakeasy" ? "bg-transparent rounded-none flex-col gap-1 border-b border-dotted border-[#D4AF37]/30 pb-4" : themeStyle === "cyberpunk" ? "bg-[#001] border border-[#0ff]/30 rounded-none flex-col gap-1" : themeStyle === "boutique" ? "bg-white/70 rounded-2xl border border-white shadow-sm flex-col" : themeStyle === "botanical" ? "bg-transparent border-b border-[#EAE3D2] rounded-none flex-col gap-1 pb-3" : themeStyle === "molecular" ? "bg-white border border-[#1a1f2e] rounded-none flex-col shadow-[2px_2px_0px_0px_rgba(26,31,46,1)]" : "bg-white shadow-sm border border-slate-100"}`}>
+                <div className={`shrink-0 overflow-hidden ${themeStyle === "bistro" ? "w-14 h-14 rounded" : themeStyle === "luxury" ? "w-14 h-14 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-16 h-16 rounded-lg border-2 border-black rotate-[1deg]" : themeStyle === "omakase" ? "w-14 h-14 rounded-none grayscale" : themeStyle === "brutalist" ? "w-full h-24 grayscale contrast-150 border-2 border-black" : themeStyle === "retro" ? "hidden" : themeStyle === "speakeasy" ? "hidden" : themeStyle === "cyberpunk" ? "hidden" : themeStyle === "boutique" ? "w-full h-20 rounded-xl" : themeStyle === "botanical" ? "w-full h-20 rounded-t-[2rem]" : themeStyle === "molecular" ? "hidden" : "w-12 h-12 rounded-md"}`}>
+                  <img src={item.img} alt={item.name} className="w-full h-full object-cover" />
                 </div>
-                <p className={`text-[8px] leading-tight ${themeStyle === "luxury" ? "text-zinc-400" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light" : themeStyle === "brutalist" ? "text-black font-bold uppercase" : themeStyle === "retro" ? "text-gray-700 font-mono" : themeStyle === "speakeasy" ? "text-[#D4AF37]/60 font-serif italic" : "text-slate-500"}`}>Classic beef broth, caramelized onions, gruyere.</p>
-              </div>
-              {themeStyle !== "speakeasy" && themeStyle !== "retro" && (
-                <span className={`text-[10px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif" : themeStyle === "vibrant" ? "bg-rose-500 text-white border border-black px-1.5 py-0.5 rounded rotate-2 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "brutalist" ? "bg-black text-white px-1.5 text-xs font-black" : "text-slate-900"}`}>$12.00</span>
-              )}
-            </div>
-
-            <div className={`flex justify-between items-center pb-2 border-b gap-3 ${previewTheme.itemBorder} ${themeStyle === "retro" || themeStyle === "speakeasy" ? "hidden" : ""}`}>
-              <div className={`w-12 h-12 rounded-lg overflow-hidden shrink-0 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rotate-[2deg]" : "border border-slate-200"}`}>
-                <img src="https://images.unsplash.com/photo-1481070555726-e2fe83477d56?q=80&w=800&auto=format&fit=crop" alt="Escargots" className="w-full h-full object-cover" />
-              </div>
-              <div className="space-y-0.5 flex-grow">
-                <div className="flex items-center gap-1.5">
-                  <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : themeStyle === "vibrant" ? "text-black font-black" : "text-slate-800"}`}>Escargots de Bourgogne</h4>
+                <div className="flex-1 space-y-1">
+                  <div className={`flex ${themeStyle === "speakeasy" ? "justify-between items-baseline gap-2" : "justify-between items-start"}`}>
+                    <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : themeStyle === "vibrant" ? "text-black font-black uppercase" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "brutalist" ? "text-black font-black text-xs uppercase" : themeStyle === "retro" ? "text-black text-sm font-bold font-mono" : themeStyle === "speakeasy" ? "text-[#F3E5AB] tracking-wider font-serif" : themeStyle === "botanical" ? "text-[#2C3B29] font-serif font-medium" : themeStyle === "molecular" ? "text-[#1a1f2e] font-mono font-bold uppercase" : "text-slate-800"}`}>{item.name}</h4>
+                    {themeStyle === "speakeasy" && <div className="flex-1 border-b border-dotted border-[#D4AF37]/30 mx-1"></div>}
+                    
+                    <div className="flex items-center gap-1">
+                      {themeStyle !== "speakeasy" && themeStyle !== "retro" && item.tags.map(tag => (
+                        <span 
+                          key={tag}
+                          className="text-[6px] font-extrabold px-1 rounded text-white tracking-widest"
+                          style={tag === "POPULAR" ? { backgroundColor: accentColor, borderColor: accentColor } : { backgroundColor: primaryColor, borderColor: primaryColor }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {themeStyle === "speakeasy" && (
+                        <span className="text-[10px] text-[#D4AF37] font-serif shrink-0">{item.price}</span>
+                      )}
+                      {themeStyle === "retro" && (
+                        <span className="text-[10px] font-bold text-[#000080] font-mono shrink-0">{item.price}</span>
+                      )}
+                    </div>
+                  </div>
+                  <p className={`text-[8px] leading-tight ${themeStyle === "luxury" ? "text-zinc-400" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light" : themeStyle === "brutalist" ? "text-black font-bold uppercase" : themeStyle === "retro" ? "text-gray-700 font-mono" : themeStyle === "speakeasy" ? "text-[#D4AF37]/60 font-serif italic" : "text-slate-500"}`}>{item.desc}</p>
                 </div>
-                <p className={`text-[8px] line-clamp-1 ${previewTheme.textSecondary}`}>Baked in garlic, parsley & herb butter.</p>
-                <span className={`inline-block border rounded px-1 text-[7px] font-bold ${themeStyle === "vibrant" ? "bg-[#06D6A0] text-black border-black" : previewTheme.accentBg}`}>
-                  VEG
-                </span>
+                {themeStyle !== "speakeasy" && themeStyle !== "retro" && (
+                  <span className={`text-[10px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif mt-0.5" : themeStyle === "vibrant" ? "bg-rose-500 text-white border border-black px-1.5 py-0.5 rounded rotate-2 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] self-start mt-0.5" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "brutalist" ? "bg-black text-white px-1.5 py-0.5 text-xs font-black self-start" : "text-slate-900 self-start mt-0.5"}`}>{item.price}</span>
+                )}
               </div>
-              <span className={`text-[10px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif" : themeStyle === "vibrant" ? "bg-rose-500 text-white border border-black px-1.5 py-0.5 rounded rotate-2 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" : "text-slate-900"}`}>$15.00</span>
-            </div>
+            ))}
           </div>
 
           {/* Footer */}
