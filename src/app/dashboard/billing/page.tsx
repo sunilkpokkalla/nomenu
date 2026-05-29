@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
+import { SubscriptionButton, PortalButton } from "@/components/dashboard/subscription-buttons";
 
 const PLANS = [
   {
@@ -134,8 +135,11 @@ export default async function BillingPage(
               </p>
             </div>
           </div>
-          <div className="text-xs text-slate-500 flex items-center gap-1.5 font-medium border bg-white px-3 py-1.5 rounded-lg shadow-sm">
-            <CreditCard className="h-3.5 w-3.5" /> Next billing date: N/A (Demo mode)
+          <div className="flex flex-col items-end gap-2">
+            <div className="text-xs text-slate-500 flex items-center gap-1.5 font-medium border bg-white px-3 py-1.5 rounded-lg shadow-sm">
+              <CreditCard className="h-3.5 w-3.5" /> Secure Stripe Billing
+            </div>
+            {currentPlan !== "free" && <PortalButton />}
           </div>
         </CardContent>
       </Card>
@@ -193,23 +197,24 @@ export default async function BillingPage(
                   ))}
                 </ul>
                 <div className="mt-8 pt-4">
-                  {isActive ? (
-                    <Button className="w-full" variant="outline" disabled>
-                      Plan Active
-                    </Button>
-                  ) : (
-                    <form action={updateRestaurantPlan}>
-                      <input type="hidden" name="plan" value={plan.id} />
-                      <Button
-                        type="submit"
-                        className="w-full font-semibold"
-                        size={isEnterprise ? "lg" : "default"}
-                        variant={isEnterprise ? "default" : plan.id === "elite" ? "outline" : "secondary"}
-                      >
-                        {plan.id === "free" ? "Downgrade Plan" : `Upgrade to ${plan.name}`}
+                    {isActive ? (
+                      <Button className="w-full" variant="outline" disabled>
+                        Plan Active
                       </Button>
-                    </form>
-                  )}
+                    ) : plan.id === "free" ? (
+                      <form action={updateRestaurantPlan}>
+                        <input type="hidden" name="plan" value="free" />
+                        <Button type="submit" className="w-full font-semibold" variant="secondary">
+                          Downgrade to Free
+                        </Button>
+                      </form>
+                    ) : (
+                      <SubscriptionButton 
+                        planId={plan.id}
+                        planName={plan.name}
+                        isEnterprise={isEnterprise}
+                      />
+                    )}
                 </div>
               </CardContent>
             </Card>
