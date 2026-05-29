@@ -27,7 +27,7 @@ export default async function DashboardLayout({
 
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id")
+    .select("id, plan")
     .eq("owner_id", user.id)
     .limit(1)
     .maybeSingle();
@@ -37,7 +37,7 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex">
-        {hasRestaurant && <Sidebar />}
+        {hasRestaurant && <Sidebar plan={restaurant.plan || "Free"} />}
         <main className="min-h-screen flex-1">
           {hasRestaurant && (
             <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-white/95 px-4 backdrop-blur lg:hidden">

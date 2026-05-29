@@ -30,7 +30,15 @@ const navItems = [
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];
 
-export function Sidebar() {
+export function Sidebar({ plan = "Free" }: { plan?: string }) {
+  const planLevels: Record<string, number> = {
+    free: 0,
+    pro: 1,
+    elite: 2,
+    enterprise: 3,
+  };
+  const userLevel = planLevels[plan.toLowerCase()] ?? 0;
+
   return (
     <aside className="hidden min-h-screen w-72 border-r bg-white px-4 py-5 lg:flex lg:flex-col">
       <Link href="/dashboard" className="mb-8 flex items-center gap-3 px-2">
@@ -49,19 +57,30 @@ export function Sidebar() {
         </div>
         {navItems.map((item) => {
           const Icon = item.icon;
+          const requiredLevel = item.badge === "ENT." ? 3 : item.badge === "ELITE" ? 2 : item.badge === "PRO" ? 1 : 0;
+          const isLocked = userLevel < requiredLevel;
+
           return (
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-slate-550 transition-all duration-200 ease-in-out hover:bg-slate-100/80 hover:text-slate-950 hover:translate-x-1"
+              className={`flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-all duration-200 ease-in-out hover:bg-slate-100/80 hover:translate-x-1 ${
+                isLocked 
+                  ? "opacity-60 grayscale hover:text-slate-600 text-slate-500" 
+                  : "text-slate-550 hover:text-slate-950"
+              }`}
             >
               <div className="flex items-center gap-3.5">
                 <Icon className="h-4 w-4" />
                 {item.label}
               </div>
               {item.badge && (
-                <span className="rounded-md bg-indigo-50 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-indigo-600 shadow-sm border border-indigo-100/50">
-                  {item.badge}
+                <span className={`rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border ${
+                  isLocked 
+                    ? "bg-slate-100 text-slate-400 border-slate-200" 
+                    : "bg-indigo-50 text-indigo-600 border-indigo-100/50"
+                }`}>
+                  {isLocked ? "🔒 " : ""}{item.badge}
                 </span>
               )}
             </Link>
