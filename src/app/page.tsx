@@ -612,13 +612,13 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Starter Plan */}
+            {/* Pro Plan */}
             <div className="rounded-[2.2rem] border border-slate-800 bg-slate-950 p-2.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-6 lg:p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
                   <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-slate-500">Growth</span>
-                  <h4 className="text-2xl lg:text-3xl font-black">Starter Plan</h4>
-                  <p className="text-xs text-slate-400 font-medium">Ideal for growing independent restaurants.</p>
+                  <h4 className="text-2xl lg:text-3xl font-black">Pro Plan</h4>
+                  <p className="text-xs text-slate-400 font-medium">Unlimited flexibility for high-volume venues.</p>
                   <div className="pt-2 flex items-baseline">
                     <span className="text-4xl lg:text-5xl font-black">$39</span>
                     <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
@@ -628,32 +628,35 @@ export default function Home() {
                   
                   <ul className="space-y-3 text-xs text-slate-350 font-medium">
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 3 Active Menus
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Digital Menus
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 25 Menu Items
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menu Items
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 3 Generated QR Codes
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited QR Codes
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Private Customer Feedback System
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Basic Scan Statistics
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Full Theme Customization
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Detailed Scan Analytics & Timezones
                     </li>
                   </ul>
                 </div>
 
                 <div className="mt-8 pt-4">
                   <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-10 text-[10px] lg:text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
-                    <Link href="/signup">Start Starter</Link>
+                    <Link href="/signup">Start Pro</Link>
                   </Button>
                 </div>
               </div>
             </div>
 
-            {/* Pro Plan */}
+            {/* Elite Plan */}
             <div className="rounded-[2.2rem] border-2 border-indigo-650 bg-slate-950 p-2.5 flex flex-col justify-between relative shadow-2xl shadow-indigo-650/5 hover:border-indigo-500 transition-colors">
               <div className="absolute top-0 right-6 -translate-y-1/2 rounded-full bg-indigo-650 px-3 py-1 text-[8px] font-black uppercase tracking-wider text-white flex items-center gap-1 shadow-md">
                 <Zap className="h-3 w-3 fill-white" /> Popular
@@ -662,8 +665,8 @@ export default function Home() {
               <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-6 lg:p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
                   <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-indigo-400">Professional</span>
-                  <h4 className="text-2xl lg:text-3xl font-black text-white">Pro Plan</h4>
-                  <p className="text-xs text-slate-400 font-medium">Unlimited flexibility for high-volume venues.</p>
+                  <h4 className="text-2xl lg:text-3xl font-black text-white">Elite Plan</h4>
+                  <p className="text-xs text-slate-400 font-medium">Real-time ordering for premium venues and groups.</p>
                   <div className="pt-2 flex items-baseline">
                     <span className="text-4xl lg:text-5xl font-black text-white">$79</span>
                     <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
@@ -673,38 +676,41 @@ export default function Home() {
 
                   <ul className="space-y-3 text-xs text-slate-300 font-medium">
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Unlimited</strong> Digital Menus
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Everything in Pro</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Unlimited</strong> Items & QRs
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Real-Time Live Ordering Dashboard</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>AI Retention Engine</strong>
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Interactive Digital Shopping Cart</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>VIP Loyalty Engine</strong>
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Digital Receipts & Live Order Tracking</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> Detailed Analytics & Timezones
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> All 8+ Premium Elite Themes
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> White-labeled Branding
                     </li>
                   </ul>
                 </div>
 
                 <div className="mt-8 pt-4">
                   <Button asChild className="w-full bg-indigo-650 hover:bg-indigo-600 text-white rounded-full font-extrabold h-10 text-[10px] lg:text-xs uppercase tracking-wider shadow-lg shadow-indigo-650/15 active:scale-[0.98] transition-all">
-                    <Link href="/signup">Get Pro</Link>
+                    <Link href="/signup">Get Elite</Link>
                   </Button>
                 </div>
               </div>
             </div>
 
-            {/* Elite Plan */}
+            {/* Enterprise Plan */}
             <div className="rounded-[2.2rem] border border-slate-800 bg-slate-950 p-2.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
               <div className="bg-slate-900/50 rounded-[calc(2.2rem-0.625rem)] p-6 lg:p-8 flex flex-col h-full justify-between">
                 <div className="space-y-5">
                   <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-slate-500">Premium</span>
-                  <h4 className="text-2xl lg:text-3xl font-black text-white">Elite Plan</h4>
-                  <p className="text-xs text-slate-400 font-medium">Full restaurant OS for premium venues.</p>
+                  <h4 className="text-2xl lg:text-3xl font-black text-white">Enterprise Plan</h4>
+                  <p className="text-xs text-slate-400 font-medium">Full commerce suite with direct payouts.</p>
                   <div className="pt-2 flex items-baseline">
                     <span className="text-4xl lg:text-5xl font-black text-white">$119</span>
                     <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
@@ -714,26 +720,26 @@ export default function Home() {
 
                   <ul className="space-y-3 text-xs text-slate-300 font-medium">
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Everything in Pro
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Everything in Elite
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Live Drag & Drop KDS</strong>
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Order & Pay via Apple Pay / Credit Card</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Real-time Kitchen Sync</strong>
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Direct Bank Payouts (Stripe Connect)</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> White-labeled Branding
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 2.5% Platform Transaction Fee
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Automated Negative Alerts
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Dedicated Account Manager
                     </li>
                   </ul>
                 </div>
 
                 <div className="mt-8 pt-4">
                   <Button asChild variant="outline" className="w-full bg-transparent border-slate-800 hover:bg-slate-900 text-white rounded-full font-extrabold h-10 text-[10px] lg:text-xs uppercase tracking-wider active:scale-[0.98] transition-all">
-                    <Link href="/signup">Get Elite</Link>
+                    <Link href="/signup">Contact Us</Link>
                   </Button>
                 </div>
               </div>
