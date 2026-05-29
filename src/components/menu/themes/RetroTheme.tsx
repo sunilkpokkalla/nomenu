@@ -28,7 +28,7 @@ export function RetroTheme(props: MenuThemeProps) {
 
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canFeedback = currentPlan !== "free";
-  const canOrder = currentPlan === "elite";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
 
   const [time, setTime] = useState("");
   useEffect(() => {

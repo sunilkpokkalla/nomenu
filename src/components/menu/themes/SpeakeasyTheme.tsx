@@ -28,7 +28,7 @@ export function SpeakeasyTheme(props: MenuThemeProps) {
 
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canFeedback = currentPlan !== "free";
-  const canOrder = currentPlan === "elite";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#D4AF37] font-serif pb-32" style={{ backgroundImage: "radial-gradient(#1A1A1A 1px, transparent 1px)", backgroundSize: "32px 32px" }}>

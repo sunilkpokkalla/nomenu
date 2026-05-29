@@ -31,7 +31,7 @@ export default async function MenuCustomizePage(
   if (!restaurant) redirect("/dashboard");
 
   const plan = restaurant.plan?.toLowerCase() || "basic";
-  const isEliteOrPro = plan === "elite" || plan === "pro";
+  const isPremiumThemeEnabled = plan === "enterprise" || plan === "elite" || plan === "pro";
 
   // Get menu
   const { data: menu } = await supabase
@@ -57,7 +57,7 @@ export default async function MenuCustomizePage(
         </div>
       </div>
 
-      {!isEliteOrPro ? (
+      {!isPremiumThemeEnabled ? (
         <div className="mt-8 rounded-xl border bg-card p-12 text-center shadow-sm flex flex-col items-center max-w-2xl mx-auto">
           <div className="bg-amber-100 p-4 rounded-full mb-6">
             <Crown className="w-12 h-12 text-amber-600" />

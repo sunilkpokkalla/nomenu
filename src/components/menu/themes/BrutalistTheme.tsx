@@ -29,7 +29,7 @@ export function BrutalistTheme(props: MenuThemeProps) {
 
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canFeedback = currentPlan !== "free";
-  const canOrder = currentPlan === "elite";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
 
   return (
     <div className="min-h-screen bg-white text-black font-sans pb-32">

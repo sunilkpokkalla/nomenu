@@ -26,7 +26,7 @@ export function BoutiqueTheme(props: MenuThemeProps) {
 
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canFeedback = currentPlan !== "free";
-  const canOrder = currentPlan === "elite";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
 
   return (
     <div className="min-h-screen bg-[#FFF0F5] text-[#835C7A] font-sans pb-32" style={{ fontFamily: '"Nunito", "Quicksand", sans-serif' }}>

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { MenuClientView } from "@/components/menu/menu-client-view";
 import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
+import { ReceiptTracker } from "@/components/menu/receipt-tracker";
 
 export default async function PublicMenuPage(
   props: {
@@ -32,11 +33,14 @@ export default async function PublicMenuPage(
   }
 
   // 2. Fetch restaurant details
-  const { data: restaurant } = await supabase
+  const { data: _restaurantData } = await supabase
     .from("restaurants")
-    .select("*")
+    .select("*, stripe_account_id")
     .eq("id", menu.restaurant_id)
     .maybeSingle();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const restaurant = _restaurantData as any;
 
   if (!restaurant) {
     notFound();
@@ -97,7 +101,7 @@ export default async function PublicMenuPage(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const designConfig = (menu.design_config as any) || {};
   const hasCustomDesign = Object.keys(designConfig).length > 0;
-  const canUseCustomDesign = ['pro', 'elite'].includes(restaurant.plan?.toLowerCase() || '') && hasCustomDesign;
+  const canUseCustomDesign = ['pro', 'elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') && hasCustomDesign;
 
   const activeThemeStyle = canUseCustomDesign && designConfig.theme_style ? designConfig.theme_style : restaurant.theme_style;
   const activePrimaryColor = canUseCustomDesign && designConfig.primary_color ? designConfig.primary_color : restaurant.primary_color;
@@ -124,7 +128,7 @@ export default async function PublicMenuPage(
         tableNumber={tableNumber}
         qrCodeId={qrCodeId}
       />
-      {restaurant.plan?.toLowerCase() === "elite" && (
+      {['elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') && (
         <FloatingCart 
           restaurantId={restaurant.id}
           menuId={menu.id}
@@ -135,8 +139,10 @@ export default async function PublicMenuPage(
           taxRate={menu.tax_rate || 0}
           serviceCharge={menu.service_charge || 0}
           serviceChargeType={menu.service_charge_type || "percentage"}
+          stripeAccountId={restaurant.stripe_account_id}
         />
       )}
+      <ReceiptTracker restaurantId={restaurant.id} />
     </CartProvider>
   );
 }

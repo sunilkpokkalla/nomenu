@@ -59,7 +59,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const isFreePlan = currentPlan === "free";
   const isStarterPlan = currentPlan === "starter";
-  const isProPlan = currentPlan === "pro" || currentPlan === "growth";
+  const hasWhiteLabeling = currentPlan === "elite" || currentPlan === "enterprise";
   const isElitePlan = currentPlan === "elite";
 
   const canOrder = isElitePlan;
@@ -1196,11 +1196,11 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
         </div>
 
         {/* Footer */}
-        {!isProPlan && (
-          <div className={`text-center py-6 pb-8 border-t text-[10px] tracking-[0.2em] font-sans ${themeStyle === "luxury" ? "bg-zinc-950/80 border-zinc-900/50 text-zinc-600" : themeStyle === "vibrant" ? "bg-[#FEFCE8] border-black text-slate-500" : themeStyle === "bistro" ? "bg-[#FDFBF7] border-[#E7E5E4] text-[#A8A29E]" : "bg-slate-50 border-slate-200 text-slate-400"}`}>
-            POWERED BY <span className={`font-bold ${themeStyle === "luxury" ? "text-zinc-500" : themeStyle === "vibrant" ? "text-black" : themeStyle === "bistro" ? "text-[#5C4033]" : "text-slate-550"}`}>NOMENU</span>
-          </div>
-        )}
+        <div className={`text-center py-6 pb-8 border-t text-[10px] tracking-[0.2em] font-sans ${themeStyle === "luxury" ? "bg-zinc-950/80 border-zinc-900/50 text-zinc-600" : themeStyle === "vibrant" ? "bg-[#FEFCE8] border-black text-slate-500" : themeStyle === "bistro" ? "bg-[#FDFBF7] border-[#E7E5E4] text-[#A8A29E]" : "bg-slate-50 border-slate-200 text-slate-400"}`}>
+          POWERED BY <span className={`font-bold ${themeStyle === "luxury" ? "text-zinc-500" : themeStyle === "vibrant" ? "text-black" : themeStyle === "bistro" ? "text-[#5C4033]" : "text-slate-550"}`}>
+            {hasWhiteLabeling ? restaurant.name.toUpperCase() : "NOMENU"}
+          </span>
+        </div>
       </div>
 
       {/* 1. Item Detail Slide-Up Drawer/Modal */}

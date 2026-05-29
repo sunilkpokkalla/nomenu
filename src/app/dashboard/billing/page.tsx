@@ -22,20 +22,6 @@ const PLANS = [
     ],
   },
   {
-    id: "starter",
-    name: "Starter Plan",
-    price: "$19",
-    period: "/mo",
-    description: "Ideal for growing independent restaurants.",
-    features: [
-      "Up to 3 Active Menus",
-      "Up to 25 Menu Items",
-      "3 Generated QR Codes",
-      "Private Customer Feedback System",
-      "Basic Scan Statistics",
-    ],
-  },
-  {
     id: "pro", // Kept ID for backward compatibility
     name: "Pro Plan",
     price: "$39",
@@ -59,9 +45,10 @@ const PLANS = [
     features: [
       "Everything in Pro",
       "Real-Time Live Ordering Dashboard",
-      "Multi-Location Restaurant Profiles",
-      "Automated Negative Feedback Alerts",
-      "White-labeled Branding (No 'Powered by NoMenu')",
+      "Interactive Digital Shopping Cart",
+      "Digital Receipts & Live Order Tracking",
+      "All 8+ Premium Elite Themes",
+      "White-labeled Branding ('Powered by [Your Restaurant]')",
     ],
   },
   {
@@ -74,8 +61,7 @@ const PLANS = [
       "Everything in Elite",
       "Order & Pay via Apple Pay / Credit Card",
       "Direct Bank Payouts (Stripe Connect)",
-      "0% Platform Transaction Fees",
-      "POS & KDS System Integration",
+      "2.5% Platform Transaction Fee",
       "Dedicated Account Manager",
     ],
   },
@@ -155,22 +141,39 @@ export default async function BillingPage(
       </Card>
 
       {/* Pricing Cards */}
-      <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-5">
-        {PLANS.map((plan) => {
+      {/* Pricing Cards */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {PLANS.map((plan, index) => {
           const isActive = currentPlan.toLowerCase() === plan.id.toLowerCase();
+          const isEnterprise = plan.id === "enterprise";
+          const isElite = plan.id === "elite";
+          
           return (
             <Card
               key={plan.id}
-              className={`flex flex-col relative overflow-hidden transition-all duration-300 ${
-                isActive ? "border-primary shadow-lg ring-1 ring-primary" : "hover:border-slate-300 hover:shadow-md"
+              className={`flex flex-col relative overflow-hidden transition-all duration-300 bg-white ${
+                isEnterprise 
+                  ? "border-2 border-slate-900 shadow-xl shadow-slate-900/10 scale-[1.02] z-10" 
+                  : isActive 
+                    ? "border-primary shadow-lg ring-1 ring-primary" 
+                    : "border-slate-200 hover:border-slate-300 hover:shadow-md"
               }`}
             >
+              {isEnterprise && !isActive && (
+                <div className="absolute top-0 inset-x-0 h-1 bg-slate-900"></div>
+              )}
               {isActive && (
-                <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-extrabold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
+                <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-extrabold px-3 py-1 rounded-bl-lg uppercase tracking-wider z-20">
                   Current
                 </div>
               )}
-              <CardHeader className="pb-4">
+              {isEnterprise && !isActive && (
+                <div className="absolute top-0 right-0 bg-slate-900 text-white text-[10px] font-extrabold px-3 py-1 rounded-bl-lg uppercase tracking-wider z-20">
+                  Recommended
+                </div>
+              )}
+              
+              <CardHeader className={`pb-4 ${isEnterprise ? "bg-slate-50 border-b border-slate-100" : ""}`}>
                 <CardTitle className="text-xl font-bold">{plan.name}</CardTitle>
                 <CardDescription className="min-h-[40px] mt-1.5">{plan.description}</CardDescription>
                 <div className="mt-4 flex items-baseline gap-1 text-slate-950">
@@ -178,13 +181,14 @@ export default async function BillingPage(
                   {plan.period && <span className="text-sm font-semibold text-slate-500">{plan.period}</span>}
                 </div>
               </CardHeader>
-              <CardContent className="flex flex-1 flex-col pt-0">
-                <hr className="mb-5" />
-                <ul className="space-y-3.5 text-xs text-slate-600 flex-1">
+              <CardContent className="flex flex-1 flex-col pt-6">
+                <ul className="space-y-4 text-sm text-slate-600 flex-1">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                      <span>{feature}</span>
+                    <li key={feature} className="flex items-start gap-3">
+                      <div className={`mt-0.5 rounded-full p-0.5 shrink-0 ${isEnterprise || isElite ? 'bg-emerald-100' : 'bg-slate-100'}`}>
+                        <Check className={`h-3 w-3 ${isEnterprise || isElite ? 'text-emerald-600' : 'text-slate-500'}`} />
+                      </div>
+                      <span className={isEnterprise || isElite ? "font-medium text-slate-700" : ""}>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -198,8 +202,9 @@ export default async function BillingPage(
                       <input type="hidden" name="plan" value={plan.id} />
                       <Button
                         type="submit"
-                        className="w-full"
-                        variant={plan.id === "growth" ? "default" : "secondary"}
+                        className="w-full font-semibold"
+                        size={isEnterprise ? "lg" : "default"}
+                        variant={isEnterprise ? "default" : plan.id === "elite" ? "outline" : "secondary"}
                       >
                         {plan.id === "free" ? "Downgrade Plan" : `Upgrade to ${plan.name}`}
                       </Button>

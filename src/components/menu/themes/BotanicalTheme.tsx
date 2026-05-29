@@ -1,20 +1,39 @@
-import { MenuProps, OrderItem } from "../types";
+import { MenuThemeProps } from "../types";
 import { Plus, Minus, ShoppingBag, Leaf, Info } from "lucide-react";
 import { FeedbackFAB } from "../feedback-fab";
 import { useState } from "react";
 
-export function BotanicalTheme({ menu, canOrder, canFeedback }: MenuProps) {
+type OrderItem = {
+  item_id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  notes: string;
+};
+
+
+export function BotanicalTheme({ restaurant, categories: rawCategories, items }: MenuThemeProps) {
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
+  const canFeedback = currentPlan === "pro" || currentPlan === "growth" || canOrder;
+  const hasWhiteLabeling = currentPlan === "elite" || currentPlan === "enterprise";
+
+  const categories = rawCategories.map(cat => ({
+    ...cat,
+    items: items.filter(item => item.category_id === cat.id && item.is_available)
+  })).filter(cat => cat.items.length > 0);
+
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>(
-    menu.categories.length > 0 ? menu.categories[0].name : ""
+    categories.length > 0 ? categories[0].name : ""
   );
 
-  const categories = menu.categories;
-  const restaurantName = menu.restaurant_name || "The Garden";
-  const accentColor = menu.design_config?.accent_color || "#3E5739";
+  const restaurantName = restaurant.name || "The Garden";
+  const accentColor = restaurant.accent_color || "#3E5739";
+  const welcomeMessage = "Locally sourced, organically inspired.";
 
-  const handleAddToCart = (item: any) => {
+  const handleAddToCart = (item: { id: string; name: string; price: number }) => {
     if (!canOrder) return;
     setOrderItems((prev) => {
       const existing = prev.find((i) => i.item_id === item.id);
@@ -71,7 +90,7 @@ export function BotanicalTheme({ menu, canOrder, canFeedback }: MenuProps) {
             {restaurantName}
           </h1>
           <p className="mt-3 text-sm italic text-[#556B50] max-w-md mx-auto">
-            {menu.design_config?.welcome_message || "Locally sourced, organically inspired."}
+            {welcomeMessage}
           </p>
         </div>
       </div>
@@ -169,10 +188,10 @@ export function BotanicalTheme({ menu, canOrder, canFeedback }: MenuProps) {
 
       <div className="text-center pb-8 opacity-40 font-sans text-xs tracking-widest uppercase">
         <Leaf className="w-4 h-4 mx-auto mb-2" />
-        Cultivated by Nomenu
+        Cultivated by {hasWhiteLabeling ? restaurant.name : "Nomenu"}
       </div>
 
-      {canFeedback && <FeedbackFAB menuId={menu.id} restaurantId={menu.restaurant_id} />}
+      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} />}
 
       {/* Cart Modal - Earthy style */}
       {canOrder && isOrderModalOpen && (

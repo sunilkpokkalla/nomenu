@@ -1,20 +1,39 @@
-import { MenuProps, OrderItem } from "../types";
+import { MenuThemeProps } from "../types";
 import { Plus, Minus, Beaker, Hexagon, Fingerprint } from "lucide-react";
 import { FeedbackFAB } from "../feedback-fab";
 import { useState } from "react";
 
-export function MolecularTheme({ menu, canOrder, canFeedback }: MenuProps) {
+type OrderItem = {
+  item_id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  notes: string;
+};
+
+
+export function MolecularTheme({ restaurant, categories: rawCategories, items }: MenuThemeProps) {
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
+  const canFeedback = currentPlan === "pro" || currentPlan === "growth" || canOrder;
+  const hasWhiteLabeling = currentPlan === "elite" || currentPlan === "enterprise";
+
+  const categories = rawCategories.map(cat => ({
+    ...cat,
+    items: items.filter(item => item.category_id === cat.id && item.is_available)
+  })).filter(cat => cat.items.length > 0);
+
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>(
-    menu.categories.length > 0 ? menu.categories[0].name : ""
+    categories.length > 0 ? categories[0].name : ""
   );
 
-  const categories = menu.categories;
-  const restaurantName = menu.restaurant_name || "LAB-01";
-  const accentColor = menu.design_config?.accent_color || "#00E5FF";
+  const restaurantName = restaurant.name || "LAB-01";
+  const accentColor = restaurant.accent_color || "#00E5FF";
+  const welcomeMessage = "SYNTHESIS // PREPARATION // CONSUMPTION";
 
-  const handleAddToCart = (item: any) => {
+  const handleAddToCart = (item: { id: string; name: string; price: number }) => {
     if (!canOrder) return;
     setOrderItems((prev) => {
       const existing = prev.find((i) => i.item_id === item.id);
@@ -79,7 +98,7 @@ export function MolecularTheme({ menu, canOrder, canFeedback }: MenuProps) {
           </div>
           <div className="bg-[#1a1f2e] text-white p-4 rounded-sm border-l-4" style={{ borderColor: accentColor }}>
             <p className="text-sm max-w-xs leading-relaxed">
-              {menu.design_config?.welcome_message || "SYNTHESIS // PREPARATION // CONSUMPTION"}
+              {welcomeMessage}
             </p>
           </div>
         </div>
@@ -186,10 +205,10 @@ export function MolecularTheme({ menu, canOrder, canFeedback }: MenuProps) {
 
       <div className="text-center pb-8 opacity-50 text-xs font-bold uppercase flex items-center justify-center gap-2 relative z-10">
         <Fingerprint className="w-4 h-4" />
-        SYSTEM PROTOTYPE BY NOMENU
+        SYSTEM PROTOTYPE BY {hasWhiteLabeling ? restaurant.name.toUpperCase() : "NOMENU"}
       </div>
 
-      {canFeedback && <FeedbackFAB menuId={menu.id} restaurantId={menu.restaurant_id} />}
+      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} />}
 
       {/* Order Terminal (Cart) */}
       {canOrder && isOrderModalOpen && (
@@ -259,7 +278,7 @@ export function MolecularTheme({ menu, canOrder, canFeedback }: MenuProps) {
         >
           <div className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: accentColor }}></div>
           <span className="font-bold tracking-widest uppercase">
-            DATA: {totalItems} // ${cartTotal.toFixed(2)}
+            DATA: {totalItems} {"//"} ${cartTotal.toFixed(2)}
           </span>
           <div className="w-6 h-6 border-2 border-[#1a1f2e] flex items-center justify-center group-hover:bg-[#1a1f2e] group-hover:text-white transition-colors">
             <Plus className="w-4 h-4" />

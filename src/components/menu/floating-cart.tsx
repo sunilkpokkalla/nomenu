@@ -5,7 +5,7 @@ import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed } from "lucide-react";
 import { submitOrder } from "@/app/menu/[id]/actions";
 
-export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage" }: {
+export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId }: {
   restaurantId: string;
   menuId: string;
   tableNumber?: string;
@@ -15,6 +15,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   taxRate?: number;
   serviceCharge?: number;
   serviceChargeType?: string;
+  stripeAccountId?: string | null;
 }) {
   const { items, totalItems, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,54 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
     setIsSubmitting(true);
     setError(null);
 
+    // Prepare items structure
+    const orderItems = items.map(i => ({
+      menu_item_id: i.menuItem.id,
+      quantity: i.quantity,
+      price_at_time_of_order: i.menuItem.price,
+      customer_notes: i.notes || null,
+    }));
+
+    // Calculate totals
+    const subtotal = totalPrice;
+    const taxAmount = subtotal * (taxRate / 100);
+    const serviceFeeAmount = serviceChargeType === "flat" ? serviceCharge : subtotal * (serviceCharge / 100);
+    const finalTotal = subtotal + taxAmount + serviceFeeAmount;
+
     try {
+      // If Stripe is connected, route to Stripe Checkout
+      if (stripeAccountId) {
+        // Generate an order ID so we can track the receipt when they return
+        const tempOrderId = crypto.randomUUID();
+        localStorage.setItem('nomenu_last_order', tempOrderId);
+
+        const res = await fetch("/api/stripe/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            restaurantId,
+            items: items.map(i => ({
+              ...i.menuItem,
+              quantity: i.quantity,
+              notes: i.notes
+            })),
+            returnUrl: window.location.href, // User comes back to the same menu
+            orderId: tempOrderId,
+            tableNumber: table || null,
+            customerName: customerName || null,
+          })
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url; // Redirect to Stripe
+          return;
+        } else {
+          throw new Error(data.error || "Failed to initialize secure checkout");
+        }
+      }
+
+      // Fallback: Cash / Pay at Counter (KDS only)
       const orderItems = items.map(i => ({
         menu_item_id: i.menuItem.id,
         quantity: i.quantity,
@@ -54,8 +102,8 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
       } else {
         setError(res.error || "Failed to place order.");
       }
-    } catch (err) {
-      setError("An unexpected error occurred.");
+    } catch (err: unknown) {
+      setError((err as Error).message || "An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
     }
@@ -235,11 +283,11 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                   style={{ backgroundColor: btnColor, color: textColor }}
                 >
                   {isSubmitting ? (
-                    <span className="animate-pulse">Sending to Kitchen...</span>
+                    <span className="animate-pulse">Processing...</span>
                   ) : (
                     <>
                       <CreditCard className="w-5 h-5" />
-                      Place Order (Pay at Counter)
+                      {stripeAccountId ? "Secure Checkout" : "Place Order (Pay at Counter)"}
                     </>
                   )}
                 </button>

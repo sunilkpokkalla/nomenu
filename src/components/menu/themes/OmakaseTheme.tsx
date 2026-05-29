@@ -29,7 +29,7 @@ export function OmakaseTheme(props: MenuThemeProps) {
 
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canFeedback = currentPlan !== "free";
-  const canOrder = currentPlan === "elite";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
 
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#CCCCCC] font-sans pb-32">

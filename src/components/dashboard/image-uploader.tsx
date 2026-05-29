@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Upload, Link as LinkIcon, X, AlertCircle } from "lucide-react";
+import { Upload, Link as LinkIcon, X, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createClient } from "@/lib/supabase/client";
 
 interface ImageUploaderProps {
   value?: string;
@@ -16,6 +17,7 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
   const [internalValue, setInternalValue] = useState<string>("");
   const [preview, setPreview] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const value = externalValue !== undefined ? externalValue : internalValue;
@@ -39,25 +41,47 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
     setPreview(newValue);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setError("");
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check size limit: 2.5MB
-    if (file.size > 2.5 * 1024 * 1024) {
-      setError("File size exceeds 2.5MB limit. Please choose a smaller image.");
-      updateValue("");
+    // Check size limit: 5MB for storage
+    if (file.size > 5 * 1024 * 1024) {
+      setError("File size exceeds 5MB limit. Please choose a smaller image.");
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result as string;
-      updateValue(base64String);
-    };
-    reader.readAsDataURL(file);
+    setIsUploading(true);
+
+    try {
+      const supabase = createClient();
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('menu-items')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data } = supabase.storage.from('menu-items').getPublicUrl(filePath);
+      
+      updateValue(data.publicUrl);
+    } catch (err: unknown) {
+      console.error('Error uploading image:', err);
+      setError((err as Error).message || "Failed to upload image. Make sure the storage bucket exists.");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,20 +140,27 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
       {/* Inputs */}
       {mode === "file" ? (
         <div className="space-y-2">
-          <div className="flex items-center justify-center w-full">
+          <div className="flex items-center justify-center w-full relative">
+            {isUploading && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/80 rounded-lg">
+                <Loader2 className="w-6 h-6 text-primary animate-spin mb-2" />
+                <p className="text-xs font-medium text-slate-700">Uploading to storage...</p>
+              </div>
+            )}
             <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-200 border-dashed rounded-lg cursor-pointer bg-white hover:bg-slate-50 transition-colors">
               <div className="flex flex-col items-center justify-center pt-4 pb-4">
                 <Upload className="w-6 h-6 text-slate-400 mb-1" />
                 <p className="text-xs text-slate-500">
                   <span className="font-semibold">Click to upload</span> or drag and drop
                 </p>
-                <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG, or WebP (max 2.5MB)</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG, or WebP (max 5MB)</p>
               </div>
               <input
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
+                disabled={isUploading}
                 className="hidden"
               />
             </label>
