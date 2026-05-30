@@ -28,9 +28,9 @@ export function SubscriptionButton({
       } else {
         throw new Error(data.error || "Failed to initiate checkout");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Checkout failed. Make sure Stripe Price IDs are configured.");
+      alert(`Checkout failed: ${error.message || "Unknown error occurred"}`);
     } finally {
       setLoading(false);
     }

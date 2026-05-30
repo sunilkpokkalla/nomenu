@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { createMenu, deleteMenu, toggleMenuStatus } from "@/app/dashboard/actions";
 import { MenuQrModal } from "@/components/dashboard/menu-qr-modal";
+import { MenuDescriptionField } from "@/components/dashboard/menu-description-field";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Button } from "@/components/ui/button";
 import {
@@ -277,14 +278,7 @@ export default async function MenusPage(
                     <option value="Lane">Lane (Bowling Alleys)</option>
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    placeholder="e.g. Served from 11 AM to 4 PM. French classics and seasonal specialties."
-                  />
-                </div>
+                <MenuDescriptionField />
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">

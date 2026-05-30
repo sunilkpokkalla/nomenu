@@ -194,7 +194,16 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
         </div>
 
         <div className="space-y-2 border-t pt-3">
-          <Label htmlFor="description">Description</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="description">Description</Label>
+            <button
+              type="button"
+              onClick={() => setDescription("Served with seasonal roasted vegetables and fresh garlic herb butter.")}
+              className="text-[10px] text-primary hover:underline font-bold uppercase tracking-wider"
+            >
+              Autofill Example
+            </button>
+          </div>
           <Textarea
             id="description"
             name="description"
