@@ -39,8 +39,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [currentTime, setCurrentTime] = useState(new Date());
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
-  const [isCompactMode, setIsCompactMode] = useState(false);
+  const [userManualCompactMode, setUserManualCompactMode] = useState<boolean | null>(null);
   const [selectedOrderForModal, setSelectedOrderForModal] = useState<Order | null>(null);
+
+  const activeOrdersCount = orders.filter(o => o.status === "pending" || o.status === "preparing").length;
+  const isCompactMode = userManualCompactMode !== null ? userManualCompactMode : activeOrdersCount > 10;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const knownOrderIds = useRef<Set<string>>(new Set(initialOrders.map(o => o.id)));
@@ -281,7 +284,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
             </button>
           )}
           <button 
-            onClick={() => setIsCompactMode(!isCompactMode)}
+            onClick={() => setUserManualCompactMode(!isCompactMode)}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
               !isKdsMode 
                 ? (isCompactMode ? "bg-indigo-50 text-indigo-700 border border-indigo-200" : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50")
