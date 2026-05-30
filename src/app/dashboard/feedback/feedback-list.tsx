@@ -58,6 +58,38 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     setCurrentPage(1);
   }, [searchQuery, ratingFilter, sortColumn, sortDirection]);
 
+  // Distinct notification sound for feedback (Soft bubble pop / chime)
+  const playFeedbackSound = () => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      // Soft sine wave
+      osc.type = 'sine';
+      
+      // Bubble pop effect (sweep frequency up quickly)
+      osc.frequency.setValueAtTime(500, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1000, ctx.currentTime + 0.1);
+      
+      // Quick envelope
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {
+      console.error("Audio playback failed", e);
+    }
+  };
+
   // Real-time subscription
   useEffect(() => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
@@ -73,6 +105,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
             .single();
           if (fullFeedback) {
             setLiveFeedbacks(prev => [fullFeedback as FeedbackData, ...prev]);
+            playFeedbackSound();
           }
         }
       )
