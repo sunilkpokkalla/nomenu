@@ -78,7 +78,7 @@ export function Sidebar({ plan = "Free" }: { plan?: string }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors duration-200 ease-in-out hover:bg-slate-100 ${
+              className={`w-full flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors duration-200 ease-in-out hover:bg-slate-100 ${
                 pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(item.href))
                   ? "bg-slate-100 text-primary"
                   : isLocked 
