@@ -34,7 +34,7 @@ export function CopyButton({ text }: { text: string }) {
   );
 }
 
-export function DownloadButton({ qrImageUrl, label }: { qrImageUrl: string; label: string }) {
+export function DownloadButton({ qrImageUrl, label, disabled = false }: { qrImageUrl: string; label: string; disabled?: boolean }) {
   const [downloading, setDownloading] = useState(false);
 
   const handleDownload = async () => {
@@ -64,7 +64,7 @@ export function DownloadButton({ qrImageUrl, label }: { qrImageUrl: string; labe
   };
 
   return (
-    <Button variant="outline" size="sm" onClick={handleDownload} disabled={downloading} className="flex-1">
+    <Button variant="outline" size="sm" onClick={handleDownload} disabled={disabled || downloading} className="flex-1">
       <Download className={`mr-1.5 h-3.5 w-3.5 ${downloading ? "animate-pulse" : ""}`} />
       {downloading ? "Downloading..." : "Download QR"}
     </Button>

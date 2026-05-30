@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { ExternalLink, QrCode } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ExternalLink, QrCode, Loader2 } from "lucide-react";
+import QRCode from "qrcode";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,8 +23,23 @@ interface MenuQrModalProps {
 
 export function MenuQrModal({ menuName, publicUrl, locationLabel }: MenuQrModalProps) {
   const [open, setOpen] = useState(false);
-  
-  const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+
+  useEffect(() => {
+    if (open && publicUrl) {
+      QRCode.toDataURL(publicUrl, {
+        errorCorrectionLevel: "H",
+        margin: 1,
+        width: 500,
+        color: {
+          dark: "#0F172A", // slate-900
+          light: "#FFFFFF",
+        },
+      })
+        .then((url) => setQrDataUrl(url))
+        .catch((err) => console.error("QR Generation error", err));
+    }
+  }, [open, publicUrl]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -43,27 +59,32 @@ export function MenuQrModal({ menuName, publicUrl, locationLabel }: MenuQrModalP
         
         <div className="flex flex-col items-center justify-center pt-2 pb-4 space-y-6">
           <a
-            href={qrImageApiUrl}
+            href={qrDataUrl || "#"}
             target="_blank"
             rel="noreferrer"
-            className="relative aspect-square w-56 rounded-xl border bg-white p-3 shadow-inner hover:opacity-90 transition-opacity cursor-pointer group"
+            className="relative aspect-square w-56 rounded-xl border bg-white p-3 shadow-inner hover:opacity-90 transition-opacity cursor-pointer group flex items-center justify-center"
             title="Click to open full size QR image"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <Image
-              src={qrImageApiUrl}
-              alt={`QR Code for ${menuName}`}
-              className="h-full w-full object-contain"
-            fill />
-            <div className="absolute inset-0 bg-slate-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
-              <ExternalLink className="h-6 w-6 text-slate-700 bg-white/80 p-1.5 rounded-md shadow-sm" />
-            </div>
+            {qrDataUrl ? (
+              <>
+                <img
+                  src={qrDataUrl}
+                  alt={`QR Code for ${menuName}`}
+                  className="h-full w-full object-contain"
+                />
+                <div className="absolute inset-0 bg-slate-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                  <ExternalLink className="h-6 w-6 text-slate-700 bg-white/80 p-1.5 rounded-md shadow-sm" />
+                </div>
+              </>
+            ) : (
+              <Loader2 className="h-8 w-8 animate-spin text-slate-300" />
+            )}
           </a>
 
           <div className="w-full space-y-2">
             <div className="flex gap-2">
               <CopyButton text={publicUrl} />
-              <DownloadButton qrImageUrl={qrImageApiUrl} label={menuName} />
+              <DownloadButton qrImageUrl={qrDataUrl} label={menuName} disabled={!qrDataUrl} />
             </div>
             
             <div className="flex items-center justify-center border-t pt-3 mt-4">
