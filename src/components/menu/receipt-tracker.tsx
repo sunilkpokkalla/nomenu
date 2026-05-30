@@ -65,12 +65,18 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
       setLoading(false);
     }
 
-    const handleNewOrder = (e: Event) => {
-      const customEvent = e as CustomEvent;
-      const newOrderIds = customEvent.detail.orderIds || [];
-      setOrderIds(newOrderIds);
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      fetchOrders(newOrderIds);
+    const handleNewOrder = () => {
+      let updatedOrderIds: string[] = [];
+      try {
+        const stored = localStorage.getItem("nomenu_orders");
+        if (stored) updatedOrderIds = JSON.parse(stored);
+      } catch(e) {}
+      
+      if (updatedOrderIds.length > 0) {
+        setOrderIds(updatedOrderIds);
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        fetchOrders(updatedOrderIds);
+      }
     };
 
     window.addEventListener("nomenu_order_placed", handleNewOrder);
