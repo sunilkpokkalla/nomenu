@@ -19,7 +19,7 @@ import {
 import { logout } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 
-const navItems = [
+export const navItems = [
   // Overview
   { href: "/dashboard", label: "Dashboard", icon: Home },
   

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Menu, QrCode } from "lucide-react";
-
 import { Sidebar } from "@/components/dashboard/sidebar";
+import { MobileNav } from "@/components/dashboard/mobile-nav";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -39,23 +39,7 @@ export default async function DashboardLayout({
       <div className="flex">
         {hasRestaurant && <Sidebar plan={restaurant.plan || "Free"} />}
         <main className="min-h-screen flex-1">
-          {hasRestaurant && (
-            <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-white/95 px-4 backdrop-blur lg:hidden">
-              <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white">
-                  <QrCode className="h-4 w-4" />
-                </span>
-                <span className="font-bold">NoMenu</span>
-              </div>
-              <button
-                type="button"
-                aria-label="Open navigation"
-                className="rounded-lg border p-2 text-slate-600"
-              >
-                <Menu className="h-5 w-5" />
-              </button>
-            </header>
-          )}
+          {hasRestaurant && <MobileNav plan={restaurant.plan || "Free"} />}
           {children}
         </main>
       </div>
