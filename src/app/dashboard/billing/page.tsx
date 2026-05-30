@@ -1,7 +1,6 @@
 import { Check, CreditCard, ShieldCheck } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { updateRestaurantPlan } from "@/app/dashboard/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,30 +9,16 @@ import { SubscriptionButton, PortalButton } from "@/components/dashboard/subscri
 
 const PLANS = [
   {
-    id: "free",
-    name: "Free Plan",
-    price: "$0",
-    period: "/mo",
-    description: "Perfect for testing or small pop-up menus.",
-    features: [
-      "1 Active Digital Menu",
-      "Up to 20 Menu Items",
-      "1 Generated QR Code",
-      "Standard Guest View",
-    ],
-  },
-  {
     id: "pro", // Kept ID for backward compatibility
     name: "Pro Plan",
     price: "$39",
     period: "/mo",
     description: "Unlimited flexibility for high-volume venues.",
     features: [
-      "Unlimited Digital Menus",
-      "Unlimited Menu Items",
-      "Unlimited QR Codes",
+      "Unlimited Menus & Items",
+      "Unlimited Location QR Codes",
+      "Full Brand & Theme Customization",
       "Private Customer Feedback System",
-      "Full Theme Customization",
       "Detailed Scan Analytics & Timezones",
     ],
   },
@@ -45,11 +30,11 @@ const PLANS = [
     description: "Real-time ordering for premium venues and groups.",
     features: [
       "Everything in Pro",
-      "Real-Time Live Ordering Dashboard",
       "Interactive Digital Shopping Cart",
-      "Digital Receipts & Live Order Tracking",
+      "Real-Time Live Orders Dashboard",
+      "Digital Receipts & Order Tracking",
       "All 8+ Premium Elite Themes",
-      "White-labeled Branding ('Powered by [Your Restaurant]')",
+      "White-labeled Branding",
     ],
   },
   {
@@ -60,7 +45,7 @@ const PLANS = [
     description: "Full commerce suite with direct payouts.",
     features: [
       "Everything in Elite",
-      "Order & Pay via Apple Pay / Credit Card",
+      "Order & Pay via Apple Pay / Card",
       "Direct Bank Payouts (Stripe Connect)",
       "2.5% Platform Transaction Fee",
       "Dedicated Account Manager",
@@ -146,7 +131,7 @@ export default async function BillingPage(
 
       {/* Pricing Cards */}
       {/* Pricing Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-3 max-w-5xl mx-auto">
         {PLANS.map((plan, index) => {
           const isActive = currentPlan.toLowerCase() === plan.id.toLowerCase();
           const isEnterprise = plan.id === "enterprise";
@@ -201,13 +186,6 @@ export default async function BillingPage(
                       <Button className="w-full" variant="outline" disabled>
                         Plan Active
                       </Button>
-                    ) : plan.id === "free" ? (
-                      <form action={updateRestaurantPlan}>
-                        <input type="hidden" name="plan" value="free" />
-                        <Button type="submit" className="w-full font-semibold" variant="secondary">
-                          Downgrade to Free
-                        </Button>
-                      </form>
                     ) : (
                       <SubscriptionButton 
                         planId={plan.id}
