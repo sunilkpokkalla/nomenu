@@ -32,8 +32,8 @@ export async function POST(req: Request) {
 
     const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-    // Demo Mode Override
-    if (process.env.DEMO_MODE === 'true') {
+    // Demo Mode Override: Bypass Stripe completely
+    if (process.env.DEMO_MODE === 'true' || process.env.NEXT_PUBLIC_DEMO_MODE === "true" || process.env.STRIPE_SECRET_KEY === "sk_test_placeholder" || !process.env.STRIPE_SECRET_KEY) {
       return NextResponse.json({ url: `${origin}/dashboard/billing?info=Demo%20Portal:%20In%20production%20this%20opens%20Stripe` });
     }
 
