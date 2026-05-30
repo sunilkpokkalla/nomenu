@@ -53,6 +53,16 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
         // Generate an order ID so we can track the receipt when they return
         const tempOrderId = crypto.randomUUID();
         localStorage.setItem('nomenu_last_order', tempOrderId);
+        
+        // Append to multi-order array tracker
+        try {
+          const existing = JSON.parse(localStorage.getItem('nomenu_orders') || '[]');
+          if (!existing.includes(tempOrderId)) {
+            localStorage.setItem('nomenu_orders', JSON.stringify([...existing, tempOrderId]));
+          }
+        } catch(e) {
+          localStorage.setItem('nomenu_orders', JSON.stringify([tempOrderId]));
+        }
 
         const res = await fetch("/api/stripe/checkout", {
           method: "POST",
@@ -99,6 +109,17 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
 
       if (res.success && res.orderId) {
         localStorage.setItem('nomenu_last_order', res.orderId);
+        
+        // Append to multi-order array tracker
+        try {
+          const existing = JSON.parse(localStorage.getItem('nomenu_orders') || '[]');
+          if (!existing.includes(res.orderId)) {
+            localStorage.setItem('nomenu_orders', JSON.stringify([...existing, res.orderId]));
+          }
+        } catch(e) {
+          localStorage.setItem('nomenu_orders', JSON.stringify([res.orderId]));
+        }
+
         window.dispatchEvent(new CustomEvent('nomenu_order_placed', { detail: { orderId: res.orderId } }));
         setSuccessOrder({ id: res.orderId, dailyNumber: res.dailyOrderNumber || 0 });
         clearCart();
