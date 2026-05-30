@@ -365,9 +365,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
                 {/* Droppable Area or Compact Grid */}
                 {isCompactMode ? (
-                  <div className="flex-1 overflow-y-auto grid grid-cols-2 gap-2 content-start pb-4">
+                  <div className="flex-1 overflow-y-auto grid grid-cols-4 gap-2 content-start pb-4">
                     {colOrders.length === 0 ? (
-                      <div className={`col-span-2 text-center py-10 text-sm font-medium ${isKdsMode ? "text-slate-600" : "text-slate-400"}`}>
+                      <div className={`col-span-4 text-center py-10 text-sm font-medium ${isKdsMode ? "text-slate-600" : "text-slate-400"}`}>
                         No {col.title.toLowerCase()}
                       </div>
                     ) : (
@@ -384,22 +384,22 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                             `}
                           >
                             {/* Urgency Dot */}
-                            {urgency === "critical" && <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
-                            {urgency === "warning" && <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-amber-400" />}
+                            {urgency === "critical" && <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
+                            {urgency === "warning" && <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400" />}
                             
-                            <span className={`text-2xl font-black font-mono leading-none tracking-tighter ${
+                            <span className={`text-lg font-black font-mono leading-none tracking-tighter text-center ${
                                col.id === "cancelled" ? "text-rose-500" : 
                                col.id === "completed" ? "text-emerald-500" :
                                (isKdsMode ? "text-slate-100" : "text-slate-900")
                             }`}>
                               #{String(order.daily_order_number).padStart(3, '0')}
                             </span>
-                            <span className={`text-[11px] font-bold mt-2 ${isKdsMode ? "text-slate-400" : "text-slate-500"}`}>
-                              {totalItems} item{totalItems !== 1 && 's'}
+                            <span className={`text-[9px] font-bold mt-1 text-center ${isKdsMode ? "text-slate-400" : "text-slate-500"}`}>
+                              {totalItems} itm
                             </span>
-                            <span className={`text-[10px] font-bold flex items-center gap-1 mt-0.5 ${isKdsMode ? "text-slate-500" : "text-slate-400"}`}>
-                              <Clock className="w-3 h-3" />
-                              {formatTimeAgoWithExact(order.created_at, timezone)}
+                            <span className={`text-[8px] font-bold flex items-center justify-center gap-0.5 mt-0.5 ${isKdsMode ? "text-slate-500" : "text-slate-400"}`}>
+                              <Clock className="w-2.5 h-2.5" />
+                              {formatTimeAgoWithExact(order.created_at, timezone).split(' ')[0]} {formatTimeAgoWithExact(order.created_at, timezone).split(' ')[1]?.[0] || 'm'}
                             </span>
                           </div>
                         );
