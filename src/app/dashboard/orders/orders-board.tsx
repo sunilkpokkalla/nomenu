@@ -5,7 +5,7 @@ import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { differenceInMinutes } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
-import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink } from "lucide-react";
+import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, LayoutGrid, List } from "lucide-react";
 import { updateOrderStatus } from "./actions";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
@@ -39,6 +39,8 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [currentTime, setCurrentTime] = useState(new Date());
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+  const [isCompactMode, setIsCompactMode] = useState(false);
+  const [selectedOrderForModal, setSelectedOrderForModal] = useState<Order | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const knownOrderIds = useRef<Set<string>>(new Set(initialOrders.map(o => o.id)));
@@ -279,6 +281,17 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
             </button>
           )}
           <button 
+            onClick={() => setIsCompactMode(!isCompactMode)}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
+              !isKdsMode 
+                ? (isCompactMode ? "bg-indigo-50 text-indigo-700 border border-indigo-200" : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50")
+                : (isCompactMode ? "bg-white/20 text-white" : "bg-white/5 hover:bg-white/10 text-white")
+            }`}
+          >
+            {isCompactMode ? <List className="w-4 h-4" /> : <LayoutGrid className="w-4 h-4" />}
+            {isCompactMode ? "Detailed View" : "Compact View"}
+          </button>
+          <button 
             onClick={toggleKdsMode}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
               isKdsMode 
@@ -347,9 +360,52 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                   </span>
                 </div>
 
-                {/* Droppable Area */}
-                <Droppable droppableId={col.id}>
-                  {(provided, snapshot) => (
+                {/* Droppable Area or Compact Grid */}
+                {isCompactMode ? (
+                  <div className="flex-1 overflow-y-auto grid grid-cols-2 gap-2 content-start pb-4">
+                    {colOrders.length === 0 ? (
+                      <div className={`col-span-2 text-center py-10 text-sm font-medium ${isKdsMode ? "text-slate-600" : "text-slate-400"}`}>
+                        No {col.title.toLowerCase()}
+                      </div>
+                    ) : (
+                      colOrders.map((order) => {
+                        const urgency = getUrgency(order.created_at, col.id);
+                        const totalItems = order.order_items?.reduce((acc, curr) => acc + curr.quantity, 0) || 0;
+                        return (
+                          <div 
+                            key={order.id}
+                            onClick={() => setSelectedOrderForModal(order)}
+                            className={`
+                              relative flex flex-col p-3 rounded-xl cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-sm
+                              ${isKdsMode ? "bg-[#21252d] text-slate-200 hover:bg-[#2a2f3a]" : "bg-white border border-slate-200 text-slate-900 hover:border-indigo-300 hover:shadow-md"}
+                            `}
+                          >
+                            {/* Urgency Dot */}
+                            {urgency === "critical" && <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
+                            {urgency === "warning" && <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-amber-400" />}
+                            
+                            <span className={`text-2xl font-black font-mono leading-none tracking-tighter ${
+                               col.id === "cancelled" ? "text-rose-500" : 
+                               col.id === "completed" ? "text-emerald-500" :
+                               (isKdsMode ? "text-slate-100" : "text-slate-900")
+                            }`}>
+                              #{String(order.daily_order_number).padStart(3, '0')}
+                            </span>
+                            <span className={`text-[11px] font-bold mt-2 ${isKdsMode ? "text-slate-400" : "text-slate-500"}`}>
+                              {totalItems} item{totalItems !== 1 && 's'}
+                            </span>
+                            <span className={`text-[10px] font-bold flex items-center gap-1 mt-0.5 ${isKdsMode ? "text-slate-500" : "text-slate-400"}`}>
+                              <Clock className="w-3 h-3" />
+                              {formatTimeAgoWithExact(order.created_at, timezone)}
+                            </span>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                ) : (
+                  <Droppable droppableId={col.id}>
+                    {(provided, snapshot) => (
                     <div 
                       ref={provided.innerRef} 
                       {...provided.droppableProps}
@@ -529,11 +585,84 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                     </div>
                   )}
                 </Droppable>
+                )}
               </div>
             );
           })}
         </div>
       </DragDropContext>
+
+      {/* Modal for Compact Mode */}
+      {selectedOrderForModal && (
+        <div className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+          <div className={`w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden ${isKdsMode ? "bg-[#161920] text-slate-200" : "bg-white text-slate-900"}`}>
+            <div className={`p-4 flex items-center justify-between border-b ${isKdsMode ? "border-slate-800" : "border-slate-100"}`}>
+              <h3 className="text-2xl font-black tracking-tighter font-mono">
+                Order #{String(selectedOrderForModal.daily_order_number).padStart(3, '0')}
+              </h3>
+              <button 
+                onClick={() => setSelectedOrderForModal(null)}
+                className={`p-2 rounded-lg transition-colors ${isKdsMode ? "hover:bg-white/10" : "hover:bg-slate-100"}`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className={`p-4 flex flex-col gap-3 overflow-y-auto max-h-[50vh]`}>
+              {selectedOrderForModal.order_items?.map((item: OrderItem, idx: number) => {
+                const menuItem = Array.isArray(item.menu_items) ? item.menu_items[0] : item.menu_items;
+                return (
+                  <div key={idx} className="flex items-start gap-3">
+                    <span className={`px-2 py-1 rounded-md text-sm font-black mt-0.5 ${
+                      isKdsMode ? "bg-[#2d323b] text-indigo-400" : "bg-indigo-50 text-indigo-700"
+                    }`}>
+                      {item.quantity}x
+                    </span>
+                    <div className="flex flex-col pt-0.5">
+                      <span className={`font-semibold leading-tight text-lg ${isKdsMode ? "text-slate-200" : "text-slate-800"}`}>
+                        {menuItem?.name || "Unknown Item"}
+                      </span>
+                      {item.customer_notes && (
+                        <span className={`text-sm font-semibold italic mt-1 px-2 py-1 rounded w-fit ${
+                          isKdsMode ? "bg-rose-500/10 text-rose-400" : "bg-rose-50 text-rose-600"
+                        }`}>
+                          Note: {item.customer_notes}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {!selectedDateStr && selectedOrderForModal.status !== "completed" && selectedOrderForModal.status !== "cancelled" && (
+              <div className={`p-4 border-t flex gap-3 ${isKdsMode ? "border-slate-800 bg-white/5" : "border-slate-100 bg-slate-50"}`}>
+                {selectedOrderForModal.status === "pending" && (
+                  <button 
+                    onClick={() => {
+                      handleStatusChange(selectedOrderForModal.id, "preparing");
+                      setSelectedOrderForModal(null);
+                    }}
+                    className="flex-1 bg-amber-500 text-amber-950 hover:bg-amber-400 py-3 rounded-xl font-black uppercase tracking-wide transition-colors"
+                  >
+                    Start Order
+                  </button>
+                )}
+                {selectedOrderForModal.status === "preparing" && (
+                  <button 
+                    onClick={() => {
+                      handleStatusChange(selectedOrderForModal.id, "completed");
+                      setSelectedOrderForModal(null);
+                    }}
+                    className="flex-1 bg-emerald-500 text-emerald-950 hover:bg-emerald-400 py-3 rounded-xl font-black uppercase tracking-wide transition-colors"
+                  >
+                    Mark as Done
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
