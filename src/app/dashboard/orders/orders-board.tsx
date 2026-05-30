@@ -65,7 +65,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       // Add to known IDs
       newOrders.forEach(o => knownOrderIds.current.add(o.id));
     }
-  }, [orders, selectedDateStr]);
+  }, [orders, selectedDateStr, locationLabel]);
 
   const playNotificationSound = () => {
     try {

@@ -3,13 +3,13 @@
 import React from "react";
 import { ClassicTheme } from "./themes/ClassicTheme";
 import { OmakaseTheme } from "./themes/OmakaseTheme";
-import { BrutalistTheme } from "./themes/BrutalistTheme";
-import { RetroTheme } from "./themes/RetroTheme";
-import { SpeakeasyTheme } from "./themes/SpeakeasyTheme";
-import { CyberpunkTheme } from "./themes/CyberpunkTheme";
+import { ResortTheme } from "./themes/ResortTheme";
+import { BistroTheme } from "./themes/BistroTheme";
+import { LoungeTheme } from "./themes/LoungeTheme";
+import { PopDinerTheme } from "./themes/PopDinerTheme";
+import { EditorialTheme } from "./themes/EditorialTheme";
 import { BoutiqueTheme } from "./themes/BoutiqueTheme";
 import { BotanicalTheme } from "./themes/BotanicalTheme";
-import { MolecularTheme } from "./themes/MolecularTheme";
 
 import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps } from "./types";
 
@@ -29,21 +29,20 @@ export function MenuClientView(props: MenuClientViewProps) {
   switch (themeStyle) {
     case "omakase":
       return <OmakaseTheme {...props} />;
-    case "brutalist":
-      return <BrutalistTheme {...props} />;
-    case "retro":
-      return <RetroTheme {...props} />;
-    case "speakeasy":
-      return <SpeakeasyTheme {...props} />;
-    case "cyberpunk":
-      return <CyberpunkTheme {...props} />;
+    case "resort":
+      return <ResortTheme {...props} />;
+    case "bistro":
+      return <BistroTheme {...props} />;
+    case "lounge":
+      return <LoungeTheme {...props} />;
+    case "popdiner":
+      return <PopDinerTheme {...props} />;
+    case "editorial":
+      return <EditorialTheme {...props} />;
     case "boutique":
       return <BoutiqueTheme {...props} />;
     case "botanical":
       return <BotanicalTheme {...props} />;
-    case "molecular":
-      return <MolecularTheme {...props} />;
-    case "bistro":
     case "minimalist":
     case "luxury":
     case "vibrant":

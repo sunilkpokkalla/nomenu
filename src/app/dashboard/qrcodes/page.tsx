@@ -20,6 +20,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
 
+const getGridClass = (count: number) => {
+  if (count <= 4) return "grid-cols-1 md:grid-cols-2";
+  if (count <= 8) return "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3";
+  return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4";
+};
+
 export default async function QrCodesPage(
   props: {
     searchParams: Promise<{ message?: string }>;
@@ -106,7 +112,7 @@ export default async function QrCodesPage(
                   <QrCode className="w-5 h-5 text-slate-400" />
                   {locationType}s
                 </h3>
-                <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+                <div className={`grid gap-6 ${getGridClass(qrs.length)}`}>
                   {qrs.map((qr) => {
                 const targetMenu = menusList.find((m) => m.id === qr.menu_id);
                 const publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
@@ -132,7 +138,7 @@ export default async function QrCodesPage(
                         href={qrImageApiUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="relative aspect-square w-48 rounded-xl border bg-white p-3 shadow-inner hover:opacity-90 transition-opacity cursor-pointer group"
+                        className="relative aspect-square w-full max-w-[12rem] mx-auto rounded-xl border bg-white p-3 shadow-inner hover:opacity-90 transition-opacity cursor-pointer group"
                         title="Click to open full size QR image"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}

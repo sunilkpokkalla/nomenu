@@ -16,6 +16,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { CreateItemForm } from "@/components/dashboard/create-item-form";
 import { EditItemModal } from "@/components/dashboard/edit-item-modal";
+import { ImportItemsModal } from "@/components/dashboard/import-items-modal";
 
 export default async function ItemsPage(
   props: {
@@ -97,6 +98,13 @@ export default async function ItemsPage(
             Create, edit, and organize dishes, drinks, and dietary labels.
           </p>
         </div>
+        {selectedMenuId !== "all" && menusList.length > 1 && (
+           <ImportItemsModal 
+             menus={menusList} 
+             categories={restaurantCategories} 
+             targetMenuId={selectedMenuId} 
+           />
+        )}
       </div>
 
       {searchParams.message ? (
@@ -295,9 +303,16 @@ export default async function ItemsPage(
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white p-12 text-center shadow-sm">
               <Plus className="mx-auto h-12 w-12 text-slate-400" />
               <h3 className="mt-4 text-lg font-semibold text-slate-900">No items found</h3>
-              <p className="mt-2 text-sm text-slate-500 max-w-sm">
+              <p className="mt-2 text-sm text-slate-500 max-w-sm mb-4">
                 Try clearing your filters or create a new menu item on the right.
               </p>
+              {selectedMenuId !== "all" && menusList.length > 1 && (
+                <ImportItemsModal 
+                  menus={menusList} 
+                  categories={restaurantCategories} 
+                  targetMenuId={selectedMenuId} 
+                />
+              )}
             </div>
           )}
         </div>

@@ -657,3 +657,81 @@ export async function updateMenuBranding(menuId: string, formData: FormData) {
   revalidatePath("/dashboard/customize");
   redirect(`/dashboard/customize?success=Menu design updated successfully`);
 }
+
+export async function importCategoriesAndItems(
+  sourceMenuId: string,
+  targetMenuId: string,
+  categoryIdsToImport: string[]
+) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    throw new Error("Restaurant not found");
+  }
+
+  if (!categoryIdsToImport || categoryIdsToImport.length === 0) {
+    throw new Error("No categories selected for import");
+  }
+
+  for (const oldCatId of categoryIdsToImport) {
+    // 1. Fetch old category
+    const { data: oldCat } = await supabase
+      .from("categories")
+      .select("*")
+      .eq("id", oldCatId)
+      .single();
+
+    if (!oldCat) continue;
+
+    // 2. Insert new category into target menu
+    const { data: newCat, error: catError } = await supabase
+      .from("categories")
+      .insert({
+        menu_id: targetMenuId,
+        name: oldCat.name,
+        description: oldCat.description,
+        sort_order: oldCat.sort_order,
+      })
+      .select()
+      .single();
+
+    if (catError || !newCat) {
+      console.error("Failed to clone category", catError);
+      continue;
+    }
+
+    // 3. Fetch old items
+    const { data: oldItems } = await supabase
+      .from("menu_items")
+      .select("*")
+      .eq("category_id", oldCatId);
+
+    if (!oldItems || oldItems.length === 0) continue;
+
+    // 4. Insert new items linked to new category
+    const itemsToInsert = oldItems.map(item => {
+      const { id, created_at, category_id, ...itemData } = item;
+      return {
+        ...itemData,
+        category_id: newCat.id,
+      };
+    });
+
+    const { error: itemsError } = await supabase
+      .from("menu_items")
+      .insert(itemsToInsert);
+
+    if (itemsError) {
+      console.error("Failed to clone items", itemsError);
+    }
+  }
+
+  revalidatePath("/dashboard/items");
+  return { success: true };
+}

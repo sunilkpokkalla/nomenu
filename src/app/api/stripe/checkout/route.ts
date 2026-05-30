@@ -80,7 +80,7 @@ export async function POST(req: Request) {
 
       if (!orderError) {
         // Insert items
-        const orderItems = items.map((i: any) => ({
+        const orderItems = items.map((i: { id?: string; menu_item_id?: string; quantity: number; price?: number; price_at_time_of_order?: number; notes?: string; customer_notes?: string; [key: string]: unknown }) => ({
           order_id: orderId,
           menu_item_id: i.menu_item_id || i.id,
           quantity: i.quantity,

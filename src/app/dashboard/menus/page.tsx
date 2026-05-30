@@ -25,6 +25,12 @@ import {
   getChefRecommendations
 } from "@/lib/menu-type-options";
 
+const getGridClass = (count: number) => {
+  if (count <= 4) return "grid-cols-1 md:grid-cols-2";
+  if (count <= 8) return "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3";
+  return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4";
+};
+
 export default async function MenusPage(
   props: {
     searchParams: Promise<{ message?: string }>;
@@ -89,8 +95,22 @@ export default async function MenusPage(
         {/* Menus List */}
         <div className="space-y-6">
           {menusList.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
-              {menusList.map((menu) => {
+            <div className="space-y-10">
+              {Object.entries(
+                menusList.reduce((acc, menu) => {
+                  const format = menu.menu_type || "general";
+                  if (!acc[format]) acc[format] = [];
+                  acc[format].push(menu);
+                  return acc;
+                }, {} as Record<string, typeof menusList>)
+              ).map(([format, menusInFormat]) => (
+                <div key={format} className="space-y-4">
+                  <h3 className="text-xl font-semibold text-slate-800 border-b pb-2 flex items-center gap-2 capitalize">
+                    <MenuIcon className="w-5 h-5 text-slate-400" />
+                    {format.replace(/_/g, " ")} Menus
+                  </h3>
+                  <div className={`grid gap-6 ${getGridClass(menusInFormat.length)}`}>
+                    {menusInFormat.map((menu) => {
                 const toggleAction = toggleMenuStatus.bind(null, menu.id, menu.is_active);
 
                 return (
@@ -126,7 +146,7 @@ export default async function MenusPage(
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="mt-auto pt-0">
-                      <div className="flex flex-wrap gap-2 border-t pt-4">
+                      <div className="flex flex-wrap gap-2 border-t pt-4 [&>a]:min-w-[80px] [&>button]:min-w-[80px]">
                         <Button variant="outline" size="sm" className="flex-1" asChild>
                           <Link href={`/menu/${menu.id}`} target="_blank">
                             <Eye className="mr-1.5 h-3.5 w-3.5" />
@@ -167,6 +187,9 @@ export default async function MenusPage(
                   </Card>
                 );
               })}
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white p-12 text-center shadow-sm">
