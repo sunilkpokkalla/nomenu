@@ -100,8 +100,7 @@ export default async function QrCodesPage(
           {qrCodesList.length > 0 ? (
             Object.entries(
               qrCodesList.reduce((acc, qr) => {
-                const targetMenu = menusList.find((m) => m.id === qr.menu_id);
-                const locationType = targetMenu?.location_label || "Table";
+                const locationType = qr.location_zone || "Main Dining";
                 if (!acc[locationType]) acc[locationType] = [];
                 acc[locationType].push(qr);
                 return acc;
@@ -230,8 +229,12 @@ export default async function QrCodesPage(
               ) : (
                 <form action={createQrCode} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="label">Location Number/Name</Label>
-                    <Input id="label" name="label" placeholder="e.g. 12, 204, Patio Booth" required />
+                    <Label htmlFor="location_zone">Location Zone</Label>
+                    <Input id="location_zone" name="location_zone" placeholder="e.g. Patio, Main Floor, Bar" defaultValue="Main Dining" required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="label">Table Number / Label</Label>
+                    <Input id="label" name="label" placeholder="e.g. 12, 204, Booth 4" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="menuId">Link to Menu</Label>

@@ -448,6 +448,7 @@ export async function createQrCode(formData: FormData) {
 
   const label = field(formData, "label");
   const menuId = field(formData, "menuId");
+  const locationZone = field(formData, "location_zone") || "Main Dining";
 
   if (!label || !menuId) {
     redirect("/dashboard/qrcodes?message=Label%20and%20Menu%20are%20required");
@@ -470,6 +471,7 @@ export async function createQrCode(formData: FormData) {
     restaurant_id: restaurant.id,
     menu_id: menuId,
     label,
+    location_zone: locationZone,
     scan_count: 0,
   });
 

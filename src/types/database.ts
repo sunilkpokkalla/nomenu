@@ -188,6 +188,7 @@ export interface Database {
           restaurant_id: string;
           menu_id: string;
           label: string | null;
+          location_zone: string | null;
           scan_count: number;
           created_at: string | null;
         };
@@ -196,6 +197,7 @@ export interface Database {
           restaurant_id: string;
           menu_id: string;
           label?: string | null;
+          location_zone?: string | null;
           scan_count?: number;
           created_at?: string | null;
         };

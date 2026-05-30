@@ -66,6 +66,7 @@ export default async function PublicMenuPage(
   const itemsList = menuItems || [];
 
   // 5. Track scan analytics if accessed via QR code
+  let locationZone: string | null = null;
   if (qrCodeId) {
     const supabaseAdmin = createSupabaseClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -91,11 +92,12 @@ export default async function PublicMenuPage(
     // Increment scan count on QR code record securely
     const { data: qrRecord } = await supabaseAdmin
       .from("qr_codes")
-      .select("scan_count")
+      .select("scan_count, location_zone")
       .eq("id", qrCodeId)
       .maybeSingle();
 
     if (qrRecord) {
+      locationZone = qrRecord.location_zone || null;
       await supabaseAdmin
         .from("qr_codes")
         .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
@@ -112,6 +114,10 @@ export default async function PublicMenuPage(
   const activeThemeStyle = canUseCustomDesign && designConfig.theme_style ? designConfig.theme_style : restaurant.theme_style;
   const activePrimaryColor = canUseCustomDesign && designConfig.primary_color ? designConfig.primary_color : restaurant.primary_color;
   const activeAccentColor = canUseCustomDesign && designConfig.accent_color ? designConfig.accent_color : restaurant.accent_color;
+
+  const effectiveTableNumber = locationZone && tableNumber 
+    ? `${locationZone} - ${tableNumber}` 
+    : tableNumber;
 
   return (
     <CartProvider>
@@ -131,7 +137,7 @@ export default async function PublicMenuPage(
         }}
         categories={categoriesList}
         items={itemsList}
-        tableNumber={tableNumber}
+        tableNumber={effectiveTableNumber}
         qrCodeId={qrCodeId}
         locationLabel={menu.location_label}
       />
@@ -139,7 +145,7 @@ export default async function PublicMenuPage(
         <FloatingCart 
           restaurantId={restaurant.id}
           menuId={menu.id}
-          tableNumber={tableNumber}
+          tableNumber={effectiveTableNumber}
           themeStyle={activeThemeStyle || "bistro"}
           primaryColor={activePrimaryColor || "#000"}
           currencySymbol={restaurant.currency || "USD"}

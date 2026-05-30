@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { formatTimezone } from "@/lib/date-utils";
 
 const TIMEZONE_OPTIONS = [
   { code: "America/New_York", name: "Eastern Time (US & Canada)" },
@@ -562,11 +563,7 @@ export default async function DashboardPage(
                     <div className="text-right shrink-0">
                       <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 border border-slate-100 px-2.5 py-1 text-xs font-bold text-slate-500 font-mono">
                         {scan.scanned_at
-                          ? new Date(scan.scanned_at).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              timeZone: restaurant.timezone || undefined,
-                            })
+                          ? formatTimezone(scan.scanned_at, restaurant.timezone, "h:mm a")
                           : "N/A"}
                       </span>
                     </div>
