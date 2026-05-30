@@ -31,7 +31,7 @@ type Order = {
   order_items?: OrderItem[];
 };
 
-export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean }) {
+export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -57,7 +57,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       setNotification({
         id: latestNew.id,
         title: `New Order #${String(latestNew.daily_order_number || 0).padStart(3, '0')}`,
-        subtitle: latestNew.table_number ? `Location: ${latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
+        subtitle: latestNew.table_number ? `${locationLabel}: ${latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
       });
       
       setTimeout(() => setNotification(null), 6000);
@@ -470,10 +470,10 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                       {(order.customer_name || order.table_number) && (
                                         <div className="flex items-center gap-2">
                                           {order.table_number && (
-                                            <span className={`text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded ${
+                                            <span className={`text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center ${
                                               isKdsMode ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"
                                             }`}>
-                                              Location: {order.table_number}
+                                              <MapPin className="w-3 h-3 mr-1" /> {locationLabel.toUpperCase()}: {order.table_number}
                                             </span>
                                           )}
                                           {order.customer_name && (

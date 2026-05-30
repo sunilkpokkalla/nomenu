@@ -59,6 +59,17 @@ export default async function OrdersPage() {
 
   const isLocked = !restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase());
   
+  // Fetch active menu to get custom location label
+  const { data: menu } = await supabase
+    .from("menus")
+    .select("location_label")
+    .eq("restaurant_id", restaurant.id)
+    .eq("is_active", true)
+    .limit(1)
+    .maybeSingle();
+
+  const locationLabel = menu?.location_label || "TABLE";
+  
   let displayOrders = initialOrders || [];
   
   // Inject highly realistic fake orders if locked so the blurred background looks amazing
@@ -152,7 +163,7 @@ export default async function OrdersPage() {
           </div>
         )}
         <div className={isLocked ? "opacity-40 pointer-events-none select-none filter blur-[2px] transition-all h-[500px] overflow-hidden" : ""}>
-          <OrdersBoard initialOrders={displayOrders} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
+          <OrdersBoard initialOrders={displayOrders} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} locationLabel={locationLabel} />
         </div>
       </div>
     </div>
