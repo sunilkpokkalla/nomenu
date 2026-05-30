@@ -18,8 +18,9 @@ interface Order {
   id: string;
   status: string;
   total_amount: number;
-  daily_order_number?: number;
+
   table_number: string | null;
+  customer_name: string | null;
   created_at: string;
   order_items: OrderItem[];
 }
@@ -27,55 +28,87 @@ interface Order {
 interface ReceiptTrackerProps {
   restaurantId: string;
   locationLabel?: string | null;
+  taxRate?: number;
+  serviceCharge?: number;
+  serviceChargeType?: string;
+  restaurantName?: string;
 }
 
-export function ReceiptTracker({ restaurantId, locationLabel }: ReceiptTrackerProps) {
-  const [orderId, setOrderId] = useState<string | null>(null);
-  const [order, setOrder] = useState<Order | null>(null);
+export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", restaurantName }: ReceiptTrackerProps) {
+  const [orderIds, setOrderIds] = useState<string[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const supabase = createClient();
 
   useEffect(() => {
-    // Check local storage for an existing order on mount
-    const savedOrderId = localStorage.getItem("nomenu_last_order");
-    if (savedOrderId) {
-      setOrderId(savedOrderId);
+    let savedOrderIds: string[] = [];
+    try {
+      const stored = localStorage.getItem("nomenu_orders");
+      if (stored) savedOrderIds = JSON.parse(stored);
+    } catch(e) {}
+    
+    // migrate legacy
+    const legacy = localStorage.getItem("nomenu_last_order");
+    if (legacy && !savedOrderIds.includes(legacy)) {
+      savedOrderIds.unshift(legacy);
+      localStorage.removeItem("nomenu_last_order");
+      localStorage.setItem("nomenu_orders", JSON.stringify(savedOrderIds));
+    }
+
+    if (savedOrderIds.length > 0) {
+      setOrderIds(savedOrderIds);
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      fetchOrder(savedOrderId);
+      fetchOrders(savedOrderIds);
     } else {
       setLoading(false);
     }
+
+    const handleNewOrder = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const newOrderIds = customEvent.detail.orderIds || [];
+      setOrderIds(newOrderIds);
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      fetchOrders(newOrderIds);
+    };
+
+    window.addEventListener("nomenu_order_placed", handleNewOrder);
+    return () => window.removeEventListener("nomenu_order_placed", handleNewOrder);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!orderId) return;
+    if (orderIds.length === 0) return;
 
-    // Subscribe to real-time status updates
-    const channel = supabase
-      .channel(`order_updates_${orderId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "orders",
-          filter: `id=eq.${orderId}`,
-        },
-        (payload) => {
-          setOrder((prev) => prev ? { ...prev, status: payload.new.status } : null);
-        }
-      )
-      .subscribe();
+    const channels = orderIds.map(id => {
+      return supabase
+        .channel(`order_updates_${id}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "orders",
+            filter: `id=eq.${id}`,
+          },
+          (payload) => {
+            setOrders((prev) => prev.map(o => o.id === id ? { ...o, status: payload.new.status } : o));
+          }
+        )
+        .subscribe();
+    });
 
     return () => {
-      supabase.removeChannel(channel);
+      channels.forEach(ch => supabase.removeChannel(ch));
     };
-  }, [orderId, supabase]);
+  }, [orderIds, supabase]);
 
-  const fetchOrder = async (id: string) => {
+  const fetchOrders = async (ids: string[]) => {
+    if (!ids || ids.length === 0) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const { data, error } = await supabase
       .from("orders")
@@ -83,8 +116,9 @@ export function ReceiptTracker({ restaurantId, locationLabel }: ReceiptTrackerPr
         id,
         status,
         total_amount,
-        daily_order_number,
+
         table_number,
+        customer_name,
         created_at,
         order_items (
           id,
@@ -96,23 +130,32 @@ export function ReceiptTracker({ restaurantId, locationLabel }: ReceiptTrackerPr
           )
         )
       `)
-      .eq("id", id)
-      .single();
+      .in("id", ids)
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Failed to fetch order:", error);
-      // If we can't fetch it, maybe it was deleted or invalid, clear it
-      localStorage.removeItem("nomenu_last_order");
-      setOrderId(null);
-    } else {
+      console.error("Failed to fetch orders:", error);
+    } else if (data) {
+      const now = new Date().getTime();
+      const validOrders = data.filter((o) => {
+        const orderTime = new Date(o.created_at).getTime();
+        return (now - orderTime) < 24 * 60 * 60 * 1000;
+      });
+      const validIds = validOrders.map((o) => o.id);
+      
+      // Update local storage if any got filtered out
+      if (validIds.length !== ids.length) {
+         localStorage.setItem("nomenu_orders", JSON.stringify(validIds));
+         setOrderIds(validIds);
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      setOrder(data as any);
+      setOrders(validOrders as any);
     }
     setLoading(false);
   };
 
-  if (!orderId || loading) return null;
-  if (!order) return null;
+  if (orderIds.length === 0 || loading) return null;
+  if (orders.length === 0) return null;
 
   // Render status icon
   const getStatusDisplay = (status: string) => {
@@ -139,10 +182,10 @@ export function ReceiptTracker({ restaurantId, locationLabel }: ReceiptTrackerPr
           >
             <div className="relative">
               <Receipt className="w-6 h-6" />
-              {order.status !== "completed" && (
+              {orders.some(o => o.status !== "completed") && (
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
               )}
-              {order.status !== "completed" && (
+              {orders.some(o => o.status !== "completed") && (
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
               )}
             </div>
@@ -152,71 +195,108 @@ export function ReceiptTracker({ restaurantId, locationLabel }: ReceiptTrackerPr
 
       {/* Receipt Modal */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-4 bg-black/60 backdrop-blur-sm transition-all">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-4 bg-black/60 backdrop-blur-sm transition-all pointer-events-auto">
           <div className="absolute inset-0" onClick={() => setIsOpen(false)} />
           
-          <div className="relative w-full max-w-sm mx-auto shadow-2xl bg-[#f9f9f9] text-[#111] font-mono flex flex-col animate-in slide-in-from-bottom-10" style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px))" }}>
+          <div className="relative w-full max-w-sm mx-auto flex flex-col h-full max-h-[85vh] animate-in slide-in-from-bottom-10 pointer-events-auto pb-6">
             
-            {/* Zig-zag top border for thermal receipt look */}
-            <div className="w-full h-3 bg-repeat-x" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left top", marginTop: "-3px" }} />
-            
-            <div className="p-6 pt-4 pb-8">
-              <div className="flex justify-between items-start mb-6">
-                <h2 className="font-bold text-xl uppercase tracking-widest flex items-center gap-2">
-                  <Receipt className="w-5 h-5" /> RECEIPT
+            <div className="flex justify-between items-center bg-black text-white p-4 rounded-t-2xl z-10 shadow-lg">
+                <h2 className="font-bold text-sm uppercase tracking-widest flex items-center gap-2">
+                  <Receipt className="w-4 h-4" /> YOUR RECEIPTS ({orders.length})
                 </h2>
-                <button onClick={() => setIsOpen(false)} className="p-1 text-slate-400 hover:text-black">
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              <div className="text-center mb-6">
-                <div className="text-sm uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
-                <div className="text-5xl font-black">{String(order.daily_order_number || order.id.slice(0,4)).padStart(3, '0')}</div>
-                {order.table_number && (
-                  <div className="mt-2 text-lg border-2 border-black rounded inline-block px-3 py-1 font-bold uppercase">
-                    {(locationLabel || "TABLE").toUpperCase()} {order.table_number}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex justify-center mb-6 py-3 border-y-2 border-dashed border-slate-300 font-bold text-lg">
-                {getStatusDisplay(order.status)}
-              </div>
-
-              <div className="space-y-4 mb-6 text-sm">
-                {order.order_items.map((item) => (
-                  <div key={item.id} className="flex flex-col">
-                    <div className="flex justify-between">
-                      <span className="font-bold">{item.quantity}x {item.menu_items?.name || "Item"}</span>
-                      <span>${(item.price_at_time_of_order * item.quantity).toFixed(2)}</span>
-                    </div>
-                    {item.customer_notes && (
-                      <span className="text-slate-500 text-xs mt-0.5 max-w-[80%] uppercase ml-5">
-                        [{item.customer_notes}]
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <div className="border-t-2 border-dashed border-slate-300 pt-4 mb-6">
-                <div className="flex justify-between text-xl font-black">
-                  <span>TOTAL</span>
-                  <span>${order.total_amount.toFixed(2)}</span>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => window.print()} className="p-1.5 text-slate-300 hover:text-white print:hidden bg-slate-800 rounded-full" title="Save / Print All">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  </button>
+                  <button onClick={() => setIsOpen(false)} className="p-1.5 text-slate-300 hover:text-white print:hidden bg-slate-800 rounded-full">
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
-                <div className="text-xs text-center text-slate-400 mt-4 uppercase">
-                  {new Date(order.created_at).toLocaleString()}
-                </div>
-              </div>
-              
-              <div className="text-center text-xs font-bold tracking-widest">
-                THANK YOU!
-              </div>
             </div>
 
-            {/* Zig-zag bottom border */}
-            <div className="w-full h-3 bg-repeat-x rotate-180" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left bottom", marginBottom: "-3px" }} />
+            {/* Scrollable Feed of Receipts */}
+            <div className="overflow-y-auto overflow-x-hidden space-y-6 pt-2 pb-10 flex-1 hide-scrollbar">
+              {orders.map((o) => (
+                <div key={o.id} className="relative w-full bg-[#f9f9f9] text-[#111] font-mono flex flex-col shadow-xl" style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px))" }}>
+                  <div className="w-full h-3 bg-repeat-x" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left top", marginTop: "-3px" }} />
+                  
+                  <div className="p-6 pt-4 pb-8">
+                    {restaurantName && (
+                      <div className="text-center font-black text-xl mb-6 uppercase tracking-wider border-b-2 border-slate-900 pb-2">
+                        {restaurantName}
+                      </div>
+                    )}
+
+                    <div className="text-center mb-6">
+                      <div className="text-sm uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
+                      <div className="text-5xl font-black">{String((o as any).daily_order_number || o.id.slice(0,4)).padStart(3, '0')}</div>
+                      {o.customer_name && (
+                        <div className="mt-3 text-sm font-bold uppercase tracking-widest text-slate-700">
+                          Guest: {o.customer_name}
+                        </div>
+                      )}
+                      {o.table_number && (
+                        <div className="mt-2 text-lg border-2 border-black rounded inline-block px-3 py-1 font-bold uppercase">
+                          {(locationLabel || "TABLE").toUpperCase()} {o.table_number}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex justify-center mb-6 py-3 border-y-2 border-dashed border-slate-300 font-bold text-lg">
+                      {getStatusDisplay(o.status)}
+                    </div>
+
+                    <div className="space-y-4 mb-6 text-sm">
+                      {o.order_items.map((item) => (
+                        <div key={item.id} className="flex flex-col">
+                          <div className="flex justify-between">
+                            <span className="font-bold">{item.quantity}x {item.menu_items?.name || "Item"}</span>
+                            <span>${(item.price_at_time_of_order * item.quantity).toFixed(2)}</span>
+                          </div>
+                          {item.customer_notes && (
+                            <span className="text-slate-500 text-xs mt-0.5 max-w-[80%] uppercase ml-5">
+                              [{item.customer_notes}]
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="border-t-2 border-dashed border-slate-300 pt-4 mb-6 space-y-1.5">
+                      <div className="flex justify-between text-sm opacity-70">
+                        <span>Subtotal</span>
+                        <span>${o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0).toFixed(2)}</span>
+                      </div>
+                      {taxRate > 0 && (
+                        <div className="flex justify-between text-sm opacity-70">
+                          <span>Tax ({taxRate}%)</span>
+                          <span>${(o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0) * (taxRate / 100)).toFixed(2)}</span>
+                        </div>
+                      )}
+                      {serviceCharge > 0 && (
+                        <div className="flex justify-between text-sm opacity-70">
+                          <span>Service Fee {serviceChargeType === 'percentage' ? `(${serviceCharge}%)` : ''}</span>
+                          <span>${(serviceChargeType === "flat" ? serviceCharge : o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0) * (serviceCharge / 100)).toFixed(2)}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between text-xl font-black pt-2 border-t border-slate-200 mt-2">
+                        <span>TOTAL</span>
+                        <span>${o.total_amount.toFixed(2)}</span>
+                      </div>
+                      <div className="text-xs text-center text-slate-400 mt-4 uppercase">
+                        {new Date(o.created_at).toLocaleString()}
+                      </div>
+                    </div>
+                    
+                    <div className="text-center text-xs font-bold tracking-widest">
+                      THANK YOU!
+                    </div>
+                  </div>
+                  
+                  <div className="w-full h-3 bg-repeat-x rotate-180" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left bottom", marginBottom: "-3px" }} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

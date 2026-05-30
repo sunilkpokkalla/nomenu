@@ -98,6 +98,8 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
       });
 
       if (res.success && res.orderId) {
+        localStorage.setItem('nomenu_last_order', res.orderId);
+        window.dispatchEvent(new CustomEvent('nomenu_order_placed', { detail: { orderId: res.orderId } }));
         setSuccessOrder({ id: res.orderId, dailyNumber: res.dailyOrderNumber || 0 });
         clearCart();
       } else {

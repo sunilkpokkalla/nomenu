@@ -146,11 +146,18 @@ export default async function PublicMenuPage(
           taxRate={menu.tax_rate || 0}
           serviceCharge={menu.service_charge || 0}
           serviceChargeType={menu.service_charge_type || "percentage"}
-          stripeAccountId={restaurant.stripe_account_id}
+          stripeAccountId={restaurant.plan?.toLowerCase() === 'enterprise' ? restaurant.stripe_account_id : null}
           locationLabel={menu.location_label}
         />
       )}
-      <ReceiptTracker restaurantId={restaurant.id} locationLabel={menu.location_label} />
+      <ReceiptTracker 
+        restaurantId={restaurant.id} 
+        restaurantName={restaurant.name}
+        locationLabel={menu.location_label} 
+        taxRate={menu.tax_rate || 0}
+        serviceCharge={menu.service_charge || 0}
+        serviceChargeType={menu.service_charge_type || "percentage"}
+      />
     </CartProvider>
   );
 }
