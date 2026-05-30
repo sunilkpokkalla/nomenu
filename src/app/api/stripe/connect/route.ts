@@ -32,6 +32,27 @@ export async function POST(req: Request) {
 
     let stripeAccountId = restaurant.stripe_account_id;
 
+    // --- DEMO MODE BYPASS ---
+    // If we are in demo mode, mock the Stripe Connect flow instantly
+    // instead of calling the real Stripe API without valid keys.
+    if (process.env.DEMO_MODE === "true" || process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
+      const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      
+      // If we don't have a fake account ID yet, save one
+      if (!stripeAccountId) {
+        stripeAccountId = "acct_demo_" + Math.random().toString(36).substr(2, 9);
+        await supabase
+          .from("restaurants")
+          // @ts-expect-error: Bypass strict generic type validation
+          .update({ stripe_account_id: stripeAccountId })
+          .eq("id", restaurant.id);
+      }
+      
+      // Instantly return the success redirect
+      return NextResponse.json({ url: `${origin}/dashboard/payouts?success=true` });
+    }
+    // --- END DEMO MODE BYPASS ---
+
     // Create a new connected account if it doesn't exist
     if (!stripeAccountId) {
       const account = await stripe.accounts.create({
