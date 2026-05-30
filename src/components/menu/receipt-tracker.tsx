@@ -229,7 +229,7 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
 
                     <div className="text-center mb-6">
                       <div className="text-sm uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
-                      <div className="text-5xl font-black">{String((o as any).daily_order_number || o.id.slice(0,4)).padStart(3, '0')}</div>
+                      <div className="text-5xl font-black">{String(o.id.slice(0,4)).padStart(3, '0')}</div>
                       {o.customer_name && (
                         <div className="mt-3 text-sm font-bold uppercase tracking-widest text-slate-700">
                           Guest: {o.customer_name}
