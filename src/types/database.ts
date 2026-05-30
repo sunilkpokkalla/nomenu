@@ -70,6 +70,7 @@ export interface Database {
           tax_rate: number | null;
           service_charge: number | null;
           service_charge_type: string | null;
+          location_label: string | null;
           created_at: string | null;
         };
         Insert: {
@@ -86,6 +87,7 @@ export interface Database {
           tax_rate?: number | null;
           service_charge?: number | null;
           service_charge_type?: string | null;
+          location_label?: string | null;
           created_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["menus"]["Insert"]>;

@@ -5,7 +5,7 @@ import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed } from "lucide-react";
 import { submitOrder } from "@/app/menu/[id]/actions";
 
-export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId }: {
+export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel }: {
   restaurantId: string;
   menuId: string;
   tableNumber?: string;
@@ -16,6 +16,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   serviceCharge?: number;
   serviceChargeType?: string;
   stripeAccountId?: string | null;
+  locationLabel?: string | null;
 }) {
   const { items, totalItems, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const [isOpen, setIsOpen] = useState(false);
@@ -265,12 +266,12 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase opacity-60 tracking-wider">Table #</label>
+                    <label className="text-xs font-bold uppercase opacity-60 tracking-wider">{locationLabel || "Table"} #</label>
                     <input 
                       required={!tableNumber} // Only require if they didn't scan a table QR
                       value={table}
                       onChange={e => setTable(e.target.value)}
-                      placeholder="e.g. 12" 
+                      placeholder={`e.g. ${locationLabel === 'Room' ? '204' : '12'}`} 
                       className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
                     />
                   </div>

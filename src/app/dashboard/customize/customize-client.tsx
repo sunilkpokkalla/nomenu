@@ -10,7 +10,6 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
   const [selectedScope, setSelectedScope] = useState<string>("global");
 
   const userPlan = (restaurant.plan || "free").toLowerCase();
-  const isPro = userPlan === "pro" || userPlan === "elite" || userPlan === "enterprise";
 
   const handleScopeChange = (val: string) => {
     setSelectedScope(val);
@@ -74,37 +73,14 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
         </div>
       </div>
 
-      {/* Paywall Overlay for Menu Scope if not Pro */}
-      <div className="relative">
-        {isMenuScope && !isPro && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-[6px] bg-white/40 rounded-xl">
-            <div className="bg-white p-8 rounded-2xl shadow-2xl border border-slate-200 text-center max-w-md mx-4">
-              <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              </div>
-              <h2 className="text-2xl font-black text-slate-900 mb-2">Pro Feature</h2>
-              <p className="text-slate-600 mb-6">
-                Applying custom designs to specific menus requires the Pro or Elite plan. Upgrade to unlock this and many other features!
-              </p>
-              <button 
-                onClick={() => window.location.href = "/dashboard/billing"}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all"
-              >
-                Upgrade to Pro
-              </button>
-            </div>
-          </div>
-        )}
-        
-        {/* The actual Branding Form */}
-        <div className={isMenuScope && !isPro ? "pointer-events-none opacity-50" : ""}>
+      {/* The actual Branding Form */}
+      <div>
           <BrandingForm 
             key={selectedScope} 
             type={isMenuScope ? "menu" : "restaurant"}
             entity={entity}
             action={isMenuScope ? menuActionWrapper : updateRestaurantBranding}
           />
-        </div>
       </div>
     </div>
   );

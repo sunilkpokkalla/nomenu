@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Palette } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { CustomizeDashboardClient } from "./customize-client";
 

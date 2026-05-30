@@ -24,7 +24,12 @@ interface Order {
   order_items: OrderItem[];
 }
 
-export function ReceiptTracker({ restaurantId }: { restaurantId: string }) {
+interface ReceiptTrackerProps {
+  restaurantId: string;
+  locationLabel?: string | null;
+}
+
+export function ReceiptTracker({ restaurantId, locationLabel }: ReceiptTrackerProps) {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [order, setOrder] = useState<Order | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -169,8 +174,8 @@ export function ReceiptTracker({ restaurantId }: { restaurantId: string }) {
                 <div className="text-sm uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
                 <div className="text-5xl font-black">{String(order.daily_order_number || order.id.slice(0,4)).padStart(3, '0')}</div>
                 {order.table_number && (
-                  <div className="mt-2 text-lg border-2 border-black rounded inline-block px-3 py-1 font-bold">
-                    TABLE {order.table_number}
+                  <div className="mt-2 text-lg border-2 border-black rounded inline-block px-3 py-1 font-bold uppercase">
+                    {(locationLabel || "TABLE").toUpperCase()} {order.table_number}
                   </div>
                 )}
               </div>

@@ -61,7 +61,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
   const isFreePlan = currentPlan === "free";
   const isStarterPlan = currentPlan === "starter";
   const hasWhiteLabeling = currentPlan === "elite" || currentPlan === "enterprise";
-  const isElitePlan = currentPlan === "elite";
+  const isElitePlan = currentPlan === "elite" || currentPlan === "enterprise";
 
   const canOrder = isElitePlan;
   const canFeedback = !isFreePlan;

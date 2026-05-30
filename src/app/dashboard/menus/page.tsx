@@ -142,6 +142,7 @@ export default async function MenusPage(
                         <MenuQrModal 
                           menuName={menu.name} 
                           publicUrl={`${baseUrl}/menu/${menu.id}`} 
+                          locationLabel={menu.location_label}
                         />
                       </div>
                       <div className="mt-4 flex justify-end">
@@ -236,6 +237,21 @@ export default async function MenusPage(
                         </option>
                       ))}
                     </optgroup>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="locationLabel">Guest Location Type</Label>
+                  <select
+                    id="locationLabel"
+                    name="locationLabel"
+                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 h-10 cursor-pointer"
+                  >
+                    <option value="Table">Table (Restaurant, Cafe, Bar)</option>
+                    <option value="Room">Room (In-Room Dining)</option>
+                    <option value="Cabana">Cabana (Poolside, Beach Club)</option>
+                    <option value="Sunbed">Sunbed (Resorts)</option>
+                    <option value="Seat">Seat (Theaters, Stadiums)</option>
+                    <option value="Lane">Lane (Bowling Alleys)</option>
                   </select>
                 </div>
                 <div className="space-y-2">

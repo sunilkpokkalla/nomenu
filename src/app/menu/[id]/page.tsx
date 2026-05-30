@@ -133,6 +133,7 @@ export default async function PublicMenuPage(
         items={itemsList}
         tableNumber={tableNumber}
         qrCodeId={qrCodeId}
+        locationLabel={menu.location_label}
       />
       {['elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') && (
         <FloatingCart 
@@ -146,9 +147,10 @@ export default async function PublicMenuPage(
           serviceCharge={menu.service_charge || 0}
           serviceChargeType={menu.service_charge_type || "percentage"}
           stripeAccountId={restaurant.stripe_account_id}
+          locationLabel={menu.location_label}
         />
       )}
-      <ReceiptTracker restaurantId={restaurant.id} />
+      <ReceiptTracker restaurantId={restaurant.id} locationLabel={menu.location_label} />
     </CartProvider>
   );
 }

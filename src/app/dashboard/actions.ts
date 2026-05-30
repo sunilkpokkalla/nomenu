@@ -85,6 +85,7 @@ export async function createMenu(formData: FormData) {
   const taxRate = parseFloat(field(formData, "taxRate") || "0") || 0;
   const serviceCharge = parseFloat(field(formData, "serviceCharge") || "0") || 0;
   const serviceChargeType = field(formData, "serviceChargeType") || "percentage";
+  const locationLabel = field(formData, "locationLabel") || "Table";
 
   const currentPlan = restaurant.plan || "free";
   if (currentPlan === "free" || currentPlan === "starter") {
@@ -108,6 +109,7 @@ export async function createMenu(formData: FormData) {
     tax_rate: taxRate,
     service_charge: serviceCharge,
     service_charge_type: serviceChargeType,
+    location_label: locationLabel,
   });
 
   if (error) {

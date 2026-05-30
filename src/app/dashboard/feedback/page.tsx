@@ -63,7 +63,7 @@ export default async function FeedbackPage() {
       </div>
 
       <div className="relative">
-        {(!restaurant.plan || restaurant.plan.toLowerCase() === "free") && (
+        {(!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase())) && (
           <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-50/80 backdrop-blur-sm rounded-2xl border border-slate-100">
             <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-center max-w-sm">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600">
@@ -71,18 +71,18 @@ export default async function FeedbackPage() {
               </div>
               <h3 className="text-xl font-bold text-slate-900">Feedback Locked</h3>
               <p className="mt-3 text-sm text-slate-500 mb-6 font-medium">
-                Upgrade to the Pro Plan to collect, manage, and analyze private customer feedback and ratings.
+                Upgrade to the Elite Plan to collect, manage, and analyze private customer feedback and ratings.
               </p>
               <a
                 href="/dashboard/billing"
                 className="inline-block w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm hover:bg-slate-800 transition"
               >
-                Upgrade to Pro Plan
+                Upgrade to Elite Plan
               </a>
             </div>
           </div>
         )}
-        <div className={!restaurant.plan || restaurant.plan.toLowerCase() === "free" ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all" : ""}>
+        <div className={!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase()) ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all" : ""}>
           <div className="mb-8">
             <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
           </div>

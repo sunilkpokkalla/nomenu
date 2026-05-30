@@ -57,6 +57,73 @@ export default async function OrdersPage() {
     .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
     .order("created_at", { ascending: false });
 
+  const isLocked = !restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase());
+  
+  let displayOrders = initialOrders || [];
+  
+  // Inject highly realistic fake orders if locked so the blurred background looks amazing
+  if (isLocked) {
+    const now = new Date();
+    displayOrders = [
+      {
+        id: "mock-1",
+        restaurant_id: restaurant.id,
+        customer_name: "Sarah Jenkins",
+        table_number: "12",
+        status: "preparing",
+        total_amount: 45.50,
+        created_at: new Date(now.getTime() - 1000 * 60 * 5).toISOString(),
+        daily_order_number: 104,
+        order_items: [
+          { id: "i1", quantity: 2, customer_notes: null, menu_items: { name: "Truffle Burger", price: 18 } },
+          { id: "i2", quantity: 1, customer_notes: "Extra crispy", menu_items: { name: "Sweet Potato Fries", price: 9.5 } }
+        ]
+      },
+      {
+        id: "mock-2",
+        restaurant_id: restaurant.id,
+        customer_name: "Michael Chen",
+        table_number: "Takeout",
+        status: "pending",
+        total_amount: 32.00,
+        created_at: new Date(now.getTime() - 1000 * 60 * 2).toISOString(),
+        daily_order_number: 105,
+        order_items: [
+          { id: "i3", quantity: 1, customer_notes: null, menu_items: { name: "Spicy Tuna Roll", price: 16 } },
+          { id: "i4", quantity: 2, customer_notes: null, menu_items: { name: "Miso Soup", price: 8 } }
+        ]
+      },
+      {
+        id: "mock-3",
+        restaurant_id: restaurant.id,
+        customer_name: "Emily R.",
+        table_number: "4",
+        status: "preparing",
+        total_amount: 89.00,
+        created_at: new Date(now.getTime() - 1000 * 60 * 15).toISOString(),
+        daily_order_number: 102,
+        order_items: [
+          { id: "i5", quantity: 1, customer_notes: "Medium Rare, No onions please", menu_items: { name: "Ribeye Steak", price: 45 } },
+          { id: "i6", quantity: 1, customer_notes: null, menu_items: { name: "Caesar Salad", price: 14 } },
+          { id: "i7", quantity: 2, customer_notes: null, menu_items: { name: "House Red Wine", price: 15 } }
+        ]
+      },
+      {
+        id: "mock-4",
+        restaurant_id: restaurant.id,
+        customer_name: "David W.",
+        table_number: "8",
+        status: "pending",
+        total_amount: 24.00,
+        created_at: now.toISOString(),
+        daily_order_number: 106,
+        order_items: [
+          { id: "i8", quantity: 2, customer_notes: null, menu_items: { name: "Margherita Pizza", price: 12 } }
+        ]
+      }
+    ] as unknown as typeof displayOrders;
+  }
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <div>
@@ -65,8 +132,8 @@ export default async function OrdersPage() {
       </div>
 
       <div className="relative flex-1">
-        {(!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase())) && (
-          <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-50/80 backdrop-blur-sm rounded-2xl border border-slate-100 min-h-[500px]">
+        {isLocked && (
+          <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-50/70 backdrop-blur-[3px] rounded-2xl border border-slate-100 min-h-[500px]">
             <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-center max-w-sm">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-blue-600">
                 <ClipboardList className="h-8 w-8" />
@@ -77,15 +144,15 @@ export default async function OrdersPage() {
               </p>
               <a
                 href="/dashboard/billing"
-                className="inline-block w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm hover:bg-slate-800 transition"
+                className="inline-block w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm hover:bg-slate-800 transition shadow-md"
               >
                 Upgrade to Elite Plan
               </a>
             </div>
           </div>
         )}
-        <div className={!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase()) ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all h-[500px] overflow-hidden" : ""}>
-          <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
+        <div className={isLocked ? "opacity-40 pointer-events-none select-none filter blur-[2px] transition-all h-[500px] overflow-hidden" : ""}>
+          <OrdersBoard initialOrders={displayOrders} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
         </div>
       </div>
     </div>

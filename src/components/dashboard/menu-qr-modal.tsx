@@ -17,9 +17,10 @@ import Image from "next/image";
 interface MenuQrModalProps {
   menuName: string;
   publicUrl: string;
+  locationLabel?: string | null;
 }
 
-export function MenuQrModal({ menuName, publicUrl }: MenuQrModalProps) {
+export function MenuQrModal({ menuName, publicUrl, locationLabel }: MenuQrModalProps) {
   const [open, setOpen] = useState(false);
   
   const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;

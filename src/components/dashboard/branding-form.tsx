@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Palette, Save, Wifi } from "lucide-react";
+import { Loader2, Palette, Save, Wifi, Lock, Sparkles, Crown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,6 +38,30 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
   const [themeStyle, setThemeStyle] = useState(entity.theme_style || "minimalist");
   const [wifiPassword, setWifiPassword] = useState(entity.wifi_password || "");
   const [isPending, setIsPending] = useState(false);
+
+  const userPlan = (entity.plan || "free").toLowerCase();
+  const isPro = ["pro", "elite", "enterprise"].includes(userPlan);
+  const isElite = ["elite", "enterprise"].includes(userPlan);
+
+  const proThemes = ["bistro", "omakase", "brutalist"];
+  const requiresElite = themeStyle !== "minimalist" && !proThemes.includes(themeStyle);
+
+  let isLocked = false;
+  let lockMessage = "";
+  let upgradeTarget = "";
+  let lockTitle = "";
+
+  if (!isPro) {
+    isLocked = true;
+    lockTitle = "Custom Branding Locked";
+    lockMessage = "Customizing your menu's colors, layout themes, and WiFi settings is a premium feature. Upgrade to Pro to unlock basic templates, or Elite for full access. You can continue to preview them here!";
+    upgradeTarget = "Save Locked: Upgrade to Pro";
+  } else if (!isElite && requiresElite) {
+    isLocked = true;
+    lockTitle = "Elite Theme Locked";
+    lockMessage = `The ${themeStyle} template is an exclusive Elite feature. Upgrade your plan to apply this premium design to your live menu.`;
+    upgradeTarget = "Save Locked: Upgrade to Elite";
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -118,7 +142,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form id="branding-settings-form" onSubmit={handleSubmit} className="space-y-6">
             {type === "menu" && (
               <div className="flex items-center justify-between rounded-lg border p-4 bg-muted/50">
                 <div className="space-y-0.5">
@@ -224,84 +248,84 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                     name: "Bistro Classic",
                     description: "Clean, warm cafe styling",
                     emoji: "☕",
-                    isPremium: true
+                    badge: "PRO"
                   },
                   {
                     id: "minimalist",
                     name: "Minimalist (Free)",
                     description: "Ultra clean line listing",
                     emoji: "🍽️",
-                    isPremium: false
-                  },
-                  {
-                    id: "luxury",
-                    name: "Lumina Premium",
-                    description: "High-end cinematic dark gold",
-                    emoji: "✨",
-                    isPremium: true
-                  },
-                  {
-                    id: "vibrant",
-                    name: "Vibrant Diner",
-                    description: "Neo-brutalism bold cards",
-                    emoji: "🍔",
-                    isPremium: true
+                    badge: null
                   },
                   {
                     id: "omakase",
                     name: "Omakase",
                     description: "Zen Minimalist Dark",
                     emoji: "🍣",
-                    isPremium: true
+                    badge: "PRO"
                   },
                   {
                     id: "brutalist",
                     name: "Brutalist",
                     description: "Raw oversized typography",
                     emoji: "🖤",
-                    isPremium: true
+                    badge: "PRO"
+                  },
+                  {
+                    id: "luxury",
+                    name: "Lumina Premium",
+                    description: "High-end cinematic dark gold",
+                    emoji: "✨",
+                    badge: "ELITE"
+                  },
+                  {
+                    id: "vibrant",
+                    name: "Vibrant Diner",
+                    description: "Neo-brutalism bold cards",
+                    emoji: "🍔",
+                    badge: "ELITE"
                   },
                   {
                     id: "retro",
                     name: "Y2K Retro",
                     description: "Windows 98 arcade style",
                     emoji: "👾",
-                    isPremium: true
+                    badge: "ELITE"
                   },
                   {
                     id: "speakeasy",
                     name: "Speakeasy",
                     description: "Dark jazz club gold",
                     emoji: "🍸",
-                    isPremium: true
+                    badge: "ELITE"
                   },
                   {
                     id: "cyberpunk",
                     name: "Cyberpunk",
                     description: "Neon glitch matrix",
                     emoji: "🦾",
-                    isPremium: true
+                    badge: "ELITE"
                   },
                   {
                     id: "boutique",
                     name: "Boutique Cafe",
                     description: "Soft girl dreamcore",
                     emoji: "🎀",
-                    isPremium: true
+                    badge: "ELITE"
                   },
                   {
                     id: "botanical",
                     name: "Botanical",
                     description: "Earthy minimal floral",
                     emoji: "🌿",
-                    isPremium: true
+                    badge: "ELITE"
                   },
                   {
                     id: "molecular",
                     name: "Laboratory",
                     description: "Clinical experimental data",
                     emoji: "🧬",
-                    isPremium: true
+                    badge: "ELITE"
                   }
                 ].map((theme) => (
                   <button
@@ -314,9 +338,9 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                         : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                     }`}
                   >
-                    {theme.isPremium && (
-                      <span className="absolute top-0 right-0 bg-amber-500 text-black text-[7px] font-extrabold px-1.5 py-0.5 rounded-bl uppercase tracking-wider scale-90 origin-top-right">
-                        PRO
+                    {theme.badge && (
+                      <span className={`absolute top-0 right-0 ${theme.badge === 'PRO' ? 'bg-indigo-500' : 'bg-amber-500'} text-white text-[7px] font-extrabold px-1.5 py-0.5 rounded-bl uppercase tracking-wider scale-90 origin-top-right`}>
+                        {theme.badge}
                       </span>
                     )}
                     <span className="text-xl mb-1">{theme.emoji}</span>
@@ -351,46 +375,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                 </p>
               </div>
             </div>
-
             </div>
-            {/* Gating Logic warning alert & premium upgrade CTA */}
-            {themeStyle !== "minimalist" && (!entity.plan || entity.plan.toLowerCase() === "free") ? (
-              <div className="space-y-4">
-                <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-4 space-y-2 flex items-start gap-3">
-                  <div className="bg-amber-100 p-2 rounded-lg text-amber-700 shrink-0">
-                    <Save className="h-4 w-4 animate-pulse text-amber-600" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1">
-                      Premium Theme Locked
-                    </h4>
-                    <p className="text-[10px] text-amber-800/90 leading-relaxed mt-1">
-                      This template is a Growth/Pro feature. Upgrade your plan to apply this design template on your live digital menu. You can continue to preview it here!
-                    </p>
-                  </div>
-                </div>
-                
-                <Button 
-                  type="button"
-                  onClick={() => window.location.href = "/dashboard/billing"}
-                  className="w-full bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-extrabold shadow-md border-0 py-5 text-xs tracking-wider uppercase"
-                >
-                  Save Locked: Upgrade to Unlock Theme
-                </Button>
-              </div>
-            ) : (
-              <Button type="submit" className="w-full" disabled={isPending}>
-                {isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="mr-2 h-4 w-4" /> Save Branding
-                  </>
-                )}
-              </Button>
-            )}
           </form>
         </CardContent>
       </Card>
@@ -632,6 +617,47 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           <div className={`text-center py-2.5 border-t text-[8px] text-slate-400 bg-slate-50/50 ${themeStyle === "luxury" ? "bg-zinc-950/80 border-zinc-900 text-zinc-600" : themeStyle === "bistro" ? "bg-[#FDFBF7] border-[#E7E5E4] text-[#A8A29E]" : themeStyle === "retro" ? "bg-[#C0C0C0] border-gray-500 text-gray-600 font-mono" : themeStyle === "speakeasy" ? "bg-[#0A0A0A] border-[#D4AF37]/20 text-[#D4AF37]/40 tracking-widest font-serif" : "bg-slate-50/50"}`}>
             POWERED BY <span className={`font-bold ${themeStyle === "luxury" ? "text-zinc-500" : themeStyle === "bistro" ? "text-[#5C4033]" : themeStyle === "retro" ? "text-black" : themeStyle === "speakeasy" ? "text-[#D4AF37]" : "text-slate-500"}`}>NOMENU</span>
           </div>
+        </div>
+
+        {/* Action / Gating Area moved under preview */}
+        <div className="w-full">
+          {isLocked ? (
+            <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/80 group">
+              <div className={`absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-r ${lockTitle.includes("Elite") ? "from-amber-500/5 via-transparent to-amber-500/5" : "from-indigo-500/5 via-transparent to-indigo-500/5"}`}></div>
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${lockTitle.includes("Elite") ? "from-amber-300 via-amber-500 to-amber-600" : "from-indigo-400 via-indigo-500 to-purple-500"}`}></div>
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${lockTitle.includes("Elite") ? "bg-gradient-to-br from-amber-100 to-amber-50 text-amber-600 border border-amber-200/50 shadow-inner" : "bg-gradient-to-br from-indigo-100 to-indigo-50 text-indigo-600 border border-indigo-200/50 shadow-inner"}`}>
+                  {lockTitle.includes("Elite") ? <Crown className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
+                </div>
+                <div className="space-y-1.5 max-w-[320px]">
+                  <h4 className="text-lg font-bold tracking-tight text-slate-900">{lockTitle}</h4>
+                  <p className="text-[11px] leading-relaxed text-slate-500 font-medium">{lockMessage}</p>
+                </div>
+                <button 
+                  type="button"
+                  onClick={() => window.location.href = "/dashboard/billing"}
+                  className={`mt-2 w-full rounded-xl px-4 py-3.5 text-xs font-black uppercase tracking-[0.1em] text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+                    lockTitle.includes("Elite") 
+                      ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 shadow-amber-500/20" 
+                      : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-500/20"
+                  }`}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    {upgradeTarget.replace("Save Locked: ", "")}
+                  </span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <Button form="branding-settings-form" type="submit" className="w-full shadow-md py-6 text-sm font-bold bg-slate-900 hover:bg-slate-800" disabled={isPending}>
+              {isPending ? (
+                <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Saving Configuration...</>
+              ) : (
+                <><Save className="mr-2 h-5 w-5" /> Save Brand & Theme</>
+              )}
+            </Button>
+          )}
         </div>
       </div>
     </div>

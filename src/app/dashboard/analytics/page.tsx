@@ -40,74 +40,125 @@ export default async function AnalyticsPage() {
   const scansList = scans || [];
   const qrCodesList = qrCodes || [];
 
-  // 1. Calculate general stats
-  const totalScans = scansList.length;
+  const isLocked = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
 
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
-  const scansToday = scansList.filter((s) => s.scanned_at && new Date(s.scanned_at) >= startOfToday).length;
+  // If locked, we inject beautiful mock data to make the blurred background look like a busy restaurant
+  let totalScans = 0;
+  let scansToday = 0;
+  let scansThisWeek = 0;
+  let dailyScans = [] as { label: string; dateStr: string; count: number }[];
+  let maxScanCount = 1;
+  let iosCount = 0;
+  let androidCount = 0;
+  let desktopCount = 0;
+  let iosPercent = 0;
+  let androidPercent = 0;
+  let desktopPercent = 0;
+  let topCountries = [] as { country: string; count: number; percent: number }[];
+  let qrPerformance = [] as { id: string; label: string | null; scan_count: number }[];
 
-  const startOfWeek = new Date();
-  startOfWeek.setDate(startOfWeek.getDate() - 7);
-  const scansThisWeek = scansList.filter((s) => s.scanned_at && new Date(s.scanned_at) >= startOfWeek).length;
+  if (isLocked) {
+    totalScans = 1248;
+    scansToday = 84;
+    scansThisWeek = 412;
+    
+    dailyScans = [
+      { label: "Mon", dateStr: "Oct 12", count: 45 },
+      { label: "Tue", dateStr: "Oct 13", count: 32 },
+      { label: "Wed", dateStr: "Oct 14", count: 58 },
+      { label: "Thu", dateStr: "Oct 15", count: 40 },
+      { label: "Fri", dateStr: "Oct 16", count: 95 },
+      { label: "Sat", dateStr: "Oct 17", count: 112 },
+      { label: "Sun", dateStr: "Oct 18", count: 84 },
+    ];
+    maxScanCount = 112;
 
-  // 2. Weekly scan breakdown for chart (past 7 days)
-  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const last7Days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }).reverse();
+    iosPercent = 64;
+    androidPercent = 28;
+    desktopPercent = 8;
+    iosCount = Math.round(totalScans * 0.64);
+    androidCount = Math.round(totalScans * 0.28);
+    desktopCount = Math.round(totalScans * 0.08);
 
-  const dailyScans = last7Days.map((date) => {
-    const count = scansList.filter((s) => {
-      if (!s.scanned_at) return false;
-      const scanDate = new Date(s.scanned_at);
-      scanDate.setHours(0, 0, 0, 0);
-      return scanDate.getTime() === date.getTime();
-    }).length;
-    return {
-      label: weekdays[date.getDay()],
-      dateStr: date.toLocaleDateString([], { month: "short", day: "numeric" }),
-      count,
-    };
-  });
+    topCountries = [
+      { country: "United States", count: 998, percent: 80 },
+      { country: "United Kingdom", count: 125, percent: 10 },
+      { country: "Canada", count: 62, percent: 5 },
+      { country: "Australia", count: 63, percent: 5 },
+    ];
 
-  const maxScanCount = Math.max(...dailyScans.map((d) => d.count), 1); // Avoid division by zero
+    qrPerformance = [
+      { id: "mock1", label: "Table 1 (Window)", scan_count: 245 },
+      { id: "mock2", label: "Table 4 (Booth)", scan_count: 182 },
+      { id: "mock3", label: "Main Entrance", scan_count: 156 },
+      { id: "mock4", label: "Bar Area - Left", scan_count: 98 },
+      { id: "mock5", label: "Takeout Counter", scan_count: 76 },
+    ];
+  } else {
+    totalScans = scansList.length;
 
-  // 3. Device Type stats
-  const iosCount = scansList.filter((s) => s.device_type === "iOS").length;
-  const androidCount = scansList.filter((s) => s.device_type === "Android").length;
-  const desktopCount = totalScans - iosCount - androidCount;
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    scansToday = scansList.filter((s) => s.scanned_at && new Date(s.scanned_at) >= startOfToday).length;
 
-  const iosPercent = totalScans > 0 ? Math.round((iosCount / totalScans) * 100) : 0;
-  const androidPercent = totalScans > 0 ? Math.round((androidCount / totalScans) * 100) : 0;
-  const desktopPercent = totalScans > 0 ? Math.round((desktopCount / totalScans) * 100) : 0;
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - 7);
+    scansThisWeek = scansList.filter((s) => s.scanned_at && new Date(s.scanned_at) >= startOfWeek).length;
 
-  // 4. Country breakdown
-  const countryCounts: Record<string, number> = {};
-  scansList.forEach((s) => {
-    const country = s.country || "Unknown";
-    countryCounts[country] = (countryCounts[country] || 0) + 1;
-  });
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }).reverse();
 
-  const topCountries = Object.entries(countryCounts)
-    .map(([country, count]) => ({ country, count, percent: totalScans > 0 ? Math.round((count / totalScans) * 100) : 0 }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 4);
-
-  // 5. QR Code performance list
-  const qrPerformance = qrCodesList
-    .map((qr) => {
-      const qrScans = scansList.filter((s) => s.qr_code_id === qr.id).length;
+    dailyScans = last7Days.map((date) => {
+      const count = scansList.filter((s) => {
+        if (!s.scanned_at) return false;
+        const scanDate = new Date(s.scanned_at);
+        scanDate.setHours(0, 0, 0, 0);
+        return scanDate.getTime() === date.getTime();
+      }).length;
       return {
-        ...qr,
-        scan_count: qrScans,
+        label: weekdays[date.getDay()],
+        dateStr: date.toLocaleDateString([], { month: "short", day: "numeric" }),
+        count,
       };
-    })
-    .sort((a, b) => b.scan_count - a.scan_count)
-    .slice(0, 5);
+    });
+
+    maxScanCount = Math.max(...dailyScans.map((d) => d.count), 1);
+
+    iosCount = scansList.filter((s) => s.device_type === "iOS").length;
+    androidCount = scansList.filter((s) => s.device_type === "Android").length;
+    desktopCount = totalScans - iosCount - androidCount;
+
+    iosPercent = totalScans > 0 ? Math.round((iosCount / totalScans) * 100) : 0;
+    androidPercent = totalScans > 0 ? Math.round((androidCount / totalScans) * 100) : 0;
+    desktopPercent = totalScans > 0 ? Math.round((desktopCount / totalScans) * 100) : 0;
+
+    const countryCounts: Record<string, number> = {};
+    scansList.forEach((s) => {
+      const country = s.country || "Unknown";
+      countryCounts[country] = (countryCounts[country] || 0) + 1;
+    });
+
+    topCountries = Object.entries(countryCounts)
+      .map(([country, count]) => ({ country, count, percent: totalScans > 0 ? Math.round((count / totalScans) * 100) : 0 }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 4);
+
+    qrPerformance = qrCodesList
+      .map((qr) => {
+        const qrScans = scansList.filter((s) => s.qr_code_id === qr.id).length;
+        return {
+          ...qr,
+          scan_count: qrScans,
+        };
+      })
+      .sort((a, b) => b.scan_count - a.scan_count)
+      .slice(0, 5);
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -119,8 +170,31 @@ export default async function AnalyticsPage() {
         </p>
       </div>
 
-      {/* Summary Stats */}
-      <div className="grid gap-4 md:grid-cols-3 mb-8">
+      {/* Locked Overlay Container */}
+      <div className="relative">
+        {isLocked && (
+          <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-50/70 backdrop-blur-[2px] rounded-2xl border border-slate-100">
+            <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-center max-w-sm sticky top-1/3">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                <BarChart3 className="h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">Analytics Dashboard Locked</h3>
+              <p className="mt-3 text-sm text-slate-500 mb-6 font-medium">
+                Upgrade to the PRO Plan to monitor your restaurant's digital engagement, traffic trends, and table performance.
+              </p>
+              <a
+                href="/dashboard/billing"
+                className="inline-block w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm hover:bg-slate-800 transition shadow-md"
+              >
+                Upgrade to PRO Plan
+              </a>
+            </div>
+          </div>
+        )}
+
+        <div className={isLocked ? "opacity-40 pointer-events-none select-none filter blur-[2px] transition-all" : ""}>
+          {/* Summary Stats */}
+          <div className="grid gap-4 md:grid-cols-3 mb-8">
         <Card>
           <CardContent className="p-5">
             <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -198,26 +272,6 @@ export default async function AnalyticsPage() {
             <CardDescription>Visitor hardware and geographic statistics.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 relative">
-            {(!restaurant.plan || restaurant.plan.toLowerCase() === "free") && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/60 backdrop-blur-sm rounded-b-xl border-t border-slate-100">
-                <div className="bg-white p-6 rounded-2xl shadow-xl border border-slate-200 text-center max-w-[280px]">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600">
-                    <Globe className="h-6 w-6" />
-                  </div>
-                  <h3 className="font-bold text-slate-900">Advanced Analytics Locked</h3>
-                  <p className="mt-2 text-xs text-slate-500 mb-4">
-                    Unlock detailed device breakdown and geographical visitor insights with the Growth plan.
-                  </p>
-                  <a
-                    href="/dashboard/billing"
-                    className="inline-block w-full bg-slate-900 text-white font-bold py-2 rounded-lg text-xs hover:bg-slate-800 transition"
-                  >
-                    Upgrade to Growth
-                  </a>
-                </div>
-              </div>
-            )}
-            
             {/* Device breakdown */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -338,6 +392,8 @@ export default async function AnalyticsPage() {
           )}
         </CardContent>
       </Card>
+        </div>
+      </div>
     </div>
   );
 }

@@ -43,4 +43,5 @@ export interface MenuThemeProps {
   items: MenuItem[];
   tableNumber?: string;
   qrCodeId?: string;
+  locationLabel?: string | null;
 }

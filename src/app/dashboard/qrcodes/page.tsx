@@ -90,10 +90,24 @@ export default async function QrCodesPage(
 
       <div className="grid gap-8 lg:grid-cols-[1fr_420px]">
         {/* QR Codes Grid */}
-        <div className="space-y-6">
+        <div className="space-y-10">
           {qrCodesList.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
-              {qrCodesList.map((qr) => {
+            Object.entries(
+              qrCodesList.reduce((acc, qr) => {
+                const targetMenu = menusList.find((m) => m.id === qr.menu_id);
+                const locationType = targetMenu?.location_label || "Table";
+                if (!acc[locationType]) acc[locationType] = [];
+                acc[locationType].push(qr);
+                return acc;
+              }, {} as Record<string, typeof qrCodesList>)
+            ).map(([locationType, qrs]) => (
+              <div key={locationType} className="space-y-4">
+                <h3 className="text-xl font-semibold text-slate-800 border-b pb-2 flex items-center gap-2">
+                  <QrCode className="w-5 h-5 text-slate-400" />
+                  {locationType}s
+                </h3>
+                <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+                  {qrs.map((qr) => {
                 const targetMenu = menusList.find((m) => m.id === qr.menu_id);
                 const publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
                 const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
@@ -174,8 +188,10 @@ export default async function QrCodesPage(
                     </CardContent>
                   </Card>
                 );
-              })}
-            </div>
+                  })}
+                </div>
+              </div>
+            ))
           ) : (
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white p-12 text-center shadow-sm">
               <QrCode className="mx-auto h-12 w-12 text-slate-400" />
@@ -208,8 +224,8 @@ export default async function QrCodesPage(
               ) : (
                 <form action={createQrCode} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="label">Table / Spot Label</Label>
-                    <Input id="label" name="label" placeholder="e.g. Table 5, Patio Booth, Main Bar" required />
+                    <Label htmlFor="label">Location Number/Name</Label>
+                    <Input id="label" name="label" placeholder="e.g. 12, 204, Patio Booth" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="menuId">Link to Menu</Label>
