@@ -1,31 +1,34 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import QRCode from "qrcode";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const data = searchParams.get("data");
-  if (!data) {
-    return new NextResponse("Missing data parameter", { status: 400 });
-  }
-
-  // Use a high-quality 600x600 size for print readiness
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(data)}`;
+export async function GET(req: NextRequest) {
   try {
-    const res = await fetch(qrUrl);
-    if (!res.ok) {
-      return new NextResponse("Failed to fetch QR code from upstream", { status: res.status });
+    const { searchParams } = new URL(req.url);
+    const data = searchParams.get("data");
+
+    if (!data) {
+      return new NextResponse("Missing data parameter", { status: 400 });
     }
-    const blob = await res.blob();
-    
-    return new NextResponse(blob, {
-      status: 200,
+
+    // Generate QR code as a buffer
+    const buffer = await QRCode.toBuffer(data, {
+      errorCorrectionLevel: "H",
+      margin: 1,
+      width: 500,
+      color: {
+        dark: "#0F172A", // slate-900
+        light: "#FFFFFF",
+      },
+    });
+
+    return new NextResponse(buffer, {
       headers: {
         "Content-Type": "image/png",
         "Cache-Control": "public, max-age=31536000, immutable",
-        "Access-Control-Allow-Origin": "*",
       },
     });
   } catch (error) {
-    console.error("QR Proxy error:", error);
+    console.error("QR Generation Error:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
