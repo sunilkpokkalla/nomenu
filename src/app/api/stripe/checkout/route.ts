@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import Stripe from "stripe";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummyKeyForBuildProcess123", {
   apiVersion: "2026-05-27.dahlia",
@@ -56,6 +57,42 @@ export async function POST(req: Request) {
 
     // 2.5% Platform Fee
     const applicationFeeAmountCents = Math.round(totalAmountCents * 0.025);
+
+    // --- DEMO MODE BYPASS ---
+    if (process.env.DEMO_MODE === 'true' || process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || process.env.STRIPE_SECRET_KEY === "sk_test_placeholder" || !process.env.STRIPE_SECRET_KEY) {
+      // Mock the Stripe Webhook's order creation using admin client
+      const adminSupabase = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_KEY!
+      );
+
+      const totalAmount = totalAmountCents / 100;
+      
+      const { error: orderError } = await adminSupabase.from("orders").insert({
+        id: orderId,
+        restaurant_id: restaurantId,
+        table_number: tableNumber || null,
+        customer_name: customerName || null,
+        status: "pending",
+        total_amount: totalAmount,
+        payment_intent_id: "pi_demo_" + Math.random().toString(36).substr(2, 9),
+      });
+
+      if (!orderError) {
+        // Insert items
+        const orderItems = items.map((i: any) => ({
+          order_id: orderId,
+          menu_item_id: i.menu_item_id || i.id,
+          quantity: i.quantity,
+          price_at_time_of_order: i.price_at_time_of_order || i.price || 0,
+          customer_notes: i.customer_notes || i.notes || null,
+        }));
+        await adminSupabase.from("order_items").insert(orderItems);
+      }
+
+      return NextResponse.json({ url: `${returnUrl}?success=true` });
+    }
+    // --- END DEMO MODE BYPASS ---
 
     // Create the Checkout Session
     const session = await stripe.checkout.sessions.create({
