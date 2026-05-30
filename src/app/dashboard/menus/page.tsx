@@ -98,7 +98,7 @@ export default async function MenusPage(
             <div className="space-y-10">
               {Object.entries(
                 menusList.reduce((acc, menu) => {
-                  const format = menu.menu_type || "general";
+                  const format = menu.location_label || "Unassigned Location";
                   if (!acc[format]) acc[format] = [];
                   acc[format].push(menu);
                   return acc;
