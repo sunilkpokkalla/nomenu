@@ -237,17 +237,25 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
 
                     <div className="text-center mb-6">
                       <div className="text-sm uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
-                      <div className="text-5xl font-black">#{String(o.daily_order_number || 0).padStart(3, '0')}</div>
-                      {o.customer_name && (
-                        <div className="mt-3 text-sm font-bold uppercase tracking-widest text-slate-700">
-                          Guest: {o.customer_name}
-                        </div>
-                      )}
-                      {o.table_number && (
-                        <div className="mt-2 text-lg border-2 border-black rounded inline-block px-3 py-1 font-bold uppercase">
-                          {(locationLabel || "TABLE").toUpperCase()} {o.table_number}
-                        </div>
-                      )}
+                      <div className="text-5xl font-black mb-4">#{String(o.daily_order_number || 0).padStart(3, '0')}</div>
+                      
+                      <div className="flex justify-between items-end text-left border-t border-slate-200 pt-4 mt-2">
+                        {o.customer_name ? (
+                          <div className="text-xs font-bold uppercase tracking-widest text-slate-500">
+                            Guest<br/><span className="text-sm text-slate-900">{o.customer_name}</span>
+                          </div>
+                        ) : <div />}
+                        {o.table_number && (
+                          <div className="text-right">
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">
+                              {(locationLabel || "TABLE").toUpperCase()}
+                            </div>
+                            <div className="text-base border-2 border-slate-900 text-slate-900 rounded px-2 py-0.5 font-black uppercase inline-block">
+                              {o.table_number}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     <div className="flex justify-center mb-6 py-3 border-y-2 border-dashed border-slate-300 font-bold text-lg">
