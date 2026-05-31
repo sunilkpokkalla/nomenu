@@ -4,7 +4,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { createMenu, deleteMenu, toggleMenuStatus } from "@/app/dashboard/actions";
-import { MenuQrModal } from "@/components/dashboard/menu-qr-modal";
 import { MenuDescriptionField } from "@/components/dashboard/menu-description-field";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Button } from "@/components/ui/button";
@@ -147,24 +146,25 @@ export default async function MenusPage(
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="mt-auto pt-0">
-                      <div className="flex flex-wrap gap-2 border-t pt-4 [&>a]:min-w-[80px] [&>button]:min-w-[80px]">
-                        <Button variant="outline" size="sm" className="flex-1" asChild>
+                      <div className="grid grid-cols-3 gap-2 border-t pt-4">
+                        <Button variant="outline" size="sm" className="w-full px-2 text-xs" asChild>
                           <Link href={`/menu/${menu.id}`} target="_blank">
-                            <Eye className="mr-1.5 h-3.5 w-3.5" />
+                            <Eye className="mr-1.5 h-3.5 w-3.5 shrink-0" />
                             Preview
                           </Link>
                         </Button>
-                        <Button variant="outline" size="sm" className="flex-1" asChild>
+                        <Button variant="outline" size="sm" className="w-full px-2 text-xs" asChild>
                           <Link href={`/dashboard/items?menuId=${menu.id}&categoryId=all`}>
-                            <Utensils className="mr-1.5 h-3.5 w-3.5" />
+                            <Utensils className="mr-1.5 h-3.5 w-3.5 shrink-0" />
                             Items
                           </Link>
                         </Button>
-                        <MenuQrModal 
-                          menuName={menu.name} 
-                          publicUrl={`${baseUrl}/menu/${menu.id}`} 
-                          locationLabel={menu.location_label}
-                        />
+                        <Button variant="outline" size="sm" className="w-full px-2 text-xs" asChild>
+                          <Link href={`/dashboard/qrcodes?menuId=${menu.id}`}>
+                            <QrCode className="mr-1.5 h-3.5 w-3.5 shrink-0" />
+                            QR
+                          </Link>
+                        </Button>
                       </div>
                       <div className="mt-4 flex justify-end">
                         <DeleteConfirmForm

@@ -28,10 +28,11 @@ const getGridClass = (count: number) => {
 
 export default async function QrCodesPage(
   props: {
-    searchParams: Promise<{ message?: string }>;
+    searchParams: Promise<{ message?: string; menuId?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
+  const menuIdFilter = searchParams.menuId;
   const supabase = await createClient();
   const {
     data: { user },
@@ -69,7 +70,11 @@ export default async function QrCodesPage(
     .eq("restaurant_id", restaurant.id)
     .order("created_at", { ascending: false });
 
-  const qrCodesList = qrCodes || [];
+  let qrCodesList = qrCodes || [];
+  
+  if (menuIdFilter) {
+    qrCodesList = qrCodesList.filter((qr) => qr.menu_id === menuIdFilter);
+  }
 
   // Determine site URL on the server
   const host = (await headers()).get("host") || "localhost:3000";
@@ -81,11 +86,23 @@ export default async function QrCodesPage(
       {/* Header */}
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-950">QR Codes</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-950 flex items-center gap-3">
+            QR Codes
+            {menuIdFilter && (
+              <Badge variant="outline" className="text-sm font-normal bg-indigo-50 text-indigo-700 border-indigo-200">
+                Filtered
+              </Badge>
+            )}
+          </h1>
           <p className="mt-1 text-slate-600">
             Generate and manage custom QR codes for your tables, bar, or take-away stand.
           </p>
         </div>
+        {menuIdFilter && (
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/qrcodes">Clear Filter</Link>
+          </Button>
+        )}
       </div>
 
       {searchParams.message ? (
@@ -200,7 +217,9 @@ export default async function QrCodesPage(
           ) : (
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white p-12 text-center shadow-sm">
               <QrCode className="mx-auto h-12 w-12 text-slate-400" />
-              <h3 className="mt-4 text-lg font-semibold text-slate-900">No QR codes yet</h3>
+              <h3 className="mt-4 text-lg font-semibold text-slate-900">
+                {menuIdFilter ? "No QR codes linked to this menu" : "No QR codes yet"}
+              </h3>
               <p className="mt-2 text-sm text-slate-500 max-w-sm">
                 Set up your dining tables by generating a custom QR code on the right.
               </p>

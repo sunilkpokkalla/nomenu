@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
-import Image from "next/image";
+
+
+import imageCompression from 'browser-image-compression';
 
 interface ImageUploaderProps {
   value?: string;
@@ -58,13 +60,29 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
 
     try {
       const supabase = createClient();
-      const fileExt = file.name.split('.').pop();
+      
+      // Compress the image
+      let compressedFile = file;
+      try {
+        const options = {
+          maxSizeMB: 0.2, // Target under 200KB
+          maxWidthOrHeight: 1200,
+          useWebWorker: true,
+          fileType: "image/webp" as string
+        };
+        compressedFile = await imageCompression(file, options);
+      } catch (compressionError) {
+        console.warn("Failed to compress image, falling back to original", compressionError);
+      }
+
+      const isCompressed = compressedFile !== file;
+      const fileExt = isCompressed ? "webp" : file.name.split('.').pop();
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
       const filePath = `${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('menu-items')
-        .upload(filePath, file, {
+        .upload(filePath, compressedFile, {
           cacheControl: '3600',
           upsert: false
         });
@@ -192,12 +210,11 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
       {preview && (
         <div className="relative rounded-xl border border-slate-200 p-2 bg-white flex items-center gap-3">
           <div className="h-12 w-12 rounded-lg overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center">
-            <Image
+            <img
               src={preview}
               alt="Preview"
               className="w-full h-full object-cover"
               onError={() => setError("Unable to load preview. Please verify URL.")}
-              fill
             />
           </div>
           <div className="min-w-0 flex-1">

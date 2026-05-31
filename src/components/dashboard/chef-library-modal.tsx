@@ -328,17 +328,21 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                             style={{ animationDelay: `${index * 15}ms` }}
                           >
                             <div className="flex gap-4">
-                              <div className="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100 border relative">
-                                <Image 
-                                  src={dish.imageUrl || `https://loremflickr.com/400/300/${encodeURIComponent(dish.name.replace(/ /g, ''))},food/all`} 
-                                  alt={dish.name}
-                                  className="w-full h-full object-cover"
-                                  loading="lazy"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src = `https://loremflickr.com/400/300/food,dish/all?random=${index}`;
-                                  }}
-                                  fill
-                                />
+                              <div className="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-50 border relative flex items-center justify-center flex-col gap-1 text-slate-300">
+                                {dish.imageUrl ? (
+                                  <img 
+                                    src={dish.imageUrl} 
+                                    alt={dish.name}
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center border-b">
+                                    <span className="text-3xl font-bold text-slate-400/50">
+                                      {dish.name.charAt(0).toUpperCase()}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                               <div className="space-y-1.5 flex-1">
                                 <div className="flex items-start justify-between gap-2">

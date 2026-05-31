@@ -60,9 +60,7 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
     setName(dish.name);
     setDescription(dish.description);
     
-    // Set the image url if available, otherwise generate a gorgeous placeholder
-    const generatedUrl = `https://loremflickr.com/400/300/${encodeURIComponent(dish.name.replace(/ /g, ''))},food/all`;
-    setImageUrl(dish.imageUrl || generatedUrl);
+    setImageUrl(dish.imageUrl || "");
     
     setIsPopular(true);
     setIsVegetarian(!!dish.isVegetarian);

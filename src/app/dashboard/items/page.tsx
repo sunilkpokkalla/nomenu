@@ -191,15 +191,21 @@ export default async function ItemsPage(
                   <Card key={item.id} className={`overflow-hidden transition ${!item.is_available ? "opacity-60" : ""}`}>
                     <div className="flex flex-col sm:flex-row justify-between p-5 gap-4">
                       <div className="flex flex-1 gap-4">
-                        {item.image_url && (
-                          <div className="h-16 w-16 rounded-lg overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center">
+                        <div className="h-16 w-16 rounded-lg overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center">
+                          {item.image_url ? (
                             <img
                               src={item.image_url}
                               alt={item.name}
                               className="w-full h-full object-cover"
                             />
-                          </div>
-                        )}
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                              <span className="text-xl font-bold text-slate-400/50">
+                                {item.name.charAt(0).toUpperCase()}
+                              </span>
+                            </div>
+                          )}
+                        </div>
                         <div className="space-y-2 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <h3 className="text-lg font-bold text-slate-900">{item.name}</h3>
