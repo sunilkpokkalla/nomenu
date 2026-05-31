@@ -24,15 +24,7 @@ import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatTimezone } from "@/lib/date-utils";
 
-const TIMEZONE_OPTIONS = [
-  { code: "America/New_York", name: "Eastern Time (US & Canada)" },
-  { code: "America/Chicago", name: "Central Time (US & Canada)" },
-  { code: "America/Denver", name: "Mountain Time (US & Canada)" },
-  { code: "America/Los_Angeles", name: "Pacific Time (US & Canada)" },
-  { code: "Europe/London", name: "London (GMT/BST)" },
-  { code: "Australia/Sydney", name: "Sydney (AEST/AEDT)" },
-  { code: "UTC", name: "UTC / Universal Time" },
-];
+import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
 
 export default async function DashboardPage(
   props: {

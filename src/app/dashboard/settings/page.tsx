@@ -12,34 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
 
 
-const COMMON_TIMEZONES = [
-  { tz: "Pacific/Midway", label: "(UTC-11:00) Midway Island, Samoa" },
-  { tz: "Pacific/Honolulu", label: "(UTC-10:00) Hawaii" },
-  { tz: "America/Anchorage", label: "(UTC-09:00) Alaska" },
-  { tz: "America/Los_Angeles", label: "(UTC-08:00) Pacific Time (US & Canada)" },
-  { tz: "America/Denver", label: "(UTC-07:00) Mountain Time (US & Canada)" },
-  { tz: "America/Chicago", label: "(UTC-06:00) Central Time (US & Canada)" },
-  { tz: "America/New_York", label: "(UTC-05:00) Eastern Time (US & Canada)" },
-  { tz: "America/Caracas", label: "(UTC-04:00) Caracas, La Paz" },
-  { tz: "America/Buenos_Aires", label: "(UTC-03:00) Buenos Aires, Brazil" },
-  { tz: "Atlantic/South_Georgia", label: "(UTC-02:00) Mid-Atlantic" },
-  { tz: "Atlantic/Azores", label: "(UTC-01:00) Azores, Cape Verde" },
-  { tz: "UTC", label: "(UTC+00:00) Coordinated Universal Time" },
-  { tz: "Europe/London", label: "(UTC+00:00) London, Edinburgh (UK)" },
-  { tz: "Europe/Paris", label: "(UTC+01:00) Central European Time (Paris, Berlin)" },
-  { tz: "Europe/Athens", label: "(UTC+02:00) Eastern European Time (Athens, Cairo)" },
-  { tz: "Europe/Moscow", label: "(UTC+03:00) Moscow, St. Petersburg" },
-  { tz: "Asia/Dubai", label: "(UTC+04:00) Abu Dhabi, Muscat, Dubai" },
-  { tz: "Asia/Karachi", label: "(UTC+05:00) Islamabad, Karachi" },
-  { tz: "Asia/Kolkata", label: "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi (India)" },
-  { tz: "Asia/Dhaka", label: "(UTC+06:00) Astana, Dhaka (Bangladesh)" },
-  { tz: "Asia/Bangkok", label: "(UTC+07:00) Bangkok, Hanoi, Jakarta" },
-  { tz: "Asia/Hong_Kong", label: "(UTC+08:00) Beijing, Hong Kong, Singapore" },
-  { tz: "Asia/Tokyo", label: "(UTC+09:00) Osaka, Sapporo, Tokyo (Japan)" },
-  { tz: "Australia/Sydney", label: "(UTC+10:00) Canberra, Melbourne, Sydney" },
-  { tz: "Asia/Magadan", label: "(UTC+11:00) Magadan, Solomon Is., New Caledonia" },
-  { tz: "Pacific/Auckland", label: "(UTC+12:00) Auckland, Wellington (New Zealand)" },
-];
+import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
 
 export default async function SettingsPage(
   props: {
@@ -154,9 +127,9 @@ export default async function SettingsPage(
                   defaultValue={restaurant.timezone || "UTC"}
                   className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 h-10 cursor-pointer"
                 >
-                  {COMMON_TIMEZONES.map(({ tz, label }) => (
-                    <option key={tz} value={tz}>
-                      {label}
+                  {TIMEZONE_OPTIONS.map((tz) => (
+                    <option key={tz.code} value={tz.code}>
+                      {tz.name}
                     </option>
                   ))}
                 </select>
