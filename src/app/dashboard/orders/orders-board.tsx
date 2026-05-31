@@ -5,7 +5,7 @@ import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { differenceInMinutes } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
-import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink } from "lucide-react";
+import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings } from "lucide-react";
 import { updateOrderStatus } from "./actions";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
@@ -39,9 +39,20 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [currentTime, setCurrentTime] = useState(new Date());
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+  const [autoArchiveMinutes, setAutoArchiveMinutes] = useState<number | null>(30);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const knownOrderIds = useRef<Set<string>>(new Set(initialOrders.map(o => o.id)));
+  const completedTimes = useRef<Map<string, number>>(new Map());
+
+  useEffect(() => {
+    // track when orders enter completed/cancelled state
+    orders.forEach(o => {
+      if ((o.status === "completed" || o.status === "cancelled") && !completedTimes.current.has(o.id)) {
+        completedTimes.current.set(o.id, Date.now());
+      }
+    });
+  }, [orders]);
 
   useEffect(() => {
     if (selectedDateStr) return; // Only notify on live "Today" view
@@ -106,6 +117,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
   useEffect(() => {
     setMounted(true);
+    const saved = localStorage.getItem("nomenu_auto_archive_minutes");
+    if (saved !== null) {
+      if (saved === "never") setAutoArchiveMinutes(null);
+      else setAutoArchiveMinutes(Number(saved));
+    }
     const interval = setInterval(() => setCurrentTime(new Date()), 30000);
     return () => clearInterval(interval);
   }, []);
@@ -252,6 +268,26 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
         <div className="flex items-center gap-4">
           {!isKdsMode && (
             <div className="flex items-center gap-2">
+              <div className="relative flex items-center">
+                <Settings className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
+                <select
+                  value={autoArchiveMinutes === null ? "never" : autoArchiveMinutes}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    localStorage.setItem("nomenu_auto_archive_minutes", val);
+                    setAutoArchiveMinutes(val === "never" ? null : Number(val));
+                  }}
+                  className="pl-9 pr-8 py-2 text-sm border-2 border-slate-200 rounded-lg bg-white shadow-sm focus:border-indigo-500 focus:outline-none font-medium text-slate-700 cursor-pointer appearance-none hover:border-slate-300 transition-colors"
+                >
+                  <option value="5">Auto-clear: 5 mins</option>
+                  <option value="15">Auto-clear: 15 mins</option>
+                  <option value="30">Auto-clear: 30 mins</option>
+                  <option value="60">Auto-clear: 1 hr</option>
+                  <option value="never">Auto-clear: Never</option>
+                </select>
+                <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 pointer-events-none" />
+              </div>
+
               <div className="relative">
                 <CalendarIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input 
@@ -324,7 +360,16 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       <DragDropContext onDragEnd={onDragEnd}>
         <div className={`flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory ${isKdsMode ? "h-full" : "h-[calc(100vh-250px)] min-h-[600px]"} scrollbar-hide`}>
           {columns.map(col => {
-            const colOrders = orders.filter(o => o.status === col.id);
+            const colOrders = orders.filter(o => o.status === col.id).filter(o => {
+              if (!selectedDateStr && (col.id === "completed" || col.id === "cancelled") && autoArchiveMinutes !== null) {
+                const completedAt = completedTimes.current.get(o.id);
+                if (completedAt) {
+                  const minsPassed = (currentTime.getTime() - completedAt) / 60000;
+                  return minsPassed <= autoArchiveMinutes;
+                }
+              }
+              return true;
+            });
             const Icon = col.icon;
             
             return (
