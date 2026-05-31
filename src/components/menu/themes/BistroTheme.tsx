@@ -237,7 +237,7 @@ export function BistroTheme(props: MenuThemeProps) {
         </div>
       )}
 
-      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} />}
+      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
     </div>
   );
 }

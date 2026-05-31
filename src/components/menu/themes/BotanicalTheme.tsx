@@ -192,7 +192,7 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items }:
         Cultivated by {hasWhiteLabeling ? restaurant.name : "Nomenu"}
       </div>
 
-      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} />}
+      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
 
       {/* Cart Modal - Earthy style */}
       {canOrder && isOrderModalOpen && (
