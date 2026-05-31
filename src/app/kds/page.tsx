@@ -56,8 +56,8 @@ export default async function KDSPage() {
     .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
     .order("created_at", { ascending: false });
 
-  // If not elite plan, lock it
-  if (!restaurant.plan || restaurant.plan.toLowerCase() !== "elite") {
+  // If not elite or enterprise plan, lock it
+  if (!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase())) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-slate-100 font-sans">
         <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-center max-w-sm">
