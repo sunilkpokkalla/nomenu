@@ -18,6 +18,7 @@ interface Order {
   id: string;
   status: string;
   total_amount: number;
+  daily_order_number?: number;
 
   table_number: string | null;
   customer_name: string | null;
@@ -122,6 +123,7 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
         id,
         status,
         total_amount,
+        daily_order_number,
 
         table_number,
         customer_name,
@@ -235,7 +237,7 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
 
                     <div className="text-center mb-6">
                       <div className="text-sm uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
-                      <div className="text-5xl font-black">{String(o.id.slice(0,4)).padStart(3, '0')}</div>
+                      <div className="text-5xl font-black">#{String(o.daily_order_number || 0).padStart(3, '0')}</div>
                       {o.customer_name && (
                         <div className="mt-3 text-sm font-bold uppercase tracking-widest text-slate-700">
                           Guest: {o.customer_name}
