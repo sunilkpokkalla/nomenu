@@ -225,6 +225,16 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const handleStatusChange = async (orderId: string, newStatus: string) => {
     // Optimistic update
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    
+    // Auto-collapse if moved to an inactive status
+    if (newStatus === "completed" || newStatus === "cancelled") {
+      setExpandedOrders(prev => {
+        const next = new Set(prev);
+        next.delete(orderId);
+        return next;
+      });
+    }
+
     await updateOrderStatus(orderId, newStatus);
   };
 
