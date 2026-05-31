@@ -27,7 +27,7 @@ type Order = {
   total_amount: number;
   status: string;
   created_at: string;
-  daily_order_number?: number;
+  daily_order_number?: number | null;
   order_items?: OrderItem[];
 };
 

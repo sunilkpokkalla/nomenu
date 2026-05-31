@@ -281,6 +281,7 @@ export interface Database {
           restaurant_id: string;
           table_number: string | null;
           customer_name: string | null;
+          daily_order_number: number | null;
           total_amount: number;
           status: string;
           created_at: string;
@@ -290,6 +291,7 @@ export interface Database {
           restaurant_id: string;
           table_number?: string | null;
           customer_name?: string | null;
+          daily_order_number?: number | null;
           total_amount: number;
           status?: string;
           created_at?: string;

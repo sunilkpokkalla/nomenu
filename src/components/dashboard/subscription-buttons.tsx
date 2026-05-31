@@ -28,9 +28,9 @@ export function SubscriptionButton({
       } else {
         throw new Error(data.error || "Failed to initiate checkout");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      alert(`Checkout failed: ${error.message || "Unknown error occurred"}`);
+      alert(`Checkout failed: ${(error as Error).message || "Unknown error occurred"}`);
     } finally {
       setLoading(false);
     }
