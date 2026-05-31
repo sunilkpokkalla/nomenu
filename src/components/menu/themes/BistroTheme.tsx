@@ -7,7 +7,7 @@ import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
 
 export function BistroTheme(props: MenuThemeProps) {
-  const { restaurant, categories, items } = props;
+  const { restaurant, categories, items, tableNumber, qrCodeId } = props;
   const { addToCart } = useCart();
   
   const {

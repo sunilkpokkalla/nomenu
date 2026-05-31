@@ -13,7 +13,7 @@ type OrderItem = {
 };
 
 
-export function BotanicalTheme({ restaurant, categories: rawCategories, items }: MenuThemeProps) {
+export function BotanicalTheme({ restaurant, categories: rawCategories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
   const canFeedback = currentPlan === "pro" || currentPlan === "growth" || canOrder;
