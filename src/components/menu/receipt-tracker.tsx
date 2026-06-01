@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Receipt, X, ChefHat, CheckCircle2, Clock } from "lucide-react";
+import { Receipt, X, ChefHat, CheckCircle2, Clock, Download, Loader2 } from "lucide-react";
+import { toPng } from "html-to-image";
 
 interface OrderItem {
   id: string;
@@ -40,8 +41,36 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
   const [orders, setOrders] = useState<Order[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isDownloadingId, setIsDownloadingId] = useState<string | null>(null);
 
   const supabase = createClient();
+
+  const handleDownloadPng = async (orderId: string, orderNumber: number) => {
+    const el = document.getElementById(`receipt-${orderId}`);
+    if (!el) return;
+    setIsDownloadingId(orderId);
+    try {
+      const dataUrl = await toPng(el, { 
+        cacheBust: true, 
+        pixelRatio: 3,
+        filter: (node) => {
+          // exclude buttons with 'print:hidden'
+          if (node.classList && typeof node.classList.contains === 'function') {
+            return !node.classList.contains('print:hidden');
+          }
+          return true;
+        }
+      });
+      const link = document.createElement("a");
+      link.download = `receipt_${String(orderNumber).padStart(3, '0')}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Failed to generate receipt image", err);
+    } finally {
+      setIsDownloadingId(null);
+    }
+  };
 
   useEffect(() => {
     let savedOrderIds: string[] = [];
@@ -230,8 +259,9 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
             {/* Scrollable Feed of Receipts */}
             <div className="overflow-y-auto overflow-x-hidden space-y-6 pt-2 pb-10 flex-1 hide-scrollbar">
               {orders.map((o) => (
-                <div key={o.id} className="relative w-full bg-[#f9f9f9] text-[#111] font-mono flex flex-col shadow-xl" style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px))" }}>
-                  <div className="w-full h-3 bg-repeat-x" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left top", marginTop: "-3px" }} />
+                <div key={o.id} className="relative w-full">
+                  <div id={`receipt-${o.id}`} className="relative w-full bg-[#f9f9f9] text-[#111] font-mono flex flex-col shadow-xl" style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px))" }}>
+                    <div className="w-full h-3 bg-repeat-x" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left top", marginTop: "-3px" }} />
                   
                   <div className="p-6 pt-4 pb-8">
                     {restaurantName && (
@@ -315,6 +345,23 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
                   </div>
                   
                   <div className="w-full h-3 bg-repeat-x rotate-180" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left bottom", marginBottom: "-3px" }} />
+                  </div>
+                  
+                  {/* Download PNG Button */}
+                  <div className="absolute top-4 right-4 z-10 print:hidden">
+                    <button
+                      onClick={() => handleDownloadPng(o.id, o.daily_order_number || 0)}
+                      disabled={isDownloadingId === o.id}
+                      className="p-2.5 bg-slate-200 text-slate-700 hover:bg-slate-900 hover:text-white rounded-full shadow-sm transition-colors"
+                      title="Save as Image (PNG)"
+                    >
+                      {isDownloadingId === o.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Download className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
