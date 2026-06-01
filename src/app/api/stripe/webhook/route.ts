@@ -2,12 +2,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 
-// We use the service key because webhooks aren't authenticated by a user
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "dummy_key")
-);
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummyKeyForBuildProcess123", {
   apiVersion: "2026-05-27.dahlia",
 });
@@ -15,6 +9,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummyKeyForB
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 
 export async function POST(req: Request) {
+  // Instantiate supabase inside the handler to prevent build-time crashes on Vercel
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://dummy-for-build.supabase.co",
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "dummy_key")
+  );
+
   const payload = await req.text();
   const signature = req.headers.get("stripe-signature") || "";
 
