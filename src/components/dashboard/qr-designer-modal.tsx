@@ -26,6 +26,7 @@ interface QRDesignerModalProps {
     plan?: string | null;
   };
   qrImageApiUrl: string;
+  iconOnly?: boolean;
 }
 
 const PRESETS = [
@@ -37,7 +38,7 @@ const PRESETS = [
   { name: "Custom", type: "custom" },
 ];
 
-export function QrDesignerModal({ qr, restaurant, qrImageApiUrl }: QRDesignerModalProps) {
+export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = false }: QRDesignerModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -180,13 +181,14 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl }: QRDesignerMod
   return (
     <>
       <Button
-        variant="outline"
-        size="sm"
+        variant={iconOnly ? "ghost" : "outline"}
+        size={iconOnly ? "icon" : "sm"}
         onClick={() => setIsOpen(true)}
-        className="w-full bg-primary/5 border-primary/20 text-primary hover:bg-primary hover:text-white"
+        className={iconOnly ? "h-9 w-9 text-slate-500 hover:text-slate-900 rounded-full" : "w-full bg-primary/5 border-primary/20 text-primary hover:bg-primary hover:text-white"}
+        title={iconOnly ? "Design Card" : undefined}
       >
-        <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-        Design Card
+        <Sparkles className={`${iconOnly ? "" : "mr-1.5 "}h-4 w-4`} />
+        {!iconOnly && "Design Card"}
       </Button>
 
       {isOpen && mounted && createPortal(
