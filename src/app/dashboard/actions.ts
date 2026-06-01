@@ -903,6 +903,7 @@ export async function updateLocationZones(restaurantId: string, zones: string[])
 
   const { error } = await supabase
     .from("restaurants")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .update({ location_zones: cleanZones } as any)
     .eq("id", restaurantId)
     .eq("owner_id", user.id);
