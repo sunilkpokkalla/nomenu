@@ -30,6 +30,9 @@ type SortColumn = "date" | "rating";
 type SortDirection = "asc" | "desc";
 type RatingFilter = "all" | "positive" | "neutral" | "attention";
 
+// Global AudioContext to prevent recreating it
+let audioCtx: AudioContext | null = null;
+
 export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string }) {
   const [liveFeedbacks, setLiveFeedbacks] = useState<FeedbackData[]>(feedbacks);
   const [mounted, setMounted] = useState(false);
@@ -61,30 +64,37 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   // Distinct notification sound for feedback (Soft bubble pop / chime)
   const playFeedbackSound = () => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContext) return;
-      const ctx = new AudioContext();
+      if (!audioCtx) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContextClass) return;
+        audioCtx = new AudioContextClass();
+      }
+
+      // Resume context if it's suspended (browser auto-play policy)
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
       
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
       
       // Soft sine wave
       osc.type = 'sine';
       
       // Bubble pop effect (sweep frequency up quickly)
-      osc.frequency.setValueAtTime(500, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1000, ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
       
       // Quick envelope
-      gain.gain.setValueAtTime(0, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      gain.gain.setValueAtTime(0, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
       
       osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.3);
+      gain.connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + 0.3);
     } catch(e) {
       console.error("Audio playback failed", e);
     }
