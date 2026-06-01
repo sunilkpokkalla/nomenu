@@ -80,6 +80,19 @@ const config: Config = {
           450: "#34d399",
         },
       },
+      keyframes: {
+        float: {
+          '0%': { transform: 'translateY(20px)', opacity: '0' },
+          '20%': { transform: 'translateY(0px)', opacity: '1' },
+          '80%': { transform: 'translateY(-20px)', opacity: '1' },
+          '100%': { transform: 'translateY(-40px)', opacity: '0' },
+        },
+      },
+      animation: {
+        'float-slow': 'float 8s ease-in-out infinite',
+        'float-medium': 'float 6s ease-in-out infinite',
+        'float-fast': 'float 5s ease-in-out infinite',
+      },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "sans-serif"],
         mono: ["var(--font-space-mono)", "Space Mono", "monospace"],
