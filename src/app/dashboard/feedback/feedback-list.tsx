@@ -103,11 +103,13 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   // Real-time subscription
   useEffect(() => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+    console.log("Subscribing to realtime for customer_feedback...");
     const channel = supabase.channel(`feedbacks-${restaurantId}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "customer_feedback", filter: `restaurant_id=eq.${restaurantId}` },
+        { event: "INSERT", schema: "public", table: "customer_feedback" },
         async (payload) => {
+          console.log("Realtime payload received!", payload);
           const { data: fullFeedback } = await supabase
             .from("customer_feedback")
             .select("*, qr_codes(label)")
@@ -119,7 +121,9 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log("Realtime subscription status:", status);
+      });
     return () => { supabase.removeChannel(channel); };
   }, [restaurantId, supabaseUrl, supabaseAnonKey]);
 
