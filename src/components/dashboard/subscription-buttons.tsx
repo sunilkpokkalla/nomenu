@@ -42,8 +42,8 @@ export function SubscriptionButton({
       disabled={loading}
       className={`w-full py-4 rounded-xl text-sm font-black tracking-widest uppercase transition-all flex items-center justify-center gap-2
         ${isElite 
-          ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-xl shadow-indigo-500/20 hover:scale-[1.02]" 
-          : "bg-slate-100 text-slate-900 border border-slate-200 hover:bg-slate-200"
+          ? "bg-slate-950 text-white shadow-lg shadow-slate-900/10 hover:bg-black hover:scale-[1.02]" 
+          : "bg-white text-slate-900 border border-slate-200 hover:bg-slate-50"
         }
         ${loading ? "opacity-70 pointer-events-none" : ""}
       `}
