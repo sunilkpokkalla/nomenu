@@ -640,7 +640,7 @@ export default function Home() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Private Customer Feedback System
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Full Theme Customization
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 3 Premium Design Themes
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Detailed Scan Analytics & Timezones
