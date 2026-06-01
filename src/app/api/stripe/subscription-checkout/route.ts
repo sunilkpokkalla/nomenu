@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       // Use Service Role to bypass RLS, because users are strictly forbidden from modifying their own 'plan' column!
       const adminSupabase = createAdminClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_KEY!
+        (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
       );
 
       // Instantly upgrade the user in the database
