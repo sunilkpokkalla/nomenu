@@ -34,7 +34,7 @@ export const navItems = [
   // Operations & Insights
   { href: "/dashboard/orders", label: "Orders", icon: ShoppingBag, badge: "ELITE" },
   { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT." },
-  { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "ELITE" },
+  { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO" },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },
   
   // Account

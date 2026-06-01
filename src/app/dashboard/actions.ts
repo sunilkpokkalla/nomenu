@@ -206,7 +206,7 @@ export async function createMenuItem(formData: FormData) {
       .select("id", { count: "exact", head: true })
       .eq("restaurant_id", restaurant.id);
       
-    const limit = currentPlan === "free" ? 30 : 25;
+    const limit = currentPlan === "free" ? 30 : 50;
     if (itemCount !== null && itemCount >= limit) {
       redirect(`/dashboard/items?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20items.%20Upgrade%20your%20plan%20to%20add%20more.`);
     }

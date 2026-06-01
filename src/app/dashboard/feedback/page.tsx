@@ -63,7 +63,7 @@ export default async function FeedbackPage() {
       </div>
 
       <div className="relative">
-        {(!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.toLowerCase())) && (
+        {(!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.trim().toLowerCase())) && (
           <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-50/80 backdrop-blur-sm rounded-2xl border border-slate-100">
             <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-center max-w-sm">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600">
@@ -83,7 +83,7 @@ export default async function FeedbackPage() {
           </div>
         )}
 
-        <div className={!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.toLowerCase()) ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all" : ""}>
+        <div className={!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.trim().toLowerCase()) ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all" : ""}>
           <div className="mb-8">
             <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
           </div>
