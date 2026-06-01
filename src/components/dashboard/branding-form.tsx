@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Loader2, Palette, Save, Wifi, Lock, Sparkles, Crown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
@@ -21,7 +20,6 @@ interface BrandingFormProps {
     plan?: string | null;
     address?: string | null;
     phone?: string | null;
-    // Menu specific
     use_custom_design?: boolean | null;
   };
   type: "restaurant" | "menu";
@@ -29,7 +27,6 @@ interface BrandingFormProps {
   successMessage?: string;
   errorMessage?: string;
 }
-
 
 export function BrandingForm({ entity, type, action, successMessage, errorMessage }: BrandingFormProps) {
   const [useCustomDesign, setUseCustomDesign] = useState(type === "menu" ? (entity.use_custom_design || false) : true);
@@ -53,14 +50,14 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
 
   if (!isPro) {
     isLocked = true;
-    lockTitle = "Custom Branding Locked";
-    lockMessage = "Customizing your menu's colors, layout themes, and WiFi settings is a premium feature. Upgrade to Pro to unlock basic templates, or Elite for full access. You can continue to preview them here!";
-    upgradeTarget = "Save Locked: Upgrade to Pro";
+    lockTitle = "Premium Branding Locked";
+    lockMessage = "Custom colors, themes, and layout designs are reserved for Pro and Elite accounts. Preview them below, then upgrade to apply to your live menu.";
+    upgradeTarget = "Upgrade to Pro";
   } else if (!isElite && requiresElite) {
     isLocked = true;
     lockTitle = "Elite Theme Locked";
-    lockMessage = `The ${themeStyle} template is an exclusive Elite feature. Upgrade your plan to apply this premium design to your live menu.`;
-    upgradeTarget = "Save Locked: Upgrade to Elite";
+    lockMessage = `The ${themeStyle} template is an exclusive Elite feature. Upgrade your plan to apply this ultra-premium design.`;
+    upgradeTarget = "Upgrade to Elite";
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,7 +73,6 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
     }
   };
 
-  // Dynamic theme class definitions for preview matching public menu styles
   const previewTheme = {
     bistro: {
       frameBg: "bg-[#FDFBF7]",
@@ -130,232 +126,122 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_420px]">
-      {/* Settings Form */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Palette className="h-5 w-5 text-primary" /> Branding & Theme
-          </CardTitle>
-          <CardDescription>
-            Customize the look and feel of your guest-facing digital menu.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form id="branding-settings-form" onSubmit={handleSubmit} className="space-y-6">
-            {type === "menu" && (
-              <div className="flex items-center justify-between rounded-lg border p-4 bg-muted/50">
-                <div className="space-y-0.5">
-                  <Label className="text-base">Override Global Theme</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Use a custom design specifically for this menu.
-                  </p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-  <input 
-    type="checkbox" 
-    name="use_custom_design" 
-    value="true" 
-    className="sr-only peer"
-    checked={useCustomDesign}
-    onChange={(e) => setUseCustomDesign(e.target.checked)}
-  />
-  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-</label>
-              </div>
-            )}
+    <div className="flex flex-col lg:flex-row gap-16 items-start max-w-[1400px] mx-auto w-full">
+      {/* LEFT: SETTINGS PANEL */}
+      <div className="flex-1 w-full space-y-16">
+        
+        {/* Header Intro */}
+        <div>
+          <h1 className="text-3xl font-black tracking-tight text-slate-900 mb-2">Visual Identity</h1>
+          <p className="text-slate-500 font-medium">Design the digital experience your guests see when they scan the QR code.</p>
+        </div>
 
-            <div className={type === "menu" && !useCustomDesign ? "opacity-50 pointer-events-none transition-opacity" : "transition-opacity"}>
-            {successMessage && (
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                {successMessage}
-              </div>
-            )}
-            {errorMessage && (
-              <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                {errorMessage}
-              </div>
-            )}
-
-            {/* Color Selectors */}
-            <div className="grid gap-6 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="primaryColor">Primary Color</Label>
-                <div className="flex gap-2">
-                  <Input
-                    type="color"
-                    id="primaryColorPicker"
-                    value={primaryColor}
-                    onChange={(e) => setPrimaryColor(e.target.value)}
-                    className="w-12 h-10 p-1 border cursor-pointer rounded-lg"
-                  />
-                  <Input
-                    type="text"
-                    id="primaryColor"
-                    name="primaryColor"
-                    value={primaryColor}
-                    onChange={(e) => setPrimaryColor(e.target.value)}
-                    placeholder="#2563EB"
-                    className="flex-1"
-                    maxLength={7}
-                    required
-                  />
-                </div>
-                <p className="text-[10px] text-slate-400">Used for headers, banners, and button active states.</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="accentColor">Accent Color</Label>
-                <div className="flex gap-2">
-                  <Input
-                    type="color"
-                    id="accentColorPicker"
-                    value={accentColor}
-                    onChange={(e) => setAccentColor(e.target.value)}
-                    className="w-12 h-10 p-1 border cursor-pointer rounded-lg"
-                  />
-                  <Input
-                    type="text"
-                    id="accentColor"
-                    name="accentColor"
-                    value={accentColor}
-                    onChange={(e) => setAccentColor(e.target.value)}
-                    placeholder="#F59E0B"
-                    className="flex-1"
-                    maxLength={7}
-                    required
-                  />
-                </div>
-                <p className="text-[10px] text-slate-400">Used for highlights, tags, badges, and accents.</p>
-              </div>
-            </div>
-
-            <hr />
-
-            {/* Theme Presets Selection */}
-            <div className="space-y-4">
+        <form id="branding-settings-form" onSubmit={handleSubmit} className="space-y-16">
+          
+          {type === "menu" && (
+            <div className="bg-slate-100 p-6 rounded-3xl flex items-center justify-between border border-slate-200/60">
               <div>
-                <Label className="text-sm font-semibold text-slate-800">Menu Layout Template</Label>
-                <p className="text-[11px] text-slate-500">Select a structural theme matching your restaurant vibe.</p>
+                <Label className="text-base font-bold text-slate-900">Custom Menu Styling</Label>
+                <p className="text-sm text-slate-500 mt-1">Detach this menu from your global restaurant branding.</p>
               </div>
-              
-              <input type="hidden" name="themeStyle" value={themeStyle} />
-
-              <div className="grid gap-3 grid-cols-2">
-                {[
-
-                  {
-                    id: "minimalist",
-                    name: "Minimalist (Free)",
-                    description: "Ultra clean line listing",
-                    emoji: "🍽️",
-                    badge: null
-                  },
-                  {
-                    id: "omakase",
-                    name: "Omakase",
-                    description: "Zen Minimalist Dark",
-                    emoji: "🍣",
-                    badge: "PRO"
-                  },
-                  {
-                    id: "bistro",
-                    name: "Classic Bistro",
-                    description: "High-end dining bento",
-                    emoji: "🍷",
-                    badge: "PRO"
-                  },
-                  {
-                    id: "luxury",
-                    name: "Lumina Premium",
-                    description: "High-end cinematic dark gold",
-                    emoji: "✨",
-                    badge: "ELITE"
-                  },
-                  {
-                    id: "vibrant",
-                    name: "Vibrant Diner",
-                    description: "Neo-brutalism bold cards",
-                    emoji: "🍔",
-                    badge: "ELITE"
-                  },
-                  {
-                    id: "resort",
-                    name: "Oasis Resort",
-                    description: "Beach club bento",
-                    emoji: "🌊",
-                    badge: "ELITE"
-                  },
-                  {
-                    id: "popdiner",
-                    name: "Pop Diner",
-                    description: "Aggressive street pop art",
-                    emoji: "⚡",
-                    badge: "ELITE"
-                  },
-                  {
-                    id: "editorial",
-                    name: "Editorial",
-                    description: "High-end fashion magazine",
-                    emoji: "📖",
-                    badge: "ELITE"
-                  },
-                  {
-                    id: "boutique",
-                    name: "Boutique Cafe",
-                    description: "Soft girl dreamcore",
-                    emoji: "🎀",
-                    badge: "ELITE"
-                  },
-                  {
-                    id: "botanical",
-                    name: "Botanical",
-                    description: "Earthy minimal floral",
-                    emoji: "🌿",
-                    badge: "ELITE"
-                  },
-                  {
-                    id: "lounge",
-                    name: "Velvet Lounge",
-                    description: "Hotel bar nightlife",
-                    emoji: "🍸",
-                    badge: "ELITE"
-                  }
-                ].map((theme) => (
-                  <button
-                    key={theme.id}
-                    type="button"
-                    onClick={() => setThemeStyle(theme.id)}
-                    className={`flex flex-col text-left p-3 rounded-xl border-2 transition-all relative overflow-hidden cursor-pointer ${
-                      themeStyle === theme.id
-                        ? "border-primary bg-primary/5 shadow-sm"
-                        : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                    }`}
-                  >
-                    {theme.badge && (
-                      <span className={`absolute top-0 right-0 ${theme.badge === 'PRO' ? 'bg-indigo-500' : 'bg-amber-500'} text-white text-[7px] font-extrabold px-1.5 py-0.5 rounded-bl uppercase tracking-wider scale-90 origin-top-right`}>
-                        {theme.badge}
-                      </span>
-                    )}
-                    <span className="text-xl mb-1">{theme.emoji}</span>
-                    <span className="text-xs font-bold text-slate-900 leading-tight">
-                      {theme.name}
-                    </span>
-                    <span className="text-[10px] text-slate-500 leading-tight mt-0.5">{theme.description}</span>
-                  </button>
-                ))}
-              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="use_custom_design" 
+                  value="true" 
+                  className="sr-only peer"
+                  checked={useCustomDesign}
+                  onChange={(e) => setUseCustomDesign(e.target.checked)}
+                />
+                <div className="w-14 h-8 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-slate-900 shadow-inner"></div>
+              </label>
             </div>
+          )}
 
-            <hr />
+          <div className={type === "menu" && !useCustomDesign ? "opacity-40 pointer-events-none transition-all duration-300 grayscale" : "transition-all duration-300"}>
+            
+            {/* Color Palette */}
+            <section>
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-6 border-b border-slate-100 pb-3">Color Palette</h2>
+              <div className="grid gap-6 sm:grid-cols-2">
+                
+                <div className="group flex items-center gap-5 p-4 rounded-[2rem] bg-slate-50 border border-slate-100 transition-all hover:bg-white hover:border-slate-200 hover:shadow-xl hover:shadow-slate-200/20">
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-inner ring-1 ring-black/5 flex-shrink-0 cursor-pointer">
+                    <input type="color" id="primaryColorPicker" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="absolute -top-4 -left-4 w-24 h-24 cursor-pointer" />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <Label className="text-sm font-bold text-slate-900">Primary Color</Label>
+                    <Input type="text" name="primaryColor" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} maxLength={7} required className="border-0 bg-transparent text-lg font-mono tracking-wider shadow-none px-0 h-auto focus-visible:ring-0 text-slate-500 uppercase" />
+                  </div>
+                </div>
 
-            {/* Amenities Section */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold flex items-center gap-1.5 text-slate-700">
-                <Wifi className="h-4 w-4 text-slate-400" /> Dining Room Amenities
-              </h3>
-              <div className="space-y-2">
-                <Label htmlFor="wifiPassword">Guest WiFi Password</Label>
+                <div className="group flex items-center gap-5 p-4 rounded-[2rem] bg-slate-50 border border-slate-100 transition-all hover:bg-white hover:border-slate-200 hover:shadow-xl hover:shadow-slate-200/20">
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-inner ring-1 ring-black/5 flex-shrink-0 cursor-pointer">
+                    <input type="color" id="accentColorPicker" value={accentColor} onChange={(e) => setAccentColor(e.target.value)} className="absolute -top-4 -left-4 w-24 h-24 cursor-pointer" />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <Label className="text-sm font-bold text-slate-900">Accent Color</Label>
+                    <Input type="text" name="accentColor" value={accentColor} onChange={(e) => setAccentColor(e.target.value)} maxLength={7} required className="border-0 bg-transparent text-lg font-mono tracking-wider shadow-none px-0 h-auto focus-visible:ring-0 text-slate-500 uppercase" />
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+            {/* Layout Themes */}
+            <section className="mt-16">
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-6 border-b border-slate-100 pb-3">Layout Themes</h2>
+              <input type="hidden" name="themeStyle" value={themeStyle} />
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[
+                  { id: "minimalist", name: "Minimalist", desc: "Clean & Simple", icon: "🍽️", badge: null },
+                  { id: "omakase", name: "Omakase", desc: "Zen Dark Mode", icon: "🍣", badge: "PRO" },
+                  { id: "bistro", name: "Bistro", desc: "Classic Serif", icon: "🍷", badge: "PRO" },
+                  { id: "luxury", name: "Lumina", desc: "Gold Cinematic", icon: "✨", badge: "ELITE" },
+                  { id: "vibrant", name: "Vibrant", desc: "Neo-brutalism", icon: "🍔", badge: "ELITE" },
+                  { id: "resort", name: "Oasis", desc: "Beach Club", icon: "🌊", badge: "ELITE" },
+                  { id: "popdiner", name: "Pop Diner", desc: "Street Art", icon: "⚡", badge: "ELITE" },
+                  { id: "editorial", name: "Editorial", desc: "Magazine Style", icon: "📖", badge: "ELITE" },
+                  { id: "lounge", name: "Velvet", desc: "Hotel Lounge", icon: "🍸", badge: "ELITE" }
+                ].map((theme) => {
+                  const isActive = themeStyle === theme.id;
+                  return (
+                    <button
+                      key={theme.id}
+                      type="button"
+                      onClick={() => setThemeStyle(theme.id)}
+                      className={`relative flex flex-col items-center justify-center p-6 rounded-3xl transition-all duration-300 hover:scale-[1.02] border-2 ${
+                        isActive 
+                          ? "border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-900/20" 
+                          : "border-slate-100 bg-white hover:border-slate-200 text-slate-900 shadow-sm"
+                      }`}
+                    >
+                      {theme.badge && (
+                        <span className={`absolute top-0 right-0 px-2 py-1 text-[8px] font-black uppercase tracking-widest rounded-bl-xl rounded-tr-2xl ${
+                          theme.badge === 'PRO' 
+                            ? 'bg-indigo-500 text-white' 
+                            : 'bg-gradient-to-r from-amber-400 to-amber-600 text-white shadow-sm'
+                        }`}>
+                          {theme.badge}
+                        </span>
+                      )}
+                      <span className="text-3xl mb-3 drop-shadow-sm">{theme.icon}</span>
+                      <span className="text-sm font-bold tracking-tight">{theme.name}</span>
+                      <span className={`text-[10px] mt-1 font-medium ${isActive ? 'text-slate-300' : 'text-slate-500'}`}>{theme.desc}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* Dining Amenities */}
+            <section className="mt-16">
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-6 border-b border-slate-100 pb-3 flex items-center gap-2">
+                <Wifi className="h-4 w-4" /> Amenities
+              </h2>
+              <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                <Label htmlFor="wifiPassword" className="text-sm font-bold text-slate-900">Guest WiFi Password</Label>
                 <Input
                   type="text"
                   id="wifiPassword"
@@ -363,102 +249,118 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                   value={wifiPassword}
                   onChange={(e) => setWifiPassword(e.target.value)}
                   placeholder="e.g. bistro-guest-2026"
+                  className="mt-3 bg-white border-slate-200 h-12 rounded-xl focus-visible:ring-slate-900 text-slate-900"
                 />
-                <p className="text-xs text-slate-500">
-                  Leave blank to hide. If provided, guests will see this WiFi password displayed directly on the digital menu page.
+                <p className="text-xs text-slate-500 mt-3 font-medium">
+                  If provided, this prints clearly on the guest-facing digital menu interface.
                 </p>
               </div>
-            </div>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+            </section>
 
-      {/* Live Preview Console */}
-      <div className="space-y-3">
-        <div className="flex justify-between items-center px-1">
-          <Label className="font-semibold text-slate-700 text-sm">Live Mobile Preview</Label>
-          <span className="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+            {successMessage && (
+              <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-4 text-sm text-emerald-800 font-medium">
+                {successMessage}
+              </div>
+            )}
+            {errorMessage && (
+              <div className="mt-8 rounded-2xl border border-destructive/20 bg-destructive/10 px-6 py-4 text-sm text-destructive font-medium">
+                {errorMessage}
+              </div>
+            )}
+
+          </div>
+        </form>
+      </div>
+
+      {/* RIGHT: STICKY PREVIEW */}
+      <div className="w-full lg:w-[420px] shrink-0 lg:sticky lg:top-8 pb-12">
+        <div className="flex justify-between items-center px-2 mb-4">
+          <Label className="font-bold text-slate-900 text-sm tracking-tight">Live Mobile Preview</Label>
+          <span className="text-[9px] bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full font-bold uppercase tracking-[0.1em]">
             Interactive
           </span>
         </div>
 
-        
         {/* Guest View Frame */}
-        <div className={`mx-auto max-w-[340px] w-full border-8 border-slate-900 rounded-[32px] overflow-hidden shadow-2xl min-h-[520px] flex flex-col relative aspect-[9/16] transition-all duration-300 ${previewTheme.frameBg} ${previewTheme.fontClass}`}>
+        <div className={`mx-auto w-full max-w-[380px] border-[10px] border-slate-900 rounded-[40px] overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)] min-h-[640px] flex flex-col relative aspect-[9/16] transition-all duration-500 ${previewTheme.frameBg} ${previewTheme.fontClass}`}>
           {/* Cover Header Banner */}
           {themeStyle === "bistro" ? (
             <div className="text-center relative bg-[#1C1917] overflow-hidden shrink-0 flex flex-col">
-              <div className="pt-6 pb-4 px-4 z-10 space-y-0.5">
-                <h1 className="text-xl font-serif text-[#D4AF37] tracking-wider uppercase drop-shadow-md">{entity.name}</h1>
-                <div className="flex items-center justify-center gap-2 mt-1">
+              <div className="pt-8 pb-5 px-4 z-10 space-y-1">
+                <h1 className="text-2xl font-serif text-[#D4AF37] tracking-wider uppercase drop-shadow-md">{entity.name}</h1>
+                <div className="flex items-center justify-center gap-2 mt-2">
                   <span className="h-px w-6 bg-gradient-to-r from-transparent to-[#D4AF37]/60"></span>
-                  <span className="text-[7px] text-[#D4AF37] uppercase tracking-[0.3em] font-sans font-medium">
+                  <span className="text-[8px] text-[#D4AF37] uppercase tracking-[0.3em] font-sans font-medium">
                     {entity.cuisine_type || "Menu"}
                   </span>
                   <span className="h-px w-6 bg-gradient-to-l from-transparent to-[#D4AF37]/60"></span>
                 </div>
               </div>
-              <div className="w-full h-[80px] relative border-t border-[#D4AF37]/30 shadow-inner">
+              <div className="w-full h-[90px] relative border-t border-[#D4AF37]/30 shadow-inner">
                 <Image src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=400&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" fill />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/50 to-transparent"></div>
               </div>
             </div>
           ) : themeStyle === "lounge" ? (
-            <div className="pt-10 pb-6 px-4 text-center bg-[#0A0A0A] text-[#E0E0E0] shrink-0 border-b border-[#D4AF37]/20 relative">
+            <div className="pt-12 pb-8 px-4 text-center bg-[#0A0A0A] text-[#E0E0E0] shrink-0 border-b border-[#D4AF37]/20 relative">
               <div className="absolute top-0 left-0 w-full h-full bg-[#D4AF37]/5 blur-xl pointer-events-none"></div>
-              <h1 className="text-2xl font-black tracking-tighter uppercase text-white mb-1 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)] relative z-10">{entity.name}</h1>
-              <p className="text-[7px] tracking-[0.2em] text-[#D4AF37] uppercase font-bold relative z-10">{entity.cuisine_type || "Lounge"}</p>
+              <h1 className="text-3xl font-black tracking-tighter uppercase text-white mb-1 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)] relative z-10">{entity.name}</h1>
+              <p className="text-[8px] tracking-[0.2em] text-[#D4AF37] uppercase font-bold relative z-10">{entity.cuisine_type || "Lounge"}</p>
             </div>
           ) : themeStyle === "resort" ? (
-            <div className="pt-10 pb-6 px-4 text-center bg-[#F0F8FF] text-[#003366] shrink-0 relative overflow-hidden">
+            <div className="pt-12 pb-8 px-4 text-center bg-[#F0F8FF] text-[#003366] shrink-0 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-b from-[#87CEEB]/30 to-transparent"></div>
-              <h1 className="text-2xl font-black tracking-tighter uppercase text-[#003366] mb-1 relative z-10">{entity.name}</h1>
-              <p className="text-[7px] tracking-[0.2em] text-[#006994] uppercase font-bold relative z-10">{entity.cuisine_type || "Oasis Resort"}</p>
+              <h1 className="text-3xl font-black tracking-tighter uppercase text-[#003366] mb-1 relative z-10">{entity.name}</h1>
+              <p className="text-[8px] tracking-[0.2em] text-[#006994] uppercase font-bold relative z-10">{entity.cuisine_type || "Oasis Resort"}</p>
             </div>
           ) : themeStyle === "luxury" ? (
-            <div className="pt-6 pb-4 px-4 text-center bg-black">
-              <h1 className="text-lg font-bold tracking-widest uppercase text-amber-400 font-serif">{entity.name}</h1>
-              <p className="text-[8px] opacity-60 mt-0.5 tracking-wider uppercase text-zinc-400">
+            <div className="pt-8 pb-6 px-4 text-center bg-black">
+              <h1 className="text-xl font-bold tracking-widest uppercase text-amber-400 font-serif">{entity.name}</h1>
+              <p className="text-[9px] opacity-60 mt-1 tracking-wider uppercase text-zinc-400">
                 {entity.cuisine_type || "Fine Dining"}
               </p>
-              <div className="w-12 h-0.5 bg-amber-500/40 mx-auto mt-2.5"></div>
+              <div className="w-12 h-0.5 bg-amber-500/40 mx-auto mt-3"></div>
             </div>
           ) : themeStyle === "vibrant" ? (
-            <div className="pt-8 pb-6 px-4 text-center border-b-2 border-black relative bg-[#FFD166] shrink-0">
+            <div className="pt-10 pb-8 px-4 text-center border-b-4 border-black relative bg-[#FFD166] shrink-0">
               <div className="text-center z-10 space-y-1">
-                <h1 className="text-xl font-black tracking-tight text-black font-sans uppercase drop-shadow-[1px_1px_0px_rgba(0,0,0,1)]">
+                <h1 className="text-2xl font-black tracking-tight text-black font-sans uppercase drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                   {entity.name}
                 </h1>
-                <span className="inline-block bg-black text-[#FEFCE8] text-[8px] font-black uppercase tracking-wider px-2 py-0.5 border border-black rounded-md transform -rotate-1">
+                <span className="inline-block bg-black text-[#FEFCE8] text-[9px] font-black uppercase tracking-wider px-2 py-1 border border-black rounded-md transform -rotate-2">
                   {entity.cuisine_type || "Diner Pop"}
                 </span>
               </div>
             </div>
           ) : themeStyle === "omakase" ? (
-            <div className="pt-10 pb-6 px-4 text-center bg-[#0F0F0F] text-[#E0E0E0] shrink-0">
-              <h1 className="text-xl tracking-[0.2em] font-light uppercase text-white mb-2">{entity.name}</h1>
-              <div className="w-[1px] h-6 bg-gradient-to-b from-transparent via-[#4A4A4A] to-transparent mx-auto"></div>
-              <p className="mt-2 text-[6px] tracking-[0.2em] text-[#888888] uppercase">{entity.cuisine_type || "Tasting Menu"}</p>
+            <div className="pt-12 pb-8 px-4 text-center bg-[#0F0F0F] text-[#E0E0E0] shrink-0">
+              <h1 className="text-2xl tracking-[0.2em] font-light uppercase text-white mb-3">{entity.name}</h1>
+              <div className="w-[1px] h-8 bg-gradient-to-b from-transparent via-[#4A4A4A] to-transparent mx-auto"></div>
+              <p className="mt-3 text-[7px] tracking-[0.2em] text-[#888888] uppercase">{entity.cuisine_type || "Tasting Menu"}</p>
             </div>
           ) : themeStyle === "popdiner" ? (
-            <div className="pt-8 pb-4 px-4 text-center bg-[#EF476F] border-b-4 border-black shrink-0 relative overflow-hidden">
-              <div className="w-12 h-12 bg-[#118AB2] border-2 border-black rounded-full mx-auto mb-2 flex items-center justify-center rotate-6 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-white font-black">⚡</div>
-              <h1 className="text-xl font-black tracking-tighter uppercase text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] mb-1 -rotate-1">{entity.name}</h1>
-              <p className="inline-block bg-black text-[#FFD166] text-[6px] font-black uppercase tracking-widest px-2 py-0.5 border border-white rounded transform rotate-2">
+            <div className="pt-10 pb-6 px-4 text-center bg-[#EF476F] border-b-4 border-black shrink-0 relative overflow-hidden">
+              <div className="w-14 h-14 bg-[#118AB2] border-2 border-black rounded-full mx-auto mb-3 flex items-center justify-center rotate-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-white font-black text-xl">⚡</div>
+              <h1 className="text-2xl font-black tracking-tighter uppercase text-white drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] mb-2 -rotate-1">{entity.name}</h1>
+              <p className="inline-block bg-black text-[#FFD166] text-[7px] font-black uppercase tracking-widest px-2.5 py-1 border border-white rounded transform rotate-2">
                 {entity.cuisine_type || "Pop Diner"}
               </p>
             </div>
+          ) : themeStyle === "editorial" ? (
+            <div className="pt-12 pb-8 px-6 text-center bg-[#F9F8F6] border-b border-[#E2DFD8] shrink-0">
+              <h1 className="text-3xl font-serif font-light text-[#1A1918] mb-2">{entity.name}</h1>
+              <p className="text-[7px] tracking-[0.25em] uppercase text-[#8C8881]">{entity.cuisine_type || "Editorial"}</p>
+            </div>
           ) : (
             <div
-              className="h-24 w-full relative flex items-end justify-center p-3 text-white transition-all duration-300"
+              className="h-28 w-full relative flex items-end justify-center p-4 text-white transition-all duration-300"
               style={{
                 background: previewTheme.headerGradient,
               }}
             >
               <div className="text-center z-10">
-                <h1 className="text-sm font-bold tracking-tight">{entity.name}</h1>
-                <p className="text-[9px] opacity-90 font-medium tracking-wide uppercase">
+                <h1 className="text-base font-bold tracking-tight">{entity.name}</h1>
+                <p className="text-[10px] opacity-90 font-medium tracking-wide uppercase mt-0.5">
                   {entity.cuisine_type || "Fine Dining"}
                 </p>
               </div>
@@ -467,52 +369,52 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
 
           {/* Overlapping Info Card */}
           {themeStyle === "bistro" ? (
-            <div className="px-4 py-2 z-20 shrink-0 bg-[#FDFBF7] border-b border-[#E7E5E4] shadow-sm text-center flex flex-col items-center gap-1">
-              <p className="font-sans text-[8px] uppercase tracking-widest text-[#78716C]">
-                📍 {entity.address}
+            <div className="px-5 py-3 z-20 shrink-0 bg-[#FDFBF7] border-b border-[#E7E5E4] shadow-sm text-center flex flex-col items-center gap-1.5">
+              <p className="font-sans text-[9px] uppercase tracking-widest text-[#78716C]">
+                📍 {entity.address || "123 Bistro Lane, Paris"}
               </p>
-              <div className="flex justify-center items-center gap-4 text-[8px] uppercase tracking-widest text-[#57534E] font-medium">
-                <span>📞 {entity.phone}</span>
-                {wifiPassword && <span className="text-[#D4AF37] font-bold">📶 WiFi: {wifiPassword}</span>}
+              <div className="flex justify-center items-center gap-4 text-[9px] uppercase tracking-widest text-[#57534E] font-medium mt-1">
+                <span>📞 {entity.phone || "555-0100"}</span>
+                {wifiPassword && <span className="text-[#D4AF37] font-bold">📶 {wifiPassword}</span>}
               </div>
             </div>
           ) : themeStyle === "lounge" ? (
-            <div className="px-4 py-2 z-20 shrink-0 bg-black/60 backdrop-blur-md border-b border-white/5 shadow-sm text-center flex flex-col items-center gap-1">
-              <p className="text-[8px] text-[#D4AF37]/60">📍 {entity.address}</p>
+            <div className="px-5 py-3 z-20 shrink-0 bg-black/60 backdrop-blur-md border-b border-white/5 shadow-sm text-center flex flex-col items-center gap-1">
+              <p className="text-[9px] text-[#D4AF37]/60 tracking-widest uppercase">📍 {entity.address || "123 Lounge Ave"}</p>
             </div>
           ) : themeStyle === "resort" ? (
-            <div className="px-4 py-2 z-20 shrink-0 bg-white/80 backdrop-blur-md border-b border-[#87CEEB]/30 shadow-sm text-center flex flex-col items-center gap-1">
-              <p className="text-[8px] text-[#006994] font-bold">📍 {entity.address}</p>
+            <div className="px-5 py-3 z-20 shrink-0 bg-white/80 backdrop-blur-md border-b border-[#87CEEB]/30 shadow-sm text-center flex flex-col items-center gap-1">
+              <p className="text-[9px] text-[#006994] font-bold tracking-wider uppercase">📍 {entity.address || "123 Beach Blvd"}</p>
             </div>
           ) : themeStyle === "luxury" || themeStyle === "minimalist" || themeStyle === "vibrant" ? (
-            <div className="px-4 py-1 text-center text-[8px] text-zinc-500 space-y-0.5 mt-2">
-              <p>📍 {entity.address}</p>
-              <div className="flex justify-center gap-3">
-                <span>📞 {entity.phone}</span>
-                {wifiPassword && <span className="text-amber-500/70">📶 WiFi: {wifiPassword}</span>}
+            <div className="px-5 py-2 text-center text-[9px] text-zinc-500 space-y-1 mt-3">
+              <p className="tracking-wide">📍 {entity.address || "123 Minimalist St."}</p>
+              <div className="flex justify-center gap-4">
+                <span>📞 {entity.phone || "555-0100"}</span>
+                {wifiPassword && <span className="text-amber-500/80 font-medium">📶 {wifiPassword}</span>}
               </div>
             </div>
           ) : themeStyle === "omakase" ? (
-            <div className="bg-[#0F0F0F] text-[#666666] text-[7px] tracking-[0.1em] text-center p-2 uppercase">
-               📍 {entity.address} | 📞 {entity.phone}
+            <div className="bg-[#0F0F0F] text-[#666666] text-[8px] tracking-[0.1em] text-center p-3 uppercase border-b border-[#222]">
+               📍 {entity.address || "123 Zen Ave"} | 📞 {entity.phone || "555-0100"}
             </div>
           ) : themeStyle === "popdiner" ? (
-            <div className="px-4 py-2 z-20 shrink-0 bg-[#FFD166] border-b-4 border-black shadow-[0_4px_0_0_rgba(0,0,0,0.1)] text-center flex flex-col items-center gap-1">
-              <p className="text-[7px] text-black font-bold uppercase tracking-widest">📍 {entity.address}</p>
+            <div className="px-5 py-3 z-20 shrink-0 bg-[#FFD166] border-b-4 border-black shadow-[0_4px_0_0_rgba(0,0,0,0.1)] text-center flex flex-col items-center gap-1">
+              <p className="text-[8px] text-black font-bold uppercase tracking-widest">📍 {entity.address || "123 Pop St."}</p>
             </div>
           ) : themeStyle === "editorial" ? (
-            <div className="px-4 py-2 z-20 shrink-0 bg-[#F9F8F6] border-b border-[#E2DFD8] text-center flex flex-col items-center gap-1">
-              <p className="text-[6px] text-[#5C5A56] tracking-widest uppercase">📍 {entity.address}</p>
+            <div className="px-5 py-3 z-20 shrink-0 bg-[#F9F8F6] border-b border-[#E2DFD8] text-center flex flex-col items-center gap-1">
+              <p className="text-[7px] text-[#5C5A56] tracking-widest uppercase">📍 {entity.address || "123 Editorial Ave"}</p>
             </div>
           ) : (
-            <div className="px-3 -mt-3 z-10">
-              <div className={`${previewTheme.cardBg} space-y-1 text-[9px] ${previewTheme.textSecondary}`}>
-                <p className="line-clamp-1">📍 {entity.address}</p>
-                <div className="flex justify-between text-[8px] font-semibold">
-                  <span>📞 {entity.phone}</span>
+            <div className="px-4 -mt-4 z-10">
+              <div className={`${previewTheme.cardBg} space-y-1.5 text-[10px] ${previewTheme.textSecondary} shadow-lg rounded-xl`}>
+                <p className="line-clamp-1 font-medium">📍 {entity.address || "123 Main St."}</p>
+                <div className="flex justify-between text-[9px] font-bold">
+                  <span>📞 {entity.phone || "555-0100"}</span>
                   {wifiPassword && (
                     <span style={{ color: primaryColor }}>
-                      📶 WiFi: {wifiPassword}
+                      📶 {wifiPassword}
                     </span>
                   )}
                 </div>
@@ -520,119 +422,72 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
             </div>
           )}
 
-          {/* Dietary Filters */}
-          <div className={`py-2 flex gap-1.5 overflow-x-auto px-3 mt-3 scrollbar-none border-b ${themeStyle === "luxury" ? "border-zinc-900 bg-zinc-950/40" : themeStyle === "lounge" ? "bg-[#0A0A0A] border-white/5" : themeStyle === "resort" ? "bg-[#F0F8FF] border-[#87CEEB]/30" : themeStyle === "vibrant" ? "bg-white border-black border-b-2" : "bg-white"}`}>
-            <span
-              className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold transition-all flex items-center gap-1 ${themeStyle === "vibrant" ? "border-2 border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] text-black" : themeStyle === "luxury" ? "text-amber-400 border border-amber-400/50" : themeStyle === "lounge" ? "text-[#D4AF37] border border-[#D4AF37]/30 bg-[#D4AF37]/10" : themeStyle === "resort" ? "text-white bg-[#4CAF50] shadow-sm" : "text-white"}`}
-              style={themeStyle !== "luxury" && themeStyle !== "vibrant" && themeStyle !== "lounge" && themeStyle !== "resort" ? { backgroundColor: primaryColor, borderColor: primaryColor } : { backgroundColor: themeStyle === "vibrant" ? "#06D6A0" : themeStyle === "lounge" ? "" : themeStyle === "resort" ? "" : "rgba(245,158,11,0.2)" }}
-            >
-              🌿 Veg
-            </span>
-            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold flex items-center gap-1 ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "lounge" ? "text-white/50 bg-white/5" : themeStyle === "resort" ? "text-[#006994] border border-[#87CEEB]/50" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
-              🌾 GF
-            </span>
-            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold flex items-center gap-1 ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "lounge" ? "text-white/50 bg-white/5" : themeStyle === "resort" ? "text-[#006994] border border-[#87CEEB]/50" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : "text-slate-600 bg-slate-100"}`}>
-              🌶️ Spicy
-            </span>
-          </div>
-
-          {/* Category Tabs */}
-          <div className={`py-2 flex gap-1.5 overflow-x-auto px-3 mt-3 scrollbar-none border-b ${themeStyle === "luxury" ? "border-zinc-900 bg-zinc-950/40" : themeStyle === "vibrant" ? "bg-white border-black border-b-2" : themeStyle === "omakase" ? "bg-[#0F0F0F] border-[#222]" : themeStyle === "popdiner" ? "bg-[#FFD166] border-black border-b-4" : themeStyle === "editorial" ? "bg-[#F9F8F6] border-[#E2DFD8] justify-end" : themeStyle === "boutique" ? "bg-[#FFF0F5] border-[#FFB6C1]" : themeStyle === "botanical" ? "bg-[#FDFBF7] border-[#EAE3D2]" : themeStyle === "lounge" ? "bg-[#0A0A0A] border-white/5" : themeStyle === "resort" ? "bg-[#F0F8FF] border-[#87CEEB]/30" : "bg-white"}`}>
-            <span 
-              className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold transition-all ${themeStyle === "vibrant" ? "border-2 border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] text-black" : themeStyle === "luxury" ? "text-amber-400 border border-amber-400/50" : themeStyle === "omakase" ? "text-white tracking-widest" : themeStyle === "popdiner" ? "bg-black text-[#FFD166] shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] translate-x-0.5 translate-y-0.5 border-2 border-black" : themeStyle === "editorial" ? "text-[#1A1918] border-b border-[#1A1918] rounded-none uppercase font-serif tracking-widest" : themeStyle === "boutique" ? "text-white bg-[#DDA0DD] shadow-sm" : themeStyle === "botanical" ? "text-[#3E5739] border-b-2 border-[#3E5739] rounded-none uppercase font-serif" : themeStyle === "lounge" ? "bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-black shadow-sm" : themeStyle === "resort" ? "bg-[#003366] text-white shadow-sm" : "text-white"}`}
-              style={themeStyle !== "luxury" && themeStyle !== "vibrant" && themeStyle !== "omakase" && themeStyle !== "popdiner" && themeStyle !== "editorial" && themeStyle !== "boutique" && themeStyle !== "botanical" && themeStyle !== "lounge" && themeStyle !== "resort" ? { backgroundColor: primaryColor, borderColor: primaryColor } : { backgroundColor: themeStyle === "vibrant" ? "#06D6A0" : themeStyle === "omakase" ? "transparent" : themeStyle === "popdiner" ? "transparent" : themeStyle === "editorial" ? "transparent" : themeStyle === "boutique" ? "#DDA0DD" : themeStyle === "botanical" ? "transparent" : themeStyle === "lounge" ? "" : themeStyle === "resort" ? "" : "rgba(245,158,11,0.2)" }}
-            >
-              APPETIZERS
-            </span>
-            <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-semibold ${themeStyle === "luxury" ? "text-zinc-400 bg-zinc-900" : themeStyle === "vibrant" ? "text-black border-2 border-transparent hover:bg-slate-100" : themeStyle === "omakase" ? "text-[#666] tracking-widest" : themeStyle === "popdiner" ? "bg-white text-black hover:bg-gray-100 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] border-2 border-black" : themeStyle === "editorial" ? "text-[#8C8881] border-b border-transparent rounded-none uppercase tracking-widest" : themeStyle === "boutique" ? "text-[#D8BFD8] bg-[#FFF0F5]/50 border border-white" : themeStyle === "botanical" ? "text-[#8A9A86] rounded-none uppercase font-serif" : themeStyle === "lounge" ? "text-white/50 bg-white/5" : themeStyle === "resort" ? "text-[#006994] border border-[#87CEEB]/50 bg-white" : "text-slate-600 bg-slate-100"}`}>
-              MAINS
-            </span>
-          </div>
-
           {/* Menu Items List */}
-          <div className={`p-3 space-y-3 flex-grow overflow-y-auto scrollbar-hide ${themeStyle === "luxury" ? "bg-[#0C0C0E]" : themeStyle === "vibrant" ? "bg-[#FEF3C7]" : themeStyle === "omakase" ? "bg-[#0F0F0F]" : themeStyle === "popdiner" ? "bg-[#FFD166] p-4 gap-4" : themeStyle === "editorial" ? "bg-[#F9F8F6] p-4 gap-6" : themeStyle === "boutique" ? "bg-[#FFF0F5]" : themeStyle === "botanical" ? "bg-[#FDFBF7]" : themeStyle === "lounge" ? "bg-[#0A0A0A]" : themeStyle === "resort" ? "bg-[#F0F8FF]" : "bg-slate-50/50"}`}>
+          <div className={`p-4 space-y-4 flex-grow overflow-y-auto scrollbar-hide mt-2 ${themeStyle === "luxury" ? "bg-[#0C0C0E]" : themeStyle === "vibrant" ? "bg-[#FEF3C7]" : themeStyle === "omakase" ? "bg-[#0F0F0F]" : themeStyle === "popdiner" ? "bg-[#FFD166] p-5 gap-5" : themeStyle === "editorial" ? "bg-[#F9F8F6] p-5 gap-8" : themeStyle === "lounge" ? "bg-[#0A0A0A]" : themeStyle === "resort" ? "bg-[#F0F8FF]" : "bg-slate-50/50"}`}>
             {[
               { name: "French Onion Soup", desc: "Classic beef broth, caramelized onions, gruyere.", price: "$12.00", img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
               { name: "Steak Frites", desc: "Prime ribeye, truffle fries, peppercorn sauce.", price: "$32.00", img: "https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
               { name: "Seared Scallops", desc: "Cauliflower purée, brown butter capers.", price: "$28.00", img: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?q=80&w=400&auto=format&fit=crop", tags: ["GF"] }
             ].map((item, idx) => (
-              <div key={idx} className={`flex gap-3 p-2 rounded-lg ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl" : themeStyle === "omakase" ? "bg-transparent rounded-none" : themeStyle === "popdiner" ? "bg-white border-2 border-black flex-col shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-1 hover:-rotate-1" : themeStyle === "editorial" ? "bg-transparent rounded-none flex-col gap-2" : themeStyle === "boutique" ? "bg-white/70 rounded-2xl border border-white shadow-sm flex-col" : themeStyle === "botanical" ? "bg-transparent border-b border-[#EAE3D2] rounded-none flex-col gap-1 pb-3" : themeStyle === "lounge" ? "bg-[#141414] border border-white/5 rounded-2xl shadow-lg flex-col" : themeStyle === "resort" ? "bg-white rounded-2xl shadow-sm flex-col" : "bg-white shadow-sm border border-slate-100"}`}>
-                <div className={`shrink-0 overflow-hidden relative ${themeStyle === "bistro" ? "w-14 h-14 rounded" : themeStyle === "luxury" ? "w-14 h-14 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-16 h-16 rounded-lg border-2 border-black rotate-[1deg]" : themeStyle === "omakase" ? "w-14 h-14 rounded-none grayscale" : themeStyle === "popdiner" ? "w-full h-24 border-b-2 border-black bg-[#118AB2]" : themeStyle === "editorial" ? "w-full h-24 bg-[#E2DFD8] rounded-none" : themeStyle === "boutique" ? "w-full h-20 rounded-xl" : themeStyle === "botanical" ? "w-full h-20 rounded-t-[2rem]" : themeStyle === "lounge" ? "w-full h-24 rounded-t-xl" : themeStyle === "resort" ? "w-full h-24 rounded-t-xl" : "w-12 h-12 rounded-md"}`}>
+              <div key={idx} className={`flex gap-3.5 p-2.5 rounded-xl ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl" : themeStyle === "omakase" ? "bg-transparent rounded-none border-b border-[#222] pb-4" : themeStyle === "popdiner" ? "bg-white border-[3px] border-black flex-col shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rotate-1" : themeStyle === "editorial" ? "bg-transparent rounded-none flex-col gap-3 pb-6 border-b border-[#E2DFD8]" : themeStyle === "lounge" ? "bg-[#141414] border border-white/5 rounded-2xl shadow-xl flex-col pb-3" : themeStyle === "resort" ? "bg-white rounded-2xl shadow-md flex-col pb-3" : "bg-white shadow-sm border border-slate-100"}`}>
+                <div className={`shrink-0 overflow-hidden relative ${themeStyle === "bistro" ? "w-16 h-16 rounded" : themeStyle === "luxury" ? "w-16 h-16 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-20 h-20 rounded-xl border-2 border-black rotate-[2deg]" : themeStyle === "omakase" ? "w-16 h-16 rounded-none grayscale" : themeStyle === "popdiner" ? "w-full h-32 border-b-2 border-black bg-[#118AB2]" : themeStyle === "editorial" ? "w-full h-32 bg-[#E2DFD8] rounded-none" : themeStyle === "lounge" ? "w-full h-32 rounded-t-xl" : themeStyle === "resort" ? "w-full h-32 rounded-t-xl" : "w-14 h-14 rounded-lg"}`}>
                   <Image src={item.img} alt={item.name} className="w-full h-full object-cover" fill />
                 </div>
-                <div className={`flex-1 space-y-1 ${themeStyle === "lounge" || themeStyle === "resort" ? "px-2 pb-1" : ""}`}>
+                <div className={`flex-1 space-y-1.5 ${themeStyle === "lounge" || themeStyle === "resort" ? "px-3" : ""}`}>
                   <div className={`flex ${themeStyle === "popdiner" ? "justify-between items-start gap-2" : "justify-between items-start"}`}>
-                    <h4 className={`text-[10px] font-bold ${themeStyle === "luxury" ? "text-zinc-100" : themeStyle === "vibrant" ? "text-black font-black uppercase" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "popdiner" ? "text-black font-black uppercase tracking-tighter text-lg" : themeStyle === "botanical" ? "text-[#2C3B29] font-serif font-medium" : themeStyle === "lounge" ? "text-white" : themeStyle === "resort" ? "text-[#003366] font-black" : "text-slate-800"}`}>{item.name}</h4>
-                    
-                    
-                    <div className="flex items-center gap-1">
-                      {themeStyle !== "popdiner" && item.tags.map(tag => (
-                        <span 
-                          key={tag}
-                          className="text-[6px] font-extrabold px-1 rounded text-white tracking-widest"
-                          style={tag === "POPULAR" ? { backgroundColor: accentColor, borderColor: accentColor } : { backgroundColor: primaryColor, borderColor: primaryColor }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      
-                    </div>
+                    <h4 className={`text-xs font-bold leading-tight ${themeStyle === "luxury" ? "text-zinc-100 font-serif" : themeStyle === "vibrant" ? "text-black font-black uppercase tracking-tight" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "popdiner" ? "text-black font-black uppercase tracking-tighter text-xl" : themeStyle === "editorial" ? "text-[#1A1918] font-serif text-lg" : themeStyle === "lounge" ? "text-white" : themeStyle === "resort" ? "text-[#003366] font-black" : "text-slate-800"}`}>{item.name}</h4>
                   </div>
-                  <p className={`text-[8px] leading-tight ${themeStyle === "luxury" ? "text-zinc-400" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light" : themeStyle === "popdiner" ? "text-gray-700 font-bold" : themeStyle === "lounge" ? "text-white/50" : themeStyle === "resort" ? "text-[#006994]" : "text-slate-500"}`}>{item.desc}</p>
+                  <p className={`text-[9px] leading-snug ${themeStyle === "luxury" ? "text-zinc-400 font-serif" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light tracking-wide" : themeStyle === "popdiner" ? "text-gray-700 font-bold" : themeStyle === "editorial" ? "text-[#5C5A56] font-serif" : themeStyle === "lounge" ? "text-white/50" : themeStyle === "resort" ? "text-[#006994]" : "text-slate-500"}`}>{item.desc}</p>
                 </div>
                 {themeStyle !== "popdiner" && (
-                  <span className={`text-[10px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif mt-0.5" : themeStyle === "vibrant" ? "bg-rose-500 text-white border border-black px-1.5 py-0.5 rounded rotate-2 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] self-start mt-0.5" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "lounge" ? "text-[#D4AF37] ml-2 pb-1" : themeStyle === "resort" ? "text-[#003366] ml-2 pb-1" : "text-slate-900 self-start mt-0.5"}`}>{item.price}</span>
+                  <span className={`text-[11px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif mt-0.5" : themeStyle === "vibrant" ? "bg-rose-500 text-white border-2 border-black px-2 py-0.5 rounded-lg rotate-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] self-start mt-1" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "editorial" ? "text-[#1A1918] font-serif" : themeStyle === "lounge" ? "text-[#D4AF37] ml-3 pb-1" : themeStyle === "resort" ? "text-[#003366] ml-3 pb-1" : "text-slate-900 self-start mt-0.5"}`}>{item.price}</span>
                 )}
               </div>
             ))}
           </div>
 
-          {/* Footer */}
-          <div className={`text-center py-2.5 border-t text-[8px] text-slate-400 bg-slate-50/50 ${themeStyle === "luxury" ? "bg-zinc-950/80 border-zinc-900 text-zinc-600" : themeStyle === "bistro" ? "bg-[#FDFBF7] border-[#E7E5E4] text-[#A8A29E]" : themeStyle === "lounge" ? "bg-[#0A0A0A] border-white/5 text-white/30" : themeStyle === "resort" ? "bg-[#F0F8FF] border-[#87CEEB]/30 text-[#006994]" : themeStyle === "popdiner" ? "bg-[#118AB2] border-black border-t-4 text-white font-black" : "bg-slate-50/50"}`}>
-            POWERED BY <span className={`font-bold ${themeStyle === "luxury" ? "text-zinc-500" : themeStyle === "bistro" ? "text-[#5C4033]" : themeStyle === "lounge" ? "text-white/50" : themeStyle === "resort" ? "text-[#003366]" : themeStyle === "popdiner" ? "text-[#FFD166]" : "text-slate-500"}`}>NOMENU</span>
-          </div>
-        </div>
-        
-        {/* Action / Gating Area moved under preview */}
-        <div className="w-full">
-          {isLocked ? (
-            <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200/80 group">
-              <div className={`absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-r ${lockTitle.includes("Elite") ? "from-amber-500/5 via-transparent to-amber-500/5" : "from-indigo-500/5 via-transparent to-indigo-500/5"}`}></div>
-              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${lockTitle.includes("Elite") ? "from-amber-300 via-amber-500 to-amber-600" : "from-indigo-400 via-indigo-500 to-purple-500"}`}></div>
-              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
-                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${lockTitle.includes("Elite") ? "bg-gradient-to-br from-amber-100 to-amber-50 text-amber-600 border border-amber-200/50 shadow-inner" : "bg-gradient-to-br from-indigo-100 to-indigo-50 text-indigo-600 border border-indigo-200/50 shadow-inner"}`}>
-                  {lockTitle.includes("Elite") ? <Crown className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
+          {/* Upgrade Overlay */}
+          {isLocked && (
+            <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-500">
+              <div className="bg-white/10 border border-white/20 p-8 rounded-[2rem] shadow-2xl backdrop-blur-xl w-full max-w-[320px] flex flex-col items-center">
+                <div className={`flex h-16 w-16 items-center justify-center rounded-3xl mb-5 shadow-inner ${lockTitle.includes("Elite") ? "bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-amber-500/40" : "bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-indigo-500/40"}`}>
+                  {lockTitle.includes("Elite") ? <Crown className="h-8 w-8" /> : <Lock className="h-8 w-8" />}
                 </div>
-                <div className="space-y-1.5 max-w-[320px]">
-                  <h4 className="text-lg font-bold tracking-tight text-slate-900">{lockTitle}</h4>
-                  <p className="text-[11px] leading-relaxed text-slate-500 font-medium">{lockMessage}</p>
-                </div>
+                <h4 className="text-xl font-black tracking-tight text-white mb-2">{lockTitle}</h4>
+                <p className="text-xs leading-relaxed text-white/70 font-medium mb-6">{lockMessage}</p>
                 <button 
                   type="button"
                   onClick={() => window.location.href = "/dashboard/billing"}
-                  className={`mt-2 w-full rounded-xl px-4 py-3.5 text-xs font-black uppercase tracking-[0.1em] text-white shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+                  className={`w-full rounded-2xl px-5 py-4 text-sm font-black uppercase tracking-[0.1em] text-white shadow-xl transition-all hover:scale-[1.02] ${
                     lockTitle.includes("Elite") 
-                      ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 shadow-amber-500/20" 
-                      : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-500/20"
+                      ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 shadow-amber-500/30" 
+                      : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-500/30"
                   }`}
                 >
                   <span className="flex items-center justify-center gap-2">
-                    <Sparkles className="h-4 w-4" />
-                    {upgradeTarget.replace("Save Locked: ", "")}
+                    <Sparkles className="h-5 w-5" />
+                    {upgradeTarget}
                   </span>
                 </button>
               </div>
             </div>
-          ) : (
-            <Button form="branding-settings-form" type="submit" className="w-full shadow-md py-6 text-sm font-bold bg-slate-900 hover:bg-slate-800" disabled={isPending}>
+          )}
+
+        </div>
+
+        {/* Action Button */}
+        {!isLocked && (
+          <div className="mt-8">
+            <Button form="branding-settings-form" type="submit" className="w-full shadow-xl py-7 text-base font-black tracking-wide bg-slate-900 hover:bg-slate-800 rounded-2xl transition-all hover:-translate-y-0.5" disabled={isPending}>
               {isPending ? (
-                <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Saving Configuration...</>
+                <><Loader2 className="mr-3 h-5 w-5 animate-spin" /> SAVING DESIGN...</>
               ) : (
-                <><Save className="mr-2 h-5 w-5" /> Save Brand & Theme</>
+                <><Save className="mr-3 h-5 w-5" /> SAVE BRAND & THEME</>
               )}
             </Button>
-          )}
-        </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

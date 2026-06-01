@@ -737,3 +737,180 @@ export async function importCategoriesAndItems(
   revalidatePath("/dashboard/items");
   return { success: true };
 }
+
+export async function deleteCategory(formData: FormData) {
+  const categoryId = formData.get("categoryId") as string;
+  if (!categoryId) return;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { error } = await supabase
+    .from("categories")
+    .delete()
+    .eq("id", categoryId);
+
+  if (error) {
+    redirect(`/dashboard/items?message=${encodeURIComponent("Failed to delete category")}`);
+  }
+
+  revalidatePath("/dashboard/items");
+  redirect("/dashboard/items");
+}
+
+export async function updateCategory(formData: FormData) {
+  const categoryId = formData.get("categoryId") as string;
+  const name = formData.get("name") as string;
+  if (!categoryId || !name || name.trim() === "") return;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { error } = await supabase
+    .from("categories")
+    .update({ name: name.trim() })
+    .eq("id", categoryId);
+
+  if (error) {
+    redirect(`/dashboard/items?message=${encodeURIComponent("Failed to update category")}`);
+  }
+
+  revalidatePath("/dashboard/items");
+}
+
+export async function importSpecificItems(
+  targetMenuId: string,
+  itemIdsToImport: string[]
+) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  if (!itemIdsToImport || itemIdsToImport.length === 0) {
+    throw new Error("No items selected for import");
+  }
+
+  // Fetch all selected items
+  const { data: itemsToImport, error: fetchError } = await supabase
+    .from("menu_items")
+    .select("*, categories!inner(name)")
+    .in("id", itemIdsToImport);
+
+  if (fetchError || !itemsToImport) {
+    console.error("Failed to fetch items to import", fetchError);
+    throw new Error("Failed to fetch items to import");
+  }
+
+  // Fetch existing categories in target menu
+  const { data: targetCategories, error: targetCatError } = await supabase
+    .from("categories")
+    .select("id, name")
+    .eq("menu_id", targetMenuId);
+
+  if (targetCatError) {
+    console.error("Failed to fetch target categories", targetCatError);
+    throw new Error("Failed to fetch target categories");
+  }
+
+  // Create a map of category names to their ID in the target menu
+  const targetCategoryMap = new Map<string, string>();
+  targetCategories?.forEach(c => targetCategoryMap.set(c.name, c.id));
+
+  // Process and insert items
+  const newItemsToInsert = [];
+
+  for (const item of itemsToImport) {
+    // The inner join gives us the category name as a related object, but since it's an array of joined records, it can be slightly messy
+    // Supabase JS client usually returns it as: categories: { name: string }
+    const catData = item.categories as unknown as { name: string };
+    const categoryName = catData?.name || "Imported Items";
+
+    let targetCategoryId = targetCategoryMap.get(categoryName);
+
+    // If category doesn't exist in target menu, create it
+    if (!targetCategoryId) {
+      const { data: newCat, error: createCatErr } = await supabase
+        .from("categories")
+        .insert({
+          menu_id: targetMenuId,
+          name: categoryName,
+          sort_order: 10,
+        })
+        .select("id")
+        .single();
+
+      if (createCatErr || !newCat) {
+        console.error("Failed to create missing category", createCatErr);
+        continue; // Skip item if we can't place it in a category
+      }
+      
+      targetCategoryId = newCat.id;
+      targetCategoryMap.set(categoryName, targetCategoryId);
+    }
+
+    // Prepare item for insertion
+    const { id, created_at, category_id, categories, ...cleanItemData } = item;
+    newItemsToInsert.push({
+      ...cleanItemData,
+      category_id: targetCategoryId,
+    });
+  }
+
+  // Batch insert all the cloned items
+  if (newItemsToInsert.length > 0) {
+    const { error: insertError } = await supabase
+      .from("menu_items")
+      .insert(newItemsToInsert);
+
+    if (insertError) {
+      console.error("Failed to clone individual items", insertError);
+      throw new Error("Failed to clone individual items");
+    }
+  }
+
+  revalidatePath("/dashboard/items");
+  return { success: true };
+}
+
+export async function updateLocationZones(restaurantId: string, zones: string[]) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  // Ensure unique zones and at least one default
+  const cleanZones = Array.from(new Set(zones.filter(z => z.trim().length > 0)));
+  if (cleanZones.length === 0) {
+    cleanZones.push("Main Dining");
+  }
+
+  const { error } = await supabase
+    .from("restaurants")
+    .update({ location_zones: cleanZones } as any)
+    .eq("id", restaurantId)
+    .eq("owner_id", user.id);
+
+  if (error) {
+    console.error("Failed to update location zones", error);
+    throw new Error("Failed to update location zones");
+  }
+
+  revalidatePath("/dashboard/qrcodes");
+}

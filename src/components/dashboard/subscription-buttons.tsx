@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export function SubscriptionButton({ 
   planId, 
   planName, 
-  isEnterprise 
+  isElite 
 }: { 
   planId: string; 
   planName: string; 
-  isEnterprise: boolean;
+  isElite: boolean;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -37,15 +37,20 @@ export function SubscriptionButton({
   };
 
   return (
-    <Button
+    <button
       onClick={handleCheckout}
       disabled={loading}
-      className="w-full font-semibold"
-      size={isEnterprise ? "lg" : "default"}
-      variant={isEnterprise ? "default" : planId === "elite" ? "outline" : "secondary"}
+      className={`w-full py-4 rounded-xl text-sm font-black tracking-widest uppercase transition-all flex items-center justify-center gap-2
+        ${isElite 
+          ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-xl shadow-indigo-500/20 hover:scale-[1.02]" 
+          : "bg-slate-100 text-slate-900 border border-slate-200 hover:bg-slate-200"
+        }
+        ${loading ? "opacity-70 pointer-events-none" : ""}
+      `}
     >
+      {loading && <Loader2 className="h-4 w-4 animate-spin" />}
       {loading ? "Redirecting..." : `Upgrade to ${planName}`}
-    </Button>
+    </button>
   );
 }
 
@@ -73,8 +78,13 @@ export function PortalButton() {
   };
 
   return (
-    <Button variant="outline" size="sm" onClick={handlePortal} disabled={loading}>
+    <button 
+      onClick={handlePortal} 
+      disabled={loading}
+      className="flex items-center justify-center gap-2 text-sm font-bold bg-white text-slate-900 border border-slate-200 px-6 py-3 rounded-xl shadow-sm hover:bg-slate-50 transition-all hover:scale-[1.02]"
+    >
+      {loading && <Loader2 className="h-4 w-4 animate-spin" />}
       {loading ? "Loading..." : "Manage Subscription"}
-    </Button>
+    </button>
   );
 }

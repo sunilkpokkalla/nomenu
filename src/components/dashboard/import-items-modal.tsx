@@ -1,8 +1,7 @@
-
 "use client";
 
 import { useState } from "react";
-import { CopyPlus, Loader2 } from "lucide-react";
+import { CopyPlus, Loader2, ChevronDown, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -17,18 +16,27 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 
-import { importCategoriesAndItems } from "@/app/dashboard/actions";
+import { importSpecificItems } from "@/app/dashboard/actions";
+
+interface MenuItem {
+  id: string;
+  name: string;
+  category_id: string;
+  [key: string]: unknown;
+}
 
 interface ImportItemsModalProps {
   menus: { id: string; name: string; [key: string]: unknown }[];
   categories: { id: string; name: string; menu_id?: string; [key: string]: unknown }[];
+  items: MenuItem[];
   targetMenuId: string;
 }
 
-export function ImportItemsModal({ menus, categories, targetMenuId }: ImportItemsModalProps) {
+export function ImportItemsModal({ menus, categories, items, targetMenuId }: ImportItemsModalProps) {
   const [open, setOpen] = useState(false);
   const [sourceMenuId, setSourceMenuId] = useState<string>("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -38,31 +46,64 @@ export function ImportItemsModal({ menus, categories, targetMenuId }: ImportItem
   // Get categories for the selected source menu
   const sourceCategories = categories.filter(c => c.menu_id === sourceMenuId);
 
-  const handleCategoryToggle = (categoryId: string) => {
-    setSelectedCategories(prev => 
+  // Helper to toggle category expansion
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategories(prev => 
       prev.includes(categoryId) 
-        ? prev.filter(id => id !== categoryId)
+        ? prev.filter(id => id !== categoryId) 
         : [...prev, categoryId]
     );
   };
 
-  const handleSelectAll = () => {
-    if (selectedCategories.length === sourceCategories.length) {
-      setSelectedCategories([]);
+  // Helper to handle individual item toggle
+  const handleItemToggle = (itemId: string) => {
+    setSelectedItemIds(prev => 
+      prev.includes(itemId) 
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
+
+  // Helper to handle category-level "Select All" toggle
+  const handleCategorySelectAll = (categoryId: string) => {
+    const categoryItems = items.filter(i => i.category_id === categoryId);
+    const categoryItemIds = categoryItems.map(i => i.id);
+    
+    // Check if all items in this category are currently selected
+    const allSelected = categoryItemIds.every(id => selectedItemIds.includes(id));
+    
+    if (allSelected) {
+      // Deselect all items in this category
+      setSelectedItemIds(prev => prev.filter(id => !categoryItemIds.includes(id)));
     } else {
-      setSelectedCategories(sourceCategories.map(c => c.id));
+      // Select all items in this category
+      setSelectedItemIds(prev => {
+        const newIds = new Set([...prev, ...categoryItemIds]);
+        return Array.from(newIds);
+      });
+    }
+  };
+
+  const handleGlobalSelectAll = () => {
+    const allSourceItems = items.filter(i => sourceCategories.some(c => c.id === i.category_id));
+    const allSourceItemIds = allSourceItems.map(i => i.id);
+
+    if (selectedItemIds.length === allSourceItemIds.length) {
+      setSelectedItemIds([]);
+    } else {
+      setSelectedItemIds(allSourceItemIds);
     }
   };
 
   const handleImport = async () => {
-    if (!sourceMenuId || selectedCategories.length === 0) return;
+    if (!sourceMenuId || selectedItemIds.length === 0) return;
     
     setIsLoading(true);
     try {
-      await importCategoriesAndItems(sourceMenuId, targetMenuId, selectedCategories);
+      await importSpecificItems(targetMenuId, selectedItemIds);
       setOpen(false);
       setSourceMenuId("");
-      setSelectedCategories([]);
+      setSelectedItemIds([]);
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -76,19 +117,21 @@ export function ImportItemsModal({ menus, categories, targetMenuId }: ImportItem
     return null; // Can't import if there are no other menus
   }
 
+  const allSourceItems = items.filter(i => sourceCategories.some(c => c.id === i.category_id));
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2">
           <CopyPlus className="h-4 w-4" />
-          Import Items
+          <span className="hidden sm:inline">Import Items</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Import Categories & Items</DialogTitle>
+          <DialogTitle>Import Specific Items</DialogTitle>
           <DialogDescription>
-            Copy entire categories (including all their items) from another menu into this one.
+            Select individual items from another menu to copy them into your current menu.
           </DialogDescription>
         </DialogHeader>
 
@@ -100,7 +143,8 @@ export function ImportItemsModal({ menus, categories, targetMenuId }: ImportItem
               value={sourceMenuId}
               onChange={(e) => {
                 setSourceMenuId(e.target.value);
-                setSelectedCategories([]);
+                setSelectedItemIds([]);
+                setExpandedCategories([]);
               }}
             >
               <option value="" disabled>Choose a menu to import from...</option>
@@ -113,41 +157,85 @@ export function ImportItemsModal({ menus, categories, targetMenuId }: ImportItem
           {sourceMenuId && sourceCategories.length > 0 && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label>Select Categories</Label>
+                <Label>Select Items</Label>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   className="h-auto p-0 text-xs text-primary"
-                  onClick={handleSelectAll}
+                  onClick={handleGlobalSelectAll}
                 >
-                  {selectedCategories.length === sourceCategories.length ? "Deselect All" : "Select All"}
+                  {selectedItemIds.length === allSourceItems.length && allSourceItems.length > 0 ? "Deselect All" : "Select All Items"}
                 </Button>
               </div>
-              <div className="border rounded-md p-3 space-y-3 max-h-[200px] overflow-y-auto">
-                {sourceCategories.map(cat => (
-                  <div key={cat.id} className="flex items-center space-x-2">
-                    <input 
-                      type="checkbox"
-                      id={`cat-${cat.id}`}
-                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      checked={selectedCategories.includes(cat.id)}
-                      onChange={() => handleCategoryToggle(cat.id)}
-                    />
-                    <label 
-                      htmlFor={`cat-${cat.id}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                    >
-                      {cat.name}
-                    </label>
-                  </div>
-                ))}
+              
+              <div className="border rounded-md max-h-[300px] overflow-y-auto bg-slate-50">
+                {sourceCategories.map(cat => {
+                  const categoryItems = items.filter(i => i.category_id === cat.id);
+                  if (categoryItems.length === 0) return null;
+
+                  const isExpanded = expandedCategories.includes(cat.id);
+                  const selectedInCategory = categoryItems.filter(i => selectedItemIds.includes(i.id)).length;
+                  const allSelected = selectedInCategory === categoryItems.length;
+
+                  return (
+                    <div key={cat.id} className="border-b last:border-b-0 border-slate-200">
+                      <div className="flex items-center justify-between p-2 hover:bg-slate-100 transition-colors">
+                        <div 
+                          className="flex items-center gap-2 cursor-pointer flex-1" 
+                          onClick={() => toggleCategory(cat.id)}
+                        >
+                          {isExpanded ? <ChevronDown className="h-4 w-4 text-slate-400" /> : <ChevronRight className="h-4 w-4 text-slate-400" />}
+                          <span className="text-sm font-medium">{cat.name}</span>
+                          <span className="text-xs text-slate-400">({categoryItems.length})</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          {selectedInCategory > 0 && (
+                            <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                              {selectedInCategory} selected
+                            </span>
+                          )}
+                          <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleCategorySelectAll(cat.id)}>
+                            <input 
+                              type="checkbox"
+                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary pointer-events-none"
+                              checked={allSelected}
+                              readOnly
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {isExpanded && (
+                        <div className="bg-white px-4 py-2 space-y-2 border-t border-slate-100">
+                          {categoryItems.map(item => (
+                            <div key={item.id} className="flex items-center space-x-3 py-1">
+                              <input 
+                                type="checkbox"
+                                id={`item-${item.id}`}
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                checked={selectedItemIds.includes(item.id)}
+                                onChange={() => handleItemToggle(item.id)}
+                              />
+                              <label 
+                                htmlFor={`item-${item.id}`}
+                                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer flex-1"
+                              >
+                                {item.name}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
 
           {sourceMenuId && sourceCategories.length === 0 && (
             <div className="text-sm text-slate-500 italic">
-              This menu has no categories to import.
+              This menu has no categories or items to import.
             </div>
           )}
         </div>
@@ -156,10 +244,10 @@ export function ImportItemsModal({ menus, categories, targetMenuId }: ImportItem
           <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
           <Button 
             onClick={handleImport} 
-            disabled={isLoading || selectedCategories.length === 0}
+            disabled={isLoading || selectedItemIds.length === 0}
           >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Import {selectedCategories.length > 0 && `(${selectedCategories.length})`}
+            Import {selectedItemIds.length > 0 && `(${selectedItemIds.length})`}
           </Button>
         </DialogFooter>
       </DialogContent>

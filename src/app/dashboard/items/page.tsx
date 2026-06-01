@@ -17,7 +17,7 @@ import { createClient } from "@/lib/supabase/server";
 import { CreateItemForm } from "@/components/dashboard/create-item-form";
 import { EditItemModal } from "@/components/dashboard/edit-item-modal";
 import { ImportItemsModal } from "@/components/dashboard/import-items-modal";
-
+import { ManageCategoriesModal } from "@/components/dashboard/manage-categories-modal";
 export default async function ItemsPage(
   props: {
     searchParams: Promise<{ menuId?: string; categoryId?: string; message?: string }>;
@@ -99,11 +99,14 @@ export default async function ItemsPage(
           </p>
         </div>
         {selectedMenuId !== "all" && menusList.length > 1 && (
-           <ImportItemsModal 
-             menus={menusList} 
-             categories={restaurantCategories} 
-             targetMenuId={selectedMenuId} 
-           />
+           <div className="flex items-center gap-2">
+             <ImportItemsModal 
+               menus={menusList} 
+               categories={restaurantCategories} 
+               items={itemsList}
+               targetMenuId={selectedMenuId} 
+             />
+           </div>
         )}
       </div>
 
@@ -146,7 +149,13 @@ export default async function ItemsPage(
       {/* Category Filter Pills (contextual to selected menu) */}
       {selectedMenuId !== "all" && (
         <div className="mb-6">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Filter by Category</p>
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Filter by Category</p>
+            <ManageCategoriesModal 
+              categories={restaurantCategories} 
+              targetMenuId={selectedMenuId} 
+            />
+          </div>
           <div className="flex flex-wrap gap-2">
             <Link
               href={`/dashboard/items?menuId=${selectedMenuId}&categoryId=all`}
@@ -313,11 +322,14 @@ export default async function ItemsPage(
                 Try clearing your filters or create a new menu item on the right.
               </p>
               {selectedMenuId !== "all" && menusList.length > 1 && (
-                <ImportItemsModal 
-                  menus={menusList} 
-                  categories={restaurantCategories} 
-                  targetMenuId={selectedMenuId} 
-                />
+                <div className="flex items-center justify-center gap-2">
+                  <ImportItemsModal 
+                    menus={menusList} 
+                    categories={restaurantCategories} 
+                    items={itemsList}
+                    targetMenuId={selectedMenuId} 
+                  />
+                </div>
               )}
             </div>
           )}

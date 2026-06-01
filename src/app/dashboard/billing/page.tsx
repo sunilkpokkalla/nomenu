@@ -1,9 +1,6 @@
-import { Check, CreditCard, ShieldCheck } from "lucide-react";
+import { Check, ShieldCheck, Sparkles } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { SubscriptionButton, PortalButton } from "@/components/dashboard/subscription-buttons";
 
@@ -20,6 +17,7 @@ const PLANS = [
       "Full Brand & Theme Customization",
       "Private Customer Feedback System",
       "Detailed Scan Analytics & Timezones",
+      "24/7 Priority Email Support",
     ],
   },
   {
@@ -49,6 +47,7 @@ const PLANS = [
       "Direct Bank Payouts (Stripe Connect)",
       "2.5% Platform Transaction Fee",
       "Dedicated Account Manager",
+      "Custom API Access & Webhooks",
     ],
   },
 ];
@@ -83,119 +82,169 @@ export default async function BillingPage(
   const currentPlan = restaurant.plan || "free";
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-8 lg:px-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-950">Billing & Subscriptions</h1>
-        <p className="mt-1 text-slate-600">
-          Manage your subscription plans, upgrade features, and unlock custom restaurant branding options.
+      <div className="mb-8 max-w-2xl">
+        <h1 className="text-3xl font-black tracking-tight text-slate-950">Plans & Billing</h1>
+        <p className="mt-2 text-slate-600 font-medium">
+          Scale your venue's capabilities. Upgrade to unlock powerful analytics, custom themes, and digital ordering features.
         </p>
       </div>
 
       {searchParams.success && (
-        <div className="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <div className="mb-8 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-800 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
           {searchParams.success}
         </div>
       )}
       {searchParams.message && (
-        <div className="mb-6 rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <div className="mb-8 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-bold text-rose-800 shadow-sm animate-in fade-in slide-in-from-top-2 duration-500">
           {searchParams.message}
         </div>
       )}
 
-      {/* Plan Status Alert */}
-      <Card className="mb-8 border-primary/20 bg-primary/5">
-        <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6">
-          <div className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <ShieldCheck className="h-6 w-6" />
-            </span>
+      {/* Active Plan Dashboard Widget */}
+      <div className="mb-12 relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-1 shadow-sm">
+        <div className="absolute top-0 right-0 p-8 opacity-5">
+           <ShieldCheck className="w-64 h-64 rotate-12" />
+        </div>
+        <div className="relative rounded-[1.75rem] bg-slate-50 border border-slate-100 p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 overflow-hidden z-10">
+          <div className="flex items-center gap-5">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-lg shadow-emerald-500/20 rotate-3">
+              <ShieldCheck className="h-8 w-8 -rotate-3" />
+            </div>
             <div>
-              <div className="font-semibold text-slate-900 flex items-center gap-2">
-                Active Plan: <span className="capitalize text-primary font-extrabold">{currentPlan}</span>
-                <Badge variant="success">Active</Badge>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+                Current Subscription
               </div>
-              <p className="text-xs text-slate-500 mt-1">
-                Your restaurant is linked to the {currentPlan} subscription. Custom coloring and detailed analytics require a paid tier.
+              <div className="flex items-baseline gap-3">
+                <span className="text-2xl font-black text-slate-900 tracking-tight capitalize">{currentPlan} Plan</span>
+                <div className="flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-700">
+                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                  Active
+                </div>
+              </div>
+              <p className="mt-1 text-sm font-medium text-slate-500">
+                Secured by Stripe billing.
               </p>
             </div>
           </div>
-          <div className="flex flex-col items-end gap-2">
-            <div className="text-xs text-slate-500 flex items-center gap-1.5 font-medium border bg-white px-3 py-1.5 rounded-lg shadow-sm">
-              <CreditCard className="h-3.5 w-3.5" /> Secure Stripe Billing
-            </div>
-            {currentPlan !== "free" && <PortalButton />}
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Pricing Cards */}
-      {/* Pricing Cards */}
-      <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-3 max-w-5xl mx-auto">
-        {PLANS.map((plan, index) => {
+          <div className="shrink-0 flex items-center justify-end w-full md:w-auto">
+             {currentPlan !== "free" ? (
+               <div className="scale-105 origin-right">
+                 <PortalButton />
+               </div>
+             ) : (
+               <div className="text-sm font-bold text-slate-400 bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-sm">
+                 Free tier limits applied
+               </div>
+             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Pricing Bento Grid */}
+      <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto items-end">
+        {PLANS.map((plan) => {
           const isActive = currentPlan.toLowerCase() === plan.id.toLowerCase();
-          const isEnterprise = plan.id === "enterprise";
           const isElite = plan.id === "elite";
           
           return (
-            <Card
+            <div
               key={plan.id}
-              className={`flex flex-col relative overflow-hidden transition-all duration-300 bg-white ${
-                isEnterprise 
-                  ? "border-2 border-slate-900 shadow-xl shadow-slate-900/10 scale-[1.02] z-10" 
-                  : isActive 
-                    ? "border-primary shadow-lg ring-1 ring-primary" 
-                    : "border-slate-200 hover:border-slate-300 hover:shadow-md"
-              }`}
+              className={`relative flex flex-col transition-all duration-500 group
+                ${isElite 
+                  ? "bg-white text-slate-900 shadow-2xl shadow-indigo-500/10 rounded-[2.5rem] p-1 z-10 md:scale-105" 
+                  : "bg-white text-slate-900 shadow-sm border border-slate-200 rounded-[2rem] hover:shadow-md hover:border-slate-300"
+                }
+                ${isActive && !isElite ? "ring-2 ring-emerald-500 ring-offset-2" : ""}
+                ${isElite && !isActive ? "bg-gradient-to-br from-indigo-500 via-purple-500 to-amber-500" : ""}
+              `}
             >
-              {isEnterprise && !isActive && (
-                <div className="absolute top-0 inset-x-0 h-1 bg-slate-900"></div>
-              )}
-              {isActive && (
-                <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-extrabold px-3 py-1 rounded-bl-lg uppercase tracking-wider z-20">
-                  Current
+              {/* Internal padding container for Elite border gradient effect */}
+              <div className={`flex flex-col h-full rounded-[2.25rem] p-8 ${isElite ? "bg-white border-none relative overflow-hidden" : ""}`}>
+                
+                {/* Elite Sparkle Effects */}
+                {isElite && (
+                  <>
+                    <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-indigo-500/10 blur-3xl rounded-full"></div>
+                    <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 bg-amber-500/10 blur-3xl rounded-full"></div>
+                  </>
+                )}
+
+                {/* Badges */}
+                <div className="flex justify-between items-start mb-6 z-10">
+                  <div className="flex flex-col">
+                    <h3 className={`text-2xl font-black tracking-tight text-slate-900`}>
+                      {plan.name}
+                    </h3>
+                    <p className={`text-xs mt-1 font-medium ${isElite ? "text-indigo-600/80" : "text-slate-500"}`}>
+                      {plan.description}
+                    </p>
+                  </div>
+                  
+                  {isElite && !isActive && (
+                    <span className="shrink-0 flex items-center gap-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg shadow-indigo-500/20">
+                      <Sparkles className="w-3 h-3" /> Recommended
+                    </span>
+                  )}
+                  {isActive && (
+                    <span className={`shrink-0 text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${isElite ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-emerald-100 text-emerald-700 border border-emerald-200'}`}>
+                      Current Plan
+                    </span>
+                  )}
                 </div>
-              )}
-              {isEnterprise && !isActive && (
-                <div className="absolute top-0 right-0 bg-slate-900 text-white text-[10px] font-extrabold px-3 py-1 rounded-bl-lg uppercase tracking-wider z-20">
-                  Recommended
+
+                {/* Pricing */}
+                <div className="mb-8 z-10">
+                  <div className="flex items-baseline gap-1">
+                    <span className={`text-5xl font-black tracking-tighter text-slate-900`}>
+                      {plan.price}
+                    </span>
+                    <span className={`text-sm font-bold text-slate-400`}>
+                      {plan.period}
+                    </span>
+                  </div>
                 </div>
-              )}
-              
-              <CardHeader className={`pb-4 ${isEnterprise ? "bg-slate-50 border-b border-slate-100" : ""}`}>
-                <CardTitle className="text-xl font-bold">{plan.name}</CardTitle>
-                <CardDescription className="min-h-[40px] mt-1.5">{plan.description}</CardDescription>
-                <div className="mt-4 flex items-baseline gap-1 text-slate-950">
-                  <span className="text-4xl font-extrabold tracking-tight">{plan.price}</span>
-                  {plan.period && <span className="text-sm font-semibold text-slate-500">{plan.period}</span>}
-                </div>
-              </CardHeader>
-              <CardContent className="flex flex-1 flex-col pt-6">
-                <ul className="space-y-4 text-sm text-slate-600 flex-1">
+
+                {/* Features List */}
+                <ul className="space-y-4 mb-8 flex-1 z-10">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
-                      <div className={`mt-0.5 rounded-full p-0.5 shrink-0 ${isEnterprise || isElite ? 'bg-emerald-100' : 'bg-slate-100'}`}>
-                        <Check className={`h-3 w-3 ${isEnterprise || isElite ? 'text-emerald-600' : 'text-slate-500'}`} />
+                      <div className={`mt-0.5 rounded-full p-0.5 shrink-0 ${isElite ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-400'}`}>
+                        <Check className="h-3.5 w-3.5" strokeWidth={3} />
                       </div>
-                      <span className={isEnterprise || isElite ? "font-medium text-slate-700" : ""}>{feature}</span>
+                      <span className={`text-sm font-medium leading-snug ${isElite ? "text-slate-700 font-semibold" : "text-slate-600"}`}>
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8 pt-4">
-                    {isActive ? (
-                      <Button className="w-full" variant="outline" disabled>
-                        Plan Active
-                      </Button>
-                    ) : (
-                      <SubscriptionButton 
-                        planId={plan.id}
-                        planName={plan.name}
-                        isEnterprise={isEnterprise}
-                      />
-                    )}
+
+                {/* CTA Button */}
+                <div className="mt-auto z-10 pt-4 border-t border-slate-100">
+                  {isActive ? (
+                    <button disabled className={`w-full py-4 rounded-xl text-sm font-black tracking-widest uppercase transition-all ${isElite ? "bg-slate-100 text-slate-400" : "bg-slate-100 text-slate-400"}`}>
+                      Active Plan
+                    </button>
+                  ) : (
+                    <div className="w-full relative group/btn">
+                      {isElite && (
+                         <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl blur opacity-30 group-hover/btn:opacity-100 transition duration-500"></div>
+                      )}
+                      <div className="relative">
+                        <SubscriptionButton 
+                          planId={plan.id}
+                          planName={plan.name}
+                          isElite={plan.id === "elite"}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
+
+              </div>
+            </div>
           );
         })}
       </div>

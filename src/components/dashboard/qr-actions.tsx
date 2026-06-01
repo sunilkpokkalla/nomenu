@@ -18,7 +18,7 @@ export function CopyButton({ text }: { text: string }) {
   };
 
   return (
-    <Button variant="outline" size="sm" onClick={handleCopy} className="flex-1">
+    <Button variant="outline" size="sm" onClick={handleCopy} className="w-full">
       {copied ? (
         <>
           <Check className="mr-1.5 h-3.5 w-3.5 text-emerald-600 animate-in fade-in duration-200" />
@@ -64,7 +64,7 @@ export function DownloadButton({ qrImageUrl, label, disabled = false }: { qrImag
   };
 
   return (
-    <Button variant="outline" size="sm" onClick={handleDownload} disabled={disabled || downloading} className="flex-1">
+    <Button variant="outline" size="sm" onClick={handleDownload} disabled={disabled || downloading} className="w-full">
       <Download className={`mr-1.5 h-3.5 w-3.5 ${downloading ? "animate-pulse" : ""}`} />
       {downloading ? "Downloading..." : "Download QR"}
     </Button>

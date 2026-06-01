@@ -1,7 +1,8 @@
 "use client";
 
 import { X, Printer, Download, Sparkles, Palette, Wifi, Image as ImageIcon } from "lucide-react";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,6 +39,8 @@ const PRESETS = [
 
 export function QrDesignerModal({ qr, restaurant, qrImageApiUrl }: QRDesignerModalProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [template, setTemplate] = useState<TemplateKey>("portrait");
   const [colorPreset, setColorPreset] = useState("brand");
   
@@ -180,13 +183,13 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl }: QRDesignerMod
         variant="outline"
         size="sm"
         onClick={() => setIsOpen(true)}
-        className="flex-1 bg-primary/5 border-primary/20 text-primary hover:bg-primary hover:text-white"
+        className="w-full bg-primary/5 border-primary/20 text-primary hover:bg-primary hover:text-white"
       >
         <Sparkles className="mr-1.5 h-3.5 w-3.5" />
         Design Card
       </Button>
 
-      {isOpen && (
+      {isOpen && mounted && createPortal(
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in-95 duration-200">
             
@@ -393,7 +396,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl }: QRDesignerMod
 
           </div>
         </div>
-      )}
+      , document.body)}
     </>
   );
 }
