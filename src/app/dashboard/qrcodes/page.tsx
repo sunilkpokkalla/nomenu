@@ -144,16 +144,16 @@ export default async function QrCodesPage(
                 return (
                   <Card key={qr.id} className="overflow-hidden flex flex-col">
                     <CardHeader className="pb-3 border-b bg-slate-50/50">
-                      <div className="flex flex-col gap-1.5">
-                        <div className="flex items-start justify-between gap-2">
-                          <CardTitle className="text-lg font-bold leading-none truncate">{qr.label}</CardTitle>
-                          <Badge variant="secondary" className="whitespace-nowrap shrink-0 text-[10px] px-1.5 py-0">
+                      <div className="flex flex-col gap-1">
+                        <CardTitle className="text-lg font-bold leading-tight break-words">{qr.label}</CardTitle>
+                        <p className="text-xs text-muted-foreground leading-tight">
+                          Menu: {targetMenu ? targetMenu.name : "Unknown"}
+                        </p>
+                        <div className="mt-1">
+                          <Badge variant="secondary" className="text-[10px] px-2 py-0.5 font-medium">
                             {qr.scan_count || 0} scans
                           </Badge>
                         </div>
-                        <p className="text-[11px] text-muted-foreground truncate leading-tight">
-                          Menu: {targetMenu ? targetMenu.name : "Unknown Menu"}
-                        </p>
                       </div>
                     </CardHeader>
                     <CardContent className="flex flex-col items-center justify-center p-6 flex-grow">
