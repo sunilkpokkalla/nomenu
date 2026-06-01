@@ -467,6 +467,18 @@ export async function createQrCode(formData: FormData) {
     }
   }
 
+  // Check for duplicate labels
+  const { data: existingLabel } = await supabase
+    .from("qr_codes")
+    .select("id")
+    .eq("restaurant_id", restaurant.id)
+    .ilike("label", label)
+    .single();
+
+  if (existingLabel) {
+    redirect(`/dashboard/qrcodes?message=A%20QR%20code%20with%20label%20"${encodeURIComponent(label)}"%20already%20exists`);
+  }
+
   const { error } = await supabase.from("qr_codes").insert({
     restaurant_id: restaurant.id,
     menu_id: menuId,
