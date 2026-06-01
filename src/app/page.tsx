@@ -78,7 +78,7 @@ function HeroLivePopups() {
       </div>
       
       {/* Toast 4: Kitchen */}
-      <div className="absolute top-[48%] right-[2%] md:right-[8%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-slow opacity-0 shadow-slate-500/5" style={{ animationDelay: '4.5s' }}>
+      <div className="absolute top-[60%] right-[2%] md:right-[8%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-slow opacity-0 shadow-slate-500/5" style={{ animationDelay: '4.5s' }}>
         <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
         <p className="text-[11px] font-bold text-slate-700">KDS: <span className="text-slate-500">Ticket #104 cleared</span></p>
       </div>
