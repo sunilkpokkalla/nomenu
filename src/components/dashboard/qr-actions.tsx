@@ -4,7 +4,7 @@ import { Check, Clipboard, Download } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-export function CopyButton({ text, iconOnly = false }: { text: string; iconOnly?: boolean }) {
+export function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -18,29 +18,23 @@ export function CopyButton({ text, iconOnly = false }: { text: string; iconOnly?
   };
 
   return (
-    <Button 
-      variant={iconOnly ? "ghost" : "outline"} 
-      size={iconOnly ? "icon" : "sm"} 
-      onClick={handleCopy} 
-      className={iconOnly ? "h-10 w-10 text-slate-400 hover:bg-slate-100 hover:text-slate-900 rounded-full transition-colors" : "w-full"}
-      title={iconOnly ? "Copy Link" : undefined}
-    >
+    <Button variant="outline" size="sm" onClick={handleCopy} className="flex-1">
       {copied ? (
         <>
-          <Check className={`${iconOnly ? "" : "mr-1.5 "}h-4 w-4 text-emerald-600 animate-in fade-in duration-200`} />
-          {!iconOnly && "Copied!"}
+          <Check className="mr-1.5 h-3.5 w-3.5 text-emerald-600 animate-in fade-in duration-200" />
+          Copied!
         </>
       ) : (
         <>
-          <Clipboard className={`${iconOnly ? "" : "mr-1.5 "}h-4 w-4`} />
-          {!iconOnly && "Copy Link"}
+          <Clipboard className="mr-1.5 h-3.5 w-3.5" />
+          Copy Link
         </>
       )}
     </Button>
   );
 }
 
-export function DownloadButton({ qrImageUrl, label, disabled = false, iconOnly = false }: { qrImageUrl: string; label: string; disabled?: boolean; iconOnly?: boolean }) {
+export function DownloadButton({ qrImageUrl, label, disabled = false }: { qrImageUrl: string; label: string; disabled?: boolean }) {
   const [downloading, setDownloading] = useState(false);
 
   const handleDownload = async () => {
@@ -70,16 +64,9 @@ export function DownloadButton({ qrImageUrl, label, disabled = false, iconOnly =
   };
 
   return (
-    <Button 
-      variant={iconOnly ? "ghost" : "outline"} 
-      size={iconOnly ? "icon" : "sm"} 
-      onClick={handleDownload} 
-      disabled={disabled || downloading} 
-      className={iconOnly ? "h-10 w-10 text-slate-400 hover:bg-slate-100 hover:text-slate-900 rounded-full transition-colors" : "w-full"}
-      title={iconOnly ? "Download QR" : undefined}
-    >
-      <Download className={`${iconOnly ? "" : "mr-1.5 "}h-4 w-4 ${downloading ? "animate-pulse" : ""}`} />
-      {!iconOnly && (downloading ? "Downloading..." : "Download QR")}
+    <Button variant="outline" size="sm" onClick={handleDownload} disabled={disabled || downloading} className="flex-1">
+      <Download className={`mr-1.5 h-3.5 w-3.5 ${downloading ? "animate-pulse" : ""}`} />
+      {downloading ? "Downloading..." : "Download QR"}
     </Button>
   );
 }

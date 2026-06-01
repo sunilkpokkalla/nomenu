@@ -142,43 +142,45 @@ export default async function QrCodesPage(
                 const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
 
                 return (
-                  <Card key={qr.id} className="group overflow-hidden flex flex-col bg-white/70 backdrop-blur-md border-slate-200/60 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/40 hover:-translate-y-1 rounded-2xl">
-                    <CardHeader className="pb-4 pt-5 px-5">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1">
-                          <CardTitle className="text-lg font-semibold tracking-tight">{qr.label}</CardTitle>
-                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                            {targetMenu ? targetMenu.name : "Unknown Menu"}
-                          </div>
+                  <Card key={qr.id} className="overflow-hidden flex flex-col">
+                    <CardHeader className="pb-3 border-b bg-slate-50/50">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <CardTitle className="text-lg">{qr.label}</CardTitle>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            Menu: {targetMenu ? targetMenu.name : "Unknown Menu"}
+                          </p>
                         </div>
-                        <Badge variant="secondary" className="bg-slate-100 text-slate-600 border-none font-medium px-2.5 py-0.5 rounded-full">
+                        <Badge variant="secondary" className="whitespace-nowrap">
                           {qr.scan_count || 0} scans
                         </Badge>
                       </div>
                     </CardHeader>
-                    <CardContent className="flex flex-col items-center justify-center px-5 pb-0 flex-grow">
+                    <CardContent className="flex flex-col items-center justify-center p-6 flex-grow">
                       <a
                         href={qrImageApiUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="relative w-[85%] max-w-[280px] aspect-square mx-auto rounded-3xl bg-white p-4 shadow-[0_4px_20px_rgb(0,0,0,0.06)] border border-slate-100 mb-6 group-hover:scale-[1.02] transition-transform duration-500 ease-out cursor-pointer block"
+                        className="relative aspect-square w-full max-w-[12rem] mx-auto rounded-xl border bg-white p-3 shadow-inner hover:opacity-90 transition-opacity cursor-pointer group"
                         title="Click to open full size QR image"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={qrImageApiUrl}
                           alt={`QR Code for ${qr.label}`}
-                          className="h-full w-full object-contain mix-blend-multiply"
+                          className="h-full w-full object-contain"
                         />
-                        <div className="absolute inset-0 bg-slate-900/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl flex items-center justify-center">
-                          <ExternalLink className="h-6 w-6 text-slate-700 bg-white/90 p-1.5 rounded-lg shadow-sm" />
+                        <div className="absolute inset-0 bg-slate-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                          <ExternalLink className="h-5 w-5 text-slate-700 bg-white/80 p-1 rounded-md shadow-sm" />
                         </div>
                       </a>
 
-                      <div className="w-full mt-auto space-y-4 bg-slate-50/80 -mx-5 px-5 pt-5 pb-5 border-t border-slate-100">
-                        {/* Primary Action: Full Width Design Button */}
-                        <div className="w-full">
+                      <div className="w-full mt-6 space-y-2">
+                        <div className="flex gap-2">
+                          <CopyButton text={publicUrl} />
+                          <DownloadButton qrImageUrl={qrImageApiUrl} label={qr.label || "QR Code"} />
+                        </div>
+                        <div className="flex">
                           <QrDesignerModal
                             qr={qr}
                             restaurant={restaurant}
@@ -186,41 +188,30 @@ export default async function QrCodesPage(
                           />
                         </div>
 
-                        {/* Secondary Action Bar: Icon Buttons + Link */}
-                        <div className="flex items-center justify-between pt-1 border-t border-slate-200/60 mt-4">
+                        <div className="flex items-center justify-between border-t pt-3 mt-3">
                           <a
                             href={publicUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-xs text-slate-500 font-mono truncate max-w-[150px] hover:text-indigo-600 transition-colors"
-                            title={publicUrl}
+                            className="text-[10px] text-slate-400 font-mono truncate max-w-[200px] hover:underline"
                           >
                             {publicUrl.replace(/^https?:\/\//, '')}
                           </a>
-                          
-                          <div className="flex items-center gap-1">
-                            <CopyButton text={publicUrl} iconOnly />
-                            <DownloadButton qrImageUrl={qrImageApiUrl} label={qr.label || "QR Code"} iconOnly />
-                            
-                            <div className="w-px h-6 bg-slate-200 mx-1" />
-                            
-                            <DeleteConfirmForm
-                              action={deleteQrCode}
-                              confirmMessage={`Are you sure you want to delete QR code for "${qr.label}"?`}
-                              name="qrCodeId"
-                              value={qr.id}
+                          <DeleteConfirmForm
+                            action={deleteQrCode}
+                            confirmMessage={`Are you sure you want to delete QR code for "${qr.label}"?`}
+                            name="qrCodeId"
+                            value={qr.id}
+                          >
+                            <Button
+                              type="submit"
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 text-destructive hover:bg-destructive/10 hover:text-destructive p-2"
                             >
-                              <Button
-                                type="submit"
-                                variant="ghost"
-                                size="icon"
-                                className="h-10 w-10 text-slate-400 hover:bg-red-50 hover:text-red-600 rounded-full transition-colors"
-                                title="Delete QR Code"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </DeleteConfirmForm>
-                          </div>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </DeleteConfirmForm>
                         </div>
                       </div>
                     </CardContent>
