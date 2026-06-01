@@ -200,7 +200,17 @@ export default async function QrCodesPage(
                         <div className="w-full mt-5 flex items-center justify-center gap-1.5 pt-4 border-t border-slate-100">
                           <CopyButton text={publicUrl} iconOnly />
                           <DownloadButton qrImageUrl={qrImageApiUrl} label={qr.label || "QR Code"} iconOnly />
-                          <QrDesignerModal qr={qr} restaurant={restaurant} qrImageApiUrl={qrImageApiUrl} iconOnly />
+                          <QrDesignerModal 
+                            qr={{
+                              id: qr.id,
+                              label: `${qr.location_zone || "Main Dining"} • ${qr.label}`,
+                              scan_count: qr.scan_count || 0,
+                              menu_id: qr.menu_id,
+                            }} 
+                            restaurant={restaurant} 
+                            qrImageApiUrl={qrImageApiUrl} 
+                            iconOnly 
+                          />
                           
                           <div className="w-px h-5 bg-slate-200 mx-1" />
                           
@@ -229,7 +239,12 @@ export default async function QrCodesPage(
                           </div>
                           <div className="flex">
                             <QrDesignerModal
-                              qr={qr}
+                              qr={{
+                                id: qr.id,
+                                label: `${qr.location_zone || "Main Dining"} • ${qr.label}`,
+                                scan_count: qr.scan_count || 0,
+                                menu_id: qr.menu_id,
+                              }}
                               restaurant={restaurant}
                               qrImageApiUrl={qrImageApiUrl}
                             />
