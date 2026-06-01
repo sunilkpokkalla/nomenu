@@ -48,14 +48,17 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
     try {
       const stored = localStorage.getItem("nomenu_orders");
       if (stored) savedOrderIds = JSON.parse(stored);
-    } catch(e) {}
-    
-    // migrate legacy
-    const legacy = localStorage.getItem("nomenu_last_order");
-    if (legacy && !savedOrderIds.includes(legacy)) {
-      savedOrderIds.unshift(legacy);
-      localStorage.removeItem("nomenu_last_order");
-      localStorage.setItem("nomenu_orders", JSON.stringify(savedOrderIds));
+      
+      // migrate legacy
+      const legacy = localStorage.getItem("nomenu_last_order");
+      if (legacy && !savedOrderIds.includes(legacy)) {
+        savedOrderIds.unshift(legacy);
+        localStorage.removeItem("nomenu_last_order");
+        localStorage.setItem("nomenu_orders", JSON.stringify(savedOrderIds));
+      }
+    } catch(e) {
+      // Ignore localStorage errors (e.g., if cookies/storage are blocked)
+      console.warn("localStorage is not available.");
     }
 
     if (savedOrderIds.length > 0) {
@@ -153,7 +156,9 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
       
       // Update local storage if any got filtered out
       if (validIds.length !== ids.length) {
-         localStorage.setItem("nomenu_orders", JSON.stringify(validIds));
+         try {
+           localStorage.setItem("nomenu_orders", JSON.stringify(validIds));
+         } catch(e) {}
          setOrderIds(validIds);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
