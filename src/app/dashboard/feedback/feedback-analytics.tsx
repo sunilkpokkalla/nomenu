@@ -28,6 +28,7 @@ export interface FeedbackData {
   created_at: string;
   is_public?: boolean;
   status?: string;
+  qr_codes?: { label: string | null; location_zone?: string | null } | null;
 }
 
 export function FeedbackAnalytics({

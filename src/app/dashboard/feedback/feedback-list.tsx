@@ -23,7 +23,7 @@ interface FeedbackData {
   created_at: string;
   is_public?: boolean;
   status?: string;
-  qr_codes?: { label: string | null } | null;
+  qr_codes?: { label: string | null; location_zone?: string | null } | null;
 }
 
 type SortColumn = "date" | "rating";
@@ -135,7 +135,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
           console.log("Realtime payload received!", payload);
           const { data: fullFeedback } = await supabase
             .from("customer_feedback")
-            .select("*, qr_codes(label)")
+            .select("*, qr_codes(label, location_zone)")
             .eq("id", payload.new.id)
             .single();
           if (fullFeedback) {
@@ -370,7 +370,9 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                               )}
                               {fb.qr_codes?.label && (
                                 <span className="inline-flex items-center gap-1 text-[11px] font-bold text-fuchsia-700 bg-fuchsia-50 border border-fuchsia-100 px-1.5 py-0.5 rounded-md uppercase">
-                                  <QrCode className="w-3 h-3" /> {fb.qr_codes.label}
+                                  <QrCode className="w-3 h-3" /> 
+                                  {fb.qr_codes.label} 
+                                  {fb.qr_codes.location_zone && ` (${fb.qr_codes.location_zone})`}
                                 </span>
                               )}
                             </div>

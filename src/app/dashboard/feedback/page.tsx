@@ -45,7 +45,7 @@ export default async function FeedbackPage() {
   // Fetch feedback
   const { data: feedbacks, error } = await supabase
     .from("customer_feedback")
-    .select("*, qr_codes(label)")
+    .select("*, qr_codes(label, location_zone)")
     .eq("restaurant_id", restaurant.id)
     .order("created_at", { ascending: false });
 
