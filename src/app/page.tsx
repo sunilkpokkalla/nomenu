@@ -55,7 +55,7 @@ const THEME_PREVIEWS = [
 
 function HeroLivePopups() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10 select-none">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 select-none">
       {/* Subtle Dynamic Mesh Background */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-tr from-indigo-100/40 via-purple-50/20 to-amber-50/30 blur-[100px] rounded-full opacity-60" />
       
