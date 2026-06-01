@@ -34,7 +34,7 @@ export default async function AnalyticsPage(props: PageProps) {
   const range = searchParams?.range || "month";
 
   const now = new Date();
-  let startDate = new Date(now);
+  const startDate = new Date(now);
   
   if (range === "7days") {
     startDate.setDate(now.getDate() - 6);

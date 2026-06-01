@@ -263,7 +263,7 @@ export function AnalyticsDashboard({
                     <XAxis dataKey="dateStr" axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} dy={10} />
                     <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} tickFormatter={(val) => isPro ? val : `$${val}`} />
                     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} formatter={(val: any, name: string) => [name === "amount" ? formatCurrency(Number(val) || 0) : val, name === "amount" ? "Revenue" : "Scans"]} />
+                    <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} formatter={(val: any, name: any) => [name === "amount" ? formatCurrency(Number(val) || 0) : val, name === "amount" ? "Revenue" : "Scans"]} />
                     
                     {!isPro && (
                       <Area type="monotone" dataKey="amount" name="amount" stroke="#0F172A" strokeWidth={2} fillOpacity={1} fill="url(#colorRev)" animationDuration={1000} />
