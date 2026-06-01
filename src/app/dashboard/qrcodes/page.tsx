@@ -140,22 +140,42 @@ export default async function QrCodesPage(
                 const targetMenu = menusList.find((m) => m.id === qr.menu_id);
                 const publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
                 const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
+                
+                const isCompact = qrs.length > 4;
 
                 return (
                   <Card key={qr.id} className="overflow-hidden flex flex-col">
-                    <CardHeader className="pb-3 border-b bg-slate-50/50">
-                      <div className="flex flex-col gap-1">
-                        <CardTitle className="text-lg font-bold leading-tight break-words">{qr.label}</CardTitle>
-                        <p className="text-xs text-muted-foreground leading-tight">
-                          Menu: {targetMenu ? targetMenu.name : "Unknown"}
-                        </p>
-                        <div className="mt-1">
-                          <Badge variant="secondary" className="text-[10px] px-2 py-0.5 font-medium">
+                    {/* Header Layout */}
+                    {isCompact ? (
+                      <CardHeader className="pb-3 border-b bg-slate-50/50">
+                        <div className="flex flex-col gap-1">
+                          <CardTitle className="text-lg font-bold leading-tight break-words">{qr.label}</CardTitle>
+                          <p className="text-xs text-muted-foreground leading-tight">
+                            Menu: {targetMenu ? targetMenu.name : "Unknown"}
+                          </p>
+                          <div className="mt-1">
+                            <Badge variant="secondary" className="text-[10px] px-2 py-0.5 font-medium">
+                              {qr.scan_count || 0} scans
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardHeader>
+                    ) : (
+                      <CardHeader className="pb-3 border-b bg-slate-50/50">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <CardTitle className="text-lg">{qr.label}</CardTitle>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              Menu: {targetMenu ? targetMenu.name : "Unknown Menu"}
+                            </p>
+                          </div>
+                          <Badge variant="secondary" className="whitespace-nowrap">
                             {qr.scan_count || 0} scans
                           </Badge>
                         </div>
-                      </div>
-                    </CardHeader>
+                      </CardHeader>
+                    )}
+
                     <CardContent className="flex flex-col items-center justify-center p-6 flex-grow">
                       <a
                         href={qrImageApiUrl}
@@ -175,30 +195,73 @@ export default async function QrCodesPage(
                         </div>
                       </a>
 
-                      <div className="w-full mt-5 flex items-center justify-center gap-1.5 pt-4 border-t border-slate-100">
-                        <CopyButton text={publicUrl} iconOnly />
-                        <DownloadButton qrImageUrl={qrImageApiUrl} label={qr.label || "QR Code"} iconOnly />
-                        <QrDesignerModal qr={qr} restaurant={restaurant} qrImageApiUrl={qrImageApiUrl} iconOnly />
-                        
-                        <div className="w-px h-5 bg-slate-200 mx-1" />
-                        
-                        <DeleteConfirmForm
-                          action={deleteQrCode}
-                          confirmMessage={`Are you sure you want to delete QR code for "${qr.label}"?`}
-                          name="qrCodeId"
-                          value={qr.id}
-                        >
-                          <Button
-                            type="submit"
-                            variant="ghost"
-                            size="icon"
-                            className="h-9 w-9 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full"
-                            title="Delete QR Code"
+                      {/* Action Layout */}
+                      {isCompact ? (
+                        <div className="w-full mt-5 flex items-center justify-center gap-1.5 pt-4 border-t border-slate-100">
+                          <CopyButton text={publicUrl} iconOnly />
+                          <DownloadButton qrImageUrl={qrImageApiUrl} label={qr.label || "QR Code"} iconOnly />
+                          <QrDesignerModal qr={qr} restaurant={restaurant} qrImageApiUrl={qrImageApiUrl} iconOnly />
+                          
+                          <div className="w-px h-5 bg-slate-200 mx-1" />
+                          
+                          <DeleteConfirmForm
+                            action={deleteQrCode}
+                            confirmMessage={`Are you sure you want to delete QR code for "${qr.label}"?`}
+                            name="qrCodeId"
+                            value={qr.id}
                           >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </DeleteConfirmForm>
-                      </div>
+                            <Button
+                              type="submit"
+                              variant="ghost"
+                              size="icon"
+                              className="h-9 w-9 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full"
+                              title="Delete QR Code"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </DeleteConfirmForm>
+                        </div>
+                      ) : (
+                        <div className="w-full mt-6 space-y-2">
+                          <div className="flex gap-2">
+                            <CopyButton text={publicUrl} />
+                            <DownloadButton qrImageUrl={qrImageApiUrl} label={qr.label || "QR Code"} />
+                          </div>
+                          <div className="flex">
+                            <QrDesignerModal
+                              qr={qr}
+                              restaurant={restaurant}
+                              qrImageApiUrl={qrImageApiUrl}
+                            />
+                          </div>
+
+                          <div className="flex items-center justify-between border-t pt-3 mt-3">
+                            <a
+                              href={publicUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-[10px] text-slate-400 font-mono truncate max-w-[200px] hover:underline"
+                            >
+                              {publicUrl.replace(/^https?:\/\//, '')}
+                            </a>
+                            <DeleteConfirmForm
+                              action={deleteQrCode}
+                              confirmMessage={`Are you sure you want to delete QR code for "${qr.label}"?`}
+                              name="qrCodeId"
+                              value={qr.id}
+                            >
+                              <Button
+                                type="submit"
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 text-destructive hover:bg-destructive/10 hover:text-destructive p-2"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </DeleteConfirmForm>
+                          </div>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 );
