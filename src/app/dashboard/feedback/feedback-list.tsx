@@ -54,6 +54,29 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
 
   useEffect(() => {
     setMounted(true);
+    
+    // Initialize AudioContext on first user interaction to bypass browser autoplay blocks
+    const initAudio = () => {
+      if (!audioCtx) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    };
+
+    // Attach to common interactions
+    document.addEventListener('click', initAudio, { once: true });
+    document.addEventListener('keydown', initAudio, { once: true });
+
+    return () => {
+      document.removeEventListener('click', initAudio);
+      document.removeEventListener('keydown', initAudio);
+    };
   }, []);
 
   // Reset to page 1 when filters or sorting change
