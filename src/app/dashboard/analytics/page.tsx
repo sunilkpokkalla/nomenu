@@ -2,7 +2,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AnalyticsDashboard } from "./analytics-dashboard";
 
-export default async function AnalyticsPage() {
+type PageProps = {
+  searchParams: Promise<{ range?: string }>;
+};
+
+export default async function AnalyticsPage(props: PageProps) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -26,11 +30,29 @@ export default async function AnalyticsPage() {
 
   const isLocked = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
 
+  const searchParams = await props.searchParams;
+  const range = searchParams?.range || "month";
+
+  const now = new Date();
+  let startDate = new Date(now);
+  
+  if (range === "7days") {
+    startDate.setDate(now.getDate() - 6);
+  } else if (range === "month") {
+    startDate.setDate(now.getDate() - 29);
+  } else if (range === "quarter") {
+    startDate.setMonth(now.getMonth() - 3);
+  } else if (range === "year") {
+    startDate.setFullYear(now.getFullYear() - 1);
+  }
+  startDate.setHours(0, 0, 0, 0);
+
   // Fetch scans
   const { data: scans } = await supabase
     .from("menu_scans")
     .select("scanned_at")
-    .eq("restaurant_id", restaurant.id);
+    .eq("restaurant_id", restaurant.id)
+    .gte("scanned_at", startDate.toISOString());
   
   const totalScans = scans?.length || 0;
 
@@ -39,7 +61,8 @@ export default async function AnalyticsPage() {
     .from("orders")
     .select("id, total_amount, table_number, created_at")
     .eq("restaurant_id", restaurant.id)
-    .eq("status", "completed");
+    .eq("status", "completed")
+    .gte("created_at", startDate.toISOString());
   
   const ordersList = orders || [];
   const totalOrders = ordersList.length;
@@ -48,37 +71,61 @@ export default async function AnalyticsPage() {
   const aov = totalOrders > 0 ? totalRevenue / totalOrders : 0;
   const conversionRate = totalScans > 0 ? (totalOrders / totalScans) * 100 : 0;
 
-  // Calculate Revenue Over Last 7 Days (for Sparklines & Area Chart)
-  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const last7Days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - (6 - i));
-    d.setHours(0, 0, 0, 0);
-    return d;
-  });
+  let buckets: { date: Date; nextDate: Date; label: string }[] = [];
 
-  const revenueData = last7Days.map((date) => {
-    const nextDay = new Date(date);
-    nextDay.setDate(nextDay.getDate() + 1);
+  if (range === "7days" || range === "month") {
+    const days = range === "7days" ? 7 : 30;
+    buckets = Array.from({ length: days }, (_, i) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() - (days - 1 - i));
+      d.setHours(0, 0, 0, 0);
+      const nextD = new Date(d);
+      nextD.setDate(nextD.getDate() + 1);
+      
+      const label = range === "7days" 
+        ? ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()]
+        : `${d.getMonth() + 1}/${d.getDate()}`;
+        
+      return { date: d, nextDate: nextD, label };
+    });
+  } else if (range === "quarter") {
+    buckets = Array.from({ length: 12 }, (_, i) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() - (11 - i) * 7);
+      d.setDate(d.getDate() - d.getDay()); // start of week
+      d.setHours(0, 0, 0, 0);
+      const nextD = new Date(d);
+      nextD.setDate(nextD.getDate() + 7);
+      return { date: d, nextDate: nextD, label: `Week ${i+1}` };
+    });
+  } else if (range === "year") {
+    buckets = Array.from({ length: 12 }, (_, i) => {
+      const d = new Date(now.getFullYear(), now.getMonth() - (11 - i), 1);
+      const nextD = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+      const label = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()];
+      return { date: d, nextDate: nextD, label };
+    });
+  }
 
+  const revenueData = buckets.map((bucket) => {
     const dayOrders = ordersList.filter((o) => {
       const d = new Date(o.created_at);
-      return d >= date && d < nextDay;
+      return d >= bucket.date && d < bucket.nextDate;
     });
     
     const dayScans = scans?.filter(s => {
       if (!s.scanned_at) return false;
       const d = new Date(s.scanned_at);
-      return d >= date && d < nextDay;
-    }).length || 0;
+      return d >= bucket.date && d < bucket.nextDate;
+    });
 
     const dayRevenue = dayOrders.reduce((acc, order) => acc + Number(order.total_amount), 0);
 
     return {
-      dateStr: weekdays[date.getDay()],
+      dateStr: bucket.label,
       amount: dayRevenue,
       orders: dayOrders.length,
-      scans: dayScans
+      scans: dayScans?.length || 0
     };
   });
 
@@ -108,10 +155,11 @@ export default async function AnalyticsPage() {
       quantity,
       price_at_time_of_order,
       menu_item_id,
-      orders!inner(restaurant_id, status)
+      orders!inner(restaurant_id, status, created_at)
     `)
     .eq("orders.restaurant_id", restaurant.id)
-    .eq("orders.status", "completed");
+    .eq("orders.status", "completed")
+    .gte("orders.created_at", startDate.toISOString());
 
   const itemStats: Record<string, { quantity: number; revenue: number }> = {};
   if (orderItems) {
@@ -193,6 +241,7 @@ export default async function AnalyticsPage() {
 
       <AnalyticsDashboard 
         isLocked={isLocked}
+        range={range}
         revenueData={revenueData}
         totalRevenue={totalRevenue}
         totalOrders={totalOrders}

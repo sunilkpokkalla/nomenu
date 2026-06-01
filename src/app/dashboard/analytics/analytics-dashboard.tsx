@@ -1,11 +1,13 @@
 "use client";
 
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from "recharts";
-import { DollarSign, TrendingUp, ShoppingBag, Crown, QrCode, Sparkles, BarChart3, Receipt, Crosshair, Users } from "lucide-react";
+import { DollarSign, TrendingUp, ShoppingBag, Crown, QrCode, Sparkles, BarChart3, Receipt, Crosshair, Users, Calendar } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface AnalyticsDashboardProps {
   isLocked: boolean;
+  range: string;
   revenueData: { dateStr: string; amount: number; orders: number; scans: number }[];
   totalRevenue: number;
   totalOrders: number;
@@ -21,6 +23,7 @@ const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
 export function AnalyticsDashboard({
   isLocked,
+  range,
   revenueData,
   totalRevenue,
   totalOrders,
@@ -31,6 +34,7 @@ export function AnalyticsDashboard({
   topTables,
   categoryData
 }: AnalyticsDashboardProps) {
+  const router = useRouter();
 
   // For locked state, we inject beautiful fake data to make the background look busy and impressive.
   const displayRevenue = isLocked ? 14250.00 : totalRevenue;
@@ -79,7 +83,7 @@ export function AnalyticsDashboard({
     <div className="h-10 w-24">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={displayChartData}>
-          <Area type="monotone" dataKey={dataKey} stroke={color} strokeWidth={2} fillOpacity={0.2} fill={color} isAnimationActive={false} />
+          <Area type="monotone" dataKey={dataKey} stroke={color} strokeWidth={2} fillOpacity={0.05} fill={color} isAnimationActive={false} />
         </AreaChart>
       </ResponsiveContainer>
     </div>
@@ -115,6 +119,21 @@ export function AnalyticsDashboard({
 
       <div className={isLocked ? "opacity-20 pointer-events-none select-none filter blur-[4px] transition-all duration-1000" : ""}>
         
+        {/* TIME RANGE SELECTOR */}
+        <div className="flex justify-end mb-4">
+          <div className="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
+            {(["7days", "month", "quarter", "year"] as const).map((r) => (
+              <button
+                key={r}
+                onClick={() => router.push(`?range=${r}`)}
+                className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${range === r ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                {r === "7days" ? "7 Days" : r}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* DENSE METRICS STRIP */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
           <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm col-span-2 md:col-span-1 flex flex-col justify-between">
@@ -190,16 +209,16 @@ export function AnalyticsDashboard({
                   <AreaChart data={displayChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#0F172A" stopOpacity={0.8}/>
+                        <stop offset="5%" stopColor="#0F172A" stopOpacity={0.05}/>
                         <stop offset="95%" stopColor="#0F172A" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F8FAFC" />
                     <XAxis dataKey="dateStr" axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} dy={10} />
                     <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} tickFormatter={(val) => `$${val}`} />
                     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} formatter={(val: any) => [formatCurrency(Number(val) || 0), "Revenue"]} />
-                    <Area type="monotone" dataKey="amount" stroke="#0F172A" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" animationDuration={1000} />
+                    <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} formatter={(val: any) => [formatCurrency(Number(val) || 0), "Revenue"]} />
+                    <Area type="monotone" dataKey="amount" stroke="#0F172A" strokeWidth={2} fillOpacity={1} fill="url(#colorRev)" animationDuration={1000} />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
@@ -237,7 +256,7 @@ export function AnalyticsDashboard({
                     <Tooltip 
                       // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       formatter={(val: any) => formatCurrency(Number(val))} 
-                      contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', fontSize: '12px', fontWeight: 'bold' }} 
+                      contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} 
                     />
                   </PieChart>
                 </ResponsiveContainer>
