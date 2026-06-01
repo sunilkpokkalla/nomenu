@@ -452,27 +452,18 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
         {/* Action / Upgrade Button */}
         <div className="mt-8">
           {isLocked ? (
-            <div className="bg-slate-900 p-6 rounded-3xl shadow-xl flex flex-col items-center text-center animate-in slide-in-from-bottom-4 duration-500">
-              <div className={`flex h-12 w-12 items-center justify-center rounded-2xl mb-4 shadow-inner ${lockTitle.includes("Elite") ? "bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-amber-500/40" : "bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-indigo-500/40"}`}>
-                {lockTitle.includes("Elite") ? <Crown className="h-6 w-6" /> : <Lock className="h-6 w-6" />}
-              </div>
-              <h4 className="text-lg font-black tracking-tight text-white mb-2">{lockTitle}</h4>
-              <p className="text-xs leading-relaxed text-slate-400 font-medium mb-6">{lockMessage}</p>
-              <button 
-                type="button"
-                onClick={() => window.location.href = "/dashboard/billing"}
-                className={`w-full rounded-2xl px-5 py-4 text-sm font-black uppercase tracking-[0.1em] text-white shadow-xl transition-all hover:scale-[1.02] ${
-                  lockTitle.includes("Elite") 
-                    ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 shadow-amber-500/30" 
-                    : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-500/30"
-                }`}
-              >
-                <span className="flex items-center justify-center gap-2">
-                  <Sparkles className="h-5 w-5" />
-                  {upgradeTarget}
-                </span>
-              </button>
-            </div>
+            <Button 
+              type="button" 
+              onClick={() => window.location.href = "/dashboard/billing"}
+              className={`w-full shadow-xl py-7 text-base font-black tracking-wide rounded-2xl transition-all hover:-translate-y-0.5 ${
+                lockTitle.includes("Elite") 
+                  ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white shadow-amber-500/20" 
+                  : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-indigo-500/20"
+              }`}
+            >
+              {lockTitle.includes("Elite") ? <Crown className="mr-3 h-5 w-5" /> : <Lock className="mr-3 h-5 w-5" />}
+              {upgradeTarget.toUpperCase()} TO APPLY THEME
+            </Button>
           ) : (
             <Button form="branding-settings-form" type="submit" className="w-full shadow-xl py-7 text-base font-black tracking-wide bg-slate-900 hover:bg-slate-800 rounded-2xl transition-all hover:-translate-y-0.5" disabled={isPending}>
               {isPending ? (
