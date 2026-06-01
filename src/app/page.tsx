@@ -593,7 +593,7 @@ export default function Home() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 1 Active Digital Menu
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 20 Menu Items
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 30 Menu Items
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 1 Generated QR Code

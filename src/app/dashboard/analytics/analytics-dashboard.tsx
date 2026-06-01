@@ -1,7 +1,7 @@
 "use client";
 
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from "recharts";
-import { DollarSign, TrendingUp, ShoppingBag, Crown, QrCode, Sparkles, BarChart3, Receipt, Crosshair, Users, Calendar } from "lucide-react";
+import { DollarSign, TrendingUp, ShoppingBag, Crown, QrCode, Sparkles, Receipt, Crosshair, MessageSquare, Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -17,6 +17,9 @@ interface AnalyticsDashboardProps {
   topItems: { id: string; name: string; image_url: string; quantity: number; revenue: number }[];
   topTables: { table_number: string; orders: number; revenue: number }[];
   categoryData: { name: string; value: number }[];
+  planType?: string;
+  totalFeedbacks?: number;
+  averageRating?: number;
 }
 
 const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
@@ -32,7 +35,10 @@ export function AnalyticsDashboard({
   conversionRate,
   topItems,
   topTables,
-  categoryData
+  categoryData,
+  planType,
+  totalFeedbacks,
+  averageRating
 }: AnalyticsDashboardProps) {
   const router = useRouter();
 
@@ -78,6 +84,8 @@ export function AnalyticsDashboard({
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
   };
+
+  const isPro = planType?.toLowerCase() === "pro";
 
   const MiniSparkline = ({ dataKey, color }: { dataKey: string, color: string }) => (
     <div className="h-10 w-24">
@@ -135,30 +143,35 @@ export function AnalyticsDashboard({
         </div>
 
         {/* DENSE METRICS STRIP */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm col-span-2 md:col-span-1 flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-indigo-600">
-                <DollarSign className="h-4 w-4" />
-                <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Gross Rev</span>
+        <div className={`grid gap-4 mb-6 ${isPro ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-2 md:grid-cols-5'}`}>
+          
+          {!isPro && (
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm col-span-2 md:col-span-1 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 text-indigo-600">
+                  <DollarSign className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Gross Rev</span>
+                </div>
+              </div>
+              <div className="flex items-end justify-between">
+                <div className="text-2xl font-black tracking-tighter text-slate-900">{formatCurrency(displayRevenue)}</div>
+                <MiniSparkline dataKey="amount" color="#4F46E5" />
               </div>
             </div>
-            <div className="flex items-end justify-between">
-              <div className="text-2xl font-black tracking-tighter text-slate-900">{formatCurrency(displayRevenue)}</div>
-              <MiniSparkline dataKey="amount" color="#4F46E5" />
-            </div>
-          </div>
+          )}
 
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-            <div className="flex items-center gap-2 text-rose-600 mb-2">
-              <Receipt className="h-4 w-4" />
-              <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Orders</span>
+          {!isPro && (
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div className="flex items-center gap-2 text-rose-600 mb-2">
+                <Receipt className="h-4 w-4" />
+                <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Orders</span>
+              </div>
+              <div className="flex items-end justify-between">
+                <div className="text-2xl font-black tracking-tighter text-slate-900">{displayOrders}</div>
+                <MiniSparkline dataKey="orders" color="#E11D48" />
+              </div>
             </div>
-            <div className="flex items-end justify-between">
-              <div className="text-2xl font-black tracking-tighter text-slate-900">{displayOrders}</div>
-              <MiniSparkline dataKey="orders" color="#E11D48" />
-            </div>
-          </div>
+          )}
 
           <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
             <div className="flex items-center gap-2 text-amber-600 mb-2">
@@ -171,34 +184,61 @@ export function AnalyticsDashboard({
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
-            <div className="flex items-center gap-2 text-emerald-600 mb-1">
-              <TrendingUp className="h-4 w-4" />
-              <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Avg Order Value</span>
-            </div>
-            <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayAov)}</div>
-          </div>
+          {!isPro ? (
+            <>
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
+                <div className="flex items-center gap-2 text-emerald-600 mb-1">
+                  <TrendingUp className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Avg Order Value</span>
+                </div>
+                <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayAov)}</div>
+              </div>
 
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
-            <div className="flex items-center gap-2 text-cyan-600 mb-1">
-              <Crosshair className="h-4 w-4" />
-              <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Conversion Rate</span>
-            </div>
-            <div className="flex items-baseline gap-1 mt-1">
-              <div className="text-2xl font-black tracking-tighter text-slate-900">{displayConversion.toFixed(1)}%</div>
-              <span className="text-[10px] text-slate-400 font-bold">SCAN-TO-ORDER</span>
-            </div>
-          </div>
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
+                <div className="flex items-center gap-2 text-cyan-600 mb-1">
+                  <Crosshair className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Conversion Rate</span>
+                </div>
+                <div className="flex items-baseline gap-1 mt-1">
+                  <div className="text-2xl font-black tracking-tighter text-slate-900">{displayConversion.toFixed(1)}%</div>
+                  <span className="text-[10px] text-slate-400 font-bold">SCAN-TO-ORDER</span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div className="flex items-center gap-2 text-indigo-600 mb-2">
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Feedback</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <div className="text-2xl font-black tracking-tighter text-slate-900">{totalFeedbacks || 0}</div>
+                </div>
+              </div>
+              
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div className="flex items-center gap-2 text-amber-500 mb-2">
+                  <Star className="h-4 w-4 fill-amber-500" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Avg Rating</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <div className="text-2xl font-black tracking-tighter text-slate-900">{averageRating ? averageRating.toFixed(1) : "0.0"} <span className="text-sm font-medium text-slate-400">/ 5.0</span></div>
+                </div>
+              </div>
+            </>
+          )}
+
         </div>
 
         {/* 3-COLUMN DENSE GRID */}
         <div className="grid gap-6 lg:grid-cols-3">
           
-          {/* Revenue Chart - Col Span 2 */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col lg:col-span-2 min-h-[340px]">
+          {/* Revenue/Scans Chart */}
+          <div className={`bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col min-h-[340px] ${isPro ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
             <div className="mb-4 flex justify-between items-center">
               <div>
-                <h3 className="text-lg font-black text-slate-900 tracking-tight">Revenue & Traffic</h3>
+                <h3 className="text-lg font-black text-slate-900 tracking-tight">{isPro ? "Traffic Analysis" : "Revenue & Traffic"}</h3>
                 <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">7-Day Trajectory</p>
               </div>
             </div>
@@ -208,146 +248,160 @@ export function AnalyticsDashboard({
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={displayChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
-                      <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#0F172A" stopOpacity={0.05}/>
-                        <stop offset="95%" stopColor="#0F172A" stopOpacity={0}/>
+                      {!isPro && (
+                        <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#0F172A" stopOpacity={0.05}/>
+                          <stop offset="95%" stopColor="#0F172A" stopOpacity={0}/>
+                        </linearGradient>
+                      )}
+                      <linearGradient id="colorScans" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#D97706" stopOpacity={0.05}/>
+                        <stop offset="95%" stopColor="#D97706" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F8FAFC" />
                     <XAxis dataKey="dateStr" axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} dy={10} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} tickFormatter={(val) => `$${val}`} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} tickFormatter={(val) => isPro ? val : `$${val}`} />
                     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} formatter={(val: any) => [formatCurrency(Number(val) || 0), "Revenue"]} />
-                    <Area type="monotone" dataKey="amount" stroke="#0F172A" strokeWidth={2} fillOpacity={1} fill="url(#colorRev)" animationDuration={1000} />
+                    <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} formatter={(val: any, name: string) => [name === "amount" ? formatCurrency(Number(val) || 0) : val, name === "amount" ? "Revenue" : "Scans"]} />
+                    
+                    {!isPro && (
+                      <Area type="monotone" dataKey="amount" name="amount" stroke="#0F172A" strokeWidth={2} fillOpacity={1} fill="url(#colorRev)" animationDuration={1000} />
+                    )}
+                    <Area type="monotone" dataKey="scans" name="scans" stroke="#D97706" strokeWidth={2} fillOpacity={1} fill="url(#colorScans)" animationDuration={1000} />
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="h-full flex items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50">
-                  <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Revenue Data</p>
+                  <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Data</p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Category Breakdown Donut */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col min-h-[340px]">
-            <div className="mb-2">
-              <h3 className="text-lg font-black text-slate-900 tracking-tight">Category Sales</h3>
-              <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Revenue Distribution</p>
-            </div>
-            <div className="flex-1 w-full relative flex items-center justify-center">
-              {displayCategoryData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={220}>
-                  <PieChart>
-                    <Pie
-                      data={displayCategoryData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={5}
-                      dataKey="value"
-                      stroke="none"
-                    >
-                      {displayCategoryData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      formatter={(val: any) => formatCurrency(Number(val))} 
-                      contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} 
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="h-full w-full flex items-center justify-center">
-                   <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Data</p>
+          {!isPro && (
+            <>
+              {/* Category Breakdown Donut */}
+              <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col min-h-[340px]">
+                <div className="mb-2">
+                  <h3 className="text-lg font-black text-slate-900 tracking-tight">Category Sales</h3>
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Revenue Distribution</p>
                 </div>
-              )}
-              {/* Legend */}
-              <div className="absolute bottom-0 left-0 w-full flex flex-wrap justify-center gap-2">
-                {displayCategoryData.map((entry, index) => (
-                  <div key={index} className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                    <span className="text-[9px] font-bold text-slate-600 uppercase tracking-wider">{entry.name}</span>
+                <div className="flex-1 w-full relative flex items-center justify-center">
+                  {displayCategoryData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={220}>
+                      <PieChart>
+                        <Pie
+                          data={displayCategoryData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={80}
+                          paddingAngle={5}
+                          dataKey="value"
+                          stroke="none"
+                        >
+                          {displayCategoryData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          formatter={(val: any) => formatCurrency(Number(val))} 
+                          contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} 
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center">
+                       <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Data</p>
+                    </div>
+                  )}
+                  {/* Legend */}
+                  <div className="absolute bottom-0 left-0 w-full flex flex-wrap justify-center gap-2">
+                    {displayCategoryData.map((entry, index) => (
+                      <div key={index} className="flex items-center gap-1.5 bg-slate-50 px-2 py-1 rounded-md">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                        <span className="text-[9px] font-bold text-slate-600 uppercase tracking-wider">{entry.name}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Top Selling Items (Col Span 2) */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm lg:col-span-2">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-black text-slate-900 tracking-tight">Menu Leaders</h3>
-                <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Top items by revenue</p>
-              </div>
-            </div>
+              {/* Top Selling Items (Col Span 2) */}
+              <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm lg:col-span-2">
+                <div className="mb-4 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-black text-slate-900 tracking-tight">Menu Leaders</h3>
+                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Top items by revenue</p>
+                  </div>
+                </div>
 
-            {displayTopItems.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {displayTopItems.slice(0,4).map((item, idx) => (
-                  <div key={item.id || idx} className="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-100 hover:border-slate-300 transition-colors">
-                    <div className="relative h-12 w-12 rounded-xl overflow-hidden shrink-0 shadow-sm">
-                      {item.image_url ? (
-                        <Image src={item.image_url} alt={item.name} fill className="object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400">
-                          <ShoppingBag className="h-4 w-4" />
+                {displayTopItems.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {displayTopItems.slice(0,4).map((item, idx) => (
+                      <div key={item.id || idx} className="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-100 hover:border-slate-300 transition-colors">
+                        <div className="relative h-12 w-12 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                          {item.image_url ? (
+                            <Image src={item.image_url} alt={item.name} fill className="object-cover" />
+                          ) : (
+                            <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400">
+                              <ShoppingBag className="h-4 w-4" />
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-slate-900 text-xs truncate">{item.name}</h4>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.quantity} units</p>
-                    </div>
-                    <div className="text-right shrink-0 pr-2">
-                      <div className="font-black text-sm text-indigo-600">{formatCurrency(item.revenue)}</div>
-                    </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-slate-900 text-xs truncate">{item.name}</h4>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.quantity} units</p>
+                        </div>
+                        <div className="text-right shrink-0 pr-2">
+                          <div className="font-black text-sm text-indigo-600">{formatCurrency(item.revenue)}</div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                ) : (
+                  <div className="flex h-24 items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50">
+                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Sales Yet</p>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="flex h-24 items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50">
-                <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Sales Yet</p>
-              </div>
-            )}
-          </div>
 
-          {/* Table Performance */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-            <div className="mb-4">
-              <h3 className="text-lg font-black text-slate-900 tracking-tight">Table Traffic</h3>
-              <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Highest grossing locations</p>
-            </div>
-            
-            {displayTopTables.length > 0 ? (
-              <div className="flex-1 overflow-y-auto pr-2 scrollbar-hide space-y-2">
-                {displayTopTables.map((table, idx) => (
-                  <div key={idx} className="flex items-center justify-between border-b border-slate-100 pb-2 last:border-0 last:pb-0">
-                    <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-bold">
-                        #{idx + 1}
+              {/* Table Performance */}
+              <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                <div className="mb-4">
+                  <h3 className="text-lg font-black text-slate-900 tracking-tight">Table Traffic</h3>
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Highest grossing locations</p>
+                </div>
+                
+                {displayTopTables.length > 0 ? (
+                  <div className="flex-1 overflow-y-auto pr-2 scrollbar-hide space-y-2">
+                    {displayTopTables.map((table, idx) => (
+                      <div key={idx} className="flex items-center justify-between border-b border-slate-100 pb-2 last:border-0 last:pb-0">
+                        <div className="flex items-center gap-2">
+                          <div className="h-7 w-7 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-bold">
+                            #{idx + 1}
+                          </div>
+                          <div>
+                            <div className="font-bold text-xs text-slate-900">{table.table_number || "Unknown"}</div>
+                            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{table.orders} orders</div>
+                          </div>
+                        </div>
+                        <div className="text-right font-black text-sm text-slate-900">
+                          {formatCurrency(table.revenue)}
+                        </div>
                       </div>
-                      <div>
-                        <div className="font-bold text-xs text-slate-900">{table.table_number || "Unknown"}</div>
-                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{table.orders} orders</div>
-                      </div>
-                    </div>
-                    <div className="text-right font-black text-sm text-slate-900">
-                      {formatCurrency(table.revenue)}
-                    </div>
+                    ))}
                   </div>
-                ))}
+                ) : (
+                  <div className="flex flex-1 items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50">
+                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Table Data</p>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="flex flex-1 items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50">
-                <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Table Data</p>
-              </div>
-            )}
-          </div>
+            </>
+          )}
 
         </div>
       </div>

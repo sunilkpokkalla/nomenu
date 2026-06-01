@@ -242,6 +242,7 @@ export default async function AnalyticsPage(props: PageProps) {
       <AnalyticsDashboard 
         isLocked={isLocked}
         range={range}
+        planType={restaurant.plan || "free"}
         revenueData={revenueData}
         totalRevenue={totalRevenue}
         totalOrders={totalOrders}
