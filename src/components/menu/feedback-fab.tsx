@@ -131,7 +131,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Tell us what you liked or what we can improve..."
-                      className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:border-slate-400 focus:ring-slate-400 transition-colors resize-none"
+                      className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors resize-none"
                     />
                   </div>
 
@@ -146,14 +146,14 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
                         placeholder="Your Name"
-                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:border-slate-400 focus:ring-slate-400 transition-colors"
+                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
                       />
                       <input
                         type="text"
                         value={contactInfo}
                         onChange={(e) => setContactInfo(e.target.value)}
                         placeholder="Email or Phone Number"
-                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm focus:border-slate-400 focus:ring-slate-400 transition-colors"
+                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
                       />
                     </div>
                   </div>
