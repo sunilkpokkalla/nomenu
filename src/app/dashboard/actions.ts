@@ -467,16 +467,17 @@ export async function createQrCode(formData: FormData) {
     }
   }
 
-  // Check for duplicate labels
+  // Check for duplicate labels in the SAME ZONE
   const { data: existingLabel } = await supabase
     .from("qr_codes")
     .select("id")
     .eq("restaurant_id", restaurant.id)
+    .eq("location_zone", locationZone)
     .ilike("label", label)
     .single();
 
   if (existingLabel) {
-    redirect(`/dashboard/qrcodes?message=A%20QR%20code%20with%20label%20"${encodeURIComponent(label)}"%20already%20exists`);
+    redirect(`/dashboard/qrcodes?message=A%20QR%20code%20with%20label%20"${encodeURIComponent(label)}"%20already%20exists%20in%20zone%20"${encodeURIComponent(locationZone)}"`);
   }
 
   const { error } = await supabase.from("qr_codes").insert({
