@@ -72,7 +72,7 @@ function HeroLivePopups() {
       </div>
 
       {/* Toast 3: Feedback */}
-      <div className="absolute top-[12%] right-[5%] md:right-[12%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-fast opacity-0 shadow-amber-500/5" style={{ animationDelay: '3s' }}>
+      <div className="absolute top-[30%] right-[10%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-fast opacity-0 shadow-amber-500/5" style={{ animationDelay: '3s' }}>
         <span className="text-sm">⭐️</span>
         <p className="text-[11px] font-bold text-slate-700">New <span className="text-amber-500">5-Star</span> Review!</p>
       </div>
