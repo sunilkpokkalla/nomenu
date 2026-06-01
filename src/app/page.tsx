@@ -55,34 +55,39 @@ const THEME_PREVIEWS = [
 
 function HeroLivePopups() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 select-none">
-      {/* Subtle Dynamic Mesh Background */}
-      <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gradient-to-tr from-indigo-100/40 via-purple-50/20 to-amber-50/30 blur-[100px] rounded-full opacity-60" />
-      
-      {/* Toast 1: Payment */}
-      <div className="absolute top-[8%] left-[8%] md:left-[15%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-slow opacity-0 shadow-emerald-500/5">
-        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-        <p className="text-[11px] font-bold text-slate-700">Table 4 paid <span className="text-emerald-600">$142.50</span></p>
+    <>
+      {/* Subtle Dynamic Mesh Background (Stays behind text) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 select-none">
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gradient-to-tr from-indigo-100/40 via-purple-50/20 to-amber-50/30 blur-[100px] rounded-full opacity-60" />
       </div>
 
-      {/* Toast 2: Order */}
-      <div className="absolute top-[42%] left-[2%] md:left-[8%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-medium opacity-0 shadow-indigo-500/5" style={{ animationDelay: '1.5s' }}>
-        <span className="text-sm">🔔</span>
-        <p className="text-[11px] font-bold text-slate-700">New Order: <span className="text-indigo-600">Truffle Fries</span></p>
-      </div>
+      {/* Floating Toasts (Renders in front of text) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-20 select-none">
+        {/* Toast 1: Payment */}
+        <div className="absolute top-[8%] left-[8%] md:left-[15%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-slow opacity-0 shadow-emerald-500/5">
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <p className="text-[11px] font-bold text-slate-700">Table 4 paid <span className="text-emerald-600">$142.50</span></p>
+        </div>
 
-      {/* Toast 3: Feedback */}
-      <div className="absolute top-[30%] right-[10%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-fast opacity-0 shadow-amber-500/5" style={{ animationDelay: '3s' }}>
-        <span className="text-sm">⭐️</span>
-        <p className="text-[11px] font-bold text-slate-700">New <span className="text-amber-500">5-Star</span> Review!</p>
+        {/* Toast 2: Order */}
+        <div className="absolute top-[42%] left-[2%] md:left-[8%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-medium opacity-0 shadow-indigo-500/5" style={{ animationDelay: '1.5s' }}>
+          <span className="text-sm">🔔</span>
+          <p className="text-[11px] font-bold text-slate-700">New Order: <span className="text-indigo-600">Truffle Fries</span></p>
+        </div>
+
+        {/* Toast 3: Feedback */}
+        <div className="absolute top-[30%] right-[10%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-fast opacity-0 shadow-amber-500/5" style={{ animationDelay: '3s' }}>
+          <span className="text-sm">⭐️</span>
+          <p className="text-[11px] font-bold text-slate-700">New <span className="text-amber-500">5-Star</span> Review!</p>
+        </div>
+        
+        {/* Toast 4: Kitchen */}
+        <div className="absolute top-[60%] right-[2%] md:right-[8%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-slow opacity-0 shadow-slate-500/5" style={{ animationDelay: '4.5s' }}>
+          <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+          <p className="text-[11px] font-bold text-slate-700">KDS: <span className="text-slate-500">Ticket #104 cleared</span></p>
+        </div>
       </div>
-      
-      {/* Toast 4: Kitchen */}
-      <div className="absolute top-[60%] right-[2%] md:right-[8%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-slow opacity-0 shadow-slate-500/5" style={{ animationDelay: '4.5s' }}>
-        <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
-        <p className="text-[11px] font-bold text-slate-700">KDS: <span className="text-slate-500">Ticket #104 cleared</span></p>
-      </div>
-    </div>
+    </>
   )
 }
 
