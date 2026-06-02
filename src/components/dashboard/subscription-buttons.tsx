@@ -54,7 +54,15 @@ export function SubscriptionButton({
   );
 }
 
-export function PortalButton() {
+export function PortalButton({ 
+  text = "Manage Subscription", 
+  variant = "default",
+  isElite = false
+}: { 
+  text?: string; 
+  variant?: "default" | "card";
+  isElite?: boolean;
+} = {}) {
   const [loading, setLoading] = useState(false);
 
   const handlePortal = async () => {
@@ -77,6 +85,25 @@ export function PortalButton() {
     }
   };
 
+  if (variant === "card") {
+    return (
+      <button
+        onClick={handlePortal}
+        disabled={loading}
+        className={`w-full py-4 rounded-xl text-sm font-black tracking-widest uppercase transition-all flex items-center justify-center gap-2
+          ${isElite 
+            ? "bg-slate-950 text-white shadow-lg shadow-slate-900/10 hover:bg-black hover:scale-[1.02]" 
+            : "bg-white text-slate-900 border border-slate-200 hover:bg-slate-50"
+          }
+          ${loading ? "opacity-70 pointer-events-none" : ""}
+        `}
+      >
+        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+        {loading ? "Redirecting..." : text}
+      </button>
+    );
+  }
+
   return (
     <button 
       onClick={handlePortal} 
@@ -84,7 +111,7 @@ export function PortalButton() {
       className="flex items-center justify-center gap-2 text-sm font-bold bg-white text-slate-900 border border-slate-200 px-6 py-3 rounded-xl shadow-sm hover:bg-slate-50 transition-all hover:scale-[1.02]"
     >
       {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-      {loading ? "Loading..." : "Manage Subscription"}
+      {loading ? "Loading..." : text}
     </button>
   );
 }

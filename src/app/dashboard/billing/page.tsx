@@ -141,7 +141,12 @@ export default async function BillingPage(
       {/* Pricing Bento Grid - Minimalist */}
       <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
         {PLANS.map((plan) => {
-          const isActive = currentPlan.toLowerCase() === plan.id.toLowerCase();
+          const planTiers: Record<string, number> = { free: 0, pro: 1, elite: 2, enterprise: 3 };
+          const currentTier = planTiers[currentPlan.toLowerCase()] || 0;
+          const thisTier = planTiers[plan.id.toLowerCase()] || 0;
+
+          const isActive = currentTier === thisTier;
+          const isDowngrade = thisTier < currentTier;
           const isElite = plan.id === "elite";
           
           return (
@@ -209,12 +214,18 @@ export default async function BillingPage(
                     <button disabled className="w-full py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all bg-slate-50 text-slate-400 border border-slate-200 cursor-not-allowed">
                       Active Plan
                     </button>
+                  ) : currentTier > 0 ? (
+                    <PortalButton 
+                      text={isDowngrade ? `Downgrade to ${plan.name}` : `Upgrade to ${plan.name}`}
+                      variant="card"
+                      isElite={isElite}
+                    />
                   ) : (
                     <div className="w-full">
                       <SubscriptionButton 
                         planId={plan.id}
                         planName={plan.name}
-                        isElite={plan.id === "elite"}
+                        isElite={isElite}
                       />
                     </div>
                   )}
