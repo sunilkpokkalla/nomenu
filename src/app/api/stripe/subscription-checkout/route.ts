@@ -72,7 +72,7 @@ export async function POST(req: Request) {
         .eq("id", restaurant.id);
     }
 
-    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL;
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
