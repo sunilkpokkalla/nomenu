@@ -8,13 +8,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2026-05-27.dahlia",
 });
 
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
   // Instantiate supabase inside the handler to prevent build-time crashes on Vercel
   const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://dummy-for-build.supabase.co",
-    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "dummy_key")
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
   );
 
   const payload = await req.text();
