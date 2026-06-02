@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
+export const dynamic = 'force-dynamic';
+
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder", {
-  apiVersion: "2026-05-27.dahlia",
-});
-
 export async function POST(req: Request) {
   try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: "2026-05-27.dahlia",
+      httpClient: Stripe.createFetchHttpClient(),
+    });
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -30,29 +32,7 @@ export async function POST(req: Request) {
     }
 
     let stripeAccountId = restaurant.stripe_account_id;
-    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
-    // Demo Mode Bypass
-    if (process.env.DEMO_MODE === 'true' || process.env.NEXT_PUBLIC_DEMO_MODE === "true" || process.env.STRIPE_SECRET_KEY === "sk_test_placeholder" || !process.env.STRIPE_SECRET_KEY) {
-      if (!stripeAccountId) {
-        stripeAccountId = "acct_demo_" + Math.random().toString(36).substr(2, 9);
-        
-        const adminSupabase = createAdminClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
-        );
-
-        const { error: mockUpdateError } = await adminSupabase
-          .from("restaurants")
-          .update({ stripe_account_id: stripeAccountId })
-          .eq("id", restaurant.id);
-          
-        if (mockUpdateError) {
-          return NextResponse.json({ error: "Failed to update database securely." }, { status: 500 });
-        }
-      }
-      return NextResponse.json({ url: `${origin}/dashboard/payouts?success=true` });
-    }
+    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL;
 
     // Real Stripe Connect Flow
     if (!stripeAccountId) {
