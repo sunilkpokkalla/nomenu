@@ -4,13 +4,12 @@ export const dynamic = 'force-dynamic';
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-05-27.dahlia",
-});
-
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-
 export async function POST(req: Request) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2026-05-27.dahlia",
+  });
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
   // Instantiate supabase inside the handler to prevent build-time crashes on Vercel
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
