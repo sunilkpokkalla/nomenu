@@ -39,28 +39,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
     }
 
-    // Demo Mode Override: Bypass Stripe completely
-    if (process.env.DEMO_MODE === 'true' || process.env.NEXT_PUBLIC_DEMO_MODE === "true" || process.env.STRIPE_SECRET_KEY === "sk_test_placeholder" || !process.env.STRIPE_SECRET_KEY) {
-      // Use Service Role to bypass RLS, because users are strictly forbidden from modifying their own 'plan' column!
-      const adminSupabase = createAdminClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
-      );
 
-      // Instantly upgrade the user in the database
-      const { error: mockUpdateError } = await adminSupabase
-        .from("restaurants")
-        .update({ plan: planId.toLowerCase() })
-        .eq("id", restaurant.id);
-        
-      if (mockUpdateError) {
-        console.error("Admin DB Update Error:", mockUpdateError);
-        return NextResponse.json({ error: "Failed to upgrade plan securely." }, { status: 500 });
-      }
-        
-      const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-      return NextResponse.json({ url: `${origin}/dashboard/billing?success=Demo%20Upgrade%20Successful!%20Plan%20set%20to%20${planId}` });
-    }
 
     // Map plans to Stripe Price IDs
     const priceMap: Record<string, string | undefined> = {
