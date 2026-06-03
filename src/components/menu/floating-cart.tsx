@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed } from "lucide-react";
 import { submitOrder } from "@/app/menu/[id]/actions";
@@ -25,6 +25,21 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrder, setSuccessOrder] = useState<{ id: string, dailyNumber: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('success') === 'true') {
+        const lastOrderId = localStorage.getItem('nomenu_last_order');
+        setSuccessOrder({ id: lastOrderId || "Paid Online", dailyNumber: 0 });
+        
+        // Clean up URL so refresh doesn't trigger it again
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete('success');
+        window.history.replaceState({}, '', newUrl.toString());
+      }
+    }
+  }, []);
 
   if (totalItems === 0 && !successOrder) return null;
 

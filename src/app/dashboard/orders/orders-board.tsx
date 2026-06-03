@@ -246,10 +246,10 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   };
 
   const columns = [
-    { id: "pending", title: "New Orders", icon: Clock },
-    { id: "preparing", title: "Preparing", icon: ChefHat },
-    { id: "completed", title: "Ready / Done", icon: CheckCircle2 },
-    { id: "cancelled", title: "Cancelled", icon: XCircle }
+    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending", "awaiting_payment"] },
+    { id: "preparing", title: "Preparing", icon: ChefHat, matchStatus: ["preparing"] },
+    { id: "completed", title: "Ready / Done", icon: CheckCircle2, matchStatus: ["completed"] },
+    { id: "cancelled", title: "Cancelled", icon: XCircle, matchStatus: ["cancelled"] }
   ];
 
   const getUrgency = (createdAt: string, status: string) => {
@@ -370,7 +370,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       <DragDropContext onDragEnd={onDragEnd}>
         <div className={`flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory ${isKdsMode ? "h-full" : "h-[calc(100vh-250px)] min-h-[600px]"} scrollbar-hide`}>
           {columns.map(col => {
-            const colOrders = orders.filter(o => o.status === col.id).filter(o => {
+            const colOrders = orders.filter(o => col.matchStatus.includes(o.status)).filter(o => {
               if (!selectedDateStr && (col.id === "completed" || col.id === "cancelled") && autoArchiveMinutes !== null) {
                 const completedAt = completedTimes.current.get(o.id);
                 if (completedAt) {

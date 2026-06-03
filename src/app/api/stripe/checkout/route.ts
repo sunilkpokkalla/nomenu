@@ -98,13 +98,20 @@ export async function POST(req: Request) {
       console.error("Failed to pre-insert order items:", itemsError);
     }
 
+    // Construct safe URLs for redirect
+    const successUrl = new URL(returnUrl);
+    successUrl.searchParams.set("success", "true");
+    
+    const cancelUrl = new URL(returnUrl);
+    cancelUrl.searchParams.set("canceled", "true");
+
     // Create the Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"], // Apple Pay and Google Pay are included automatically
       line_items: lineItems,
       mode: "payment",
-      success_url: `${returnUrl}?success=true`,
-      cancel_url: `${returnUrl}?canceled=true`,
+      success_url: successUrl.toString(),
+      cancel_url: cancelUrl.toString(),
       client_reference_id: orderId,
       payment_intent_data: {
         application_fee_amount: applicationFeeAmountCents,
