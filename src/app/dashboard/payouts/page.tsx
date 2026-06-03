@@ -84,17 +84,20 @@ export default async function PayoutsPage(
                     <ShieldCheck className="w-6 h-6 text-green-600 shrink-0" />
                     <div>
                       <h3 className="font-bold mb-1">Account Connected Successfully!</h3>
-                      <p className="text-sm text-green-700">
+                      <p className="text-sm text-green-700 mb-4">
                         Your restaurant is now able to accept live payments via Apple Pay, Google Pay, and Credit Cards directly on your digital menus.
                       </p>
+                      <ConnectBankButton isAlreadyConnected={true} />
                     </div>
                   </div>
                 ) : (
                   <>
                     <p className="text-slate-600 mb-8 max-w-lg">
-                      To start accepting Apple Pay and credit card orders on your digital menu, you need to securely link your business bank account. Funds are routed directly to you.
+                      {restaurant.stripe_account_id 
+                        ? "Your bank account is securely linked! Click below to open your Stripe Express Dashboard to view your balance, see recent payouts, and update your banking details."
+                        : "To start accepting Apple Pay and credit card orders on your digital menu, you need to securely link your business bank account. Funds are routed directly to you."}
                     </p>
-                    <ConnectBankButton />
+                    <ConnectBankButton isAlreadyConnected={!!restaurant.stripe_account_id} />
                   </>
                 )}
               </div>

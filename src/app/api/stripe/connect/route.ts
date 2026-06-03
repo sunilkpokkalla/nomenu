@@ -51,6 +51,14 @@ export async function POST(req: Request) {
         // @ts-expect-error: Bypass strict generic type validation
         .update({ stripe_account_id: stripeAccountId })
         .eq("id", restaurant.id);
+    } else {
+      // Check if they already finished onboarding
+      const account = await stripe.accounts.retrieve(stripeAccountId);
+      if (account.details_submitted) {
+        // Generate a dashboard login link so they can see their money
+        const loginLink = await stripe.accounts.createLoginLink(stripeAccountId);
+        return NextResponse.json({ url: loginLink.url });
+      }
     }
 
     const accountLink = await stripe.accountLinks.create({
