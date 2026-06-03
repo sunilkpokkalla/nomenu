@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useCart } from "./cart-context";
-import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed } from "lucide-react";
+import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt } from "lucide-react";
 import { submitOrder, getOrderReceipt } from "@/app/menu/[id]/actions";
 
 export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel }: {
@@ -209,8 +209,20 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
             <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-4">
               <div>
                 <div className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Order Number</div>
-                <div className="text-3xl font-black text-amber-500">
-                  #{receipt ? String(receipt.daily_order_number).padStart(3, '0') : String(successOrder.dailyNumber).padStart(3, '0')}
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl font-black text-amber-500">
+                    #{receipt ? String(receipt.daily_order_number).padStart(3, '0') : String(successOrder.dailyNumber).padStart(3, '0')}
+                  </div>
+                  <button 
+                    onClick={() => {
+                      setIsOpen(false);
+                      window.dispatchEvent(new Event('nomenu_open_receipts'));
+                    }}
+                    className="p-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 rounded-full transition-colors print:hidden"
+                    title="View Full Receipt"
+                  >
+                    <Receipt className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
               <div className="text-right">

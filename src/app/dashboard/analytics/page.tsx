@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { AnalyticsDashboard } from "./analytics-dashboard";
 
 type PageProps = {
-  searchParams: Promise<{ range?: string }>;
+  searchParams: Promise<{ range?: string; date?: string; startDate?: string; endDate?: string }>;
 };
 
 export default async function AnalyticsPage(props: PageProps) {
@@ -32,39 +32,70 @@ export default async function AnalyticsPage(props: PageProps) {
 
   const searchParams = await props.searchParams;
   const range = searchParams?.range || "month";
+  const dateStr = searchParams?.date;
+  const startDateStr = searchParams?.startDate;
+  const endDateStr = searchParams?.endDate;
 
   const now = new Date();
-  const startDate = new Date(now);
+  let startDate: Date;
+  let endDate: Date | undefined = undefined;
   
-  if (range === "today") {
-    // startDate is already today, just needs hours reset below
-  } else if (range === "7days") {
-    startDate.setDate(now.getDate() - 6);
-  } else if (range === "month") {
-    startDate.setDate(now.getDate() - 29);
-  } else if (range === "quarter") {
-    startDate.setMonth(now.getMonth() - 3);
-  } else if (range === "year") {
-    startDate.setFullYear(now.getFullYear() - 1);
+  if (startDateStr && endDateStr) {
+    const [sy, sm, sd] = startDateStr.split("-").map(Number);
+    startDate = new Date(sy, sm - 1, sd);
+    startDate.setHours(0, 0, 0, 0);
+
+    const [ey, em, ed] = endDateStr.split("-").map(Number);
+    endDate = new Date(ey, em - 1, ed);
+    endDate.setHours(23, 59, 59, 999);
+  } else if (dateStr) {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    startDate = new Date(y, m - 1, d);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 1);
+  } else {
+    startDate = new Date(now);
+    if (range === "today") {
+      // startDate is already today, just needs hours reset below
+    } else if (range === "7days") {
+      startDate.setDate(now.getDate() - 6);
+    } else if (range === "month") {
+      startDate.setDate(now.getDate() - 29);
+    } else if (range === "quarter") {
+      startDate.setMonth(now.getMonth() - 3);
+    } else if (range === "year") {
+      startDate.setFullYear(now.getFullYear() - 1);
+    }
+    startDate.setHours(0, 0, 0, 0);
   }
-  startDate.setHours(0, 0, 0, 0);
 
   // Fetch scans
-  const { data: scans } = await supabase
+  let scansQuery = supabase
     .from("menu_scans")
     .select("scanned_at")
     .eq("restaurant_id", restaurant.id)
     .gte("scanned_at", startDate.toISOString());
+    
+  if (endDate) {
+    scansQuery = scansQuery.lt("scanned_at", endDate.toISOString());
+  }
+  const { data: scans } = await scansQuery;
   
   const totalScans = scans?.length || 0;
 
   // Fetch orders
-  const { data: orders } = await supabase
+  let ordersQuery = supabase
     .from("orders")
     .select("id, total_amount, table_number, created_at")
     .eq("restaurant_id", restaurant.id)
     .eq("status", "completed")
     .gte("created_at", startDate.toISOString());
+    
+  if (endDate) {
+    ordersQuery = ordersQuery.lt("created_at", endDate.toISOString());
+  }
+  const { data: orders } = await ordersQuery;
   
   const ordersList = orders || [];
   const totalOrders = ordersList.length;
@@ -75,9 +106,39 @@ export default async function AnalyticsPage(props: PageProps) {
 
   let buckets: { date: Date; nextDate: Date; label: string }[] = [];
 
-  if (range === "today") {
+  if (startDateStr && endDateStr && endDate) {
+    const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays <= 2) {
+      const hours = diffDays * 24;
+      buckets = Array.from({ length: hours }, (_, i) => {
+        const d = new Date(startDate);
+        d.setHours(i);
+        const nextD = new Date(d);
+        nextD.setHours(i + 1);
+        
+        const hour12 = d.getHours() === 0 ? 12 : d.getHours() > 12 ? d.getHours() - 12 : d.getHours();
+        const ampm = d.getHours() < 12 ? "AM" : "PM";
+        const dayLabel = diffDays > 1 ? ` (${d.getMonth() + 1}/${d.getDate()})` : '';
+        return { date: d, nextDate: nextD, label: `${hour12}${ampm}${dayLabel}` };
+      });
+    } else {
+      buckets = Array.from({ length: diffDays }, (_, i) => {
+        const d = new Date(startDate);
+        d.setDate(d.getDate() + i);
+        d.setHours(0, 0, 0, 0);
+        const nextD = new Date(d);
+        nextD.setDate(nextD.getDate() + 1);
+        
+        const label = `${d.getMonth() + 1}/${d.getDate()}`;
+        return { date: d, nextDate: nextD, label };
+      });
+    }
+  } else if (dateStr || range === "today") {
+    const baseDate = dateStr ? new Date(startDate) : new Date(now);
     buckets = Array.from({ length: 24 }, (_, i) => {
-      const d = new Date(now);
+      const d = new Date(baseDate);
       d.setHours(0, 0, 0, 0);
       d.setHours(i);
       const nextD = new Date(d);
@@ -163,7 +224,7 @@ export default async function AnalyticsPage(props: PageProps) {
     .slice(0, 5);
 
   // Fetch Order Items, Menu Items, and Categories
-  const { data: orderItems } = await supabase
+  let orderItemsQuery = supabase
     .from("order_items")
     .select(`
       quantity,
@@ -174,6 +235,11 @@ export default async function AnalyticsPage(props: PageProps) {
     .eq("orders.restaurant_id", restaurant.id)
     .eq("orders.status", "completed")
     .gte("orders.created_at", startDate.toISOString());
+    
+  if (endDate) {
+    orderItemsQuery = orderItemsQuery.lt("orders.created_at", endDate.toISOString());
+  }
+  const { data: orderItems } = await orderItemsQuery;
 
   const itemStats: Record<string, { quantity: number; revenue: number }> = {};
   if (orderItems) {
@@ -256,6 +322,9 @@ export default async function AnalyticsPage(props: PageProps) {
       <AnalyticsDashboard 
         isLocked={isLocked}
         range={range}
+        dateStr={dateStr}
+        startDateStr={startDateStr}
+        endDateStr={endDateStr}
         planType={restaurant.plan || "free"}
         revenueData={revenueData}
         totalRevenue={totalRevenue}

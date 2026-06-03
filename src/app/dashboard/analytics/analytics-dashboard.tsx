@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 interface AnalyticsDashboardProps {
   isLocked: boolean;
   range: string;
+  dateStr?: string;
+  startDateStr?: string;
+  endDateStr?: string;
   revenueData: { dateStr: string; amount: number; orders: number; scans: number }[];
   totalRevenue: number;
   totalOrders: number;
@@ -27,6 +30,9 @@ const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 export function AnalyticsDashboard({
   isLocked,
   range,
+  dateStr,
+  startDateStr,
+  endDateStr,
   revenueData,
   totalRevenue,
   totalOrders,
@@ -129,16 +135,53 @@ export function AnalyticsDashboard({
         
         {/* TIME RANGE SELECTOR */}
         <div className="flex justify-end mb-4">
-          <div className="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
-            {(["today", "7days", "month", "quarter", "year"] as const).map((r) => (
-              <button
-                key={r}
-                onClick={() => router.push(`?range=${r}`)}
-                className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${range === r ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-              >
-                {r === "today" ? "Today" : r === "7days" ? "7 Days" : r}
-              </button>
-            ))}
+          <div className="inline-flex flex-wrap items-center gap-2 justify-end">
+            {/* Custom Date Range Picker */}
+            <div className="relative inline-flex items-center gap-2">
+              <input
+                type="date"
+                value={startDateStr || dateStr || ""}
+                onChange={(e) => {
+                  if (e.target.value) {
+                    if (endDateStr) {
+                      router.push(`?startDate=${e.target.value}&endDate=${endDateStr}`);
+                    } else {
+                      router.push(`?date=${e.target.value}`);
+                    }
+                  }
+                }}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-slate-200/50 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${
+                  (dateStr || startDateStr) ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-white text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                }`}
+              />
+              <span className="text-slate-400 font-bold text-[10px] uppercase tracking-widest">to</span>
+              <input
+                type="date"
+                value={endDateStr || dateStr || ""}
+                onChange={(e) => {
+                  if (e.target.value) {
+                    const start = startDateStr || dateStr || e.target.value;
+                    router.push(`?startDate=${start}&endDate=${e.target.value}`);
+                  }
+                }}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-slate-200/50 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${
+                  (endDateStr || dateStr) ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-white text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                }`}
+              />
+            </div>
+            
+            {/* Quick Filters */}
+            <div className="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
+              {(["today", "7days", "month", "quarter", "year"] as const).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => router.push(`?range=${r}`)}
+                  className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${(!dateStr && !startDateStr && !endDateStr && range === r) ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  {r === "today" ? "Today" : r === "7days" ? "7 Days" : r}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

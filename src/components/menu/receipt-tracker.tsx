@@ -112,7 +112,14 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
     };
 
     window.addEventListener("nomenu_order_placed", handleNewOrder);
-    return () => window.removeEventListener("nomenu_order_placed", handleNewOrder);
+    
+    const handleOpenReceipts = () => setIsOpen(true);
+    window.addEventListener("nomenu_open_receipts", handleOpenReceipts);
+
+    return () => {
+      window.removeEventListener("nomenu_order_placed", handleNewOrder);
+      window.removeEventListener("nomenu_open_receipts", handleOpenReceipts);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
