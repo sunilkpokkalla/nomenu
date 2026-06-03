@@ -117,6 +117,12 @@ export default async function PayoutsPage(
                   Payouts are automatically transferred to your linked bank account on a 2-day rolling basis by Stripe.
                 </p>
               </div>
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 sm:col-span-2">
+                <h3 className="font-semibold text-slate-900 mb-2">Automatic Refunds</h3>
+                <p className="text-sm text-slate-600">
+                  When you cancel a paid order directly from your Kitchen Display System (KDS), the customer's payment is automatically and fully refunded via Stripe. Refunded amounts are automatically deducted from your pending payouts without needing to log into the Stripe Dashboard.
+                </p>
+              </div>
             </div>
           </div>
 

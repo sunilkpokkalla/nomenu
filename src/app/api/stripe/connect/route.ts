@@ -48,7 +48,6 @@ export async function POST(req: Request) {
 
       await supabase
         .from("restaurants")
-        // @ts-expect-error: Bypass strict generic type validation
         .update({ stripe_account_id: stripeAccountId })
         .eq("id", restaurant.id);
     } else {

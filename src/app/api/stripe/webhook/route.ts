@@ -52,6 +52,23 @@ export async function POST(req: Request) {
           console.log(`Restaurant ${restaurantId} upgraded to ${planId}`);
         }
       }
+    } else if (session.mode === "payment") {
+      const orderId = session.metadata?.order_id;
+      if (orderId) {
+        const { error: updateError } = await supabase
+          .from("orders")
+          .update({
+            status: "pending",
+            payment_intent_id: session.payment_intent as string,
+          })
+          .eq("id", orderId);
+        
+        if (updateError) {
+          console.error("Failed to update order status:", updateError);
+        } else {
+          console.log(`Order ${orderId} marked as pending (paid).`);
+        }
+      }
     }
   } else if (event.type === "customer.subscription.deleted" || event.type === "customer.subscription.updated") {
     const subscription = event.data.object as Stripe.Subscription;

@@ -28,6 +28,7 @@ export interface Database {
           subscription_status: string | null;
           stripe_customer_id: string | null;
           stripe_subscription_id: string | null;
+          stripe_account_id: string | null;
           timezone: string | null;
           created_at: string | null;
         };
@@ -49,6 +50,7 @@ export interface Database {
           subscription_status?: string | null;
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
+          stripe_account_id?: string | null;
           timezone?: string | null;
           created_at?: string | null;
         };
@@ -285,6 +287,7 @@ export interface Database {
           total_amount: number;
           status: string;
           created_at: string;
+          payment_intent_id: string | null;
         };
         Insert: {
           id?: string;
@@ -295,6 +298,7 @@ export interface Database {
           total_amount: number;
           status?: string;
           created_at?: string;
+          payment_intent_id?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["orders"]["Insert"]>;
         Relationships: [

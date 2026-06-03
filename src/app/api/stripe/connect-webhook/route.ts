@@ -55,8 +55,6 @@ export async function POST(req: Request) {
         if (updateError) {
           console.error("Failed to update order status to pending via connect webhook:", updateError);
           return NextResponse.json({ error: "DB Error" }, { status: 500 });
-        } else {
-          console.log("Connect Webhook: Order payment confirmed, moved to pending. Order ID:", orderId);
         }
       }
     }

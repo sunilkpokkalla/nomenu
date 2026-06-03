@@ -162,3 +162,38 @@ export async function submitOrder(data: {
 
   return { success: true, orderId: order.id, dailyOrderNumber: order.daily_order_number };
 }
+
+export async function getOrderReceipt(orderId: string) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+
+  const { data: order, error } = await supabase
+    .from("orders")
+    .select(`
+      id,
+      daily_order_number,
+      total_amount,
+      status,
+      payment_intent_id,
+      created_at,
+      order_items (
+        quantity,
+        price_at_time_of_order,
+        menu_items (
+          name
+        )
+      )
+    `)
+    .eq("id", orderId)
+    .single();
+
+  if (error || !order) {
+    console.error("Error fetching receipt:", error);
+    return null;
+  }
+
+  return order;
+}
+

@@ -224,6 +224,20 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   };
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
+    if (newStatus === "cancelled") {
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        const isPaid = !!order.payment_intent_id;
+        const confirmMessage = isPaid 
+          ? `Are you sure you want to cancel Order #${String(order.daily_order_number || 0).padStart(3, '0')}?\n\nWARNING: This will permanently refund $${Number(order.total_amount).toFixed(2)} to the customer via Stripe. This action CANNOT be undone.`
+          : `Are you sure you want to cancel Order #${String(order.daily_order_number || 0).padStart(3, '0')}?`;
+          
+        if (!window.confirm(confirmMessage)) {
+          return; // Abort cancellation, drag-and-drop will snap back to original position
+        }
+      }
+    }
+
     // Optimistic update
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
     

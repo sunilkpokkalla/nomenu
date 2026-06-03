@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed } from "lucide-react";
-import { submitOrder } from "@/app/menu/[id]/actions";
+import { submitOrder, getOrderReceipt } from "@/app/menu/[id]/actions";
 
 export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel }: {
   restaurantId: string;
@@ -24,7 +24,32 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   const [table, setTable] = useState(tableNumber || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrder, setSuccessOrder] = useState<{ id: string, dailyNumber: number } | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [receipt, setReceipt] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    
+    const fetchReceipt = async () => {
+      if (successOrder?.id && successOrder.id !== "Paid Online") {
+        const data = await getOrderReceipt(successOrder.id);
+        if (data) {
+          setReceipt(data);
+          // If the webhook hasn't processed yet, poll again
+          if (data.status === "awaiting_payment" && !data.payment_intent_id) {
+            timeoutId = setTimeout(fetchReceipt, 2000);
+          }
+        }
+      }
+    };
+
+    fetchReceipt();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [successOrder]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -164,34 +189,89 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   // Success Screen
   if (successOrder) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-        <div className={`w-full max-w-md rounded-3xl p-8 text-center space-y-6 shadow-2xl ${
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+        <div className={`w-full max-w-md rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-2xl my-auto ${
           themeStyle === "luxury" ? "bg-[#0C0C0E] border border-zinc-900 text-zinc-100" : 
           themeStyle === "vibrant" ? "bg-[#FEFCE8] border-4 border-black text-black" : 
           "bg-white text-slate-900"
         }`}>
-          <div className="mx-auto w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4">
-            <UtensilsCrossed className="w-10 h-10" />
+          <div className="mx-auto w-16 h-16 sm:w-20 sm:h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 shadow-inner">
+            <UtensilsCrossed className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold">Order Received!</h2>
-            <p className="opacity-70 mt-2">The kitchen is preparing your food.</p>
+            <h2 className="text-2xl font-black tracking-tight">{receipt?.payment_intent_id ? "Payment Successful!" : "Order Received!"}</h2>
+            <p className="opacity-70 mt-2 font-medium">
+              {receipt?.payment_intent_id ? "Your payment was processed and the kitchen is preparing your food." : "The kitchen is preparing your food."}
+            </p>
           </div>
-          <div className="bg-slate-100 dark:bg-zinc-800/50 rounded-xl p-4 flex flex-col gap-1 text-center">
-            <div className="text-xs font-bold uppercase tracking-wider opacity-60">Order Number</div>
-            <div className="text-4xl font-extrabold text-amber-500">
-              #{String(successOrder.dailyNumber).padStart(3, '0')}
+          
+          <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-2xl p-5 flex flex-col gap-4 text-left border border-black/5 dark:border-white/5">
+            <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-4">
+              <div>
+                <div className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Order Number</div>
+                <div className="text-3xl font-black text-amber-500">
+                  #{receipt ? String(receipt.daily_order_number).padStart(3, '0') : String(successOrder.dailyNumber).padStart(3, '0')}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Status</div>
+                <div className="text-sm font-bold bg-black/5 dark:bg-white/10 px-2 py-1 rounded-md">
+                  {receipt?.status === 'pending' ? 'Pending' : receipt?.status || 'Processing...'}
+                </div>
+              </div>
             </div>
-            <div className="text-xs font-mono opacity-40 mt-2">ID: {successOrder.id.split('-')[0]}</div>
+
+            {/* Receipt Items */}
+            {receipt && (
+              <div className="space-y-3 pt-2">
+                <div className="text-xs font-bold uppercase opacity-50 tracking-wider">Order Summary</div>
+                <div className="space-y-2 max-h-[150px] overflow-y-auto pr-2 custom-scrollbar">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {receipt.order_items.map((item: any, idx: number) => {
+                    const itemName = Array.isArray(item.menu_items) ? item.menu_items[0]?.name : item.menu_items?.name;
+                    return (
+                      <div key={idx} className="flex justify-between text-sm font-medium">
+                        <span className="flex gap-2">
+                          <span className="opacity-60">{item.quantity}x</span>
+                          <span>{itemName || 'Item'}</span>
+                        </span>
+                        <span>{formatPrice(item.price_at_time_of_order * item.quantity)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                <div className="border-t border-black/10 dark:border-white/10 pt-3 flex justify-between items-center mt-2">
+                  <span className="font-bold">Total Paid</span>
+                  <span className="font-black text-lg text-emerald-600 dark:text-emerald-400">
+                    {formatPrice(receipt.total_amount)}
+                  </span>
+                </div>
+                
+                {receipt.payment_intent_id && (
+                  <div className="text-[10px] font-bold text-center opacity-50 mt-2 flex items-center justify-center gap-1">
+                    <CreditCard className="w-3 h-3" /> Paid securely via Stripe
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {!receipt && (
+              <div className="text-center py-4 opacity-50 animate-pulse text-sm font-bold">
+                Loading receipt details...
+              </div>
+            )}
           </div>
+
           <button
             onClick={() => {
               setSuccessOrder(null);
+              setReceipt(null);
               setIsOpen(false);
             }}
-            className="w-full py-4 rounded-xl font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors"
+            className="w-full py-4 rounded-xl font-bold text-white bg-slate-900 hover:bg-slate-800 transition-colors shadow-lg active:scale-[0.98]"
           >
-            Close
+            Close & Start New Order
           </button>
         </div>
       </div>

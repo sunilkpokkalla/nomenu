@@ -78,11 +78,10 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
       const stored = localStorage.getItem("nomenu_orders");
       if (stored) savedOrderIds = JSON.parse(stored);
       
-      // migrate legacy
+      // migrate legacy (do not remove it as floating-cart uses it for checkout success)
       const legacy = localStorage.getItem("nomenu_last_order");
       if (legacy && !savedOrderIds.includes(legacy)) {
         savedOrderIds.unshift(legacy);
-        localStorage.removeItem("nomenu_last_order");
         localStorage.setItem("nomenu_orders", JSON.stringify(savedOrderIds));
       }
     } catch(e) {

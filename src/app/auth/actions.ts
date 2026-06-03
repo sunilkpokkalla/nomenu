@@ -17,8 +17,6 @@ export async function login(formData: FormData) {
   const password = getString(formData, "password");
   const next = getString(formData, "next") || "/dashboard";
 
-  console.log("Login action starting...", { email });
-
   if (!hasSupabaseEnv()) {
     console.error("Login action: Missing Supabase Env vars");
     redirect("/login?message=Configure%20Supabase%20env%20vars%20first");
@@ -27,14 +25,11 @@ export async function login(formData: FormData) {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-  console.log("Login action result:", { user: data?.user?.id, error: error?.message });
-
   if (error) {
     redirect(`/login?message=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/", "layout");
-  console.log("Login action redirecting to:", next);
   redirect(next);
 }
 
@@ -117,11 +112,6 @@ export async function loginWithGoogle() {
 
   const redirectToUrl = `${cleanAppUrl}/auth/callback`;
 
-  console.log("loginWithGoogle starting...", {
-    redirectTo: redirectToUrl,
-    origin,
-    host
-  });
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
@@ -129,7 +119,6 @@ export async function loginWithGoogle() {
       redirectTo: redirectToUrl,
     },
   });
-  console.log("loginWithGoogle result:", { data, error });
 
   if (error) {
     console.error("loginWithGoogle error redirecting:", error);
@@ -137,7 +126,6 @@ export async function loginWithGoogle() {
   }
 
   if (data.url) {
-    console.log("loginWithGoogle redirecting to:", data.url);
     redirect(data.url);
   } else {
     console.warn("loginWithGoogle: No redirect URL returned by Supabase.");
