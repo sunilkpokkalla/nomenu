@@ -41,6 +41,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
   const [autoArchiveMinutes, setAutoArchiveMinutes] = useState<number | null>(30);
+  const [cancelOrderPrompt, setCancelOrderPrompt] = useState<Order | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const knownOrderIds = useRef<Set<string>>(new Set(initialOrders.map(o => o.id)));
@@ -223,18 +224,12 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     }
   };
 
-  const handleStatusChange = async (orderId: string, newStatus: string) => {
-    if (newStatus === "cancelled") {
+  const handleStatusChange = async (orderId: string, newStatus: string, bypassConfirm: boolean = false) => {
+    if (newStatus === "cancelled" && !bypassConfirm) {
       const order = orders.find(o => o.id === orderId);
       if (order) {
-        const isPaid = !!order.payment_intent_id;
-        const confirmMessage = isPaid 
-          ? `Are you sure you want to cancel Order #${String(order.daily_order_number || 0).padStart(3, '0')}?\n\nWARNING: This will permanently refund $${Number(order.total_amount).toFixed(2)} to the customer via Stripe. This action CANNOT be undone.`
-          : `Are you sure you want to cancel Order #${String(order.daily_order_number || 0).padStart(3, '0')}?`;
-          
-        if (!window.confirm(confirmMessage)) {
-          return; // Abort cancellation, drag-and-drop will snap back to original position
-        }
+        setCancelOrderPrompt(order);
+        return; // Abort optimistic update, show custom modal. Drag will snap back temporarily.
       }
     }
 
@@ -377,6 +372,44 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
             >
               <X className="w-4 h-4" />
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Cancel Confirmation Modal */}
+      {cancelOrderPrompt && (
+        <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full flex flex-col items-center text-center">
+            <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mb-6">
+              <AlertTriangle className="w-8 h-8" />
+            </div>
+            <h3 className="text-2xl font-black text-slate-900 mb-2">Cancel Order #{String(cancelOrderPrompt.daily_order_number || 0).padStart(3, '0')}?</h3>
+            {cancelOrderPrompt.payment_intent_id ? (
+              <p className="text-slate-500 font-medium mb-8">
+                WARNING: This order was paid online. Canceling it will <strong className="text-rose-600 font-bold">permanently refund ${Number(cancelOrderPrompt.total_amount).toFixed(2)}</strong> to the customer via Stripe. This action cannot be undone.
+              </p>
+            ) : (
+              <p className="text-slate-500 font-medium mb-8">
+                Are you sure you want to cancel this order? It will be moved to the cancelled column.
+              </p>
+            )}
+            <div className="flex gap-4 w-full">
+              <button 
+                onClick={() => setCancelOrderPrompt(null)}
+                className="flex-1 px-4 py-3 rounded-xl font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+              >
+                Keep Order
+              </button>
+              <button 
+                onClick={() => {
+                  handleStatusChange(cancelOrderPrompt.id, "cancelled", true);
+                  setCancelOrderPrompt(null);
+                }}
+                className="flex-1 px-4 py-3 rounded-xl font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-lg shadow-rose-600/30 transition-colors"
+              >
+                Yes, Cancel It
+              </button>
+            </div>
           </div>
         </div>
       )}
