@@ -108,6 +108,7 @@ export async function POST(req: Request) {
       client_reference_id: orderId,
       payment_intent_data: {
         application_fee_amount: applicationFeeAmountCents,
+        on_behalf_of: restaurant.stripe_account_id, // Forces the restaurant to pay the 2.9% + 30c Stripe fee
         transfer_data: {
           destination: restaurant.stripe_account_id,
         },
