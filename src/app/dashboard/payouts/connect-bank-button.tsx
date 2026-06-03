@@ -11,6 +11,9 @@ export function ConnectBankButton({ isAlreadyConnected }: { isAlreadyConnected?:
     setIsLoading(true);
     setError(null);
 
+    // Open a blank window synchronously to bypass aggressive popup blockers
+    const newWindow = window.open("about:blank", "_blank");
+
     try {
       const res = await fetch("/api/stripe/connect", {
         method: "POST",
@@ -18,12 +21,20 @@ export function ConnectBankButton({ isAlreadyConnected }: { isAlreadyConnected?:
       const data = await res.json();
 
       if (data.url) {
-        window.location.href = data.url;
+        // Redirect the newly opened tab to Stripe
+        if (newWindow) {
+          newWindow.location.href = data.url;
+        } else {
+          // Fallback if popup was blocked completely
+          window.location.href = data.url;
+        }
       } else {
+        if (newWindow) newWindow.close();
         throw new Error(data.error || "Failed to generate connect link");
       }
     } catch (err: unknown) {
       console.error(err);
+      if (newWindow) newWindow.close();
       setError((err as Error).message || "An unexpected error occurred.");
     } finally {
       setIsLoading(false);
