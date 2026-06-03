@@ -93,11 +93,11 @@ export default async function PayoutsPage(
                 ) : (
                   <>
                     <p className="text-slate-600 mb-8 max-w-lg">
-                      {restaurant.stripe_account_id 
+                      {(restaurant as unknown as { stripe_account_id: string | null }).stripe_account_id 
                         ? "Your bank account is securely linked! Click below to open your Stripe Express Dashboard to view your balance, see recent payouts, and update your banking details."
                         : "To start accepting Apple Pay and credit card orders on your digital menu, you need to securely link your business bank account. Funds are routed directly to you."}
                     </p>
-                    <ConnectBankButton isAlreadyConnected={!!restaurant.stripe_account_id} />
+                    <ConnectBankButton isAlreadyConnected={!!(restaurant as unknown as { stripe_account_id: string | null }).stripe_account_id} />
                   </>
                 )}
               </div>
