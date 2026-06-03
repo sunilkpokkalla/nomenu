@@ -36,7 +36,9 @@ export default async function AnalyticsPage(props: PageProps) {
   const now = new Date();
   const startDate = new Date(now);
   
-  if (range === "7days") {
+  if (range === "today") {
+    // startDate is already today, just needs hours reset below
+  } else if (range === "7days") {
     startDate.setDate(now.getDate() - 6);
   } else if (range === "month") {
     startDate.setDate(now.getDate() - 29);
@@ -73,7 +75,19 @@ export default async function AnalyticsPage(props: PageProps) {
 
   let buckets: { date: Date; nextDate: Date; label: string }[] = [];
 
-  if (range === "7days" || range === "month") {
+  if (range === "today") {
+    buckets = Array.from({ length: 24 }, (_, i) => {
+      const d = new Date(now);
+      d.setHours(0, 0, 0, 0);
+      d.setHours(i);
+      const nextD = new Date(d);
+      nextD.setHours(i + 1);
+      
+      const hour12 = i === 0 ? 12 : i > 12 ? i - 12 : i;
+      const ampm = i < 12 ? "AM" : "PM";
+      return { date: d, nextDate: nextD, label: `${hour12}${ampm}` };
+    });
+  } else if (range === "7days" || range === "month") {
     const days = range === "7days" ? 7 : 30;
     buckets = Array.from({ length: days }, (_, i) => {
       const d = new Date(now);

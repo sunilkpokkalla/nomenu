@@ -130,13 +130,13 @@ export function AnalyticsDashboard({
         {/* TIME RANGE SELECTOR */}
         <div className="flex justify-end mb-4">
           <div className="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
-            {(["7days", "month", "quarter", "year"] as const).map((r) => (
+            {(["today", "7days", "month", "quarter", "year"] as const).map((r) => (
               <button
                 key={r}
                 onClick={() => router.push(`?range=${r}`)}
                 className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${range === r ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
               >
-                {r === "7days" ? "7 Days" : r}
+                {r === "today" ? "Today" : r === "7days" ? "7 Days" : r}
               </button>
             ))}
           </div>
