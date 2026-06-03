@@ -28,6 +28,7 @@ type Order = {
   status: string;
   created_at: string;
   daily_order_number?: number | null;
+  payment_intent_id?: string | null;
   order_items?: OrderItem[];
 };
 
@@ -466,6 +467,16 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                       }`}>
                                         #{String(order.daily_order_number).padStart(3, '0')}
                                       </span>
+                                      
+                                      {/* PAYMENT STATUS BADGE */}
+                                      {order.status === 'awaiting_payment' ? (
+                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20">Unpaid</span>
+                                      ) : order.payment_intent_id ? (
+                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Paid Online</span>
+                                      ) : (
+                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-amber-500/10 text-amber-500 border border-amber-500/20">Collect Payment</span>
+                                      )}
+
                                       {shouldDefaultCollapse && (
                                         isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />
                                       )}
@@ -544,14 +555,22 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                     {/* Right Side: Quick Action Button (Light mode only to keep KDS clean, or maybe keep everywhere) */}
                                     {!selectedDateStr && (
                                       <div className="flex items-center gap-2 ml-auto">
-                                        {col.id === "pending" && (
-                                        <button 
-                                          onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "preparing"); }} 
-                                          className="bg-amber-500 text-amber-950 hover:bg-amber-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
-                                        >
-                                          Start
-                                        </button>
-                                      )}
+                                        {col.id === "pending" && order.status === "awaiting_payment" && (
+                                          <button 
+                                            onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "cancelled"); }} 
+                                            className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border border-rose-500/20 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
+                                          >
+                                            Dismiss
+                                          </button>
+                                        )}
+                                        {col.id === "pending" && order.status !== "awaiting_payment" && (
+                                          <button 
+                                            onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "preparing"); }} 
+                                            className="bg-amber-500 text-amber-950 hover:bg-amber-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
+                                          >
+                                            Start
+                                          </button>
+                                        )}
                                       {col.id === "preparing" && (
                                         <button 
                                           onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "completed"); }} 
