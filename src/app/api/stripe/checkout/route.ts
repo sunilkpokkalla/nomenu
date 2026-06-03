@@ -60,6 +60,44 @@ export async function POST(req: Request) {
     // 2.5% Platform Fee
     const applicationFeeAmountCents = Math.round(totalAmountCents * 0.025);
 
+    // Pre-insert the order into the database securely via Service Role
+    // This avoids hitting the 500-character Stripe metadata limit with items_json
+    const adminSupabase = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+    );
+
+    const totalAmount = totalAmountCents / 100;
+    
+    const { error: orderError } = await adminSupabase.from("orders").insert({
+      id: orderId,
+      restaurant_id: restaurantId,
+      table_number: tableNumber || null,
+      customer_name: customerName || null,
+      status: "awaiting_payment", // Will be flipped to 'pending' by the webhook
+      total_amount: totalAmount,
+      payment_intent_id: null,
+    });
+
+    if (orderError) {
+      console.error("Failed to pre-insert order:", orderError);
+      return NextResponse.json({ error: "Failed to initialize order" }, { status: 500 });
+    }
+
+    // Insert items
+    const orderItems = items.map((i: { id?: string; menu_item_id?: string; quantity: number; price?: number; price_at_time_of_order?: number; notes?: string; customer_notes?: string; [key: string]: unknown }) => ({
+      order_id: orderId,
+      menu_item_id: i.menu_item_id || i.id,
+      quantity: i.quantity,
+      price_at_time_of_order: i.price_at_time_of_order || i.price || 0,
+      customer_notes: i.customer_notes || i.notes || null,
+    }));
+    
+    const { error: itemsError } = await adminSupabase.from("order_items").insert(orderItems);
+    if (itemsError) {
+      console.error("Failed to pre-insert order items:", itemsError);
+    }
+
     // Create the Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"], // Apple Pay and Google Pay are included automatically
@@ -77,9 +115,6 @@ export async function POST(req: Request) {
       metadata: {
         restaurant_id: restaurantId,
         order_id: orderId,
-        table_number: tableNumber || "",
-        customer_name: customerName || "",
-        items_json: JSON.stringify(items), // We pass this so the webhook can insert the order into the DB
       }
     });
 

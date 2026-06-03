@@ -56,52 +56,24 @@ export async function POST(req: Request) {
       // Retrieve metadata we passed during checkout creation
       const restaurantId = session.metadata?.restaurant_id;
       const orderId = session.metadata?.order_id;
-      const tableNumber = session.metadata?.table_number;
-      const customerName = session.metadata?.customer_name;
-      const itemsJsonStr = session.metadata?.items_json;
 
-      if (restaurantId && itemsJsonStr && orderId) {
-        const items = JSON.parse(itemsJsonStr);
-        
-        // Calculate total
-        const totalAmount = (session.amount_total || 0) / 100;
-        
-        // 1. Insert the order
-        const { error: orderError } = await supabase
+      if (restaurantId && orderId) {
+        // Since we pre-inserted the order in the checkout route as 'awaiting_payment',
+        // we just need to flip the status to 'pending' and attach the payment intent.
+        const { error: updateError } = await supabase
           .from("orders")
-          .insert({
-            id: orderId,
-            restaurant_id: restaurantId,
-            table_number: tableNumber || null,
-            customer_name: customerName || null,
+          .update({
             status: "pending",
-            total_amount: totalAmount,
             payment_intent_id: session.payment_intent as string,
-          });
+          })
+          .eq("id", orderId)
+          .eq("restaurant_id", restaurantId);
 
-        if (orderError) {
-          console.error("Failed to insert order into DB:", orderError);
+        if (updateError) {
+          console.error("Failed to update order status to pending:", updateError);
           return NextResponse.json({ error: "DB Error" }, { status: 500 });
-        }
-
-        // 2. Insert the order items
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const orderItems = items.map((i: any) => ({
-          order_id: orderId,
-          menu_item_id: i.menu_item_id || i.id,
-          quantity: i.quantity,
-          price_at_time_of_order: i.price_at_time_of_order || i.price || 0,
-          customer_notes: i.customer_notes || i.notes || null,
-        }));
-
-        const { error: itemsError } = await supabase
-          .from("order_items")
-          .insert(orderItems);
-
-        if (itemsError) {
-          console.error("Failed to insert order items:", itemsError);
         } else {
-          console.log("Order successfully created for restaurant:", restaurantId, "Order ID:", orderId);
+          console.log("Order payment confirmed, moved to pending. Order ID:", orderId);
         }
       }
     }
