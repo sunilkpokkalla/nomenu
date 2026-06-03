@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     
-    // Is this a food order or a SaaS subscription upgrade?
+    // Is this a SaaS subscription upgrade?
     if (session.mode === "subscription") {
       const restaurantId = session.metadata?.restaurant_id;
       const planId = session.metadata?.plan_id;
@@ -50,30 +50,6 @@ export async function POST(req: Request) {
           console.error("Failed to upgrade SaaS plan:", updateError);
         } else {
           console.log(`Restaurant ${restaurantId} upgraded to ${planId}`);
-        }
-      }
-    } else if (session.mode === "payment") {
-      // Retrieve metadata we passed during checkout creation
-      const restaurantId = session.metadata?.restaurant_id;
-      const orderId = session.metadata?.order_id;
-
-      if (restaurantId && orderId) {
-        // Since we pre-inserted the order in the checkout route as 'awaiting_payment',
-        // we just need to flip the status to 'pending' and attach the payment intent.
-        const { error: updateError } = await supabase
-          .from("orders")
-          .update({
-            status: "pending",
-            payment_intent_id: session.payment_intent as string,
-          })
-          .eq("id", orderId)
-          .eq("restaurant_id", restaurantId);
-
-        if (updateError) {
-          console.error("Failed to update order status to pending:", updateError);
-          return NextResponse.json({ error: "DB Error" }, { status: 500 });
-        } else {
-          console.log("Order payment confirmed, moved to pending. Order ID:", orderId);
         }
       }
     }
