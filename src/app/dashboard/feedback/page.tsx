@@ -62,34 +62,30 @@ export default async function FeedbackPage() {
         <p className="text-slate-500">See what your customers are saying about your menu.</p>
       </div>
 
-      <div className="relative">
-        {(!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.trim().toLowerCase())) && (
-          <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-50/80 backdrop-blur-sm rounded-2xl border border-slate-100">
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-center max-w-sm">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600">
-                <Star className="h-8 w-8 fill-amber-500" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Feedback Locked</h3>
-              <p className="mt-3 text-sm text-slate-500 mb-6 font-medium">
-                Upgrade to the Pro Plan to collect, manage, and analyze private customer feedback and ratings.
-              </p>
-              <a
-                href="/dashboard/billing"
-                className="inline-block w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm hover:bg-slate-800 transition"
-              >
-                Upgrade to Pro Plan
-              </a>
-            </div>
+      {!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.trim().toLowerCase()) ? (
+        <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12">
+          <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+            <MessageSquare className="w-8 h-8 text-slate-400" />
           </div>
-        )}
-
-        <div className={!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.trim().toLowerCase()) ? "opacity-30 pointer-events-none select-none filter blur-sm transition-all" : ""}>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Pro</h2>
+          <p className="text-slate-600 mb-8 leading-relaxed">
+            Private customer feedback, rating analytics, and instant alerts are exclusively available on the Pro plan. Upgrade to listen to your customers.
+          </p>
+          <a
+            href="/dashboard/billing"
+            className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-all hover:scale-[1.02]"
+          >
+            View Pricing Plans
+          </a>
+        </div>
+      ) : (
+        <div>
           <div className="mb-8">
             <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
           </div>
           <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
         </div>
-      </div>
+      )}
     </div>
   );
 }

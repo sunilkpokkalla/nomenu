@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, QrCode } from "lucide-react";
+import { Menu, X, QrCode, HelpCircle } from "lucide-react";
 import { navItems } from "@/components/dashboard/sidebar";
 import { logout } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
@@ -107,6 +107,17 @@ export function MobileNav({ plan = "Free" }: { plan?: string }) {
                   </Link>
                 );
               })}
+
+              <Link
+                href="/dashboard/manual"
+                onClick={() => setIsOpen(false)}
+                className="w-full mt-4 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors duration-200 ease-in-out hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 bg-slate-50"
+              >
+                <div className="flex items-center gap-3.5">
+                  <HelpCircle className="h-4 w-4" />
+                  User Manual
+                </div>
+              </Link>
             </nav>
 
             <div className="mt-8">

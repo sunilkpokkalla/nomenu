@@ -48,44 +48,17 @@ export function AnalyticsDashboard({
 }: AnalyticsDashboardProps) {
   const router = useRouter();
 
-  // For locked state, we inject beautiful fake data to make the background look busy and impressive.
-  const displayRevenue = isLocked ? 14250.00 : totalRevenue;
-  const displayOrders = isLocked ? 342 : totalOrders;
-  const displayScans = isLocked ? 1845 : totalScans;
-  const displayAov = isLocked ? 41.66 : aov;
-  const displayConversion = isLocked ? 18.5 : conversionRate;
+  // We don't need fake data anymore
+  const displayRevenue = totalRevenue;
+  const displayOrders = totalOrders;
+  const displayScans = totalScans;
+  const displayAov = aov;
+  const displayConversion = conversionRate;
   
-  const displayChartData = isLocked ? [
-    { dateStr: "Mon", amount: 1200, orders: 30, scans: 150 },
-    { dateStr: "Tue", amount: 1800, orders: 45, scans: 220 },
-    { dateStr: "Wed", amount: 1500, orders: 38, scans: 190 },
-    { dateStr: "Thu", amount: 2400, orders: 60, scans: 300 },
-    { dateStr: "Fri", amount: 3200, orders: 75, scans: 450 },
-    { dateStr: "Sat", amount: 4100, orders: 95, scans: 580 },
-    { dateStr: "Sun", amount: 2800, orders: 68, scans: 400 },
-  ] : revenueData;
-
-  const displayCategoryData = isLocked ? [
-    { name: "Mains", value: 6500 },
-    { name: "Drinks", value: 3200 },
-    { name: "Appetizers", value: 2400 },
-    { name: "Desserts", value: 1150 },
-    { name: "Sides", value: 1000 },
-  ] : categoryData;
-
-  const displayTopItems = isLocked ? [
-    { id: "1", name: "Truffle Ribeye Steak", image_url: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=200&h=200&fit=crop", quantity: 84, revenue: 4620 },
-    { id: "2", name: "Seared Scallops", image_url: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=200&h=200&fit=crop", quantity: 112, revenue: 3136 },
-    { id: "3", name: "French Onion Soup", image_url: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=200&h=200&fit=crop", quantity: 156, revenue: 1872 },
-    { id: "4", name: "Lobster Ravioli", image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop", quantity: 65, revenue: 1560 },
-  ] : topItems;
-
-  const displayTopTables = isLocked ? [
-    { table_number: "Table 12 (Window)", orders: 45, revenue: 2150 },
-    { table_number: "Table 04 (Booth)", orders: 38, revenue: 1840 },
-    { table_number: "Bar Area", orders: 82, revenue: 1640 },
-    { table_number: "Table 08", orders: 31, revenue: 1200 },
-  ] : topTables;
+  const displayChartData = revenueData;
+  const displayCategoryData = categoryData;
+  const displayTopItems = topItems;
+  const displayTopTables = topTables;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
@@ -103,35 +76,28 @@ export function AnalyticsDashboard({
     </div>
   );
 
+  if (isLocked) {
+    return (
+      <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12">
+        <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+          <TrendingUp className="w-8 h-8 text-slate-400" />
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Pro</h2>
+        <p className="text-slate-600 mb-8 leading-relaxed">
+          Advanced analytics, real-time revenue tracking, and conversion funnels are exclusively available on the Pro plan. Upgrade to unlock business insights.
+        </p>
+        <button 
+          onClick={() => window.location.href = "/dashboard/billing"}
+          className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-all hover:scale-[1.02]"
+        >
+          View Pricing Plans
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
-      {/* PREMIUM LOCKED OVERLAY */}
-      {isLocked && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center rounded-[2rem] overflow-hidden">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl"></div>
-          
-          <div className="relative bg-white/5 border border-white/10 p-10 rounded-[2.5rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] backdrop-blur-3xl w-full max-w-lg flex flex-col items-center text-center animate-in fade-in zoom-in duration-700">
-            <div className="flex h-20 w-20 items-center justify-center rounded-[2rem] mb-6 shadow-inner bg-gradient-to-br from-amber-400 to-orange-600 text-white shadow-amber-500/40 rotate-3">
-              <Crown className="h-10 w-10 -rotate-3" />
-            </div>
-            <h3 className="text-3xl font-black tracking-tight text-white mb-3 drop-shadow-md">Advanced Analytics</h3>
-            <p className="text-sm leading-relaxed text-slate-300 font-medium mb-8 max-w-sm">
-              Upgrade to the PRO Plan to unlock high-density real-time dashboards, including AOV, category breakdowns, and conversion funnels.
-            </p>
-            <button 
-              onClick={() => window.location.href = "/dashboard/billing"}
-              className="w-full rounded-2xl px-6 py-5 text-sm font-black uppercase tracking-[0.1em] text-slate-900 shadow-2xl transition-all hover:scale-[1.02] bg-gradient-to-r from-amber-300 to-amber-500 hover:from-amber-200 hover:to-amber-400 shadow-amber-500/30"
-            >
-              <span className="flex items-center justify-center gap-2">
-                <Sparkles className="h-5 w-5" />
-                Unlock Analytics
-              </span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className={isLocked ? "opacity-20 pointer-events-none select-none filter blur-[4px] transition-all duration-1000" : ""}>
         
         {/* TIME RANGE SELECTOR */}
         <div className="flex justify-end mb-4">
@@ -446,7 +412,6 @@ export function AnalyticsDashboard({
             </>
           )}
 
-        </div>
       </div>
     </div>
   );

@@ -14,6 +14,8 @@ import {
   ShoppingBag,
   Utensils,
   Banknote,
+  LifeBuoy,
+  BookOpen,
 } from "lucide-react";
 
 import { logout } from "@/app/auth/actions";
@@ -38,6 +40,8 @@ export const navItems = [
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },
   
   // Account
+  { href: "/dashboard/manual", label: "User Manual", icon: BookOpen },
+  { href: "/dashboard/support", label: "Support", icon: LifeBuoy },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];

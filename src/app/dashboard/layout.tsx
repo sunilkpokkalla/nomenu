@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { Menu, QrCode } from "lucide-react";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { MobileNav } from "@/components/dashboard/mobile-nav";
+import { TopHeader } from "@/components/dashboard/top-header";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -38,9 +39,12 @@ export default async function DashboardLayout({
     <div className="min-h-screen bg-slate-50">
       <div className="flex">
         {hasRestaurant && <Sidebar plan={restaurant.plan || "Free"} />}
-        <main className="min-h-screen flex-1">
+        <main className="min-h-screen flex-1 flex flex-col">
           {hasRestaurant && <MobileNav plan={restaurant.plan || "Free"} />}
-          {children}
+          {hasRestaurant && <TopHeader />}
+          <div className="flex-1">
+            {children}
+          </div>
         </main>
       </div>
     </div>
