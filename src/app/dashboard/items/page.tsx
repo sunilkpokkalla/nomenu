@@ -98,16 +98,7 @@ export default async function ItemsPage(
             Create, edit, and organize dishes, drinks, and dietary labels.
           </p>
         </div>
-        {selectedMenuId !== "all" && menusList.length > 1 && (
-           <div className="flex items-center gap-2">
-             <ImportItemsModal 
-               menus={menusList} 
-               categories={restaurantCategories} 
-               items={itemsList}
-               targetMenuId={selectedMenuId} 
-             />
-           </div>
-        )}
+        {/* Top-level actions can go here if needed, but menu-specific actions are moved down */}
       </div>
 
       {searchParams.message ? (
@@ -151,10 +142,20 @@ export default async function ItemsPage(
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Filter by Category</p>
-            <ManageCategoriesModal 
-              categories={restaurantCategories} 
-              targetMenuId={selectedMenuId} 
-            />
+            <div className="flex items-center gap-2">
+              {menusList.length > 1 && (
+                <ImportItemsModal 
+                  menus={menusList} 
+                  categories={restaurantCategories} 
+                  items={itemsList}
+                  targetMenuId={selectedMenuId} 
+                />
+              )}
+              <ManageCategoriesModal
+                categories={restaurantCategories.filter((c) => c.menu_id === selectedMenuId)}
+                targetMenuId={selectedMenuId}
+              />
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <Link

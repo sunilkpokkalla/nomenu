@@ -212,24 +212,35 @@ export async function createMenuItem(formData: FormData) {
     }
   }
 
-  // If a new category is specified, create it first
-  if (newCategoryName && menuId) {
-    const { data: newCat, error: catErr } = await supabase
+  // If a new category is specified and no existing category was selected, create it or use existing
+  if (newCategoryName && menuId && !categoryId) {
+    const { data: existingCat } = await supabase
       .from("categories")
-      .insert({
-        menu_id: menuId,
-        name: newCategoryName,
-        sort_order: 10,
-      })
-      .select()
-      .single();
+      .select("id")
+      .eq("menu_id", menuId)
+      .ilike("name", newCategoryName.trim())
+      .maybeSingle();
 
-    if (catErr) {
-      redirect(`/dashboard/items?message=${encodeURIComponent(catErr.message)}`);
-    }
+    if (existingCat) {
+      categoryId = existingCat.id;
+    } else {
+      const { data: newCat, error: catErr } = await supabase
+        .from("categories")
+        .insert({
+          menu_id: menuId,
+          name: newCategoryName.trim(),
+          sort_order: 10,
+        })
+        .select()
+        .single();
 
-    if (newCat) {
-      categoryId = newCat.id;
+      if (catErr) {
+        redirect(`/dashboard/items?message=${encodeURIComponent(catErr.message)}`);
+      }
+
+      if (newCat) {
+        categoryId = newCat.id;
+      }
     }
   }
 
@@ -272,11 +283,11 @@ export async function createMenuItem(formData: FormData) {
   const { error } = await supabase.from("menu_items").insert(insertPayload);
 
   if (error) {
-    redirect(`/dashboard/items?message=${encodeURIComponent(error.message)}`);
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=${encodeURIComponent(error.message)}` : `/dashboard/items?message=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/dashboard/items");
-  redirect("/dashboard/items");
+  redirect(menuId ? `/dashboard/items?menuId=${menuId}` : `/dashboard/items`);
 }
 
 export async function editMenuItem(formData: FormData) {
@@ -314,24 +325,35 @@ export async function editMenuItem(formData: FormData) {
     redirect("/dashboard/items?message=Invalid%20price%20format");
   }
 
-  // If a new category is specified, create it first
-  if (newCategoryName && menuId) {
-    const { data: newCat, error: catErr } = await supabase
+  // If a new category is specified and no existing category was selected, create it or use existing
+  if (newCategoryName && menuId && !categoryId) {
+    const { data: existingCat } = await supabase
       .from("categories")
-      .insert({
-        menu_id: menuId,
-        name: newCategoryName,
-        sort_order: 10,
-      })
-      .select()
-      .single();
+      .select("id")
+      .eq("menu_id", menuId)
+      .ilike("name", newCategoryName.trim())
+      .maybeSingle();
 
-    if (catErr) {
-      redirect(`/dashboard/items?message=${encodeURIComponent(catErr.message)}`);
-    }
+    if (existingCat) {
+      categoryId = existingCat.id;
+    } else {
+      const { data: newCat, error: catErr } = await supabase
+        .from("categories")
+        .insert({
+          menu_id: menuId,
+          name: newCategoryName.trim(),
+          sort_order: 10,
+        })
+        .select()
+        .single();
 
-    if (newCat) {
-      categoryId = newCat.id;
+      if (catErr) {
+        redirect(`/dashboard/items?message=${encodeURIComponent(catErr.message)}`);
+      }
+
+      if (newCat) {
+        categoryId = newCat.id;
+      }
     }
   }
 
@@ -375,11 +397,11 @@ export async function editMenuItem(formData: FormData) {
   const { error } = await supabase.from("menu_items").update(updatePayload).eq("id", itemId).eq("restaurant_id", restaurant.id);
 
   if (error) {
-    redirect(`/dashboard/items?message=${encodeURIComponent(error.message)}`);
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=${encodeURIComponent(error.message)}` : `/dashboard/items?message=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/dashboard/items");
-  redirect("/dashboard/items");
+  redirect(menuId ? `/dashboard/items?menuId=${menuId}` : `/dashboard/items`);
 }
 
 export async function toggleMenuItemStatus(itemId: string, currentStatus: boolean) {
@@ -422,12 +444,14 @@ export async function deleteMenuItem(formData: FormData) {
 
   const { error } = await supabase.from("menu_items").delete().eq("id", itemId);
 
+  const menuId = field(formData, "menuId");
+
   if (error) {
-    redirect(`/dashboard/items?message=${encodeURIComponent(error.message)}`);
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=${encodeURIComponent(error.message)}` : `/dashboard/items?message=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/dashboard/items");
-  redirect("/dashboard/items");
+  redirect(menuId ? `/dashboard/items?menuId=${menuId}` : `/dashboard/items`);
 }
 
 // QR CODE ACTIONS

@@ -15,48 +15,6 @@ export const metadata = {
   description: "Official documentation and guides for NoMenu.",
 };
 
-const CATEGORIES = [
-  {
-    title: "Managing Menus",
-    description: "Learn how to create menus, add categories, and manage individual items, prices, and allergens.",
-    href: "/dashboard/manual/menus",
-    icon: ChefHat,
-    bgClass: "bg-rose-100",
-    textClass: "text-rose-600"
-  },
-  {
-    title: "Brand Customization",
-    description: "Set up your logo, banner, color themes, and typography to make your menu unique to your brand.",
-    href: "/dashboard/manual/customize",
-    icon: Palette,
-    bgClass: "bg-emerald-100",
-    textClass: "text-emerald-600"
-  },
-  {
-    title: "Generating QR Codes",
-    description: "Create table-specific QR codes, assign them to zones, and design beautiful print-ready SVGs.",
-    href: "/dashboard/manual/qr-codes",
-    icon: QrCode,
-    bgClass: "bg-blue-100",
-    textClass: "text-blue-600"
-  },
-  {
-    title: "Live Order KDS",
-    description: "Master the Kitchen Display System to track orders, manage states, and process instant refunds.",
-    href: "/dashboard/manual/orders",
-    icon: MonitorPlay,
-    bgClass: "bg-orange-100",
-    textClass: "text-orange-600"
-  },
-  {
-    title: "Analytics & Payouts",
-    description: "Understand your sales data, read the performance charts, and track your Stripe payouts.",
-    href: "/dashboard/manual/analytics",
-    icon: LineChart,
-    bgClass: "bg-purple-100",
-    textClass: "text-purple-600"
-  }
-];
 
 export default function ManualIndexPage() {
   return (
@@ -77,30 +35,97 @@ export default function ManualIndexPage() {
 
       {/* Grid of Categories */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {CATEGORIES.map((category) => {
-          const Icon = category.icon;
-          return (
-            <Link 
-              key={category.href} 
-              href={category.href}
-              className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${category.bgClass} ${category.textClass} group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className="w-7 h-7" />
-                </div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-3">{category.title}</h2>
-                <p className="text-slate-500 leading-relaxed">
-                  {category.description}
-                </p>
-              </div>
-              
-              <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
-                Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
-              </div>
-            </Link>
-          )
-        })}
+        
+        <Link 
+          href="/dashboard/manual/menus"
+          className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-rose-100 text-rose-600 group-hover:scale-110 transition-transform duration-300">
+              <ChefHat className="w-7 h-7" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Managing Menus</h2>
+            <p className="text-slate-500 leading-relaxed">
+              Learn how to create menus, add categories, and manage individual items, prices, and allergens.
+            </p>
+          </div>
+          <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+            Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
+          </div>
+        </Link>
+
+        <Link 
+          href="/dashboard/manual/customize"
+          className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-emerald-100 text-emerald-600 group-hover:scale-110 transition-transform duration-300">
+              <Palette className="w-7 h-7" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Brand Customization</h2>
+            <p className="text-slate-500 leading-relaxed">
+              Set up your logo, banner, color themes, and typography to make your menu unique to your brand.
+            </p>
+          </div>
+          <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+            Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
+          </div>
+        </Link>
+
+        <Link 
+          href="/dashboard/manual/qr-codes"
+          className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-blue-100 text-blue-600 group-hover:scale-110 transition-transform duration-300">
+              <QrCode className="w-7 h-7" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Generating QR Codes</h2>
+            <p className="text-slate-500 leading-relaxed">
+              Create table-specific QR codes, assign them to zones, and design beautiful print-ready SVGs.
+            </p>
+          </div>
+          <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+            Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
+          </div>
+        </Link>
+
+        <Link 
+          href="/dashboard/manual/orders"
+          className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-orange-100 text-orange-600 group-hover:scale-110 transition-transform duration-300">
+              <MonitorPlay className="w-7 h-7" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Live Order KDS</h2>
+            <p className="text-slate-500 leading-relaxed">
+              Master the Kitchen Display System to track orders, manage states, and process instant refunds.
+            </p>
+          </div>
+          <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+            Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
+          </div>
+        </Link>
+
+        <Link 
+          href="/dashboard/manual/analytics"
+          className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-purple-100 text-purple-600 group-hover:scale-110 transition-transform duration-300">
+              <LineChart className="w-7 h-7" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Analytics & Payouts</h2>
+            <p className="text-slate-500 leading-relaxed">
+              Understand your sales data, read the performance charts, and track your Stripe payouts.
+            </p>
+          </div>
+          <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+            Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
+          </div>
+        </Link>
+
       </div>
 
       {/* Support Banner */}
