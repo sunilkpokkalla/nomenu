@@ -40,8 +40,6 @@ export const navItems = [
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },
   
   // Account
-  { href: "/dashboard/manual", label: "User Manual", icon: BookOpen },
-  { href: "/dashboard/support", label: "Support", icon: LifeBuoy },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];
@@ -108,13 +106,6 @@ export function Sidebar({ plan = "Free" }: { plan?: string }) {
         })}
       </nav>
 
-      <div className="mt-auto pt-8 border-t border-slate-100">
-        <form action={logout}>
-          <Button variant="ghost" className="w-full justify-start text-slate-500 hover:text-slate-900 hover:bg-slate-100/80 font-semibold rounded-xl">
-            Sign out
-          </Button>
-        </form>
-      </div>
     </aside>
   );
 }

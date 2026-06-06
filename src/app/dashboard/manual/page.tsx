@@ -99,23 +99,23 @@ export default function ManualIndexPage() {
       </div>
 
       {/* Support Banner */}
-      <div className="mt-12 bg-slate-900 p-8 rounded-3xl shadow-sm text-white flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="mt-12 bg-indigo-50/50 p-8 rounded-3xl border border-indigo-100 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-start gap-5">
-          <div className="p-3 bg-slate-800 text-slate-300 rounded-2xl shrink-0">
+          <div className="p-3 bg-indigo-100 text-indigo-600 rounded-2xl shrink-0">
             <LifeBuoy className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Still Need Help?</h2>
-            <p className="text-slate-300 leading-relaxed max-w-xl">
-              Can't find what you're looking for in the manual? Our dedicated support team is available to assist you directly.
+            <h2 className="text-xl font-bold text-slate-900 mb-1">Still need help?</h2>
+            <p className="text-slate-600 leading-relaxed max-w-xl">
+              Can&apos;t find what you&apos;re looking for in the manual? Our dedicated support team is available to assist you directly.
             </p>
           </div>
         </div>
         <Link 
           href="/dashboard/support"
-          className="shrink-0 bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-6 py-4 rounded-xl transition-colors whitespace-nowrap"
+          className="shrink-0 bg-white hover:bg-slate-50 text-slate-900 font-bold px-6 py-3 rounded-xl transition-colors border border-slate-200 shadow-sm whitespace-nowrap"
         >
-          Open a Support Ticket
+          Open Support Ticket
         </Link>
       </div>
 

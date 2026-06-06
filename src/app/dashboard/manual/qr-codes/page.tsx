@@ -23,7 +23,7 @@ export default function QRCodesManualPage() {
         </div>
         <h1 className="text-4xl font-black text-slate-900 tracking-tight">Generating QR Codes</h1>
         <p className="text-xl text-slate-500">
-          Create table-specific QR codes, assign them to zones, and design print-ready SVGs.
+          Generate, download, and manage QR codes for your tables to allow instant ordering.
         </p>
       </div>
 
