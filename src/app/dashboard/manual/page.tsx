@@ -21,35 +21,40 @@ const CATEGORIES = [
     description: "Learn how to create menus, add categories, and manage individual items, prices, and allergens.",
     href: "/dashboard/manual/menus",
     icon: ChefHat,
-    color: "rose"
+    bgClass: "bg-rose-100",
+    textClass: "text-rose-600"
   },
   {
     title: "Brand Customization",
     description: "Set up your logo, banner, color themes, and typography to make your menu unique to your brand.",
     href: "/dashboard/manual/customize",
     icon: Palette,
-    color: "emerald"
+    bgClass: "bg-emerald-100",
+    textClass: "text-emerald-600"
   },
   {
     title: "Generating QR Codes",
     description: "Create table-specific QR codes, assign them to zones, and design beautiful print-ready SVGs.",
     href: "/dashboard/manual/qr-codes",
     icon: QrCode,
-    color: "blue"
+    bgClass: "bg-blue-100",
+    textClass: "text-blue-600"
   },
   {
     title: "Live Order KDS",
     description: "Master the Kitchen Display System to track orders, manage states, and process instant refunds.",
     href: "/dashboard/manual/orders",
     icon: MonitorPlay,
-    color: "orange"
+    bgClass: "bg-orange-100",
+    textClass: "text-orange-600"
   },
   {
     title: "Analytics & Payouts",
     description: "Understand your sales data, read the performance charts, and track your Stripe payouts.",
     href: "/dashboard/manual/analytics",
     icon: LineChart,
-    color: "purple"
+    bgClass: "bg-purple-100",
+    textClass: "text-purple-600"
   }
 ];
 
@@ -81,7 +86,7 @@ export default function ManualIndexPage() {
               className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-${category.color}-100 text-${category.color}-600 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${category.bgClass} ${category.textClass} group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className="w-7 h-7" />
                 </div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-3">{category.title}</h2>
