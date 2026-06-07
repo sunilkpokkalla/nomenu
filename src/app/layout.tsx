@@ -27,6 +27,7 @@ const spaceMono = Space_Mono({
 });
 
 import { ClientErrorLogger } from "@/components/client-error-logger";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
   title: {
@@ -48,6 +49,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${lora.variable} ${montserrat.variable} ${cormorant.variable} ${poppins.variable} ${outfit.variable} ${spaceMono.variable} font-sans antialiased`} suppressHydrationWarning>
+        <NextTopLoader
+          color="#2563EB"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #2563EB,0 0 5px #2563EB"
+        />
         <ClientErrorLogger />
         {children}
       </body>

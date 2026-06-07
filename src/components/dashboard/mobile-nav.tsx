@@ -83,7 +83,7 @@ export function MobileNav({ plan = "Free" }: { plan?: string }) {
                     onClick={() => {
                       if (!isLocked) setIsOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors duration-200 ease-in-out hover:bg-slate-100 ${
+                    className={`w-full flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-all duration-200 ease-in-out hover:bg-slate-100 active:scale-[0.98] ${
                       pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(item.href))
                         ? "bg-slate-100 text-primary"
                         : isLocked 
@@ -111,7 +111,7 @@ export function MobileNav({ plan = "Free" }: { plan?: string }) {
               <Link
                 href="/dashboard/manual"
                 onClick={() => setIsOpen(false)}
-                className="w-full mt-4 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-colors duration-200 ease-in-out hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 bg-slate-50"
+                className="w-full mt-4 flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-all duration-200 ease-in-out hover:bg-slate-100 active:scale-[0.98] text-slate-600 hover:text-slate-900 border border-slate-200 bg-slate-50"
               >
                 <div className="flex items-center gap-3.5">
                   <HelpCircle className="h-4 w-4" />
