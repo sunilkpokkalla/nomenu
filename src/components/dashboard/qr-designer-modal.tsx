@@ -47,6 +47,8 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
 
   const printRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://nomenu.us';
+  const fullMenuUrl = `${origin}/menu/${qr.menu_id}?qr=${qr.id}`;
 
   const colorStart = restaurant.primary_color || "#2563EB";
   const colorEnd = restaurant.accent_color || "#F59E0B";
