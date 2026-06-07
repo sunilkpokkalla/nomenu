@@ -15,6 +15,8 @@ export const metadata = {
   description: "Official documentation and guides for NoMenu.",
 };
 
+export const dynamic = 'force-dynamic';
+
 
 export default function ManualIndexPage() {
   return (
