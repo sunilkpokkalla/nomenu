@@ -1,14 +1,15 @@
 "use client";
 
-import { X, Printer, Download, Sparkles, Palette, Wifi, Image as ImageIcon } from "lucide-react";
+import { X, Printer, Download, Sparkles, Palette, Wifi, Image as ImageIcon, ChevronDown } from "lucide-react";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toPng } from "html-to-image";
-import { TEMPLATES, TEMPLATE_OPTIONS, TemplateKey } from "./qr-templates";
+import { templates, templateCategories, type TemplateKey } from "./qr-templates/index";
 import Image from "next/image";
+import { ImageUploader } from "@/components/dashboard/image-uploader";
 
 interface QRDesignerModalProps {
   qr: {
@@ -42,7 +43,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const [template, setTemplate] = useState<TemplateKey>("portrait");
+  const [template, setTemplate] = useState<TemplateKey>("classic");
   const [colorPreset, setColorPreset] = useState("brand");
   
   // Custom brand settings
@@ -50,7 +51,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
   const [headline, setHeadline] = useState("Scan to View Menu");
   const [subtext, setSubtext] = useState(qr.label || "Table");
   const [showWifi, setShowWifi] = useState(!!restaurant.wifi_password);
-  const [showLogo, setShowLogo] = useState(true);
+  const [customLogoUrl, setCustomLogoUrl] = useState<string>(restaurant.logo_url || "");
 
   // Gradient custom pickers
   const [customStart, setCustomStart] = useState(restaurant.primary_color || "#2563EB");
@@ -176,7 +177,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
     }
   }, [brandName]);
 
-  const SelectedTemplate = TEMPLATES[template];
+  const SelectedTemplate = templates[template] || templates["classic"];
 
   return (
     <>
@@ -210,7 +211,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                     headline={headline}
                     subtext={subtext}
                     wifiPassword={showWifi ? restaurant.wifi_password : null}
-                    logoUrl={showLogo ? restaurant.logo_url : null}
+                    logoUrl={customLogoUrl || null}
                     qrImageUrl={qrImageApiUrl}
                     colorStart={colorStart}
                     colorEnd={colorEnd}
@@ -237,32 +238,41 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                 {/* TEMPLATE PICKER */}
                 <div className="space-y-2">
                   <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Card Template Style (10 Designs)</Label>
-                  <div className="grid grid-cols-2 gap-2 max-h-[160px] overflow-y-auto p-1">
-                    {TEMPLATE_OPTIONS.map((t) => {
-                      const isFreePlan = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
-                      const isLocked = isFreePlan && t.id !== "portrait";
-
-                      return (
-                        <button
-                          key={t.id}
-                          onClick={() => {
-                            if (!isLocked) setTemplate(t.id);
-                          }}
-                          className={`px-3 py-2 text-xs font-semibold rounded-lg border text-left transition-all flex flex-col relative ${
-                            template === t.id
-                              ? "border-primary bg-primary/5 text-primary shadow-sm"
-                              : isLocked
-                              ? "border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed"
-                              : "border-slate-200 text-slate-600 hover:border-slate-300 bg-white"
-                          }`}
-                        >
-                          <span className="truncate">{t.name}</span>
-                          {isLocked && (
-                            <span className="absolute right-2 top-2 text-[8px] bg-slate-200 text-slate-500 px-1 rounded uppercase font-bold">PRO</span>
-                          )}
-                        </button>
-                      );
-                    })}
+                  <div className="relative">
+                    <select
+                      value={template}
+                      onChange={(e) => {
+                        const selectedId = e.target.value as TemplateKey;
+                        const isFreePlan = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
+                        const isLocked = isFreePlan && selectedId !== "classic";
+                        
+                        if (!isLocked) {
+                          setTemplate(selectedId);
+                        }
+                      }}
+                      className="w-full h-11 px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer shadow-sm hover:border-slate-300 transition-colors"
+                    >
+                      {templateCategories.map((category) => (
+                        <optgroup key={category.id} label={category.name}>
+                          {category.templates.map((t: {id: string; name: string}) => {
+                            const isFreePlan = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
+                            const isLocked = isFreePlan && t.id !== "classic";
+                            return (
+                              <option 
+                                key={t.id} 
+                                value={t.id} 
+                                disabled={isLocked}
+                              >
+                                {t.name} {isLocked ? "(PRO)" : ""}
+                              </option>
+                            );
+                          })}
+                        </optgroup>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                      <ChevronDown className="h-4 w-4" />
+                    </div>
                   </div>
                   {(!restaurant.plan || restaurant.plan.toLowerCase() === "free") && (
                     <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-md">
@@ -274,8 +284,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                 </div>
 
                 {/* COLOR PRESETS */}
-                {template !== "minimalist" && template !== "polaroid" && template !== "bistrogold" && (
-                  <div className="space-y-2">
+                <div className="space-y-2">
                     <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Color Theme Preset</Label>
                     <div className="grid grid-cols-3 gap-1.5">
                       {PRESETS.map((preset) => (
@@ -326,7 +335,6 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                       </div>
                     )}
                   </div>
-                )}
 
                 {/* TEXT FIELDS */}
                 <div className="space-y-3">
@@ -366,20 +374,15 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                     </div>
                   )}
 
-                  {restaurant.logo_url && (
-                    <div className="flex items-center justify-between text-xs py-1 hover:bg-slate-50 px-2 rounded-md transition-colors">
-                      <label htmlFor="showLogo" className="font-semibold text-slate-700 flex items-center gap-1.5 cursor-pointer">
-                        <ImageIcon className="h-3.5 w-3.5 text-slate-400" /> Display Restaurant Logo
-                      </label>
-                      <input
-                        type="checkbox"
-                        id="showLogo"
-                        checked={showLogo}
-                        onChange={(e) => setShowLogo(e.target.checked)}
-                        className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
-                      />
-                    </div>
-                  )}
+                  <div className="space-y-1.5 pt-2">
+                    <Label className="font-semibold text-slate-700 flex items-center gap-1.5">
+                      <ImageIcon className="h-3.5 w-3.5 text-slate-400" /> Card Logo
+                    </Label>
+                    <ImageUploader 
+                      value={customLogoUrl} 
+                      onChange={setCustomLogoUrl} 
+                    />
+                  </div>
                 </div>
               </div>
 

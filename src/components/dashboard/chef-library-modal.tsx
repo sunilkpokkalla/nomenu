@@ -231,14 +231,14 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
             setSelectedCuisine("all");
           }
         }}
-        className="w-full bg-slate-900 text-white hover:bg-slate-800 border-slate-900 font-bold transition flex items-center justify-center gap-1.5 h-11 shadow-sm hover:shadow"
+        className="w-full bg-primary text-white hover:bg-primary/90 border-primary font-bold transition flex items-center justify-center gap-1.5 h-11 shadow-sm hover:shadow"
       >
         <Sparkles className="h-4 w-4 text-amber-400 fill-amber-400" />
         Browse Chef's Library
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
             
             {/* MODAL HEADER */}
@@ -305,7 +305,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                           onClick={() => setSelectedCuisine(cat.id)}
                           className={`px-3 py-1.5 text-xs font-semibold rounded-full border transition ${
                             isActive
-                              ? "bg-slate-900 text-white border-slate-900"
+                              ? "bg-primary text-primary-foreground border-primary shadow-sm"
                               : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
                           }`}
                         >
@@ -630,7 +630,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                   </Button>
                   <Button 
                     type="submit" 
-                    className="h-10 bg-slate-900 text-white hover:bg-slate-800 font-bold px-6"
+                    className="h-10 bg-primary text-primary-foreground hover:bg-primary/90 font-bold px-6"
                   >
                     <Check className="mr-1.5 h-4 w-4" /> Save to Menu
                   </Button>

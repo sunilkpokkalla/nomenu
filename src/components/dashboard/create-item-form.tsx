@@ -84,18 +84,22 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
 
   return (
     <div className="space-y-4">
-      <ChefLibraryModal
-        cuisineType={cuisineType}
-        menus={menus}
-        categories={categories}
-        onSelectDish={handleSelectDish}
-      />
-      
-      <div className="relative flex py-2 items-center">
-        <div className="flex-grow border-t border-slate-200"></div>
-        <span className="flex-shrink mx-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white px-1">Or Create Custom</span>
-        <div className="flex-grow border-t border-slate-200"></div>
-      </div>
+      {!initialData && (
+        <>
+          <ChefLibraryModal
+            cuisineType={cuisineType}
+            menus={menus}
+            categories={categories}
+            onSelectDish={handleSelectDish}
+          />
+          
+          <div className="relative flex py-2 items-center">
+            <div className="flex-grow border-t border-slate-200"></div>
+            <span className="flex-shrink mx-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white px-1">Or Create Custom</span>
+            <div className="flex-grow border-t border-slate-200"></div>
+          </div>
+        </>
+      )}
 
       <form action={createAction} className="space-y-4">
         {initialData && <input type="hidden" name="itemId" value={initialData.id} />}

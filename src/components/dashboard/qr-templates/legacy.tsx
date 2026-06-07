@@ -1,20 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React from "react";
 import { Wifi } from "lucide-react";
-import Image from "next/image";
-
-export interface QrTemplateProps {
-  brandName: string;
-  headline: string;
-  subtext: string;
-  wifiPassword?: string | null;
-  logoUrl?: string | null;
-  qrImageUrl: string;
-  colorStart: string;
-  colorEnd: string;
-  id?: string;
-}
+import { QrTemplateProps } from "./types";
 
 // 1. Classic Portrait
 export function ClassicPortrait({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, colorEnd, id }: QrTemplateProps) {
@@ -23,13 +12,8 @@ export function ClassicPortrait({ brandName, headline, subtext, wifiPassword, lo
       <div className="w-full h-4" style={{ backgroundColor: colorStart }} />
       <div className="flex-grow p-[30px] flex flex-col items-center justify-between box-border bg-gradient-to-b from-white to-slate-50">
         <div className="flex flex-col items-center">
-          {logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
+          {logoUrl && (
             <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[80px] h-[80px] rounded-full border-[3px] object-cover mb-4 shadow-md" style={{ borderColor: colorStart }} />
-          ) : (
-            <div className="w-[80px] h-[80px] rounded-full flex items-center justify-center text-[32px] font-bold text-white mb-4 shadow-md" style={{ backgroundColor: colorStart }}>
-              {brandName.charAt(0).toUpperCase()}
-            </div>
           )}
           <h1 className="text-[32px] font-bold text-slate-900 leading-tight text-center">{brandName}</h1>
           <div className="w-[40px] h-[3px] mt-2 mb-4" style={{ backgroundColor: colorEnd }} />
@@ -37,7 +21,6 @@ export function ClassicPortrait({ brandName, headline, subtext, wifiPassword, lo
         </div>
 
         <div className="border border-slate-200 p-4 rounded-[16px] bg-white shadow-sm">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[240px] h-[240px] object-contain" />
         </div>
 
@@ -67,19 +50,13 @@ export function InstagramSquare({ brandName, headline, subtext, wifiPassword, lo
     <div id={id} className="w-[500px] h-[500px] rounded-[24px] p-[24px] flex items-center justify-center relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${colorStart}, ${colorEnd})`, boxSizing: "border-box" }}>
       <div className="w-full h-full bg-white/95 backdrop-blur-xl rounded-[20px] shadow-2xl p-[30px] flex flex-col items-center justify-between box-border">
         <div className="flex flex-col items-center">
-          {logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
+          {logoUrl && (
             <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[60px] h-[60px] rounded-full border-[2px] border-slate-200 object-cover mb-2 shadow-sm" />
-          ) : (
-            <div className="w-[60px] h-[60px] rounded-full flex items-center justify-center text-[24px] font-bold text-white mb-2 shadow-sm" style={{ backgroundColor: colorStart }}>
-              {brandName.charAt(0).toUpperCase()}
-            </div>
           )}
           <h1 className="text-[22px] font-extrabold text-slate-900 leading-none mb-1">{brandName}</h1>
           <h2 className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.15em]">{headline}</h2>
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain drop-shadow-md" />
 
         <div className="flex flex-col items-center w-full gap-2">
@@ -104,12 +81,10 @@ export function Minimalist({ brandName, headline, subtext, wifiPassword, logoUrl
           <h1 className="text-[28px] font-serif italic text-slate-900 mb-1">{brandName}</h1>
           <div className="text-[12px] font-bold tracking-widest text-slate-400 mb-2">• • •</div>
           {logoUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[40px] h-[40px] rounded-full object-cover grayscale" />
           )}
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain mix-blend-multiply" />
 
         <div className="flex flex-col items-center w-full text-center">
@@ -139,13 +114,8 @@ export function NeonCyber({ brandName, headline, subtext, wifiPassword, logoUrl,
       <div className="relative z-10 w-full h-full border border-white/10 rounded-[16px] bg-black/40 backdrop-blur-md p-[24px] flex flex-col items-center justify-between box-border" style={{ boxShadow: `0 0 20px ${colorEnd}20` }}>
         <div className="flex w-full items-center justify-between border-b border-white/10 pb-4">
           <div className="flex items-center gap-3">
-            {logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
+            {logoUrl && (
               <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[40px] h-[40px] rounded-md object-cover" style={{ boxShadow: `0 0 10px ${colorStart}` }} />
-            ) : (
-              <div className="w-[40px] h-[40px] rounded-md flex items-center justify-center text-[18px] font-bold text-white shadow-lg" style={{ backgroundColor: colorStart, boxShadow: `0 0 15px ${colorStart}` }}>
-                {brandName.charAt(0).toUpperCase()}
-              </div>
             )}
             <div>
               <h1 className="text-[16px] font-bold tracking-wider">{brandName.toUpperCase()}</h1>
@@ -158,7 +128,6 @@ export function NeonCyber({ brandName, headline, subtext, wifiPassword, logoUrl,
         <div className="relative my-4">
           <div className="absolute -inset-2 bg-gradient-to-r blur-lg opacity-50" style={{ backgroundImage: `linear-gradient(to right, ${colorStart}, ${colorEnd})` }} />
           <div className="relative bg-white p-3 rounded-lg shadow-2xl">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[220px] h-[220px] object-contain mix-blend-multiply" />
           </div>
         </div>
@@ -196,7 +165,6 @@ export function LuxuryGold({ brandName, headline, subtext, wifiPassword, logoUrl
           <div className="flex flex-col items-center w-full">
             <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent mb-6" />
             {logoUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[60px] h-[60px] rounded-full object-cover border border-[#D4AF37] mb-4" />
             )}
             <h1 className="text-[28px] font-serif text-[#D4AF37] text-center tracking-widest">{brandName.toUpperCase()}</h1>
@@ -204,7 +172,6 @@ export function LuxuryGold({ brandName, headline, subtext, wifiPassword, logoUrl
           </div>
 
           <div className="bg-white p-3 border-[2px] border-[#D4AF37]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain" />
           </div>
 
@@ -233,7 +200,6 @@ export function Brutalist({ brandName, headline, subtext, wifiPassword, logoUrl,
       <div className="w-full border-b-[4px] border-black bg-[#FF3B30] p-4 flex items-center justify-between" style={{ backgroundColor: colorStart }}>
         <h1 className="text-[24px] font-black text-black uppercase tracking-tighter mix-blend-overlay">{brandName}</h1>
         {logoUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
           <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[40px] h-[40px] object-cover border-[2px] border-black mix-blend-luminosity" />
         )}
       </div>
@@ -244,7 +210,6 @@ export function Brutalist({ brandName, headline, subtext, wifiPassword, logoUrl,
         </div>
 
         <div className="border-[4px] border-black bg-white p-2 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[260px] h-[260px] object-contain mix-blend-multiply" />
         </div>
 
@@ -272,20 +237,16 @@ export function Claymorphism({ brandName, headline, subtext, wifiPassword, logoU
       <div className="w-full h-full rounded-[30px] bg-[#E0E5EC] p-[30px] flex flex-col items-center justify-between box-border shadow-[9px_9px_16px_rgb(163,177,198,0.6),-9px_-9px_16px_rgba(255,255,255,0.5)]">
         
         <div className="flex flex-col items-center">
-          <div className="w-[80px] h-[80px] rounded-full bg-[#E0E5EC] flex items-center justify-center shadow-[inset_6px_6px_10px_0_rgba(163,177,198,0.6),inset_-6px_-6px_10px_0_rgba(255,255,255,0.5)] mb-4 p-2">
-            {logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
+          {logoUrl && (
+            <div className="w-[80px] h-[80px] rounded-full bg-[#E0E5EC] flex items-center justify-center shadow-[inset_6px_6px_10px_0_rgba(163,177,198,0.6),inset_-6px_-6px_10px_0_rgba(255,255,255,0.5)] mb-4 p-2">
               <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-full h-full rounded-full object-cover" />
-            ) : (
-              <span className="text-[32px] font-bold" style={{ color: colorStart }}>{brandName.charAt(0).toUpperCase()}</span>
-            )}
-          </div>
+            </div>
+          )}
           <h1 className="text-[24px] font-extrabold text-slate-700">{brandName}</h1>
           <h2 className="text-[12px] font-bold text-slate-400 uppercase tracking-widest mt-1">{headline}</h2>
         </div>
 
         <div className="p-4 rounded-[24px] bg-[#E0E5EC] shadow-[9px_9px_16px_rgb(163,177,198,0.6),-9px_-9px_16px_rgba(255,255,255,0.5)]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain mix-blend-multiply rounded-xl" />
         </div>
 
@@ -320,7 +281,6 @@ export function ArtDeco({ brandName, headline, subtext, wifiPassword, logoUrl, q
               <div className="w-[40px] h-[2px] bg-[#D4AF37]" />
             </div>
             {logoUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[50px] h-[50px] object-cover grayscale opacity-80 mb-3" />
             )}
             <h1 className="text-[32px] font-serif text-[#D4AF37] uppercase tracking-widest text-center leading-tight">{brandName}</h1>
@@ -333,7 +293,6 @@ export function ArtDeco({ brandName, headline, subtext, wifiPassword, logoUrl, q
             <div className="absolute bottom-0 left-0 w-[20px] h-[20px] border-b-[2px] border-l-[2px] border-[#D4AF37]" />
             <div className="absolute bottom-0 right-0 w-[20px] h-[20px] border-b-[2px] border-r-[2px] border-[#D4AF37]" />
             <div className="bg-[#FAF9F6] p-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain" />
             </div>
           </div>
@@ -372,20 +331,16 @@ export function ModernGlass({ brandName, headline, subtext, wifiPassword, logoUr
       <div className="w-full h-full bg-white/40 backdrop-blur-2xl rounded-[20px] border border-white/60 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] p-[30px] flex flex-col items-center justify-between box-border z-10">
         
         <div className="flex flex-col items-center">
-          <div className="w-[60px] h-[60px] rounded-2xl bg-white/60 border border-white/80 shadow-sm flex items-center justify-center mb-4 p-1 backdrop-blur-md">
-            {logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
+          {logoUrl && (
+            <div className="w-[60px] h-[60px] rounded-2xl bg-white/60 border border-white/80 shadow-sm flex items-center justify-center mb-4 p-1 backdrop-blur-md">
               <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-full h-full rounded-xl object-cover" />
-            ) : (
-              <span className="text-[24px] font-bold" style={{ color: colorStart }}>{brandName.charAt(0).toUpperCase()}</span>
-            )}
-          </div>
+            </div>
+          )}
           <h1 className="text-[26px] font-extrabold text-slate-800 tracking-tight">{brandName}</h1>
           <h2 className="text-[12px] font-bold text-slate-500 uppercase tracking-wider mt-1 bg-white/50 px-3 py-1 rounded-full">{headline}</h2>
         </div>
 
         <div className="bg-white/80 p-4 rounded-[20px] border border-white shadow-sm backdrop-blur-md">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[220px] h-[220px] object-contain mix-blend-multiply" />
         </div>
 
@@ -413,7 +368,6 @@ export function PolaroidSnapshot({ brandName, headline, subtext, wifiPassword, l
         {/* Photo area */}
         <div className="w-full bg-slate-900 aspect-square mb-[24px] p-4 flex flex-col items-center justify-center relative overflow-hidden shadow-inner">
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[280px] h-[280px] object-contain mix-blend-screen opacity-90" />
         </div>
 
@@ -458,7 +412,6 @@ export function BistroGold({ brandName, headline, subtext, wifiPassword, logoUrl
         {/* Header Section */}
         <div className="flex flex-col items-center text-center mt-4">
           {logoUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[50px] h-[50px] rounded-full object-cover border border-[#c5af7d] mb-4 shadow-lg shadow-black/45" />
           )}
           
@@ -484,7 +437,6 @@ export function BistroGold({ brandName, headline, subtext, wifiPassword, logoUrl
           <div className="absolute bottom-0 right-0 w-8 h-8 border-b-[2.5px] border-r-[2.5px] border-[#c5af7d]" />
           
           <div className="bg-white p-3 rounded-[12px] shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-[#c5af7d]/10">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain" />
           </div>
         </div>
@@ -507,34 +459,3 @@ export function BistroGold({ brandName, headline, subtext, wifiPassword, logoUrl
     </div>
   );
 }
-
-// Array mapping for easy selection
-export const TEMPLATES = {
-  portrait: ClassicPortrait,
-  instagram: InstagramSquare,
-  minimalist: Minimalist,
-  neon: NeonCyber,
-  gold: LuxuryGold,
-  brutalist: Brutalist,
-  clay: Claymorphism,
-  artdeco: ArtDeco,
-  glass: ModernGlass,
-  polaroid: PolaroidSnapshot,
-  bistrogold: BistroGold,
-};
-
-export type TemplateKey = keyof typeof TEMPLATES;
-
-export const TEMPLATE_OPTIONS: { id: TemplateKey; name: string; description: string }[] = [
-  { id: "portrait", name: "Classic Portrait", description: "Clean, elegant table tent." },
-  { id: "instagram", name: "Instagram Square", description: "Glassmorphic square ideal for social." },
-  { id: "minimalist", name: "Minimalist", description: "High-contrast bistro monochrome." },
-  { id: "neon", name: "Neon Cyber", description: "Dark mode futuristic glowing card." },
-  { id: "gold", name: "Luxury Gold", description: "Premium dark aesthetics with gold accents." },
-  { id: "bistrogold", name: "Premium Bistro Gold", description: "Luxury black & champagne gold table stand." },
-  { id: "brutalist", name: "Brutalist", description: "Bold, raw typography and high contrast." },
-  { id: "clay", name: "Soft Claymorphism", description: "Neumorphic soft shadows and pastel tones." },
-  { id: "artdeco", name: "Art Deco", description: "Geometric borders and vintage luxury." },
-  { id: "glass", name: "Modern Glass", description: "Frosted glass on abstract color orbs." },
-  { id: "polaroid", name: "Polaroid Snapshot", description: "Vintage instant camera frame style." },
-];
