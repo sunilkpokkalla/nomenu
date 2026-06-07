@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
-import { createClient } from "@/lib/supabase/server";
 import { MenuItemsClient } from "@/components/dashboard/menu-items-client";
 export default async function ItemsPage(
   props: {
@@ -69,8 +68,6 @@ export default async function ItemsPage(
     .select("*")
     .eq("restaurant_id", restaurant.id)
     .order("name", { ascending: true });
-
-  const itemsList = menuItems || [];
 
   const itemsList = menuItems || [];
 

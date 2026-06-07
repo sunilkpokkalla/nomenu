@@ -21,9 +21,13 @@ export function MenuItemsClient({
   initialMenuId = "all",
   initialCategoryId = "all"
 }: { 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   menus: any[]; 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   categories: any[]; 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   items: any[]; 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   restaurant: any;
   initialMenuId?: string;
   initialCategoryId?: string;
