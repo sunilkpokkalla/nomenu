@@ -325,53 +325,51 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                           <div
                             key={`${dish.name}-${index}`}
                             onClick={() => handleSelectDish(dish)}
-                            className="bg-white border hover:border-slate-400 p-4 rounded-xl shadow-sm transition flex flex-col justify-between cursor-pointer group hover:shadow-md animate-in fade-in slide-in-from-bottom-2 duration-200"
+                            className="bg-white border hover:border-slate-400 rounded-xl shadow-sm transition flex flex-col cursor-pointer group hover:shadow-md animate-in fade-in slide-in-from-bottom-2 duration-200 overflow-hidden"
                             style={{ animationDelay: `${index * 15}ms` }}
                           >
-                            <div className="flex gap-4">
-                              <div className="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-50 border relative flex items-center justify-center flex-col gap-1 text-slate-300">
-                                {dish.imageUrl ? (
-                                  <img 
-                                    src={dish.imageUrl} 
-                                    alt={dish.name}
-                                    className="w-full h-full object-cover"
-                                    loading="lazy"
-                                  />
-                                ) : (
-                                  <div className="w-full h-full bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col items-center justify-center border-b group-hover:from-slate-100 group-hover:to-slate-200 transition">
-                                    <UtensilsCrossed className="w-8 h-8 text-slate-300 mb-1" strokeWidth={1.5} />
-                                    <span className="text-[9px] font-medium text-slate-400/80 uppercase tracking-wider">No Image</span>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="space-y-1.5 flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-2">
-                                  <h3 className="font-bold text-slate-950 group-hover:text-primary transition flex-1 min-w-0 leading-tight">
-                                    {dish.name}
-                                  </h3>
-                                  <div className="flex items-center shrink-0">
-                                    <span className="text-[10px] text-slate-400 font-medium px-1.5 py-0.5 rounded bg-slate-100 border truncate max-w-[80px]">
-                                      {dish.category}
-                                    </span>
-                                  </div>
+                            <div className="w-full h-40 bg-slate-50 relative border-b overflow-hidden group-hover:opacity-90 transition-opacity shrink-0">
+                              {dish.imageUrl ? (
+                                <img 
+                                  src={dish.imageUrl} 
+                                  alt={dish.name}
+                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                  loading="lazy"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col items-center justify-center text-slate-300">
+                                  <UtensilsCrossed className="w-8 h-8 mb-2" strokeWidth={1.5} />
+                                  <span className="text-[10px] font-medium text-slate-400/80 uppercase tracking-wider">No Image</span>
                                 </div>
-                                <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
-                                  {dish.description}
-                                </p>
+                              )}
+                              <div className="absolute top-2.5 left-2.5">
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/95 backdrop-blur-sm border text-slate-700 shadow-sm whitespace-nowrap">
+                                  {dish.category}
+                                </span>
                               </div>
                             </div>
                             
-                            <div className="flex items-center justify-between border-t pt-3 mt-3 shrink-0">
-                              <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-500 mr-2">
-
-                                {dish.isVegetarian && <span className="flex items-center text-green-600 gap-0.5"><Leaf className="h-3 w-3" /> Veg</span>}
-                                {dish.isVegan && <span className="flex items-center text-emerald-600 gap-0.5"><Sparkles className="h-3 w-3" /> Vegan</span>}
-                                {dish.isGlutenFree && <span className="text-blue-600 font-semibold bg-blue-50 px-1 border border-blue-100 rounded">GF</span>}
-                                {dish.isSpicy && <span className="flex items-center text-rose-600 gap-0.5"><Flame className="h-3 w-3" /> Hot</span>}
+                            <div className="p-4 flex flex-col flex-1">
+                              <div className="mb-1.5">
+                                <h3 className="font-bold text-[15px] text-slate-950 group-hover:text-primary transition leading-tight line-clamp-2">
+                                  {dish.name}
+                                </h3>
                               </div>
-                              <span className="shrink-0 text-xs font-bold text-slate-900 group-hover:text-primary transition flex items-center gap-1 bg-slate-50 group-hover:bg-primary/5 border px-2.5 py-1 rounded-lg">
-                                <Plus className="h-3.5 w-3.5" /> Select
-                              </span>
+                              <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed flex-1">
+                                {dish.description}
+                              </p>
+                              
+                              <div className="flex items-center justify-between border-t border-slate-100 pt-3 mt-4 shrink-0">
+                                <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-500 mr-2">
+                                  {dish.isVegetarian && <span className="flex items-center text-green-600 gap-0.5 font-medium"><Leaf className="h-3 w-3" /> Veg</span>}
+                                  {dish.isVegan && <span className="flex items-center text-emerald-600 gap-0.5 font-medium"><Sparkles className="h-3 w-3" /> Vegan</span>}
+                                  {dish.isGlutenFree && <span className="text-blue-600 font-semibold bg-blue-50 px-1 border border-blue-100 rounded">GF</span>}
+                                  {dish.isSpicy && <span className="flex items-center text-rose-600 gap-0.5 font-medium"><Flame className="h-3 w-3" /> Hot</span>}
+                                </div>
+                                <span className="shrink-0 text-xs font-bold text-slate-900 group-hover:text-primary transition flex items-center gap-1 bg-slate-50 group-hover:bg-primary/5 border border-slate-200 px-2.5 py-1 rounded-lg">
+                                  <Plus className="h-3.5 w-3.5" /> Select
+                                </span>
+                              </div>
                             </div>
                           </div>
                         );
