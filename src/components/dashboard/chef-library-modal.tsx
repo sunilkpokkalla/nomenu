@@ -11,7 +11,8 @@ import {
   Sparkles, 
   Clock, 
   Award, 
-  Check 
+  Check,
+  UtensilsCrossed
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -337,39 +338,38 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                                     loading="lazy"
                                   />
                                 ) : (
-                                  <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center border-b">
-                                    <span className="text-3xl font-bold text-slate-400/50">
-                                      {dish.name.charAt(0).toUpperCase()}
-                                    </span>
+                                  <div className="w-full h-full bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col items-center justify-center border-b group-hover:from-slate-100 group-hover:to-slate-200 transition">
+                                    <UtensilsCrossed className="w-8 h-8 text-slate-300 mb-1" strokeWidth={1.5} />
+                                    <span className="text-[9px] font-medium text-slate-400/80 uppercase tracking-wider">No Image</span>
                                   </div>
                                 )}
                               </div>
-                              <div className="space-y-1.5 flex-1">
+                              <div className="space-y-1.5 flex-1 min-w-0">
                                 <div className="flex items-start justify-between gap-2">
-                                  <h3 className="font-bold text-slate-950 group-hover:text-primary transition">
+                                  <h3 className="font-bold text-slate-950 group-hover:text-primary transition flex-1 min-w-0 leading-tight">
                                     {dish.name}
                                   </h3>
-                                  <div className="flex items-center gap-1 shrink-0">
-                                    <span className="text-[10px] text-slate-400 font-medium px-1.5 py-0.5 rounded bg-slate-100 border">
+                                  <div className="flex items-center shrink-0">
+                                    <span className="text-[10px] text-slate-400 font-medium px-1.5 py-0.5 rounded bg-slate-100 border truncate max-w-[80px]">
                                       {dish.category}
                                     </span>
                                   </div>
                                 </div>
-                                <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                                <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
                                   {dish.description}
                                 </p>
                               </div>
                             </div>
                             
                             <div className="flex items-center justify-between border-t pt-3 mt-3 shrink-0">
-                              <div className="flex gap-1.5 text-[10px] text-slate-500">
+                              <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-500 mr-2">
 
                                 {dish.isVegetarian && <span className="flex items-center text-green-600 gap-0.5"><Leaf className="h-3 w-3" /> Veg</span>}
                                 {dish.isVegan && <span className="flex items-center text-emerald-600 gap-0.5"><Sparkles className="h-3 w-3" /> Vegan</span>}
                                 {dish.isGlutenFree && <span className="text-blue-600 font-semibold bg-blue-50 px-1 border border-blue-100 rounded">GF</span>}
                                 {dish.isSpicy && <span className="flex items-center text-rose-600 gap-0.5"><Flame className="h-3 w-3" /> Hot</span>}
                               </div>
-                              <span className="text-xs font-bold text-slate-900 group-hover:text-primary transition flex items-center gap-1 bg-slate-50 group-hover:bg-primary/5 border px-2.5 py-1 rounded-lg">
+                              <span className="shrink-0 text-xs font-bold text-slate-900 group-hover:text-primary transition flex items-center gap-1 bg-slate-50 group-hover:bg-primary/5 border px-2.5 py-1 rounded-lg">
                                 <Plus className="h-3.5 w-3.5" /> Select
                               </span>
                             </div>

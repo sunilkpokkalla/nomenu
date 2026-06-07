@@ -3009,6 +3009,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 30,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1314",
   },
   {
     name: "Malai Kofta",
@@ -3398,6 +3400,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Premium acorn-fed Iberian ham, sliced paper-thin, served at room temperature.",
     isGlutenFree: true,
     suggestedCookingTime: 0,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1470",
   },
   {
     name: "Tortilla Española",
@@ -3408,6 +3412,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 25,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1825",
   },
   {
     name: "Pimientos de Padrón",
@@ -3418,6 +3424,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 10,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1961",
   },
   {
     name: "Boquerones en Vinagre",
@@ -3427,6 +3435,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Fresh white anchovy fillets marinated in vinegar, olive oil, garlic, and parsley.",
     isGlutenFree: true,
     suggestedCookingTime: 0,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1050",
   },
   {
     name: "Chorizo a la Sidra",
@@ -3436,6 +3446,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Spanish chorizo sausage slowly braised in hard apple cider until tender.",
     isGlutenFree: true,
     suggestedCookingTime: 20,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1631",
   },
   {
     name: "Pulpo a la Gallega",
@@ -3445,6 +3457,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tender octopus slices dusted with smoked paprika and coarse sea salt, served over boiled potatoes.",
     isGlutenFree: true,
     suggestedCookingTime: 45,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1611",
   },
   {
     name: "Paella Valenciana",
@@ -3454,6 +3468,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "The authentic paella from Valencia, cooked with rabbit, chicken, butter beans, green beans, and saffron-infused rice.",
     isGlutenFree: true,
     suggestedCookingTime: 45,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1633",
   },
   {
     name: "Paella de Marisco",
@@ -3463,6 +3479,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A stunning seafood paella packed with shrimp, mussels, clams, and calamari in a saffron broth.",
     isGlutenFree: true,
     suggestedCookingTime: 45,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1574",
   },
   {
     name: "Cochinillo Asado",
@@ -3472,6 +3490,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Segovian-style whole roasted suckling pig with incredibly crispy skin and tender, melt-in-the-mouth meat.",
     isGlutenFree: true,
     suggestedCookingTime: 180,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1548",
   },
   {
     name: "Rabo de Toro",
@@ -3481,6 +3501,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A rich, slow-braised oxtail stew simmered in red wine and vegetables until the meat falls off the bone.",
     isGlutenFree: true,
     suggestedCookingTime: 180,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1073",
   },
   {
     name: "Fabada Asturiana",
@@ -3490,6 +3512,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A hearty, warming white bean stew from Asturias, cooked with chorizo, morcilla (blood sausage), and pork belly.",
     isGlutenFree: true,
     suggestedCookingTime: 60,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1527",
   },
   {
     name: "Fideuà",
@@ -3498,6 +3522,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "A paella-like dish from Catalonia made with short noodles instead of rice, packed with seafood.",
     suggestedCookingTime: 35,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1717",
   },
   {
     name: "Pollo al Ajillo",
@@ -3507,6 +3533,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rustic, flavor-packed chicken braised with copious amounts of garlic, white wine, and bay leaves.",
     isGlutenFree: true,
     suggestedCookingTime: 40,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1390",
   },
   {
     name: "Bacalao a la Vizcaína",
@@ -3516,6 +3544,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Salt cod simmered in a rich, slightly sweet Basque sauce made from red choricero peppers, onions, and tomatoes.",
     isGlutenFree: true,
     suggestedCookingTime: 30,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1026",
   },
   {
     name: "Secreto Ibérico",
@@ -3525,6 +3555,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A highly marbled, incredibly flavorful cut of Iberian pork grilled rapidly to preserve its juiciness.",
     isGlutenFree: true,
     suggestedCookingTime: 15,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1590",
   },
   {
     name: "Arroz Negro",
@@ -3534,6 +3566,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A dramatic paella variation colored pitch black with squid ink, featuring cuttlefish and served with garlic aioli.",
     isGlutenFree: true,
     suggestedCookingTime: 40,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1065",
   },
   {
     name: "Merluza a la Vasca",
@@ -3543,6 +3577,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Hake fish served in a Basque-style green sauce made with parsley, garlic, clams, and white wine.",
     isGlutenFree: true,
     suggestedCookingTime: 25,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1628",
   },
   {
     name: "Caldereta de Langosta",
@@ -3552,6 +3588,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A luxurious lobster stew from Menorca, cooked with a tomato, pepper, and garlic sofrito.",
     isGlutenFree: true,
     suggestedCookingTime: 45,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1991",
   },
   {
     name: "Chuletón de Vaca Vieja",
@@ -3561,6 +3599,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A massive, dry-aged, bone-in ribeye steak from mature cows, grilled rare and sliced to share.",
     isGlutenFree: true,
     suggestedCookingTime: 30,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1137",
   },
   {
     name: "Callos a la Madrileña",
@@ -3570,6 +3610,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A traditional, gelatinous Madrid stew made with beef tripe, chorizo, and morcilla.",
     isGlutenFree: true,
     suggestedCookingTime: 120,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1044",
   },
   {
     name: "Zarzuela de Mariscos",
@@ -3579,6 +3621,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A complex, tomato-based Catalan seafood stew heavily scented with almonds and saffron.",
     isGlutenFree: true,
     suggestedCookingTime: 50,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1944",
   },
   {
     name: "Pisto Manchego",
@@ -3773,6 +3817,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy fried dough loops served alongside a cup of thick, dark, pudding-like hot chocolate.",
     isVegetarian: true,
     suggestedCookingTime: 15,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1040",
   },
   {
     name: "Tarta de Santiago",
@@ -3992,6 +4038,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "A buttery, flaky croissant filled with thinly sliced ham and melted Gruyère cheese.",
     suggestedCookingTime: 10,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1799",
   },
   {
     name: "Belgian Waffle",
@@ -4001,6 +4049,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A deep-pocketed, crispy waffle served with a dusting of powdered sugar and fresh strawberries.",
     isVegetarian: true,
     suggestedCookingTime: 15,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1319",
   },
   {
     name: "Huevos Rancheros",
@@ -4011,6 +4061,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 15,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1599",
   },
   {
     name: "Greek Yogurt Parfait",
@@ -4021,6 +4073,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1919",
   },
   {
     name: "Steak and Eggs",
@@ -4030,6 +4084,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A tender 8oz sirloin steak cooked to order, served with two eggs any style and hash browns.",
     isGlutenFree: true,
     suggestedCookingTime: 15,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1265",
   },
   {
     name: "Corned Beef Hash",
@@ -4038,6 +4094,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Crispy pan-fried potatoes mixed with savory corned beef and onions, topped with two poached eggs.",
     suggestedCookingTime: 15,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1425",
   },
   {
     name: "Mushroom & Swiss Omelette",
@@ -4048,6 +4106,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 10,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1360",
   },
   {
     name: "Chilaquiles",
@@ -4058,6 +4118,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 15,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1140",
   },
   {
     name: "Chia Seed Pudding",
@@ -4068,6 +4130,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1537",
   },
   {
     name: "Classic Margarita",
@@ -4078,6 +4142,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1658",
   },
   {
     name: "Old Fashioned",
@@ -4088,6 +4154,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1232",
   },
   {
     name: "Mojito",
@@ -4098,6 +4166,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1626",
   },
   {
     name: "Aperol Spritz",
@@ -4108,6 +4178,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1295",
   },
   {
     name: "Espresso Martini",
@@ -4118,6 +4190,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1608",
   },
   {
     name: "Fresh Squeezed Orange Juice",
@@ -4127,6 +4201,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1538",
   },
   {
     name: "Cappuccino",
@@ -4137,6 +4213,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1029",
   },
   {
     name: "Iced Latte",
@@ -4146,6 +4224,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1911",
   },
   {
     name: "Matcha Latte",
@@ -4155,6 +4235,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1128",
   },
   {
     name: "Strawberry Banana Smoothie",
@@ -4165,6 +4247,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dish?lock=1558",
   },
   {
     name: "Craft IPA",
