@@ -30,21 +30,13 @@ interface QRDesignerModalProps {
   iconOnly?: boolean;
 }
 
-const PRESETS = [
-  { name: "Brand Colors", type: "brand" },
-  { name: "Sunset Flare", type: "sunset", start: "#F59E0B", end: "#EF4444" },
-  { name: "Midnight Forest", type: "midnight", start: "#0F766E", end: "#1E293B" },
-  { name: "Ocean Breeze", type: "ocean", start: "#06B6D4", end: "#3B82F6" },
-  { name: "Luxury Gold", type: "gold", start: "#111827", end: "#B45309" },
-  { name: "Custom", type: "custom" },
-];
+
 
 export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = false }: QRDesignerModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const [template, setTemplate] = useState<TemplateKey>("classic");
-  const [colorPreset, setColorPreset] = useState("brand");
   
   // Custom brand settings
   const [brandName, setBrandName] = useState(restaurant.name);
@@ -53,36 +45,11 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
   const [showWifi, setShowWifi] = useState(!!restaurant.wifi_password);
   const [customLogoUrl, setCustomLogoUrl] = useState<string>(restaurant.logo_url || "");
 
-  // Gradient custom pickers
-  const [customStart, setCustomStart] = useState(restaurant.primary_color || "#2563EB");
-  const [customEnd, setCustomEnd] = useState(restaurant.accent_color || "#F59E0B");
-
   const printRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  // Get active colors
-  const getGradientColors = () => {
-    switch (colorPreset) {
-      case "sunset":
-        return { start: "#F59E0B", end: "#EF4444" };
-      case "midnight":
-        return { start: "#0F766E", end: "#1E293B" };
-      case "ocean":
-        return { start: "#06B6D4", end: "#3B82F6" };
-      case "gold":
-        return { start: "#1F2937", end: "#D97706" };
-      case "custom":
-        return { start: customStart, end: customEnd };
-      case "brand":
-      default:
-        return {
-          start: restaurant.primary_color || "#2563EB",
-          end: restaurant.accent_color || "#F59E0B",
-        };
-    }
-  };
-
-  const { start: colorStart, end: colorEnd } = getGradientColors();
+  const colorStart = restaurant.primary_color || "#2563EB";
+  const colorEnd = restaurant.accent_color || "#F59E0B";
 
   // html-to-image downloader
   const handleDownloadPng = useCallback(async () => {
@@ -283,58 +250,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                   )}
                 </div>
 
-                {/* COLOR PRESETS */}
-                <div className="space-y-2">
-                    <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Color Theme Preset</Label>
-                    <div className="grid grid-cols-3 gap-1.5">
-                      {PRESETS.map((preset) => (
-                        <button
-                          key={preset.name}
-                          type="button"
-                          onClick={() => setColorPreset(preset.type)}
-                          className={`px-2 py-1.5 text-[10px] font-bold rounded-md border text-center transition-all ${
-                            colorPreset === preset.type
-                              ? "border-slate-800 bg-slate-900 text-white shadow-sm"
-                              : "border-slate-200 text-slate-600 hover:border-slate-300 bg-white"
-                          }`}
-                        >
-                          {preset.name}
-                        </button>
-                      ))}
-                    </div>
 
-                    {/* Custom Picker Fields */}
-                    {colorPreset === "custom" && (
-                      <div className="grid grid-cols-2 gap-3 mt-2 pt-2 border-t">
-                        <div className="space-y-1">
-                          <Label htmlFor="customStart" className="text-[10px] text-slate-400">Gradient Start</Label>
-                          <div className="flex gap-1.5 items-center">
-                            <input
-                              type="color"
-                              id="customStart"
-                              value={customStart}
-                              onChange={(e) => setCustomStart(e.target.value)}
-                              className="h-7 w-7 rounded-md cursor-pointer border p-0 overflow-hidden"
-                            />
-                            <span className="text-[10px] font-mono font-semibold">{customStart}</span>
-                          </div>
-                        </div>
-                        <div className="space-y-1">
-                          <Label htmlFor="customEnd" className="text-[10px] text-slate-400">Gradient End</Label>
-                          <div className="flex gap-1.5 items-center">
-                            <input
-                              type="color"
-                              id="customEnd"
-                              value={customEnd}
-                              onChange={(e) => setCustomEnd(e.target.value)}
-                              className="h-7 w-7 rounded-md cursor-pointer border p-0 overflow-hidden"
-                            />
-                            <span className="text-[10px] font-mono font-semibold">{customEnd}</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
 
                 {/* TEXT FIELDS */}
                 <div className="space-y-3">
