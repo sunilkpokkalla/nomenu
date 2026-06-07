@@ -5,6 +5,7 @@ export interface QrTemplateProps {
   wifiPassword?: string | null;
   logoUrl?: string | null;
   qrImageUrl: string;
+  qrDataUrl?: string;
   colorStart: string;
   colorEnd: string;
   id?: string;

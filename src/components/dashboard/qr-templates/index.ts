@@ -5,6 +5,7 @@ import * as MinimalistTemplates from './minimalist';
 import * as FineDiningTemplates from './fine-dining';
 import * as CreativeTemplates from './creative';
 import * as CasualTemplates from './casual';
+import * as LuminaTemplates from './lumina';
 import * as LegacyTemplates from './legacy';
 
 export type TemplateKey = 
@@ -20,7 +21,7 @@ export type TemplateKey =
   | 'local-pub'  | 'pizzeria'  | 'juice-bar'  | 'retro-diner'  | 'cozy-teahouse'
   | 'classic'  | 'instagram-square'  | 'minimalist'  | 'neon-cyber'  | 'luxury-gold'
   | 'brutalist'  | 'claymorphism'  | 'art-deco'  | 'modern-glass'  | 'polaroid-snapshot'
-  | 'bistro-gold';
+  | 'bistro-gold' | 'lumina-bistro';
 
 export const templates: Record<TemplateKey, React.ComponentType<QrTemplateProps>> = {
   'neon-tube': NightlifeTemplates.NeonTube,
@@ -84,6 +85,7 @@ export const templates: Record<TemplateKey, React.ComponentType<QrTemplateProps>
   'modern-glass': LegacyTemplates.ModernGlass,
   'polaroid-snapshot': LegacyTemplates.PolaroidSnapshot,
   'bistro-gold': LegacyTemplates.BistroGold,
+  'lumina-bistro': LuminaTemplates.LuminaBistro,
 };
 
 export const templateCategories: QrTemplateCategory[] = [
@@ -165,6 +167,7 @@ export const templateCategories: QrTemplateCategory[] = [
       { id: 'juice-bar', name: 'Juice Bar' },
       { id: 'retro-diner', name: 'Retro Diner' },
       { id: 'cozy-teahouse', name: 'Cozy Teahouse' },
+      { id: 'lumina-bistro', name: 'Lumina Bistro' },
     ]
   },
   {

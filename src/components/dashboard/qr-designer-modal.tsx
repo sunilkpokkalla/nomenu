@@ -180,6 +180,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                     wifiPassword={showWifi ? restaurant.wifi_password : null}
                     logoUrl={customLogoUrl || null}
                     qrImageUrl={qrImageApiUrl}
+                    qrDataUrl={fullMenuUrl}
                     colorStart={colorStart}
                     colorEnd={colorEnd}
                   />
