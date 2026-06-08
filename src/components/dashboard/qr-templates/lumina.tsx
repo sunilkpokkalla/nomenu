@@ -15,7 +15,7 @@ const LuminaFonts = () => (
   `}} />
 );
 
-export function LuminaBistro({ brandName, headline, subtext, wifiPassword, logoUrl, qrDataUrl, colorStart, id }: QrTemplateProps) {
+export function LuminaBistro({ brandName, headline, subtext, wifiPassword, logoUrl, qrDataUrl, qrImageUrl, colorStart, id }: QrTemplateProps) {
   // Use colorStart if available, fallback to a deep blue
   const themeColor = colorStart && colorStart !== '#000000' ? colorStart : '#4F46E5';
   
@@ -70,7 +70,7 @@ export function LuminaBistro({ brandName, headline, subtext, wifiPassword, logoU
           style={{ width: "220px", height: "220px" }}
         >
           {qrDataUrl && (
-            <DottedQRCode data={qrDataUrl} color="#1E293B" size={170} />
+            <DottedQRCode data={qrDataUrl} color="#1E293B" size={170} fallbackSrc={qrImageUrl} />
           )}
         </div>
 

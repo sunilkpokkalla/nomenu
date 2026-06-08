@@ -96,6 +96,31 @@ export function AnalyticsDashboard({
     );
   }
 
+  const hasData = totalScans > 0 || totalOrders > 0;
+
+  if (!hasData) {
+    return (
+      <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none"></div>
+        <div className="mx-auto w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mb-6 relative z-10">
+          <Sparkles className="w-8 h-8 text-indigo-500" />
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-4 relative z-10">You're Ready to Grow</h2>
+        <p className="text-slate-600 mb-8 leading-relaxed max-w-md mx-auto relative z-10">
+          Your Pro analytics dashboard is active and waiting for data. Once your customers start scanning QR codes and placing orders, real-time insights will appear here.
+        </p>
+        <div className="flex gap-4 justify-center relative z-10">
+          <button 
+            onClick={() => router.push("/dashboard/qrcodes")}
+            className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-all hover:scale-[1.02]"
+          >
+            Generate QR Codes
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
         

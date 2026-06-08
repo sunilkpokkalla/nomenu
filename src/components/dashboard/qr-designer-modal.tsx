@@ -154,7 +154,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
         variant={iconOnly ? "ghost" : "outline"}
         size={iconOnly ? "icon" : "sm"}
         onClick={() => setIsOpen(true)}
-        className={iconOnly ? "h-9 w-9 text-slate-500 hover:text-slate-900 rounded-full" : "w-full bg-primary/5 border-primary/20 text-primary hover:bg-primary hover:text-white"}
+        className={iconOnly ? "h-8 w-8 text-slate-500 hover:text-slate-900 rounded-full" : "w-full bg-primary/5 border-primary/20 text-primary hover:bg-primary hover:text-white"}
         title={iconOnly ? "Design Card" : undefined}
       >
         <Sparkles className={`${iconOnly ? "" : "mr-1.5 "}h-4 w-4`} />

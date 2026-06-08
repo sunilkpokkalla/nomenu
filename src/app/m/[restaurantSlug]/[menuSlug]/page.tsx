@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
@@ -8,50 +8,45 @@ import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
 import { ReceiptTracker } from "@/components/menu/receipt-tracker";
 
-export default async function PublicMenuPage(
+export default async function SlugMenuPage(
   props: {
-    params: Promise<{ id: string }>;
+    params: Promise<{ restaurantSlug: string; menuSlug: string }>;
     searchParams: Promise<{ qr?: string; table?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
   const params = await props.params;
-  const menuId = params.id;
+  const restaurantSlug = params.restaurantSlug;
+  const menuSlug = params.menuSlug;
   const qrCodeId = searchParams.qr;
   const tableNumber = searchParams.table;
 
   const supabase = await createClient();
 
-  // 1. Fetch menu details
-  const { data: menu } = await supabase
-    .from("menus")
-    .select("*")
-    .eq("id", menuId)
-    .maybeSingle();
-
-  if (!menu) {
-    notFound();
-  }
-
-  // 2. Fetch restaurant details
+  // 1. Fetch restaurant details by slug
   const { data: _restaurantData } = await supabase
     .from("restaurants")
     .select("*, stripe_account_id")
-    .eq("id", menu.restaurant_id)
+    .eq("slug", restaurantSlug)
     .maybeSingle();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const restaurant = _restaurantData as any;
+  const restaurant = _restaurantData as any;
 
   if (!restaurant) {
     notFound();
   }
 
-  // Redirect to the new beautiful URL format if slugs are available
-  if (restaurant.slug && menu.slug) {
-    const searchParamsString = new URLSearchParams(await props.searchParams as Record<string, string>).toString();
-    const query = searchParamsString ? `?${searchParamsString}` : '';
-    redirect(`/m/${restaurant.slug}/${menu.slug}${query}`);
+  // 2. Fetch menu details by slug
+  const { data: menu } = await supabase
+    .from("menus")
+    .select("*")
+    .eq("restaurant_id", restaurant.id)
+    .eq("slug", menuSlug)
+    .maybeSingle();
+
+  if (!menu) {
+    notFound();
   }
 
   // 3. Fetch categories
@@ -174,4 +169,3 @@ export default async function PublicMenuPage(
     </CartProvider>
   );
 }
-

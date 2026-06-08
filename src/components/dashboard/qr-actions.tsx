@@ -22,7 +22,7 @@ export function CopyButton({ text, iconOnly = false }: { text: string; iconOnly?
       variant={iconOnly ? "ghost" : "outline"} 
       size={iconOnly ? "icon" : "sm"} 
       onClick={handleCopy} 
-      className={iconOnly ? "h-9 w-9 text-slate-500 hover:text-slate-900 rounded-full" : "flex-1"}
+      className={iconOnly ? "h-8 w-8 text-slate-500 hover:text-slate-900 rounded-full" : "flex-1"}
       title={iconOnly ? "Copy Link" : undefined}
     >
       {copied ? (
@@ -75,7 +75,7 @@ export function DownloadButton({ qrImageUrl, label, disabled = false, iconOnly =
       size={iconOnly ? "icon" : "sm"} 
       onClick={handleDownload} 
       disabled={disabled || downloading} 
-      className={iconOnly ? "h-9 w-9 text-slate-500 hover:text-slate-900 rounded-full" : "flex-1"}
+      className={iconOnly ? "h-8 w-8 text-slate-500 hover:text-slate-900 rounded-full" : "flex-1"}
       title={iconOnly ? "Download QR" : undefined}
     >
       <Download className={`${iconOnly ? "" : "mr-1.5 "}h-4 w-4 ${downloading ? "animate-pulse" : ""}`} />

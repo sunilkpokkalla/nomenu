@@ -1,15 +1,18 @@
 import React, { useMemo } from 'react';
-import QRCode from 'qrcode';
+/* eslint-disable @typescript-eslint/no-require-imports */
+const QRCode = require('qrcode');
 
 interface DottedQRProps {
   data: string;
   color?: string;
   size?: number;
+  fallbackSrc?: string;
 }
 
-export function DottedQRCode({ data, color = "#0F172A", size = 200 }: DottedQRProps) {
+export function DottedQRCode({ data, color = "#0F172A", size = 200, fallbackSrc }: DottedQRProps) {
   const matrix = useMemo(() => {
     try {
+      if (!data) return { matrix: [], size: 0 };
       const qr = QRCode.create(data, { errorCorrectionLevel: 'H' });
       const size = qr.modules.size;
       const dataArray = qr.modules.data;
@@ -22,11 +25,18 @@ export function DottedQRCode({ data, color = "#0F172A", size = 200 }: DottedQRPr
       }
       return { matrix, size };
     } catch (e) {
+      console.error("QR Code generation error:", e);
       return { matrix: [], size: 0 };
     }
   }, [data]);
 
-  if (!matrix.size) return null;
+  if (!matrix.size) {
+    if (fallbackSrc) {
+      /* eslint-disable-next-line @next/next/no-img-element */
+      return <img src={fallbackSrc} alt="QR Code" width={size} height={size} style={{ width: size, height: size, objectFit: 'contain' }} crossOrigin="anonymous" />;
+    }
+    return null;
+  }
 
   const { matrix: m, size: qrSize } = matrix;
   const cellSize = size / qrSize;

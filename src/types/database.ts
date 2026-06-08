@@ -31,6 +31,9 @@ export interface Database {
           stripe_account_id: string | null;
           timezone: string | null;
           created_at: string | null;
+          slug: string | null;
+          subdomain: string | null;
+          custom_domain: string | null;
         };
         Insert: {
           id?: string;
@@ -53,6 +56,9 @@ export interface Database {
           stripe_account_id?: string | null;
           timezone?: string | null;
           created_at?: string | null;
+          slug?: string | null;
+          subdomain?: string | null;
+          custom_domain?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];
@@ -74,6 +80,7 @@ export interface Database {
           service_charge_type: string | null;
           location_label: string | null;
           created_at: string | null;
+          slug: string | null;
         };
         Insert: {
           id?: string;
@@ -91,6 +98,7 @@ export interface Database {
           service_charge_type?: string | null;
           location_label?: string | null;
           created_at?: string | null;
+          slug?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["menus"]["Insert"]>;
         Relationships: [

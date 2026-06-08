@@ -66,5 +66,32 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Multi-tenant routing
+  const hostname = request.headers.get("host") || "";
+  const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0]; // Extract domain
+
+  const isApiOrInternal = pathname.startsWith("/api") || pathname.startsWith("/_next") || pathname.startsWith("/favicon.ico");
+  
+  if (
+    hostname !== rootDomain && 
+    !hostname.includes("vercel.app") && 
+    !hostname.startsWith("localhost:") && // Ignore plain localhost:3000
+    !isApiOrInternal &&
+    !pathname.startsWith("/dashboard") &&
+    !pathname.startsWith("/login") &&
+    !pathname.startsWith("/signup")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/_sites/${hostname}${pathname}`;
+    const rewriteRes = NextResponse.rewrite(url);
+    
+    // Copy cookies from original response to rewritten response
+    response.cookies.getAll().forEach((cookie) => {
+      rewriteRes.cookies.set(cookie);
+    });
+    return rewriteRes;
+  }
+
   return response;
 }

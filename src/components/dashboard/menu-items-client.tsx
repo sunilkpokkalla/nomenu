@@ -52,6 +52,44 @@ export function MenuItemsClient({
     filteredItems = filteredItems.filter((item) => item.category_id === selectedCategoryId);
   }
 
+  // Group items
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const groupedItems: { category: any, menu: any, items: any[] }[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const itemsByCategoryId: Record<string, any[]> = {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const uncategorizedItems: any[] = [];
+  
+  filteredItems.forEach(item => {
+    if (item.category_id) {
+      if (!itemsByCategoryId[item.category_id]) {
+        itemsByCategoryId[item.category_id] = [];
+      }
+      itemsByCategoryId[item.category_id].push(item);
+    } else {
+      uncategorizedItems.push(item);
+    }
+  });
+
+  restaurantCategories.forEach(category => {
+    if (itemsByCategoryId[category.id] && itemsByCategoryId[category.id].length > 0) {
+      const menu = menus.find((m) => m.id === category.menu_id);
+      groupedItems.push({
+        category,
+        menu,
+        items: itemsByCategoryId[category.id]
+      });
+    }
+  });
+  
+  if (uncategorizedItems.length > 0) {
+    groupedItems.push({
+      category: null,
+      menu: null,
+      items: uncategorizedItems
+    });
+  }
+
   return (
     <>
       {/* Menu Filter Pills */}
@@ -138,14 +176,30 @@ export function MenuItemsClient({
         {/* Items List */}
         <div className="space-y-6">
           {filteredItems.length > 0 ? (
-            <div className="grid gap-4">
-              {filteredItems.map((item) => {
-                const category = restaurantCategories.find((c) => c.id === item.category_id);
-                const menu = menus.find((m) => m.id === category?.menu_id);
-                const toggleAction = toggleMenuItemStatus.bind(null, item.id, item.is_available);
+            <div className="space-y-8">
+              {groupedItems.map((group, index) => (
+                <div key={group.category?.id || `uncategorized-${index}`} className="space-y-4">
+                  <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                    <h2 className="text-xl font-bold text-slate-800">
+                      {group.category ? (
+                        selectedMenuId === "all" && group.menu ? (
+                          `${group.menu.name} • ${group.category.name}`
+                        ) : (
+                          group.category.name
+                        )
+                      ) : (
+                        "Uncategorized"
+                      )}
+                    </h2>
+                  </div>
+                  <div className="grid gap-4">
+                    {group.items.map((item) => {
+                      const category = group.category;
+                      const menu = group.menu;
+                      const toggleAction = toggleMenuItemStatus.bind(null, item.id, item.is_available);
 
-                return (
-                  <Card key={item.id} className={`overflow-hidden transition ${!item.is_available ? "opacity-60" : ""}`}>
+                      return (
+                        <Card key={item.id} className={`overflow-hidden transition ${!item.is_available ? "opacity-60" : ""}`}>
                     <div className="flex flex-col sm:flex-row justify-between p-5 gap-4">
                       <div className="flex flex-1 gap-4">
                         <div className="h-16 w-16 rounded-lg overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center">
@@ -257,9 +311,12 @@ export function MenuItemsClient({
                         </div>
                       </div>
                     </div>
-                  </Card>
-                );
-              })}
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white p-12 text-center shadow-sm">
