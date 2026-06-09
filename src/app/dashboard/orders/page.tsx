@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
 import { OrdersBoard } from "./orders-board";
@@ -86,12 +87,12 @@ export default async function OrdersPage() {
           <p className="text-slate-600 mb-8 leading-relaxed">
             The Live Kitchen Display System (KDS) and real-time ordering board are exclusively available on the Elite plan. Upgrade to start accepting live orders.
           </p>
-          <a
+          <Link
             href="/dashboard/billing"
             className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-all hover:scale-[1.02]"
           >
             View Pricing Plans
-          </a>
+          </Link>
         </div>
       </div>
     );

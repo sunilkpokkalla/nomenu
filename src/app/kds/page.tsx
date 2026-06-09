@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
 import { OrdersBoard } from "@/app/dashboard/orders/orders-board";
@@ -68,12 +69,12 @@ export default async function KDSPage() {
           <p className="mt-3 text-sm text-slate-500 mb-6 font-medium">
             Upgrade to the Elite Plan to unlock the real-time ordering system and kitchen display board.
           </p>
-          <a
+          <Link
             href="/dashboard/billing"
             className="inline-block w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm hover:bg-slate-800 transition"
           >
             Upgrade to Elite Plan
-          </a>
+          </Link>
         </div>
       </div>
     );

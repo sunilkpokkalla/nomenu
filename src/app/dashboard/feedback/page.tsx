@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, MapPin, Mail, QrCode } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
@@ -71,12 +72,12 @@ export default async function FeedbackPage() {
           <p className="text-slate-600 mb-8 leading-relaxed">
             Private customer feedback, rating analytics, and instant alerts are exclusively available on the Pro plan. Upgrade to listen to your customers.
           </p>
-          <a
+          <Link
             href="/dashboard/billing"
             className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-all hover:scale-[1.02]"
           >
             View Pricing Plans
-          </a>
+          </Link>
         </div>
       ) : (
         <div>
