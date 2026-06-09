@@ -185,19 +185,22 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
         { event: "*", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
         async (payload) => {
           if (payload.eventType === "INSERT") {
-            const { data: newOrder } = await supabase
-              .from("orders")
-              .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
-              .eq("id", payload.new.id)
-              .single();
-            
-            if (newOrder) {
-              setOrders(prev => {
-                // Prevent duplicate insertions if polling already grabbed it
-                if (prev.some(o => o.id === newOrder.id)) return prev;
-                return [...prev, newOrder as Order];
-              });
-            }
+            // Give the backend 1.5s to finish inserting the order_items before we fetch the full order
+            setTimeout(async () => {
+              const { data: newOrder } = await supabase
+                .from("orders")
+                .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
+                .eq("id", payload.new.id)
+                .single();
+              
+              if (newOrder) {
+                setOrders(prev => {
+                  // Prevent duplicate insertions if polling already grabbed it
+                  if (prev.some(o => o.id === newOrder.id)) return prev;
+                  return [...prev, newOrder as Order];
+                });
+              }
+            }, 1500);
           } else if (payload.eventType === "UPDATE") {
             setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));
           }
