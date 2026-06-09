@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       apiVersion: "2026-05-27.dahlia",
       httpClient: Stripe.createFetchHttpClient(),
     });
-    const { planId } = await req.json();
+    const { planId, isAnnual } = await req.json();
 
     if (!planId) {
       return NextResponse.json({ error: "Missing planId" }, { status: 400 });
@@ -42,15 +42,28 @@ export async function POST(req: Request) {
 
 
     // Map plans to Stripe Price IDs
-    const priceMap: Record<string, string | undefined> = {
-      pro: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO,
-      elite: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE,
-      enterprise: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE,
+    const priceMap: Record<string, Record<string, string | undefined>> = {
+      pro: {
+        monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO,
+        annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL,
+      },
+      elite: {
+        monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE,
+        annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE_ANNUAL,
+      },
+      enterprise: {
+        monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE,
+        annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_ANNUAL,
+      },
     };
 
-    const priceId = priceMap[planId.toLowerCase()];
+    const billingCycle = isAnnual ? "annual" : "monthly";
+    const priceId = priceMap[planId.toLowerCase()]?.[billingCycle];
 
     if (!priceId) {
+      if (isAnnual) {
+        return NextResponse.json({ error: `Annual pricing for ${planId} is not yet configured. Please select Monthly billing or contact support.` }, { status: 400 });
+      }
       return NextResponse.json({ error: "Invalid plan or missing price ID in environment variables." }, { status: 400 });
     }
 

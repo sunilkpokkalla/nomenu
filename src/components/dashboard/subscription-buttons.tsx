@@ -6,11 +6,13 @@ import { Loader2 } from "lucide-react";
 export function SubscriptionButton({ 
   planId, 
   planName, 
-  isElite 
+  isElite,
+  isAnnual = false
 }: { 
   planId: string; 
   planName: string; 
   isElite: boolean;
+  isAnnual?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +22,7 @@ export function SubscriptionButton({
       const res = await fetch("/api/stripe/subscription-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planId }),
+        body: JSON.stringify({ planId, isAnnual }),
       });
       const data = await res.json();
       if (data.url) {

@@ -25,6 +25,7 @@ import {
   ShieldAlert
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DualDeviceMockup } from "@/components/marketing/dual-device-mockup";
 
 const THEME_PREVIEWS = [
   {
@@ -66,7 +67,7 @@ function HeroLivePopups() {
         {/* Toast 1: Payment (Top Left) */}
         <div className="absolute top-[12%] left-[4%] md:left-[10%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-slow opacity-0 shadow-emerald-500/5">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <p className="text-[11px] font-bold text-slate-700">Table 4 paid <span className="text-emerald-600">$142.50</span></p>
+          <p className="text-[11px] font-bold text-slate-700">Ticket #104 <span className="text-emerald-600">marked Paid</span></p>
         </div>
 
         {/* Toast 2: Order (Lower Left) */}
@@ -84,7 +85,7 @@ function HeroLivePopups() {
         {/* Toast 4: Kitchen (Lower Right) */}
         <div className="absolute top-[42%] right-[2%] md:right-[6%] bg-white/90 backdrop-blur-md border border-slate-200/60 shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 animate-float-slow opacity-0 shadow-slate-500/5" style={{ animationDelay: '4.5s' }}>
           <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
-          <p className="text-[11px] font-bold text-slate-700">KDS: <span className="text-slate-500">Ticket #104 cleared</span></p>
+          <p className="text-[11px] font-bold text-slate-700">Live KDS: <span className="text-slate-500">New Order Syncing...</span></p>
         </div>
       </div>
     </>
@@ -207,12 +208,7 @@ export default function LandingPage() {
             <div className="rounded-[2.2rem] border border-slate-200/50 bg-slate-100/80 p-2.5 shadow-2xl shadow-slate-900/5 transition-transform duration-500 hover:scale-[1.005]">
               {/* Inner Core */}
               <div className="bg-white rounded-[calc(2.2rem-0.625rem)] overflow-hidden border border-slate-200/40 relative aspect-video shadow-inner">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/hero-preview.png"
-                  alt="NoMenu premium smartphone menu mockup and QR code cards on a table"
-                  className="w-full h-full object-cover"
-                />
+                <DualDeviceMockup />
               </div>
             </div>
 

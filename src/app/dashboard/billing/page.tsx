@@ -1,14 +1,15 @@
-import { Check, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { Check, ShieldCheck, Sparkles, Zap, AlertTriangle } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { SubscriptionButton, PortalButton } from "@/components/dashboard/subscription-buttons";
+import { BillingToggle } from "@/components/dashboard/billing-toggle";
 
-const PLANS = [
+const getPlans = (isAnnual: boolean) => [
   {
     id: "pro", // Kept ID for backward compatibility
     name: "Pro",
-    price: "$39",
+    price: isAnnual ? "$31" : "$39",
     period: "/mo",
     description: "Unlimited flexibility for high-volume venues.",
     features: [
@@ -23,14 +24,15 @@ const PLANS = [
   {
     id: "elite",
     name: "Elite",
-    price: "$79",
+    price: isAnnual ? "$63" : "$79",
     period: "/mo",
     description: "Real-time ordering for premium venues and groups.",
     features: [
       "Everything in Pro",
       "Interactive Digital Shopping Cart",
-      "Real-Time Live Orders Dashboard",
+      "Real-Time Live Orders Dashboard (KDS)",
       "Digital Receipts & Order Tracking",
+      "Manual Paid/Unpaid Payment Toggle",
       "All 8+ Premium Elite Themes",
       "White-labeled Branding",
     ],
@@ -38,7 +40,7 @@ const PLANS = [
   {
     id: "enterprise",
     name: "Enterprise",
-    price: "$119",
+    price: isAnnual ? "$95" : "$119",
     period: "/mo",
     description: "Full commerce suite with direct payouts.",
     features: [
@@ -54,10 +56,13 @@ const PLANS = [
 
 export default async function BillingPage(
   props: {
-    searchParams: Promise<{ message?: string; success?: string }>;
+    searchParams: Promise<{ message?: string; success?: string; billing?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
+  const isAnnual = searchParams.billing === "annual";
+  const plans = getPlans(isAnnual);
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -81,6 +86,28 @@ export default async function BillingPage(
 
   const currentPlan = restaurant.plan || "free";
 
+  // Fetch Free Plan Usage
+  let menuCount = 0;
+  let orderCount = 0;
+  if (currentPlan === "free") {
+    const { count: mCount } = await supabase
+      .from("menus")
+      .select("*", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+    menuCount = mCount || 0;
+
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0,0,0,0);
+    
+    const { count: oCount } = await supabase
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id)
+      .gte("created_at", startOfMonth.toISOString());
+    orderCount = oCount || 0;
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 lg:px-8">
       {/* Header */}
@@ -97,19 +124,20 @@ export default async function BillingPage(
         </div>
       )}
       {searchParams.message && (
-        <div className="mb-8 rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-medium text-slate-800 shadow-sm">
+        <div className="mb-8 rounded-xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-medium text-rose-800 shadow-sm flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4" />
           {searchParams.message}
         </div>
       )}
 
       {/* Active Plan Dashboard Widget - Minimalist */}
-      <div className="mb-16">
+      <div className="mb-12">
         <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5 w-full md:w-auto">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-900 border border-slate-200">
               <Zap className="h-6 w-6" strokeWidth={1.5} />
             </div>
-            <div>
+            <div className="flex-1">
               <div className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">
                 Current Subscription
               </div>
@@ -136,11 +164,44 @@ export default async function BillingPage(
              )}
           </div>
         </div>
+
+        {/* Free Plan Usage Tracker */}
+        {currentPlan === "free" && (
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-bold text-slate-900">Menus Created</span>
+                <span className="text-sm font-bold text-slate-500">{menuCount} / 1</span>
+              </div>
+              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full ${menuCount >= 1 ? 'bg-rose-500' : 'bg-slate-900'}`} 
+                  style={{ width: `${Math.min((menuCount / 1) * 100, 100)}%` }} 
+                />
+              </div>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-bold text-slate-900">Orders This Month</span>
+                <span className="text-sm font-bold text-slate-500">{orderCount} / 50</span>
+              </div>
+              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full ${orderCount >= 50 ? 'bg-rose-500' : 'bg-slate-900'}`} 
+                  style={{ width: `${Math.min((orderCount / 50) * 100, 100)}%` }} 
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Monthly/Annual Toggle */}
+      <BillingToggle />
 
       {/* Pricing Bento Grid - Minimalist */}
       <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
-        {PLANS.map((plan) => {
+        {plans.map((plan) => {
           const planTiers: Record<string, number> = { free: 0, pro: 1, elite: 2, enterprise: 3 };
           const currentTier = planTiers[currentPlan.toLowerCase()] || 0;
           const thisTier = planTiers[plan.id.toLowerCase()] || 0;
@@ -165,7 +226,7 @@ export default async function BillingPage(
                     <h3 className="text-xl font-bold tracking-tight text-slate-950">
                       {plan.name}
                     </h3>
-                    <p className="text-sm mt-2 text-slate-500 font-medium">
+                    <p className="text-sm mt-2 text-slate-500 font-medium leading-relaxed">
                       {plan.description}
                     </p>
                   </div>
@@ -192,6 +253,11 @@ export default async function BillingPage(
                       {plan.period}
                     </span>
                   </div>
+                  {isAnnual && (
+                    <div className="mt-2 text-[11px] font-bold text-emerald-600 uppercase tracking-widest">
+                      Billed Annually
+                    </div>
+                  )}
                 </div>
 
                 {/* Features List */}
@@ -226,6 +292,7 @@ export default async function BillingPage(
                         planId={plan.id}
                         planName={plan.name}
                         isElite={isElite}
+                        isAnnual={isAnnual}
                       />
                     </div>
                   )}
