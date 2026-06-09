@@ -51,7 +51,7 @@ export default async function PublicMenuPage(
   if (restaurant.slug && menu.slug) {
     const searchParamsString = new URLSearchParams(await props.searchParams as Record<string, string>).toString();
     const query = searchParamsString ? `?${searchParamsString}` : '';
-    redirect(`/m/${restaurant.slug}/${menu.slug}${query}`);
+    redirect(`/${restaurant.slug}/${menu.slug}${query}`);
   }
 
   // 3. Fetch categories

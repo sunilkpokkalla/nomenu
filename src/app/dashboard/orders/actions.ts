@@ -70,3 +70,19 @@ export async function updateOrderStatus(orderId: string, status: string) {
 
   return { success: true };
 }
+
+export async function toggleOrderPaymentStatus(orderId: string, isPaid: boolean) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("orders")
+    .update({ is_paid: isPaid })
+    .eq("id", orderId);
+
+  if (error) {
+    console.error("Error updating order payment status:", error);
+    throw new Error("Failed to update order payment status");
+  }
+
+  return { success: true };
+}

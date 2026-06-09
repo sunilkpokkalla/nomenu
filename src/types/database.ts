@@ -296,6 +296,7 @@ export interface Database {
           status: string;
           created_at: string;
           payment_intent_id: string | null;
+          is_paid: boolean;
         };
         Insert: {
           id?: string;
@@ -307,6 +308,7 @@ export interface Database {
           status?: string;
           created_at?: string;
           payment_intent_id?: string | null;
+          is_paid?: boolean;
         };
         Update: Partial<Database["public"]["Tables"]["orders"]["Insert"]>;
         Relationships: [

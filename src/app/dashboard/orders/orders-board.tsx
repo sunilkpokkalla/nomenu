@@ -6,7 +6,7 @@ import { differenceInMinutes } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
 import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings } from "lucide-react";
-import { updateOrderStatus } from "./actions";
+import { updateOrderStatus, toggleOrderPaymentStatus } from "./actions";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
 type OrderItem = {
@@ -29,6 +29,7 @@ type Order = {
   created_at: string;
   daily_order_number?: number | null;
   payment_intent_id?: string | null;
+  is_paid?: boolean;
   order_items?: OrderItem[];
 };
 
@@ -515,13 +516,27 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                         #{String(order.daily_order_number).padStart(3, '0')}
                                       </span>
                                       
-                                      {/* PAYMENT STATUS BADGE */}
+                                      {/* PAYMENT STATUS BADGE / TOGGLE */}
                                       {order.status === 'awaiting_payment' ? (
                                         <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20">Unpaid</span>
                                       ) : order.payment_intent_id ? (
-                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Paid Online</span>
+                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
+                                          <CheckCircle2 className="w-3 h-3" /> Paid Online
+                                        </span>
+                                      ) : order.is_paid ? (
+                                        <button 
+                                          onClick={(e) => { e.stopPropagation(); setOrders(prev => prev.map(o => o.id === order.id ? { ...o, is_paid: false } : o)); toggleOrderPaymentStatus(order.id, false); }}
+                                          className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1 hover:bg-emerald-500/20 transition-colors"
+                                        >
+                                          <CheckCircle2 className="w-3 h-3" /> Paid
+                                        </button>
                                       ) : (
-                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-amber-500/10 text-amber-500 border border-amber-500/20">Collect Payment</span>
+                                        <button 
+                                          onClick={(e) => { e.stopPropagation(); setOrders(prev => prev.map(o => o.id === order.id ? { ...o, is_paid: true } : o)); toggleOrderPaymentStatus(order.id, true); }}
+                                          className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center gap-1 hover:bg-rose-500/20 transition-colors"
+                                        >
+                                          <div className="w-3 h-3 border border-current rounded-[3px]" /> Unpaid
+                                        </button>
                                       )}
 
                                       {shouldDefaultCollapse && (

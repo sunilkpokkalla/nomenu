@@ -79,7 +79,7 @@ export default async function QrCodesPage(
   // Determine site URL on the server
   const host = (await headers()).get("host") || "localhost:3000";
   const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
+  const baseUrl = process.env.NODE_ENV === 'development' ? `${protocol}://${host}` : (process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`);
   const rootDomain = baseUrl.replace(/^https?:\/\//, "").split("/")[0];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -140,16 +140,18 @@ export default async function QrCodesPage(
                   {qrs.map((qr) => {
                 const targetMenu = menusList.find((m) => m.id === qr.menu_id);
                 
-                // Advanced White-Label URL Construction
-                let publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
+                // Tier-Based URL Construction
                 const plan = restaurant.plan?.toLowerCase() || 'free';
+                const domainPrefix = ['elite', 'enterprise'].includes(plan) ? 'order' : 'menu';
                 
-                if (['elite', 'enterprise'].includes(plan) && restaurant.custom_domain) {
-                  publicUrl = `https://${restaurant.custom_domain}${targetMenu?.slug ? `/${targetMenu.slug}` : ''}?qr=${qr.id}`;
-                } else if (['pro', 'elite', 'enterprise'].includes(plan) && restaurant.subdomain) {
-                  publicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${restaurant.subdomain}.${rootDomain}${targetMenu?.slug ? `/${targetMenu.slug}` : ''}?qr=${qr.id}`;
-                } else if (restaurant.slug && targetMenu?.slug) {
-                  publicUrl = `${baseUrl}/m/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}`;
+                let publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
+                if (restaurant.slug && targetMenu?.slug) {
+                  const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1');
+                  if (isLocalhost) {
+                    publicUrl = `${baseUrl}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}`;
+                  } else {
+                    publicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}`;
+                  }
                 }
                 
                 const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;

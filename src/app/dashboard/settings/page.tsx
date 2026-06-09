@@ -1,7 +1,7 @@
 import { Building2, Save, Globe } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { updateRestaurantSettings, updateDomainSettings } from "@/app/dashboard/actions";
+import { updateRestaurantSettings } from "@/app/dashboard/actions";
 import { CuisineSelect } from "@/components/dashboard/cuisine-select";
 import { CURRENCY_OPTIONS } from "@/lib/currency-options";
 import { Button } from "@/components/ui/button";
@@ -81,16 +81,26 @@ export default async function SettingsPage(
                 <Input id="name" name="name" defaultValue={restaurant.name} placeholder="Le Bistrot Parisien" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cuisineSelect">Cuisine / Service Style</Label>
-                <CuisineSelect defaultValue={restaurant.cuisine_type || ""} />
+                <Label htmlFor="slug">Unique URL Slug</Label>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground bg-slate-100 px-3 py-2 rounded-lg border h-10 flex items-center">nomenu.us/</span>
+                  <Input id="slug" name="slug" defaultValue={restaurant.slug || ""} placeholder="the-golden-spoon" className="flex-1" required />
+                </div>
               </div>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="space-y-2">
+                <Label htmlFor="cuisineSelect">Cuisine / Service Style</Label>
+                <CuisineSelect defaultValue={restaurant.cuisine_type || ""} />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
                 <Input id="phone" name="phone" type="tel" defaultValue={restaurant.phone || ""} placeholder="e.g. +33 1 45 55 12 34" />
               </div>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="currency">Currency Code</Label>
                 <select
@@ -144,56 +154,6 @@ export default async function SettingsPage(
         </CardContent>
       </Card>
 
-      {/* Domain Routing Card */}
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Globe className="h-5 w-5 text-primary" /> Domain Routing
-          </CardTitle>
-          <CardDescription>
-            Customize your URL structure. White-labeling features depend on your subscription plan.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form action={updateDomainSettings} className="space-y-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="slug">Restaurant URL Slug (Free)</Label>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground bg-slate-100 px-3 py-2 rounded-lg border">nomenu.us/m/</span>
-                  <Input id="slug" name="slug" defaultValue={restaurant.slug || ""} placeholder="the-golden-spoon" className="flex-1" />
-                </div>
-                <p className="text-xs text-muted-foreground">This is your standard link. It must be unique.</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="subdomain">Custom Subdomain (Pro, Elite, & Enterprise)</Label>
-                <div className="flex items-center gap-2">
-                  <Input id="subdomain" name="subdomain" defaultValue={restaurant.subdomain || ""} placeholder="the-golden-spoon" className="flex-1" disabled={!['pro', 'elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '')} />
-                  <span className="text-sm text-muted-foreground bg-slate-100 px-3 py-2 rounded-lg border">.nomenu.us</span>
-                </div>
-                {!['pro', 'elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') && (
-                   <p className="text-xs text-amber-600">Upgrade to Pro, Elite, or Enterprise to unlock subdomains.</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="custom_domain">Custom Domain (Elite Plan)</Label>
-                <Input id="custom_domain" name="custom_domain" defaultValue={restaurant.custom_domain || ""} placeholder="menu.thegoldenspoon.com" disabled={!['elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '')} />
-                {!['elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') ? (
-                  <p className="text-xs text-amber-600">Upgrade to Elite to connect your own domain.</p>
-                ) : (
-                  <p className="text-xs text-muted-foreground">You must configure a CNAME record pointing to `cname.vercel-dns.com`.</p>
-                )}
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full sm:w-auto mt-4" variant="secondary">
-              <Save className="mr-2 h-4 w-4" /> Save Domain Settings
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+import { slugify } from "@/lib/utils/slugify";
 import type { Database } from "@/types/database";
 
 function field(formData: FormData, key: string) {
@@ -103,6 +104,7 @@ export async function createMenu(formData: FormData) {
   const { error } = await supabase.from("menus").insert({
     restaurant_id: restaurant.id,
     name,
+    slug: slugify(name),
     description,
     is_active: isActive,
     menu_type: menuType,
@@ -565,10 +567,16 @@ export async function updateRestaurantSettings(formData: FormData) {
     redirect("/dashboard/settings?message=Restaurant%20name%20is%20required");
   }
 
+  const slug = field(formData, "slug")?.toLowerCase().replace(/[^a-z0-9-]/g, "") || null;
+  if (!slug) {
+    redirect("/dashboard/settings?message=Restaurant%20URL%20slug%20is%20required");
+  }
+
   const { error } = await supabase
     .from("restaurants")
     .update({
       name,
+      slug,
       cuisine_type: field(formData, "cuisineType"),
       address: field(formData, "address"),
       phone: field(formData, "phone"),
@@ -578,61 +586,15 @@ export async function updateRestaurantSettings(formData: FormData) {
     .eq("id", restaurant.id);
 
   if (error) {
-    redirect(`/dashboard/settings?message=${encodeURIComponent(error.message)}`);
-  }
-
-  revalidatePath("/dashboard/settings");
-  revalidatePath("/dashboard");
-  redirect("/dashboard/settings?success=Settings%20updated%20successfully");
-}
-
-export async function updateDomainSettings(formData: FormData) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const restaurant = await getRestaurantForUser(supabase, user.id);
-  if (!restaurant) {
-    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
-  }
-
-  const slug = field(formData, "slug")?.toLowerCase().replace(/[^a-z0-9-]/g, "") || null;
-  const subdomain = field(formData, "subdomain")?.toLowerCase().replace(/[^a-z0-9-]/g, "") || null;
-  const custom_domain = field(formData, "custom_domain")?.toLowerCase() || null;
-
-  // Plan checks
-  const currentPlan = restaurant.plan?.toLowerCase() || "free";
-  if (subdomain && !['pro', 'elite', 'enterprise'].includes(currentPlan)) {
-    redirect("/dashboard/settings?message=Subdomains%20require%20the%20Pro%20plan%20or%20higher.");
-  }
-  if (custom_domain && !['elite', 'enterprise'].includes(currentPlan)) {
-    redirect("/dashboard/settings?message=Custom%20domains%20require%20the%20Elite%20plan%20or%20higher.");
-  }
-
-  const { error } = await supabase
-    .from("restaurants")
-    .update({
-      slug,
-      subdomain,
-      custom_domain,
-    })
-    .eq("id", restaurant.id);
-
-  if (error) {
     if (error.code === '23505') {
-       redirect(`/dashboard/settings?message=That%20domain%20or%20slug%20is%20already%20taken.`);
+       redirect(`/dashboard/settings?message=That%20URL%20slug%20is%20already%20taken.`);
     }
     redirect(`/dashboard/settings?message=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/dashboard/settings");
   revalidatePath("/dashboard");
-  redirect("/dashboard/settings?success=Domain%20settings%20updated%20successfully");
+  redirect("/dashboard/settings?success=Settings%20updated%20successfully");
 }
 
 export async function updateRestaurantBranding(formData: FormData) {

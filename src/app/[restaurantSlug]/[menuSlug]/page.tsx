@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
@@ -8,26 +8,26 @@ import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
 import { ReceiptTracker } from "@/components/menu/receipt-tracker";
 
-export default async function SubdomainMenuPage(
+export default async function StorefrontMenuPage(
   props: {
-    params: Promise<{ domain: string; menuSlug: string }>;
+    params: Promise<{ restaurantSlug: string; menuSlug: string }>;
     searchParams: Promise<{ qr?: string; table?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
   const params = await props.params;
-  const domain = params.domain; // This comes from middleware rewrite
+  const restaurantSlug = params.restaurantSlug;
   const menuSlug = params.menuSlug;
   const qrCodeId = searchParams.qr;
   const tableNumber = searchParams.table;
 
   const supabase = await createClient();
 
-  // 1. Fetch restaurant details by domain
+  // 1. Fetch restaurant details by slug
   const { data: _restaurantData } = await supabase
     .from("restaurants")
     .select("*, stripe_account_id")
-    .or(`subdomain.eq.${domain},custom_domain.eq.${domain}`)
+    .eq("slug", restaurantSlug)
     .maybeSingle();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,6 +35,28 @@ export default async function SubdomainMenuPage(
 
   if (!restaurant) {
     notFound();
+  }
+
+  // Tier subdomain enforcement
+  const host = (await headers()).get("host") || "";
+  const isMenuHost = host.startsWith("menu.");
+  const isOrderHost = host.startsWith("order.");
+  const plan = restaurant.plan?.toLowerCase() || "free";
+  
+  if (['elite', 'enterprise'].includes(plan) && isMenuHost) {
+    const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const protocol = rawAppUrl.startsWith("https") ? "https" : "http";
+    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0];
+    const qrParam = qrCodeId ? `?qr=${qrCodeId}` : "";
+    const tableParam = tableNumber ? `${qrParam ? '&' : '?'}table=${tableNumber}` : "";
+    redirect(`${protocol}://order.${rootDomain}/${restaurantSlug}/${menuSlug}${qrParam}${tableParam}`);
+  } else if (['free', 'pro'].includes(plan) && isOrderHost) {
+    const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const protocol = rawAppUrl.startsWith("https") ? "https" : "http";
+    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0];
+    const qrParam = qrCodeId ? `?qr=${qrCodeId}` : "";
+    const tableParam = tableNumber ? `${qrParam ? '&' : '?'}table=${tableNumber}` : "";
+    redirect(`${protocol}://menu.${rootDomain}/${restaurantSlug}/${menuSlug}${qrParam}${tableParam}`);
   }
 
   // 2. Fetch menu details by slug
@@ -111,7 +133,7 @@ export default async function SubdomainMenuPage(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const designConfig = (menu.design_config as any) || {};
   const hasCustomDesign = Object.keys(designConfig).length > 0;
-  const canUseCustomDesign = ['pro', 'elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') && hasCustomDesign;
+  const canUseCustomDesign = ['pro', 'elite', 'enterprise'].includes(plan) && hasCustomDesign;
 
   const activeThemeStyle = canUseCustomDesign && designConfig.theme_style ? designConfig.theme_style : restaurant.theme_style;
   const activePrimaryColor = canUseCustomDesign && designConfig.primary_color ? designConfig.primary_color : restaurant.primary_color;
@@ -143,7 +165,7 @@ export default async function SubdomainMenuPage(
         qrCodeId={qrCodeId}
         locationLabel={menu.location_label}
       />
-      {['elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') && (
+      {['elite', 'enterprise'].includes(plan) && (
         <FloatingCart 
           restaurantId={restaurant.id}
           menuId={menu.id}
@@ -154,7 +176,7 @@ export default async function SubdomainMenuPage(
           taxRate={menu.tax_rate || 0}
           serviceCharge={menu.service_charge || 0}
           serviceChargeType={menu.service_charge_type || "percentage"}
-          stripeAccountId={restaurant.plan?.toLowerCase() === 'enterprise' ? restaurant.stripe_account_id : null}
+          stripeAccountId={plan === 'enterprise' ? restaurant.stripe_account_id : null}
           locationLabel={menu.location_label}
         />
       )}

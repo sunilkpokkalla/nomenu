@@ -26,3 +26,7 @@ WHERE slug IS NULL;
 UPDATE public.restaurants
 SET slug = lower(regexp_replace(name, '\s+', '-', 'g'))
 WHERE slug IS NULL;
+
+-- 6. Add is_paid column to orders for Elite plan payment tracking
+ALTER TABLE public.orders
+ADD COLUMN IF NOT EXISTS is_paid BOOLEAN DEFAULT false;
