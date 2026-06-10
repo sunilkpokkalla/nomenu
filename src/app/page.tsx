@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { SocialProofMarquee } from "@/components/SocialProofMarquee";
 import { 
   ArrowRight, 
   QrCode, 
@@ -240,6 +241,8 @@ export default function LandingPage() {
 
         </div>
       </section>
+
+      <SocialProofMarquee />
 
       {/* ASYMMETRIC BENTO GRID FEATURES SECTION */}
       <section id="features" className="py-24 bg-slate-900 text-white relative overflow-hidden">

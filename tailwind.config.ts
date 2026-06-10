@@ -87,11 +87,16 @@ const config: Config = {
           '80%': { transform: 'translateY(-20px)', opacity: '1' },
           '100%': { transform: 'translateY(-40px)', opacity: '0' },
         },
+        "infinite-scroll": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         'float-slow': 'float 8s ease-in-out infinite',
         'float-medium': 'float 6s ease-in-out infinite',
         'float-fast': 'float 5s ease-in-out infinite',
+        "infinite-scroll": "infinite-scroll 40s linear infinite",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "sans-serif"],

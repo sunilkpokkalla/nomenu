@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { QrCode, Star } from "lucide-react";
+import { QrCode, Star, UtensilsCrossed, ChefHat, Wine } from "lucide-react";
 
 import { login, loginWithGoogle } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
@@ -58,16 +58,21 @@ export default async function LoginPage(
           </div>
 
           {/* Trusted By */}
-          <div className="pt-10 flex items-center justify-center gap-8 text-slate-400 font-medium text-sm uppercase tracking-wider w-full">
-             <span className="shrink-0">Trusted by</span>
-             <div className="flex items-center gap-8 opacity-60 grayscale transition-all hover:grayscale-0 hover:opacity-100 duration-500">
-               <Image src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg" alt="McDonalds" className="h-6 w-auto object-contain" width={100} height={24} />
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <Image src="https://upload.wikimedia.org/wikipedia/en/d/d3/Starbucks_Corporation_Logo_2011.svg" alt="Starbucks" className="h-8 w-auto object-contain" width={100} height={32} />
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <Image src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Subway_2016_logo.svg" alt="Subway" className="h-4 w-auto object-contain" width={100} height={16} />
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <Image src="https://upload.wikimedia.org/wikipedia/commons/7/74/Dominos_pizza_logo.svg" alt="Dominos" className="h-7 w-auto object-contain" width={100} height={28} />
+          <div className="pt-10 flex flex-col items-center justify-center gap-5 w-full">
+             <span className="text-slate-400 font-bold text-xs uppercase tracking-widest shrink-0">Trusted by innovative restaurants</span>
+             <div className="flex flex-wrap items-center justify-center gap-8 opacity-60 transition-all hover:opacity-100 duration-500">
+                <div className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors">
+                  <UtensilsCrossed className="w-5 h-5" strokeWidth={1.5} />
+                  <span className="text-sm font-bold tracking-tight">The Oak Room</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors">
+                  <ChefHat className="w-5 h-5" strokeWidth={1.5} />
+                  <span className="text-sm font-bold tracking-tight">Lumière</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors">
+                  <Wine className="w-5 h-5" strokeWidth={1.5} />
+                  <span className="text-sm font-bold tracking-tight">Symphony Kitchen</span>
+                </div>
              </div>
           </div>
         </div>
