@@ -1,14 +1,36 @@
 import { NextResponse } from "next/server";
+import { type EmailOtpType } from "@supabase/supabase-js";
 
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
+  const token_hash = requestUrl.searchParams.get("token_hash");
+  const type = requestUrl.searchParams.get("type");
   const next = requestUrl.searchParams.get("next") ?? "/dashboard";
 
+  const supabase = await createClient();
+
+  if (token_hash && type) {
+    const { error } = await supabase.auth.verifyOtp({
+      type: type as EmailOtpType,
+      token_hash,
+    });
+    if (!error) {
+      const redirectUrl = new URL(next, request.url);
+      return NextResponse.redirect(redirectUrl);
+    } else {
+      console.error("Auth callback verifyOtp error:", error.message);
+      let errorMessage = error.message;
+      if (errorMessage.includes("expired") || errorMessage.includes("invalid")) {
+        errorMessage = "Verification link expired or invalid. Please request a new one.";
+      }
+      return NextResponse.redirect(new URL(`/login?message=${encodeURIComponent(errorMessage)}`, request.url));
+    }
+  }
+
   if (code) {
-    const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       const redirectUrl = new URL(next, request.url);
