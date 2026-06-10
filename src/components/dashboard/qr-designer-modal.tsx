@@ -163,18 +163,24 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
 
       {isOpen && mounted && createPortal(
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-[2rem] shadow-2xl shadow-indigo-900/20 max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in-95 duration-200">
             
             {/* LEFT SIDE: PREVIEW CONTAINER */}
-            <div className="flex-1 bg-slate-50 p-6 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-200/80 overflow-y-auto min-h-[460px] md:min-h-0 relative">
-              <div className="mb-4 text-center absolute top-4">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Live Print Card Preview</span>
+            <div className="flex-1 bg-gradient-to-br from-slate-100 via-indigo-50/60 to-purple-50/40 p-6 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-200/50 overflow-y-auto min-h-[460px] md:min-h-0 relative">
+              <div className="mb-4 text-center absolute top-6">
+                <span className="text-[11px] uppercase font-black tracking-[0.2em] text-indigo-400 drop-shadow-sm flex items-center gap-1.5 justify-center">
+                  <Sparkles className="w-3.5 h-3.5" /> Live Print Card Preview
+                </span>
               </div>
               
               {/* Scaled wrapper for preview so it fits nicely on smaller screens */}
-              <div className="transform scale-[0.6] sm:scale-[0.7] md:scale-[0.8] lg:scale-[0.9] origin-center mt-8">
+              <div className="transform scale-[0.6] sm:scale-[0.7] md:scale-[0.8] lg:scale-[0.9] origin-center mt-8 relative">
+                
+                {/* Floating Glow behind card */}
+                <div className="absolute inset-0 bg-indigo-500/20 blur-[80px] rounded-full scale-90 translate-y-4 pointer-events-none" />
+                
                 {/* We render the template directly inside a ref for html-to-image */}
-                <div ref={printRef}>
+                <div ref={printRef} className="relative z-10 shadow-2xl shadow-slate-900/10 rounded-2xl overflow-hidden ring-1 ring-black/5">
                   <SelectedTemplate
                     brandName={brandName}
                     headline={headline}
@@ -191,23 +197,23 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
             </div>
 
             {/* RIGHT SIDE: CUSTOMIZER PANEL */}
-            <div className="w-full md:w-[450px] p-6 flex flex-col justify-between overflow-y-auto max-h-[50vh] md:max-h-none">
-              <div className="space-y-6">
+            <div className="w-full md:w-[450px] p-6 lg:p-8 flex flex-col justify-between overflow-y-auto max-h-[50vh] md:max-h-none bg-white">
+              <div className="space-y-7">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-bold text-slate-950 flex items-center gap-1.5">
-                    <Palette className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl font-black text-slate-950 flex items-center gap-2 tracking-tight">
+                    <Palette className="h-5 w-5 text-indigo-600" />
                     Customize QR Card
                   </h2>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-600 rounded-full" onClick={() => setIsOpen(false)}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors" onClick={() => setIsOpen(false)}>
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
 
-                <hr />
+                <hr className="border-slate-100" />
 
                 {/* TEMPLATE PICKER */}
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Card Template Style (10 Designs)</Label>
+                <div className="space-y-2.5">
+                  <Label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.15em]">Card Template Style</Label>
                   <div className="relative">
                     <select
                       value={template}
@@ -220,34 +226,37 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                           setTemplate(selectedId);
                         }
                       }}
-                      className="w-full h-11 px-4 py-2 text-sm font-semibold rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer shadow-sm hover:border-slate-300 transition-colors"
+                      className="w-full h-12 px-4 py-2 text-sm font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 appearance-none cursor-pointer shadow-sm hover:border-slate-300 transition-all"
                     >
                       {templateCategories.map((category) => (
-                        <optgroup key={category.id} label={category.name}>
+                        <optgroup key={category.id} label={category.name} className="font-bold text-slate-500">
                           {category.templates.map((t: {id: string; name: string}) => {
                             const isFreePlan = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
                             const isLocked = isFreePlan && t.id !== "classic";
                             return (
-                              <option 
-                                key={t.id} 
-                                value={t.id} 
-                                disabled={isLocked}
-                              >
-                                {t.name} {isLocked ? "(PRO)" : ""}
-                              </option>
+                                <option 
+                                  key={t.id} 
+                                  value={t.id} 
+                                  disabled={isLocked}
+                                  className="font-medium text-slate-900"
+                                >
+                                  {t.name} {isLocked ? " 🔒 (PREMIUM)" : ""}
+                                </option>
                             );
                           })}
                         </optgroup>
                       ))}
                     </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className="h-4 w-4" strokeWidth={3} />
                     </div>
                   </div>
                   {(!restaurant.plan || restaurant.plan.toLowerCase() === "free") && (
-                    <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-md">
-                      <p className="text-[10px] text-amber-800 font-medium text-center">
-                        Upgrade to Growth to unlock premium card designs.
+                    <div className="mt-2 p-3 bg-slate-950 rounded-xl flex items-start gap-2 shadow-lg shadow-slate-900/10">
+                      <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <p className="text-[10px] text-slate-300 font-medium leading-relaxed">
+                        <strong className="text-white block mb-0.5">Unlock Premium Designs</strong>
+                        Upgrade your plan to access 10+ premium layout designs and color themes.
                       </p>
                     </div>
                   )}
@@ -256,63 +265,81 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
 
 
                 {/* TEXT FIELDS */}
-                <div className="space-y-3">
-                  <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Card Texts</Label>
-                  <div className="space-y-2">
-                    <div className="space-y-1">
-                      <Label htmlFor="brandName" className="text-[10px] text-slate-400">Brand / Restaurant Name</Label>
-                      <Input id="brandName" size={32} value={brandName} onChange={(e) => setBrandName(e.target.value)} className="h-8 text-xs font-semibold" />
+                <div className="space-y-3.5">
+                  <Label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.15em]">Card Typography</Label>
+                  <div className="space-y-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="brandName" className="text-[10px] font-bold text-slate-500">Brand / Restaurant Name</Label>
+                      <Input id="brandName" size={32} value={brandName} onChange={(e) => setBrandName(e.target.value)} className="h-10 text-xs font-bold rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm" />
                     </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="headline" className="text-[10px] text-slate-400">Main Call-To-Action</Label>
-                      <Input id="headline" value={headline} onChange={(e) => setHeadline(e.target.value)} className="h-8 text-xs font-semibold" />
+                    <div className="space-y-1.5">
+                      <Label htmlFor="headline" className="text-[10px] font-bold text-slate-500">Main Call-To-Action</Label>
+                      <Input id="headline" value={headline} onChange={(e) => setHeadline(e.target.value)} className="h-10 text-xs font-bold rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm" />
                     </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="subtext" className="text-[10px] text-slate-400">Table Number / Label</Label>
-                      <Input id="subtext" value={subtext} onChange={(e) => setSubtext(e.target.value)} className="h-8 text-xs font-semibold" />
+                    <div className="space-y-1.5">
+                      <Label htmlFor="subtext" className="text-[10px] font-bold text-slate-500">Table Number / Label</Label>
+                      <Input id="subtext" value={subtext} onChange={(e) => setSubtext(e.target.value)} className="h-10 text-xs font-bold rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm" />
                     </div>
                   </div>
                 </div>
 
                 {/* TOGGLES */}
-                <div className="space-y-2 pt-2 border-t">
-                  <Label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Visibility Toggles</Label>
+                <div className="space-y-3 pt-3 border-t border-slate-100">
+                  <Label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.15em]">Visibility & Branding</Label>
                   
                   {restaurant.wifi_password && (
-                    <div className="flex items-center justify-between text-xs py-1 hover:bg-slate-50 px-2 rounded-md transition-colors">
-                      <label htmlFor="showWifi" className="font-semibold text-slate-700 flex items-center gap-1.5 cursor-pointer">
-                        <Wifi className="h-3.5 w-3.5 text-slate-400" /> Print Guest WiFi Details
+                    <div className="flex items-center justify-between text-xs py-1.5 px-3 hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => setShowWifi(!showWifi)}>
+                      <label htmlFor="showWifi" className="font-bold text-slate-700 flex items-center gap-2 cursor-pointer">
+                        <Wifi className="h-4 w-4 text-indigo-500" /> Print Guest WiFi Details
                       </label>
                       <input
                         type="checkbox"
                         id="showWifi"
                         checked={showWifi}
                         onChange={(e) => setShowWifi(e.target.checked)}
-                        className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
+                        className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600 cursor-pointer pointer-events-none"
                       />
                     </div>
                   )}
 
-                  <div className="space-y-1.5 pt-2">
-                    <Label className="font-semibold text-slate-700 flex items-center gap-1.5">
-                      <ImageIcon className="h-3.5 w-3.5 text-slate-400" /> Card Logo
+                  <div className="space-y-2 pt-2">
+                    <Label className="font-bold text-slate-700 flex items-center gap-2 px-1">
+                      <ImageIcon className="h-4 w-4 text-indigo-500" /> Card Logo
                     </Label>
-                    <ImageUploader 
-                      value={customLogoUrl} 
-                      onChange={setCustomLogoUrl} 
-                    />
+                    {!restaurant.plan || restaurant.plan.toLowerCase() === "free" ? (
+                      <div className="p-4 bg-slate-950 rounded-xl flex items-center gap-3 shadow-lg shadow-slate-900/10">
+                        <div className="h-8 w-8 rounded-full bg-indigo-500/20 flex items-center justify-center shrink-0">
+                          <ImageIcon className="h-4 w-4 text-indigo-400" />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-[11px] text-white font-bold mb-0.5">
+                            Custom Logo is Premium
+                          </p>
+                          <p className="text-[10px] text-slate-400 font-medium">
+                            Upgrade to upload your restaurant logo.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                        <ImageUploader 
+                          value={customLogoUrl} 
+                          onChange={setCustomLogoUrl} 
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* ACTION BUTTONS */}
-              <div className="grid grid-cols-2 gap-2 mt-6 pt-4 border-t shrink-0">
-                <Button variant="outline" size="sm" className="h-10 font-bold" onClick={handlePrint} disabled={isDownloading}>
-                  <Printer className="mr-1.5 h-4 w-4" />
+              <div className="grid grid-cols-2 gap-3 mt-8 pt-6 border-t border-slate-100 shrink-0">
+                <Button variant="outline" className="h-11 font-extrabold text-xs tracking-wide rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all" onClick={handlePrint} disabled={isDownloading}>
+                  <Printer className="mr-2 h-4 w-4" strokeWidth={2.5} />
                   Print Card
                 </Button>
-                <Button size="sm" className="h-10 font-bold" onClick={handleDownloadPng} disabled={isDownloading}>
-                  <Download className="mr-1.5 h-4 w-4" />
+                <Button className="h-11 font-extrabold text-xs tracking-wide rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all" onClick={handleDownloadPng} disabled={isDownloading}>
+                  <Download className="mr-2 h-4 w-4" strokeWidth={2.5} />
                   {isDownloading ? "Generating..." : "Download PNG"}
                 </Button>
               </div>
