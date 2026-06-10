@@ -5557,4 +5557,750 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     suggestedCookingTime: 15,
     imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1121",
   },
+  {
+    name: "Edamame",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Steamed soybeans lightly salted with sea salt.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Edamame%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isVegetarian: true,
+    isVegan: true,
+    isGlutenFree: true,
+  },
+  {
+    name: "Harumaki",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Crispy Japanese vegetable spring rolls.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Harumaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isVegetarian: true,
+    isVegan: true,
+  },
+  {
+    name: "Crab Puff",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Crispy wontons stuffed with cream cheese and crab meat.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Crab%20Puff%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shumai",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Steamed or fried shrimp dumplings.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shumai%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Gyoza",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Pan-fried pork and vegetable dumplings.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Gyoza%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Yakitori",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Grilled chicken skewers glazed with a sweet and savory teriyaki sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Yakitori%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Takoyaki",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Fried octopus balls topped with mayo, takoyaki sauce, and bonito flakes.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Takoyaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Sesame Seed Ball",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Crispy, chewy pastry balls filled with sweet red bean paste and coated in sesame seeds.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Sesame%20Seed%20Ball%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isVegetarian: true,
+  },
+  {
+    name: "Chicken & Veg Tempura",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Lightly battered and crispy fried chicken and assorted vegetables.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Chicken%20%26%20Veg%20Tempura%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shrimp & Veg Tempura",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Lightly battered and crispy fried shrimp and assorted vegetables.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shrimp%20%26%20Veg%20Tempura%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Crunchy Spider",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Deep-fried crispy soft shell crab with eel sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Crunchy%20Spider%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Fried Calamari",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Crispy battered calamari rings served with a dipping sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Fried%20Calamari%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Rock Shrimp",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Lightly battered, deep-fried shrimp tossed in a creamy, spicy mayo.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Rock%20Shrimp%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Tuna Tataki",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Seared tuna thinly sliced and served with ponzu sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Tuna%20Tataki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Pepper Tuna",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Seared tuna with a black pepper crust, thinly sliced.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Pepper%20Tuna%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Lemon Pepper Tuna",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Seared tuna with a lemon pepper crust, thinly sliced.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Lemon%20Pepper%20Tuna%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Yellowtail Jalapenos",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Thinly sliced yellowtail topped with fresh jalapeño and ponzu sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Yellowtail%20Jalapenos%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isSpicy: true,
+  },
+  {
+    name: "Mango Salmon",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Fresh salmon wrapped around mango, finished with a sweet citrus sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Mango%20Salmon%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Salmon Tartar",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Diced fresh salmon mixed with delicate seasonings.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Salmon%20Tartar%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Tuna Tartar",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Diced fresh tuna mixed with delicate seasonings.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Tuna%20Tartar%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Ahi Tower",
+    category: "Appetizers",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Layers of spicy tuna, crab salad, avocado, and rice, shaped into a tower.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Ahi%20Tower%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Chicken Teriyaki",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Grilled chicken topped with a sweet and savory teriyaki glaze, served with vegetables.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Chicken%20Teriyaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Steak Teriyaki",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Grilled steak topped with a sweet and savory teriyaki glaze, served with vegetables.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Steak%20Teriyaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shrimp Teriyaki",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Grilled shrimp topped with a sweet and savory teriyaki glaze, served with vegetables.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shrimp%20Teriyaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Salmon Teriyaki",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Grilled salmon topped with a sweet and savory teriyaki glaze, served with vegetables.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Salmon%20Teriyaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Seafood Teriyaki",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Assorted grilled seafood topped with a sweet and savory teriyaki glaze, served with vegetables.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Seafood%20Teriyaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Vegetable Teriyaki",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Assorted grilled vegetables topped with a sweet and savory teriyaki glaze.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Vegetable%20Teriyaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isVegetarian: true,
+    isVegan: true,
+  },
+  {
+    name: "Red Snapper Teriyaki",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Grilled red snapper topped with a sweet and savory teriyaki glaze, served with vegetables.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Red%20Snapper%20Teriyaki%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Chicken Katsu",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Panko-breaded and deep-fried chicken cutlet served with katsu sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Chicken%20Katsu%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Vegetable Tempura",
+    category: "Main Courses",
+    cuisines: ["japanese"],
+    description:
+      "Assorted vegetables lightly battered and deep-fried to a delicate crisp.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Vegetable%20Tempura%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isVegetarian: true,
+  },
+  {
+    name: "Hibachi Vegetable",
+    category: "Main Courses",
+    cuisines: ["japanese","hibachi"],
+    description:
+      "Fresh vegetables grilled on a teppanyaki iron griddle with soy sauce and butter.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Hibachi%20Vegetable%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isVegetarian: true,
+  },
+  {
+    name: "Hibachi Chicken",
+    category: "Main Courses",
+    cuisines: ["japanese","hibachi"],
+    description:
+      "Tender chicken grilled on a teppanyaki iron griddle with soy sauce and butter.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Hibachi%20Chicken%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Hibachi Salmon",
+    category: "Main Courses",
+    cuisines: ["japanese","hibachi"],
+    description:
+      "Fresh salmon grilled on a teppanyaki iron griddle with soy sauce and butter.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Hibachi%20Salmon%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Hibachi Shrimp",
+    category: "Main Courses",
+    cuisines: ["japanese","hibachi"],
+    description:
+      "Juicy shrimp grilled on a teppanyaki iron griddle with soy sauce and butter.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Hibachi%20Shrimp%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Hibachi Steak",
+    category: "Main Courses",
+    cuisines: ["japanese","hibachi"],
+    description:
+      "Juicy steak grilled on a teppanyaki iron griddle with soy sauce and butter.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Hibachi%20Steak%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Hibachi Scallop",
+    category: "Main Courses",
+    cuisines: ["japanese","hibachi"],
+    description:
+      "Tender scallops grilled on a teppanyaki iron griddle with soy sauce and butter.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Hibachi%20Scallop%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Hibachi Lobster Tail",
+    category: "Main Courses",
+    cuisines: ["japanese","hibachi"],
+    description:
+      "Premium lobster tail grilled on a teppanyaki iron griddle with soy sauce and butter.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Hibachi%20Lobster%20Tail%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Rainbow Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "California roll topped with assorted raw fish and avocado.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Rainbow%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Dragon Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Eel and cucumber roll topped with thinly sliced avocado and eel sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Dragon%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Spider Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Fried soft shell crab, avocado, cucumber, and eel sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Spider%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Godzilla Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Deep-fried roll with spicy tuna, avocado, and cream cheese.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Godzilla%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Volcano Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "California roll topped with baked spicy seafood mix.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Volcano%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shaggy Dog Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Shrimp tempura and avocado topped with shredded crab and spicy mayo.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shaggy%20Dog%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Super Crunchy Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Crispy shrimp tempura roll topped with tempura flakes and eel sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Super%20Crunchy%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Cowboy Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Steak and avocado roll topped with eel sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Cowboy%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Rock And Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Shrimp tempura, eel, avocado, and cucumber wrapped in soy paper.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Rock%20And%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Fire Island Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Spicy tuna and jalapeño topped with spicy crab.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Fire%20Island%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isSpicy: true,
+  },
+  {
+    name: "Caterpillar Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Eel and cucumber roll topped with layers of avocado, resembling a caterpillar.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Caterpillar%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Angry Dragon Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Shrimp tempura, spicy tuna, and papaya topped with spicy crab and rutabaga wrapper.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Angry%20Dragon%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Firecracker Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Spicy tuna roll topped with spicy yellowtail and jalapeño.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Firecracker%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isSpicy: true,
+  },
+  {
+    name: "Hawaii Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Shrimp tempura and mango topped with spicy tuna and coconut flakes.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Hawaii%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Monster Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Massive tempura roll filled with mixed fish, cream cheese, and avocado.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Monster%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "TNT Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Spicy tuna roll topped with seared tuna and spicy mayo.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20TNT%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isSpicy: true,
+  },
+  {
+    name: "Alaska Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Fresh salmon, avocado, and cucumber roll.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Alaska%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Salmon Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Classic sushi roll filled with fresh raw salmon.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Salmon%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Salmon Avocado Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Sushi roll filled with fresh salmon and creamy avocado.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Salmon%20Avocado%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Spicy Salmon Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Sushi roll filled with chopped salmon mixed with spicy mayo.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Spicy%20Salmon%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isSpicy: true,
+  },
+  {
+    name: "Tuna Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Classic sushi roll filled with fresh raw tuna.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Tuna%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Tuna Avocado Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Sushi roll filled with fresh tuna and creamy avocado.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Tuna%20Avocado%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Spicy Tuna Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Sushi roll filled with chopped tuna mixed with spicy mayo.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Spicy%20Tuna%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isSpicy: true,
+  },
+  {
+    name: "Yellowtail Scallion Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Classic sushi roll filled with fresh yellowtail and scallions.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Yellowtail%20Scallion%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Spicy Yellowtail Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Sushi roll filled with chopped yellowtail mixed with spicy mayo.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Spicy%20Yellowtail%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isSpicy: true,
+  },
+  {
+    name: "Philadelphia Roll",
+    category: "Sushi Rolls",
+    cuisines: ["japanese","sushi"],
+    description:
+      "Smoked salmon, cream cheese, and cucumber roll.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Philadelphia%20Roll%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Enchiladas A la Gloria",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Signature enchiladas filled with a blend of cheeses and topped with special sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Enchiladas%20A%20la%20Gloria%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Sour Cream Chicken Enchiladas",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Shredded chicken enchiladas smothered in a rich and tangy sour cream sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Sour%20Cream%20Chicken%20Enchiladas%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Enchiladas Verdes",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Enchiladas topped with a tangy and slightly spicy green tomatillo sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Enchiladas%20Verdes%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Beef Enchiladas",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Savory ground beef enchiladas topped with traditional red chili sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Beef%20Enchiladas%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shrimp Enchiladas",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Enchiladas filled with seasoned shrimp, topped with a creamy sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shrimp%20Enchiladas%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Spinach & Chicken Quesadilla",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Grilled flour tortilla stuffed with melted cheese, fresh spinach, and chicken.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Spinach%20%26%20Chicken%20Quesadilla%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shrimp Quesadilla",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Grilled flour tortilla stuffed with melted cheese and seasoned shrimp.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shrimp%20Quesadilla%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Skirt Steak Fajita Quesadilla",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Grilled flour tortilla stuffed with melted cheese and marinated skirt steak fajitas.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Skirt%20Steak%20Fajita%20Quesadilla%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Crispy Taco Dinner",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Three classic crispy shell tacos filled with ground beef or chicken, lettuce, tomato, and cheese.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Crispy%20Taco%20Dinner%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Chicken Flautas",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Corn tortillas rolled with chicken and deep-fried until golden crisp, served with guacamole and sour cream.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Chicken%20Flautas%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Combination Plate",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "A generous platter featuring an enchilada, a taco, and a tamale, served with rice and beans.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Combination%20Plate%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shredded Chicken Burrito",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Large flour tortilla wrapped around shredded chicken, beans, cheese, and rice.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shredded%20Chicken%20Burrito%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Ground Beef Burrito",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Large flour tortilla wrapped around seasoned ground beef, beans, cheese, and rice.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Ground%20Beef%20Burrito%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Chicken Fajita Burrito",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Large flour tortilla wrapped around grilled chicken fajitas, beans, cheese, and rice.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Chicken%20Fajita%20Burrito%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Beef Fajita Burrito",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Large flour tortilla wrapped around grilled beef fajitas, beans, cheese, and rice.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Beef%20Fajita%20Burrito%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Ground Beef Chile Relleno",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Poblano pepper stuffed with ground beef and cheese, battered and fried.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Ground%20Beef%20Chile%20Relleno%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Beef Fajita Chile Relleno",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Poblano pepper stuffed with beef fajitas and cheese, battered and fried.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Beef%20Fajita%20Chile%20Relleno%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Chicken Fajita Chile Relleno",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Poblano pepper stuffed with chicken fajitas and cheese, battered and fried.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Chicken%20Fajita%20Chile%20Relleno%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shrimp Chile Relleno",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Poblano pepper stuffed with shrimp and cheese, battered and fried.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shrimp%20Chile%20Relleno%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Chicken Fajitas",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Sizzling marinated chicken strips grilled with onions and bell peppers, served with tortillas.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Chicken%20Fajitas%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Skirt Steak Fajitas",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Sizzling marinated skirt steak grilled with onions and bell peppers, served with tortillas.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Skirt%20Steak%20Fajitas%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Veggie Fajitas",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Sizzling assorted grilled vegetables served with tortillas.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Veggie%20Fajitas%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+    isVegetarian: true,
+  },
+  {
+    name: "Shrimp Fajitas",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Sizzling marinated shrimp grilled with onions and bell peppers, served with tortillas.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shrimp%20Fajitas%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Tacos Al Carbón",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Grilled marinated beef or chicken folded in warm flour tortillas.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Tacos%20Al%20Carb%C3%B3n%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Brisket Tacos",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Slow-roasted, tender beef brisket served in tortillas with onions and cilantro.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Brisket%20Tacos%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Tacos de Pollo",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Classic chicken tacos garnished with fresh cilantro and diced onions.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Tacos%20de%20Pollo%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Red Snapper Tacos",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Grilled or fried red snapper in tortillas, topped with slaw and a zesty sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Red%20Snapper%20Tacos%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
+  {
+    name: "Shrimp Tacos",
+    category: "Main Courses",
+    cuisines: ["tex-mex","mexican"],
+    description:
+      "Succulent shrimp served in tortillas, topped with fresh slaw and a creamy sauce.",
+    imageUrl: "https://image.pollinations.ai/prompt/High%20quality%20food%20photography%20of%20Shrimp%20Tacos%2C%20beautiful%20plating%2C%20dark%20background%2C%20cinematic%20lighting%2C%20hyper%20realistic?width=800&height=600&nologo=true",
+  },
 ];
