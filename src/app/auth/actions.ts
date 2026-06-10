@@ -43,8 +43,20 @@ export async function signup(formData: FormData) {
   const password = getString(formData, "password");
   const restaurantName = getString(formData, "restaurantName");
 
-  const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const cleanAppUrl = rawAppUrl.endsWith("/") ? rawAppUrl.slice(0, -1) : rawAppUrl;
+  const headersList = await headers();
+  const origin = headersList.get("origin");
+  const host = headersList.get("host");
+  const protocol = headersList.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
+  
+  let cleanAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  
+  if (origin) {
+    cleanAppUrl = origin;
+  } else if (host) {
+    cleanAppUrl = `${protocol}://${host}`;
+  } else if (cleanAppUrl.endsWith("/")) {
+    cleanAppUrl = cleanAppUrl.slice(0, -1);
+  }
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -142,8 +154,20 @@ export async function forgotPassword(formData: FormData) {
     redirect("/forgot-password?message=Please%20provide%20a%20valid%20email%20address");
   }
 
-  const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const cleanAppUrl = rawAppUrl.endsWith("/") ? rawAppUrl.slice(0, -1) : rawAppUrl;
+  const headersList = await headers();
+  const origin = headersList.get("origin");
+  const host = headersList.get("host");
+  const protocol = headersList.get("x-forwarded-proto") ?? (host?.includes("localhost") ? "http" : "https");
+  
+  let cleanAppUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  
+  if (origin) {
+    cleanAppUrl = origin;
+  } else if (host) {
+    cleanAppUrl = `${protocol}://${host}`;
+  } else if (cleanAppUrl.endsWith("/")) {
+    cleanAppUrl = cleanAppUrl.slice(0, -1);
+  }
   const redirectTo = `${cleanAppUrl}/auth/callback?next=/reset-password`;
 
   const supabase = await createClient();
