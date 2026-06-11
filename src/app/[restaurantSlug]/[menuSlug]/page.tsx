@@ -190,20 +190,22 @@ export default async function StorefrontMenuPage(
         serviceChargeType={menu.service_charge_type || "percentage"}
       />
       
-      {/* Viral Marketing Badge */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[40]">
-        <a 
-          href="/" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="flex items-center gap-2 bg-[#1A1A1A]/90 backdrop-blur-md px-4 py-2 rounded-full shadow-2xl border border-white/10 hover:bg-black transition-colors group"
-        >
-          <QrCode className="w-3 h-3 text-white/70 group-hover:text-white transition-colors" />
-          <span className="text-white/90 group-hover:text-white text-[10px] font-bold tracking-widest uppercase transition-colors">
-            Powered by NoMenu
-          </span>
-        </a>
-      </div>
+      {/* Viral Marketing Badge - Only for Free Plan */}
+      {(!restaurant.plan || restaurant.plan.toLowerCase() === 'free') && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[40]">
+          <a 
+            href="/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="flex items-center gap-2 bg-[#1A1A1A]/90 backdrop-blur-md px-4 py-2 rounded-full shadow-2xl border border-white/10 hover:bg-black transition-colors group"
+          >
+            <QrCode className="w-3 h-3 text-white/70 group-hover:text-white transition-colors" />
+            <span className="text-white/90 group-hover:text-white text-[10px] font-bold tracking-widest uppercase transition-colors">
+              Powered by NoMenu
+            </span>
+          </a>
+        </div>
+      )}
     </CartProvider>
   );
 }
