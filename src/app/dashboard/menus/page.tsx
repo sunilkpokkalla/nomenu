@@ -1,22 +1,15 @@
-import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils } from "lucide-react";
+import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils, BedDouble, Coffee, Wine, Sun, Car, MapPin, Building, Armchair } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { createMenu, deleteMenu, toggleMenuStatus } from "@/app/dashboard/actions";
-import { MenuDescriptionField } from "@/components/dashboard/menu-description-field";
+import { createMenu, deleteMenu, toggleMenuStatus, editMenu } from "@/app/dashboard/actions";
+import { EditMenuModal } from "@/components/dashboard/edit-menu-modal";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { CreateMenuSheet } from "@/components/dashboard/create-menu-sheet";
 import { createClient } from "@/lib/supabase/server";
 import {
   GLOBAL_MENU_TYPES,
@@ -29,6 +22,19 @@ const getGridClass = (count: number) => {
   if (count <= 4) return "grid-cols-1 md:grid-cols-2";
   if (count <= 8) return "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3";
   return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4";
+};
+
+const getLocationIcon = (format: string) => {
+  const normalized = format.toLowerCase();
+  if (normalized.includes("room") || normalized.includes("hotel") || normalized.includes("suite")) return BedDouble;
+  if (normalized.includes("table") || normalized.includes("dining") || normalized.includes("restaurant")) return Utensils;
+  if (normalized.includes("bar") || normalized.includes("drink") || normalized.includes("wine")) return Wine;
+  if (normalized.includes("cafe") || normalized.includes("coffee") || normalized.includes("lounge")) return Coffee;
+  if (normalized.includes("pool") || normalized.includes("patio") || normalized.includes("outdoor") || normalized.includes("beach") || normalized.includes("cabana")) return Sun;
+  if (normalized.includes("lobby") || normalized.includes("building")) return Building;
+  if (normalized.includes("drive") || normalized.includes("car") || normalized.includes("curb")) return Car;
+  if (normalized.includes("seating") || normalized.includes("waiting") || normalized.includes("chair")) return Armchair;
+  return MapPin;
 };
 
 export default async function MenusPage(
@@ -83,245 +89,153 @@ export default async function MenusPage(
             Create different menus for lunch, dinner, drinks, or seasonal specials.
           </p>
         </div>
+        <div className="shrink-0">
+          <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} />
+        </div>
       </div>
 
-      {searchParams.message ? (
+      {searchParams.message && (
         <div className="mb-6 rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {searchParams.message}
         </div>
-      ) : null}
+      )}
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_420px]">
-        {/* Menus List */}
-        <div className="space-y-6">
-          {menusList.length > 0 ? (
-            <div className="space-y-10">
-              {Object.entries(
-                menusList.reduce((acc, menu) => {
-                  const format = menu.location_label || "Unassigned Location";
-                  if (!acc[format]) acc[format] = [];
-                  acc[format].push(menu);
-                  return acc;
-                }, {} as Record<string, typeof menusList>)
-              ).map(([format, menusInFormat]) => (
-                <div key={format} className="space-y-4">
-                  <h3 className="text-xl font-semibold text-slate-800 border-b pb-2 flex items-center gap-2 capitalize">
-                    <MenuIcon className="w-5 h-5 text-slate-400" />
-                    {format.replace(/_/g, " ")} Menus
-                  </h3>
-                  <div className={`grid gap-6 ${getGridClass(menusInFormat.length)}`}>
-                    {menusInFormat.map((menu) => {
-                const toggleAction = toggleMenuStatus.bind(null, menu.id, menu.is_active);
+      {/* Menus List */}
+      <div className="space-y-12">
+        {menusList.length > 0 ? (
+          Object.entries(
+            menusList.reduce((acc, menu) => {
+              const format = menu.location_label || "Unassigned Location";
+              if (!acc[format]) acc[format] = [];
+              acc[format].push(menu);
+              return acc;
+            }, {} as Record<string, typeof menusList>)
+          ).map(([format, menusInFormat]) => {
+            const FormatIcon = getLocationIcon(format);
+            return (
+            <div key={format} className="space-y-4">
+              <h3 className="text-xl font-medium tracking-tight text-slate-900 flex items-center gap-3">
+                <div className="bg-slate-100 rounded-full p-2">
+                  <FormatIcon className="w-4 h-4 text-slate-600" />
+                </div>
+                {format.replace(/_/g, " ")} Menus
+                <div className="h-px bg-slate-200 flex-1 ml-4" />
+              </h3>
+              
+              <div className="grid gap-3">
+                {menusInFormat.map((menu) => {
+                  const toggleAction = toggleMenuStatus.bind(null, menu.id, menu.is_active);
 
-                return (
-                  <Card key={menu.id} className="relative flex flex-col overflow-hidden">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                          <MenuIcon className="h-5 w-5" />
+                  return (
+                    <div key={menu.id} className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                      {/* Left Side: Info */}
+                      <div className="flex items-start gap-4 flex-1">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-slate-400">
+                          <FormatIcon className="h-6 w-6" />
                         </div>
-                        <form action={toggleAction}>
-                          <Button
-                            type="submit"
-                            variant={menu.is_active ? "default" : "outline"}
-                            size="sm"
-                            className="h-7 text-xs font-semibold"
-                          >
-                            {menu.is_active ? "Active" : "Inactive"}
-                          </Button>
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-lg font-bold text-slate-900">{menu.name}</h4>
+                            {menu.menu_type && (
+                              <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-semibold text-slate-600">
+                                {menu.menu_type}
+                              </Badge>
+                            )}
+                            {!menu.is_active && (
+                              <Badge variant="secondary" className="bg-slate-100 text-slate-500 hover:bg-slate-100 border-transparent text-[10px] uppercase tracking-wider">
+                                Draft
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-slate-500 line-clamp-1 mt-1">
+                            {menu.description || "No description provided."}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Right Side: Actions */}
+                      <div className="flex items-center gap-3 sm:gap-6 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-slate-100 pt-3 sm:pt-0">
+                        {/* Status Toggle */}
+                        <form action={toggleAction} className="flex items-center gap-2" title={menu.is_active ? "Active" : "Inactive"}>
+                          <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 hidden sm:inline-block">
+                            {menu.is_active ? "Live" : "Draft"}
+                          </span>
+                          <Switch 
+                            checked={menu.is_active} 
+                            type="submit" 
+                            className="scale-90"
+                          />
                         </form>
-                      </div>
-                      <div className="flex flex-col gap-1 mt-4">
-                        <CardTitle className="text-xl flex flex-wrap items-center gap-2">
-                          {menu.name}
-                          {menu.menu_type && (
-                            <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-semibold text-slate-800 border border-slate-200 uppercase tracking-wider">
-                              {menu.menu_type}
-                            </span>
-                          )}
-                        </CardTitle>
-                      </div>
-                      <CardDescription className="line-clamp-2 min-h-[40px] mt-2">
-                        {menu.description || "No description provided."}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="mt-auto pt-0">
-                      <div className="grid grid-cols-3 gap-2 border-t pt-4">
-                        <Button variant="outline" size="sm" className="w-full px-2 text-xs" asChild>
-                          <Link href={`/menu/${menu.id}`} target="_blank">
-                            <Eye className="mr-1.5 h-3.5 w-3.5 shrink-0" />
-                            Preview
-                          </Link>
-                        </Button>
-                        <Button variant="outline" size="sm" className="w-full px-2 text-xs" asChild>
-                          <Link href={`/dashboard/items?menuId=${menu.id}&categoryId=all`}>
-                            <Utensils className="mr-1.5 h-3.5 w-3.5 shrink-0" />
-                            Items
-                          </Link>
-                        </Button>
-                        <Button variant="outline" size="sm" className="w-full px-2 text-xs" asChild>
-                          <Link href={`/dashboard/qrcodes?menuId=${menu.id}`}>
-                            <QrCode className="mr-1.5 h-3.5 w-3.5 shrink-0" />
-                            QR
-                          </Link>
-                        </Button>
-                      </div>
-                      <div className="mt-4 flex justify-end">
-                        <DeleteConfirmForm
-                          action={deleteMenu}
-                          confirmMessage="Are you sure you want to delete this menu? This will delete all its categories and items!"
-                          name="menuId"
-                          value={menu.id}
-                        >
-                          <Button
-                            type="submit"
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                          >
-                            <Trash2 className="mr-1.5 h-4 w-4" />
-                            Delete Menu
+
+                        <div className="h-8 w-px bg-slate-200 hidden sm:block" />
+
+                        {/* Button Links */}
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" className="h-9 px-3 bg-white" asChild>
+                            <Link href={`/dashboard/items?menuId=${menu.id}&categoryId=all`}>
+                              <Utensils className="mr-2 h-4 w-4 text-slate-400" />
+                              Manage Items
+                            </Link>
                           </Button>
-                        </DeleteConfirmForm>
+                          
+                          <Button variant="outline" size="sm" className="h-9 w-9 p-0 bg-white" title="Preview Menu" asChild>
+                            <Link href={`/menu/${menu.id}`} target="_blank">
+                              <Eye className="h-4 w-4 text-slate-400" />
+                            </Link>
+                          </Button>
+
+                          <Button variant="outline" size="sm" className="h-9 w-9 p-0 bg-white" title="QR Codes" asChild>
+                            <Link href={`/dashboard/qrcodes?menuId=${menu.id}`}>
+                              <QrCode className="h-4 w-4 text-slate-400" />
+                            </Link>
+                          </Button>
+                        </div>
+
+                        {/* Edit & Delete */}
+                        <div className="flex items-center gap-1 border-l border-slate-100 pl-3">
+                          <EditMenuModal 
+                            menu={menu} 
+                            cuisineType={restaurant.cuisine_type} 
+                            editAction={editMenu} 
+                          />
+                          <DeleteConfirmForm
+                            action={deleteMenu}
+                            confirmMessage="Delete this menu and ALL its items?"
+                            name="menuId"
+                            value={menu.id}
+                          >
+                            <Button
+                              type="submit"
+                              variant="ghost"
+                              size="sm"
+                              className="h-9 w-9 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </DeleteConfirmForm>
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-                  </div>
-                </div>
-              ))}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-white p-12 text-center shadow-sm">
-              <MenuIcon className="mx-auto h-12 w-12 text-slate-400" />
-              <h3 className="mt-4 text-lg font-semibold text-slate-900">No menus created yet</h3>
-              <p className="mt-2 text-sm text-slate-500 max-w-sm">
-                Get started by creating your first digital menu on the right. You can assign items to it later.
-              </p>
+            );
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 p-16 text-center">
+            <div className="bg-white p-4 rounded-full shadow-sm border border-slate-100 mb-4">
+              <MenuIcon className="h-8 w-8 text-slate-400" />
             </div>
-          )}
-        </div>
-
-        {/* Add Menu Form */}
-        <div>
-          <Card className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
-            <CardHeader>
-              <CardTitle>Create Menu</CardTitle>
-              <CardDescription>
-                Add a new digital menu to your restaurant dashboard.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form action={createMenu} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Menu Name</Label>
-                  <Input id="name" name="name" placeholder="e.g. Lunch Specials, Wine List" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="menuType">Menu Format / Type</Label>
-                  <select
-                    id="menuType"
-                    name="menuType"
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 h-10 cursor-pointer"
-                    required
-                  >
-                    <option value="">Select Format...</option>
-                    
-                    {chefRecommendations.length > 0 && (
-                      <optgroup label="👨‍🍳 Chef's Recommendations for your Cuisine">
-                        {chefRecommendations.map((c) => (
-                          <option key={`rec-${c.value}`} value={c.value}>
-                            {c.label}
-                          </option>
-                        ))}
-                      </optgroup>
-                    )}
-
-                    <optgroup label="🌍 Global Formats">
-                      {GLOBAL_MENU_TYPES.map((c) => (
-                        <option key={`global-${c.value}`} value={c.value}>
-                          {c.label}
-                        </option>
-                      ))}
-                    </optgroup>
-
-                    <optgroup label="🎌 Regional & Cultural Formats">
-                      {REGIONAL_MENU_TYPES.map((c) => (
-                        <option key={`regional-${c.value}`} value={c.value}>
-                          {c.label}
-                        </option>
-                      ))}
-                    </optgroup>
-
-                    <optgroup label="✨ Specialty Formats">
-                      {SPECIALTY_MENU_TYPES.map((c) => (
-                        <option key={`specialty-${c.value}`} value={c.value}>
-                          {c.label}
-                        </option>
-                      ))}
-                    </optgroup>
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="locationLabel">Guest Location Type</Label>
-                  <select
-                    id="locationLabel"
-                    name="locationLabel"
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 h-10 cursor-pointer"
-                  >
-                    <option value="Table">Table (Restaurant, Cafe, Bar)</option>
-                    <option value="Room">Room (In-Room Dining)</option>
-                    <option value="Cabana">Cabana (Poolside, Beach Club)</option>
-                    <option value="Sunbed">Sunbed (Resorts)</option>
-                    <option value="Seat">Seat (Theaters, Stadiums)</option>
-                    <option value="Lane">Lane (Bowling Alleys)</option>
-                  </select>
-                </div>
-                <MenuDescriptionField />
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="taxRate">Tax Rate (%)</Label>
-                    <Input id="taxRate" name="taxRate" type="number" step="0.01" min="0" placeholder="e.g. 8.5" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="serviceCharge">Service Fee</Label>
-                    <Input id="serviceCharge" name="serviceCharge" type="number" step="0.01" min="0" placeholder="e.g. 10" />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="serviceChargeType">Service Fee Type</Label>
-                  <select
-                    id="serviceChargeType"
-                    name="serviceChargeType"
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  >
-                    <option value="percentage">Percentage (%)</option>
-                    <option value="flat">Flat Amount ($)</option>
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="isActive">Status</Label>
-                  <select
-                    id="isActive"
-                    name="isActive"
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <option value="true">Active (Visible when scanned)</option>
-                    <option value="false">Inactive (Draft mode)</option>
-                  </select>
-                </div>
-                <Button type="submit" className="w-full">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Save Menu
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+            <h3 className="text-lg font-medium tracking-tight text-slate-900">No menus created yet</h3>
+            <p className="mt-2 text-sm text-slate-500 max-w-[260px]">
+              Get started by creating your first digital menu.
+            </p>
+            <div className="mt-6">
+              <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

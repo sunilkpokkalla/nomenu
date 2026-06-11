@@ -68,66 +68,71 @@ export function ManageLocationZonesModal({ restaurantId, initialZones }: ManageL
       }
     }}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <MapPin className="h-4 w-4" />
+        <Button variant="outline" size="sm" className="gap-2 rounded-full border-slate-200 bg-white/50 backdrop-blur-sm shadow-sm hover:bg-slate-50 transition-all font-medium text-slate-700">
+          <MapPin className="h-3.5 w-3.5 text-indigo-500" />
           Manage Zones
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Manage Location Zones</DialogTitle>
-          <DialogDescription>
-            Add or remove zones (e.g. Patio, Bar) to organize your QR codes cleanly without typos.
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="sm:max-w-[425px] rounded-[2rem] border border-white/60 bg-white/80 backdrop-blur-xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden p-0">
+        <div className="px-6 pt-8 pb-4">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold tracking-tight text-slate-900">Manage Zones</DialogTitle>
+            <DialogDescription className="text-slate-500 text-sm mt-1.5 leading-relaxed">
+              Organize your QR codes by areas (e.g. Patio, VIP Lounge) for clean analytics and fast filtering.
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="grid gap-4 py-4">
-          <div className="flex items-center gap-2">
-            <Input 
-              placeholder="e.g. Rooftop, VIP Lounge" 
-              value={newZone}
-              onChange={(e) => setNewZone(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleAddZone();
-                }
-              }}
-            />
-            <Button type="button" onClick={handleAddZone} size="icon" variant="secondary">
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
+          <div className="grid gap-5 py-5">
+            <div className="flex items-center gap-2">
+              <Input 
+                placeholder="e.g. Rooftop, Main Bar" 
+                value={newZone}
+                onChange={(e) => setNewZone(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddZone();
+                  }
+                }}
+                className="h-11 rounded-xl border-slate-200 bg-white/50 shadow-sm focus-visible:ring-indigo-500/50"
+              />
+              <Button type="button" onClick={handleAddZone} size="icon" className="h-11 w-11 rounded-xl bg-slate-900 hover:bg-slate-800 text-white shadow-sm flex-shrink-0">
+                <Plus className="h-5 w-5" />
+              </Button>
+            </div>
 
-          <div className="border rounded-md p-3 space-y-2 max-h-[250px] overflow-y-auto bg-slate-50">
-            {zones.length === 0 && (
-              <div className="text-sm text-slate-500 text-center py-2">
-                No zones added. Add at least one zone above.
+            <div className="rounded-2xl border border-slate-200/60 p-2 max-h-[260px] overflow-y-auto bg-slate-50/50 shadow-inner">
+              {zones.length === 0 && (
+                <div className="text-sm text-slate-400 font-medium text-center py-6">
+                  No zones configured yet.
+                </div>
+              )}
+              <div className="flex flex-col gap-1.5">
+                {zones.map((zone, idx) => (
+                  <div key={idx} className="flex items-center justify-between bg-white border border-slate-100 px-3.5 py-2.5 rounded-xl shadow-[0_2px_10px_rgb(0,0,0,0.02)] transition-all hover:border-slate-200">
+                    <span className="text-sm font-medium text-slate-700">{zone}</span>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-7 w-7 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                      onClick={() => handleRemoveZone(zone)}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                ))}
               </div>
-            )}
-            {zones.map((zone, idx) => (
-              <div key={idx} className="flex items-center justify-between bg-white border px-3 py-2 rounded-md shadow-sm">
-                <span className="text-sm font-medium">{zone}</span>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-6 w-6 text-slate-400 hover:text-destructive hover:bg-destructive/10"
-                  onClick={() => handleRemoveZone(zone)}
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </div>
-            ))}
+            </div>
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={handleSave} disabled={isLoading || zones.length === 0}>
+        <div className="px-6 py-4 bg-slate-50/50 border-t border-slate-100 flex items-center justify-end gap-2">
+          <Button variant="ghost" onClick={() => setOpen(false)} className="rounded-xl font-medium text-slate-600 hover:text-slate-900">Cancel</Button>
+          <Button onClick={handleSave} disabled={isLoading || zones.length === 0} className="rounded-xl font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-md transition-all px-6">
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Save Zones
           </Button>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   );

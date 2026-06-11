@@ -29,6 +29,9 @@ export interface Database {
           stripe_customer_id: string | null;
           stripe_subscription_id: string | null;
           stripe_account_id: string | null;
+          square_access_token: string | null;
+          square_refresh_token: string | null;
+          square_merchant_id: string | null;
           timezone: string | null;
           created_at: string | null;
           slug: string | null;
@@ -54,6 +57,9 @@ export interface Database {
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
           stripe_account_id?: string | null;
+          square_access_token?: string | null;
+          square_refresh_token?: string | null;
+          square_merchant_id?: string | null;
           timezone?: string | null;
           created_at?: string | null;
           slug?: string | null;

@@ -117,8 +117,6 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
 
   return (
     <div className="space-y-3">
-      <Label>Item Image (Optional)</Label>
-      
       {/* Hidden input to submit the base64 or URL value with the parent form */}
       <input type="hidden" name="imageUrl" value={value} />
 

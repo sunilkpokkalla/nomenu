@@ -16,6 +16,7 @@ import {
   Banknote,
   LifeBuoy,
   BookOpen,
+  Plug,
 } from "lucide-react";
 
 import { logout } from "@/app/auth/actions";
@@ -40,6 +41,7 @@ export const navItems = [
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },
   
   // Account
+  { href: "/dashboard/integrations", label: "Integrations", icon: Plug },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];

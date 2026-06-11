@@ -484,6 +484,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
+                                  style={{
+                                    ...provided.draggableProps.style,
+                                  } as React.CSSProperties}
                                   className={`
                                     relative flex flex-col ${!isExpanded && isInactiveStatus ? "p-3 gap-1" : "p-4 gap-4"} transition-all
                                     ${isInactiveStatus && isExpanded ? "col-span-2" : ""}

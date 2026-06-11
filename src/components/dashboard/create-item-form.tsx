@@ -32,9 +32,10 @@ interface CreateItemFormProps {
   categories: { id: string; name: string; menu_id: string }[];
   createAction: (formData: FormData) => Promise<void>;
   initialData?: MenuItemData;
+  onSuccess?: () => void;
 }
 
-export function CreateItemForm({ cuisineType, menus, categories, createAction, initialData }: CreateItemFormProps) {
+export function CreateItemForm({ cuisineType, menus, categories, createAction, initialData, onSuccess }: CreateItemFormProps) {
   // Form state
   const [name, setName] = useState(initialData?.name || "");
   const [description, setDescription] = useState(initialData?.description || "");
@@ -101,7 +102,10 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
         </>
       )}
 
-      <form action={createAction} className="space-y-4">
+      <form action={async (formData) => {
+        await createAction(formData);
+        onSuccess?.();
+      }} className="space-y-4">
         {initialData && <input type="hidden" name="itemId" value={initialData.id} />}
         <div className="space-y-2">
           <Label htmlFor="name">Item Name</Label>
@@ -246,6 +250,7 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
         </div>
 
         <div className="pt-2 border-t mt-4">
+          <Label className="mb-2 block text-xs font-semibold text-slate-700">Item Image (Optional)</Label>
           <ImageUploader value={imageUrl} onChange={setImageUrl} />
         </div>
 

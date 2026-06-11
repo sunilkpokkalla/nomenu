@@ -19,21 +19,24 @@ interface EditItemModalProps {
   item: MenuItemData;
   menus: { id: string; name: string }[];
   categories: { id: string; name: string; menu_id: string }[];
+  trigger?: React.ReactNode;
 }
 
-export function EditItemModal({ item, menus, categories }: EditItemModalProps) {
+export function EditItemModal({ item, menus, categories, trigger }: EditItemModalProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 text-slate-500 hover:text-slate-900 p-2"
-        >
-          <Pencil className="h-4 w-4" />
-        </Button>
+        {trigger || (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 text-slate-500 hover:text-slate-900 p-2"
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>

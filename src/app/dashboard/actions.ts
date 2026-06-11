@@ -122,6 +122,77 @@ export async function createMenu(formData: FormData) {
   redirect("/dashboard/menus");
 }
 
+export async function editMenu(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const menuId = field(formData, "menuId");
+  if (!menuId) {
+    redirect("/dashboard/menus?message=Menu%20ID%20is%20required");
+  }
+
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  const name = field(formData, "name");
+  if (!name) {
+    redirect("/dashboard/menus?message=Menu%20name%20is%20required");
+  }
+
+  const description = field(formData, "description");
+  const isActive = formData.get("isActive") === "true";
+  const menuType = field(formData, "menuType");
+  const taxRate = parseFloat(field(formData, "taxRate") || "0") || 0;
+  const serviceCharge = parseFloat(field(formData, "serviceCharge") || "0") || 0;
+  const serviceChargeType = field(formData, "serviceChargeType") || "percentage";
+  const locationLabel = field(formData, "locationLabel") || "Table";
+
+  // First, verify the menu belongs to this restaurant
+  const { data: existingMenu } = await supabase
+    .from("menus")
+    .select("id")
+    .eq("id", menuId)
+    .eq("restaurant_id", restaurant.id)
+    .single();
+
+  if (!existingMenu) {
+    redirect("/dashboard/menus?message=Unauthorized%20or%20menu%20not%20found");
+  }
+
+  const { error } = await supabase
+    .from("menus")
+    .update({
+      name,
+      slug: slugify(name),
+      description,
+      is_active: isActive,
+      menu_type: menuType,
+      tax_rate: taxRate,
+      service_charge: serviceCharge,
+      service_charge_type: serviceChargeType,
+      location_label: locationLabel,
+    })
+    .eq("id", menuId);
+
+  if (error) {
+    redirect(`/dashboard/menus?message=${encodeURIComponent(error.message)}`);
+  }
+
+  revalidatePath("/dashboard/menus");
+  revalidatePath(`/dashboard/menus/${menuId}/customize`);
+  revalidatePath("/dashboard/items");
+  redirect("/dashboard/menus");
+}
+
+
 export async function toggleMenuStatus(menuId: string, currentStatus: boolean) {
   const supabase = await createClient();
   const {
@@ -504,6 +575,15 @@ export async function createQrCode(formData: FormData) {
 
   if (existingLabel) {
     redirect(`/dashboard/qrcodes?message=A%20QR%20code%20with%20label%20"${encodeURIComponent(label)}"%20already%20exists%20in%20zone%20"${encodeURIComponent(locationZone)}"`);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentZones = (restaurant as any).location_zones || [];
+  if (!currentZones.includes(locationZone)) {
+    await supabase.from("restaurants").update({
+      location_zones: [...currentZones, locationZone]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any).eq("id", restaurant.id);
   }
 
   const { error } = await supabase.from("qr_codes").insert({
@@ -962,4 +1042,82 @@ export async function updateLocationZones(restaurantId: string, zones: string[])
   }
 
   revalidatePath("/dashboard/qrcodes");
+}
+
+export async function applyMenuTemplate(menuId: string, restaurantId: string, templateId: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  // Import the templates
+  const { MENU_TEMPLATES } = await import("@/lib/templates");
+  const template = MENU_TEMPLATES.find(t => t.id === templateId);
+
+  if (!template) {
+    throw new Error("Template not found");
+  }
+
+  // Double check ownership
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("id")
+    .eq("id", restaurantId)
+    .eq("owner_id", user.id)
+    .single();
+
+  if (!restaurant) {
+    throw new Error("Unauthorized or restaurant not found");
+  }
+
+  // 1. Create categories
+  for (let i = 0; i < template.categories.length; i++) {
+    const category = template.categories[i];
+    
+    // Insert category
+    const { data: newCategory, error: categoryError } = await supabase
+      .from("categories")
+      .insert({
+        menu_id: menuId,
+        name: category.name,
+        sort_order: i,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any)
+      .select("id")
+      .single();
+
+    if (categoryError || !newCategory) {
+      console.error("Failed to insert category", categoryError);
+      continue;
+    }
+
+    // 2. Create items for this category
+    const itemsToInsert = category.items.map(item => ({
+      restaurant_id: restaurantId,
+      category_id: newCategory.id,
+      name: item.name,
+      description: item.description,
+      price: item.price,
+      is_available: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      image_url: (item as any).imageUrl || ""
+    }));
+
+    if (itemsToInsert.length > 0) {
+      const { error: itemsError } = await supabase
+        .from("menu_items")
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .insert(itemsToInsert as any[]);
+
+      if (itemsError) {
+        console.error("Failed to insert items", itemsError);
+      }
+    }
+  }
+
+  revalidatePath("/dashboard/items");
+  revalidatePath("/dashboard/menus");
+  revalidatePath(`/dashboard/menus/${menuId}/customize`);
 }
