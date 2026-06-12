@@ -89,7 +89,7 @@ export default async function QrCodesPage(
   const host = (await headers()).get("host") || "localhost:3000";
   const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
   const baseUrl = process.env.NODE_ENV === 'development' ? `${protocol}://${host}` : (process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`);
-  const rootDomain = baseUrl.replace(/^https?:\/\//, "").split("/")[0];
+  const rootDomain = baseUrl.replace(/^https?:\/\//, "").split("/")[0].replace(/^www\./, "");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const locationZones: string[] = (restaurant as any).location_zones || ["Main Dining"];
