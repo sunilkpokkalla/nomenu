@@ -20,7 +20,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic French onion soup topped with a toasted baguette slice and melted Gruyère cheese.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-soupe-l-oignon-gratin-e.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Escargots de Bourgogne",
@@ -30,7 +30,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Snail delicacy baked in its shell with a rich, fragrant garlic and parsley butter.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-escargots-de-bourgogne.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Pâté de Campagne",
@@ -40,7 +40,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rustic pork and liver pâté served with cornichons, Dijon mustard, and toasted sourdough.",
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-p-t-de-campagne.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Gougères",
@@ -51,7 +51,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-goug-res.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Tartare de Bœuf",
@@ -61,7 +61,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Hand-chopped raw beef tenderloin seasoned with capers, shallots, egg yolk, and Dijon mustard.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tartare-de-b-uf.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Foie Gras Poêlé",
@@ -71,7 +71,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Seared duck liver served with a sweet fig compote and toasted brioche.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-foie-gras-po-l-.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Salade Lyonnaise",
@@ -81,7 +81,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Frisée lettuce tossed with warm bacon lardons, croutons, and topped with a poached egg.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-salade-lyonnaise.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Bisque de Homard",
@@ -91,7 +91,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A velvety, rich lobster soup infused with cognac and fresh cream.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-bisque-de-homard.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Camembert Rôti",
@@ -102,7 +102,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-camembert-r-ti.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Quiche Lorraine",
@@ -112,7 +112,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic savory tart filled with a rich egg custard, smoked bacon, and Gruyère cheese.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-quiche-lorraine.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Coq au Vin",
@@ -122,7 +122,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tender chicken braised slowly in red Burgundy wine with mushrooms, pearl onions, and bacon.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-coq-au-vin.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Bœuf Bourguignon",
@@ -132,7 +132,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic beef stew simmered in red wine with carrots, onions, garlic, and a bouquet garni.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-b-uf-bourguignon.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Canard à l'Orange",
@@ -142,7 +142,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy roasted duck breast dressed in a sweet and savory bitter-orange glaze.",
     suggestedCookingTime: 35,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-canard-l-orange.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Bouillabaisse",
@@ -152,7 +152,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Traditional Provençal fish stew heavily infused with saffron, fennel, and orange zest, served with rouille.",
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-bouillabaisse.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Steak Frites",
@@ -162,7 +162,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-seared ribeye steak slathered in herb butter, served with a mountain of crispy golden frites.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-steak-frites.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Ratatouille Niçoise",
@@ -174,7 +174,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-ratatouille-ni-oise.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Cassoulet",
@@ -184,7 +184,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rich, slow-cooked casserole from the South of France featuring white beans, duck confit, and garlic sausage.",
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cassoulet.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Confit de Canard",
@@ -194,7 +194,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Duck legs slow-cooked in their own fat until meltingly tender, then roasted until crisp.",
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-confit-de-canard.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Blanquette de Veau",
@@ -204,7 +204,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A classic, comforting veal ragout cooked in a rich, velvety white sauce with button mushrooms.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-blanquette-de-veau.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Sole Meunière",
@@ -214,7 +214,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Delicate whole Dover sole pan-fried in brown butter, lemon, and fresh parsley.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sole-meuni-re.jpg",
+      "/images/templates/seafood.png",
   },
   {
     name: "Poulet Rôti",
@@ -224,7 +224,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Half a chicken beautifully roasted with lemon, garlic, and thyme, served with buttered green beans.",
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-poulet-r-ti.jpg",
+      "/images/templates/chicken.png",
   },
   {
     name: "Magret de Canard",
@@ -234,7 +234,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-seared duck breast served pink, paired with a rich cherry reduction.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-magret-de-canard.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Châteaubriand",
@@ -244,7 +244,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A thick, center-cut beef tenderloin roasted to perfection, served with Béarnaise sauce.",
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-ch-teaubriand.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Moules Marinières",
@@ -254,7 +254,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Fresh mussels steamed in white wine, garlic, shallots, and parsley, served with crusty baguette.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-moules-marini-res.jpg",
+      "/images/templates/seafood.png",
   },
   {
     name: "Hachis Parmentier",
@@ -264,7 +264,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "The elegant French cousin to Shepherd's Pie, made with slow-braised beef topped with creamy mashed potatoes.",
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-hachis-parmentier.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Filet Mignon au Poivre",
@@ -275,7 +275,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-filet-mignon-au-poivre.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Navarin d'Agneau",
@@ -285,7 +285,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A delicate spring lamb stew simmered with baby turnips, carrots, and peas.",
     suggestedCookingTime: 50,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-navarin-d-agneau.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Gratin Dauphinois",
@@ -296,7 +296,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gratin-dauphinois.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Salade Niçoise",
@@ -307,7 +307,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-salade-ni-oise.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Croque Monsieur",
@@ -317,7 +317,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "The ultimate toasted ham and Gruyère cheese sandwich, smothered in rich Béchamel sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-croque-monsieur.jpg",
+      "/images/templates/sandwich.png",
   },
   {
     name: "Pommes Purée",
@@ -329,7 +329,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pommes-pur-e.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Haricots Verts Amandine",
@@ -341,7 +341,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-haricots-verts-amandine.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Pommes Frites",
@@ -353,7 +353,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pommes-frites.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Gratin de Macaronis",
@@ -364,7 +364,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gratin-de-macaronis.webp",
+      "/images/templates/pasta.png",
   },
   {
     name: "Champignons Sauvages",
@@ -376,7 +376,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-champignons-sauvages.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Asperges Sauce Hollandaise",
@@ -388,7 +388,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-asperges-sauce-hollandaise.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Pommes Anna",
@@ -400,7 +400,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pommes-anna.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Petits Pois à la Française",
@@ -412,7 +412,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-petits-pois-la-fran-aise.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Salade Verte",
@@ -424,7 +424,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-salade-verte.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Tomates à la Provençale",
@@ -435,7 +435,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tomates-la-proven-ale.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Crème Brûlée",
@@ -447,7 +447,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cr-me-br-l-e.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Tarte Tatin",
@@ -458,7 +458,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tarte-tatin.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Mousse au Chocolat",
@@ -470,7 +470,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mousse-au-chocolat.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Profiteroles",
@@ -481,7 +481,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-profiteroles.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Île Flottante",
@@ -493,7 +493,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library--le-flottante.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Soufflé au Grand Marnier",
@@ -504,7 +504,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-souffl-au-grand-marnier.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Mille-Feuille",
@@ -515,7 +515,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mille-feuille.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Macarons Assortis",
@@ -527,7 +527,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-macarons-assortis.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Tarte au Citron Meringuée",
@@ -538,7 +538,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tarte-au-citron-meringu-e.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Éclair au Chocolat",
@@ -549,7 +549,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library--clair-au-chocolat.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Bruschetta al Pomodoro",
@@ -560,7 +560,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-bruschetta-al-pomodoro.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Burrata e Prosciutto",
@@ -571,7 +571,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-burrata-e-prosciutto.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Arancini al Ragù",
@@ -581,7 +581,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy, golden-fried risotto balls stuffed with a rich beef ragù and mozzarella center.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-arancini-al-rag-.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Calamari Fritti",
@@ -591,7 +591,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Lightly dusted, crispy fried squid rings served with a side of zesty marinara sauce and lemon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-calamari-fritti.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Carpaccio di Manzo",
@@ -602,7 +602,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-carpaccio-di-manzo.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Insalata Caprese",
@@ -614,7 +614,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-insalata-caprese.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Polpette della Nonna",
@@ -624,7 +624,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic Italian meatballs simmered in a slow-cooked tomato sauce, served with toasted focaccia.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-polpette-della-nonna.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Fritto Misto",
@@ -634,7 +634,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A crispy mix of lightly fried seafood and vegetables, perfectly seasoned with sea salt.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-fritto-misto.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Melanzane alla Parmigiana",
@@ -646,7 +646,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-melanzane-alla-parmigiana.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Zuppa Toscana",
@@ -657,7 +657,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-zuppa-toscana.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Spaghetti Carbonara",
@@ -667,7 +667,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Authentic Roman pasta dish with guanciale, pecorino romano, egg yolks, and heavy black pepper.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-spaghetti-carbonara.jpg",
+      "/images/templates/pasta.png",
   },
   {
     name: "Lasagna al Forno",
@@ -677,7 +677,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Oven-baked layers of fresh pasta, rich Bolognese ragù, velvety béchamel, and parmesan.",
     suggestedCookingTime: 35,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-lasagna-al-forno.jpg",
+      "/images/templates/pasta.png",
   },
   {
     name: "Risotto ai Funghi Porcini",
@@ -689,7 +689,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-risotto-ai-funghi-porcini.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Ossobuco alla Milanese",
@@ -700,7 +700,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-ossobuco-alla-milanese.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Pizza Margherita",
@@ -711,7 +711,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pizza-margherita.jpg",
+      "/images/templates/pizza.png",
   },
   {
     name: "Tagliatelle al Ragù Bolognese",
@@ -721,7 +721,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Ribbons of egg pasta tossed in a slow-cooked, rich meat sauce from Bologna.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tagliatelle-al-rag-bolognese.jpg",
+      "/images/templates/pasta.png",
   },
   {
     name: "Cacio e Pepe",
@@ -732,7 +732,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cacio-e-pepe.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Saltimbocca alla Romana",
@@ -742,7 +742,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-fried veal medallions wrapped in prosciutto and sage, glazed with a white wine sauce.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-saltimbocca-alla-romana.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Bistecca alla Fiorentina",
@@ -753,7 +753,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-bistecca-alla-fiorentina.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Linguine alle Vongole",
@@ -763,7 +763,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Linguine tossed with fresh clams, white wine, garlic, parsley, and a touch of chili flakes.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-linguine-alle-vongole.jpg",
+      "/images/templates/pasta.png",
   },
   {
     name: "Ravioli Ricotta e Spinaci",
@@ -774,7 +774,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-ravioli-ricotta-e-spinaci.jpg",
+      "/images/templates/pasta.png",
   },
   {
     name: "Pizza Diavola",
@@ -785,7 +785,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pizza-diavola.jpg",
+      "/images/templates/pizza.png",
   },
   {
     name: "Gnocchi al Pesto Genovese",
@@ -796,7 +796,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gnocchi-al-pesto-genovese.jpg",
+      "/images/templates/pasta.png",
   },
   {
     name: "Pappardelle al Cinghiale",
@@ -806,7 +806,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Wide pasta ribbons served with a robust, slow-braised wild boar ragù.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pappardelle-al-cinghiale.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Pollo alla Cacciatora",
@@ -817,7 +817,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pollo-alla-cacciatora.jpg",
+      "/images/templates/chicken.png",
   },
   {
     name: "Spaghetti all'Amatriciana",
@@ -828,7 +828,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-spaghetti-all-amatriciana.jpg",
+      "/images/templates/pasta.png",
   },
   {
     name: "Fritto Misto di Pesce",
@@ -838,7 +838,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A generous platter of assorted Mediterranean seafood, lightly battered and fried.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-fritto-misto-di-pesce.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Orecchiette con Cime di Rapa",
@@ -848,7 +848,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Little 'ear-shaped' pasta tossed with bitter broccoli rabe, garlic, and anchovies.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-orecchiette-con-cime-di-rapa.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Risotto alla Milanese",
@@ -860,7 +860,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-risotto-alla-milanese.jpg",
+      "/images/templates/steak.png",
   },
   {
     name: "Pizza Quattro Formaggi",
@@ -871,7 +871,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pizza-quattro-formaggi.jpg",
+      "/images/templates/pizza.png",
   },
   {
     name: "Focaccia al Rosmarino",
@@ -882,7 +882,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-focaccia-al-rosmarino.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Broccoletti Saltati",
@@ -895,7 +895,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-broccoletti-saltati.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Patate Arrosto",
@@ -906,7 +906,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-patate-arrosto.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Polenta Morbida",
@@ -918,7 +918,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-polenta-morbida.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Insalata Mista",
@@ -930,7 +930,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-insalata-mista.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Carciofi alla Romana",
@@ -942,7 +942,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-carciofi-alla-romana.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Verdure Grigliate",
@@ -954,7 +954,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-verdure-grigliate.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Pane all'Aglio",
@@ -965,7 +965,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pane-all-aglio.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Spinaci al Limone",
@@ -977,7 +977,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-spinaci-al-limone.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Caponata Siciliana",
@@ -989,7 +989,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-caponata-siciliana.jpg",
+      "/images/templates/salad.png",
   },
   {
     name: "Tiramisù",
@@ -1000,7 +1000,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tiramis-.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Panna Cotta",
@@ -1012,7 +1012,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-panna-cotta.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Cannoli Siciliani",
@@ -1023,7 +1023,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cannoli-siciliani.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Gelato Artigianale",
@@ -1035,7 +1035,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gelato-artigianale.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Affogato al Caffè",
@@ -1047,7 +1047,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-affogato-al-caff-.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Zabaione",
@@ -1059,7 +1059,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-zabaione.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Torta della Nonna",
@@ -1070,7 +1070,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-torta-della-nonna.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Biscotti Cantuccini",
@@ -1081,7 +1081,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-biscotti-cantuccini.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Profiteroles al Cioccolato",
@@ -1092,7 +1092,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-profiteroles-al-cioccolato.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Zeppole",
@@ -1103,7 +1103,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-zeppole.jpg",
+      "/images/templates/dessert.png",
   },
   {
     name: "Loaded Potato Skins",
@@ -1113,7 +1113,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy potato skins loaded with melted cheddar, bacon bits, sour cream, and green onions.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-loaded-potato-skins.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Buffalo Chicken Wings",
@@ -1124,7 +1124,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-buffalo-chicken-wings.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Mozzarella Sticks",
@@ -1135,7 +1135,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mozzarella-sticks.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Spinach Artichoke Dip",
@@ -1146,7 +1146,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-spinach-artichoke-dip.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Fried Pickles",
@@ -1157,7 +1157,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-fried-pickles.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Onion Rings",
@@ -1168,7 +1168,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-onion-rings.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Clam Chowder",
@@ -1178,7 +1178,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rich, creamy New England soup packed with tender clams, potatoes, and bacon.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-clam-chowder.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Jalapeño Poppers",
@@ -1190,7 +1190,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-jalape-o-poppers.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Mini Sliders",
@@ -1200,7 +1200,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Three bite-sized beef burgers topped with American cheese, pickles, and ketchup.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mini-sliders.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Deviled Eggs",
@@ -1212,7 +1212,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-deviled-eggs.jpg",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Classic Cheeseburger",
@@ -1222,7 +1222,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A juicy beef patty topped with melted American cheese, lettuce, tomato, onion, and signature sauce on a toasted bun.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-classic-cheeseburger.webp",
+      "/images/templates/burger.png",
   },
   {
     name: "BBQ Pork Ribs",
@@ -1233,7 +1233,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 180,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-bbq-pork-ribs.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Fried Chicken",
@@ -1243,7 +1243,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy, buttermilk-marinated fried chicken served with a side of creamy coleslaw and a biscuit.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-fried-chicken.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Philly Cheesesteak",
@@ -1253,7 +1253,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thinly sliced ribeye steak grilled with onions and topped with melted provolone on a hoagie roll.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-philly-cheesesteak.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Macaroni and Cheese",
@@ -1264,7 +1264,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-macaroni-and-cheese.webp",
+      "/images/templates/pasta.png",
   },
   {
     name: "Meatloaf",
@@ -1274,7 +1274,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Homestyle baked beef meatloaf topped with a sweet tomato glaze, served alongside mashed potatoes.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-meatloaf.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Chicken Fried Steak",
@@ -1284,7 +1284,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tenderized beef steak, breaded and fried like chicken, smothered in rich country pepper gravy.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chicken-fried-steak.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Pulled Pork Sandwich",
@@ -1294,7 +1294,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Slow-smoked pork shoulder piled high on a brioche bun, topped with tangy slaw and BBQ sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pulled-pork-sandwich.webp",
+      "/images/templates/sandwich.png",
   },
   {
     name: "Grilled Cheese & Tomato Soup",
@@ -1305,7 +1305,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-grilled-cheese-tomato-soup.webp",
+      "/images/templates/soup.png",
   },
   {
     name: "BLT Sandwich",
@@ -1315,7 +1315,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy thick-cut bacon, fresh iceberg lettuce, and ripe tomatoes with mayo on toasted sourdough.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-blt-sandwich.webp",
+      "/images/templates/sandwich.png",
   },
   {
     name: "New York Strip Steak",
@@ -1326,7 +1326,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-new-york-strip-steak.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Cobb Salad",
@@ -1337,7 +1337,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cobb-salad.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Hot Dog with Chili",
@@ -1347,7 +1347,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "An all-beef frankfurter topped with hearty beef chili, diced onions, and yellow mustard.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-hot-dog-with-chili.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Jambalaya",
@@ -1359,7 +1359,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-jambalaya.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Shrimp and Grits",
@@ -1369,7 +1369,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Plump sautéed shrimp served over creamy, cheesy stone-ground grits with bacon and scallions.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-shrimp-and-grits.webp",
+      "/images/templates/seafood.png",
   },
   {
     name: "Club Sandwich",
@@ -1379,7 +1379,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A triple-decker sandwich stacked with roasted turkey, ham, bacon, lettuce, tomato, and mayo.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-club-sandwich.webp",
+      "/images/templates/sandwich.png",
   },
   {
     name: "Beef Brisket",
@@ -1390,7 +1390,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 720,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-beef-brisket.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Lobster Roll",
@@ -1400,7 +1400,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Chilled, sweet Maine lobster meat lightly dressed with mayo, served in a butter-toasted split-top bun.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-lobster-roll.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Chicken Pot Pie",
@@ -1410,7 +1410,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A comforting, creamy stew of chicken and vegetables baked under a flaky, golden pastry crust.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chicken-pot-pie.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Bacon Cheeseburger",
@@ -1420,7 +1420,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Our classic cheeseburger elevated with two slices of thick-cut, crispy smoked bacon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-bacon-cheeseburger.webp",
+      "/images/templates/burger.png",
   },
   {
     name: "French Fries",
@@ -1432,7 +1432,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-french-fries.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Coleslaw",
@@ -1444,7 +1444,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-coleslaw.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Baked Potato",
@@ -1456,7 +1456,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-baked-potato.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Corn on the Cob",
@@ -1467,7 +1467,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-corn-on-the-cob.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Hush Puppies",
@@ -1477,7 +1477,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-hush-puppies.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Tater Tots",
@@ -1489,7 +1489,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tater-tots.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Mashed Potatoes & Gravy",
@@ -1498,7 +1498,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description: "Creamy mashed potatoes topped with rich brown beef gravy.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mashed-potatoes-gravy.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Baked Beans",
@@ -1509,7 +1509,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-baked-beans.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Sweet Potato Fries",
@@ -1521,7 +1521,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sweet-potato-fries.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Buttermilk Biscuits",
@@ -1532,7 +1532,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-buttermilk-biscuits.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "New York Cheesecake",
@@ -1543,7 +1543,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-new-york-cheesecake.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Apple Pie",
@@ -1554,7 +1554,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-apple-pie.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Chocolate Brownie Sundae",
@@ -1565,7 +1565,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chocolate-brownie-sundae.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Pecan Pie",
@@ -1576,7 +1576,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pecan-pie.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Key Lime Pie",
@@ -1587,7 +1587,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-key-lime-pie.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Banana Split",
@@ -1599,7 +1599,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-banana-split.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Milkshake",
@@ -1611,7 +1611,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-milkshake.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Chocolate Chip Cookies",
@@ -1622,7 +1622,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chocolate-chip-cookies.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Red Velvet Cake",
@@ -1633,7 +1633,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-red-velvet-cake.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "S'mores",
@@ -1644,7 +1644,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-s-mores.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Guacamole & Chips",
@@ -1656,7 +1656,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-guacamole-chips.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Queso Fundido",
@@ -1667,7 +1667,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-queso-fundido.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Pico de Gallo",
@@ -1679,7 +1679,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pico-de-gallo.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Ceviche de Camarón",
@@ -1690,7 +1690,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-ceviche-de-camar-n.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Nachos Supremos",
@@ -1702,7 +1702,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-nachos-supremos.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Elote",
@@ -1715,7 +1715,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-elote.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Taquitos Dorados",
@@ -1726,7 +1726,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-taquitos-dorados.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Sopa de Tortilla",
@@ -1738,7 +1738,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sopa-de-tortilla.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Tostada de Tinga",
@@ -1750,7 +1750,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tostada-de-tinga.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Chiles Toreados",
@@ -1763,7 +1763,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chiles-toreados.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Tacos al Pastor",
@@ -1774,7 +1774,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tacos-al-pastor.webp",
+      "/images/templates/taco.png",
   },
   {
     name: "Enchiladas Verdes",
@@ -1785,7 +1785,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-enchiladas-verdes.webp",
+      "/images/templates/taco.png",
   },
   {
     name: "Fajitas de Pollo",
@@ -1795,7 +1795,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Sizzling strips of grilled chicken breast with bell peppers and onions, served with tortillas and guacamole.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-fajitas-de-pollo.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Carne Asada",
@@ -1806,7 +1806,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-carne-asada.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Mole Poblano",
@@ -1816,7 +1816,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A complex, rich, and dark sauce made of chilies and chocolate, poured over tender chicken pieces.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mole-poblano.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Burrito de Asada",
@@ -1826,7 +1826,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A massive flour tortilla stuffed with grilled steak, rice, beans, cheese, and pico de gallo.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-burrito-de-asada.webp",
+      "/images/templates/taco.png",
   },
   {
     name: "Quesadilla de Huitlacoche",
@@ -1838,7 +1838,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-quesadilla-de-huitlacoche.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Chiles Rellenos",
@@ -1849,7 +1849,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chiles-rellenos.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Pozole Rojo",
@@ -1861,7 +1861,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pozole-rojo.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Tacos de Carnitas",
@@ -1872,7 +1872,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tacos-de-carnitas.webp",
+      "/images/templates/taco.png",
   },
   {
     name: "Camarones al la Diabla",
@@ -1884,7 +1884,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-camarones-al-la-diabla.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Chimichanga",
@@ -1894,7 +1894,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A large burrito filled with shredded beef and cheese, deep-fried until golden and crispy.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chimichanga.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Tacos de Pescado",
@@ -1904,7 +1904,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Baja-style crispy battered fish served in tortillas with shredded cabbage and a creamy white sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tacos-de-pescado.webp",
+      "/images/templates/taco.png",
   },
   {
     name: "Tamales de Puerco",
@@ -1915,7 +1915,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tamales-de-puerco.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Sopes con Chorizo",
@@ -1926,7 +1926,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sopes-con-chorizo.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Barbacoa de Res",
@@ -1937,7 +1937,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-barbacoa-de-res.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Tlayuda",
@@ -1948,7 +1948,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tlayuda.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Enchiladas Suizas",
@@ -1959,7 +1959,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-enchiladas-suizas.webp",
+      "/images/templates/taco.png",
   },
   {
     name: "Cochinita Pibil",
@@ -1970,7 +1970,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cochinita-pibil.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Fajitas Vegetarianas",
@@ -1982,7 +1982,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-fajitas-vegetarianas.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Arroz Mexicano",
@@ -1993,7 +1993,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-arroz-mexicano.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Frijoles Refritos",
@@ -2005,7 +2005,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-frijoles-refritos.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Frijoles Charros",
@@ -2017,7 +2017,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-frijoles-charros.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Tortillas de Maíz Hechas a Mano",
@@ -2028,7 +2028,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tortillas-de-ma-z-hechas-a-mano.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Cebollitas Asadas",
@@ -2040,7 +2040,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cebollitas-asadas.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Nopales en Ensalada",
@@ -2052,7 +2052,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-nopales-en-ensalada.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Plátanos Fritos",
@@ -2064,7 +2064,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pl-tanos-fritos.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Salsa Roja y Verde",
@@ -2077,7 +2077,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-salsa-roja-y-verde.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Chicharrón",
@@ -2088,7 +2088,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chicharr-n.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Calabacitas con Elote",
@@ -2100,7 +2100,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-calabacitas-con-elote.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Churros con Chocolate",
@@ -2111,7 +2111,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-churros-con-chocolate.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Flan de Vainilla",
@@ -2123,7 +2123,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-flan-de-vainilla.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Tres Leches Cake",
@@ -2134,7 +2134,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tres-leches-cake.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Arroz con Leche",
@@ -2146,7 +2146,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-arroz-con-leche.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Sopapillas",
@@ -2157,7 +2157,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sopapillas.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Nieve de Garrafa",
@@ -2169,7 +2169,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-nieve-de-garrafa.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Carlota de Limón",
@@ -2180,7 +2180,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-carlota-de-lim-n.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Paletas",
@@ -2192,7 +2192,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-paletas.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Empanadas Dulces",
@@ -2203,7 +2203,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-empanadas-dulces.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Capirotada",
@@ -2214,7 +2214,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-capirotada.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Edamame",
@@ -2226,7 +2226,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-edamame.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Gyoza",
@@ -2236,7 +2236,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Six pan-fried dumplings filled with seasoned pork and cabbage, served with a soy-vinegar dip.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gyoza.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Agedashi Tofu",
@@ -2247,7 +2247,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-agedashi-tofu.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Miso Soup",
@@ -2257,7 +2257,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Traditional soup made with fermented soybean paste, dashi, tofu cubes, and wakame seaweed.",
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-miso-soup.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Takoyaki",
@@ -2267,7 +2267,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Golden, savory battered octopus balls drizzled with sweet sauce, mayo, and bonito flakes.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-takoyaki.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Wakame Salad",
@@ -2279,7 +2279,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-wakame-salad.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Yakitori",
@@ -2290,7 +2290,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-yakitori.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Tuna Tataki",
@@ -2301,7 +2301,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tuna-tataki.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Karaage",
@@ -2311,7 +2311,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Japanese-style bite-sized fried chicken, marinated in soy sauce, ginger, and garlic, served with lemon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-karaage.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Chawanmushi",
@@ -2322,7 +2322,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chawanmushi.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Tonkotsu Ramen",
@@ -2332,7 +2332,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Hakata-style ramen featuring a rich, milky pork bone broth, thin noodles, chashu pork, and a soft-boiled egg.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tonkotsu-ramen.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Sushi Nigiri Platter",
@@ -2343,7 +2343,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sushi-nigiri-platter.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Sashimi Moriawase",
@@ -2354,7 +2354,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sashimi-moriawase.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Katsudon",
@@ -2364,7 +2364,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A comforting bowl of rice topped with a breaded, deep-fried pork cutlet, egg, and onions simmered in sweet soy broth.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-katsudon.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Chicken Teriyaki",
@@ -2374,7 +2374,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Grilled chicken breast glazed in a sweet, sticky soy-based sauce, served with steamed rice and vegetables.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chicken-teriyaki.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Tempura Udon",
@@ -2384,7 +2384,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thick, chewy wheat noodles in a hot dashi broth, served with light, crispy shrimp and vegetable tempura.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tempura-udon.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Unadon (Eel Bowl)",
@@ -2394,7 +2394,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Grilled freshwater eel glazed with a sweet soy-based sauce, served over a bed of steamed white rice.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-unadon-eel-bowl-.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Shoyu Ramen",
@@ -2404,7 +2404,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tokyo-style ramen with a clear, soy-sauce flavored broth, curly noodles, bamboo shoots, and roasted pork.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-shoyu-ramen.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Okonomiyaki",
@@ -2414,7 +2414,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A savory Japanese cabbage pancake mixed with pork belly and seafood, topped with mayo, sweet sauce, and bonito.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-okonomiyaki.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Spicy Tuna Roll",
@@ -2426,7 +2426,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-spicy-tuna-roll.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Sukiyaki",
@@ -2436,7 +2436,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thinly sliced beef, tofu, and vegetables simmered right at your table in a sweet soy and mirin broth.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sukiyaki.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Yakisoba",
@@ -2446,7 +2446,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Stir-fried wheat noodles with pork, cabbage, and carrots in a sweet and savory sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-yakisoba.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Salmon Teriyaki Bento",
@@ -2456,7 +2456,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A complete meal box featuring glazed salmon, rice, miso soup, salad, and a small side dish.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-salmon-teriyaki-bento.webp",
+      "/images/templates/seafood.png",
   },
   {
     name: "Gyudon (Beef Bowl)",
@@ -2466,7 +2466,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thinly sliced beef and onions simmered in a mildly sweet broth flavored with dashi, soy sauce, and mirin, over rice.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gyudon-beef-bowl-.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Miso Black Cod",
@@ -2477,7 +2477,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-miso-black-cod.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Dragon Roll",
@@ -2487,7 +2487,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "An inside-out sushi roll featuring shrimp tempura and cucumber, draped with thinly sliced avocado.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-dragon-roll.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Zaru Soba",
@@ -2498,7 +2498,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-zaru-soba.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Omurice",
@@ -2508,7 +2508,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A fluffy, western-influenced Japanese omelette draped over ketchup-flavored chicken fried rice.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-omurice.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Shabu Shabu",
@@ -2519,7 +2519,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-shabu-shabu.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Katsu Curry",
@@ -2529,7 +2529,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A crispy breaded pork cutlet served with a rich, slightly sweet Japanese curry sauce over rice.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-katsu-curry.webp",
+      "/images/templates/soup.png",
   },
   {
     name: "Gohan (Steamed Rice)",
@@ -2540,7 +2540,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gohan-steamed-rice-.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Tsukemono (Pickles)",
@@ -2552,7 +2552,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tsukemono-pickles-.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Tamagoyaki",
@@ -2564,7 +2564,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tamagoyaki.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Natto",
@@ -2576,7 +2576,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-natto.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Onigiri",
@@ -2587,7 +2587,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-onigiri.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Kinoko Butter Yaki",
@@ -2599,7 +2599,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kinoko-butter-yaki.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Korokke",
@@ -2609,7 +2609,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A Japanese potato croquette, breaded with panko and deep-fried, served with sweet tonkatsu sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-korokke.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Daikon Salad",
@@ -2621,7 +2621,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-daikon-salad.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Nasu Dengaku",
@@ -2633,7 +2633,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-nasu-dengaku.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Kinpira Gobo",
@@ -2645,7 +2645,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kinpira-gobo.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Matcha Ice Cream",
@@ -2657,7 +2657,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-matcha-ice-cream.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Mochi Ice Cream",
@@ -2669,7 +2669,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mochi-ice-cream.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Dorayaki",
@@ -2680,7 +2680,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-dorayaki.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Taiyaki",
@@ -2691,7 +2691,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-taiyaki.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Daifuku",
@@ -2703,7 +2703,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-daifuku.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Purin",
@@ -2714,7 +2714,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-purin.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Mitarashi Dango",
@@ -2726,7 +2726,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mitarashi-dango.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Yuzu Sorbet",
@@ -2738,7 +2738,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-yuzu-sorbet.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Anmitsu",
@@ -2750,7 +2750,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-anmitsu.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Castella Cake",
@@ -2761,7 +2761,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-castella-cake.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Samosa",
@@ -2773,7 +2773,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-samosa.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Onion Bhaji",
@@ -2786,7 +2786,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-onion-bhaji.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Chicken Tikka",
@@ -2797,7 +2797,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chicken-tikka.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Paneer Tikka",
@@ -2809,7 +2809,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-paneer-tikka.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Aloo Tikki",
@@ -2821,7 +2821,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-aloo-tikki.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Pani Puri",
@@ -2834,7 +2834,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pani-puri.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Seekh Kebab",
@@ -2846,7 +2846,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-seekh-kebab.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Gobi Manchurian",
@@ -2858,7 +2858,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gobi-manchurian.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Papdi Chaat",
@@ -2869,7 +2869,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-papdi-chaat.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Fish Amritsari",
@@ -2880,7 +2880,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-fish-amritsari.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Butter Chicken (Murgh Makhani)",
@@ -2891,7 +2891,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-butter-chicken-murgh-makhani-.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Chicken Tikka Masala",
@@ -2902,7 +2902,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chicken-tikka-masala.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Lamb Rogan Josh",
@@ -2913,7 +2913,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-lamb-rogan-josh.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Palak Paneer",
@@ -2925,7 +2925,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-palak-paneer.webp",
+      "/images/templates/soup.png",
   },
   {
     name: "Chana Masala",
@@ -2938,7 +2938,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-chana-masala.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Biryani (Chicken or Lamb)",
@@ -2949,7 +2949,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-biryani-chicken-or-lamb-.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Dal Makhani",
@@ -2961,7 +2961,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-dal-makhani.webp",
+      "/images/templates/soup.png",
   },
   {
     name: "Aloo Gobi",
@@ -2974,7 +2974,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-aloo-gobi.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Vindaloo",
@@ -2986,7 +2986,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-vindaloo.webp",
+      "/images/templates/soup.png",
   },
   {
     name: "Saag Gosht",
@@ -2997,7 +2997,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 50,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-saag-gosht.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Baingan Bharta",
@@ -3021,7 +3021,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-malai-kofta.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Tandoori Chicken (Half/Full)",
@@ -3032,7 +3032,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tandoori-chicken-half-full-.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Korma",
@@ -3043,7 +3043,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-korma.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Fish Curry (Goan Style)",
@@ -3055,7 +3055,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-fish-curry-goan-style-.webp",
+      "/images/templates/seafood.png",
   },
   {
     name: "Bhindi Masala",
@@ -3068,7 +3068,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-bhindi-masala.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Madras Curry",
@@ -3080,7 +3080,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-madras-curry.webp",
+      "/images/templates/soup.png",
   },
   {
     name: "Prawn Balchão",
@@ -3092,7 +3092,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-prawn-balch-o.webp",
+      "/images/templates/seafood.png",
   },
   {
     name: "Matar Paneer",
@@ -3104,7 +3104,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-matar-paneer.webp",
+      "/images/templates/soup.png",
   },
   {
     name: "Keema Mutter",
@@ -3115,7 +3115,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-keema-mutter.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Garlic Naan",
@@ -3126,7 +3126,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-garlic-naan.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Basmati Rice",
@@ -3137,7 +3137,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-basmati-rice.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Roti / Chapati",
@@ -3148,7 +3148,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-roti-chapati.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Cucumber Raita",
@@ -3160,7 +3160,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cucumber-raita.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Peshawari Naan",
@@ -3171,7 +3171,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-peshawari-naan.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Mango Chutney",
@@ -3183,7 +3183,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mango-chutney.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Jeera Rice",
@@ -3194,7 +3194,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-jeera-rice.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Pappadum",
@@ -3205,7 +3205,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pappadum.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Kachumber Salad",
@@ -3217,7 +3217,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kachumber-salad.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Lacha Paratha",
@@ -3228,7 +3228,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-lacha-paratha.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Gulab Jamun",
@@ -3239,7 +3239,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gulab-jamun.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Rasgulla",
@@ -3251,7 +3251,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-rasgulla.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Mango Lassi",
@@ -3263,7 +3263,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mango-lassi.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Gajar Ka Halwa",
@@ -3275,7 +3275,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gajar-ka-halwa.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Kheer",
@@ -3287,7 +3287,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kheer.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Rasmalai",
@@ -3299,7 +3299,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-rasmalai.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Jalebi",
@@ -3310,7 +3310,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-jalebi.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Kulfi",
@@ -3322,7 +3322,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kulfi.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Mysore Pak",
@@ -3334,7 +3334,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-mysore-pak.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Falooda",
@@ -3345,7 +3345,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-falooda.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Patatas Bravas",
@@ -3358,7 +3358,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-patatas-bravas.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Gambas al Ajillo",
@@ -3369,7 +3369,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-gambas-al-ajillo.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Pan con Tomate",
@@ -3380,7 +3380,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pan-con-tomate.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Croquetas de Jamón",
@@ -3390,7 +3390,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy fried croquettes with an impossibly creamy, rich béchamel and cured ham filling.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-croquetas-de-jam-n.webp",
+      "/images/templates/appetizer.png",
   },
   {
     name: "Jamón Ibérico de Bellota",
@@ -3634,7 +3634,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pisto-manchego.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Marmitako",
@@ -3645,7 +3645,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-marmitako.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Cordero Asado",
@@ -3656,7 +3656,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 120,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cordero-asado.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Lomo de Orza",
@@ -3667,7 +3667,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-lomo-de-orza.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Paella de Verduras",
@@ -3679,7 +3679,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-paella-de-verduras.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Alioli",
@@ -3690,7 +3690,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-alioli.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Aceitunas Aliñadas",
@@ -3702,7 +3702,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-aceitunas-ali-adas.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Ensalada Mixta",
@@ -3713,7 +3713,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-ensalada-mixta.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Patatas a lo Pobre",
@@ -3725,7 +3725,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-patatas-a-lo-pobre.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Escalivada",
@@ -3737,7 +3737,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-escalivada.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Pan Rústico",
@@ -3748,7 +3748,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pan-r-stico.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Queso Manchego",
@@ -3759,7 +3759,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-queso-manchego.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Garbanzos Fritos",
@@ -3771,7 +3771,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-garbanzos-fritos.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Champiñones al Ajillo",
@@ -3783,7 +3783,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-champi-ones-al-ajillo.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Espinacas con Garbanzos",
@@ -3795,7 +3795,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-espinacas-con-garbanzos.webp",
+      "/images/templates/salad.png",
   },
   {
     name: "Crema Catalana",
@@ -3807,7 +3807,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-crema-catalana.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Churros con Chocolate",
@@ -3830,7 +3830,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-tarta-de-santiago.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Flan de Huevo",
@@ -3842,7 +3842,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-flan-de-huevo.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Basque Cheesecake (Tarta de Queso)",
@@ -3854,7 +3854,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-basque-cheesecake-tarta-de-queso-.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Torrijas",
@@ -3865,7 +3865,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-torrijas.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Polvorones",
@@ -3876,7 +3876,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-polvorones.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Leche Frita",
@@ -3887,7 +3887,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-leche-frita.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Ensaimada",
@@ -3898,7 +3898,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-ensaimada.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Turrón",
@@ -3910,7 +3910,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-turr-n.webp",
+      "/images/templates/dessert.png",
   },
   {
     name: "Avocado Toast",
@@ -3921,7 +3921,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-avocado-toast.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Eggs Benedict",
@@ -3931,7 +3931,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Two poached eggs and Canadian bacon on toasted English muffins, draped in rich hollandaise sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-eggs-benedict.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Buttermilk Pancakes",
@@ -3942,7 +3942,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-buttermilk-pancakes.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "French Toast",
@@ -3953,7 +3953,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-french-toast.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Full English Breakfast",
@@ -3963,7 +3963,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A hearty plate of eggs, bacon, sausage, baked beans, grilled tomatoes, mushrooms, and toast.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-full-english-breakfast.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Breakfast Burrito",
@@ -3973,7 +3973,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A large flour tortilla wrapped around scrambled eggs, chorizo, potatoes, and cheddar cheese.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-breakfast-burrito.webp",
+      "/images/templates/taco.png",
   },
   {
     name: "Açaí Bowl",
@@ -3985,7 +3985,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-a-a-bowl.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Smoked Salmon Bagel",
@@ -3995,7 +3995,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A toasted everything bagel smeared with cream cheese, topped with lox, capers, red onions, and dill.",
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-smoked-salmon-bagel.webp",
+      "/images/templates/seafood.png",
   },
   {
     name: "Oatmeal with Fresh Berries",
@@ -4007,7 +4007,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-oatmeal-with-fresh-berries.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Breakfast Sandwich",
@@ -4017,7 +4017,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A fried egg, melted cheddar, and crispy bacon served on a freshly baked brioche bun.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-breakfast-sandwich.webp",
+      "/images/templates/sandwich.png",
   },
   {
     name: "Shakshuka",
@@ -4029,7 +4029,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-shakshuka.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Croissant Sandwich",
@@ -4258,7 +4258,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-craft-ipa.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Pino Grigio (Glass)",
@@ -4270,7 +4270,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pino-grigio-glass-.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Cabernet Sauvignon (Glass)",
@@ -4282,7 +4282,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-cabernet-sauvignon-glass-.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Sangria Tinto",
@@ -4294,7 +4294,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sangria-tinto.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Diet Cola",
@@ -4305,7 +4305,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-diet-cola.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Sparkling Water",
@@ -4316,7 +4316,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-sparkling-water.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Moscow Mule",
@@ -4328,7 +4328,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-moscow-mule.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Lemonade",
@@ -4339,7 +4339,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-lemonade.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Iced Tea",
@@ -4351,7 +4351,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-iced-tea.webp",
+      "/images/templates/coffee.png",
   },
   {
     name: "Piña Colada",
@@ -4363,7 +4363,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-pi-a-colada.webp",
+      "/images/templates/cocktail.png",
   },
   {
     name: "Kids Chicken Nuggets",
@@ -4373,7 +4373,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Six crispy, all-white-meat chicken nuggets served with french fries and ketchup.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-chicken-nuggets.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Kids Mac & Cheese",
@@ -4383,7 +4383,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-mac-cheese.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Kids Cheese Pizza",
@@ -4394,7 +4394,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-cheese-pizza.webp",
+      "/images/templates/pizza.png",
   },
   {
     name: "Kids Mini Burger",
@@ -4404,7 +4404,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A plain beef slider with American cheese on a soft bun, served with fries.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-mini-burger.webp",
+      "/images/templates/burger.png",
   },
   {
     name: "Kids Grilled Cheese",
@@ -4415,7 +4415,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-grilled-cheese.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Kids Buttered Noodles",
@@ -4426,7 +4426,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-buttered-noodles.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Kids Hot Dog",
@@ -4436,7 +4436,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A classic all-beef hot dog on a soft bun, served with a side of apple slices.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-hot-dog.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Kids Fish Sticks",
@@ -4446,7 +4446,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy breaded fish sticks served with tartar sauce and a side of steamed peas.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-fish-sticks.webp",
+      "/images/templates/seafood.png",
   },
   {
     name: "Kids Quesadilla",
@@ -4457,7 +4457,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-quesadilla.webp",
+      "/images/templates/steak.png",
   },
   {
     name: "Kids Chicken & Rice",
@@ -4468,7 +4468,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-kids-chicken-rice.webp",
+      "/images/templates/chicken.png",
   },
   {
     name: "Idly",
