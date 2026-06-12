@@ -130,10 +130,10 @@ export function LoungeTheme(props: MenuThemeProps) {
                       <div 
                         key={item.id} 
                         onClick={() => setters.setSelectedItem(item)}
-                        className={`group cursor-pointer bg-[#141414] rounded-3xl overflow-hidden border border-white/5 hover:border-[#D4AF37]/30 hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:-translate-y-1 transition-all duration-500 flex ${layoutMode === "list" ? "flex-col sm:flex-row p-4 gap-6 items-center h-auto" : `${bentoClass} flex-col relative`}`}
+                        className={`group cursor-pointer bg-[#141414] rounded-3xl overflow-hidden border border-white/5 hover:border-[#D4AF37]/30 hover:shadow-[0_10px_40px_rgba(212,175,55,0.15)] hover:-translate-y-1 transition-all duration-500 flex ${layoutMode === "list" ? "flex-col sm:flex-row p-4 gap-6 items-start sm:items-center relative" : `${bentoClass} flex-col relative`}`}
                       >
                         {item.image_url ? (
-                          <div className={`${layoutMode === "list" ? "w-full sm:w-32 h-32 rounded-2xl" : "absolute inset-0 w-full h-full"} overflow-hidden z-0`}>
+                          <div className={`${layoutMode === "list" ? "w-full sm:w-32 h-40 sm:h-32 rounded-2xl relative shrink-0" : "absolute inset-0 w-full h-full"} overflow-hidden z-0`}>
                             <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition-transform duration-1000" fill />
                             {/* Dark Gradient Overlay for Bento items */}
                             {layoutMode === "grid" && (
@@ -142,35 +142,31 @@ export function LoungeTheme(props: MenuThemeProps) {
                           </div>
                         ) : (
                           // Fallback dark gradient if no image
-                          <div className={`${layoutMode === "list" ? "w-full sm:w-32 h-32 rounded-2xl" : "absolute inset-0 w-full h-full"} bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A] z-0 flex items-center justify-center opacity-30`}>
+                          <div className={`${layoutMode === "list" ? "w-full sm:w-32 h-40 sm:h-32 rounded-2xl relative shrink-0" : "absolute inset-0 w-full h-full"} bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A] z-0 flex items-center justify-center opacity-30`}>
                             <GlassWater size={48} className="text-white/20" />
                           </div>
                         )}
                         
                         {/* Content Area */}
-                        <div className={`relative z-20 flex flex-col justify-end h-full ${layoutMode === "list" ? "w-full py-2" : "p-6"}`}>
+                        <div className={`relative z-20 flex flex-col justify-center w-full ${layoutMode === "list" ? "py-2" : "p-6 h-full mt-auto"}`}>
                           
-                          {/* Price Tag */}
-                          <div className={`absolute ${layoutMode === "list" ? "top-2 right-0" : "top-4 right-4"} z-30`}>
-                            <span className="text-sm font-bold bg-black/60 backdrop-blur-md border border-white/10 text-[#D4AF37] px-3 py-1.5 rounded-full shadow-lg">
+                          <div className={`flex justify-between items-start gap-4 mb-2`}>
+                            <h3 className={`font-bold tracking-tight text-white ${layoutMode === "list" ? "text-xl" : isGiant ? "text-3xl" : "text-lg"}`}>
+                              {item.name}
+                            </h3>
+                            <span className={`shrink-0 font-bold bg-black/60 backdrop-blur-md border border-white/10 text-[#D4AF37] px-3 py-1.5 rounded-full shadow-lg ${layoutMode === "grid" ? "absolute top-4 right-4" : "text-sm"}`}>
                               {currencySign}{item.price.toFixed(2)}
                             </span>
                           </div>
-
-                          <div className={layoutMode === "list" ? "pr-20" : "mt-auto"}>
-                            <h3 className={`font-bold tracking-tight ${layoutMode === "list" ? "text-xl text-white mb-2" : `text-white ${isGiant ? "text-3xl mb-2" : "text-lg mb-1"}`}`}>
-                              {item.name}
-                            </h3>
-                            
-                            {(item.description && (layoutMode === "list" || isGiant)) && (
-                              <p className={`text-sm line-clamp-2 ${layoutMode === "list" ? "text-white/50" : "text-white/60"} font-light leading-relaxed mb-4`}>
-                                {item.description}
-                              </p>
-                            )}
-                            
-                            <div className="flex flex-wrap gap-2 mt-2">
-                              {item.is_popular && <span className="text-[10px] uppercase font-bold bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] px-2 py-1 rounded-md flex items-center gap-1"><Sparkles size={10}/> Premium</span>}
-                            </div>
+                          
+                          {(item.description && (layoutMode === "list" || isGiant)) && (
+                            <p className={`text-sm line-clamp-2 font-light leading-relaxed mb-4 ${layoutMode === "list" ? "text-white/50 pr-4" : "text-white/60"}`}>
+                              {item.description}
+                            </p>
+                          )}
+                          
+                          <div className={`flex flex-wrap gap-2 ${layoutMode === "list" ? "mt-auto" : "mt-2"}`}>
+                            {item.is_popular && <span className="text-[10px] uppercase font-bold bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] px-2 py-1 rounded-md flex items-center gap-1"><Sparkles size={10}/> Premium</span>}
                           </div>
                         </div>
                       </div>
