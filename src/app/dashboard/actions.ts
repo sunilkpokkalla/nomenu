@@ -264,12 +264,12 @@ export async function createMenuItem(formData: FormData) {
   const menuId = field(formData, "menuId");
 
   if (!name || !priceStr) {
-    redirect("/dashboard/items?message=Name%20and%20Price%20are%20required");
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Name%20and%20Price%20are%20required` : "/dashboard/items?message=Name%20and%20Price%20are%20required");
   }
 
   const price = parseFloat(priceStr);
   if (isNaN(price)) {
-    redirect("/dashboard/items?message=Invalid%20price%20format");
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Invalid%20price%20format` : "/dashboard/items?message=Invalid%20price%20format");
   }
 
   const currentPlan = restaurant.plan || "free";
@@ -318,7 +318,7 @@ export async function createMenuItem(formData: FormData) {
   }
 
   if (!categoryId) {
-    redirect("/dashboard/items?message=Category%20is%20required");
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Category%20is%20required` : "/dashboard/items?message=Category%20is%20required");
   }
 
   const description = field(formData, "description");
@@ -390,12 +390,12 @@ export async function editMenuItem(formData: FormData) {
   const menuId = field(formData, "menuId");
 
   if (!name || !priceStr) {
-    redirect("/dashboard/items?message=Name%20and%20Price%20are%20required");
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Name%20and%20Price%20are%20required` : "/dashboard/items?message=Name%20and%20Price%20are%20required");
   }
 
   const price = parseFloat(priceStr);
   if (isNaN(price)) {
-    redirect("/dashboard/items?message=Invalid%20price%20format");
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Invalid%20price%20format` : "/dashboard/items?message=Invalid%20price%20format");
   }
 
   // If a new category is specified and no existing category was selected, create it or use existing
@@ -431,7 +431,7 @@ export async function editMenuItem(formData: FormData) {
   }
 
   if (!categoryId) {
-    redirect("/dashboard/items?message=Category%20is%20required");
+    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Category%20is%20required` : "/dashboard/items?message=Category%20is%20required");
   }
 
   const description = field(formData, "description");
@@ -524,7 +524,6 @@ export async function deleteMenuItem(formData: FormData) {
   }
 
   revalidatePath("/dashboard/items");
-  redirect(menuId ? `/dashboard/items?menuId=${menuId}` : `/dashboard/items`);
 }
 
 // QR CODE ACTIONS
@@ -833,7 +832,8 @@ export async function importCategoriesAndItems(
 
     if (catError || !newCat) {
       console.error("Failed to clone category", catError);
-      continue;
+      await supabase.from("menus").delete().eq("id", targetMenuId); // Rollback
+      redirect(`/dashboard/menus?message=${encodeURIComponent("Failed to clone category. Rolled back.")}`);
     }
 
     // 3. Fetch old items
@@ -859,6 +859,8 @@ export async function importCategoriesAndItems(
 
     if (itemsError) {
       console.error("Failed to clone items", itemsError);
+      await supabase.from("menus").delete().eq("id", targetMenuId); // Rollback
+      redirect(`/dashboard/menus?message=${encodeURIComponent("Failed to clone items. Rolled back.")}`);
     }
   }
 
@@ -911,7 +913,8 @@ export async function updateCategory(formData: FormData) {
     .eq("id", categoryId);
 
   if (error) {
-    redirect(`/dashboard/items?message=${encodeURIComponent("Failed to update category")}`);
+    console.error("Failed to update category:", error);
+    return { error: "Failed to update category" };
   }
 
   revalidatePath("/dashboard/items");
