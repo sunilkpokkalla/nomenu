@@ -889,7 +889,6 @@ export async function deleteCategory(formData: FormData) {
   }
 
   revalidatePath("/dashboard/items");
-  redirect("/dashboard/items");
 }
 
 export async function updateCategory(formData: FormData) {
