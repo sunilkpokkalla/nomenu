@@ -5563,7 +5563,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Steamed soybeans lightly salted with sea salt.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051637156-0.jpg",
+    imageUrl: "/images/templates/appetizer.png",
     isVegetarian: true,
     isVegan: true,
     isGlutenFree: true,
@@ -5574,7 +5574,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Crispy Japanese vegetable spring rolls.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051638730-1.png",
+    imageUrl: "/images/templates/appetizer.png",
     isVegetarian: true,
     isVegan: true,
   },
@@ -5584,7 +5584,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Crispy wontons stuffed with cream cheese and crab meat.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051640118-2.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Shumai",
@@ -5592,7 +5592,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Steamed or fried shrimp dumplings.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051640356-3.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Gyoza",
@@ -5600,7 +5600,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Pan-fried pork and vegetable dumplings.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051640838-4.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Yakitori",
@@ -5608,7 +5608,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Grilled chicken skewers glazed with a sweet and savory teriyaki sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051641162-5.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Takoyaki",
@@ -5616,7 +5616,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Fried octopus balls topped with mayo, takoyaki sauce, and bonito flakes.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051641449-6.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Sesame Seed Ball",
@@ -5624,7 +5624,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Crispy, chewy pastry balls filled with sweet red bean paste and coated in sesame seeds.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051641707-7.png",
+    imageUrl: "/images/templates/appetizer.png",
     isVegetarian: true,
   },
   {
@@ -5633,7 +5633,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Lightly battered and crispy fried chicken and assorted vegetables.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051641970-8.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Shrimp & Veg Tempura",
@@ -5641,7 +5641,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Lightly battered and crispy fried shrimp and assorted vegetables.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051642245-9.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Crunchy Spider",
@@ -5649,7 +5649,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Deep-fried crispy soft shell crab with eel sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051642523-10.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Fried Calamari",
@@ -5657,7 +5657,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Crispy battered calamari rings served with a dipping sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051642796-11.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Rock Shrimp",
@@ -5665,7 +5665,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Lightly battered, deep-fried shrimp tossed in a creamy, spicy mayo.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051643062-12.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Tuna Tataki",
@@ -5673,7 +5673,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Seared tuna thinly sliced and served with ponzu sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051643347-13.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Pepper Tuna",
@@ -5681,7 +5681,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Seared tuna with a black pepper crust, thinly sliced.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051643625-14.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Lemon Pepper Tuna",
@@ -5689,7 +5689,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Seared tuna with a lemon pepper crust, thinly sliced.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051644204-15.png",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Yellowtail Jalapenos",
@@ -5697,7 +5697,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Thinly sliced yellowtail topped with fresh jalapeño and ponzu sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051644542-16.png",
+    imageUrl: "/images/templates/appetizer.png",
     isSpicy: true,
   },
   {
@@ -5706,7 +5706,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Fresh salmon wrapped around mango, finished with a sweet citrus sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051645644-17.jpg",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Salmon Tartar",
@@ -5714,7 +5714,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Diced fresh salmon mixed with delicate seasonings.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051647753-18.jpg",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Tuna Tartar",
@@ -5722,7 +5722,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Diced fresh tuna mixed with delicate seasonings.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051649599-19.jpg",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Ahi Tower",
@@ -5730,7 +5730,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Layers of spicy tuna, crab salad, avocado, and rice, shaped into a tower.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051651433-20.jpg",
+    imageUrl: "/images/templates/appetizer.png",
   },
   {
     name: "Chicken Teriyaki",
@@ -5738,7 +5738,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled chicken topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051653141-21.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Steak Teriyaki",
@@ -5746,7 +5746,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled steak topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051655063-22.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Shrimp Teriyaki",
@@ -5754,7 +5754,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled shrimp topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051658028-23.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Salmon Teriyaki",
@@ -5762,7 +5762,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled salmon topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051661619-24.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Seafood Teriyaki",
@@ -5770,7 +5770,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Assorted grilled seafood topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051663044-25.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Vegetable Teriyaki",
@@ -5778,7 +5778,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Assorted grilled vegetables topped with a sweet and savory teriyaki glaze.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051665654-26.jpg",
+    imageUrl: "/images/templates/steak.png",
     isVegetarian: true,
     isVegan: true,
   },
@@ -5788,7 +5788,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled red snapper topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051667652-27.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Chicken Katsu",
@@ -5796,7 +5796,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Panko-breaded and deep-fried chicken cutlet served with katsu sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051669346-28.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Vegetable Tempura",
@@ -5804,7 +5804,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Assorted vegetables lightly battered and deep-fried to a delicate crisp.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051671102-29.jpg",
+    imageUrl: "/images/templates/steak.png",
     isVegetarian: true,
   },
   {
@@ -5813,7 +5813,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Fresh vegetables grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051673699-30.jpg",
+    imageUrl: "/images/templates/steak.png",
     isVegetarian: true,
   },
   {
@@ -5822,7 +5822,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Tender chicken grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051676011-31.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Hibachi Salmon",
@@ -5830,7 +5830,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Fresh salmon grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051677847-32.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Hibachi Shrimp",
@@ -5838,7 +5838,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Juicy shrimp grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051679981-33.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Hibachi Steak",
@@ -5846,7 +5846,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Juicy steak grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051682843-34.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Hibachi Scallop",
@@ -5854,7 +5854,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Tender scallops grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051685288-35.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Hibachi Lobster Tail",
@@ -5862,7 +5862,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Premium lobster tail grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051687184-36.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Rainbow Roll",
@@ -5870,7 +5870,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "California roll topped with assorted raw fish and avocado.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051688733-37.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Dragon Roll",
@@ -5878,7 +5878,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Eel and cucumber roll topped with thinly sliced avocado and eel sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051691102-38.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Spider Roll",
@@ -5886,7 +5886,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Fried soft shell crab, avocado, cucumber, and eel sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051693567-39.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Godzilla Roll",
@@ -5894,7 +5894,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Deep-fried roll with spicy tuna, avocado, and cream cheese.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051695205-40.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Volcano Roll",
@@ -5902,7 +5902,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "California roll topped with baked spicy seafood mix.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051696879-41.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Shaggy Dog Roll",
@@ -5910,7 +5910,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Shrimp tempura and avocado topped with shredded crab and spicy mayo.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051698298-42.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Super Crunchy Roll",
@@ -5918,7 +5918,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Crispy shrimp tempura roll topped with tempura flakes and eel sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051700890-43.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Cowboy Roll",
@@ -5926,7 +5926,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Steak and avocado roll topped with eel sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051704573-44.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Rock And Roll",
@@ -5934,7 +5934,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Shrimp tempura, eel, avocado, and cucumber wrapped in soy paper.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051706242-45.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Fire Island Roll",
@@ -5942,7 +5942,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Spicy tuna and jalapeño topped with spicy crab.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051708005-46.jpg",
+    imageUrl: "/images/templates/sushi.png",
     isSpicy: true,
   },
   {
@@ -5951,7 +5951,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Eel and cucumber roll topped with layers of avocado, resembling a caterpillar.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051711079-47.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Angry Dragon Roll",
@@ -5959,7 +5959,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Shrimp tempura, spicy tuna, and papaya topped with spicy crab and rutabaga wrapper.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051712904-48.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Firecracker Roll",
@@ -5967,7 +5967,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Spicy tuna roll topped with spicy yellowtail and jalapeño.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051714450-49.jpg",
+    imageUrl: "/images/templates/sushi.png",
     isSpicy: true,
   },
   {
@@ -5976,7 +5976,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Shrimp tempura and mango topped with spicy tuna and coconut flakes.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051716248-50.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Monster Roll",
@@ -5984,7 +5984,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Massive tempura roll filled with mixed fish, cream cheese, and avocado.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051718533-51.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "TNT Roll",
@@ -5992,7 +5992,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Spicy tuna roll topped with seared tuna and spicy mayo.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051720290-52.jpg",
+    imageUrl: "/images/templates/sushi.png",
     isSpicy: true,
   },
   {
@@ -6001,7 +6001,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Fresh salmon, avocado, and cucumber roll.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051721985-53.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Salmon Roll",
@@ -6009,7 +6009,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Classic sushi roll filled with fresh raw salmon.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051725232-54.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Salmon Avocado Roll",
@@ -6017,7 +6017,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Sushi roll filled with fresh salmon and creamy avocado.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051728224-55.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Spicy Salmon Roll",
@@ -6025,7 +6025,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Sushi roll filled with chopped salmon mixed with spicy mayo.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051730450-56.jpg",
+    imageUrl: "/images/templates/sushi.png",
     isSpicy: true,
   },
   {
@@ -6034,7 +6034,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Classic sushi roll filled with fresh raw tuna.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051732017-57.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Tuna Avocado Roll",
@@ -6042,7 +6042,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Sushi roll filled with fresh tuna and creamy avocado.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051733844-58.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Spicy Tuna Roll",
@@ -6050,7 +6050,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Sushi roll filled with chopped tuna mixed with spicy mayo.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051736598-59.jpg",
+    imageUrl: "/images/templates/sushi.png",
     isSpicy: true,
   },
   {
@@ -6059,7 +6059,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Classic sushi roll filled with fresh yellowtail and scallions.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051738271-60.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Spicy Yellowtail Roll",
@@ -6067,7 +6067,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Sushi roll filled with chopped yellowtail mixed with spicy mayo.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051739928-61.jpg",
+    imageUrl: "/images/templates/sushi.png",
     isSpicy: true,
   },
   {
@@ -6076,7 +6076,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Smoked salmon, cream cheese, and cucumber roll.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051741462-62.jpg",
+    imageUrl: "/images/templates/sushi.png",
   },
   {
     name: "Enchiladas A la Gloria",
@@ -6084,7 +6084,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Signature enchiladas filled with a blend of cheeses and topped with special sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051744535-63.jpg",
+    imageUrl: "/images/templates/taco.png",
   },
   {
     name: "Sour Cream Chicken Enchiladas",
@@ -6092,7 +6092,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Shredded chicken enchiladas smothered in a rich and tangy sour cream sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051747396-64.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Enchiladas Verdes",
@@ -6100,7 +6100,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Enchiladas topped with a tangy and slightly spicy green tomatillo sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051749100-65.jpg",
+    imageUrl: "/images/templates/taco.png",
   },
   {
     name: "Beef Enchiladas",
@@ -6108,7 +6108,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Savory ground beef enchiladas topped with traditional red chili sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051750738-66.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Shrimp Enchiladas",
@@ -6116,7 +6116,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Enchiladas filled with seasoned shrimp, topped with a creamy sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051752505-67.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Spinach & Chicken Quesadilla",
@@ -6124,7 +6124,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled flour tortilla stuffed with melted cheese, fresh spinach, and chicken.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051754113-68.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Shrimp Quesadilla",
@@ -6132,7 +6132,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled flour tortilla stuffed with melted cheese and seasoned shrimp.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051756668-69.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Skirt Steak Fajita Quesadilla",
@@ -6140,7 +6140,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled flour tortilla stuffed with melted cheese and marinated skirt steak fajitas.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051758399-70.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Crispy Taco Dinner",
@@ -6148,7 +6148,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Three classic crispy shell tacos filled with ground beef or chicken, lettuce, tomato, and cheese.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051759966-71.jpg",
+    imageUrl: "/images/templates/taco.png",
   },
   {
     name: "Chicken Flautas",
@@ -6156,7 +6156,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Corn tortillas rolled with chicken and deep-fried until golden crisp, served with guacamole and sour cream.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051761688-72.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Combination Plate",
@@ -6164,7 +6164,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "A generous platter featuring an enchilada, a taco, and a tamale, served with rice and beans.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051766651-73.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Shredded Chicken Burrito",
@@ -6172,7 +6172,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Large flour tortilla wrapped around shredded chicken, beans, cheese, and rice.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051768173-74.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Ground Beef Burrito",
@@ -6180,7 +6180,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Large flour tortilla wrapped around seasoned ground beef, beans, cheese, and rice.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051769816-75.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Chicken Fajita Burrito",
@@ -6188,7 +6188,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Large flour tortilla wrapped around grilled chicken fajitas, beans, cheese, and rice.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051771156-76.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Beef Fajita Burrito",
@@ -6196,7 +6196,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Large flour tortilla wrapped around grilled beef fajitas, beans, cheese, and rice.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051772618-77.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Ground Beef Chile Relleno",
@@ -6204,7 +6204,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Poblano pepper stuffed with ground beef and cheese, battered and fried.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051773888-78.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Beef Fajita Chile Relleno",
@@ -6212,7 +6212,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Poblano pepper stuffed with beef fajitas and cheese, battered and fried.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051775521-79.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Chicken Fajita Chile Relleno",
@@ -6220,7 +6220,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Poblano pepper stuffed with chicken fajitas and cheese, battered and fried.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051777489-80.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Shrimp Chile Relleno",
@@ -6228,7 +6228,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Poblano pepper stuffed with shrimp and cheese, battered and fried.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051779662-81.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Chicken Fajitas",
@@ -6236,7 +6236,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Sizzling marinated chicken strips grilled with onions and bell peppers, served with tortillas.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051781380-82.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Skirt Steak Fajitas",
@@ -6244,7 +6244,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Sizzling marinated skirt steak grilled with onions and bell peppers, served with tortillas.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051783085-83.jpg",
+    imageUrl: "/images/templates/steak.png",
   },
   {
     name: "Veggie Fajitas",
@@ -6252,7 +6252,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Sizzling assorted grilled vegetables served with tortillas.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051786504-84.jpg",
+    imageUrl: "/images/templates/steak.png",
     isVegetarian: true,
   },
   {
@@ -6261,7 +6261,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Sizzling marinated shrimp grilled with onions and bell peppers, served with tortillas.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051790595-85.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
   {
     name: "Tacos Al Carbón",
@@ -6269,7 +6269,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled marinated beef or chicken folded in warm flour tortillas.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051792129-86.jpg",
+    imageUrl: "/images/templates/taco.png",
   },
   {
     name: "Brisket Tacos",
@@ -6277,7 +6277,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Slow-roasted, tender beef brisket served in tortillas with onions and cilantro.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051794100-87.jpg",
+    imageUrl: "/images/templates/taco.png",
   },
   {
     name: "Tacos de Pollo",
@@ -6285,7 +6285,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Classic chicken tacos garnished with fresh cilantro and diced onions.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051795692-88.jpg",
+    imageUrl: "/images/templates/chicken.png",
   },
   {
     name: "Red Snapper Tacos",
@@ -6293,7 +6293,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled or fried red snapper in tortillas, topped with slaw and a zesty sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051798376-89.jpg",
+    imageUrl: "/images/templates/taco.png",
   },
   {
     name: "Shrimp Tacos",
@@ -6301,6 +6301,6 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Succulent shrimp served in tortillas, topped with fresh slaw and a creamy sauce.",
-    imageUrl: "https://mlfvzvoiaqsaagslervc.supabase.co/storage/v1/object/public/menu-items/library-images/library-item-1781051800025-90.jpg",
+    imageUrl: "/images/templates/seafood.png",
   },
 ];
