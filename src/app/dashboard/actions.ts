@@ -70,7 +70,10 @@ export async function createMenu(formData: FormData) {
     redirect("/login");
   }
 
-
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
 
   const name = field(formData, "name");
   if (!name) {
@@ -134,7 +137,10 @@ export async function editMenu(formData: FormData) {
     redirect("/dashboard/menus?message=Menu%20ID%20is%20required");
   }
 
-
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
 
   const name = field(formData, "name");
   if (!name) {
@@ -246,7 +252,10 @@ export async function createMenuItem(formData: FormData) {
     redirect("/login");
   }
 
-
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
 
   const name = field(formData, "name");
   const priceStr = field(formData, "price");
@@ -255,12 +264,12 @@ export async function createMenuItem(formData: FormData) {
   const menuId = field(formData, "menuId");
 
   if (!name || !priceStr) {
-    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Name%20and%20Price%20are%20required` : "/dashboard/items?message=Name%20and%20Price%20are%20required");
+    redirect("/dashboard/items?message=Name%20and%20Price%20are%20required");
   }
 
   const price = parseFloat(priceStr);
   if (isNaN(price)) {
-    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Invalid%20price%20format` : "/dashboard/items?message=Invalid%20price%20format");
+    redirect("/dashboard/items?message=Invalid%20price%20format");
   }
 
   const currentPlan = restaurant.plan || "free";
@@ -309,7 +318,7 @@ export async function createMenuItem(formData: FormData) {
   }
 
   if (!categoryId) {
-    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Category%20is%20required` : "/dashboard/items?message=Category%20is%20required");
+    redirect("/dashboard/items?message=Category%20is%20required");
   }
 
   const description = field(formData, "description");
@@ -351,6 +360,7 @@ export async function createMenuItem(formData: FormData) {
   }
 
   revalidatePath("/dashboard/items");
+  redirect(menuId ? `/dashboard/items?menuId=${menuId}` : `/dashboard/items`);
 }
 
 export async function editMenuItem(formData: FormData) {
@@ -363,7 +373,10 @@ export async function editMenuItem(formData: FormData) {
     redirect("/login");
   }
 
-
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
 
   const itemId = field(formData, "itemId");
   if (!itemId) {
@@ -377,12 +390,12 @@ export async function editMenuItem(formData: FormData) {
   const menuId = field(formData, "menuId");
 
   if (!name || !priceStr) {
-    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Name%20and%20Price%20are%20required` : "/dashboard/items?message=Name%20and%20Price%20are%20required");
+    redirect("/dashboard/items?message=Name%20and%20Price%20are%20required");
   }
 
   const price = parseFloat(priceStr);
   if (isNaN(price)) {
-    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Invalid%20price%20format` : "/dashboard/items?message=Invalid%20price%20format");
+    redirect("/dashboard/items?message=Invalid%20price%20format");
   }
 
   // If a new category is specified and no existing category was selected, create it or use existing
@@ -418,7 +431,7 @@ export async function editMenuItem(formData: FormData) {
   }
 
   if (!categoryId) {
-    redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Category%20is%20required` : "/dashboard/items?message=Category%20is%20required");
+    redirect("/dashboard/items?message=Category%20is%20required");
   }
 
   const description = field(formData, "description");
@@ -461,6 +474,7 @@ export async function editMenuItem(formData: FormData) {
   }
 
   revalidatePath("/dashboard/items");
+  redirect(menuId ? `/dashboard/items?menuId=${menuId}` : `/dashboard/items`);
 }
 
 export async function toggleMenuItemStatus(itemId: string, currentStatus: boolean) {
@@ -510,6 +524,7 @@ export async function deleteMenuItem(formData: FormData) {
   }
 
   revalidatePath("/dashboard/items");
+  redirect(menuId ? `/dashboard/items?menuId=${menuId}` : `/dashboard/items`);
 }
 
 // QR CODE ACTIONS
@@ -818,8 +833,7 @@ export async function importCategoriesAndItems(
 
     if (catError || !newCat) {
       console.error("Failed to clone category", catError);
-      await supabase.from("menus").delete().eq("id", targetMenuId); // Rollback
-      redirect(`/dashboard/menus?message=${encodeURIComponent("Failed to clone category. Rolled back.")}`);
+      continue;
     }
 
     // 3. Fetch old items
@@ -845,8 +859,6 @@ export async function importCategoriesAndItems(
 
     if (itemsError) {
       console.error("Failed to clone items", itemsError);
-      await supabase.from("menus").delete().eq("id", targetMenuId); // Rollback
-      redirect(`/dashboard/menus?message=${encodeURIComponent("Failed to clone items. Rolled back.")}`);
     }
   }
 
@@ -899,8 +911,7 @@ export async function updateCategory(formData: FormData) {
     .eq("id", categoryId);
 
   if (error) {
-    console.error(error);
-    return { error: "Failed to update category" };
+    redirect(`/dashboard/items?message=${encodeURIComponent("Failed to update category")}`);
   }
 
   revalidatePath("/dashboard/items");
