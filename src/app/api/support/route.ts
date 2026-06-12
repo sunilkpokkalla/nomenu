@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
     // 2. Parse request body
     const body = await req.json();
-    const { subject, urgency, message, userEmail, restaurantName } = body;
+    const { subject, urgency, message, userEmail, restaurantName, contactNumber } = body;
 
     if (!subject || !message || !userEmail) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -49,6 +49,10 @@ export async function POST(req: Request) {
             <tr>
               <td style="padding: 8px 0; border-bottom: 1px solid #f1f5f9; color: #64748b;"><strong>User Email:</strong></td>
               <td style="padding: 8px 0; border-bottom: 1px solid #f1f5f9; color: #0f172a;"><a href="mailto:${userEmail}">${userEmail}</a></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; border-bottom: 1px solid #f1f5f9; color: #64748b;"><strong>Contact Number:</strong></td>
+              <td style="padding: 8px 0; border-bottom: 1px solid #f1f5f9; color: #0f172a;">${contactNumber || 'Not provided'}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; border-bottom: 1px solid #f1f5f9; color: #64748b;"><strong>Urgency:</strong></td>

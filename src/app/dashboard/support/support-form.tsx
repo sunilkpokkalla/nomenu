@@ -10,6 +10,7 @@ interface SupportFormProps {
 
 export function SupportForm({ userEmail, restaurantName }: SupportFormProps) {
   const [subject, setSubject] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
   const [urgency, setUrgency] = useState("Normal");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +34,8 @@ export function SupportForm({ userEmail, restaurantName }: SupportFormProps) {
           urgency,
           message,
           userEmail,
-          restaurantName
+          restaurantName,
+          contactNumber
         })
       });
 
@@ -47,6 +49,7 @@ export function SupportForm({ userEmail, restaurantName }: SupportFormProps) {
       setSubject("");
       setMessage("");
       setUrgency("Normal");
+      setContactNumber("");
       
     } catch (err) {
       console.error(err);
@@ -113,15 +116,26 @@ export function SupportForm({ userEmail, restaurantName }: SupportFormProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="space-y-2 md:col-span-2">
-          <label className="text-sm font-bold text-slate-700 uppercase tracking-widest">Subject <span className="text-rose-500">*</span></label>
+      <div className="space-y-2">
+        <label className="text-sm font-bold text-slate-700 uppercase tracking-widest">Subject <span className="text-rose-500">*</span></label>
+        <input 
+          type="text" 
+          required
+          placeholder="Briefly describe the issue..."
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          className="w-full bg-white border border-slate-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-slate-900 font-medium transition-all"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="text-sm font-bold text-slate-700 uppercase tracking-widest">Contact Number (Optional)</label>
           <input 
-            type="text" 
-            required
-            placeholder="Briefly describe the issue..."
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
+            type="tel" 
+            placeholder="e.g. +1 (555) 000-0000"
+            value={contactNumber}
+            onChange={(e) => setContactNumber(e.target.value)}
             className="w-full bg-white border border-slate-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-slate-900 font-medium transition-all"
           />
         </div>
