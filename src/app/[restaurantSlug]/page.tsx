@@ -32,12 +32,12 @@ export default async function RestaurantRootPage(
   if (['elite', 'enterprise'].includes(plan) && isMenuHost) {
     const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const protocol = rawAppUrl.startsWith("https") ? "https" : "http";
-    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0];
+    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0].replace(/^www\./, "");
     redirect(`${protocol}://order.${rootDomain}/${restaurantSlug}`);
   } else if (['free', 'pro'].includes(plan) && isOrderHost) {
     const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const protocol = rawAppUrl.startsWith("https") ? "https" : "http";
-    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0];
+    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0].replace(/^www\./, "");
     redirect(`${protocol}://menu.${rootDomain}/${restaurantSlug}`);
   }
 

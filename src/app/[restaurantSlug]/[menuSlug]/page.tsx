@@ -47,14 +47,14 @@ export default async function StorefrontMenuPage(
   if (['elite', 'enterprise'].includes(plan) && isMenuHost) {
     const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const protocol = rawAppUrl.startsWith("https") ? "https" : "http";
-    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0];
+    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0].replace(/^www\./, "");
     const qrParam = qrCodeId ? `?qr=${qrCodeId}` : "";
     const tableParam = tableNumber ? `${qrParam ? '&' : '?'}table=${tableNumber}` : "";
     redirect(`${protocol}://order.${rootDomain}/${restaurantSlug}/${menuSlug}${qrParam}${tableParam}`);
   } else if (['free', 'pro'].includes(plan) && isOrderHost) {
     const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const protocol = rawAppUrl.startsWith("https") ? "https" : "http";
-    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0];
+    const rootDomain = rawAppUrl.replace(/^https?:\/\//, "").split("/")[0].replace(/^www\./, "");
     const qrParam = qrCodeId ? `?qr=${qrCodeId}` : "";
     const tableParam = tableNumber ? `${qrParam ? '&' : '?'}table=${tableNumber}` : "";
     redirect(`${protocol}://menu.${rootDomain}/${restaurantSlug}/${menuSlug}${qrParam}${tableParam}`);

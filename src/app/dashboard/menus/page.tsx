@@ -1,4 +1,4 @@
-import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils, BedDouble, Coffee, Wine, Sun, Car, MapPin, Building, Armchair } from "lucide-react";
+import { Eye, Menu as MenuIcon, Plus, QrCode, Trash2, Utensils, BedDouble, Coffee, Wine, Sun, Car, MapPin, Building, Armchair, Target } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -30,10 +30,12 @@ const getLocationIcon = (format: string) => {
   if (normalized.includes("table") || normalized.includes("dining") || normalized.includes("restaurant")) return Utensils;
   if (normalized.includes("bar") || normalized.includes("drink") || normalized.includes("wine")) return Wine;
   if (normalized.includes("cafe") || normalized.includes("coffee") || normalized.includes("lounge")) return Coffee;
-  if (normalized.includes("pool") || normalized.includes("patio") || normalized.includes("outdoor") || normalized.includes("beach") || normalized.includes("cabana")) return Sun;
+  if (normalized.includes("pool") || normalized.includes("patio") || normalized.includes("outdoor") || normalized.includes("beach") || normalized.includes("cabana") || normalized.includes("sunbed")) return Sun;
   if (normalized.includes("lobby") || normalized.includes("building")) return Building;
   if (normalized.includes("drive") || normalized.includes("car") || normalized.includes("curb")) return Car;
-  if (normalized.includes("seating") || normalized.includes("waiting") || normalized.includes("chair")) return Armchair;
+  if (normalized.includes("seating") || normalized.includes("waiting") || normalized.includes("chair") || normalized.includes("seat")) return Armchair;
+  if (normalized.includes("lane") || normalized.includes("bowling") || normalized.includes("alley")) return Target;
+  if (normalized.includes("none")) return MenuIcon;
   return MapPin;
 };
 
@@ -113,106 +115,102 @@ export default async function MenusPage(
           ).map(([format, menusInFormat]) => {
             const FormatIcon = getLocationIcon(format);
             return (
-            <div key={format} className="space-y-4">
-              <h3 className="text-xl font-medium tracking-tight text-slate-900 flex items-center gap-3">
-                <div className="bg-slate-100 rounded-full p-2">
-                  <FormatIcon className="w-4 h-4 text-slate-600" />
+            <div key={format} className="space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="bg-indigo-50/80 border border-indigo-100 rounded-xl p-2.5 shadow-sm">
+                  <FormatIcon className="w-5 h-5 text-indigo-600" />
                 </div>
-                {format.replace(/_/g, " ")} Menus
-                <div className="h-px bg-slate-200 flex-1 ml-4" />
-              </h3>
+                <h3 className="text-2xl font-bold tracking-tight text-slate-900">
+                  {format.replace(/_/g, " ")} Menus
+                </h3>
+              </div>
               
-              <div className="grid gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {menusInFormat.map((menu) => {
                   const toggleAction = toggleMenuStatus.bind(null, menu.id, menu.is_active);
 
                   return (
-                    <div key={menu.id} className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                      {/* Left Side: Info */}
-                      <div className="flex items-start gap-4 flex-1">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-slate-400">
-                          <FormatIcon className="h-6 w-6" />
+                    <div key={menu.id} className="group relative flex flex-col bg-white rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:border-slate-300 transition-all duration-300 overflow-hidden">
+                      {/* Top Section */}
+                      <div className="p-6 pb-4">
+                        <div className="flex items-start justify-between gap-4 mb-4">
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200/60 text-slate-600 shadow-inner">
+                            <FormatIcon className="h-6 w-6" />
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <form action={toggleAction} className="flex items-center gap-2" title={menu.is_active ? "Active" : "Inactive"}>
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                {menu.is_active ? "Live" : "Draft"}
+                              </span>
+                              <Switch 
+                                checked={menu.is_active} 
+                                type="submit" 
+                                className="scale-90 data-[state=checked]:bg-indigo-600"
+                              />
+                            </form>
+                            <div className="h-5 w-px bg-slate-200" />
+                            <DeleteConfirmForm
+                              action={deleteMenu}
+                              confirmMessage="Delete this menu and ALL its items?"
+                              name="menuId"
+                              value={menu.id}
+                            >
+                              <Button
+                                type="submit"
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50"
+                                title="Delete Menu"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </DeleteConfirmForm>
+                          </div>
                         </div>
-                        <div className="flex flex-col">
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-lg font-bold text-slate-900">{menu.name}</h4>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="text-xl font-bold text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors">{menu.name}</h4>
                             {menu.menu_type && (
-                              <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-semibold text-slate-600">
+                              <Badge variant="outline" className="bg-indigo-50/50 text-indigo-700 border-indigo-200/60 text-[10px] uppercase tracking-wider font-bold">
                                 {menu.menu_type}
                               </Badge>
                             )}
-                            {!menu.is_active && (
-                              <Badge variant="secondary" className="bg-slate-100 text-slate-500 hover:bg-slate-100 border-transparent text-[10px] uppercase tracking-wider">
-                                Draft
-                              </Badge>
-                            )}
                           </div>
-                          <p className="text-sm text-slate-500 line-clamp-1 mt-1">
+                          <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">
                             {menu.description || "No description provided."}
                           </p>
                         </div>
                       </div>
 
-                      {/* Right Side: Actions */}
-                      <div className="flex items-center gap-3 sm:gap-6 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-slate-100 pt-3 sm:pt-0">
-                        {/* Status Toggle */}
-                        <form action={toggleAction} className="flex items-center gap-2" title={menu.is_active ? "Active" : "Inactive"}>
-                          <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 hidden sm:inline-block">
-                            {menu.is_active ? "Live" : "Draft"}
-                          </span>
-                          <Switch 
-                            checked={menu.is_active} 
-                            type="submit" 
-                            className="scale-90"
-                          />
-                        </form>
-
-                        <div className="h-8 w-px bg-slate-200 hidden sm:block" />
-
-                        {/* Button Links */}
-                        <div className="flex items-center gap-2">
-                          <Button variant="outline" size="sm" className="h-9 px-3 bg-white" asChild>
+                      <div className="mt-auto border-t border-slate-100 bg-slate-50/50 p-4">
+                        <div className="flex items-center justify-between gap-2">
+                          <Button variant="default" size="sm" className="h-10 px-4 rounded-xl font-semibold shadow-sm w-full bg-slate-900 hover:bg-slate-800 text-white" asChild>
                             <Link href={`/dashboard/items?menuId=${menu.id}&categoryId=all`}>
-                              <Utensils className="mr-2 h-4 w-4 text-slate-400" />
+                              <Utensils className="mr-2 h-4 w-4 opacity-80" />
                               Manage Items
                             </Link>
                           </Button>
                           
-                          <Button variant="outline" size="sm" className="h-9 w-9 p-0 bg-white" title="Preview Menu" asChild>
-                            <Link href={`/menu/${menu.id}`} target="_blank">
-                              <Eye className="h-4 w-4 text-slate-400" />
-                            </Link>
-                          </Button>
-
-                          <Button variant="outline" size="sm" className="h-9 w-9 p-0 bg-white" title="QR Codes" asChild>
-                            <Link href={`/dashboard/qrcodes?menuId=${menu.id}`}>
-                              <QrCode className="h-4 w-4 text-slate-400" />
-                            </Link>
-                          </Button>
-                        </div>
-
-                        {/* Edit & Delete */}
-                        <div className="flex items-center gap-1 border-l border-slate-100 pl-3">
-                          <EditMenuModal 
-                            menu={menu} 
-                            cuisineType={restaurant.cuisine_type} 
-                            editAction={editMenu} 
-                          />
-                          <DeleteConfirmForm
-                            action={deleteMenu}
-                            confirmMessage="Delete this menu and ALL its items?"
-                            name="menuId"
-                            value={menu.id}
-                          >
-                            <Button
-                              type="submit"
-                              variant="ghost"
-                              size="sm"
-                              className="h-9 w-9 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
-                            >
-                              <Trash2 className="h-4 w-4" />
+                          <div className="flex items-center gap-1.5 shrink-0 border-l border-slate-200/60 pl-2 ml-1">
+                            <Button variant="outline" size="sm" className="h-10 w-10 p-0 rounded-xl bg-white hover:bg-slate-50 border-slate-200" title="Preview Menu" asChild>
+                              <Link href={`/menu/${menu.id}`} target="_blank">
+                                <Eye className="h-4 w-4 text-slate-500" />
+                              </Link>
                             </Button>
-                          </DeleteConfirmForm>
+
+                            <Button variant="outline" size="sm" className="h-10 w-10 p-0 rounded-xl bg-white hover:bg-slate-50 border-slate-200" title="QR Codes" asChild>
+                              <Link href={`/dashboard/qrcodes?menuId=${menu.id}`}>
+                                <QrCode className="h-4 w-4 text-slate-500" />
+                              </Link>
+                            </Button>
+
+                            <EditMenuModal 
+                              menu={menu} 
+                              cuisineType={restaurant.cuisine_type} 
+                              editAction={editMenu} 
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
