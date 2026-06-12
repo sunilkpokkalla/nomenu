@@ -5,6 +5,7 @@ import { Plus, UtensilsCrossed, MapPin, Receipt, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { MenuDescriptionField } from "@/components/dashboard/menu-description-field";
 import {
@@ -37,18 +38,18 @@ export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMen
           Create Menu
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-md overflow-y-auto">
-        <SheetHeader className="mb-6">
-          <SheetTitle className="text-2xl font-bold tracking-tight text-slate-900">Create Menu</SheetTitle>
-          <SheetDescription>
-            Add a new digital menu to your restaurant dashboard.
-          </SheetDescription>
-        </SheetHeader>
-
+      <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
         <form action={async (formData) => {
           await createAction(formData);
           setIsOpen(false);
-        }} className="space-y-8 pb-8">
+        }} className="flex flex-col h-full max-h-screen">
+          <div className="flex-1 overflow-y-auto p-6 space-y-8">
+            <SheetHeader className="mb-2">
+              <SheetTitle className="text-2xl font-bold tracking-tight text-slate-900">Create Menu</SheetTitle>
+              <SheetDescription>
+                Add a new digital menu to your restaurant dashboard.
+              </SheetDescription>
+            </SheetHeader>
           
           {/* Basic Details */}
           <div className="space-y-4">
@@ -144,9 +145,9 @@ export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMen
             <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-50/80 border border-slate-100">
               <div className="space-y-1.5">
                 <Label htmlFor="taxRate" className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Tax Rate (%)</Label>
-                <div className="relative">
-                  <Input id="taxRate" name="taxRate" type="number" step="0.001" min="0" placeholder="8.875" className="bg-white border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 h-10 shadow-sm pr-8" />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400 font-medium">%</div>
+                <div className="flex space-x-2">
+                  <Input id="taxRate" name="taxRate" type="number" step="0.001" min="0" placeholder="8.875" className="flex-1 bg-white border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 h-10 shadow-sm" />
+                  <div className="w-[72px] flex items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-sm font-medium text-slate-600 shadow-sm select-none">%</div>
                 </div>
               </div>
               <div className="space-y-1.5">
@@ -168,14 +169,13 @@ export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMen
 
           {/* Status Section */}
           <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
-            <div className="mt-0.5">
-              <input 
-                type="checkbox" 
-                id="isActive"
+            <div className="mt-0.5 flex items-center h-5">
+              <Switch 
+                id="isActive" 
                 name="isActive" 
                 value="true" 
                 defaultChecked={true} 
-                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-600 h-5 w-5 cursor-pointer bg-white" 
+                className="data-[state=checked]:bg-indigo-600"
               />
             </div>
             <div className="flex-1 space-y-1">
@@ -187,10 +187,13 @@ export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMen
             <Eye className="h-5 w-5 text-indigo-500" />
           </div>
 
-          <Button type="submit" className="w-full h-11 text-sm font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm mt-4">
-            <Plus className="mr-2 h-4 w-4" />
-            Create Menu
-          </Button>
+          </div>
+          <div className="p-4 border-t border-slate-100 bg-white mt-auto shrink-0 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
+            <Button type="submit" className="w-full h-11 text-sm font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm">
+              <Plus className="mr-2 h-4 w-4" />
+              Create Menu
+            </Button>
+          </div>
         </form>
       </SheetContent>
     </Sheet>
