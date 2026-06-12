@@ -322,7 +322,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                       </div>
                     ) : (
                       <div className="bg-slate-50 p-2 rounded-xl border border-slate-200">
-                        <ImageUploader 
+                        <ImageUploader folder="logo" 
                           value={customLogoUrl} 
                           onChange={setCustomLogoUrl} 
                         />

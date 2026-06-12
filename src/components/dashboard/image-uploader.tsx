@@ -13,9 +13,10 @@ import imageCompression from 'browser-image-compression';
 interface ImageUploaderProps {
   value?: string;
   onChange?: (value: string) => void;
+  folder?: "logo" | "item-list" | "general";
 }
 
-export function ImageUploader({ value: externalValue, onChange }: ImageUploaderProps) {
+export function ImageUploader({ value: externalValue, onChange, folder = "item-list" }: ImageUploaderProps) {
   const [mode, setMode] = useState<"file" | "url">("file");
   const [internalValue, setInternalValue] = useState<string>("");
   const [preview, setPreview] = useState<string>("");
@@ -80,7 +81,7 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
 
       const uploadFormData = new FormData();
       uploadFormData.append("file", compressedFile);
-      uploadFormData.append("path", filePath);
+      uploadFormData.append("folder", folder);
 
       const response = await fetch("/api/upload", {
         method: "POST",

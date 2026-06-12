@@ -11,9 +11,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Get the user's restaurant
+    const { data: restaurant } = await supabase
+      .from("restaurants")
+      .select("id")
+      .eq("owner_id", user.id)
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+      
+    const restaurantId = restaurant?.id || "unassigned";
+
     const formData = await request.formData();
     const file = formData.get("file") as File;
-    const path = formData.get("path") as string;
+    const folder = formData.get("folder") as string || "general";
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -24,9 +35,15 @@ export async function POST(request: Request) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${crypto.randomUUID()}.${fileExt}`;
+    
+    // Structure: restaurant_id/folder/filename
+    const finalPath = `${restaurantId}/${folder}/${fileName}`;
+
     const { error: uploadError } = await adminClient.storage
       .from("menu-items")
-      .upload(path, file, {
+      .upload(finalPath, file, {
         cacheControl: "3600",
         upsert: false,
       });
@@ -36,7 +53,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: uploadError.message || "Failed to upload image" }, { status: 500 });
     }
 
-    const { data } = adminClient.storage.from("menu-items").getPublicUrl(path);
+    const { data } = adminClient.storage.from("menu-items").getPublicUrl(finalPath);
 
     return NextResponse.json({ publicUrl: data.publicUrl });
   } catch (error) {
