@@ -1,6 +1,10 @@
 "use client";
 
 import React from "react";
+import { NoirTheme } from "./themes/NoirTheme";
+import { BrasserieTheme } from "./themes/BrasserieTheme";
+import { BentoTheme } from "./themes/BentoTheme";
+import { ZenTheme } from "./themes/ZenTheme";
 import { ClassicTheme } from "./themes/ClassicTheme";
 import { OmakaseTheme } from "./themes/OmakaseTheme";
 import { ResortTheme } from "./themes/ResortTheme";
@@ -27,6 +31,14 @@ export function MenuClientView(props: MenuClientViewProps) {
 
   // Route to the appropriate Theme Component
   switch (themeStyle) {
+    case "noir":
+      return <NoirTheme {...props} />;
+    case "brasserie":
+      return <BrasserieTheme {...props} />;
+    case "bentopop":
+      return <BentoTheme {...props} />;
+    case "zen":
+      return <ZenTheme {...props} />;
     case "omakase":
       return <OmakaseTheme {...props} />;
     case "resort":

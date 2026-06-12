@@ -195,7 +195,11 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
               
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {[
-                  { id: "minimalist", name: "Minimalist", desc: "Clean & Simple", icon: "🍽️", badge: null },
+                  { id: "noir", name: "Noir Editorial", desc: "Luxury Dark Mode", icon: "🍸", badge: "ELITE" },
+                  { id: "brasserie", name: "Brasserie", desc: "Warm & Natural", icon: "🍷", badge: "PRO" },
+                  { id: "bentopop", name: "Bento Pop", desc: "Vibrant Grid", icon: "🍱", badge: "PRO" },
+                  { id: "zen", name: "Zen Minimalist", desc: "Pure Whitespace", icon: "🍵", badge: null },
+                  { id: "minimalist", name: "Classic Minimalist", desc: "Clean & Simple", icon: "🍽️", badge: null },
                   { id: "omakase", name: "Omakase", desc: "Zen Dark Mode", icon: "🍣", badge: "PRO" },
                   { id: "bistro", name: "Bistro", desc: "Classic Serif", icon: "🍷", badge: "PRO" },
                   { id: "luxury", name: "Lumina", desc: "Gold Cinematic", icon: "✨", badge: "ELITE" },
@@ -284,7 +288,29 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
         {/* Guest View Frame */}
         <div className={`mx-auto w-full max-w-[380px] border-[10px] border-slate-900 rounded-[40px] overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)] min-h-[640px] flex flex-col relative aspect-[9/16] transition-all duration-500 ${previewTheme.frameBg} ${previewTheme.fontClass}`}>
           {/* Cover Header Banner */}
-          {themeStyle === "bistro" ? (
+          {themeStyle === "noir" ? (
+            <div className="pt-16 pb-8 px-6 text-center bg-[#0A0A0A] text-[#E0E0E0] shrink-0 border-b border-[#333]">
+              <h1 className="text-4xl font-serif text-white tracking-widest uppercase mb-4">{entity.name}</h1>
+              <p className="text-[10px] tracking-[0.3em] uppercase text-amber-500 font-semibold">{entity.cuisine_type || "Fine Dining"}</p>
+            </div>
+          ) : themeStyle === "brasserie" ? (
+            <div className="pt-12 pb-8 px-4 text-center bg-[#FAFAED] text-[#1C1917] shrink-0 border-b border-[#E7E5E4]">
+              <h1 className="text-3xl font-serif text-slate-800 mb-2">{entity.name}</h1>
+              <p className="text-[10px] tracking-[0.2em] uppercase text-slate-500 font-medium">{entity.cuisine_type || "Brasserie"}</p>
+            </div>
+          ) : themeStyle === "bentopop" ? (
+            <div className="pt-10 pb-8 px-4 text-center bg-[#FFD166] border-b-4 border-black shrink-0 relative overflow-hidden">
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-[#EF476F] rounded-full border-4 border-black"></div>
+              <h1 className="text-3xl font-black text-black leading-none drop-shadow-[2px_2px_0_rgba(0,0,0,1)] tracking-tight relative z-10 mb-2">{entity.name}</h1>
+              <span className="inline-block bg-white text-black text-[9px] font-black uppercase tracking-wider px-2 py-1 border-2 border-black rounded-full relative z-10">{entity.cuisine_type || "Street Food"}</span>
+            </div>
+          ) : themeStyle === "zen" ? (
+            <div className="pt-16 pb-12 px-6 text-center bg-white shrink-0 border-b border-zinc-100">
+              <h1 className="text-2xl font-sans tracking-[0.2em] uppercase text-zinc-900 mb-4">{entity.name}</h1>
+              <div className="w-8 h-px bg-zinc-300 mx-auto mb-4"></div>
+              <p className="text-[9px] tracking-[0.2em] uppercase text-zinc-400">{entity.cuisine_type || "Zen"}</p>
+            </div>
+          ) : themeStyle === "bistro" ? (
             <div className="text-center relative bg-[#1C1917] overflow-hidden shrink-0 flex flex-col">
               <div className="pt-8 pb-5 px-4 z-10 space-y-1">
                 <h1 className="text-2xl font-serif text-[#D4AF37] tracking-wider uppercase drop-shadow-md">{entity.name}</h1>
