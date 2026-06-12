@@ -59,8 +59,6 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
     setIsUploading(true);
 
     try {
-      const supabase = createClient();
-      
       // Compress the image
       let compressedFile = file;
       try {
@@ -80,18 +78,20 @@ export function ImageUploader({ value: externalValue, onChange }: ImageUploaderP
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('menu-items')
-        .upload(filePath, compressedFile, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", compressedFile);
+      uploadFormData.append("path", filePath);
 
-      if (uploadError) {
-        throw uploadError;
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadFormData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to upload image");
       }
-
-      const { data } = supabase.storage.from('menu-items').getPublicUrl(filePath);
       
       updateValue(data.publicUrl);
     } catch (err: unknown) {

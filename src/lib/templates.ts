@@ -17,25 +17,25 @@ export interface MenuTemplate {
   categories: TemplateCategory[];
 }
 
-// Reusable high-quality Unsplash image IDs
+// High-quality AI-generated template images
 const IMAGES = {
-  burger: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80",
-  steak: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=80",
-  salad: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
-  cocktail: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80",
-  dessert: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800&q=80",
-  pizza: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80",
-  pasta: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800&q=80",
-  sushi: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800&q=80",
-  coffee: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=800&q=80",
-  taco: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=800&q=80",
-  soup: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80",
-  sandwich: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=800&q=80",
-  seafood: "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800&q=80",
-  chicken: "https://images.unsplash.com/photo-1598514982205-f36b96d1e8d4?w=800&q=80",
-  beer: "https://images.unsplash.com/photo-1538481199005-9715c6d6899c?w=800&q=80",
-  appetizer: "https://images.unsplash.com/photo-1541529086526-db283c563270?w=800&q=80",
-  pastry: "https://images.unsplash.com/photo-1509365465994-3e89242262d5?w=800&q=80",
+  burger: "/images/templates/burger.png",
+  steak: "/images/templates/steak.png",
+  salad: "/images/templates/salad.png",
+  cocktail: "/images/templates/cocktail.png",
+  dessert: "/images/templates/dessert.png",
+  pizza: "/images/templates/pizza.png",
+  pasta: "/images/templates/pasta.png",
+  sushi: "/images/templates/sushi.png",
+  coffee: "/images/templates/coffee.png",
+  taco: "/images/templates/taco.png",
+  soup: "/images/templates/soup.png",
+  sandwich: "/images/templates/sandwich.png",
+  seafood: "/images/templates/seafood.png",
+  chicken: "/images/templates/chicken.png",
+  beer: "/images/templates/beer.png",
+  appetizer: "/images/templates/appetizer.png",
+  pastry: "/images/templates/pastry.png",
 };
 
 export const MENU_TEMPLATES: MenuTemplate[] = [
