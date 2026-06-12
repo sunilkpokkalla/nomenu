@@ -18,8 +18,10 @@ interface AnalyticsDashboardProps {
   aov: number;
   conversionRate: number;
   topItems: { id: string; name: string; image_url: string; quantity: number; revenue: number }[];
+  bottomItems: { id: string; name: string; image_url: string; quantity: number; revenue: number }[];
   topTables: { table_number: string; orders: number; revenue: number }[];
   categoryData: { name: string; value: number }[];
+  mockTips: number;
   planType?: string;
   totalFeedbacks?: number;
   averageRating?: number;
@@ -40,8 +42,10 @@ export function AnalyticsDashboard({
   aov,
   conversionRate,
   topItems,
+  bottomItems,
   topTables,
   categoryData,
+  mockTips,
   planType,
   totalFeedbacks,
   averageRating
@@ -58,7 +62,11 @@ export function AnalyticsDashboard({
   const displayChartData = revenueData;
   const displayCategoryData = categoryData;
   const displayTopItems = topItems;
+  const displayBottomItems = bottomItems;
   const displayTopTables = topTables;
+  const displayTips = mockTips;
+
+  const isLive = range === "today";
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
@@ -124,8 +132,23 @@ export function AnalyticsDashboard({
   return (
     <div className="relative">
         
-        {/* TIME RANGE SELECTOR */}
-        <div className="flex justify-end mb-4">
+        {/* VIEW MODE TOGGLE & TIME RANGE SELECTOR */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <div className="flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
+            <button 
+              onClick={() => router.push("?range=today")} 
+              className={`px-6 py-2 rounded-lg text-sm font-bold uppercase tracking-widest transition-all ${isLive ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Live Shift
+            </button>
+            <button 
+              onClick={() => router.push("?range=7days")} 
+              className={`px-6 py-2 rounded-lg text-sm font-bold uppercase tracking-widest transition-all ${!isLive ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Historical Trends
+            </button>
+          </div>
+
           <div className="inline-flex flex-wrap items-center gap-2 justify-end">
             {/* Custom Date Range Picker */}
             <div className="relative inline-flex items-center gap-2">
@@ -161,18 +184,20 @@ export function AnalyticsDashboard({
               />
             </div>
             
-            {/* Quick Filters */}
-            <div className="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
-              {(["today", "7days", "month", "quarter", "year"] as const).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => router.push(`?range=${r}`)}
-                  className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${(!dateStr && !startDateStr && !endDateStr && range === r) ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                  {r === "today" ? "Today" : r === "7days" ? "7 Days" : r}
-                </button>
-              ))}
-            </div>
+            {/* Quick Filters - Historical Mode Only */}
+            {!isLive && (
+              <div className="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
+                {(["7days", "month", "quarter", "year"] as const).map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => router.push(`?range=${r}`)}
+                    className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${(!dateStr && !startDateStr && !endDateStr && range === r) ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    {r === "7days" ? "7 Days" : r}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -229,14 +254,11 @@ export function AnalyticsDashboard({
               </div>
 
               <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
-                <div className="flex items-center gap-2 text-cyan-600 mb-1">
-                  <Crosshair className="h-4 w-4" />
-                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Conversion Rate</span>
+                <div className="flex items-center gap-2 text-emerald-600 mb-1">
+                  <DollarSign className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Est. Tips</span>
                 </div>
-                <div className="flex items-baseline gap-1 mt-1">
-                  <div className="text-2xl font-black tracking-tighter text-slate-900">{displayConversion.toFixed(1)}%</div>
-                  <span className="text-[10px] text-slate-400 font-bold">SCAN-TO-ORDER</span>
-                </div>
+                <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayTips)}</div>
               </div>
             </>
           ) : (
@@ -265,6 +287,32 @@ export function AnalyticsDashboard({
 
         </div>
 
+        {/* CONVERSION FUNNEL ROW */}
+        {!isPro && (
+          <div className="mb-6 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+            <div className="mb-4">
+              <h3 className="text-lg font-black text-slate-900 tracking-tight">Menu Bounce Rate (Conversion Funnel)</h3>
+              <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Are prices scaring people away?</p>
+            </div>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex-1 w-full bg-slate-50 rounded-2xl p-4 border border-slate-100 text-center">
+                <div className="text-3xl font-black text-slate-900">{displayScans}</div>
+                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Table Scans</div>
+              </div>
+              <div className="text-slate-300 hidden md:block">➔</div>
+              <div className="flex-1 w-full bg-slate-50 rounded-2xl p-4 border border-slate-100 text-center">
+                <div className="text-3xl font-black text-slate-900">{displayOrders}</div>
+                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Orders Placed</div>
+              </div>
+              <div className="text-slate-300 hidden md:block">➔</div>
+              <div className="flex-1 w-full bg-indigo-50 rounded-2xl p-4 border border-indigo-100 text-center">
+                <div className="text-3xl font-black text-indigo-700">{displayConversion.toFixed(1)}%</div>
+                <div className="text-xs font-bold text-indigo-500 uppercase tracking-widest mt-1">Conversion Rate</div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 3-COLUMN DENSE GRID */}
         <div className="grid gap-6 lg:grid-cols-3">
           
@@ -272,8 +320,8 @@ export function AnalyticsDashboard({
           <div className={`bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col min-h-[340px] ${isPro ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
             <div className="mb-4 flex justify-between items-center">
               <div>
-                <h3 className="text-lg font-black text-slate-900 tracking-tight">{isPro ? "Traffic Analysis" : "Revenue & Traffic"}</h3>
-                <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">7-Day Trajectory</p>
+                <h3 className="text-lg font-black text-slate-900 tracking-tight">{isLive ? "Order Velocity Heatmap" : (isPro ? "Traffic Analysis" : "Revenue & Traffic")}</h3>
+                <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">{isLive ? "Today's Busiest Hours" : "Historical Trajectory"}</p>
               </div>
             </div>
             
@@ -363,43 +411,87 @@ export function AnalyticsDashboard({
                 </div>
               </div>
 
-              {/* Top Selling Items (Col Span 2) */}
+              {/* Top & Bottom Selling Items (Col Span 2) */}
               <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm lg:col-span-2">
-                <div className="mb-4 flex items-center justify-between">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Top Performers */}
                   <div>
-                    <h3 className="text-lg font-black text-slate-900 tracking-tight">Menu Leaders</h3>
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Top items by revenue</p>
+                    <div className="mb-4 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-black text-emerald-600 tracking-tight">Menu Leaders</h3>
+                        <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Top selling items</p>
+                      </div>
+                    </div>
+
+                    {displayTopItems.length > 0 ? (
+                      <div className="flex flex-col gap-3">
+                        {displayTopItems.slice(0,5).map((item, idx) => (
+                          <div key={item.id || idx} className="flex items-center gap-3 bg-emerald-50/50 p-2.5 rounded-2xl border border-emerald-100 hover:border-emerald-200 transition-colors">
+                            <div className="relative h-12 w-12 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                              {item.image_url ? (
+                                <Image src={item.image_url} alt={item.name} fill className="object-cover" />
+                              ) : (
+                                <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400">
+                                  <ShoppingBag className="h-4 w-4" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-slate-900 text-xs truncate">{item.name}</h4>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.quantity} units</p>
+                            </div>
+                            <div className="text-right shrink-0 pr-2">
+                              <div className="font-black text-sm text-emerald-700">{formatCurrency(item.revenue)}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex h-24 items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50">
+                        <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Sales Yet</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bottom Performers (Dead Stock) */}
+                  <div>
+                    <div className="mb-4 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-black text-rose-600 tracking-tight">Dead Stock Monitor</h3>
+                        <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Bottom performing items</p>
+                      </div>
+                    </div>
+
+                    {displayBottomItems.length > 0 ? (
+                      <div className="flex flex-col gap-3">
+                        {displayBottomItems.slice(0,5).map((item, idx) => (
+                          <div key={item.id || idx} className="flex items-center gap-3 bg-rose-50/50 p-2.5 rounded-2xl border border-rose-100 hover:border-rose-200 transition-colors">
+                            <div className="relative h-12 w-12 rounded-xl overflow-hidden shrink-0 shadow-sm opacity-60 grayscale">
+                              {item.image_url ? (
+                                <Image src={item.image_url} alt={item.name} fill className="object-cover" />
+                              ) : (
+                                <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400">
+                                  <ShoppingBag className="h-4 w-4" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0 opacity-80">
+                              <h4 className="font-bold text-slate-900 text-xs truncate">{item.name}</h4>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.quantity} units</p>
+                            </div>
+                            <div className="text-right shrink-0 pr-2 opacity-80">
+                              <div className="font-black text-sm text-rose-700">{formatCurrency(item.revenue)}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex h-24 items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50">
+                        <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Sales Yet</p>
+                      </div>
+                    )}
                   </div>
                 </div>
-
-                {displayTopItems.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {displayTopItems.slice(0,4).map((item, idx) => (
-                      <div key={item.id || idx} className="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-100 hover:border-slate-300 transition-colors">
-                        <div className="relative h-12 w-12 rounded-xl overflow-hidden shrink-0 shadow-sm">
-                          {item.image_url ? (
-                            <Image src={item.image_url} alt={item.name} fill className="object-cover" />
-                          ) : (
-                            <div className="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400">
-                              <ShoppingBag className="h-4 w-4" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-slate-900 text-xs truncate">{item.name}</h4>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.quantity} units</p>
-                        </div>
-                        <div className="text-right shrink-0 pr-2">
-                          <div className="font-black text-sm text-indigo-600">{formatCurrency(item.revenue)}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex h-24 items-center justify-center border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50">
-                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">No Sales Yet</p>
-                  </div>
-                )}
               </div>
 
               {/* Table Performance */}

@@ -257,7 +257,14 @@ export default async function AnalyticsPage(props: PageProps) {
     .slice(0, 5)
     .map(([id]) => id);
 
+  // Get Bottom 5 item IDs (Dead Stock)
+  const bottomItemIds = Object.entries(itemStats)
+    .sort((a, b) => a[1].revenue - b[1].revenue)
+    .slice(0, 5)
+    .map(([id]) => id);
+
   let topItems = [] as { id: string; name: string; image_url: string; quantity: number; revenue: number }[];
+  let bottomItems = [] as { id: string; name: string; image_url: string; quantity: number; revenue: number }[];
   let categoryData: { name: string; value: number }[] = [];
 
   // If we have items sold, we need to join with menu_items to get categories
@@ -273,6 +280,18 @@ export default async function AnalyticsPage(props: PageProps) {
     if (menuItemsData) {
       // Build top items list
       topItems = topItemIds.map(id => {
+        const menuItem = menuItemsData.find(m => m.id === id);
+        return {
+          id,
+          name: menuItem?.name || "Unknown Item",
+          image_url: menuItem?.image_url || "",
+          quantity: itemStats[id].quantity,
+          revenue: itemStats[id].revenue
+        };
+      }).filter(Boolean);
+
+      // Build bottom items list
+      bottomItems = bottomItemIds.map(id => {
         const menuItem = menuItemsData.find(m => m.id === id);
         return {
           id,
@@ -333,8 +352,10 @@ export default async function AnalyticsPage(props: PageProps) {
         aov={aov}
         conversionRate={conversionRate}
         topItems={topItems}
+        bottomItems={bottomItems}
         topTables={topTables}
         categoryData={categoryData}
+        mockTips={totalRevenue * 0.18} // Mocked until tip_amount is added to schema
       />
     </div>
   );
