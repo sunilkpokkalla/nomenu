@@ -90,9 +90,9 @@ export function AnalyticsDashboard({
         <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
           <TrendingUp className="w-8 h-8 text-slate-400" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Pro</h2>
+        <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Elite</h2>
         <p className="text-slate-600 mb-8 leading-relaxed">
-          Advanced analytics, real-time revenue tracking, and conversion funnels are exclusively available on the Pro plan. Upgrade to unlock business insights.
+          Advanced analytics, real-time revenue tracking, and conversion funnels are exclusively available on the Elite plan. Upgrade to unlock business insights.
         </p>
         <button 
           onClick={() => window.location.href = "/dashboard/billing"}
