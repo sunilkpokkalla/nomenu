@@ -99,6 +99,15 @@ export function MenuItemsClient({
   const selectedMenuName = selectedMenuId === "all" ? "All Menus" : menus.find(m => m.id === selectedMenuId)?.name;
   const selectedCategoryName = selectedCategoryId === "all" ? "All Categories" : restaurantCategories.find(c => c.id === selectedCategoryId)?.name;
 
+  // Group menus by location
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const groupedMenusByLocation: Record<string, any[]> = {};
+  menus.forEach(menu => {
+    const loc = menu.location_label || "Other";
+    if (!groupedMenusByLocation[loc]) groupedMenusByLocation[loc] = [];
+    groupedMenusByLocation[loc].push(menu);
+  });
+
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
       {/* LEFT SIDEBAR NAVIGATION */}
@@ -117,53 +126,53 @@ export function MenuItemsClient({
             <span className="text-xs text-slate-400 bg-white px-2 py-0.5 rounded-full border">{items.length}</span>
           </button>
 
-          <div className="pt-4 pb-2">
-            <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Your Menus</p>
-          </div>
-          
-          <div className="space-y-1">
-            {menus.map(menu => {
-              const isSelected = selectedMenuId === menu.id;
-              const menuCategories = restaurantCategories.filter((c) => c.menu_id === menu.id);
-              
-              return (
-                <div key={menu.id} className="space-y-1">
-                  <button
-                    onClick={() => { setSelectedMenuId(menu.id); setSelectedCategoryId("all"); }}
-                    className={`w-full flex items-start gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                      isSelected && selectedCategoryId === "all" ? "bg-primary text-white" : isSelected ? "bg-primary/10 text-primary" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                    }`}
-                  >
-                    <Folder className="h-4 w-4 mt-0.5 shrink-0" />
-                    <div className="flex flex-col items-start text-left truncate">
-                      <span className="truncate w-full">{menu.name}</span>
-                      {menu.location_label && (
-                        <span className={`text-[10px] truncate w-full ${isSelected && selectedCategoryId === "all" ? "text-primary-foreground/70" : "text-slate-400 font-normal"}`}>
-                          ({menu.location_label})
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                  
-                  {isSelected && menuCategories.length > 0 && (
-                    <div className="ml-4 pl-2 border-l-2 border-slate-100 space-y-1 mt-1 mb-3">
-                      {menuCategories.map(cat => (
+          <div className="space-y-4 pt-2">
+            {Object.entries(groupedMenusByLocation).map(([location, locationMenus]) => (
+              <div key={location} className="space-y-1">
+                <div className="pb-1">
+                  <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    📍 {location}
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  {locationMenus.map(menu => {
+                    const isSelected = selectedMenuId === menu.id;
+                    const menuCategories = restaurantCategories.filter((c) => c.menu_id === menu.id);
+                    
+                    return (
+                      <div key={menu.id} className="space-y-1">
                         <button
-                          key={cat.id}
-                          onClick={() => setSelectedCategoryId(cat.id)}
-                          className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm rounded-md transition-colors ${
-                            selectedCategoryId === cat.id ? "bg-slate-100 text-slate-900 font-medium" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                          onClick={() => { setSelectedMenuId(menu.id); setSelectedCategoryId("all"); }}
+                          className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                            isSelected && selectedCategoryId === "all" ? "bg-primary text-white" : isSelected ? "bg-primary/10 text-primary" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                           }`}
                         >
-                          <ChevronRight className="h-3 w-3 shrink-0 opacity-50" />
-                          <span className="truncate">{cat.name}</span>
+                          <Folder className="h-4 w-4 shrink-0" />
+                          <span className="truncate w-full text-left">{menu.name}</span>
                         </button>
-                      ))}
-                    </div>
-                  )}
+                        
+                        {isSelected && menuCategories.length > 0 && (
+                          <div className="ml-4 pl-2 border-l-2 border-slate-100 space-y-1 mt-1 mb-3">
+                            {menuCategories.map(cat => (
+                              <button
+                                key={cat.id}
+                                onClick={() => setSelectedCategoryId(cat.id)}
+                                className={`w-full flex items-center gap-2 px-3 py-1.5 text-sm rounded-md transition-colors ${
+                                  selectedCategoryId === cat.id ? "bg-slate-100 text-slate-900 font-medium" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                                }`}
+                              >
+                                <ChevronRight className="h-3 w-3 shrink-0 opacity-50" />
+                                <span className="truncate text-left">{cat.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </div>
