@@ -51,7 +51,6 @@ const getPlans = (isAnnual: boolean) => [
       "Order & Pay via Apple Pay / Card",
       "Direct Bank Payouts (Stripe Connect)",
       "Dedicated Account Manager",
-      "Custom API Access & Webhooks",
     ],
   },
 ];

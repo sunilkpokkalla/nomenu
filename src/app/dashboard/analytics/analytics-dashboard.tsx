@@ -2,6 +2,7 @@
 
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import { DollarSign, TrendingUp, ShoppingBag, Crown, QrCode, Sparkles, Receipt, Crosshair, MessageSquare, Star } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -86,7 +87,7 @@ export function AnalyticsDashboard({
 
   if (isLocked) {
     return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12">
+      <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12 w-full">
         <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
           <TrendingUp className="w-8 h-8 text-slate-400" />
         </div>
@@ -94,12 +95,12 @@ export function AnalyticsDashboard({
         <p className="text-slate-600 mb-8 leading-relaxed">
           Advanced analytics, real-time revenue tracking, and conversion funnels are exclusively available on the Elite plan. Upgrade to unlock business insights.
         </p>
-        <button 
-          onClick={() => window.location.href = "/dashboard/billing"}
+        <Link 
+          href="/dashboard/billing"
           className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-all hover:scale-[1.02]"
         >
           View Pricing Plans
-        </button>
+        </Link>
       </div>
     );
   }
@@ -119,7 +120,7 @@ export function AnalyticsDashboard({
               {isPro ? 'Today' : 'Live Shift'}
             </button>
             <button 
-              onClick={() => router.push("?range=7days")} 
+              onClick={() => router.push("?range=yesterday")} 
               className={`px-6 py-2 rounded-lg text-sm font-bold uppercase tracking-widest transition-all ${!isLive ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
             >
               Historical Trends
@@ -164,13 +165,13 @@ export function AnalyticsDashboard({
             {/* Quick Filters - Historical Mode Only */}
             {!isLive && (
               <div className="inline-flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200/50">
-                {(["7days", "month", "quarter", "year"] as const).map((r) => (
+                {(["yesterday", "7days", "month", "quarter", "year"] as const).map((r) => (
                   <button
                     key={r}
                     onClick={() => router.push(`?range=${r}`)}
                     className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${(!dateStr && !startDateStr && !endDateStr && range === r) ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                   >
-                    {r === "7days" ? "7 Days" : r}
+                    {r === "7days" ? "7 Days" : r === "yesterday" ? "Yesterday" : r}
                   </button>
                 ))}
               </div>

@@ -59,7 +59,7 @@ export default async function TakeawayPage() {
     .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
     .order("created_at", { ascending: false });
 
-  const isLocked = !restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase());
+  const isLocked = !restaurant.plan || !["enterprise"].includes(restaurant.plan.toLowerCase());
   
   // Fetch active menu to get custom location label
   const { data: menu } = await supabase
@@ -84,9 +84,9 @@ export default async function TakeawayPage() {
           <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
             <ClipboardList className="w-8 h-8 text-slate-400" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Elite</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Enterprise</h2>
           <p className="text-slate-600 mb-8 leading-relaxed">
-            The Live Kitchen Display System (KDS) and real-time ordering board are exclusively available on the Elite plan. Upgrade to start accepting live orders.
+            The Takeaway & Priority Reservations system is exclusively available on the Enterprise plan. Upgrade to start accepting remote and priority orders.
           </p>
           <Link
             href="/dashboard/billing"

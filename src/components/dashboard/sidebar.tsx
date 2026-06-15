@@ -37,7 +37,7 @@ export const navItems = [
   
   // Operations & Insights
   { href: "/dashboard/orders", label: "Dine-In Orders", icon: ShoppingBag, badge: "ELITE" },
-  { href: "/dashboard/takeaway", label: "Pickup & Reserve", icon: Clock, badge: "ELITE" },
+  { href: "/dashboard/takeaway", label: "Pickup & Reserve", icon: Clock, badge: "ENT." },
   { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT." },
   { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO" },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },
@@ -77,7 +77,7 @@ export function Sidebar({ plan = "Free" }: { plan?: string }) {
         </div>
         {navItems.map((item) => {
           const Icon = item.icon;
-          const requiredLevel = item.badge === "ENT." ? 3 : item.badge === "ELITE" ? 2 : item.badge === "PRO" ? 1 : 0;
+          const requiredLevel = (item.badge === "ENT." || item.badge === "ENTERPRISE") ? 3 : item.badge === "ELITE" ? 2 : item.badge === "PRO" ? 1 : 0;
           const isLocked = userLevel < requiredLevel;
 
           return (

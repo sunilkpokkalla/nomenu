@@ -84,7 +84,8 @@ export default async function MenusPage(
   const rootDomain = baseUrl.replace(/^https?:\/\//, "").split("/")[0].replace(/^www\./, "");
   const plan = restaurant.plan?.toLowerCase() || 'free';
   const domainPrefix = ['elite', 'enterprise'].includes(plan) ? 'order' : 'menu';
-  const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1');
+  const isIpAddress = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(rootDomain);
+  const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1') || isIpAddress;
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
       {/* Header */}

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useEffect, useState, useRef } from "react";
 import { Receipt, X, ChefHat, CheckCircle2, Clock, Download, Loader2 } from "lucide-react";
 import { toPng } from "html-to-image";
+import { getReceipts } from "@/app/menu/[id]/actions";
 
 interface OrderItem {
   id: string;
@@ -42,8 +42,6 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isDownloadingId, setIsDownloadingId] = useState<string | null>(null);
-
-  const supabase = createClient();
 
   const handleDownloadPng = async (orderId: string, orderNumber: number) => {
     const el = document.getElementById(`receipt-${orderId}`);
@@ -124,80 +122,57 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
   }, []);
 
   useEffect(() => {
-    if (orderIds.length === 0) return;
+    let intervalId: NodeJS.Timeout;
+    
+    const checkActiveOrders = () => {
+      // Only poll if we have orders that are not completed or cancelled
+      const hasActiveOrders = orders.some(o => o.status === "pending" || o.status === "preparing");
+      if (hasActiveOrders && orderIds.length > 0) {
+        fetchOrders(orderIds, false);
+      }
+    };
 
-    const channels = orderIds.map(id => {
-      return supabase
-        .channel(`order_updates_${id}`)
-        .on(
-          "postgres_changes",
-          {
-            event: "UPDATE",
-            schema: "public",
-            table: "orders",
-            filter: `id=eq.${id}`,
-          },
-          (payload) => {
-            setOrders((prev) => prev.map(o => o.id === id ? { ...o, status: payload.new.status } : o));
-          }
-        )
-        .subscribe();
-    });
+    if (orderIds.length > 0) {
+      intervalId = setInterval(checkActiveOrders, 10000); // Poll every 10 seconds
+    }
 
     return () => {
-      channels.forEach(ch => supabase.removeChannel(ch));
+      if (intervalId) clearInterval(intervalId);
     };
-  }, [orderIds, supabase]);
+  }, [orderIds, orders]);
 
-  const fetchOrders = async (ids: string[]) => {
+  const fetchOrders = async (ids: string[], showLoading = true) => {
     if (!ids || ids.length === 0) {
       setLoading(false);
       return;
     }
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("orders")
-      .select(`
-        id,
-        status,
-        total_amount,
-        daily_order_number,
-
-        table_number,
-        customer_name,
-        created_at,
-        order_items (
-          id,
-          quantity,
-          price_at_time_of_order,
-          customer_notes,
-          menu_items (
-            name
-          )
-        )
-      `)
-      .in("id", ids)
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Failed to fetch orders:", error);
-    } else if (data) {
-      const now = new Date().getTime();
-      const validOrders = data.filter((o) => {
-        const orderTime = new Date(o.created_at).getTime();
-        return (now - orderTime) < 24 * 60 * 60 * 1000;
-      });
-      const validIds = validOrders.map((o) => o.id);
+    if (showLoading) setLoading(true);
+    
+    try {
+      const res = await getReceipts(ids);
       
-      // Update local storage if any got filtered out
-      if (validIds.length !== ids.length) {
-         try {
-           localStorage.setItem("nomenu_orders", JSON.stringify(validIds));
-         } catch(e) {}
-         setOrderIds(validIds);
+      if (res.error) {
+        console.error("Failed to fetch orders:", res.error);
+      } else if (res.orders) {
+        const now = new Date().getTime();
+        const validOrders = res.orders.filter((o: any) => {
+          const orderTime = new Date(o.created_at).getTime();
+          return (now - orderTime) < 24 * 60 * 60 * 1000;
+        });
+        const validIds = validOrders.map((o: any) => o.id);
+        
+        // Update local storage if any got filtered out
+        if (validIds.length !== ids.length) {
+           try {
+             localStorage.setItem("nomenu_orders", JSON.stringify(validIds));
+           } catch(e) {}
+           setOrderIds(validIds);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setOrders(validOrders as any);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      setOrders(validOrders as any);
+    } catch (err) {
+      console.error("Error fetching receipts:", err);
     }
     setLoading(false);
   };

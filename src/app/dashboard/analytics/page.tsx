@@ -31,7 +31,7 @@ export default async function AnalyticsPage(props: PageProps) {
   const isLocked = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
 
   const searchParams = await props.searchParams;
-  const range = searchParams?.range || "month";
+  const range = searchParams?.range || "today";
   const dateStr = searchParams?.date;
   const startDateStr = searchParams?.startDate;
   const endDateStr = searchParams?.endDate;
@@ -58,6 +58,11 @@ export default async function AnalyticsPage(props: PageProps) {
     startDate = new Date(now);
     if (range === "today") {
       // startDate is already today, just needs hours reset below
+    } else if (range === "yesterday") {
+      startDate.setDate(now.getDate() - 1);
+      endDate = new Date(now);
+      endDate.setDate(now.getDate() - 1);
+      endDate.setHours(23, 59, 59, 999);
     } else if (range === "7days") {
       startDate.setDate(now.getDate() - 6);
     } else if (range === "month") {

@@ -38,6 +38,45 @@ export async function submitFeedback(
   return { success: true };
 }
 
+export async function getReceipts(orderIds: string[]) {
+  if (!orderIds || orderIds.length === 0) return { orders: [] };
+  
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+
+  const { data, error } = await supabase
+    .from("orders")
+    .select(`
+      id,
+      status,
+      total_amount,
+      daily_order_number,
+      table_number,
+      customer_name,
+      created_at,
+      order_items (
+        id,
+        quantity,
+        price_at_time_of_order,
+        customer_notes,
+        menu_items (
+          name
+        )
+      )
+    `)
+    .in("id", orderIds)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching receipts:", error);
+    return { error: "Failed to fetch receipts." };
+  }
+
+  return { orders: data };
+}
+
 export async function submitOrder(data: {
   restaurantId: string;
   menuId: string;

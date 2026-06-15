@@ -114,7 +114,8 @@ export function QrCodesClient({
                     let publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
                     const modeParam = qr.mode && qr.mode !== 'dine_in' ? `&mode=${qr.mode}` : '';
                     if (restaurant.slug && targetMenu?.slug) {
-                      const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1');
+                      const isIpAddress = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(rootDomain);
+                      const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1') || isIpAddress;
                       if (isLocalhost) {
                         publicUrl = `${baseUrl}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}${modeParam}`;
                       } else {
