@@ -149,7 +149,9 @@ export function ImportItemsModal({ menus, categories, items, targetMenuId }: Imp
             >
               <option value="" disabled>Choose a menu to import from...</option>
               {availableMenus.map(menu => (
-                <option key={menu.id} value={menu.id}>{menu.name}</option>
+                <option key={menu.id} value={menu.id}>
+                  {menu.name} {menu.location_label ? `(${menu.location_label})` : ""}
+                </option>
               ))}
             </select>
           </div>
