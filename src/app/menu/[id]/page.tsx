@@ -162,6 +162,11 @@ export default async function PublicMenuPage(
           serviceChargeType={menu.service_charge_type || "percentage"}
           stripeAccountId={restaurant.plan?.toLowerCase() === 'enterprise' ? restaurant.stripe_account_id : null}
           locationLabel={menu.location_label}
+          fulfillmentType={menu.fulfillment_type || "dine_in"}
+          prepTimeMinutes={restaurant.prep_time_minutes ?? 20}
+          maxTakeawayPerSlot={restaurant.max_takeaway_per_slot ?? 5}
+          maxReservePerSlot={restaurant.max_reserve_per_slot ?? 2}
+          closingTime={restaurant.closing_time ? restaurant.closing_time.substring(0, 5) : "23:00"}
         />
       )}
       <ReceiptTracker 

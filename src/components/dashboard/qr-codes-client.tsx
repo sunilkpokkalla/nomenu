@@ -64,7 +64,9 @@ export function QrCodesClient({
   };
 
   const groupedQrs = qrCodesList.reduce((acc: Record<string, QrCode[]>, qr: QrCode) => {
-    const locationType = qr.location_zone || "Main Dining";
+    let locationType = qr.location_zone || "Main Dining";
+    if (qr.mode === "pickup") locationType = "Takeaway";
+    if (qr.mode === "reserve") locationType = "Priority Reserve";
     if (!acc[locationType]) acc[locationType] = [];
     acc[locationType].push(qr);
     return acc;
@@ -110,13 +112,16 @@ export function QrCodesClient({
                     const domainPrefix = ['elite', 'enterprise'].includes(plan) ? 'order' : 'menu';
                     
                     let publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
+                    const modeParam = qr.mode && qr.mode !== 'dine_in' ? `&mode=${qr.mode}` : '';
                     if (restaurant.slug && targetMenu?.slug) {
                       const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1');
                       if (isLocalhost) {
-                        publicUrl = `${baseUrl}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}`;
+                        publicUrl = `${baseUrl}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}${modeParam}`;
                       } else {
-                        publicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}`;
+                        publicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}${modeParam}`;
                       }
+                    } else {
+                      publicUrl += modeParam;
                     }
                     
                     const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
@@ -140,6 +145,11 @@ export function QrCodesClient({
                           <p className="text-sm text-slate-500 font-medium mt-1">
                             {targetMenu ? targetMenu.name : "Unknown Menu"}
                           </p>
+                          {qr.mode && qr.mode !== 'dine_in' && (
+                             <span className={`mt-2 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${qr.mode === 'pickup' ? 'bg-orange-50 text-orange-700 ring-orange-600/20' : 'bg-purple-50 text-purple-700 ring-purple-600/20'}`}>
+                                {qr.mode === 'pickup' ? 'Takeaway' : 'Reserve'}
+                             </span>
+                          )}
                           <span className="mt-3 inline-flex items-center rounded-full bg-slate-900/5 px-3 py-1 text-xs font-semibold text-slate-700 tracking-wide uppercase">
                             {qr.scan_count || 0} scans
                           </span>
@@ -168,6 +178,7 @@ export function QrCodesClient({
                                 label: `${qr.location_zone || "Main Dining"} • ${qr.label}`,
                                 scan_count: qr.scan_count || 0,
                                 menu_id: qr.menu_id,
+                                mode: qr.mode,
                               }} 
                               restaurant={restaurant} 
                               qrImageApiUrl={qrImageApiUrl} 

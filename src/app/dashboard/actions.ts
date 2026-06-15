@@ -544,7 +544,8 @@ export async function createQrCode(formData: FormData) {
 
   const label = field(formData, "label");
   const menuId = field(formData, "menuId");
-  const locationZone = field(formData, "location_zone") || "Main Dining";
+  const mode = field(formData, "mode") || "dine_in";
+  const locationZone = mode === "dine_in" ? (field(formData, "location_zone") || "Main Dining") : null;
 
   if (!label || !menuId) {
     redirect("/dashboard/qrcodes?message=Label%20and%20Menu%20are%20required");
@@ -564,21 +565,27 @@ export async function createQrCode(formData: FormData) {
   }
 
   // Check for duplicate labels in the SAME ZONE
-  const { data: existingLabel } = await supabase
+  let existingLabelQuery = supabase
     .from("qr_codes")
     .select("id")
     .eq("restaurant_id", restaurant.id)
-    .eq("location_zone", locationZone)
-    .ilike("label", label)
-    .single();
+    .ilike("label", label);
+    
+  if (locationZone) {
+    existingLabelQuery = existingLabelQuery.eq("location_zone", locationZone);
+  } else {
+    existingLabelQuery = existingLabelQuery.is("location_zone", null).eq("mode", mode);
+  }
+
+  const { data: existingLabel } = await existingLabelQuery.single();
 
   if (existingLabel) {
-    redirect(`/dashboard/qrcodes?message=A%20QR%20code%20with%20label%20"${encodeURIComponent(label)}"%20already%20exists%20in%20zone%20"${encodeURIComponent(locationZone)}"`);
+    redirect(`/dashboard/qrcodes?message=A%20QR%20code%20with%20label%20"${encodeURIComponent(label)}"%20already%20exists`);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const currentZones = (restaurant as any).location_zones || [];
-  if (!currentZones.includes(locationZone)) {
+  if (locationZone && !currentZones.includes(locationZone)) {
     await supabase.from("restaurants").update({
       location_zones: [...currentZones, locationZone]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -591,6 +598,7 @@ export async function createQrCode(formData: FormData) {
     label,
     location_zone: locationZone,
     scan_count: 0,
+    mode,
   });
 
   if (error) {
@@ -661,6 +669,10 @@ export async function updateRestaurantSettings(formData: FormData) {
       phone: field(formData, "phone"),
       currency: field(formData, "currency") ?? "USD",
       timezone: field(formData, "timezone") ?? "UTC",
+      prep_time_minutes: parseInt(field(formData, "prepTimeMinutes") || "20", 10),
+      max_takeaway_per_slot: parseInt(field(formData, "maxTakeawayPerSlot") || "5", 10),
+      max_reserve_per_slot: parseInt(field(formData, "maxReservePerSlot") || "2", 10),
+      closing_time: (field(formData, "closingTime") || "23:00") + ":00",
     })
     .eq("id", restaurant.id);
 

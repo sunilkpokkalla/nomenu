@@ -12,6 +12,7 @@ import {
   QrCode,
   Settings,
   ShoppingBag,
+  Clock,
   Utensils,
   Banknote,
   LifeBuoy,
@@ -35,7 +36,8 @@ export const navItems = [
   { href: "/dashboard/qrcodes", label: "QR Codes", icon: QrCode },
   
   // Operations & Insights
-  { href: "/dashboard/orders", label: "Orders", icon: ShoppingBag, badge: "ELITE" },
+  { href: "/dashboard/orders", label: "Dine-In Orders", icon: ShoppingBag, badge: "ELITE" },
+  { href: "/dashboard/takeaway", label: "Pickup & Reserve", icon: Clock, badge: "ELITE" },
   { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT." },
   { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO" },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },

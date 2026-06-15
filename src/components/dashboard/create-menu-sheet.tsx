@@ -55,7 +55,7 @@ export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMen
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
               <UtensilsCrossed className="h-4 w-4 text-slate-400" />
-              Basic Details
+              Menu Type & Basic Details
             </div>
             <div className="space-y-4 p-4 rounded-xl bg-slate-50/80 border border-slate-100">
               <div className="space-y-1.5">

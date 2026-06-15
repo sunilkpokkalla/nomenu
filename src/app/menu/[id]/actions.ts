@@ -43,6 +43,9 @@ export async function submitOrder(data: {
   menuId: string;
   tableNumber: string | null;
   customerName: string | null;
+  customerPhone?: string | null;
+  reservationTime?: string | null;
+  partySize?: number | null;
   totalAmount: number; // We'll recalculate this, but keep the signature for backwards compatibility
   items: {
     menu_item_id: string;
@@ -63,6 +66,19 @@ export async function submitOrder(data: {
   
   const safeTableNumber = data.tableNumber ? data.tableNumber.substring(0, 50).trim() : null;
   const safeCustomerName = data.customerName ? data.customerName.substring(0, 100).trim() : null;
+  const safeCustomerPhone = data.customerPhone ? data.customerPhone.substring(0, 20).trim() : null;
+  
+  const { data: restData } = await supabase.from("restaurants").select("prep_time_minutes").eq("id", data.restaurantId).single();
+  let safeReservationTime = null;
+  if (data.reservationTime) {
+    if (data.reservationTime === "ASAP") {
+      const prep = restData?.prep_time_minutes || 20;
+      safeReservationTime = new Date(Date.now() + prep * 60000).toISOString();
+    } else {
+      safeReservationTime = new Date(data.reservationTime).toISOString();
+    }
+  }
+  const safePartySize = data.partySize ? Math.max(1, Math.min(100, Math.floor(data.partySize))) : null;
 
   // 2. Fetch secure prices from the database for all requested items
   const menuItemIds = data.items.map(i => i.menu_item_id);
@@ -132,6 +148,9 @@ export async function submitOrder(data: {
       restaurant_id: data.restaurantId,
       table_number: safeTableNumber,
       customer_name: safeCustomerName,
+      customer_phone: safeCustomerPhone,
+      reservation_time: safeReservationTime,
+      party_size: safePartySize,
       total_amount: secureTotalAmount,
       status: "pending"
     })
@@ -197,3 +216,42 @@ export async function getOrderReceipt(orderId: string) {
   return order;
 }
 
+export async function getSlotAvailability(restaurantId: string) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const { data: orders, error } = await supabase
+    .from("orders")
+    .select("reservation_time, party_size")
+    .eq("restaurant_id", restaurantId)
+    .gte("reservation_time", today.toISOString())
+    .not("reservation_time", "is", null);
+
+  if (error || !orders) {
+    return {};
+  }
+
+  const slotCounts: Record<string, { takeawayCount: number; reserveCount: number }> = {};
+  for (const order of orders) {
+    if (order.reservation_time) {
+      const time = order.reservation_time;
+      if (!slotCounts[time]) {
+        slotCounts[time] = { takeawayCount: 0, reserveCount: 0 };
+      }
+      // If party_size exists, it's a reservation. Otherwise, it's a takeaway.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((order as any).party_size !== null && (order as any).party_size !== undefined) {
+        slotCounts[time].reserveCount += 1;
+      } else {
+        slotCounts[time].takeawayCount += 1;
+      }
+    }
+  }
+
+  return slotCounts;
+}

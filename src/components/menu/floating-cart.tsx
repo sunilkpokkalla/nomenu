@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt } from "lucide-react";
-import { submitOrder, getOrderReceipt } from "@/app/menu/[id]/actions";
+import { submitOrder, getOrderReceipt, getSlotAvailability } from "@/app/menu/[id]/actions";
 
-export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel }: {
+export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel, fulfillmentType, prepTimeMinutes, maxTakeawayPerSlot = 5, maxReservePerSlot = 5, closingTime = "23:00:00", plan }: {
   restaurantId: string;
   menuId: string;
   tableNumber?: string;
@@ -17,16 +18,96 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   serviceChargeType?: string;
   stripeAccountId?: string | null;
   locationLabel?: string | null;
+  fulfillmentType?: string | null;
+  prepTimeMinutes?: number;
+  maxTakeawayPerSlot?: number;
+  maxReservePerSlot?: number;
+  closingTime?: string;
+  plan?: string;
 }) {
+  const searchParams = useSearchParams();
+  const urlMode = searchParams?.get('mode');
+  let activeFulfillmentType = urlMode === 'pickup' ? 'pickup' : urlMode === 'reserve' ? 'priority_reserve' : 'dine_in';
+  
+  // Enforce enterprise-only fulfillment modes
+  if (plan !== 'enterprise' && activeFulfillmentType !== 'dine_in') {
+    activeFulfillmentType = 'dine_in';
+  }
+
   const { items, totalItems, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [pickupTime, setPickupTime] = useState("ASAP");
+
+  const [partySize, setPartySize] = useState("");
   const [table, setTable] = useState(tableNumber || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrder, setSuccessOrder] = useState<{ id: string, dailyNumber: number } | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [receipt, setReceipt] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [timeSlots, setTimeSlots] = useState<{label: string, value: string}[]>([]);
+  const [slotAvailability, setSlotAvailability] = useState<Record<string, { takeawayCount: number; reserveCount: number }>>({});
+
+  useEffect(() => {
+    async function loadTimeSlots() {
+      if (activeFulfillmentType === 'pickup' || activeFulfillmentType === 'priority_reserve') {
+        const slots = [];
+        const now = new Date();
+        const prep = prepTimeMinutes || 20;
+        
+        let availability: Record<string, { takeawayCount: number; reserveCount: number }> = {};
+        try {
+          availability = await getSlotAvailability(restaurantId);
+          setSlotAvailability(availability);
+        } catch (e) {
+          console.error("Failed to load slot availability", e);
+        }
+        
+        const closeHours = parseInt(closingTime?.split(':')[0] || "23", 10);
+        const closeMins = parseInt(closingTime?.split(':')[1] || "00", 10);
+        const endTime = new Date(now);
+        endTime.setHours(closeHours, closeMins, 0, 0);
+
+        const startTime = new Date(now.getTime() + prep * 60000);
+        const remainder = 15 - (startTime.getMinutes() % 15);
+        startTime.setMinutes(startTime.getMinutes() + remainder);
+        startTime.setSeconds(0);
+        startTime.setMilliseconds(0);
+
+        if (activeFulfillmentType === 'pickup' && startTime <= endTime) {
+          slots.push({
+            label: `ASAP (Ready in ~${prep} mins)`,
+            value: "ASAP",
+          });
+        }
+
+        let currentSlot = startTime;
+        while (currentSlot <= endTime) {
+          const iso = currentSlot.toISOString();
+          const counts = availability[iso] || { takeawayCount: 0, reserveCount: 0 };
+          const currentCount = activeFulfillmentType === 'pickup' ? counts.takeawayCount : counts.reserveCount;
+          const maxLimit = activeFulfillmentType === 'pickup' ? maxTakeawayPerSlot : maxReservePerSlot;
+
+          if (currentCount < maxLimit) {
+            slots.push({
+              label: currentSlot.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              value: iso,
+            });
+          }
+          currentSlot = new Date(currentSlot.getTime() + 15 * 60000);
+        }
+        setTimeSlots(slots);
+        
+        if (activeFulfillmentType === 'priority_reserve' && slots.length > 0) {
+          setPickupTime(slots[0].value);
+        }
+      }
+    }
+    loadTimeSlots();
+  }, [activeFulfillmentType, prepTimeMinutes, restaurantId, maxTakeawayPerSlot, maxReservePerSlot, closingTime]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -118,6 +199,9 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
             orderId: tempOrderId,
             tableNumber: table || null,
             customerName: customerName || null,
+            customerPhone: customerPhone || null,
+            reservationTime: pickupTime || null,
+            partySize: partySize ? parseInt(partySize, 10) : null,
           })
         });
 
@@ -131,20 +215,16 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
       }
 
       // Fallback: Cash / Pay at Counter (KDS only)
-      const orderItems = items.map(i => ({
-        menu_item_id: i.menuItem.id,
-        quantity: i.quantity,
-        price_at_time_of_order: i.menuItem.price,
-        customer_notes: i.notes || null,
-      }));
-
       const res = await submitOrder({
         restaurantId,
         menuId,
         tableNumber: table || null,
         customerName: customerName || null,
-        totalAmount: totalPrice,
-        items: orderItems
+        customerPhone: customerPhone || null,
+        reservationTime: pickupTime || null,
+        partySize: partySize ? parseInt(partySize, 10) : null,
+        items: orderItems,
+        totalAmount: finalTotal
       });
 
       if (res.success && res.orderId) {
@@ -385,7 +465,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
 
               <form onSubmit={handleCheckout} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
+                  <div className="space-y-1.5 col-span-2 sm:col-span-1">
                     <label className="text-xs font-bold uppercase opacity-60 tracking-wider">Your Name</label>
                     <input 
                       required
@@ -395,26 +475,95 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                       className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase opacity-60 tracking-wider">{locationLabel || "Table"} #</label>
-                    <input 
-                      required={!tableNumber} // Only require if they didn't scan a table QR
-                      value={table}
-                      onChange={e => setTable(e.target.value)}
-                      placeholder={`e.g. ${locationLabel === 'Room' ? '204' : '12'}`} 
-                      className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
-                    />
-                  </div>
+                  
+                  {activeFulfillmentType === 'dine_in' && locationLabel !== 'None' && (
+                    <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                      <label className="text-xs font-bold uppercase opacity-60 tracking-wider">{locationLabel || "Table"} #</label>
+                      <input 
+                        required={!tableNumber} // Only require if they didn't scan a table QR
+                        value={table}
+                        onChange={e => setTable(e.target.value)}
+                        placeholder={`e.g. ${locationLabel === 'Room' ? '204' : '12'}`} 
+                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
+                      />
+                    </div>
+                  )}
+
+                  {(activeFulfillmentType === 'pickup' || activeFulfillmentType === 'priority_reserve') && (
+                    <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                      <label className="text-xs font-bold uppercase opacity-60 tracking-wider">Phone Number</label>
+                      <input 
+                        required
+                        type="tel"
+                        value={customerPhone}
+                        onChange={e => setCustomerPhone(e.target.value)}
+                        placeholder="e.g. 555-0198" 
+                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
+                      />
+                    </div>
+                  )}
+
+                  {activeFulfillmentType === 'pickup' && (
+                    <div className="space-y-1.5 col-span-2">
+                      <label className="text-xs font-bold uppercase opacity-60 tracking-wider">Pickup Time</label>
+                      <select 
+                        required
+                        value={pickupTime}
+                        onChange={e => setPickupTime(e.target.value)}
+                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 appearance-none cursor-pointer"
+                        disabled={timeSlots.length === 0}
+                      >
+                        {timeSlots.length === 0 && <option value="">Kitchen Closed</option>}
+                        {timeSlots.map((slot) => (
+                          <option key={slot.value} value={slot.value}>{slot.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {activeFulfillmentType === 'priority_reserve' && (
+                    <>
+                      <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                        <label className="text-xs font-bold uppercase opacity-60 tracking-wider">Party Size</label>
+                        <input 
+                          required
+                          type="number"
+                          min="1"
+                          value={partySize}
+                          onChange={e => setPartySize(e.target.value)}
+                          placeholder="e.g. 2" 
+                          className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
+                        />
+                      </div>
+                      <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                        <label className="text-xs font-bold uppercase opacity-60 tracking-wider">Reservation Time</label>
+                        <select 
+                          required
+                          value={pickupTime}
+                          onChange={e => setPickupTime(e.target.value)}
+                          className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 appearance-none cursor-pointer"
+                          disabled={timeSlots.length === 0}
+                        >
+                          {timeSlots.length === 0 && <option value="">Kitchen Closed</option>}
+                          {timeSlots.map((slot) => (
+                            <option key={slot.value} value={slot.value}>{slot.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0)}
                   className="w-full py-4 rounded-xl font-bold flex justify-center items-center gap-2 shadow-lg hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
                   style={{ backgroundColor: btnColor, color: textColor }}
                 >
                   {isSubmitting ? (
                     <span className="animate-pulse">Processing...</span>
+                  ) : (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0) ? (
+                    "Kitchen Closed"
                   ) : (
                     <>
                       <CreditCard className="w-5 h-5" />

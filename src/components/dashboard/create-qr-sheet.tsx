@@ -20,10 +20,12 @@ interface CreateQrSheetProps {
   locationZones: string[];
   menusList: { id: string; name: string; is_active: boolean }[];
   ManageLocationZonesModal: React.ReactNode;
+  plan: string;
 }
 
-export function CreateQrSheet({ createAction, locationZones, menusList, ManageLocationZonesModal }: CreateQrSheetProps) {
+export function CreateQrSheet({ createAction, locationZones, menusList, ManageLocationZonesModal, plan }: CreateQrSheetProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mode, setMode] = useState("dine_in");
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -61,23 +63,43 @@ export function CreateQrSheet({ createAction, locationZones, menusList, ManageLo
             setIsOpen(false);
           }} className="space-y-6 mt-4">
             <div className="space-y-2.5">
-              <Label htmlFor="location_zone" className="text-slate-700 font-medium">Location Zone</Label>
+              <Label htmlFor="mode" className="text-slate-700 font-medium">Order Mode</Label>
               <select
-                id="location_zone"
-                name="location_zone"
+                id="mode"
+                name="mode"
+                value={mode}
+                onChange={(e) => setMode(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all shadow-sm"
                 required
               >
-                {locationZones.map((zone, idx) => (
-                  <option key={idx} value={zone}>
-                    {zone}
-                  </option>
-                ))}
+                <option value="dine_in">Dine-In (Table / Room)</option>
+                <option value="pickup" disabled={plan !== 'enterprise'}>Takeaway (Enterprise Only)</option>
+                <option value="reserve" disabled={plan !== 'enterprise'}>Priority Reserve (Enterprise Only)</option>
               </select>
             </div>
+
+            {mode === "dine_in" && (
+              <div className="space-y-2.5">
+                <Label htmlFor="location_zone" className="text-slate-700 font-medium">Location Zone</Label>
+                <select
+                  id="location_zone"
+                  name="location_zone"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all shadow-sm"
+                  required
+                >
+                  {locationZones.map((zone, idx) => (
+                    <option key={idx} value={zone}>
+                      {zone}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             
             <div className="space-y-2.5">
-              <Label htmlFor="label" className="text-slate-700 font-medium">Table Number / Label</Label>
+              <Label htmlFor="label" className="text-slate-700 font-medium">
+                {mode === "dine_in" ? "Table Number / Label" : "Label (e.g. Front Window)"}
+              </Label>
               <Input 
                 id="label" 
                 name="label" 

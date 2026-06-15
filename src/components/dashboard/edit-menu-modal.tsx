@@ -67,19 +67,13 @@ export function EditMenuModal({ menu, cuisineType, editAction }: EditMenuProps) 
           <Settings2 className="h-4 w-4 text-slate-500" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 shadow-2xl rounded-2xl">
+      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 shadow-2xl rounded-2xl top-[5vh] translate-y-0 mb-[5vh]">
         <DialogHeader className="p-6 pb-4 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10">
           <DialogTitle className="text-xl font-bold flex items-center justify-between gap-2 w-full">
             <div className="flex items-center gap-2">
               <Settings2 className="h-5 w-5 text-indigo-500" />
               Menu Settings
             </div>
-            <DialogClose asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full hover:bg-slate-200/50 -mr-2">
-                <X className="h-4 w-4 text-slate-500" />
-                <span className="sr-only">Close</span>
-              </Button>
-            </DialogClose>
           </DialogTitle>
           <DialogDescription className="text-slate-500 text-sm mt-1.5">
             Configure how this menu appears and functions for your guests.
@@ -99,14 +93,16 @@ export function EditMenuModal({ menu, cuisineType, editAction }: EditMenuProps) 
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
               <UtensilsCrossed className="h-4 w-4 text-slate-400" />
-              Basic Details
+              Menu Type & Basic Details
             </div>
-            <div className="space-y-4 p-4 rounded-xl bg-slate-50/80 border border-slate-100">
+            <div className="grid gap-4 p-4 rounded-xl bg-slate-50/80 border border-slate-100">
+
               <div className="space-y-1.5">
                 <Label htmlFor="name" className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Menu Name</Label>
                 <Input 
                   id="name" 
                   name="name" 
+                  placeholder="E.g., Dinner Menu" 
                   defaultValue={menu.name} 
                   required 
                   className="bg-white border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 h-10 shadow-sm"

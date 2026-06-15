@@ -365,9 +365,9 @@ export default async function DashboardPage(
           asChild 
           className="rounded-xl bg-slate-950 hover:bg-slate-900 text-white h-11 text-sm font-semibold tracking-wide shadow-sm transition-all duration-300 hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98]"
         >
-          <Link href="/dashboard/items">
+          <Link href="/dashboard/menus">
             <Plus className="mr-2 h-4.5 w-4.5" strokeWidth={1.5} />
-            Add Menu Item
+            Add Menu
           </Link>
         </Button>
       </div>

@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       apiVersion: "2026-05-27.dahlia",
       httpClient: Stripe.createFetchHttpClient(),
     });
-    const { restaurantId, items, returnUrl, orderId, tableNumber, customerName } = await req.json();
+    const { restaurantId, items, returnUrl, orderId, tableNumber, customerName, customerPhone, reservationTime, partySize } = await req.json();
 
     if (!restaurantId || !items || !items.length || !orderId) {
       return NextResponse.json({ error: "Invalid request payload" }, { status: 400 });
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     // Get the restaurant's stripe_account_id
     const { data: _restaurantData, error: fetchError } = await supabase
       .from("restaurants")
-      .select("stripe_account_id, plan")
+      .select("stripe_account_id, plan, prep_time_minutes")
       .eq("id", restaurantId)
       .single();
 
@@ -69,11 +69,24 @@ export async function POST(req: Request) {
 
     const totalAmount = totalAmountCents / 100;
     
+    let safeReservationTime = null;
+    if (reservationTime) {
+      if (reservationTime === "ASAP") {
+        const prep = restaurant.prep_time_minutes || 20;
+        safeReservationTime = new Date(Date.now() + prep * 60000).toISOString();
+      } else {
+        safeReservationTime = new Date(reservationTime).toISOString();
+      }
+    }
+
     const { error: orderError } = await adminSupabase.from("orders").insert({
       id: orderId,
       restaurant_id: restaurantId,
       table_number: tableNumber || null,
       customer_name: customerName || null,
+      customer_phone: customerPhone || null,
+      reservation_time: safeReservationTime,
+      party_size: partySize ? Math.max(1, Math.floor(partySize)) : null,
       status: "awaiting_payment", // Will be flipped to 'pending' by the webhook
       total_amount: totalAmount,
       payment_intent_id: null,

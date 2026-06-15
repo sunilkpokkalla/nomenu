@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { CreateMenuSheet } from "@/components/dashboard/create-menu-sheet";
+import { MenuShareModal } from "@/components/dashboard/menu-share-modal";
 import { createClient } from "@/lib/supabase/server";
 import {
   GLOBAL_MENU_TYPES,
@@ -79,8 +80,11 @@ export default async function MenusPage(
   // Determine site URL on the server
   const host = (await headers()).get("host") || "localhost:3000";
   const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
-  const baseUrl = `${protocol}://${host}`;
-
+  const baseUrl = process.env.NODE_ENV === 'development' ? `${protocol}://${host}` : (process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`);
+  const rootDomain = baseUrl.replace(/^https?:\/\//, "").split("/")[0].replace(/^www\./, "");
+  const plan = restaurant.plan?.toLowerCase() || 'free';
+  const domainPrefix = ['elite', 'enterprise'].includes(plan) ? 'order' : 'menu';
+  const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1');
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
       {/* Header */}
@@ -149,6 +153,12 @@ export default async function MenusPage(
                               />
                             </form>
                             <div className="h-5 w-px bg-slate-200" />
+                            <EditMenuModal 
+                              menu={menu} 
+                              cuisineType={restaurant.cuisine_type} 
+                              editAction={editMenu} 
+                            />
+                            <div className="h-5 w-px bg-slate-200" />
                             <DeleteConfirmForm
                               action={deleteMenu}
                               confirmMessage="Delete this menu and ALL its items?"
@@ -205,11 +215,17 @@ export default async function MenusPage(
                               </Link>
                             </Button>
 
-                            <EditMenuModal 
-                              menu={menu} 
-                              cuisineType={restaurant.cuisine_type} 
-                              editAction={editMenu} 
-                            />
+                            {(() => {
+                              let baseMenuUrl = `${baseUrl}/menu/${menu.id}`;
+                              if (restaurant.slug && menu.slug) {
+                                if (isLocalhost) {
+                                  baseMenuUrl = `${baseUrl}/${restaurant.slug}/${menu.slug}`;
+                                } else {
+                                  baseMenuUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/${menu.slug}`;
+                                }
+                              }
+                              return <MenuShareModal baseMenuUrl={baseMenuUrl} menuName={menu.name} plan={restaurant.plan?.toLowerCase() || 'free'} />;
+                            })()}
                           </div>
                         </div>
                       </div>

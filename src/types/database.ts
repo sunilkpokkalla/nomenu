@@ -37,6 +37,10 @@ export interface Database {
           slug: string | null;
           subdomain: string | null;
           custom_domain: string | null;
+          prep_time_minutes: number | null;
+          max_takeaway_per_slot: number | null;
+          max_reserve_per_slot: number | null;
+          closing_time: string | null;
         };
         Insert: {
           id?: string;
@@ -65,6 +69,10 @@ export interface Database {
           slug?: string | null;
           subdomain?: string | null;
           custom_domain?: string | null;
+          prep_time_minutes?: number | null;
+          max_takeaway_per_slot?: number | null;
+          max_reserve_per_slot?: number | null;
+          closing_time?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];
@@ -85,6 +93,7 @@ export interface Database {
           service_charge: number | null;
           service_charge_type: string | null;
           location_label: string | null;
+          fulfillment_type: string | null;
           created_at: string | null;
           slug: string | null;
         };
@@ -103,6 +112,7 @@ export interface Database {
           service_charge?: number | null;
           service_charge_type?: string | null;
           location_label?: string | null;
+          fulfillment_type?: string | null;
           created_at?: string | null;
           slug?: string | null;
         };
@@ -207,6 +217,7 @@ export interface Database {
           location_zone: string | null;
           scan_count: number;
           created_at: string | null;
+          mode: string | null;
         };
         Insert: {
           id?: string;
@@ -216,6 +227,7 @@ export interface Database {
           location_zone?: string | null;
           scan_count?: number;
           created_at?: string | null;
+          mode?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["qr_codes"]["Insert"]>;
         Relationships: [

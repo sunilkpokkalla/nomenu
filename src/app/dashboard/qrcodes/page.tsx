@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CreateQrSheet } from "@/components/dashboard/create-qr-sheet";
 import { ManageLocationZonesModal } from "@/components/dashboard/manage-location-zones-modal";
+import { QrCategoryFilter } from "@/components/dashboard/qr-category-filter";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
 
@@ -37,11 +38,12 @@ import { QrCodesClient } from "@/components/dashboard/qr-codes-client";
 
 export default async function QrCodesPage(
   props: {
-    searchParams: Promise<{ message?: string; menuId?: string }>;
+    searchParams: Promise<{ message?: string; menuId?: string; category?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
   const menuIdFilter = searchParams.menuId;
+  const categoryFilter = searchParams.category;
   const supabase = await createClient();
   const {
     data: { user },
@@ -85,6 +87,23 @@ export default async function QrCodesPage(
     qrCodesList = qrCodesList.filter((qr) => qr.menu_id === menuIdFilter);
   }
 
+  // Derive unique categories from the current list (location_zone + modes)
+  const uniqueCategories = Array.from(new Set(qrCodesList.map(qr => {
+    let locationType = qr.location_zone || "Main Dining";
+    if (qr.mode === "pickup") locationType = "Takeaway";
+    if (qr.mode === "reserve") locationType = "Priority Reserve";
+    return locationType;
+  }))).sort();
+
+  if (categoryFilter) {
+    qrCodesList = qrCodesList.filter((qr) => {
+      let locationType = qr.location_zone || "Main Dining";
+      if (qr.mode === "pickup") locationType = "Takeaway";
+      if (qr.mode === "reserve") locationType = "Priority Reserve";
+      return locationType === categoryFilter;
+    });
+  }
+
   // Determine site URL on the server
   const host = (await headers()).get("host") || "localhost:3000";
   const protocol = host.includes("localhost") || host.includes("127.0.0.1") ? "http" : "https";
@@ -112,15 +131,18 @@ export default async function QrCodesPage(
           </p>
         </div>
         <div className="flex items-center gap-3">
-          {menuIdFilter && (
+          {(menuIdFilter || categoryFilter) && (
             <Button variant="outline" asChild>
-              <Link href="/dashboard/qrcodes">Clear Filter</Link>
+              <Link href="/dashboard/qrcodes">Clear Filters</Link>
             </Button>
           )}
+          <QrCategoryFilter categories={uniqueCategories} />
           <CreateQrSheet 
             createAction={createQrCode} 
             locationZones={locationZones} 
-            menusList={menusList}
+            menusList={menusList} 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            plan={(restaurant as any).plan?.toLowerCase() || 'free'}
             ManageLocationZonesModal={
               <ManageLocationZonesModal 
                 key="manage-zones-header"

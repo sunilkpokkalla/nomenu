@@ -2,15 +2,15 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
-import { OrdersBoard } from "./orders-board";
+import { TakeawayBoard } from "./takeaway-board";
 import { ClipboardList } from "lucide-react";
 
 export const metadata = {
-  title: "Orders | NoMenu Dashboard",
-  description: "Manage incoming customer orders in real-time.",
+  title: "Takeaway & Priority | NoMenu Dashboard",
+  description: "Manage incoming pickup and priority reservations in real-time.",
 };
 
-export default async function OrdersPage() {
+export default async function TakeawayPage() {
   const supabase = await createClient();
 
   // Get user session
@@ -55,7 +55,7 @@ export default async function OrdersPage() {
       )
     `)
     .eq("restaurant_id", restaurant.id)
-    .is("customer_phone", null) // Exclusively Dine-In orders
+    .not("customer_phone", "is", null) // Exclusively Takeaway/Priority
     .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
     .order("created_at", { ascending: false });
 
@@ -76,8 +76,8 @@ export default async function OrdersPage() {
     return (
       <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Orders Dashboard</h1>
-          <p className="text-slate-500 mt-2">Manage incoming orders from your customers in real-time.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Takeaway & Reservations</h1>
+          <p className="text-slate-500 mt-2">Manage incoming pickup and priority reservations in real-time.</p>
         </div>
         
         <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12 w-full">
@@ -100,14 +100,15 @@ export default async function OrdersPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Orders Dashboard</h1>
-        <p className="text-slate-500 mt-2">Manage incoming orders from your customers in real-time.</p>
-      </div>
-
-      <div className="relative flex-1">
-        <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} locationLabel={locationLabel} />
+    <div className="h-screen flex flex-col bg-slate-50 relative overflow-hidden">
+      <div className="flex-1 overflow-hidden p-6 relative z-10">
+        <TakeawayBoard 
+          initialOrders={initialOrders || []} 
+          restaurantId={restaurant.id}
+          timezone={restaurant.timezone || "UTC"}
+          supabaseUrl={getSupabaseEnv().url}
+          supabaseAnonKey={getSupabaseEnv().anonKey}
+        />
       </div>
     </div>
   );

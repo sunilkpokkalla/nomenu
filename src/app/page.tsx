@@ -726,6 +726,9 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Digital Receipts & Live Order Tracking</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Keep 100% Revenue (0% Platform Fees)</strong>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> All 8+ Premium Elite Themes
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
@@ -758,7 +761,16 @@ export default function LandingPage() {
 
                   <ul className="space-y-3 text-xs text-slate-300 font-medium">
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Everything in Elite
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Everything in Elite</strong>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Dine-in, Takeaway & Priority Reserve</strong>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Multiple Kitchen Displays (KDS)</strong>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Intelligent Order Capacity Pacing</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Order & Pay via Apple Pay / Credit Card</strong>

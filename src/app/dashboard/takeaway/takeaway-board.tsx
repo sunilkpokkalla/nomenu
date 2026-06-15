@@ -6,7 +6,7 @@ import { differenceInMinutes } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
 import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings } from "lucide-react";
-import { updateOrderStatus, toggleOrderPaymentStatus } from "./actions";
+import { updateOrderStatus, toggleOrderPaymentStatus } from "../orders/actions";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
 type OrderItem = {
@@ -31,9 +31,12 @@ type Order = {
   payment_intent_id?: string | null;
   is_paid?: boolean;
   order_items?: OrderItem[];
+  customer_phone?: string | null;
+  reservation_time?: string | null;
+  party_size?: number | null;
 };
 
-export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string }) {
+export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -71,7 +74,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       setNotification({
         id: latestNew.id,
         title: `New Order #${String(latestNew.daily_order_number || 0).padStart(3, '0')}`,
-        subtitle: latestNew.table_number ? `${locationLabel}: ${latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
+        subtitle: latestNew.customer_phone ? `Phone: ${latestNew.customer_phone}` : (latestNew.customer_name || 'Anonymous')
       });
       
       setTimeout(() => setNotification(null), 6000);
@@ -135,7 +138,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       .from("orders")
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
-      .is("customer_phone", null) // Exclusively Dine-In orders
+      .not("customer_phone", "is", null) // Exclusively Takeaway/Priority orders
       .order("created_at", { ascending: true });
       
     if (selectedDateStr) {
@@ -186,7 +189,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
         { event: "*", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
         async (payload) => {
           if (payload.eventType === "INSERT") {
-            if (payload.new.customer_phone !== null) return; // Only track Dine-In
+            if (payload.new.customer_phone === null) return; // Only track Takeaway/Priority
             // Give the backend 1.5s to finish inserting the order_items before we fetch the full order
             setTimeout(async () => {
               const { data: newOrder } = await supabase
@@ -204,7 +207,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
               }
             }, 1500);
           } else if (payload.eventType === "UPDATE") {
-            if (payload.new.customer_phone !== null) return;
+            if (payload.new.customer_phone === null) return;
             setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));
           }
         }
@@ -289,7 +292,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       <div className={`flex items-center justify-between ${isKdsMode ? "text-slate-100" : "text-slate-900"}`}>
         <h2 className="font-extrabold tracking-tight text-2xl flex items-center gap-3">
           {isKdsMode ? <ChefHat className="w-7 h-7 text-emerald-400" /> : <Clock className="w-6 h-6 text-indigo-500" />}
-          {isKdsMode ? "KDS Live Terminal (Dine-In)" : "Kitchen Display System"}
+          {isKdsMode ? "KDS Live Terminal (Pickup & Reserve)" : "Kitchen Display System"}
         </h2>
         
         <div className="flex items-center gap-4">
@@ -605,19 +608,37 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                         {formatTimeAgoWithExact(order.created_at, timezone)}
                                       </div>
                                       
-                                      {(order.customer_name || order.table_number) && (
-                                        <div className="flex items-center gap-2">
-                                          {order.table_number && (
-                                            <span className={`text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center ${
-                                              isKdsMode ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"
-                                            }`}>
-                                              <MapPin className="w-3 h-3 mr-1" /> {locationLabel.toUpperCase()}: {order.table_number}
-                                            </span>
-                                          )}
-                                          {order.customer_name && (
-                                            <span className={`text-[11px] font-bold ${isKdsMode ? "text-slate-400" : "text-slate-500"}`}>
-                                              {order.customer_name}
-                                            </span>
+                                      {(order.customer_name || order.customer_phone || order.reservation_time) && (
+                                        <div className="flex flex-col gap-1 mt-1">
+                                          <div className="flex items-center gap-2">
+                                            {order.customer_name && (
+                                              <span className={`text-[12px] font-bold ${isKdsMode ? "text-slate-300" : "text-slate-700"}`}>
+                                                <User className="w-3 h-3 inline mr-1 opacity-50" />
+                                                {order.customer_name}
+                                              </span>
+                                            )}
+                                            {order.customer_phone && (
+                                              <span className={`text-[11px] font-semibold ${isKdsMode ? "text-slate-400" : "text-slate-500"}`}>
+                                                {order.customer_phone}
+                                              </span>
+                                            )}
+                                          </div>
+                                          {order.reservation_time && (
+                                            <div className="flex items-center gap-2">
+                                              <span className={`text-[11px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center ${
+                                                isKdsMode ? "bg-amber-500/20 text-amber-300" : "bg-amber-100 text-amber-700"
+                                              }`}>
+                                                <Clock className="w-3 h-3 mr-1" />
+                                                {new Date(order.reservation_time).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', month: 'short', day: 'numeric' })}
+                                              </span>
+                                              {order.party_size && (
+                                                <span className={`text-[11px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center ${
+                                                  isKdsMode ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"
+                                                }`}>
+                                                  <User className="w-3 h-3 mr-1" /> Party of {order.party_size}
+                                                </span>
+                                              )}
+                                            </div>
                                           )}
                                         </div>
                                       )}

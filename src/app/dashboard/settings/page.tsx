@@ -122,6 +122,59 @@ export default async function SettingsPage(
                   ))}
                 </select>
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="prepTimeMinutes">Default Prep Time (Minutes)</Label>
+                <Input 
+                  id="prepTimeMinutes" 
+                  name="prepTimeMinutes" 
+                  type="number" 
+                  min="0" 
+                  max="120"
+                  defaultValue={restaurant.prep_time_minutes ?? 20} 
+                  required 
+                />
+                <p className="text-[10px] text-muted-foreground">Kitchen buffer time. E.g., if set to 20, ASAP pickups are current time + 20 mins.</p>
+              </div>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="maxTakeawayPerSlot">Takeaway Capacity per 15-Min</Label>
+                <Input 
+                  id="maxTakeawayPerSlot" 
+                  name="maxTakeawayPerSlot" 
+                  type="number" 
+                  min="1" 
+                  max="100"
+                  defaultValue={restaurant.max_takeaway_per_slot ?? 5} 
+                  required 
+                />
+                <p className="text-[10px] text-muted-foreground">Limits Takeaway orders per time slot.</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="maxReservePerSlot">Reserve Capacity per 15-Min</Label>
+                <Input 
+                  id="maxReservePerSlot" 
+                  name="maxReservePerSlot" 
+                  type="number" 
+                  min="1" 
+                  max="100"
+                  defaultValue={restaurant.max_reserve_per_slot ?? 2} 
+                  required 
+                />
+                <p className="text-[10px] text-muted-foreground">Limits Priority Reservations per slot.</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="closingTime">Kitchen Closing Time</Label>
+                <Input 
+                  id="closingTime" 
+                  name="closingTime" 
+                  type="time" 
+                  defaultValue={restaurant.closing_time ? restaurant.closing_time.substring(0, 5) : "23:00"} 
+                  required 
+                />
+                <p className="text-[10px] text-muted-foreground">The cart will not allow any orders or reservations past this time.</p>
+              </div>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">

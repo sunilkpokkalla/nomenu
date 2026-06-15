@@ -177,8 +177,11 @@ export default async function StorefrontMenuPage(
           taxRate={menu.tax_rate || 0}
           serviceCharge={menu.service_charge || 0}
           serviceChargeType={menu.service_charge_type || "percentage"}
-          stripeAccountId={plan === 'enterprise' ? restaurant.stripe_account_id : null}
+          stripeAccountId={restaurant.plan?.toLowerCase() === 'enterprise' ? restaurant.stripe_account_id : null}
           locationLabel={menu.location_label}
+          fulfillmentType={menu.fulfillment_type || "dine_in"}
+          prepTimeMinutes={restaurant.prep_time_minutes ?? 20}
+          plan={plan}
         />
       )}
       <ReceiptTracker 
