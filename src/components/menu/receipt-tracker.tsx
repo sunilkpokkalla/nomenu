@@ -155,10 +155,12 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
         console.error("Failed to fetch orders:", res.error);
       } else if (res.orders) {
         const now = new Date().getTime();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const validOrders = res.orders.filter((o: any) => {
           const orderTime = new Date(o.created_at).getTime();
           return (now - orderTime) < 24 * 60 * 60 * 1000;
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const validIds = validOrders.map((o: any) => o.id);
         
         // Update local storage if any got filtered out
@@ -168,8 +170,7 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
            } catch(e) {}
            setOrderIds(validIds);
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setOrders(validOrders as any);
+        setOrders(validOrders as unknown as Order[]);
       }
     } catch (err) {
       console.error("Error fetching receipts:", err);
