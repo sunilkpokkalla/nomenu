@@ -34,6 +34,7 @@ export default async function IntegrationsPage(
 
   const isStripeConnected = !!restaurant.stripe_account_id;
   const isSquareConnected = !!restaurant.square_merchant_id;
+  const isPro = restaurant.plan?.toLowerCase() === "pro";
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 lg:px-8">
@@ -109,7 +110,14 @@ export default async function IntegrationsPage(
               <div className="h-16 w-16 bg-[#635BFF] rounded-2xl shadow-sm flex items-center justify-center mb-4">
                 <span className="text-white font-black text-2xl">S</span>
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Stripe Connect</h3>
+              <h3 className="font-bold text-slate-900 text-lg flex items-center justify-center gap-2">
+                Stripe Connect
+                {isPro && (
+                  <span className="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-[9px] font-black text-indigo-700 uppercase tracking-widest ring-1 ring-inset ring-indigo-600/20">
+                    Elite
+                  </span>
+                )}
+              </h3>
               <p className="text-sm text-slate-500 mt-1">Payments & Payouts</p>
             </div>
             
@@ -132,11 +140,20 @@ export default async function IntegrationsPage(
                 </p>
               </div>
               
-              <div className="flex items-center justify-end border-t border-slate-100 pt-4">
-                <Button variant="outline" className="text-slate-600 font-bold" asChild>
-                  <Link href="/dashboard/payouts">
-                    Manage in Payouts <ChevronRight className="ml-1 h-4 w-4" />
-                  </Link>
+              <div className="flex items-center justify-end border-t border-slate-100 pt-4 gap-4">
+                {isPro && (
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Requires Elite Plan</span>
+                )}
+                <Button variant="outline" className={`font-bold ${isPro ? 'text-slate-400 opacity-50' : 'text-slate-600'}`} disabled={isPro} asChild={!isPro}>
+                  {isPro ? (
+                    <span className="inline-flex items-center justify-center">
+                      Manage in Payouts <ChevronRight className="ml-1 h-4 w-4" />
+                    </span>
+                  ) : (
+                    <Link href="/dashboard/payouts">
+                      Manage in Payouts <ChevronRight className="ml-1 h-4 w-4" />
+                    </Link>
+                  )}
                 </Button>
               </div>
             </div>
