@@ -130,12 +130,19 @@ export function MenuItemsClient({
                 <div key={menu.id} className="space-y-1">
                   <button
                     onClick={() => { setSelectedMenuId(menu.id); setSelectedCategoryId("all"); }}
-                    className={`w-full flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                    className={`w-full flex items-start gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
                       isSelected && selectedCategoryId === "all" ? "bg-primary text-white" : isSelected ? "bg-primary/10 text-primary" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
-                    <Folder className="h-4 w-4" />
-                    <span className="truncate">{menu.name}</span>
+                    <Folder className="h-4 w-4 mt-0.5 shrink-0" />
+                    <div className="flex flex-col items-start text-left truncate">
+                      <span className="truncate w-full">{menu.name}</span>
+                      {menu.location_label && (
+                        <span className={`text-[10px] truncate w-full ${isSelected && selectedCategoryId === "all" ? "text-primary-foreground/70" : "text-slate-400 font-normal"}`}>
+                          ({menu.location_label})
+                        </span>
+                      )}
+                    </div>
                   </button>
                   
                   {isSelected && menuCategories.length > 0 && (

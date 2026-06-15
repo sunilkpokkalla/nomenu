@@ -101,10 +101,42 @@ export async function createMenu(formData: FormData) {
     }
   }
 
+  // 1. Prevent exact duplicate Name + Location Label
+  const { data: existingDuplicate } = await supabase
+    .from("menus")
+    .select("id")
+    .eq("restaurant_id", restaurant.id)
+    .ilike("name", name)
+    .ilike("location_label", locationLabel)
+    .maybeSingle();
+
+  if (existingDuplicate) {
+    redirect(`/dashboard/menus?message=A%20menu%20named%20'${encodeURIComponent(name)}'%20with%20location%20'${encodeURIComponent(locationLabel)}'%20already%20exists.`);
+  }
+
+  // 2. Auto-generate unique slug to prevent URL crashes
+  const baseSlug = slugify(name);
+  let finalSlug = baseSlug;
+  let counter = 2;
+  
+  while (true) {
+    const { data: collision } = await supabase
+      .from("menus")
+      .select("id")
+      .eq("restaurant_id", restaurant.id)
+      .eq("slug", finalSlug)
+      .maybeSingle();
+      
+    if (!collision) break; // Unique slug found
+    
+    finalSlug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+
   const { error } = await supabase.from("menus").insert({
     restaurant_id: restaurant.id,
     name,
-    slug: slugify(name),
+    slug: finalSlug,
     description,
     is_active: isActive,
     menu_type: menuType,
@@ -167,11 +199,45 @@ export async function editMenu(formData: FormData) {
     redirect("/dashboard/menus?message=Unauthorized%20or%20menu%20not%20found");
   }
 
+  // 1. Prevent renaming to an exact duplicate Name + Location Label
+  const { data: existingDuplicate } = await supabase
+    .from("menus")
+    .select("id")
+    .eq("restaurant_id", restaurant.id)
+    .ilike("name", name)
+    .ilike("location_label", locationLabel)
+    .neq("id", menuId)
+    .maybeSingle();
+
+  if (existingDuplicate) {
+    redirect(`/dashboard/menus?message=A%20menu%20named%20'${encodeURIComponent(name)}'%20with%20location%20'${encodeURIComponent(locationLabel)}'%20already%20exists.`);
+  }
+
+  // 2. Auto-generate unique slug to prevent URL crashes
+  const baseSlug = slugify(name);
+  let finalSlug = baseSlug;
+  let counter = 2;
+  
+  while (true) {
+    const { data: collision } = await supabase
+      .from("menus")
+      .select("id")
+      .eq("restaurant_id", restaurant.id)
+      .eq("slug", finalSlug)
+      .neq("id", menuId)
+      .maybeSingle();
+      
+    if (!collision) break; // Unique slug found
+    
+    finalSlug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+
   const { error } = await supabase
     .from("menus")
     .update({
       name,
-      slug: slugify(name),
+      slug: finalSlug,
       description,
       is_active: isActive,
       menu_type: menuType,
