@@ -72,6 +72,8 @@ export function AnalyticsDashboard({
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
   };
 
+  const isPro = planType?.toLowerCase() === "pro";
+
   const MiniSparkline = ({ dataKey, color }: { dataKey: string, color: string }) => (
     <div className="h-10 w-24">
       <ResponsiveContainer width="100%" height="100%">
@@ -200,31 +202,35 @@ export function AnalyticsDashboard({
         ) : (
           <>
             {/* DENSE METRICS STRIP */}
-        <div className={`grid gap-4 mb-6 grid-cols-2 md:grid-cols-5 lg:grid-cols-7`}>
+        <div className={`grid gap-4 mb-6 ${isPro ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-2 md:grid-cols-5'}`}>
           
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm col-span-2 md:col-span-1 flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-indigo-600">
-                <DollarSign className="h-4 w-4" />
-                <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Gross Rev</span>
+          {!isPro && (
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm col-span-2 md:col-span-1 flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 text-indigo-600">
+                  <DollarSign className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Gross Rev</span>
+                </div>
+              </div>
+              <div className="flex items-end justify-between">
+                <div className="text-2xl font-black tracking-tighter text-slate-900">{formatCurrency(displayRevenue)}</div>
+                <MiniSparkline dataKey="amount" color="#4F46E5" />
               </div>
             </div>
-            <div className="flex items-end justify-between">
-              <div className="text-2xl font-black tracking-tighter text-slate-900">{formatCurrency(displayRevenue)}</div>
-              <MiniSparkline dataKey="amount" color="#4F46E5" />
-            </div>
-          </div>
+          )}
 
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-            <div className="flex items-center gap-2 text-rose-600 mb-2">
-              <Receipt className="h-4 w-4" />
-              <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Orders</span>
+          {!isPro && (
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div className="flex items-center gap-2 text-rose-600 mb-2">
+                <Receipt className="h-4 w-4" />
+                <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Orders</span>
+              </div>
+              <div className="flex items-end justify-between">
+                <div className="text-2xl font-black tracking-tighter text-slate-900">{displayOrders}</div>
+                <MiniSparkline dataKey="orders" color="#E11D48" />
+              </div>
             </div>
-            <div className="flex items-end justify-between">
-              <div className="text-2xl font-black tracking-tighter text-slate-900">{displayOrders}</div>
-              <MiniSparkline dataKey="orders" color="#E11D48" />
-            </div>
-          </div>
+          )}
 
           <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
             <div className="flex items-center gap-2 text-amber-600 mb-2">
@@ -237,45 +243,52 @@ export function AnalyticsDashboard({
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
-            <div className="flex items-center gap-2 text-emerald-600 mb-1">
-              <TrendingUp className="h-4 w-4" />
-              <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Avg Order Value</span>
-            </div>
-            <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayAov)}</div>
-          </div>
+          {!isPro ? (
+            <>
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
+                <div className="flex items-center gap-2 text-emerald-600 mb-1">
+                  <TrendingUp className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Avg Order Value</span>
+                </div>
+                <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayAov)}</div>
+              </div>
 
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
-            <div className="flex items-center gap-2 text-emerald-600 mb-1">
-              <DollarSign className="h-4 w-4" />
-              <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Est. Tips</span>
-            </div>
-            <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayTips)}</div>
-          </div>
-
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-            <div className="flex items-center gap-2 text-indigo-600 mb-2">
-              <MessageSquare className="h-4 w-4" />
-              <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Feedback</span>
-            </div>
-            <div className="flex items-end justify-between">
-              <div className="text-2xl font-black tracking-tighter text-slate-900">{totalFeedbacks || 0}</div>
-            </div>
-          </div>
-          
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-            <div className="flex items-center gap-2 text-amber-500 mb-2">
-              <Star className="h-4 w-4 fill-amber-500" />
-              <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Avg Rating</span>
-            </div>
-            <div className="flex items-end justify-between">
-              <div className="text-2xl font-black tracking-tighter text-slate-900">{averageRating ? averageRating.toFixed(1) : "0.0"} <span className="text-sm font-medium text-slate-400">/ 5.0</span></div>
-            </div>
-          </div>
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
+                <div className="flex items-center gap-2 text-emerald-600 mb-1">
+                  <DollarSign className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Est. Tips</span>
+                </div>
+                <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayTips)}</div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div className="flex items-center gap-2 text-indigo-600 mb-2">
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Feedback</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <div className="text-2xl font-black tracking-tighter text-slate-900">{totalFeedbacks || 0}</div>
+                </div>
+              </div>
+              
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div className="flex items-center gap-2 text-amber-500 mb-2">
+                  <Star className="h-4 w-4 fill-amber-500" />
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Avg Rating</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <div className="text-2xl font-black tracking-tighter text-slate-900">{averageRating ? averageRating.toFixed(1) : "0.0"} <span className="text-sm font-medium text-slate-400">/ 5.0</span></div>
+                </div>
+              </div>
+            </>
+          )}
 
         </div>
 
         {/* CONVERSION FUNNEL ROW */}
+        {!isPro && (
           <div className="mb-6 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
             <div className="mb-4">
               <h3 className="text-lg font-black text-slate-900 tracking-tight">Menu Bounce Rate (Conversion Funnel)</h3>
@@ -298,15 +311,16 @@ export function AnalyticsDashboard({
               </div>
             </div>
           </div>
+        )}
 
         {/* 3-COLUMN DENSE GRID */}
         <div className="grid gap-6 lg:grid-cols-3">
           
           {/* Revenue/Scans Chart */}
-          <div className={`bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col min-h-[340px] lg:col-span-2`}>
+          <div className={`bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col min-h-[340px] ${isPro ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
             <div className="mb-4 flex justify-between items-center">
               <div>
-                <h3 className="text-lg font-black text-slate-900 tracking-tight">{isLive ? "Order Velocity Heatmap" : "Revenue & Traffic"}</h3>
+                <h3 className="text-lg font-black text-slate-900 tracking-tight">{isLive ? "Order Velocity Heatmap" : (isPro ? "Traffic Analysis" : "Revenue & Traffic")}</h3>
                 <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">{isLive ? "Today's Busiest Hours" : "Historical Trajectory"}</p>
               </div>
             </div>
@@ -316,10 +330,12 @@ export function AnalyticsDashboard({
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={displayChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
-                      <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#0F172A" stopOpacity={0.05}/>
-                        <stop offset="95%" stopColor="#0F172A" stopOpacity={0}/>
-                      </linearGradient>
+                      {!isPro && (
+                        <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#0F172A" stopOpacity={0.05}/>
+                          <stop offset="95%" stopColor="#0F172A" stopOpacity={0}/>
+                        </linearGradient>
+                      )}
                       <linearGradient id="colorScans" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#D97706" stopOpacity={0.05}/>
                         <stop offset="95%" stopColor="#D97706" stopOpacity={0}/>
@@ -327,11 +343,13 @@ export function AnalyticsDashboard({
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F8FAFC" />
                     <XAxis dataKey="dateStr" axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} dy={10} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} tickFormatter={(val) => `$${val}`} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 700 }} tickFormatter={(val) => isPro ? val : `$${val}`} />
                     {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', fontSize: '12px', fontWeight: 'bold' }} formatter={(val: any, name: any) => [name === "amount" ? formatCurrency(Number(val) || 0) : val, name === "amount" ? "Revenue" : "Scans"]} />
                     
-                    <Area type="monotone" dataKey="amount" name="amount" stroke="#0F172A" strokeWidth={2} fillOpacity={1} fill="url(#colorRev)" animationDuration={1000} />
+                    {!isPro && (
+                      <Area type="monotone" dataKey="amount" name="amount" stroke="#0F172A" strokeWidth={2} fillOpacity={1} fill="url(#colorRev)" animationDuration={1000} />
+                    )}
                     <Area type="monotone" dataKey="scans" name="scans" stroke="#D97706" strokeWidth={2} fillOpacity={1} fill="url(#colorScans)" animationDuration={1000} />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -343,8 +361,10 @@ export function AnalyticsDashboard({
             </div>
           </div>
 
-          {/* Category Breakdown Donut */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col min-h-[340px]">
+          {!isPro && (
+            <>
+              {/* Category Breakdown Donut */}
+              <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col min-h-[340px]">
                 <div className="mb-2">
                   <h3 className="text-lg font-black text-slate-900 tracking-tight">Category Sales</h3>
                   <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Revenue Distribution</p>
@@ -506,7 +526,10 @@ export function AnalyticsDashboard({
                   </div>
                 )}
               </div>
-            </div>
+            </>
+          )}
+
+      </div>
           </>
         )}
     </div>
