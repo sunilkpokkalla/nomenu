@@ -20,6 +20,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FeedbackFAB } from "../feedback-fab";
 import { useCart } from "../cart-context";
 
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps } from "../types";
 import Image from "next/image";
 
@@ -290,6 +291,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme.containerBg} ${theme.fontFamilyClass}`}>
+      <RestaurantInfoModal restaurant={restaurant} />
       <div className={`mx-auto max-w-md min-h-screen ${theme.bodyBg} ${theme.shellShadow} flex flex-col pb-28 relative`}>
         
         {/* Banner Section */}

@@ -2,6 +2,7 @@ import React from "react";
 import { X, Heart, Star, Flame, Sparkles } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -31,6 +32,7 @@ export function EditorialTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#F9F8F6] text-[#1A1918] pb-32" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <RestaurantInfoModal restaurant={restaurant} />
       
       {/* Editorial Header */}
       <header className="relative w-full pt-24 pb-16 px-6 flex flex-col items-center text-center border-b border-[#E2DFD8]">

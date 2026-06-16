@@ -12,6 +12,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { MenuThemeProps, MenuItem } from "../types";
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import Image from "next/image";
 
 export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
@@ -88,6 +89,7 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
         
         {/* Vibrant Neo-brutalist Header */}
         <div className="bg-[#FFD166] border-b-4 border-black p-6 pt-12 relative overflow-hidden shrink-0">
+          <RestaurantInfoModal restaurant={restaurant} />
           <div className="absolute -top-4 -right-4 w-20 h-20 bg-[#EF476F] rounded-full border-4 border-black"></div>
           <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#118AB2] border-4 border-black rotate-12"></div>
           

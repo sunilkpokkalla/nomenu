@@ -9,6 +9,7 @@ import {
   Clock,
   Sparkles
 } from "lucide-react";
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 
@@ -82,6 +83,7 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] font-serif selection:bg-orange-200">
+      <RestaurantInfoModal restaurant={restaurant} />
       <div className="mx-auto max-w-md min-h-screen bg-[#FDFBF7] shadow-xl shadow-stone-200/50 flex flex-col pb-28 relative">
         
         {/* Soft Organic Header */}

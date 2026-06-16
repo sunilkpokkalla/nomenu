@@ -2,6 +2,7 @@ import React from "react";
 import { X, Heart, Star, Flame, Waves } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -45,6 +46,7 @@ export function ResortTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#F0F8FF] text-[#003366] font-sans pb-32" style={{ fontFamily: '"Inter", "system-ui", sans-serif' }}>
+      <RestaurantInfoModal restaurant={restaurant} />
       
       {/* Resort Header */}
       <header className="relative w-full pt-20 pb-12 px-6 flex flex-col items-center text-center overflow-hidden">

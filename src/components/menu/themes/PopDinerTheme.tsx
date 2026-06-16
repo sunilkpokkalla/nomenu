@@ -2,6 +2,7 @@ import React from "react";
 import { X, Heart, Star, Flame, Zap } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -31,6 +32,7 @@ export function PopDinerTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#FFD166] text-black font-sans pb-32" style={{ fontFamily: '"Inter", "system-ui", sans-serif' }}>
+      <RestaurantInfoModal restaurant={restaurant} />
       
       {/* Pop Diner Header */}
       <header className="relative w-full pt-16 pb-10 px-6 flex flex-col items-center text-center border-b-4 border-black bg-[#EF476F]">

@@ -1,3 +1,4 @@
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { Plus, Minus, ShoppingBag, Leaf, Info } from "lucide-react";
 import { FeedbackFAB } from "../feedback-fab";
@@ -74,6 +75,7 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#2C3B29] font-serif pb-32 selection:bg-[#3E5739] selection:text-white">
+      <RestaurantInfoModal restaurant={restaurant} />
       {/* Botanical Header Pattern */}
       <div 
         className="h-48 w-full relative overflow-hidden flex items-center justify-center bg-[#EAE3D2]"

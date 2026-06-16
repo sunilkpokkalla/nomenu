@@ -8,6 +8,7 @@ import {
   Phone,
   Sparkles
 } from "lucide-react";
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 
@@ -81,6 +82,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-zinc-100">
+      <RestaurantInfoModal restaurant={restaurant} />
       <div className="mx-auto max-w-md min-h-screen bg-white flex flex-col pb-28 relative">
         
         {/* Pure Minimal Header */}

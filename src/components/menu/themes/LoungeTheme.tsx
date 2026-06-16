@@ -2,6 +2,7 @@ import React from "react";
 import { X, GlassWater, Martini, Sparkles } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -45,6 +46,7 @@ export function LoungeTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#E0E0E0] font-sans pb-32" style={{ fontFamily: '"Inter", "system-ui", sans-serif' }}>
+      <RestaurantInfoModal restaurant={restaurant} />
       
       {/* Ambient Glow Effects */}
       <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">

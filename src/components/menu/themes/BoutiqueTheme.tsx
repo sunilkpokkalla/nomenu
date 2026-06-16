@@ -2,6 +2,7 @@ import React from "react";
 import { X, Heart, Star, Sparkles, ArrowRight } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
+import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -31,6 +32,7 @@ export function BoutiqueTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#FFF5F8] text-[#4A3B42] font-sans pb-32" style={{ fontFamily: '"Inter", "Nunito", sans-serif' }}>
+      <RestaurantInfoModal restaurant={restaurant} />
       
       {/* Decorative Top Banner */}
       <div className="w-full h-48 bg-gradient-to-r from-[#FFD1DC] via-[#FFE4E1] to-[#E6E6FA] relative overflow-hidden flex items-center justify-center">

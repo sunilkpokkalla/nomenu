@@ -20,7 +20,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic French onion soup topped with a toasted baguette slice and melted Gruyère cheese.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,soupe%C3%A0l%27oignongratin%C3%A9e?lock=49796",
   },
   {
     name: "Escargots de Bourgogne",
@@ -30,7 +30,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Snail delicacy baked in its shell with a rich, fragrant garlic and parsley butter.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,escargotsdebourgogne?lock=66944",
   },
   {
     name: "Pâté de Campagne",
@@ -40,7 +40,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rustic pork and liver pâté served with cornichons, Dijon mustard, and toasted sourdough.",
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,p%C3%A2t%C3%A9decampagne?lock=41230",
   },
   {
     name: "Gougères",
@@ -51,7 +51,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,goug%C3%A8res?lock=18967",
   },
   {
     name: "Tartare de Bœuf",
@@ -61,7 +61,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Hand-chopped raw beef tenderloin seasoned with capers, shallots, egg yolk, and Dijon mustard.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,tartaredeb%C5%93uf?lock=99994",
   },
   {
     name: "Foie Gras Poêlé",
@@ -71,7 +71,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Seared duck liver served with a sweet fig compote and toasted brioche.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,foiegraspo%C3%AAl%C3%A9?lock=41414",
   },
   {
     name: "Salade Lyonnaise",
@@ -81,7 +81,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Frisée lettuce tossed with warm bacon lardons, croutons, and topped with a poached egg.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,saladelyonnaise?lock=76029",
   },
   {
     name: "Bisque de Homard",
@@ -91,7 +91,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A velvety, rich lobster soup infused with cognac and fresh cream.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,bisquedehomard?lock=56474",
   },
   {
     name: "Camembert Rôti",
@@ -102,7 +102,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,camembertr%C3%B4ti?lock=72550",
   },
   {
     name: "Quiche Lorraine",
@@ -112,7 +112,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic savory tart filled with a rich egg custard, smoked bacon, and Gruyère cheese.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,quichelorraine?lock=44672",
   },
   {
     name: "Coq au Vin",
@@ -122,7 +122,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tender chicken braised slowly in red Burgundy wine with mushrooms, pearl onions, and bacon.",
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,coqauvin?lock=54390",
   },
   {
     name: "Bœuf Bourguignon",
@@ -132,7 +132,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic beef stew simmered in red wine with carrots, onions, garlic, and a bouquet garni.",
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,b%C5%93ufbourguignon?lock=11512",
   },
   {
     name: "Canard à l'Orange",
@@ -142,7 +142,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy roasted duck breast dressed in a sweet and savory bitter-orange glaze.",
     suggestedCookingTime: 35,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,canard%C3%A0l%27orange?lock=87046",
   },
   {
     name: "Bouillabaisse",
@@ -152,7 +152,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Traditional Provençal fish stew heavily infused with saffron, fennel, and orange zest, served with rouille.",
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,bouillabaisse?lock=72357",
   },
   {
     name: "Steak Frites",
@@ -162,7 +162,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-seared ribeye steak slathered in herb butter, served with a mountain of crispy golden frites.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,steakfrites?lock=22412",
   },
   {
     name: "Ratatouille Niçoise",
@@ -174,7 +174,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,ratatouilleni%C3%A7oise?lock=87104",
   },
   {
     name: "Cassoulet",
@@ -184,7 +184,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rich, slow-cooked casserole from the South of France featuring white beans, duck confit, and garlic sausage.",
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,cassoulet?lock=29363",
   },
   {
     name: "Confit de Canard",
@@ -194,7 +194,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Duck legs slow-cooked in their own fat until meltingly tender, then roasted until crisp.",
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,confitdecanard?lock=4483",
   },
   {
     name: "Blanquette de Veau",
@@ -204,7 +204,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A classic, comforting veal ragout cooked in a rich, velvety white sauce with button mushrooms.",
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,blanquettedeveau?lock=26574",
   },
   {
     name: "Sole Meunière",
@@ -214,7 +214,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Delicate whole Dover sole pan-fried in brown butter, lemon, and fresh parsley.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/seafood.png",
+      "https://loremflickr.com/800/600/food,solemeuni%C3%A8re?lock=35383",
   },
   {
     name: "Poulet Rôti",
@@ -224,7 +224,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Half a chicken beautifully roasted with lemon, garlic, and thyme, served with buttered green beans.",
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,pouletr%C3%B4ti?lock=90169",
   },
   {
     name: "Magret de Canard",
@@ -234,7 +234,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-seared duck breast served pink, paired with a rich cherry reduction.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,magretdecanard?lock=7390",
   },
   {
     name: "Châteaubriand",
@@ -244,7 +244,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A thick, center-cut beef tenderloin roasted to perfection, served with Béarnaise sauce.",
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,ch%C3%A2teaubriand?lock=26240",
   },
   {
     name: "Moules Marinières",
@@ -254,7 +254,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Fresh mussels steamed in white wine, garlic, shallots, and parsley, served with crusty baguette.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/seafood.png",
+      "https://loremflickr.com/800/600/food,moulesmarini%C3%A8res?lock=78681",
   },
   {
     name: "Hachis Parmentier",
@@ -264,7 +264,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "The elegant French cousin to Shepherd's Pie, made with slow-braised beef topped with creamy mashed potatoes.",
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,hachisparmentier?lock=35329",
   },
   {
     name: "Filet Mignon au Poivre",
@@ -275,7 +275,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,filetmignonaupoivre?lock=92566",
   },
   {
     name: "Navarin d'Agneau",
@@ -285,7 +285,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A delicate spring lamb stew simmered with baby turnips, carrots, and peas.",
     suggestedCookingTime: 50,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,navarind%27agneau?lock=14997",
   },
   {
     name: "Gratin Dauphinois",
@@ -296,7 +296,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,gratindauphinois?lock=60947",
   },
   {
     name: "Salade Niçoise",
@@ -307,7 +307,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,saladeni%C3%A7oise?lock=7348",
   },
   {
     name: "Croque Monsieur",
@@ -317,7 +317,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "The ultimate toasted ham and Gruyère cheese sandwich, smothered in rich Béchamel sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/sandwich.png",
+      "https://loremflickr.com/800/600/food,croquemonsieur?lock=68707",
   },
   {
     name: "Pommes Purée",
@@ -329,7 +329,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,pommespur%C3%A9e?lock=54615",
   },
   {
     name: "Haricots Verts Amandine",
@@ -341,7 +341,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,haricotsvertsamandine?lock=41240",
   },
   {
     name: "Pommes Frites",
@@ -353,7 +353,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,pommesfrites?lock=42963",
   },
   {
     name: "Gratin de Macaronis",
@@ -364,7 +364,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,gratindemacaronis?lock=57614",
   },
   {
     name: "Champignons Sauvages",
@@ -376,7 +376,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,champignonssauvages?lock=55182",
   },
   {
     name: "Asperges Sauce Hollandaise",
@@ -388,7 +388,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,aspergessaucehollandaise?lock=85196",
   },
   {
     name: "Pommes Anna",
@@ -400,7 +400,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,pommesanna?lock=46723",
   },
   {
     name: "Petits Pois à la Française",
@@ -412,7 +412,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,petitspois%C3%A0lafran%C3%A7aise?lock=14555",
   },
   {
     name: "Salade Verte",
@@ -424,7 +424,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,saladeverte?lock=9995",
   },
   {
     name: "Tomates à la Provençale",
@@ -435,7 +435,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,tomates%C3%A0laproven%C3%A7ale?lock=91169",
   },
   {
     name: "Crème Brûlée",
@@ -447,7 +447,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,cr%C3%A8mebr%C3%BBl%C3%A9e?lock=91266",
   },
   {
     name: "Tarte Tatin",
@@ -458,7 +458,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,tartetatin?lock=42561",
   },
   {
     name: "Mousse au Chocolat",
@@ -470,7 +470,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,mousseauchocolat?lock=76863",
   },
   {
     name: "Profiteroles",
@@ -481,7 +481,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,profiteroles?lock=55618",
   },
   {
     name: "Île Flottante",
@@ -493,7 +493,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,%C3%AEleflottante?lock=71811",
   },
   {
     name: "Soufflé au Grand Marnier",
@@ -504,7 +504,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,souffl%C3%A9augrandmarnier?lock=94108",
   },
   {
     name: "Mille-Feuille",
@@ -515,7 +515,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,mille-feuille?lock=23050",
   },
   {
     name: "Macarons Assortis",
@@ -527,7 +527,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,macaronsassortis?lock=89380",
   },
   {
     name: "Tarte au Citron Meringuée",
@@ -538,7 +538,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,tarteaucitronmeringu%C3%A9e?lock=79858",
   },
   {
     name: "Éclair au Chocolat",
@@ -549,7 +549,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,%C3%A9clairauchocolat?lock=39755",
   },
   {
     name: "Bruschetta al Pomodoro",
@@ -560,7 +560,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,bruschettaalpomodoro?lock=50085",
   },
   {
     name: "Burrata e Prosciutto",
@@ -571,7 +571,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,burrataeprosciutto?lock=14389",
   },
   {
     name: "Arancini al Ragù",
@@ -581,7 +581,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy, golden-fried risotto balls stuffed with a rich beef ragù and mozzarella center.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,arancinialrag%C3%B9?lock=11352",
   },
   {
     name: "Calamari Fritti",
@@ -591,7 +591,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Lightly dusted, crispy fried squid rings served with a side of zesty marinara sauce and lemon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,calamarifritti?lock=739",
   },
   {
     name: "Carpaccio di Manzo",
@@ -602,7 +602,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,carpacciodimanzo?lock=62696",
   },
   {
     name: "Insalata Caprese",
@@ -614,7 +614,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,insalatacaprese?lock=81457",
   },
   {
     name: "Polpette della Nonna",
@@ -624,7 +624,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic Italian meatballs simmered in a slow-cooked tomato sauce, served with toasted focaccia.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,polpettedellanonna?lock=61976",
   },
   {
     name: "Fritto Misto",
@@ -634,7 +634,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A crispy mix of lightly fried seafood and vegetables, perfectly seasoned with sea salt.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,frittomisto?lock=64011",
   },
   {
     name: "Melanzane alla Parmigiana",
@@ -646,7 +646,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,melanzaneallaparmigiana?lock=65868",
   },
   {
     name: "Zuppa Toscana",
@@ -657,7 +657,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,zuppatoscana?lock=28876",
   },
   {
     name: "Spaghetti Carbonara",
@@ -667,7 +667,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Authentic Roman pasta dish with guanciale, pecorino romano, egg yolks, and heavy black pepper.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,spaghetticarbonara?lock=75590",
   },
   {
     name: "Lasagna al Forno",
@@ -677,7 +677,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Oven-baked layers of fresh pasta, rich Bolognese ragù, velvety béchamel, and parmesan.",
     suggestedCookingTime: 35,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,lasagnaalforno?lock=6893",
   },
   {
     name: "Risotto ai Funghi Porcini",
@@ -689,7 +689,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,risottoaifunghiporcini?lock=53506",
   },
   {
     name: "Ossobuco alla Milanese",
@@ -700,7 +700,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,ossobucoallamilanese?lock=63408",
   },
   {
     name: "Pizza Margherita",
@@ -711,7 +711,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/pizza.png",
+      "https://loremflickr.com/800/600/food,pizzamargherita?lock=46071",
   },
   {
     name: "Tagliatelle al Ragù Bolognese",
@@ -721,7 +721,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Ribbons of egg pasta tossed in a slow-cooked, rich meat sauce from Bologna.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,tagliatellealrag%C3%B9bolognese?lock=94126",
   },
   {
     name: "Cacio e Pepe",
@@ -732,7 +732,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,cacioepepe?lock=46164",
   },
   {
     name: "Saltimbocca alla Romana",
@@ -742,7 +742,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-fried veal medallions wrapped in prosciutto and sage, glazed with a white wine sauce.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,saltimboccaallaromana?lock=64008",
   },
   {
     name: "Bistecca alla Fiorentina",
@@ -753,7 +753,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,bisteccaallafiorentina?lock=97806",
   },
   {
     name: "Linguine alle Vongole",
@@ -763,7 +763,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Linguine tossed with fresh clams, white wine, garlic, parsley, and a touch of chili flakes.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,linguineallevongole?lock=63674",
   },
   {
     name: "Ravioli Ricotta e Spinaci",
@@ -774,7 +774,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,ravioliricottaespinaci?lock=59370",
   },
   {
     name: "Pizza Diavola",
@@ -785,7 +785,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/pizza.png",
+      "https://loremflickr.com/800/600/food,pizzadiavola?lock=42939",
   },
   {
     name: "Gnocchi al Pesto Genovese",
@@ -796,7 +796,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,gnocchialpestogenovese?lock=87683",
   },
   {
     name: "Pappardelle al Cinghiale",
@@ -806,7 +806,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Wide pasta ribbons served with a robust, slow-braised wild boar ragù.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,pappardellealcinghiale?lock=3171",
   },
   {
     name: "Pollo alla Cacciatora",
@@ -817,7 +817,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,polloallacacciatora?lock=84779",
   },
   {
     name: "Spaghetti all'Amatriciana",
@@ -828,7 +828,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,spaghettiall%27amatriciana?lock=23013",
   },
   {
     name: "Fritto Misto di Pesce",
@@ -838,7 +838,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A generous platter of assorted Mediterranean seafood, lightly battered and fried.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,frittomistodipesce?lock=53462",
   },
   {
     name: "Orecchiette con Cime di Rapa",
@@ -848,7 +848,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Little 'ear-shaped' pasta tossed with bitter broccoli rabe, garlic, and anchovies.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,orecchietteconcimedirapa?lock=54041",
   },
   {
     name: "Risotto alla Milanese",
@@ -860,7 +860,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,risottoallamilanese?lock=34275",
   },
   {
     name: "Pizza Quattro Formaggi",
@@ -871,7 +871,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/pizza.png",
+      "https://loremflickr.com/800/600/food,pizzaquattroformaggi?lock=44718",
   },
   {
     name: "Focaccia al Rosmarino",
@@ -882,7 +882,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,focacciaalrosmarino?lock=27102",
   },
   {
     name: "Broccoletti Saltati",
@@ -895,18 +895,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,broccolettisaltati?lock=17845",
   },
   {
     name: "Patate Arrosto",
     category: "Sides",
     cuisines: ["italian"],
-    description: "Crispy roasted potatoes tossed with garlic and rosemary.",
+    description: "Crispy roasted potatoes tossed with garlic and rosemary. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,patatearrosto?lock=55536",
   },
   {
     name: "Polenta Morbida",
@@ -918,7 +918,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,polentamorbida?lock=36473",
   },
   {
     name: "Insalata Mista",
@@ -930,7 +930,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,insalatamista?lock=26742",
   },
   {
     name: "Carciofi alla Romana",
@@ -942,7 +942,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,carciofiallaromana?lock=65103",
   },
   {
     name: "Verdure Grigliate",
@@ -954,7 +954,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,verduregrigliate?lock=4728",
   },
   {
     name: "Pane all'Aglio",
@@ -965,7 +965,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,paneall%27aglio?lock=66507",
   },
   {
     name: "Spinaci al Limone",
@@ -977,7 +977,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,spinaciallimone?lock=16590",
   },
   {
     name: "Caponata Siciliana",
@@ -989,7 +989,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,caponatasiciliana?lock=88103",
   },
   {
     name: "Tiramisù",
@@ -1000,7 +1000,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,tiramis%C3%B9?lock=80257",
   },
   {
     name: "Panna Cotta",
@@ -1012,7 +1012,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,pannacotta?lock=68212",
   },
   {
     name: "Cannoli Siciliani",
@@ -1023,7 +1023,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,cannolisiciliani?lock=86095",
   },
   {
     name: "Gelato Artigianale",
@@ -1035,7 +1035,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,gelatoartigianale?lock=11070",
   },
   {
     name: "Affogato al Caffè",
@@ -1047,7 +1047,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,affogatoalcaff%C3%A8?lock=99737",
   },
   {
     name: "Zabaione",
@@ -1059,7 +1059,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,zabaione?lock=88269",
   },
   {
     name: "Torta della Nonna",
@@ -1070,7 +1070,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,tortadellanonna?lock=91547",
   },
   {
     name: "Biscotti Cantuccini",
@@ -1081,7 +1081,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,biscotticantuccini?lock=86908",
   },
   {
     name: "Profiteroles al Cioccolato",
@@ -1092,7 +1092,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,profiterolesalcioccolato?lock=72038",
   },
   {
     name: "Zeppole",
@@ -1103,7 +1103,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,zeppole?lock=14310",
   },
   {
     name: "Loaded Potato Skins",
@@ -1113,7 +1113,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy potato skins loaded with melted cheddar, bacon bits, sour cream, and green onions.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,loadedpotatoskins?lock=32736",
   },
   {
     name: "Buffalo Chicken Wings",
@@ -1124,7 +1124,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,buffalochickenwings?lock=79249",
   },
   {
     name: "Mozzarella Sticks",
@@ -1135,7 +1135,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,mozzarellasticks?lock=22857",
   },
   {
     name: "Spinach Artichoke Dip",
@@ -1146,7 +1146,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,spinachartichokedip?lock=85945",
   },
   {
     name: "Fried Pickles",
@@ -1157,7 +1157,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,friedpickles?lock=92534",
   },
   {
     name: "Onion Rings",
@@ -1168,7 +1168,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,onionrings?lock=3908",
   },
   {
     name: "Clam Chowder",
@@ -1178,7 +1178,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rich, creamy New England soup packed with tender clams, potatoes, and bacon.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,clamchowder?lock=79900",
   },
   {
     name: "Jalapeño Poppers",
@@ -1190,7 +1190,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,jalape%C3%B1opoppers?lock=72957",
   },
   {
     name: "Mini Sliders",
@@ -1200,7 +1200,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Three bite-sized beef burgers topped with American cheese, pickles, and ketchup.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,minisliders?lock=77954",
   },
   {
     name: "Deviled Eggs",
@@ -1212,7 +1212,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,deviledeggs?lock=77973",
   },
   {
     name: "Classic Cheeseburger",
@@ -1222,7 +1222,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A juicy beef patty topped with melted American cheese, lettuce, tomato, onion, and signature sauce on a toasted bun.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/burger.png",
+      "https://loremflickr.com/800/600/food,classiccheeseburger?lock=2671",
   },
   {
     name: "BBQ Pork Ribs",
@@ -1233,7 +1233,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 180,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,bbqporkribs?lock=72134",
   },
   {
     name: "Fried Chicken",
@@ -1243,7 +1243,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy, buttermilk-marinated fried chicken served with a side of creamy coleslaw and a biscuit.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,friedchicken?lock=94108",
   },
   {
     name: "Philly Cheesesteak",
@@ -1253,7 +1253,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thinly sliced ribeye steak grilled with onions and topped with melted provolone on a hoagie roll.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,phillycheesesteak?lock=86880",
   },
   {
     name: "Macaroni and Cheese",
@@ -1264,7 +1264,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/pasta.png",
+      "https://loremflickr.com/800/600/food,macaroniandcheese?lock=12358",
   },
   {
     name: "Meatloaf",
@@ -1274,7 +1274,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Homestyle baked beef meatloaf topped with a sweet tomato glaze, served alongside mashed potatoes.",
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,meatloaf?lock=39987",
   },
   {
     name: "Chicken Fried Steak",
@@ -1284,7 +1284,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tenderized beef steak, breaded and fried like chicken, smothered in rich country pepper gravy.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,chickenfriedsteak?lock=40277",
   },
   {
     name: "Pulled Pork Sandwich",
@@ -1294,7 +1294,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Slow-smoked pork shoulder piled high on a brioche bun, topped with tangy slaw and BBQ sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/sandwich.png",
+      "https://loremflickr.com/800/600/food,pulledporksandwich?lock=53268",
   },
   {
     name: "Grilled Cheese & Tomato Soup",
@@ -1305,7 +1305,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/soup.png",
+      "https://loremflickr.com/800/600/food,grilledcheese%26tomatosoup?lock=33201",
   },
   {
     name: "BLT Sandwich",
@@ -1315,7 +1315,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy thick-cut bacon, fresh iceberg lettuce, and ripe tomatoes with mayo on toasted sourdough.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/sandwich.png",
+      "https://loremflickr.com/800/600/food,bltsandwich?lock=565",
   },
   {
     name: "New York Strip Steak",
@@ -1326,7 +1326,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,newyorkstripsteak?lock=43185",
   },
   {
     name: "Cobb Salad",
@@ -1337,7 +1337,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,cobbsalad?lock=74245",
   },
   {
     name: "Hot Dog with Chili",
@@ -1347,7 +1347,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "An all-beef frankfurter topped with hearty beef chili, diced onions, and yellow mustard.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,hotdogwithchili?lock=61178",
   },
   {
     name: "Jambalaya",
@@ -1359,7 +1359,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,jambalaya?lock=3831",
   },
   {
     name: "Shrimp and Grits",
@@ -1369,7 +1369,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Plump sautéed shrimp served over creamy, cheesy stone-ground grits with bacon and scallions.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/seafood.png",
+      "https://loremflickr.com/800/600/food,shrimpandgrits?lock=97805",
   },
   {
     name: "Club Sandwich",
@@ -1379,7 +1379,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A triple-decker sandwich stacked with roasted turkey, ham, bacon, lettuce, tomato, and mayo.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/sandwich.png",
+      "https://loremflickr.com/800/600/food,clubsandwich?lock=30681",
   },
   {
     name: "Beef Brisket",
@@ -1390,7 +1390,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 720,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,beefbrisket?lock=18415",
   },
   {
     name: "Lobster Roll",
@@ -1400,7 +1400,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Chilled, sweet Maine lobster meat lightly dressed with mayo, served in a butter-toasted split-top bun.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,lobsterroll?lock=4879",
   },
   {
     name: "Chicken Pot Pie",
@@ -1410,7 +1410,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A comforting, creamy stew of chicken and vegetables baked under a flaky, golden pastry crust.",
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,chickenpotpie?lock=67759",
   },
   {
     name: "Bacon Cheeseburger",
@@ -1420,7 +1420,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Our classic cheeseburger elevated with two slices of thick-cut, crispy smoked bacon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/burger.png",
+      "https://loremflickr.com/800/600/food,baconcheeseburger?lock=72496",
   },
   {
     name: "French Fries",
@@ -1432,7 +1432,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,frenchfries?lock=42641",
   },
   {
     name: "Coleslaw",
@@ -1444,7 +1444,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,coleslaw?lock=89628",
   },
   {
     name: "Baked Potato",
@@ -1456,28 +1456,28 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,bakedpotato?lock=32429",
   },
   {
     name: "Corn on the Cob",
     category: "Sides",
     cuisines: ["american diner", "bbq"],
-    description: "Sweet corn boiled and slathered with melted butter.",
+    description: "Sweet corn boiled and slathered with melted butter. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,cornonthecob?lock=12885",
   },
   {
     name: "Hush Puppies",
     category: "Sides",
     cuisines: ["american diner", "southern"],
-    description: "Deep-fried, savory cornbread balls.",
+    description: "Deep-fried, savory cornbread balls. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,hushpuppies?lock=62885",
   },
   {
     name: "Tater Tots",
@@ -1489,16 +1489,16 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,tatertots?lock=25366",
   },
   {
     name: "Mashed Potatoes & Gravy",
     category: "Sides",
     cuisines: ["american diner", "southern"],
-    description: "Creamy mashed potatoes topped with rich brown beef gravy.",
+    description: "Creamy mashed potatoes topped with rich brown beef gravy. Authentic and freshly prepared by our expert chefs.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,mashedpotatoes%26gravy?lock=70849",
   },
   {
     name: "Baked Beans",
@@ -1509,7 +1509,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,bakedbeans?lock=9657",
   },
   {
     name: "Sweet Potato Fries",
@@ -1521,7 +1521,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,sweetpotatofries?lock=15935",
   },
   {
     name: "Buttermilk Biscuits",
@@ -1532,7 +1532,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,buttermilkbiscuits?lock=59159",
   },
   {
     name: "New York Cheesecake",
@@ -1543,7 +1543,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,newyorkcheesecake?lock=13338",
   },
   {
     name: "Apple Pie",
@@ -1554,7 +1554,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,applepie?lock=75168",
   },
   {
     name: "Chocolate Brownie Sundae",
@@ -1565,7 +1565,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,chocolatebrowniesundae?lock=28357",
   },
   {
     name: "Pecan Pie",
@@ -1576,7 +1576,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,pecanpie?lock=22866",
   },
   {
     name: "Key Lime Pie",
@@ -1587,7 +1587,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,keylimepie?lock=41047",
   },
   {
     name: "Banana Split",
@@ -1599,7 +1599,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,bananasplit?lock=32397",
   },
   {
     name: "Milkshake",
@@ -1611,7 +1611,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,milkshake?lock=38756",
   },
   {
     name: "Chocolate Chip Cookies",
@@ -1622,7 +1622,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,chocolatechipcookies?lock=52794",
   },
   {
     name: "Red Velvet Cake",
@@ -1633,7 +1633,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,redvelvetcake?lock=39792",
   },
   {
     name: "S'mores",
@@ -1644,7 +1644,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,s%27mores?lock=56677",
   },
   {
     name: "Guacamole & Chips",
@@ -1656,7 +1656,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,guacamole%26chips?lock=51584",
   },
   {
     name: "Queso Fundido",
@@ -1667,7 +1667,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,quesofundido?lock=87249",
   },
   {
     name: "Pico de Gallo",
@@ -1679,7 +1679,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,picodegallo?lock=33245",
   },
   {
     name: "Ceviche de Camarón",
@@ -1690,7 +1690,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,cevichedecamar%C3%B3n?lock=10302",
   },
   {
     name: "Nachos Supremos",
@@ -1702,7 +1702,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,nachossupremos?lock=49313",
   },
   {
     name: "Elote",
@@ -1715,7 +1715,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,elote?lock=47358",
   },
   {
     name: "Taquitos Dorados",
@@ -1726,7 +1726,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,taquitosdorados?lock=96897",
   },
   {
     name: "Sopa de Tortilla",
@@ -1738,7 +1738,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,sopadetortilla?lock=98561",
   },
   {
     name: "Tostada de Tinga",
@@ -1750,7 +1750,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,tostadadetinga?lock=25351",
   },
   {
     name: "Chiles Toreados",
@@ -1763,7 +1763,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,chilestoreados?lock=48065",
   },
   {
     name: "Tacos al Pastor",
@@ -1774,7 +1774,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/taco.png",
+      "https://loremflickr.com/800/600/food,tacosalpastor?lock=54105",
   },
   {
     name: "Enchiladas Verdes",
@@ -1785,7 +1785,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/taco.png",
+      "https://loremflickr.com/800/600/food,enchiladasverdes?lock=88409",
   },
   {
     name: "Fajitas de Pollo",
@@ -1795,7 +1795,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Sizzling strips of grilled chicken breast with bell peppers and onions, served with tortillas and guacamole.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,fajitasdepollo?lock=61926",
   },
   {
     name: "Carne Asada",
@@ -1806,7 +1806,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,carneasada?lock=95055",
   },
   {
     name: "Mole Poblano",
@@ -1816,7 +1816,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A complex, rich, and dark sauce made of chilies and chocolate, poured over tender chicken pieces.",
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,molepoblano?lock=65723",
   },
   {
     name: "Burrito de Asada",
@@ -1826,7 +1826,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A massive flour tortilla stuffed with grilled steak, rice, beans, cheese, and pico de gallo.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/taco.png",
+      "https://loremflickr.com/800/600/food,burritodeasada?lock=89975",
   },
   {
     name: "Quesadilla de Huitlacoche",
@@ -1838,7 +1838,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,quesadilladehuitlacoche?lock=96779",
   },
   {
     name: "Chiles Rellenos",
@@ -1849,7 +1849,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,chilesrellenos?lock=53442",
   },
   {
     name: "Pozole Rojo",
@@ -1861,7 +1861,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,pozolerojo?lock=40485",
   },
   {
     name: "Tacos de Carnitas",
@@ -1872,7 +1872,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/taco.png",
+      "https://loremflickr.com/800/600/food,tacosdecarnitas?lock=17948",
   },
   {
     name: "Camarones al la Diabla",
@@ -1884,7 +1884,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,camaronesalladiabla?lock=25363",
   },
   {
     name: "Chimichanga",
@@ -1894,7 +1894,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A large burrito filled with shredded beef and cheese, deep-fried until golden and crispy.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,chimichanga?lock=11826",
   },
   {
     name: "Tacos de Pescado",
@@ -1904,7 +1904,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Baja-style crispy battered fish served in tortillas with shredded cabbage and a creamy white sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/taco.png",
+      "https://loremflickr.com/800/600/food,tacosdepescado?lock=72112",
   },
   {
     name: "Tamales de Puerco",
@@ -1915,7 +1915,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,tamalesdepuerco?lock=29455",
   },
   {
     name: "Sopes con Chorizo",
@@ -1926,7 +1926,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,sopesconchorizo?lock=22509",
   },
   {
     name: "Barbacoa de Res",
@@ -1937,7 +1937,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,barbacoaderes?lock=32972",
   },
   {
     name: "Tlayuda",
@@ -1948,7 +1948,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,tlayuda?lock=3766",
   },
   {
     name: "Enchiladas Suizas",
@@ -1959,7 +1959,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/taco.png",
+      "https://loremflickr.com/800/600/food,enchiladassuizas?lock=6779",
   },
   {
     name: "Cochinita Pibil",
@@ -1970,7 +1970,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,cochinitapibil?lock=97688",
   },
   {
     name: "Fajitas Vegetarianas",
@@ -1982,7 +1982,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,fajitasvegetarianas?lock=90393",
   },
   {
     name: "Arroz Mexicano",
@@ -1993,7 +1993,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,arrozmexicano?lock=31387",
   },
   {
     name: "Frijoles Refritos",
@@ -2005,7 +2005,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,frijolesrefritos?lock=8367",
   },
   {
     name: "Frijoles Charros",
@@ -2017,18 +2017,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,frijolescharros?lock=50920",
   },
   {
     name: "Tortillas de Maíz Hechas a Mano",
     category: "Sides",
     cuisines: ["mexican", "taqueria"],
-    description: "A stack of warm, fresh, handmade corn tortillas.",
+    description: "A stack of warm, fresh, handmade corn tortillas. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,tortillasdema%C3%ADzhechasamano?lock=95460",
   },
   {
     name: "Cebollitas Asadas",
@@ -2040,7 +2040,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,cebollitasasadas?lock=61536",
   },
   {
     name: "Nopales en Ensalada",
@@ -2052,7 +2052,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,nopalesenensalada?lock=7119",
   },
   {
     name: "Plátanos Fritos",
@@ -2064,7 +2064,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,pl%C3%A1tanosfritos?lock=89176",
   },
   {
     name: "Salsa Roja y Verde",
@@ -2077,7 +2077,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,salsarojayverde?lock=99103",
   },
   {
     name: "Chicharrón",
@@ -2088,7 +2088,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,chicharr%C3%B3n?lock=14",
   },
   {
     name: "Calabacitas con Elote",
@@ -2100,7 +2100,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,calabacitasconelote?lock=80895",
   },
   {
     name: "Churros con Chocolate",
@@ -2111,7 +2111,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,churrosconchocolate?lock=80849",
   },
   {
     name: "Flan de Vainilla",
@@ -2123,7 +2123,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,flandevainilla?lock=97205",
   },
   {
     name: "Tres Leches Cake",
@@ -2134,7 +2134,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,treslechescake?lock=96237",
   },
   {
     name: "Arroz con Leche",
@@ -2146,7 +2146,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,arrozconleche?lock=64234",
   },
   {
     name: "Sopapillas",
@@ -2157,7 +2157,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,sopapillas?lock=5677",
   },
   {
     name: "Nieve de Garrafa",
@@ -2169,7 +2169,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,nievedegarrafa?lock=74558",
   },
   {
     name: "Carlota de Limón",
@@ -2180,7 +2180,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,carlotadelim%C3%B3n?lock=71388",
   },
   {
     name: "Paletas",
@@ -2192,7 +2192,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,paletas?lock=48014",
   },
   {
     name: "Empanadas Dulces",
@@ -2203,7 +2203,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,empanadasdulces?lock=11670",
   },
   {
     name: "Capirotada",
@@ -2214,7 +2214,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,capirotada?lock=50679",
   },
   {
     name: "Edamame",
@@ -2226,7 +2226,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,edamame?lock=64679",
   },
   {
     name: "Gyoza",
@@ -2236,7 +2236,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Six pan-fried dumplings filled with seasoned pork and cabbage, served with a soy-vinegar dip.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,gyoza?lock=41291",
   },
   {
     name: "Agedashi Tofu",
@@ -2247,7 +2247,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,agedashitofu?lock=33495",
   },
   {
     name: "Miso Soup",
@@ -2257,7 +2257,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Traditional soup made with fermented soybean paste, dashi, tofu cubes, and wakame seaweed.",
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,misosoup?lock=92141",
   },
   {
     name: "Takoyaki",
@@ -2267,7 +2267,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Golden, savory battered octopus balls drizzled with sweet sauce, mayo, and bonito flakes.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,takoyaki?lock=43887",
   },
   {
     name: "Wakame Salad",
@@ -2279,7 +2279,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,wakamesalad?lock=80140",
   },
   {
     name: "Yakitori",
@@ -2290,7 +2290,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,yakitori?lock=80581",
   },
   {
     name: "Tuna Tataki",
@@ -2301,7 +2301,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,tunatataki?lock=45165",
   },
   {
     name: "Karaage",
@@ -2311,7 +2311,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Japanese-style bite-sized fried chicken, marinated in soy sauce, ginger, and garlic, served with lemon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,karaage?lock=34424",
   },
   {
     name: "Chawanmushi",
@@ -2322,7 +2322,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,chawanmushi?lock=34921",
   },
   {
     name: "Tonkotsu Ramen",
@@ -2332,7 +2332,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Hakata-style ramen featuring a rich, milky pork bone broth, thin noodles, chashu pork, and a soft-boiled egg.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,tonkotsuramen?lock=1995",
   },
   {
     name: "Sushi Nigiri Platter",
@@ -2343,7 +2343,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,sushinigiriplatter?lock=27382",
   },
   {
     name: "Sashimi Moriawase",
@@ -2354,7 +2354,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,sashimimoriawase?lock=77179",
   },
   {
     name: "Katsudon",
@@ -2364,7 +2364,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A comforting bowl of rice topped with a breaded, deep-fried pork cutlet, egg, and onions simmered in sweet soy broth.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,katsudon?lock=17399",
   },
   {
     name: "Chicken Teriyaki",
@@ -2374,7 +2374,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Grilled chicken breast glazed in a sweet, sticky soy-based sauce, served with steamed rice and vegetables.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,chickenteriyaki?lock=20223",
   },
   {
     name: "Tempura Udon",
@@ -2384,7 +2384,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thick, chewy wheat noodles in a hot dashi broth, served with light, crispy shrimp and vegetable tempura.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,tempuraudon?lock=85359",
   },
   {
     name: "Unadon (Eel Bowl)",
@@ -2394,7 +2394,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Grilled freshwater eel glazed with a sweet soy-based sauce, served over a bed of steamed white rice.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,unadon%28eelbowl%29?lock=7060",
   },
   {
     name: "Shoyu Ramen",
@@ -2404,7 +2404,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tokyo-style ramen with a clear, soy-sauce flavored broth, curly noodles, bamboo shoots, and roasted pork.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,shoyuramen?lock=86553",
   },
   {
     name: "Okonomiyaki",
@@ -2414,7 +2414,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A savory Japanese cabbage pancake mixed with pork belly and seafood, topped with mayo, sweet sauce, and bonito.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,okonomiyaki?lock=52977",
   },
   {
     name: "Spicy Tuna Roll",
@@ -2426,7 +2426,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,spicytunaroll?lock=72184",
   },
   {
     name: "Sukiyaki",
@@ -2436,7 +2436,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thinly sliced beef, tofu, and vegetables simmered right at your table in a sweet soy and mirin broth.",
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,sukiyaki?lock=61934",
   },
   {
     name: "Yakisoba",
@@ -2446,7 +2446,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Stir-fried wheat noodles with pork, cabbage, and carrots in a sweet and savory sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,yakisoba?lock=48656",
   },
   {
     name: "Salmon Teriyaki Bento",
@@ -2456,7 +2456,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A complete meal box featuring glazed salmon, rice, miso soup, salad, and a small side dish.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/seafood.png",
+      "https://loremflickr.com/800/600/food,salmonteriyakibento?lock=42521",
   },
   {
     name: "Gyudon (Beef Bowl)",
@@ -2466,7 +2466,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thinly sliced beef and onions simmered in a mildly sweet broth flavored with dashi, soy sauce, and mirin, over rice.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,gyudon%28beefbowl%29?lock=56995",
   },
   {
     name: "Miso Black Cod",
@@ -2477,7 +2477,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,misoblackcod?lock=44098",
   },
   {
     name: "Dragon Roll",
@@ -2487,7 +2487,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "An inside-out sushi roll featuring shrimp tempura and cucumber, draped with thinly sliced avocado.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,dragonroll?lock=65919",
   },
   {
     name: "Zaru Soba",
@@ -2498,7 +2498,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,zarusoba?lock=60800",
   },
   {
     name: "Omurice",
@@ -2508,7 +2508,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A fluffy, western-influenced Japanese omelette draped over ketchup-flavored chicken fried rice.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,omurice?lock=49757",
   },
   {
     name: "Shabu Shabu",
@@ -2519,7 +2519,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,shabushabu?lock=3455",
   },
   {
     name: "Katsu Curry",
@@ -2529,18 +2529,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A crispy breaded pork cutlet served with a rich, slightly sweet Japanese curry sauce over rice.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/soup.png",
+      "https://loremflickr.com/800/600/food,katsucurry?lock=53289",
   },
   {
     name: "Gohan (Steamed Rice)",
     category: "Sides",
     cuisines: ["japanese", "sushi", "teishoku"],
-    description: "A bowl of premium short-grain Japanese white rice.",
+    description: "A bowl of premium short-grain Japanese white rice. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,gohan%28steamedrice%29?lock=98326",
   },
   {
     name: "Tsukemono (Pickles)",
@@ -2552,7 +2552,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,tsukemono%28pickles%29?lock=20322",
   },
   {
     name: "Tamagoyaki",
@@ -2564,7 +2564,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,tamagoyaki?lock=44087",
   },
   {
     name: "Natto",
@@ -2576,7 +2576,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,natto?lock=41075",
   },
   {
     name: "Onigiri",
@@ -2587,7 +2587,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,onigiri?lock=35207",
   },
   {
     name: "Kinoko Butter Yaki",
@@ -2599,7 +2599,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,kinokobutteryaki?lock=1035",
   },
   {
     name: "Korokke",
@@ -2609,7 +2609,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A Japanese potato croquette, breaded with panko and deep-fried, served with sweet tonkatsu sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,korokke?lock=2215",
   },
   {
     name: "Daikon Salad",
@@ -2621,7 +2621,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,daikonsalad?lock=73145",
   },
   {
     name: "Nasu Dengaku",
@@ -2633,7 +2633,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,nasudengaku?lock=27004",
   },
   {
     name: "Kinpira Gobo",
@@ -2645,7 +2645,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,kinpiragobo?lock=44920",
   },
   {
     name: "Matcha Ice Cream",
@@ -2657,7 +2657,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,matchaicecream?lock=92938",
   },
   {
     name: "Mochi Ice Cream",
@@ -2669,7 +2669,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,mochiicecream?lock=9971",
   },
   {
     name: "Dorayaki",
@@ -2680,7 +2680,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,dorayaki?lock=2720",
   },
   {
     name: "Taiyaki",
@@ -2691,7 +2691,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,taiyaki?lock=821",
   },
   {
     name: "Daifuku",
@@ -2703,18 +2703,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,daifuku?lock=5312",
   },
   {
     name: "Purin",
     category: "Desserts",
     cuisines: ["japanese", "cafe"],
-    description: "A firm, smooth Japanese caramel custard pudding.",
+    description: "A firm, smooth Japanese caramel custard pudding. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,purin?lock=35456",
   },
   {
     name: "Mitarashi Dango",
@@ -2726,7 +2726,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,mitarashidango?lock=90253",
   },
   {
     name: "Yuzu Sorbet",
@@ -2738,7 +2738,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,yuzusorbet?lock=32119",
   },
   {
     name: "Anmitsu",
@@ -2750,7 +2750,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,anmitsu?lock=83416",
   },
   {
     name: "Castella Cake",
@@ -2761,7 +2761,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,castellacake?lock=85580",
   },
   {
     name: "Samosa",
@@ -2773,7 +2773,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,samosa?lock=70094",
   },
   {
     name: "Onion Bhaji",
@@ -2786,7 +2786,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,onionbhaji?lock=73634",
   },
   {
     name: "Chicken Tikka",
@@ -2797,7 +2797,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,chickentikka?lock=9590",
   },
   {
     name: "Paneer Tikka",
@@ -2809,7 +2809,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,paneertikka?lock=89395",
   },
   {
     name: "Aloo Tikki",
@@ -2821,7 +2821,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,alootikki?lock=47585",
   },
   {
     name: "Pani Puri",
@@ -2834,7 +2834,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,panipuri?lock=43691",
   },
   {
     name: "Seekh Kebab",
@@ -2846,7 +2846,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,seekhkebab?lock=75371",
   },
   {
     name: "Gobi Manchurian",
@@ -2858,7 +2858,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,gobimanchurian?lock=88861",
   },
   {
     name: "Papdi Chaat",
@@ -2869,7 +2869,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,papdichaat?lock=87707",
   },
   {
     name: "Fish Amritsari",
@@ -2880,7 +2880,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,fishamritsari?lock=266",
   },
   {
     name: "Butter Chicken (Murgh Makhani)",
@@ -2891,7 +2891,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,butterchicken%28murghmakhani%29?lock=11909",
   },
   {
     name: "Chicken Tikka Masala",
@@ -2902,7 +2902,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,chickentikkamasala?lock=37154",
   },
   {
     name: "Lamb Rogan Josh",
@@ -2913,7 +2913,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,lambroganjosh?lock=37447",
   },
   {
     name: "Palak Paneer",
@@ -2925,7 +2925,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/soup.png",
+      "https://loremflickr.com/800/600/food,palakpaneer?lock=52712",
   },
   {
     name: "Chana Masala",
@@ -2938,7 +2938,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,chanamasala?lock=95649",
   },
   {
     name: "Biryani (Chicken or Lamb)",
@@ -2949,7 +2949,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,biryani%28chickenorlamb%29?lock=82148",
   },
   {
     name: "Dal Makhani",
@@ -2961,7 +2961,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "/images/templates/soup.png",
+      "https://loremflickr.com/800/600/food,dalmakhani?lock=99127",
   },
   {
     name: "Aloo Gobi",
@@ -2974,7 +2974,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,aloogobi?lock=70313",
   },
   {
     name: "Vindaloo",
@@ -2986,7 +2986,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/soup.png",
+      "https://loremflickr.com/800/600/food,vindaloo?lock=90956",
   },
   {
     name: "Saag Gosht",
@@ -2997,7 +2997,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 50,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,saaggosht?lock=29997",
   },
   {
     name: "Baingan Bharta",
@@ -3010,7 +3010,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1314",
+      "https://loremflickr.com/800/600/food,bainganbharta?lock=38440",
   },
   {
     name: "Malai Kofta",
@@ -3021,7 +3021,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,malaikofta?lock=1841",
   },
   {
     name: "Tandoori Chicken (Half/Full)",
@@ -3032,7 +3032,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,tandoorichicken%28half/full%29?lock=77779",
   },
   {
     name: "Korma",
@@ -3043,7 +3043,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,korma?lock=32054",
   },
   {
     name: "Fish Curry (Goan Style)",
@@ -3055,7 +3055,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/seafood.png",
+      "https://loremflickr.com/800/600/food,fishcurry%28goanstyle%29?lock=49416",
   },
   {
     name: "Bhindi Masala",
@@ -3068,7 +3068,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,bhindimasala?lock=76346",
   },
   {
     name: "Madras Curry",
@@ -3080,7 +3080,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/soup.png",
+      "https://loremflickr.com/800/600/food,madrascurry?lock=61085",
   },
   {
     name: "Prawn Balchão",
@@ -3092,7 +3092,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/seafood.png",
+      "https://loremflickr.com/800/600/food,prawnbalch%C3%A3o?lock=56874",
   },
   {
     name: "Matar Paneer",
@@ -3104,7 +3104,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/soup.png",
+      "https://loremflickr.com/800/600/food,matarpaneer?lock=76412",
   },
   {
     name: "Keema Mutter",
@@ -3115,7 +3115,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,keemamutter?lock=19321",
   },
   {
     name: "Garlic Naan",
@@ -3126,18 +3126,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,garlicnaan?lock=2415",
   },
   {
     name: "Basmati Rice",
     category: "Sides",
     cuisines: ["indian"],
-    description: "Long-grain, incredibly fragrant steamed white rice.",
+    description: "Long-grain, incredibly fragrant steamed white rice. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,basmatirice?lock=49336",
   },
   {
     name: "Roti / Chapati",
@@ -3148,7 +3148,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,roti/chapati?lock=35084",
   },
   {
     name: "Cucumber Raita",
@@ -3160,7 +3160,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,cucumberraita?lock=72817",
   },
   {
     name: "Peshawari Naan",
@@ -3171,7 +3171,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,peshawarinaan?lock=97924",
   },
   {
     name: "Mango Chutney",
@@ -3183,29 +3183,29 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,mangochutney?lock=57018",
   },
   {
     name: "Jeera Rice",
     category: "Sides",
     cuisines: ["indian"],
-    description: "Basmati rice pan-fried with ghee and toasted cumin seeds.",
+    description: "Basmati rice pan-fried with ghee and toasted cumin seeds. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,jeerarice?lock=38049",
   },
   {
     name: "Pappadum",
     category: "Sides",
     cuisines: ["indian", "street food"],
-    description: "Thin, crisp, disc-shaped crackers made from lentil flour.",
+    description: "Thin, crisp, disc-shaped crackers made from lentil flour. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,pappadum?lock=16569",
   },
   {
     name: "Kachumber Salad",
@@ -3217,7 +3217,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,kachumbersalad?lock=68800",
   },
   {
     name: "Lacha Paratha",
@@ -3228,7 +3228,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,lachaparatha?lock=76947",
   },
   {
     name: "Gulab Jamun",
@@ -3239,7 +3239,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,gulabjamun?lock=51604",
   },
   {
     name: "Rasgulla",
@@ -3251,7 +3251,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,rasgulla?lock=63803",
   },
   {
     name: "Mango Lassi",
@@ -3263,7 +3263,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,mangolassi?lock=87153",
   },
   {
     name: "Gajar Ka Halwa",
@@ -3275,7 +3275,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,gajarkahalwa?lock=2787",
   },
   {
     name: "Kheer",
@@ -3287,7 +3287,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,kheer?lock=44889",
   },
   {
     name: "Rasmalai",
@@ -3299,7 +3299,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,rasmalai?lock=49518",
   },
   {
     name: "Jalebi",
@@ -3310,7 +3310,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,jalebi?lock=64352",
   },
   {
     name: "Kulfi",
@@ -3322,7 +3322,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,kulfi?lock=48943",
   },
   {
     name: "Mysore Pak",
@@ -3334,7 +3334,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,mysorepak?lock=58220",
   },
   {
     name: "Falooda",
@@ -3345,7 +3345,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,falooda?lock=75260",
   },
   {
     name: "Patatas Bravas",
@@ -3358,7 +3358,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,patatasbravas?lock=82352",
   },
   {
     name: "Gambas al Ajillo",
@@ -3369,7 +3369,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,gambasalajillo?lock=67051",
   },
   {
     name: "Pan con Tomate",
@@ -3380,7 +3380,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,pancontomate?lock=49516",
   },
   {
     name: "Croquetas de Jamón",
@@ -3390,7 +3390,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy fried croquettes with an impossibly creamy, rich béchamel and cured ham filling.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/appetizer.png",
+      "https://loremflickr.com/800/600/food,croquetasdejam%C3%B3n?lock=47390",
   },
   {
     name: "Jamón Ibérico de Bellota",
@@ -3401,7 +3401,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1470",
+      "https://loremflickr.com/800/600/food,jam%C3%B3nib%C3%A9ricodebellota?lock=45572",
   },
   {
     name: "Tortilla Española",
@@ -3413,7 +3413,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1825",
+      "https://loremflickr.com/800/600/food,tortillaespa%C3%B1ola?lock=72130",
   },
   {
     name: "Pimientos de Padrón",
@@ -3425,7 +3425,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1961",
+      "https://loremflickr.com/800/600/food,pimientosdepadr%C3%B3n?lock=56757",
   },
   {
     name: "Boquerones en Vinagre",
@@ -3436,7 +3436,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1050",
+      "https://loremflickr.com/800/600/food,boqueronesenvinagre?lock=59970",
   },
   {
     name: "Chorizo a la Sidra",
@@ -3447,7 +3447,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1631",
+      "https://loremflickr.com/800/600/food,chorizoalasidra?lock=84316",
   },
   {
     name: "Pulpo a la Gallega",
@@ -3458,7 +3458,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1611",
+      "https://loremflickr.com/800/600/food,pulpoalagallega?lock=55400",
   },
   {
     name: "Paella Valenciana",
@@ -3469,7 +3469,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1633",
+      "https://loremflickr.com/800/600/food,paellavalenciana?lock=75019",
   },
   {
     name: "Paella de Marisco",
@@ -3480,7 +3480,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1574",
+      "https://loremflickr.com/800/600/food,paellademarisco?lock=83347",
   },
   {
     name: "Cochinillo Asado",
@@ -3491,7 +3491,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 180,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1548",
+      "https://loremflickr.com/800/600/food,cochinilloasado?lock=71719",
   },
   {
     name: "Rabo de Toro",
@@ -3502,7 +3502,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 180,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1073",
+      "https://loremflickr.com/800/600/food,rabodetoro?lock=39027",
   },
   {
     name: "Fabada Asturiana",
@@ -3513,7 +3513,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1527",
+      "https://loremflickr.com/800/600/food,fabadaasturiana?lock=66610",
   },
   {
     name: "Fideuà",
@@ -3523,7 +3523,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A paella-like dish from Catalonia made with short noodles instead of rice, packed with seafood.",
     suggestedCookingTime: 35,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1717",
+      "https://loremflickr.com/800/600/food,fideu%C3%A0?lock=67157",
   },
   {
     name: "Pollo al Ajillo",
@@ -3534,7 +3534,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1390",
+      "https://loremflickr.com/800/600/food,polloalajillo?lock=56735",
   },
   {
     name: "Bacalao a la Vizcaína",
@@ -3545,7 +3545,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1026",
+      "https://loremflickr.com/800/600/food,bacalaoalavizca%C3%ADna?lock=13876",
   },
   {
     name: "Secreto Ibérico",
@@ -3556,7 +3556,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1590",
+      "https://loremflickr.com/800/600/food,secretoib%C3%A9rico?lock=32065",
   },
   {
     name: "Arroz Negro",
@@ -3567,7 +3567,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1065",
+      "https://loremflickr.com/800/600/food,arroznegro?lock=60669",
   },
   {
     name: "Merluza a la Vasca",
@@ -3578,7 +3578,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1628",
+      "https://loremflickr.com/800/600/food,merluzaalavasca?lock=18979",
   },
   {
     name: "Caldereta de Langosta",
@@ -3589,7 +3589,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1991",
+      "https://loremflickr.com/800/600/food,calderetadelangosta?lock=97566",
   },
   {
     name: "Chuletón de Vaca Vieja",
@@ -3600,7 +3600,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1137",
+      "https://loremflickr.com/800/600/food,chulet%C3%B3ndevacavieja?lock=46641",
   },
   {
     name: "Callos a la Madrileña",
@@ -3611,7 +3611,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 120,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1044",
+      "https://loremflickr.com/800/600/food,callosalamadrile%C3%B1a?lock=17535",
   },
   {
     name: "Zarzuela de Mariscos",
@@ -3622,7 +3622,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 50,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1944",
+      "https://loremflickr.com/800/600/food,zarzuelademariscos?lock=82884",
   },
   {
     name: "Pisto Manchego",
@@ -3634,7 +3634,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,pistomanchego?lock=47780",
   },
   {
     name: "Marmitako",
@@ -3645,7 +3645,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,marmitako?lock=67068",
   },
   {
     name: "Cordero Asado",
@@ -3656,7 +3656,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 120,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,corderoasado?lock=381",
   },
   {
     name: "Lomo de Orza",
@@ -3667,7 +3667,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,lomodeorza?lock=58922",
   },
   {
     name: "Paella de Verduras",
@@ -3679,18 +3679,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,paelladeverduras?lock=37375",
   },
   {
     name: "Alioli",
     category: "Sides",
     cuisines: ["spanish", "tapas"],
-    description: "A fiercely strong, emulsion of pure garlic and olive oil.",
+    description: "A fiercely strong, emulsion of pure garlic and olive oil. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,alioli?lock=69125",
   },
   {
     name: "Aceitunas Aliñadas",
@@ -3702,7 +3702,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,aceitunasali%C3%B1adas?lock=8896",
   },
   {
     name: "Ensalada Mixta",
@@ -3713,7 +3713,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,ensaladamixta?lock=80890",
   },
   {
     name: "Patatas a lo Pobre",
@@ -3725,7 +3725,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,patatasalopobre?lock=53020",
   },
   {
     name: "Escalivada",
@@ -3737,7 +3737,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,escalivada?lock=62710",
   },
   {
     name: "Pan Rústico",
@@ -3748,18 +3748,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,panr%C3%BAstico?lock=25725",
   },
   {
     name: "Queso Manchego",
     category: "Sides",
     cuisines: ["spanish", "tapas"],
-    description: "A wedge of aged sheep's milk cheese from La Mancha.",
+    description: "A wedge of aged sheep's milk cheese from La Mancha. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,quesomanchego?lock=15605",
   },
   {
     name: "Garbanzos Fritos",
@@ -3771,7 +3771,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,garbanzosfritos?lock=34092",
   },
   {
     name: "Champiñones al Ajillo",
@@ -3783,7 +3783,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,champi%C3%B1onesalajillo?lock=81071",
   },
   {
     name: "Espinacas con Garbanzos",
@@ -3795,7 +3795,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/salad.png",
+      "https://loremflickr.com/800/600/food,espinacascongarbanzos?lock=17779",
   },
   {
     name: "Crema Catalana",
@@ -3807,7 +3807,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,cremacatalana?lock=46677",
   },
   {
     name: "Churros con Chocolate",
@@ -3818,7 +3818,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1040",
+      "https://loremflickr.com/800/600/food,churrosconchocolate?lock=80849",
   },
   {
     name: "Tarta de Santiago",
@@ -3830,7 +3830,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,tartadesantiago?lock=49077",
   },
   {
     name: "Flan de Huevo",
@@ -3842,7 +3842,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,flandehuevo?lock=35442",
   },
   {
     name: "Basque Cheesecake (Tarta de Queso)",
@@ -3854,7 +3854,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,basquecheesecake%28tartadequeso%29?lock=14454",
   },
   {
     name: "Torrijas",
@@ -3865,7 +3865,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,torrijas?lock=38459",
   },
   {
     name: "Polvorones",
@@ -3876,7 +3876,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,polvorones?lock=41167",
   },
   {
     name: "Leche Frita",
@@ -3887,7 +3887,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,lechefrita?lock=62585",
   },
   {
     name: "Ensaimada",
@@ -3898,7 +3898,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,ensaimada?lock=3825",
   },
   {
     name: "Turrón",
@@ -3910,7 +3910,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/dessert.png",
+      "https://loremflickr.com/800/600/food,turr%C3%B3n?lock=34586",
   },
   {
     name: "Avocado Toast",
@@ -3921,7 +3921,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,avocadotoast?lock=83575",
   },
   {
     name: "Eggs Benedict",
@@ -3931,7 +3931,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Two poached eggs and Canadian bacon on toasted English muffins, draped in rich hollandaise sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,eggsbenedict?lock=76236",
   },
   {
     name: "Buttermilk Pancakes",
@@ -3942,7 +3942,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,buttermilkpancakes?lock=38378",
   },
   {
     name: "French Toast",
@@ -3953,7 +3953,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,frenchtoast?lock=86622",
   },
   {
     name: "Full English Breakfast",
@@ -3963,7 +3963,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A hearty plate of eggs, bacon, sausage, baked beans, grilled tomatoes, mushrooms, and toast.",
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,fullenglishbreakfast?lock=44915",
   },
   {
     name: "Breakfast Burrito",
@@ -3973,7 +3973,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A large flour tortilla wrapped around scrambled eggs, chorizo, potatoes, and cheddar cheese.",
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/taco.png",
+      "https://loremflickr.com/800/600/food,breakfastburrito?lock=68921",
   },
   {
     name: "Açaí Bowl",
@@ -3985,7 +3985,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,a%C3%A7a%C3%ADbowl?lock=94768",
   },
   {
     name: "Smoked Salmon Bagel",
@@ -3995,7 +3995,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A toasted everything bagel smeared with cream cheese, topped with lox, capers, red onions, and dill.",
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/seafood.png",
+      "https://loremflickr.com/800/600/food,smokedsalmonbagel?lock=90341",
   },
   {
     name: "Oatmeal with Fresh Berries",
@@ -4007,7 +4007,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,oatmealwithfreshberries?lock=75470",
   },
   {
     name: "Breakfast Sandwich",
@@ -4017,7 +4017,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A fried egg, melted cheddar, and crispy bacon served on a freshly baked brioche bun.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/sandwich.png",
+      "https://loremflickr.com/800/600/food,breakfastsandwich?lock=31771",
   },
   {
     name: "Shakshuka",
@@ -4029,7 +4029,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,shakshuka?lock=84729",
   },
   {
     name: "Croissant Sandwich",
@@ -4039,7 +4039,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A buttery, flaky croissant filled with thinly sliced ham and melted Gruyère cheese.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1799",
+      "https://loremflickr.com/800/600/food,croissantsandwich?lock=10214",
   },
   {
     name: "Belgian Waffle",
@@ -4050,7 +4050,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1319",
+      "https://loremflickr.com/800/600/food,belgianwaffle?lock=57695",
   },
   {
     name: "Huevos Rancheros",
@@ -4062,7 +4062,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1599",
+      "https://loremflickr.com/800/600/food,huevosrancheros?lock=42715",
   },
   {
     name: "Greek Yogurt Parfait",
@@ -4074,7 +4074,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1919",
+      "https://loremflickr.com/800/600/food,greekyogurtparfait?lock=5009",
   },
   {
     name: "Steak and Eggs",
@@ -4085,7 +4085,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1265",
+      "https://loremflickr.com/800/600/food,steakandeggs?lock=89346",
   },
   {
     name: "Corned Beef Hash",
@@ -4095,7 +4095,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy pan-fried potatoes mixed with savory corned beef and onions, topped with two poached eggs.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1425",
+      "https://loremflickr.com/800/600/food,cornedbeefhash?lock=98754",
   },
   {
     name: "Mushroom & Swiss Omelette",
@@ -4107,7 +4107,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1360",
+      "https://loremflickr.com/800/600/food,mushroom%26swissomelette?lock=92647",
   },
   {
     name: "Chilaquiles",
@@ -4119,7 +4119,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1140",
+      "https://loremflickr.com/800/600/food,chilaquiles?lock=55759",
   },
   {
     name: "Chia Seed Pudding",
@@ -4131,7 +4131,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1537",
+      "https://loremflickr.com/800/600/food,chiaseedpudding?lock=71433",
   },
   {
     name: "Classic Margarita",
@@ -4143,7 +4143,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1658",
+      "https://loremflickr.com/800/600/food,classicmargarita?lock=11864",
   },
   {
     name: "Old Fashioned",
@@ -4155,7 +4155,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1232",
+      "https://loremflickr.com/800/600/food,oldfashioned?lock=90217",
   },
   {
     name: "Mojito",
@@ -4167,7 +4167,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1626",
+      "https://loremflickr.com/800/600/food,mojito?lock=32329",
   },
   {
     name: "Aperol Spritz",
@@ -4179,7 +4179,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1295",
+      "https://loremflickr.com/800/600/food,aperolspritz?lock=48306",
   },
   {
     name: "Espresso Martini",
@@ -4191,18 +4191,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1608",
+      "https://loremflickr.com/800/600/food,espressomartini?lock=6927",
   },
   {
     name: "Fresh Squeezed Orange Juice",
     category: "Beverages",
     cuisines: ["drinks", "breakfast"],
-    description: "100% pure, cold-pressed Valencia oranges.",
+    description: "100% pure, cold-pressed Valencia oranges. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1538",
+      "https://loremflickr.com/800/600/food,freshsqueezedorangejuice?lock=66847",
   },
   {
     name: "Cappuccino",
@@ -4214,29 +4214,29 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1029",
+      "https://loremflickr.com/800/600/food,cappuccino?lock=91566",
   },
   {
     name: "Iced Latte",
     category: "Beverages",
     cuisines: ["drinks", "cafe"],
-    description: "Espresso and chilled milk poured over ice.",
+    description: "Espresso and chilled milk poured over ice. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1911",
+      "https://loremflickr.com/800/600/food,icedlatte?lock=88126",
   },
   {
     name: "Matcha Latte",
     category: "Beverages",
     cuisines: ["drinks", "cafe", "japanese"],
-    description: "Premium stone-ground green tea whisked with steamed milk.",
+    description: "Premium stone-ground green tea whisked with steamed milk. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1128",
+      "https://loremflickr.com/800/600/food,matchalatte?lock=61751",
   },
   {
     name: "Strawberry Banana Smoothie",
@@ -4248,17 +4248,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,dish?lock=1558",
+      "https://loremflickr.com/800/600/food,strawberrybananasmoothie?lock=82495",
   },
   {
     name: "Craft IPA",
     category: "Beverages",
     cuisines: ["drinks", "bar"],
-    description: "A pint of locally brewed, intensely hoppy India Pale Ale.",
+    description: "A pint of locally brewed, intensely hoppy India Pale Ale. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,craftipa?lock=90284",
   },
   {
     name: "Pino Grigio (Glass)",
@@ -4270,7 +4270,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,pinogrigio%28glass%29?lock=65311",
   },
   {
     name: "Cabernet Sauvignon (Glass)",
@@ -4282,7 +4282,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,cabernetsauvignon%28glass%29?lock=91991",
   },
   {
     name: "Sangria Tinto",
@@ -4294,29 +4294,29 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,sangriatinto?lock=62350",
   },
   {
     name: "Diet Cola",
     category: "Beverages",
     cuisines: ["drinks", "fast food"],
-    description: "Classic zero-calorie cola served over ice.",
+    description: "Classic zero-calorie cola served over ice. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,dietcola?lock=55581",
   },
   {
     name: "Sparkling Water",
     category: "Beverages",
     cuisines: ["drinks"],
-    description: "Premium carbonated mineral water, served with a lime wedge.",
+    description: "Premium carbonated mineral water, served with a lime wedge. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,sparklingwater?lock=28506",
   },
   {
     name: "Moscow Mule",
@@ -4328,18 +4328,18 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,moscowmule?lock=300",
   },
   {
     name: "Lemonade",
     category: "Beverages",
     cuisines: ["drinks", "diner"],
-    description: "Tart, sweet, and freshly squeezed lemonade.",
+    description: "Tart, sweet, and freshly squeezed lemonade. Authentic and freshly prepared by our expert chefs.",
     isVegan: true,
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,lemonade?lock=65645",
   },
   {
     name: "Iced Tea",
@@ -4351,7 +4351,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "/images/templates/coffee.png",
+      "https://loremflickr.com/800/600/food,icedtea?lock=31181",
   },
   {
     name: "Piña Colada",
@@ -4363,7 +4363,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "/images/templates/cocktail.png",
+      "https://loremflickr.com/800/600/food,pi%C3%B1acolada?lock=37812",
   },
   {
     name: "Kids Chicken Nuggets",
@@ -4373,17 +4373,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Six crispy, all-white-meat chicken nuggets served with french fries and ketchup.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,kidschickennuggets?lock=69112",
   },
   {
     name: "Kids Mac & Cheese",
     category: "Kids",
     cuisines: ["kids"],
-    description: "A smaller portion of our creamy, gooey macaroni and cheese.",
+    description: "A smaller portion of our creamy, gooey macaroni and cheese. Authentic and freshly prepared by our expert chefs.",
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,kidsmac%26cheese?lock=78081",
   },
   {
     name: "Kids Cheese Pizza",
@@ -4394,7 +4394,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/pizza.png",
+      "https://loremflickr.com/800/600/food,kidscheesepizza?lock=45770",
   },
   {
     name: "Kids Mini Burger",
@@ -4404,7 +4404,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A plain beef slider with American cheese on a soft bun, served with fries.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/burger.png",
+      "https://loremflickr.com/800/600/food,kidsminiburger?lock=75287",
   },
   {
     name: "Kids Grilled Cheese",
@@ -4415,7 +4415,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,kidsgrilledcheese?lock=6593",
   },
   {
     name: "Kids Buttered Noodles",
@@ -4426,7 +4426,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,kidsbutterednoodles?lock=59901",
   },
   {
     name: "Kids Hot Dog",
@@ -4436,7 +4436,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A classic all-beef hot dog on a soft bun, served with a side of apple slices.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,kidshotdog?lock=2541",
   },
   {
     name: "Kids Fish Sticks",
@@ -4446,7 +4446,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy breaded fish sticks served with tartar sauce and a side of steamed peas.",
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/seafood.png",
+      "https://loremflickr.com/800/600/food,kidsfishsticks?lock=43861",
   },
   {
     name: "Kids Quesadilla",
@@ -4457,7 +4457,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "/images/templates/steak.png",
+      "https://loremflickr.com/800/600/food,kidsquesadilla?lock=16005",
   },
   {
     name: "Kids Chicken & Rice",
@@ -4468,7 +4468,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "/images/templates/chicken.png",
+      "https://loremflickr.com/800/600/food,kidschicken%26rice?lock=13993",
   },
   {
     name: "Idly",
@@ -4477,7 +4477,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1001",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,idly?lock=97180",
   },
   {
     name: "Ghee Idly",
@@ -4486,7 +4487,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Ghee Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1002",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gheeidly?lock=27369",
   },
   {
     name: "Ghee Karam Idly",
@@ -4495,7 +4497,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Ghee Karam Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1003",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gheekaramidly?lock=2632",
   },
   {
     name: "Sambar Idly",
@@ -4504,7 +4507,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Sambar Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1004",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,sambaridly?lock=68873",
   },
   {
     name: "Mini Idly",
@@ -4513,7 +4517,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Mini Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1005",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,miniidly?lock=47374",
   },
   {
     name: "Ghee Mini Idly",
@@ -4522,7 +4527,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Ghee Mini Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1006",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gheeminiidly?lock=29106",
   },
   {
     name: "Ghee Karam Mini Idly",
@@ -4531,7 +4537,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Ghee Karam Mini Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1007",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gheekaramminiidly?lock=95074",
   },
   {
     name: "Sambar Mini Idly",
@@ -4540,7 +4547,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Sambar Mini Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1008",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,sambarminiidly?lock=46696",
   },
   {
     name: "Thatte Idly",
@@ -4549,7 +4557,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Thatte Idly, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1009",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,thatteidly?lock=38773",
   },
   {
     name: "Plain Dosa",
@@ -4558,7 +4567,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Plain Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1010",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,plaindosa?lock=24019",
   },
   {
     name: "Masala Dosa",
@@ -4567,7 +4577,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Masala Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1011",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,masaladosa?lock=86521",
   },
   {
     name: "DD Special Dosa",
@@ -4576,7 +4587,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Contains chef curated sauce along with potato masala and topped with some grated paneer",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1012",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,ddspecialdosa?lock=65602",
   },
   {
     name: "Ghee Dosa",
@@ -4585,7 +4597,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Ghee Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1013",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gheedosa?lock=33058",
   },
   {
     name: "Ghee Karam Dosa",
@@ -4594,7 +4607,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Ghee Karam Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1014",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gheekaramdosa?lock=8426",
   },
   {
     name: "Ghee Karam Masala Dosa",
@@ -4603,7 +4617,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Ghee Karam Masala Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1015",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gheekarammasaladosa?lock=35114",
   },
   {
     name: "Double Egg Dosa",
@@ -4612,7 +4627,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Double Egg Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1016",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,doubleeggdosa?lock=13869",
   },
   {
     name: "Double Egg Karam Dosa",
@@ -4621,7 +4637,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Double Egg Karam Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1017",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,doubleeggkaramdosa?lock=14345",
   },
   {
     name: "Paneer Dosa",
@@ -4630,7 +4647,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Paneer Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1018",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,paneerdosa?lock=37110",
   },
   {
     name: "Chicken Dosa",
@@ -4639,7 +4657,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chicken Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1019",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickendosa?lock=57146",
   },
   {
     name: "Onion Dosa",
@@ -4648,7 +4667,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Onion Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1020",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,oniondosa?lock=62407",
   },
   {
     name: "Onion Masala Dosa",
@@ -4657,7 +4677,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Onion Masala Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1021",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,onionmasaladosa?lock=34347",
   },
   {
     name: "Andhra Karam Dosa",
@@ -4666,7 +4687,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Andhra Karam Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1022",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,andhrakaramdosa?lock=63211",
   },
   {
     name: "Mysore Masala Dosa",
@@ -4675,7 +4697,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Mysore Masala Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1023",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,mysoremasaladosa?lock=25672",
   },
   {
     name: "Kids Dosa",
@@ -4684,7 +4707,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Kids Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1024",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,kidsdosa?lock=34818",
   },
   {
     name: "Chocolate Dosa",
@@ -4693,7 +4717,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chocolate Dosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1025",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chocolatedosa?lock=78569",
   },
   {
     name: "Punugulu",
@@ -4702,7 +4727,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Punugulu, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1026",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,punugulu?lock=94576",
   },
   {
     name: "Mysore Bonda",
@@ -4711,7 +4737,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Mysore Bonda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1027",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,mysorebonda?lock=41952",
   },
   {
     name: "Tawa Bonda",
@@ -4720,7 +4747,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Tawa Bonda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1028",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tawabonda?lock=23154",
   },
   {
     name: "Mirchi Bajji",
@@ -4729,7 +4757,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Mirchi Bajji, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1029",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,mirchibajji?lock=35325",
   },
   {
     name: "Stuffed Mirchi Bajji",
@@ -4738,7 +4767,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Stuffed Mirchi Bajji, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1030",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,stuffedmirchibajji?lock=49492",
   },
   {
     name: "Onion Pakodi",
@@ -4747,7 +4777,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Onion Pakodi, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1031",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,onionpakodi?lock=58467",
   },
   {
     name: "Aloo Samosa",
@@ -4756,7 +4787,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Aloo Samosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1032",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,aloosamosa?lock=19614",
   },
   {
     name: "Onion Samosa",
@@ -4765,7 +4797,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Onion Samosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1033",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,onionsamosa?lock=92235",
   },
   {
     name: "Corn Samosa",
@@ -4774,7 +4807,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Corn Samosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1034",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,cornsamosa?lock=42284",
   },
   {
     name: "Chicken Samosa",
@@ -4783,7 +4817,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chicken Samosa, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1035",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickensamosa?lock=53923",
   },
   {
     name: "Egg Bonda",
@@ -4792,7 +4827,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Egg Bonda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1036",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,eggbonda?lock=97424",
   },
   {
     name: "Gobi Manchuria",
@@ -4801,7 +4837,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Gobi Manchuria, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1037",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gobimanchuria?lock=46193",
   },
   {
     name: "Veg Manchuria",
@@ -4810,7 +4847,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Veg Manchuria, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1038",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,vegmanchuria?lock=55785",
   },
   {
     name: "Paneer 65",
@@ -4819,7 +4857,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Paneer 65, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1039",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,paneer65?lock=10606",
   },
   {
     name: "Chilli Paneer",
@@ -4828,7 +4867,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chilli Paneer, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1040",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chillipaneer?lock=49807",
   },
   {
     name: "Dragon Chicken",
@@ -4837,7 +4877,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Prepared with a special sauce, that gives it a sweeter taste with little spice",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1041",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dragonchicken?lock=76607",
   },
   {
     name: "Chilli Chicken",
@@ -4846,7 +4887,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chilli Chicken, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1042",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chillichicken?lock=10825",
   },
   {
     name: "Chicken 65",
@@ -4855,7 +4897,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chicken 65, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1043",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chicken65?lock=58227",
   },
   {
     name: "Chicken Pepper Fry",
@@ -4864,7 +4907,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chicken Pepper Fry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1044",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickenpepperfry?lock=92529",
   },
   {
     name: "Nellore Kodi Vepudu",
@@ -4873,7 +4917,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Nellore Kodi Vepudu, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1045",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,nellorekodivepudu?lock=3650",
   },
   {
     name: "Chicken Pakoda",
@@ -4882,7 +4927,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chicken Pakoda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1046",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickenpakoda?lock=82624",
   },
   {
     name: "Street Style Veg Noodles",
@@ -4891,7 +4937,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Veg Noodles, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1047",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstylevegnoodles?lock=48766",
   },
   {
     name: "Street Style Veg Manchurian Noodles",
@@ -4900,7 +4947,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Veg Manchurian Noodles, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1048",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstylevegmanchuriannoodles?lock=90614",
   },
   {
     name: "Street Style Gobi Manchurian Noodles",
@@ -4909,7 +4957,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Gobi Manchurian Noodles, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1049",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstylegobimanchuriannoodles?lock=54827",
   },
   {
     name: "Street Style Double Egg Noodles",
@@ -4918,7 +4967,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Double Egg Noodles, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1050",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstyledoubleeggnoodles?lock=70614",
   },
   {
     name: "Street Style Double-Egg Chicken Noodles",
@@ -4927,7 +4977,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Double-Egg Chicken Noodles, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1051",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstyledouble-eggchickennoodles?lock=42203",
   },
   {
     name: "Street Style Veg Fried Rice",
@@ -4936,7 +4987,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Veg Fried Rice, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1052",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstylevegfriedrice?lock=84332",
   },
   {
     name: "Street Style Veg Manchurian Fried Rice",
@@ -4945,7 +4997,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Veg Manchurian Fried Rice, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1053",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstylevegmanchurianfriedrice?lock=99881",
   },
   {
     name: "Street Style Gobi Manchurian Fried Rice",
@@ -4954,7 +5007,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Gobi Manchurian Fried Rice, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1054",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstylegobimanchurianfriedrice?lock=36986",
   },
   {
     name: "Street Style Double Egg Fried Rice",
@@ -4963,7 +5017,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Double Egg Fried Rice, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1055",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstyledoubleeggfriedrice?lock=49608",
   },
   {
     name: "Street Style Double-Egg Chicken Fried Rice",
@@ -4972,7 +5027,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Street Style Double-Egg Chicken Fried Rice, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1056",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,streetstyledouble-eggchickenfriedrice?lock=52391",
   },
   {
     name: "DD Special Chicken Shawarma",
@@ -4981,7 +5037,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian DD Special Chicken Shawarma, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1057",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,ddspecialchickenshawarma?lock=16520",
   },
   {
     name: "DD Special Paneer Shawarma",
@@ -4990,15 +5047,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian DD Special Paneer Shawarma, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1058",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,ddspecialpaneershawarma?lock=75105",
   },
   {
     name: "DD Special Chicken Shawarma Combo",
     category: "Main Course",
     cuisines: ["indian", "street food"],
-    description: "Complement the fresh Shawarma with a free soda",
+    description: "Complement the fresh Shawarma with a free soda. Authentic and freshly prepared by our expert chefs.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1059",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,ddspecialchickenshawarmacombo?lock=93992",
   },
   {
     name: "Raju Gari Kodi Pulao",
@@ -5007,15 +5066,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Raju Gari Kodi Pulao, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1060",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rajugarikodipulao?lock=34943",
   },
   {
     name: "Nawaab Gari Mutton Pulao",
     category: "Main Course",
     cuisines: ["indian", "street food"],
-    description: "Pulao rice with a side of mutton curry",
+    description: "Pulao rice with a side of mutton curry. Authentic and freshly prepared by our expert chefs.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1061",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,nawaabgarimuttonpulao?lock=82141",
   },
   {
     name: "Paneer Pulao",
@@ -5024,7 +5085,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Paneer Pulao, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1062",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,paneerpulao?lock=5261",
   },
   {
     name: "style Parotta w/ Chole",
@@ -5033,7 +5095,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian style Parotta w/ Chole, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1063",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,styleparottaw/chole?lock=59880",
   },
   {
     name: "style Parotta w/ Kadai Paneer",
@@ -5042,7 +5105,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian style Parotta w/ Kadai Paneer, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1064",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,styleparottaw/kadaipaneer?lock=48337",
   },
   {
     name: "style Parotta w/ Paneer Butter Masala",
@@ -5051,7 +5115,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian style Parotta w/ Paneer Butter Masala, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1065",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,styleparottaw/paneerbuttermasala?lock=42793",
   },
   {
     name: "style Parotta w/ Butter Chicken",
@@ -5060,7 +5125,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian style Parotta w/ Butter Chicken, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1066",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,styleparottaw/butterchicken?lock=29791",
   },
   {
     name: "style Parotta w/ Chicken Curry",
@@ -5069,7 +5135,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian style Parotta w/ Chicken Curry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1067",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,styleparottaw/chickencurry?lock=19303",
   },
   {
     name: "style Parotta w/ Mutton Curry",
@@ -5078,7 +5145,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian style Parotta w/ Mutton Curry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1068",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,styleparottaw/muttoncurry?lock=13507",
   },
   {
     name: "Rumali Roti w/ Chole",
@@ -5087,7 +5155,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Rumali Roti w/ Chole, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1069",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rumalirotiw/chole?lock=24505",
   },
   {
     name: "Rumali Roti w/ Paneer Butter Masala",
@@ -5096,7 +5165,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Rumali Roti w/ Paneer Butter Masala, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1070",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rumalirotiw/paneerbuttermasala?lock=4535",
   },
   {
     name: "Rumali Roti w/ Kadai Paneer",
@@ -5105,7 +5175,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Rumali Roti w/ Kadai Paneer, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1071",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rumalirotiw/kadaipaneer?lock=22416",
   },
   {
     name: "Rumali Roti w/ Chicken Curry",
@@ -5114,7 +5185,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Rumali Roti w/ Chicken Curry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1072",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rumalirotiw/chickencurry?lock=63712",
   },
   {
     name: "Rumali Roti w/ Butter Chicken",
@@ -5123,7 +5195,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Rumali Roti w/ Butter Chicken, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1073",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rumalirotiw/butterchicken?lock=32570",
   },
   {
     name: "Rumali Roti w/ Mutton Curry",
@@ -5132,7 +5205,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Rumali Roti w/ Mutton Curry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1074",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rumalirotiw/muttoncurry?lock=65889",
   },
   {
     name: "Poori w/ Potato Masala",
@@ -5141,7 +5215,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Poori w/ Potato Masala, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1075",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,pooriw/potatomasala?lock=23316",
   },
   {
     name: "Poori w/ Chole",
@@ -5150,7 +5225,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Poori w/ Chole, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1076",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,pooriw/chole?lock=7568",
   },
   {
     name: "Poori w/ Kadai Paneer",
@@ -5159,7 +5235,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Poori w/ Kadai Paneer, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1077",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,pooriw/kadaipaneer?lock=67887",
   },
   {
     name: "Poori w/ Chicken Curry",
@@ -5168,7 +5245,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Poori w/ Chicken Curry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1078",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,pooriw/chickencurry?lock=83186",
   },
   {
     name: "Poori w/ Mutton Curry",
@@ -5177,7 +5255,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Poori w/ Mutton Curry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1079",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,pooriw/muttoncurry?lock=76174",
   },
   {
     name: "Chapathi w/ Chole",
@@ -5186,7 +5265,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chapathi w/ Chole, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1080",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chapathiw/chole?lock=14594",
   },
   {
     name: "Chapathi w/ Kadai Paneer",
@@ -5195,7 +5275,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chapathi w/ Kadai Paneer, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1081",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chapathiw/kadaipaneer?lock=71299",
   },
   {
     name: "Chapathi w/ Paneer Butter Masala",
@@ -5204,7 +5285,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chapathi w/ Paneer Butter Masala, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1082",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chapathiw/paneerbuttermasala?lock=28480",
   },
   {
     name: "Chapathi w/ Chicken Curry",
@@ -5213,7 +5295,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chapathi w/ Chicken Curry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1083",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chapathiw/chickencurry?lock=33509",
   },
   {
     name: "Chapathi w/ Butter Chicken",
@@ -5222,7 +5305,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chapathi w/ Butter Chicken, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1084",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chapathiw/butterchicken?lock=26185",
   },
   {
     name: "Chapathi w/ Mutton Curry",
@@ -5231,7 +5315,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chapathi w/ Mutton Curry, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1085",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chapathiw/muttoncurry?lock=80035",
   },
   {
     name: "Sev Puri",
@@ -5240,7 +5325,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Sev Puri, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1086",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,sevpuri?lock=71516",
   },
   {
     name: "Dahi Puri",
@@ -5249,7 +5335,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Dahi Puri, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1087",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dahipuri?lock=15948",
   },
   {
     name: "Masala Puri",
@@ -5258,7 +5345,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Masala Puri, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1088",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,masalapuri?lock=7939",
   },
   {
     name: "Bhel Puri",
@@ -5267,7 +5355,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Bhel Puri, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1089",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,bhelpuri?lock=86388",
   },
   {
     name: "Samosa Chaat",
@@ -5276,7 +5365,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Samosa Chaat, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1090",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,samosachaat?lock=98426",
   },
   {
     name: "Pav Bhaji",
@@ -5285,7 +5375,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Pav Bhaji, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1091",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,pavbhaji?lock=46973",
   },
   {
     name: "Hyderabadi Spl Haleem - 8 oz",
@@ -5294,7 +5385,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Hyderabadi Spl Haleem - 8 oz, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1092",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hyderabadisplhaleem-8oz?lock=42096",
   },
   {
     name: "Veg Dum Biryani",
@@ -5303,7 +5395,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Veg Dum Biryani, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1093",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,vegdumbiryani?lock=75939",
   },
   {
     name: "Thalapakattu Mutton Biryani",
@@ -5312,7 +5405,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Thalapakattu Mutton Biryani, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1094",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,thalapakattumuttonbiryani?lock=30960",
   },
   {
     name: "Chicken Dum Biryani",
@@ -5321,7 +5415,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chicken Dum Biryani, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1095",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickendumbiryani?lock=78068",
   },
   {
     name: "Pachimirchi Kodi Pulao",
@@ -5330,7 +5425,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Pachimirchi Kodi Pulao, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1096",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,pachimirchikodipulao?lock=72143",
   },
   {
     name: "Royal Falooda",
@@ -5339,7 +5435,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Royal Falooda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1097",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,royalfalooda?lock=72245",
   },
   {
     name: "Butterscotch Falooda",
@@ -5348,7 +5445,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Butterscotch Falooda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1098",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,butterscotchfalooda?lock=66940",
   },
   {
     name: "Malai Falooda",
@@ -5357,7 +5455,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Malai Falooda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1099",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,malaifalooda?lock=11492",
   },
   {
     name: "Tutti Fruity Falooda",
@@ -5366,7 +5465,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Tutti Fruity Falooda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1100",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tuttifruityfalooda?lock=32331",
   },
   {
     name: "Kesar Pista Falooda",
@@ -5375,7 +5475,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Kesar Pista Falooda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1101",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,kesarpistafalooda?lock=20426",
   },
   {
     name: "Mango Falooda",
@@ -5384,7 +5485,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Mango Falooda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1102",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,mangofalooda?lock=99488",
   },
   {
     name: "Kitkat Milkshake",
@@ -5393,7 +5495,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Kitkat Milkshake, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1103",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,kitkatmilkshake?lock=18024",
   },
   {
     name: "Oreo Milkshake",
@@ -5402,7 +5505,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Oreo Milkshake, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1104",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,oreomilkshake?lock=1472",
   },
   {
     name: "Cookies & Cream Milkshake",
@@ -5411,7 +5515,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Cookies & Cream Milkshake, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1105",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,cookies%26creammilkshake?lock=82580",
   },
   {
     name: "Ferrero Milkshake",
@@ -5420,7 +5525,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Ferrero Milkshake, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1106",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,ferreromilkshake?lock=3219",
   },
   {
     name: "DD Spl Chocolate Milkshake",
@@ -5429,7 +5535,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian DD Spl Chocolate Milkshake, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1107",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,ddsplchocolatemilkshake?lock=49054",
   },
   {
     name: "Chikoo Shake",
@@ -5438,7 +5545,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Chikoo Shake, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1108",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chikooshake?lock=44301",
   },
   {
     name: "Seethaphal Shake",
@@ -5447,7 +5555,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Seethaphal Shake, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1109",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,seethaphalshake?lock=13331",
   },
   {
     name: "Masala Soda",
@@ -5456,7 +5565,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Masala Soda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1110",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,masalasoda?lock=80640",
   },
   {
     name: "Lime Soda",
@@ -5465,7 +5575,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Lime Soda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1111",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,limesoda?lock=94504",
   },
   {
     name: "Sweet & Salt Lime Soda",
@@ -5474,7 +5585,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Sweet & Salt Lime Soda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1112",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,sweet%26saltlimesoda?lock=67118",
   },
   {
     name: "Sugandhi Soda",
@@ -5483,7 +5595,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Sugandhi Soda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1113",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,sugandhisoda?lock=13638",
   },
   {
     name: "Kala Katta Soda",
@@ -5492,7 +5605,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Kala Katta Soda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1114",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,kalakattasoda?lock=35863",
   },
   {
     name: "Coke",
@@ -5501,7 +5615,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Coke, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1115",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,coke?lock=78027",
   },
   {
     name: "Pepsi",
@@ -5510,7 +5625,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Pepsi, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1116",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,pepsi?lock=58211",
   },
   {
     name: "Thums Up",
@@ -5519,7 +5635,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Thums Up, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1117",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,thumsup?lock=22659",
   },
   {
     name: "Sprite",
@@ -5528,7 +5645,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Sprite, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1118",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,sprite?lock=70551",
   },
   {
     name: "Goli Soda",
@@ -5537,7 +5655,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Goli Soda, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1119",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,golisoda?lock=93831",
   },
   {
     name: "Water",
@@ -5546,7 +5665,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Water, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1120",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,water?lock=81327",
   },
   {
     name: "Tea",
@@ -5555,15 +5675,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description:
       "Authentic Indian Tea, prepared with traditional spices and fresh ingredients.",
     suggestedCookingTime: 15,
-    imageUrl: "https://loremflickr.com/800/600/indian,food,dish?lock=1121",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tea?lock=42182",
   },
   {
     name: "Edamame",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Steamed soybeans lightly salted with sea salt.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Steamed soybeans lightly salted with sea salt. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,edamame?lock=64679",
     isVegetarian: true,
     isVegan: true,
     isGlutenFree: true,
@@ -5573,8 +5695,9 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Crispy Japanese vegetable spring rolls.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Crispy Japanese vegetable spring rolls. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,harumaki?lock=87586",
     isVegetarian: true,
     isVegan: true,
   },
@@ -5583,24 +5706,27 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Crispy wontons stuffed with cream cheese and crab meat.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Crispy wontons stuffed with cream cheese and crab meat. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,crabpuff?lock=42001",
   },
   {
     name: "Shumai",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Steamed or fried shrimp dumplings.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Steamed or fried shrimp dumplings. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shumai?lock=60824",
   },
   {
     name: "Gyoza",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Pan-fried pork and vegetable dumplings.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Pan-fried pork and vegetable dumplings. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,gyoza?lock=41291",
   },
   {
     name: "Yakitori",
@@ -5608,7 +5734,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Grilled chicken skewers glazed with a sweet and savory teriyaki sauce.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,yakitori?lock=80581",
   },
   {
     name: "Takoyaki",
@@ -5616,7 +5743,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Fried octopus balls topped with mayo, takoyaki sauce, and bonito flakes.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,takoyaki?lock=43887",
   },
   {
     name: "Sesame Seed Ball",
@@ -5624,7 +5752,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Crispy, chewy pastry balls filled with sweet red bean paste and coated in sesame seeds.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,sesameseedball?lock=73761",
     isVegetarian: true,
   },
   {
@@ -5633,7 +5762,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Lightly battered and crispy fried chicken and assorted vegetables.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chicken%26vegtempura?lock=45774",
   },
   {
     name: "Shrimp & Veg Tempura",
@@ -5641,23 +5771,26 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Lightly battered and crispy fried shrimp and assorted vegetables.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shrimp%26vegtempura?lock=79784",
   },
   {
     name: "Crunchy Spider",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Deep-fried crispy soft shell crab with eel sauce.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Deep-fried crispy soft shell crab with eel sauce. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,crunchyspider?lock=86250",
   },
   {
     name: "Fried Calamari",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Crispy battered calamari rings served with a dipping sauce.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Crispy battered calamari rings served with a dipping sauce. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,friedcalamari?lock=4365",
   },
   {
     name: "Rock Shrimp",
@@ -5665,31 +5798,35 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Lightly battered, deep-fried shrimp tossed in a creamy, spicy mayo.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rockshrimp?lock=87397",
   },
   {
     name: "Tuna Tataki",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Seared tuna thinly sliced and served with ponzu sauce.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Seared tuna thinly sliced and served with ponzu sauce. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tunatataki?lock=45165",
   },
   {
     name: "Pepper Tuna",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Seared tuna with a black pepper crust, thinly sliced.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Seared tuna with a black pepper crust, thinly sliced. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,peppertuna?lock=52190",
   },
   {
     name: "Lemon Pepper Tuna",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Seared tuna with a lemon pepper crust, thinly sliced.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Seared tuna with a lemon pepper crust, thinly sliced. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,lemonpeppertuna?lock=47219",
   },
   {
     name: "Yellowtail Jalapenos",
@@ -5697,7 +5834,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Thinly sliced yellowtail topped with fresh jalapeño and ponzu sauce.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,yellowtailjalapenos?lock=46388",
     isSpicy: true,
   },
   {
@@ -5706,23 +5844,26 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Fresh salmon wrapped around mango, finished with a sweet citrus sauce.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,mangosalmon?lock=85015",
   },
   {
     name: "Salmon Tartar",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Diced fresh salmon mixed with delicate seasonings.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Diced fresh salmon mixed with delicate seasonings. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,salmontartar?lock=23255",
   },
   {
     name: "Tuna Tartar",
     category: "Appetizers",
     cuisines: ["japanese","sushi"],
     description:
-      "Diced fresh tuna mixed with delicate seasonings.",
-    imageUrl: "/images/templates/appetizer.png",
+      "Diced fresh tuna mixed with delicate seasonings. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tunatartar?lock=44239",
   },
   {
     name: "Ahi Tower",
@@ -5730,7 +5871,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Layers of spicy tuna, crab salad, avocado, and rice, shaped into a tower.",
-    imageUrl: "/images/templates/appetizer.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,ahitower?lock=3433",
   },
   {
     name: "Chicken Teriyaki",
@@ -5738,7 +5880,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled chicken topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickenteriyaki?lock=20223",
   },
   {
     name: "Steak Teriyaki",
@@ -5746,7 +5889,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled steak topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,steakteriyaki?lock=61267",
   },
   {
     name: "Shrimp Teriyaki",
@@ -5754,7 +5898,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled shrimp topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shrimpteriyaki?lock=77405",
   },
   {
     name: "Salmon Teriyaki",
@@ -5762,7 +5907,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled salmon topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,salmonteriyaki?lock=14925",
   },
   {
     name: "Seafood Teriyaki",
@@ -5770,7 +5916,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Assorted grilled seafood topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,seafoodteriyaki?lock=74137",
   },
   {
     name: "Vegetable Teriyaki",
@@ -5778,7 +5925,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Assorted grilled vegetables topped with a sweet and savory teriyaki glaze.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,vegetableteriyaki?lock=98587",
     isVegetarian: true,
     isVegan: true,
   },
@@ -5788,7 +5936,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Grilled red snapper topped with a sweet and savory teriyaki glaze, served with vegetables.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,redsnapperteriyaki?lock=76383",
   },
   {
     name: "Chicken Katsu",
@@ -5796,7 +5945,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Panko-breaded and deep-fried chicken cutlet served with katsu sauce.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickenkatsu?lock=78038",
   },
   {
     name: "Vegetable Tempura",
@@ -5804,7 +5954,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese"],
     description:
       "Assorted vegetables lightly battered and deep-fried to a delicate crisp.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,vegetabletempura?lock=53685",
     isVegetarian: true,
   },
   {
@@ -5813,7 +5964,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Fresh vegetables grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hibachivegetable?lock=83023",
     isVegetarian: true,
   },
   {
@@ -5822,7 +5974,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Tender chicken grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hibachichicken?lock=2909",
   },
   {
     name: "Hibachi Salmon",
@@ -5830,7 +5983,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Fresh salmon grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hibachisalmon?lock=315",
   },
   {
     name: "Hibachi Shrimp",
@@ -5838,7 +5992,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Juicy shrimp grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hibachishrimp?lock=23967",
   },
   {
     name: "Hibachi Steak",
@@ -5846,7 +6001,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Juicy steak grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hibachisteak?lock=98945",
   },
   {
     name: "Hibachi Scallop",
@@ -5854,7 +6010,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Tender scallops grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hibachiscallop?lock=44311",
   },
   {
     name: "Hibachi Lobster Tail",
@@ -5862,15 +6019,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","hibachi"],
     description:
       "Premium lobster tail grilled on a teppanyaki iron griddle with soy sauce and butter.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hibachilobstertail?lock=42406",
   },
   {
     name: "Rainbow Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "California roll topped with assorted raw fish and avocado.",
-    imageUrl: "/images/templates/sushi.png",
+      "California roll topped with assorted raw fish and avocado. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rainbowroll?lock=57522",
   },
   {
     name: "Dragon Roll",
@@ -5878,31 +6037,35 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Eel and cucumber roll topped with thinly sliced avocado and eel sauce.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,dragonroll?lock=65919",
   },
   {
     name: "Spider Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Fried soft shell crab, avocado, cucumber, and eel sauce.",
-    imageUrl: "/images/templates/sushi.png",
+      "Fried soft shell crab, avocado, cucumber, and eel sauce. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,spiderroll?lock=82265",
   },
   {
     name: "Godzilla Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Deep-fried roll with spicy tuna, avocado, and cream cheese.",
-    imageUrl: "/images/templates/sushi.png",
+      "Deep-fried roll with spicy tuna, avocado, and cream cheese. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,godzillaroll?lock=24243",
   },
   {
     name: "Volcano Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "California roll topped with baked spicy seafood mix.",
-    imageUrl: "/images/templates/sushi.png",
+      "California roll topped with baked spicy seafood mix. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,volcanoroll?lock=8491",
   },
   {
     name: "Shaggy Dog Roll",
@@ -5910,7 +6073,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Shrimp tempura and avocado topped with shredded crab and spicy mayo.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shaggydogroll?lock=38974",
   },
   {
     name: "Super Crunchy Roll",
@@ -5918,15 +6082,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Crispy shrimp tempura roll topped with tempura flakes and eel sauce.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,supercrunchyroll?lock=23900",
   },
   {
     name: "Cowboy Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Steak and avocado roll topped with eel sauce.",
-    imageUrl: "/images/templates/sushi.png",
+      "Steak and avocado roll topped with eel sauce. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,cowboyroll?lock=11092",
   },
   {
     name: "Rock And Roll",
@@ -5934,15 +6100,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Shrimp tempura, eel, avocado, and cucumber wrapped in soy paper.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,rockandroll?lock=89975",
   },
   {
     name: "Fire Island Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Spicy tuna and jalapeño topped with spicy crab.",
-    imageUrl: "/images/templates/sushi.png",
+      "Spicy tuna and jalapeño topped with spicy crab. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,fireislandroll?lock=93881",
     isSpicy: true,
   },
   {
@@ -5951,7 +6119,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Eel and cucumber roll topped with layers of avocado, resembling a caterpillar.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,caterpillarroll?lock=8602",
   },
   {
     name: "Angry Dragon Roll",
@@ -5959,15 +6128,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Shrimp tempura, spicy tuna, and papaya topped with spicy crab and rutabaga wrapper.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,angrydragonroll?lock=81639",
   },
   {
     name: "Firecracker Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Spicy tuna roll topped with spicy yellowtail and jalapeño.",
-    imageUrl: "/images/templates/sushi.png",
+      "Spicy tuna roll topped with spicy yellowtail and jalapeño. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,firecrackerroll?lock=53192",
     isSpicy: true,
   },
   {
@@ -5976,7 +6147,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Shrimp tempura and mango topped with spicy tuna and coconut flakes.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,hawaiiroll?lock=83556",
   },
   {
     name: "Monster Roll",
@@ -5984,15 +6156,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Massive tempura roll filled with mixed fish, cream cheese, and avocado.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,monsterroll?lock=99753",
   },
   {
     name: "TNT Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Spicy tuna roll topped with seared tuna and spicy mayo.",
-    imageUrl: "/images/templates/sushi.png",
+      "Spicy tuna roll topped with seared tuna and spicy mayo. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tntroll?lock=48922",
     isSpicy: true,
   },
   {
@@ -6000,24 +6174,27 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Fresh salmon, avocado, and cucumber roll.",
-    imageUrl: "/images/templates/sushi.png",
+      "Fresh salmon, avocado, and cucumber roll. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,alaskaroll?lock=1881",
   },
   {
     name: "Salmon Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Classic sushi roll filled with fresh raw salmon.",
-    imageUrl: "/images/templates/sushi.png",
+      "Classic sushi roll filled with fresh raw salmon. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,salmonroll?lock=74447",
   },
   {
     name: "Salmon Avocado Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Sushi roll filled with fresh salmon and creamy avocado.",
-    imageUrl: "/images/templates/sushi.png",
+      "Sushi roll filled with fresh salmon and creamy avocado. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,salmonavocadoroll?lock=9675",
   },
   {
     name: "Spicy Salmon Roll",
@@ -6025,7 +6202,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Sushi roll filled with chopped salmon mixed with spicy mayo.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,spicysalmonroll?lock=44253",
     isSpicy: true,
   },
   {
@@ -6033,24 +6211,27 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Classic sushi roll filled with fresh raw tuna.",
-    imageUrl: "/images/templates/sushi.png",
+      "Classic sushi roll filled with fresh raw tuna. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tunaroll?lock=77584",
   },
   {
     name: "Tuna Avocado Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Sushi roll filled with fresh tuna and creamy avocado.",
-    imageUrl: "/images/templates/sushi.png",
+      "Sushi roll filled with fresh tuna and creamy avocado. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tunaavocadoroll?lock=2919",
   },
   {
     name: "Spicy Tuna Roll",
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Sushi roll filled with chopped tuna mixed with spicy mayo.",
-    imageUrl: "/images/templates/sushi.png",
+      "Sushi roll filled with chopped tuna mixed with spicy mayo. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,spicytunaroll?lock=72184",
     isSpicy: true,
   },
   {
@@ -6059,7 +6240,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Classic sushi roll filled with fresh yellowtail and scallions.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,yellowtailscallionroll?lock=86344",
   },
   {
     name: "Spicy Yellowtail Roll",
@@ -6067,7 +6249,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["japanese","sushi"],
     description:
       "Sushi roll filled with chopped yellowtail mixed with spicy mayo.",
-    imageUrl: "/images/templates/sushi.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,spicyyellowtailroll?lock=21357",
     isSpicy: true,
   },
   {
@@ -6075,8 +6258,9 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     category: "Sushi Rolls",
     cuisines: ["japanese","sushi"],
     description:
-      "Smoked salmon, cream cheese, and cucumber roll.",
-    imageUrl: "/images/templates/sushi.png",
+      "Smoked salmon, cream cheese, and cucumber roll. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,philadelphiaroll?lock=97148",
   },
   {
     name: "Enchiladas A la Gloria",
@@ -6084,7 +6268,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Signature enchiladas filled with a blend of cheeses and topped with special sauce.",
-    imageUrl: "/images/templates/taco.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,enchiladasalagloria?lock=20031",
   },
   {
     name: "Sour Cream Chicken Enchiladas",
@@ -6092,7 +6277,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Shredded chicken enchiladas smothered in a rich and tangy sour cream sauce.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,sourcreamchickenenchiladas?lock=13222",
   },
   {
     name: "Enchiladas Verdes",
@@ -6100,7 +6286,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Enchiladas topped with a tangy and slightly spicy green tomatillo sauce.",
-    imageUrl: "/images/templates/taco.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,enchiladasverdes?lock=88409",
   },
   {
     name: "Beef Enchiladas",
@@ -6108,7 +6295,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Savory ground beef enchiladas topped with traditional red chili sauce.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,beefenchiladas?lock=66195",
   },
   {
     name: "Shrimp Enchiladas",
@@ -6116,7 +6304,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Enchiladas filled with seasoned shrimp, topped with a creamy sauce.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shrimpenchiladas?lock=47192",
   },
   {
     name: "Spinach & Chicken Quesadilla",
@@ -6124,7 +6313,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled flour tortilla stuffed with melted cheese, fresh spinach, and chicken.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,spinach%26chickenquesadilla?lock=52328",
   },
   {
     name: "Shrimp Quesadilla",
@@ -6132,7 +6322,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled flour tortilla stuffed with melted cheese and seasoned shrimp.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shrimpquesadilla?lock=45091",
   },
   {
     name: "Skirt Steak Fajita Quesadilla",
@@ -6140,7 +6331,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled flour tortilla stuffed with melted cheese and marinated skirt steak fajitas.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,skirtsteakfajitaquesadilla?lock=61763",
   },
   {
     name: "Crispy Taco Dinner",
@@ -6148,7 +6340,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Three classic crispy shell tacos filled with ground beef or chicken, lettuce, tomato, and cheese.",
-    imageUrl: "/images/templates/taco.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,crispytacodinner?lock=60010",
   },
   {
     name: "Chicken Flautas",
@@ -6156,7 +6349,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Corn tortillas rolled with chicken and deep-fried until golden crisp, served with guacamole and sour cream.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickenflautas?lock=56098",
   },
   {
     name: "Combination Plate",
@@ -6164,7 +6358,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "A generous platter featuring an enchilada, a taco, and a tamale, served with rice and beans.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,combinationplate?lock=79433",
   },
   {
     name: "Shredded Chicken Burrito",
@@ -6172,7 +6367,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Large flour tortilla wrapped around shredded chicken, beans, cheese, and rice.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shreddedchickenburrito?lock=64166",
   },
   {
     name: "Ground Beef Burrito",
@@ -6180,7 +6376,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Large flour tortilla wrapped around seasoned ground beef, beans, cheese, and rice.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,groundbeefburrito?lock=82390",
   },
   {
     name: "Chicken Fajita Burrito",
@@ -6188,7 +6385,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Large flour tortilla wrapped around grilled chicken fajitas, beans, cheese, and rice.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickenfajitaburrito?lock=7479",
   },
   {
     name: "Beef Fajita Burrito",
@@ -6196,7 +6394,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Large flour tortilla wrapped around grilled beef fajitas, beans, cheese, and rice.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,beeffajitaburrito?lock=24263",
   },
   {
     name: "Ground Beef Chile Relleno",
@@ -6204,7 +6403,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Poblano pepper stuffed with ground beef and cheese, battered and fried.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,groundbeefchilerelleno?lock=42412",
   },
   {
     name: "Beef Fajita Chile Relleno",
@@ -6212,7 +6412,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Poblano pepper stuffed with beef fajitas and cheese, battered and fried.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,beeffajitachilerelleno?lock=14643",
   },
   {
     name: "Chicken Fajita Chile Relleno",
@@ -6220,7 +6421,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Poblano pepper stuffed with chicken fajitas and cheese, battered and fried.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickenfajitachilerelleno?lock=58851",
   },
   {
     name: "Shrimp Chile Relleno",
@@ -6228,7 +6430,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Poblano pepper stuffed with shrimp and cheese, battered and fried.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shrimpchilerelleno?lock=29591",
   },
   {
     name: "Chicken Fajitas",
@@ -6236,7 +6439,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Sizzling marinated chicken strips grilled with onions and bell peppers, served with tortillas.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,chickenfajitas?lock=86716",
   },
   {
     name: "Skirt Steak Fajitas",
@@ -6244,15 +6448,17 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Sizzling marinated skirt steak grilled with onions and bell peppers, served with tortillas.",
-    imageUrl: "/images/templates/steak.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,skirtsteakfajitas?lock=25438",
   },
   {
     name: "Veggie Fajitas",
     category: "Main Courses",
     cuisines: ["tex-mex","mexican"],
     description:
-      "Sizzling assorted grilled vegetables served with tortillas.",
-    imageUrl: "/images/templates/steak.png",
+      "Sizzling assorted grilled vegetables served with tortillas. Authentic and freshly prepared by our expert chefs.",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,veggiefajitas?lock=11163",
     isVegetarian: true,
   },
   {
@@ -6261,7 +6467,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Sizzling marinated shrimp grilled with onions and bell peppers, served with tortillas.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shrimpfajitas?lock=55895",
   },
   {
     name: "Tacos Al Carbón",
@@ -6269,7 +6476,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled marinated beef or chicken folded in warm flour tortillas.",
-    imageUrl: "/images/templates/taco.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tacosalcarb%C3%B3n?lock=29945",
   },
   {
     name: "Brisket Tacos",
@@ -6277,7 +6485,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Slow-roasted, tender beef brisket served in tortillas with onions and cilantro.",
-    imageUrl: "/images/templates/taco.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,briskettacos?lock=1628",
   },
   {
     name: "Tacos de Pollo",
@@ -6285,7 +6494,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Classic chicken tacos garnished with fresh cilantro and diced onions.",
-    imageUrl: "/images/templates/chicken.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,tacosdepollo?lock=81761",
   },
   {
     name: "Red Snapper Tacos",
@@ -6293,7 +6503,8 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Grilled or fried red snapper in tortillas, topped with slaw and a zesty sauce.",
-    imageUrl: "/images/templates/taco.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,redsnappertacos?lock=30574",
   },
   {
     name: "Shrimp Tacos",
@@ -6301,6 +6512,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     cuisines: ["tex-mex","mexican"],
     description:
       "Succulent shrimp served in tortillas, topped with fresh slaw and a creamy sauce.",
-    imageUrl: "/images/templates/seafood.png",
+    imageUrl:
+      "https://loremflickr.com/800/600/food,shrimptacos?lock=69678",
   },
 ];
