@@ -59,6 +59,12 @@ export function AdminLogin() {
           >
             Authenticate
           </button>
+          
+          <div className="text-center pt-4">
+            <p className="text-xs text-neutral-500">
+              Forgot password? Contact <a href="mailto:support@nomenu.us" className="text-indigo-400 hover:text-indigo-300">support@nomenu.us</a> for a reset.
+            </p>
+          </div>
         </form>
       </div>
     </div>

@@ -18,7 +18,7 @@ export default async function AdminLayout({
     return <AdminLogin />;
   }
 
-  const adminEmails = (process.env.ADMIN_EMAILS || "support@nomenu.us,sunil@nomenu.us").split(",");
+  const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
   if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
     return <AdminLogin />;
   }

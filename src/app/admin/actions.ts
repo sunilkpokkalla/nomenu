@@ -9,7 +9,7 @@ export async function generateImpersonationOtp(userId: string) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !user.email) throw new Error("Not logged in");
   
-  const adminEmails = (process.env.ADMIN_EMAILS || "support@nomenu.us,sunil@nomenu.us").split(",");
+  const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
   if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
     throw new Error("Unauthorized");
   }
