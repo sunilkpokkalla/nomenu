@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
-export async function generateImpersonationLink(userId: string) {
+export async function generateImpersonationLink(userId: string, origin: string) {
   // 1. Verify caller is an Admin
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -32,7 +32,7 @@ export async function generateImpersonationLink(userId: string) {
     type: "magiclink",
     email: targetUser.user.email,
     options: {
-      redirectTo: `${process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_APP_URL}/dashboard`
+      redirectTo: `${origin}/dashboard`
     }
   });
 

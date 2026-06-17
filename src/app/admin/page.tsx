@@ -1,28 +1,55 @@
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { ImpersonateButton } from "./components/impersonate-button";
+import { AdminSearch } from "./components/admin-search";
+import { AdminPagination } from "./components/admin-pagination";
 import { formatDistanceToNow } from "date-fns";
-import { Store, CreditCard, Users, Search } from "lucide-react";
+import { Store, CreditCard, Users } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPage() {
+export default async function AdminPage(
+  props: {
+    searchParams: Promise<{ q?: string; page?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const query = searchParams.q || "";
+  const page = Number(searchParams.page) || 1;
+  const pageSize = 10;
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
   // We use the admin client here to bypass RLS and fetch ALL restaurants
   const adminSupabase = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
   );
 
-  const { data: restaurants, error } = await adminSupabase
+  // Get totals (without pagination)
+  const { data: allRestaurants, error: totalsError } = await adminSupabase
     .from("restaurants")
-    .select("*")
-    .order("created_at", { ascending: false });
+    .select("subscription_status");
 
-  if (error) {
-    return <div className="text-red-500">Error loading restaurants: {error.message}</div>;
+  const activeSubscriptions = allRestaurants?.filter(r => r.subscription_status === 'active')?.length || 0;
+  const totalRestaurants = allRestaurants?.length || 0;
+
+  // Get paginated and filtered list
+  let supabaseQuery = adminSupabase
+    .from("restaurants")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (query) {
+    // Search by name or slug
+    supabaseQuery = supabaseQuery.or(`name.ilike.%${query}%,slug.ilike.%${query}%`);
   }
 
-  const activeSubscriptions = restaurants?.filter(r => r.subscription_status === 'active')?.length || 0;
-  const totalRestaurants = restaurants?.length || 0;
+  const { data: restaurants, count, error } = await supabaseQuery;
+
+  if (totalsError || error) {
+    return <div className="text-red-500">Error loading restaurants: {(totalsError || error)?.message}</div>;
+  }
 
   return (
     <div className="space-y-8">
@@ -64,17 +91,9 @@ export default async function AdminPage() {
 
       {/* Fleet Data Table */}
       <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-neutral-800 flex items-center justify-between">
+        <div className="p-6 border-b border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="text-lg font-medium text-white">Fleet Overview</h2>
-          <div className="relative">
-            <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input 
-              type="text" 
-              placeholder="Search (Coming soon)..." 
-              disabled
-              className="bg-black border border-neutral-800 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-neutral-600 w-64"
-            />
-          </div>
+          <AdminSearch />
         </div>
         
         <div className="overflow-x-auto">
@@ -131,13 +150,18 @@ export default async function AdminPage() {
               {restaurants?.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-neutral-500">
-                    No restaurants found.
+                    {query ? `No restaurants found matching "${query}".` : "No restaurants found."}
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination Footer */}
+        {count !== null && count > 0 && (
+          <AdminPagination total={count} pageSize={pageSize} />
+        )}
       </div>
     </div>
   );

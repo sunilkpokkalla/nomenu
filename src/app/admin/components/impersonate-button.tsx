@@ -16,7 +16,8 @@ export function ImpersonateButton({ userId, restaurantName }: { userId: string, 
     setIsLoading(true);
     setError(null);
     try {
-      const actionLink = await generateImpersonationLink(userId);
+      const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+      const actionLink = await generateImpersonationLink(userId, origin);
       // Immediately redirect the user to the magic link.
       // Supabase will log them in and redirect them to /dashboard
       window.location.href = actionLink;
