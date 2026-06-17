@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { LogOut, Shield } from "lucide-react";
 import Link from "next/link";
 
+import { AdminLogin } from "./components/admin-login";
+
 export default async function AdminLayout({
   children,
 }: {
@@ -12,12 +14,12 @@ export default async function AdminLayout({
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user || !user.email) {
-    redirect("/login");
+    return <AdminLogin />;
   }
 
   const adminEmails = (process.env.ADMIN_EMAILS || "support@nomenu.us,sunil@nomenu.us").split(",");
   if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
-    redirect("/dashboard");
+    return <AdminLogin />;
   }
 
   return (
