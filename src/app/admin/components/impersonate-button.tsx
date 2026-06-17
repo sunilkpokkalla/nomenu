@@ -1,26 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import { generateImpersonationLink } from "../actions";
+import { generateImpersonationOtp } from "../actions";
 import { UserCircle, Loader2, AlertCircle } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export function ImpersonateButton({ userId, restaurantName }: { userId: string, restaurantName: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleGenerateAndRedirect = async () => {
-    if (!confirm(`WARNING: You are about to log in as ${restaurantName}. This will replace your current Admin session. You will need to log back in as an Admin later.\n\nProceed?`)) {
+  const handleImpersonate = async () => {
+    if (!window.confirm(`WARNING: You are about to log in as ${restaurantName}. This will replace your current Admin session. You will need to log back in as an Admin later.\n\nProceed?`)) {
       return;
     }
 
     setIsLoading(true);
     setError(null);
     try {
-      const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-      const actionLink = await generateImpersonationLink(userId, origin);
-      // Immediately redirect the user to the magic link.
-      // Supabase will log them in and redirect them to /dashboard
-      window.location.href = actionLink;
+      const { email, otp } = await generateImpersonationOtp(userId);
+      
+      const supabase = createClient();
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        email,
+        token: otp,
+        type: 'magiclink'
+      });
+
+      if (verifyError) throw verifyError;
+
+      // Successfully logged in locally, redirect to dashboard
+      window.location.href = '/dashboard';
     } catch (e: unknown) {
       setError((e as Error).message || "Failed to generate link");
       setIsLoading(false);
@@ -30,7 +39,7 @@ export function ImpersonateButton({ userId, restaurantName }: { userId: string, 
   return (
     <>
       <button
-        onClick={handleGenerateAndRedirect}
+        onClick={handleImpersonate}
         disabled={isLoading}
         className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white rounded-md transition-colors disabled:opacity-50"
       >

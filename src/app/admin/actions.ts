@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
-export async function generateImpersonationLink(userId: string, origin: string) {
+export async function generateImpersonationOtp(userId: string) {
   // 1. Verify caller is an Admin
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -26,19 +26,15 @@ export async function generateImpersonationLink(userId: string, origin: string) 
     throw new Error("Failed to find user email for impersonation");
   }
 
-  // 4. Generate the magic link
-  // We use type 'magiclink' so it creates a sign-in URL without needing the password
+  // 4. Generate the magic link and extract OTP
   const { data: linkData, error: linkError } = await adminSupabase.auth.admin.generateLink({
     type: "magiclink",
     email: targetUser.user.email,
-    options: {
-      redirectTo: `${origin}/dashboard`
-    }
   });
 
-  if (linkError || !linkData?.properties?.action_link) {
-    throw new Error(linkError?.message || "Failed to generate link");
+  if (linkError || !linkData.properties?.email_otp) {
+    throw new Error(`Failed to generate magic link: ${linkError?.message}`);
   }
 
-  return linkData.properties.action_link;
+  return { email: targetUser.user.email, otp: linkData.properties.email_otp };
 }
