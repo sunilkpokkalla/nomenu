@@ -41,6 +41,8 @@ export const metadata: Metadata = {
   publisher: "AmBrightTech LLC",
 };
 
+import { SupabaseHashListener } from "@/components/supabase-hash-listener";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -49,6 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${lora.variable} ${montserrat.variable} ${cormorant.variable} ${poppins.variable} ${outfit.variable} ${spaceMono.variable} font-sans antialiased`} suppressHydrationWarning>
+        <SupabaseHashListener />
         <NextTopLoader
           color="#2563EB"
           initialPosition={0.08}

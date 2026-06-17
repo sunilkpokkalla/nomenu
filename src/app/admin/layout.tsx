@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LogOut, Shield } from "lucide-react";
 import Link from "next/link";
+import { logout } from "@/app/auth/actions";
 
 import { AdminLogin } from "./components/admin-login";
 
@@ -35,13 +36,15 @@ export default async function AdminLayout({
           
           <div className="flex items-center gap-6 text-sm">
             <span className="text-white/50">{user.email}</span>
-            <Link 
-              href="/dashboard"
-              className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Exit Admin
-            </Link>
+            <form action={logout}>
+              <button 
+                type="submit"
+                className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </button>
+            </form>
           </div>
         </div>
       </header>
