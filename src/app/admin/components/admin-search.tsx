@@ -11,8 +11,11 @@ export function AdminSearch() {
 
   // Debounce the search input
   useEffect(() => {
+    // Prevent infinite loop if the query matches the URL
+    if (query === (searchParams.get("q") || "")) return;
+
     const delayDebounceFn = setTimeout(() => {
-      const params = new URLSearchParams(searchParams);
+      const params = new URLSearchParams(searchParams.toString());
       if (query) {
         params.set("q", query);
       } else {
