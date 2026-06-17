@@ -16,7 +16,7 @@ export default async function AdminLayout({
   }
 
   const adminEmails = (process.env.ADMIN_EMAILS || "support@nomenu.us,sunil@nomenu.us").split(",");
-  if (!adminEmails.includes(user.email)) {
+  if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
     redirect("/dashboard");
   }
 

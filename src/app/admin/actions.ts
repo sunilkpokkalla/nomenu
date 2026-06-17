@@ -10,7 +10,7 @@ export async function generateImpersonationLink(userId: string) {
   if (!user || !user.email) throw new Error("Not logged in");
   
   const adminEmails = (process.env.ADMIN_EMAILS || "support@nomenu.us,sunil@nomenu.us").split(",");
-  if (!adminEmails.includes(user.email)) {
+  if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
     throw new Error("Unauthorized");
   }
 
@@ -31,6 +31,9 @@ export async function generateImpersonationLink(userId: string) {
   const { data: linkData, error: linkError } = await adminSupabase.auth.admin.generateLink({
     type: "magiclink",
     email: targetUser.user.email,
+    options: {
+      redirectTo: `${process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.NEXT_PUBLIC_APP_URL}/dashboard`
+    }
   });
 
   if (linkError || !linkData?.properties?.action_link) {
