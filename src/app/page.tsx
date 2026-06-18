@@ -717,10 +717,10 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menus & Items
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI Magic Menu Import & AI Writer
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI Magic Menu Import
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited AI Dish Images ($0.25/image)
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI Image Generation & Menu Writer
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Square POS Integration

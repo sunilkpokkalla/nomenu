@@ -14,8 +14,8 @@ const getPlans = (isAnnual: boolean) => [
     description: "Unlimited flexibility for high-volume venues.",
     features: [
       "Unlimited Menus & Items",
-      "AI Magic Menu Import & AI Writer",
-      "Unlimited AI Dish Images ($0.25/image)",
+      "AI Magic Menu Import",
+      "AI Image Generation & Menu Writer",
       "Square POS Integration",
       "Private Customer Feedback System",
       "Detailed Scan Analytics & Timezones",
