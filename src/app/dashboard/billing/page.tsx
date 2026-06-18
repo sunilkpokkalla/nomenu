@@ -14,11 +14,11 @@ const getPlans = (isAnnual: boolean) => [
     description: "Unlimited flexibility for high-volume venues.",
     features: [
       "Unlimited Menus & Items",
-      "Unlimited Location QR Codes",
-      "Full Brand & Theme Customization",
+      "AI Magic Menu Import & AI Writer",
+      "Unlimited AI Dish Images ($0.03/image)",
+      "Square POS Integration",
       "Private Customer Feedback System",
       "Detailed Scan Analytics & Timezones",
-      "24/7 Priority Email Support",
     ],
   },
   {

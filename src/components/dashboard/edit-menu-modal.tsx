@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Settings2, Loader2, UtensilsCrossed, Receipt, MapPin, Eye, Info, X } from "lucide-react";
+import { Settings2, Loader2, UtensilsCrossed, Receipt, MapPin, Eye, Info, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -58,7 +58,36 @@ interface EditMenuProps {
 
 export function EditMenuModal({ menu, cuisineType, editAction }: EditMenuProps) {
   const [open, setOpen] = useState(false);
+  const [description, setDescription] = useState(menu.description || "");
+  const [isGeneratingDesc, setIsGeneratingDesc] = useState(false);
   const chefRecommendations = getChefRecommendations(cuisineType);
+
+  const handleGenerateDescription = async () => {
+    const nameInput = document.getElementById("name") as HTMLInputElement | null;
+    const name = nameInput?.value || menu.name;
+    
+    if (!name) {
+      alert("Please enter a Menu Name first!");
+      return;
+    }
+    
+    setIsGeneratingDesc(true);
+    try {
+      const res = await fetch("/api/menu/generate-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, type: 'menu' })
+      });
+      const data = await res.json();
+      if (data.description) {
+        setDescription(data.description);
+      }
+    } catch (error) {
+      console.error("Failed to generate description:", error);
+    } finally {
+      setIsGeneratingDesc(false);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -149,12 +178,24 @@ export function EditMenuModal({ menu, cuisineType, editAction }: EditMenuProps) 
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="description" className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Description <span className="text-slate-400 font-normal lowercase">(Optional)</span></Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="description" className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Description <span className="text-slate-400 font-normal lowercase">(Optional)</span></Label>
+                  <button
+                    type="button"
+                    onClick={handleGenerateDescription}
+                    disabled={isGeneratingDesc}
+                    className="text-[10px] text-purple-600 hover:text-purple-700 hover:underline font-bold uppercase tracking-wider flex items-center gap-1 disabled:opacity-50"
+                  >
+                    {isGeneratingDesc ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                    AI Writer
+                  </button>
+                </div>
                 <Textarea 
                   id="description" 
                   name="description" 
                   placeholder="E.g., Our seasonal tasting menu featuring local ingredients." 
-                  defaultValue={menu.description || ""}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   className="resize-none bg-white border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
                   rows={3}
                 />

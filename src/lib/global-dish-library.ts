@@ -20,7 +20,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic French onion soup topped with a toasted baguette slice and melted Gruyère cheese.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,soupe%C3%A0l%27oignongratin%C3%A9e?lock=49796",
+      "/images/library/soupe-l-oignon-gratin-e.jpg",
   },
   {
     name: "Escargots de Bourgogne",
@@ -30,7 +30,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Snail delicacy baked in its shell with a rich, fragrant garlic and parsley butter.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,escargotsdebourgogne?lock=66944",
+      "/images/library/escargots-de-bourgogne.jpg",
   },
   {
     name: "Pâté de Campagne",
@@ -40,7 +40,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rustic pork and liver pâté served with cornichons, Dijon mustard, and toasted sourdough.",
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,p%C3%A2t%C3%A9decampagne?lock=41230",
+      "/images/library/p-t-de-campagne.jpg",
   },
   {
     name: "Gougères",
@@ -51,7 +51,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,goug%C3%A8res?lock=18967",
+      "/images/library/goug-res.jpg",
   },
   {
     name: "Tartare de Bœuf",
@@ -61,7 +61,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Hand-chopped raw beef tenderloin seasoned with capers, shallots, egg yolk, and Dijon mustard.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tartaredeb%C5%93uf?lock=99994",
+      "/images/library/tartare-de-b-uf.jpg",
   },
   {
     name: "Foie Gras Poêlé",
@@ -71,7 +71,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Seared duck liver served with a sweet fig compote and toasted brioche.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,foiegraspo%C3%AAl%C3%A9?lock=41414",
+      "/images/library/foie-gras-po-l.jpg",
   },
   {
     name: "Salade Lyonnaise",
@@ -81,7 +81,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Frisée lettuce tossed with warm bacon lardons, croutons, and topped with a poached egg.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,saladelyonnaise?lock=76029",
+      "/images/library/salade-lyonnaise.jpg",
   },
   {
     name: "Bisque de Homard",
@@ -91,7 +91,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A velvety, rich lobster soup infused with cognac and fresh cream.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bisquedehomard?lock=56474",
+      "/images/library/bisque-de-homard.jpg",
   },
   {
     name: "Camembert Rôti",
@@ -102,7 +102,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,camembertr%C3%B4ti?lock=72550",
+      "/images/library/camembert-r-ti.jpg",
   },
   {
     name: "Quiche Lorraine",
@@ -112,7 +112,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic savory tart filled with a rich egg custard, smoked bacon, and Gruyère cheese.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,quichelorraine?lock=44672",
+      "/images/library/quiche-lorraine.jpg",
   },
   {
     name: "Coq au Vin",
@@ -122,7 +122,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tender chicken braised slowly in red Burgundy wine with mushrooms, pearl onions, and bacon.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,coqauvin?lock=54390",
+      "/images/library/coq-au-vin.jpg",
   },
   {
     name: "Bœuf Bourguignon",
@@ -132,7 +132,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic beef stew simmered in red wine with carrots, onions, garlic, and a bouquet garni.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,b%C5%93ufbourguignon?lock=11512",
+      "/images/library/b-uf-bourguignon.jpg",
   },
   {
     name: "Canard à l'Orange",
@@ -142,7 +142,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy roasted duck breast dressed in a sweet and savory bitter-orange glaze.",
     suggestedCookingTime: 35,
     imageUrl:
-      "https://loremflickr.com/800/600/food,canard%C3%A0l%27orange?lock=87046",
+      "/images/library/canard-l-orange.jpg",
   },
   {
     name: "Bouillabaisse",
@@ -152,7 +152,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Traditional Provençal fish stew heavily infused with saffron, fennel, and orange zest, served with rouille.",
     suggestedCookingTime: 40,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bouillabaisse?lock=72357",
+      "/images/library/bouillabaisse.jpg",
   },
   {
     name: "Steak Frites",
@@ -162,7 +162,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-seared ribeye steak slathered in herb butter, served with a mountain of crispy golden frites.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,steakfrites?lock=22412",
+      "/images/library/steak-frites.jpg",
   },
   {
     name: "Ratatouille Niçoise",
@@ -174,7 +174,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,ratatouilleni%C3%A7oise?lock=87104",
+      "/images/library/ratatouille-ni-oise.jpg",
   },
   {
     name: "Cassoulet",
@@ -184,7 +184,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rich, slow-cooked casserole from the South of France featuring white beans, duck confit, and garlic sausage.",
     suggestedCookingTime: 60,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cassoulet?lock=29363",
+      "/images/library/cassoulet.jpg",
   },
   {
     name: "Confit de Canard",
@@ -194,7 +194,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Duck legs slow-cooked in their own fat until meltingly tender, then roasted until crisp.",
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,confitdecanard?lock=4483",
+      "/images/library/confit-de-canard.jpg",
   },
   {
     name: "Blanquette de Veau",
@@ -204,7 +204,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A classic, comforting veal ragout cooked in a rich, velvety white sauce with button mushrooms.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,blanquettedeveau?lock=26574",
+      "/images/library/blanquette-de-veau.jpg",
   },
   {
     name: "Sole Meunière",
@@ -214,7 +214,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Delicate whole Dover sole pan-fried in brown butter, lemon, and fresh parsley.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,solemeuni%C3%A8re?lock=35383",
+      "/images/library/sole-meuni-re.jpg",
   },
   {
     name: "Poulet Rôti",
@@ -224,7 +224,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Half a chicken beautifully roasted with lemon, garlic, and thyme, served with buttered green beans.",
     suggestedCookingTime: 40,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pouletr%C3%B4ti?lock=90169",
+      "/images/library/poulet-r-ti.jpg",
   },
   {
     name: "Magret de Canard",
@@ -234,7 +234,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-seared duck breast served pink, paired with a rich cherry reduction.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,magretdecanard?lock=7390",
+      "/images/library/magret-de-canard.jpg",
   },
   {
     name: "Châteaubriand",
@@ -244,7 +244,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A thick, center-cut beef tenderloin roasted to perfection, served with Béarnaise sauce.",
     suggestedCookingTime: 40,
     imageUrl:
-      "https://loremflickr.com/800/600/food,ch%C3%A2teaubriand?lock=26240",
+      "/images/library/ch-teaubriand.jpg",
   },
   {
     name: "Moules Marinières",
@@ -254,7 +254,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Fresh mussels steamed in white wine, garlic, shallots, and parsley, served with crusty baguette.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,moulesmarini%C3%A8res?lock=78681",
+      "/images/library/moules-marini-res.jpg",
   },
   {
     name: "Hachis Parmentier",
@@ -264,7 +264,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "The elegant French cousin to Shepherd's Pie, made with slow-braised beef topped with creamy mashed potatoes.",
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,hachisparmentier?lock=35329",
+      "/images/library/hachis-parmentier.jpg",
   },
   {
     name: "Filet Mignon au Poivre",
@@ -275,7 +275,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,filetmignonaupoivre?lock=92566",
+      "/images/library/filet-mignon-au-poivre.jpg",
   },
   {
     name: "Navarin d'Agneau",
@@ -285,7 +285,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A delicate spring lamb stew simmered with baby turnips, carrots, and peas.",
     suggestedCookingTime: 50,
     imageUrl:
-      "https://loremflickr.com/800/600/food,navarind%27agneau?lock=14997",
+      "/images/library/navarin-d-agneau.jpg",
   },
   {
     name: "Gratin Dauphinois",
@@ -296,7 +296,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,gratindauphinois?lock=60947",
+      "/images/library/gratin-dauphinois.jpg",
   },
   {
     name: "Salade Niçoise",
@@ -307,7 +307,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,saladeni%C3%A7oise?lock=7348",
+      "/images/library/salade-ni-oise.jpg",
   },
   {
     name: "Croque Monsieur",
@@ -317,7 +317,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "The ultimate toasted ham and Gruyère cheese sandwich, smothered in rich Béchamel sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,croquemonsieur?lock=68707",
+      "/images/library/croque-monsieur.jpg",
   },
   {
     name: "Pommes Purée",
@@ -329,7 +329,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pommespur%C3%A9e?lock=54615",
+      "/images/library/pommes-pur-e.jpg",
   },
   {
     name: "Haricots Verts Amandine",
@@ -341,7 +341,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,haricotsvertsamandine?lock=41240",
+      "/images/library/haricots-verts-amandine.jpg",
   },
   {
     name: "Pommes Frites",
@@ -353,7 +353,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pommesfrites?lock=42963",
+      "/images/library/pommes-frites.jpg",
   },
   {
     name: "Gratin de Macaronis",
@@ -364,7 +364,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,gratindemacaronis?lock=57614",
+      "/images/library/gratin-de-macaronis.jpg",
   },
   {
     name: "Champignons Sauvages",
@@ -376,7 +376,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,champignonssauvages?lock=55182",
+      "/images/library/champignons-sauvages.jpg",
   },
   {
     name: "Asperges Sauce Hollandaise",
@@ -388,7 +388,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,aspergessaucehollandaise?lock=85196",
+      "/images/library/asperges-sauce-hollandaise.jpg",
   },
   {
     name: "Pommes Anna",
@@ -400,7 +400,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pommesanna?lock=46723",
+      "/images/library/pommes-anna.jpg",
   },
   {
     name: "Petits Pois à la Française",
@@ -412,7 +412,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,petitspois%C3%A0lafran%C3%A7aise?lock=14555",
+      "/images/library/petits-pois-la-fran-aise.jpg",
   },
   {
     name: "Salade Verte",
@@ -424,7 +424,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,saladeverte?lock=9995",
+      "/images/library/salade-verte.jpg",
   },
   {
     name: "Tomates à la Provençale",
@@ -435,7 +435,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tomates%C3%A0laproven%C3%A7ale?lock=91169",
+      "/images/library/tomates-la-proven-ale.jpg",
   },
   {
     name: "Crème Brûlée",
@@ -447,7 +447,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cr%C3%A8mebr%C3%BBl%C3%A9e?lock=91266",
+      "/images/library/cr-me-br-l-e.jpg",
   },
   {
     name: "Tarte Tatin",
@@ -458,7 +458,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tartetatin?lock=42561",
+      "/images/library/tarte-tatin.jpg",
   },
   {
     name: "Mousse au Chocolat",
@@ -470,7 +470,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,mousseauchocolat?lock=76863",
+      "/images/library/mousse-au-chocolat.jpg",
   },
   {
     name: "Profiteroles",
@@ -481,7 +481,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,profiteroles?lock=55618",
+      "/images/library/profiteroles.jpg",
   },
   {
     name: "Île Flottante",
@@ -493,7 +493,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,%C3%AEleflottante?lock=71811",
+      "/images/library/le-flottante.jpg",
   },
   {
     name: "Soufflé au Grand Marnier",
@@ -504,7 +504,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,souffl%C3%A9augrandmarnier?lock=94108",
+      "/images/library/souffl-au-grand-marnier.jpg",
   },
   {
     name: "Mille-Feuille",
@@ -515,7 +515,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,mille-feuille?lock=23050",
+      "/images/library/mille-feuille.jpg",
   },
   {
     name: "Macarons Assortis",
@@ -527,7 +527,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,macaronsassortis?lock=89380",
+      "/images/library/macarons-assortis.jpg",
   },
   {
     name: "Tarte au Citron Meringuée",
@@ -538,7 +538,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tarteaucitronmeringu%C3%A9e?lock=79858",
+      "/images/library/tarte-au-citron-meringu-e.jpg",
   },
   {
     name: "Éclair au Chocolat",
@@ -549,7 +549,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,%C3%A9clairauchocolat?lock=39755",
+      "/images/library/clair-au-chocolat.jpg",
   },
   {
     name: "Bruschetta al Pomodoro",
@@ -560,7 +560,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bruschettaalpomodoro?lock=50085",
+      "/images/library/bruschetta-al-pomodoro.jpg",
   },
   {
     name: "Burrata e Prosciutto",
@@ -571,7 +571,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,burrataeprosciutto?lock=14389",
+      "/images/library/burrata-e-prosciutto.jpg",
   },
   {
     name: "Arancini al Ragù",
@@ -581,7 +581,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy, golden-fried risotto balls stuffed with a rich beef ragù and mozzarella center.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,arancinialrag%C3%B9?lock=11352",
+      "/images/library/arancini-al-rag.jpg",
   },
   {
     name: "Calamari Fritti",
@@ -591,7 +591,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Lightly dusted, crispy fried squid rings served with a side of zesty marinara sauce and lemon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,calamarifritti?lock=739",
+      "/images/library/calamari-fritti.jpg",
   },
   {
     name: "Carpaccio di Manzo",
@@ -602,7 +602,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,carpacciodimanzo?lock=62696",
+      "/images/library/carpaccio-di-manzo.jpg",
   },
   {
     name: "Insalata Caprese",
@@ -614,7 +614,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,insalatacaprese?lock=81457",
+      "/images/library/insalata-caprese.jpg",
   },
   {
     name: "Polpette della Nonna",
@@ -624,7 +624,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Classic Italian meatballs simmered in a slow-cooked tomato sauce, served with toasted focaccia.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,polpettedellanonna?lock=61976",
+      "/images/library/polpette-della-nonna.jpg",
   },
   {
     name: "Fritto Misto",
@@ -634,7 +634,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A crispy mix of lightly fried seafood and vegetables, perfectly seasoned with sea salt.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,frittomisto?lock=64011",
+      "/images/library/fritto-misto.jpg",
   },
   {
     name: "Melanzane alla Parmigiana",
@@ -646,7 +646,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,melanzaneallaparmigiana?lock=65868",
+      "/images/library/melanzane-alla-parmigiana.jpg",
   },
   {
     name: "Zuppa Toscana",
@@ -657,7 +657,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,zuppatoscana?lock=28876",
+      "/images/library/zuppa-toscana.jpg",
   },
   {
     name: "Spaghetti Carbonara",
@@ -667,7 +667,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Authentic Roman pasta dish with guanciale, pecorino romano, egg yolks, and heavy black pepper.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,spaghetticarbonara?lock=75590",
+      "/images/library/spaghetti-carbonara.jpg",
   },
   {
     name: "Lasagna al Forno",
@@ -677,7 +677,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Oven-baked layers of fresh pasta, rich Bolognese ragù, velvety béchamel, and parmesan.",
     suggestedCookingTime: 35,
     imageUrl:
-      "https://loremflickr.com/800/600/food,lasagnaalforno?lock=6893",
+      "/images/library/lasagna-al-forno.jpg",
   },
   {
     name: "Risotto ai Funghi Porcini",
@@ -689,7 +689,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,risottoaifunghiporcini?lock=53506",
+      "/images/library/risotto-ai-funghi-porcini.jpg",
   },
   {
     name: "Ossobuco alla Milanese",
@@ -700,7 +700,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://loremflickr.com/800/600/food,ossobucoallamilanese?lock=63408",
+      "/images/library/ossobuco-alla-milanese.jpg",
   },
   {
     name: "Pizza Margherita",
@@ -711,7 +711,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pizzamargherita?lock=46071",
+      "/images/library/pizza-margherita.jpg",
   },
   {
     name: "Tagliatelle al Ragù Bolognese",
@@ -721,7 +721,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Ribbons of egg pasta tossed in a slow-cooked, rich meat sauce from Bologna.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tagliatellealrag%C3%B9bolognese?lock=94126",
+      "/images/library/tagliatelle-al-rag-bolognese.jpg",
   },
   {
     name: "Cacio e Pepe",
@@ -732,7 +732,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cacioepepe?lock=46164",
+      "/images/library/cacio-e-pepe.jpg",
   },
   {
     name: "Saltimbocca alla Romana",
@@ -742,7 +742,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Pan-fried veal medallions wrapped in prosciutto and sage, glazed with a white wine sauce.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,saltimboccaallaromana?lock=64008",
+      "/images/library/saltimbocca-alla-romana.jpg",
   },
   {
     name: "Bistecca alla Fiorentina",
@@ -753,7 +753,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bisteccaallafiorentina?lock=97806",
+      "/images/library/bistecca-alla-fiorentina.jpg",
   },
   {
     name: "Linguine alle Vongole",
@@ -763,7 +763,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Linguine tossed with fresh clams, white wine, garlic, parsley, and a touch of chili flakes.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,linguineallevongole?lock=63674",
+      "/images/library/linguine-alle-vongole.jpg",
   },
   {
     name: "Ravioli Ricotta e Spinaci",
@@ -774,7 +774,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,ravioliricottaespinaci?lock=59370",
+      "/images/library/ravioli-ricotta-e-spinaci.jpg",
   },
   {
     name: "Pizza Diavola",
@@ -785,7 +785,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pizzadiavola?lock=42939",
+      "/images/library/pizza-diavola.jpg",
   },
   {
     name: "Gnocchi al Pesto Genovese",
@@ -796,7 +796,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,gnocchialpestogenovese?lock=87683",
+      "/images/library/gnocchi-al-pesto-genovese.jpg",
   },
   {
     name: "Pappardelle al Cinghiale",
@@ -806,7 +806,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Wide pasta ribbons served with a robust, slow-braised wild boar ragù.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pappardellealcinghiale?lock=3171",
+      "/images/library/pappardelle-al-cinghiale.jpg",
   },
   {
     name: "Pollo alla Cacciatora",
@@ -817,7 +817,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 40,
     imageUrl:
-      "https://loremflickr.com/800/600/food,polloallacacciatora?lock=84779",
+      "/images/library/pollo-alla-cacciatora.jpg",
   },
   {
     name: "Spaghetti all'Amatriciana",
@@ -828,7 +828,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,spaghettiall%27amatriciana?lock=23013",
+      "/images/library/spaghetti-all-amatriciana.jpg",
   },
   {
     name: "Fritto Misto di Pesce",
@@ -838,7 +838,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A generous platter of assorted Mediterranean seafood, lightly battered and fried.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,frittomistodipesce?lock=53462",
+      "/images/library/fritto-misto-di-pesce.jpg",
   },
   {
     name: "Orecchiette con Cime di Rapa",
@@ -848,7 +848,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Little 'ear-shaped' pasta tossed with bitter broccoli rabe, garlic, and anchovies.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,orecchietteconcimedirapa?lock=54041",
+      "/images/library/orecchiette-con-cime-di-rapa.jpg",
   },
   {
     name: "Risotto alla Milanese",
@@ -860,7 +860,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,risottoallamilanese?lock=34275",
+      "/images/library/risotto-alla-milanese.jpg",
   },
   {
     name: "Pizza Quattro Formaggi",
@@ -871,7 +871,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pizzaquattroformaggi?lock=44718",
+      "/images/library/pizza-quattro-formaggi.jpg",
   },
   {
     name: "Focaccia al Rosmarino",
@@ -882,7 +882,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,focacciaalrosmarino?lock=27102",
+      "/images/library/focaccia-al-rosmarino.jpg",
   },
   {
     name: "Broccoletti Saltati",
@@ -895,7 +895,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,broccolettisaltati?lock=17845",
+      "/images/library/broccoletti-saltati.jpg",
   },
   {
     name: "Patate Arrosto",
@@ -906,7 +906,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 30,
     imageUrl:
-      "https://loremflickr.com/800/600/food,patatearrosto?lock=55536",
+      "/images/library/patate-arrosto.jpg",
   },
   {
     name: "Polenta Morbida",
@@ -918,7 +918,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,polentamorbida?lock=36473",
+      "/images/library/polenta-morbida.jpg",
   },
   {
     name: "Insalata Mista",
@@ -930,7 +930,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,insalatamista?lock=26742",
+      "/images/library/insalata-mista.jpg",
   },
   {
     name: "Carciofi alla Romana",
@@ -942,7 +942,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,carciofiallaromana?lock=65103",
+      "/images/library/carciofi-alla-romana.jpg",
   },
   {
     name: "Verdure Grigliate",
@@ -954,7 +954,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,verduregrigliate?lock=4728",
+      "/images/library/verdure-grigliate.jpg",
   },
   {
     name: "Pane all'Aglio",
@@ -965,7 +965,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,paneall%27aglio?lock=66507",
+      "/images/library/pane-all-aglio.jpg",
   },
   {
     name: "Spinaci al Limone",
@@ -977,7 +977,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,spinaciallimone?lock=16590",
+      "/images/library/spinaci-al-limone.jpg",
   },
   {
     name: "Caponata Siciliana",
@@ -989,7 +989,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,caponatasiciliana?lock=88103",
+      "/images/library/caponata-siciliana.jpg",
   },
   {
     name: "Tiramisù",
@@ -1000,7 +1000,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tiramis%C3%B9?lock=80257",
+      "/images/library/tiramis.jpg",
   },
   {
     name: "Panna Cotta",
@@ -1012,7 +1012,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pannacotta?lock=68212",
+      "/images/library/panna-cotta.jpg",
   },
   {
     name: "Cannoli Siciliani",
@@ -1023,7 +1023,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cannolisiciliani?lock=86095",
+      "/images/library/cannoli-siciliani.jpg",
   },
   {
     name: "Gelato Artigianale",
@@ -1035,7 +1035,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,gelatoartigianale?lock=11070",
+      "/images/library/gelato-artigianale.jpg",
   },
   {
     name: "Affogato al Caffè",
@@ -1047,7 +1047,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,affogatoalcaff%C3%A8?lock=99737",
+      "/images/library/affogato-al-caff.jpg",
   },
   {
     name: "Zabaione",
@@ -1059,7 +1059,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,zabaione?lock=88269",
+      "/images/library/zabaione.jpg",
   },
   {
     name: "Torta della Nonna",
@@ -1070,7 +1070,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tortadellanonna?lock=91547",
+      "/images/library/torta-della-nonna.jpg",
   },
   {
     name: "Biscotti Cantuccini",
@@ -1081,7 +1081,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,biscotticantuccini?lock=86908",
+      "/images/library/biscotti-cantuccini.jpg",
   },
   {
     name: "Profiteroles al Cioccolato",
@@ -1092,7 +1092,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,profiterolesalcioccolato?lock=72038",
+      "/images/library/profiteroles-al-cioccolato.jpg",
   },
   {
     name: "Zeppole",
@@ -1103,7 +1103,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,zeppole?lock=14310",
+      "/images/library/zeppole.jpg",
   },
   {
     name: "Loaded Potato Skins",
@@ -1113,7 +1113,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy potato skins loaded with melted cheddar, bacon bits, sour cream, and green onions.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,loadedpotatoskins?lock=32736",
+      "/images/library/loaded-potato-skins.jpg",
   },
   {
     name: "Buffalo Chicken Wings",
@@ -1124,7 +1124,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,buffalochickenwings?lock=79249",
+      "/images/library/buffalo-chicken-wings.jpg",
   },
   {
     name: "Mozzarella Sticks",
@@ -1135,7 +1135,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,mozzarellasticks?lock=22857",
+      "/images/library/mozzarella-sticks.jpg",
   },
   {
     name: "Spinach Artichoke Dip",
@@ -1146,7 +1146,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,spinachartichokedip?lock=85945",
+      "/images/library/spinach-artichoke-dip.jpg",
   },
   {
     name: "Fried Pickles",
@@ -1157,7 +1157,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,friedpickles?lock=92534",
+      "/images/library/fried-pickles.jpg",
   },
   {
     name: "Onion Rings",
@@ -1168,7 +1168,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,onionrings?lock=3908",
+      "/images/library/onion-rings.jpg",
   },
   {
     name: "Clam Chowder",
@@ -1178,7 +1178,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Rich, creamy New England soup packed with tender clams, potatoes, and bacon.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,clamchowder?lock=79900",
+      "/images/library/clam-chowder.jpg",
   },
   {
     name: "Jalapeño Poppers",
@@ -1190,7 +1190,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,jalape%C3%B1opoppers?lock=72957",
+      "/images/library/jalape-o-poppers.jpg",
   },
   {
     name: "Mini Sliders",
@@ -1200,7 +1200,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Three bite-sized beef burgers topped with American cheese, pickles, and ketchup.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,minisliders?lock=77954",
+      "/images/library/mini-sliders.jpg",
   },
   {
     name: "Deviled Eggs",
@@ -1212,7 +1212,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,deviledeggs?lock=77973",
+      "/images/library/deviled-eggs.jpg",
   },
   {
     name: "Classic Cheeseburger",
@@ -1222,7 +1222,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A juicy beef patty topped with melted American cheese, lettuce, tomato, onion, and signature sauce on a toasted bun.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,classiccheeseburger?lock=2671",
+      "/images/library/classic-cheeseburger.jpg",
   },
   {
     name: "BBQ Pork Ribs",
@@ -1233,7 +1233,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 180,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bbqporkribs?lock=72134",
+      "/images/library/bbq-pork-ribs.jpg",
   },
   {
     name: "Fried Chicken",
@@ -1243,7 +1243,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy, buttermilk-marinated fried chicken served with a side of creamy coleslaw and a biscuit.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,friedchicken?lock=94108",
+      "/images/library/fried-chicken.jpg",
   },
   {
     name: "Philly Cheesesteak",
@@ -1253,7 +1253,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thinly sliced ribeye steak grilled with onions and topped with melted provolone on a hoagie roll.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,phillycheesesteak?lock=86880",
+      "/images/library/philly-cheesesteak.jpg",
   },
   {
     name: "Macaroni and Cheese",
@@ -1264,7 +1264,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,macaroniandcheese?lock=12358",
+      "/images/library/macaroni-and-cheese.jpg",
   },
   {
     name: "Meatloaf",
@@ -1274,7 +1274,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Homestyle baked beef meatloaf topped with a sweet tomato glaze, served alongside mashed potatoes.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,meatloaf?lock=39987",
+      "/images/library/meatloaf.jpg",
   },
   {
     name: "Chicken Fried Steak",
@@ -1284,7 +1284,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tenderized beef steak, breaded and fried like chicken, smothered in rich country pepper gravy.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chickenfriedsteak?lock=40277",
+      "/images/library/chicken-fried-steak.jpg",
   },
   {
     name: "Pulled Pork Sandwich",
@@ -1294,7 +1294,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Slow-smoked pork shoulder piled high on a brioche bun, topped with tangy slaw and BBQ sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pulledporksandwich?lock=53268",
+      "/images/library/pulled-pork-sandwich.jpg",
   },
   {
     name: "Grilled Cheese & Tomato Soup",
@@ -1305,7 +1305,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,grilledcheese%26tomatosoup?lock=33201",
+      "/images/library/grilled-cheese-tomato-soup.jpg",
   },
   {
     name: "BLT Sandwich",
@@ -1315,7 +1315,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Crispy thick-cut bacon, fresh iceberg lettuce, and ripe tomatoes with mayo on toasted sourdough.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bltsandwich?lock=565",
+      "/images/library/blt-sandwich.jpg",
   },
   {
     name: "New York Strip Steak",
@@ -1326,7 +1326,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,newyorkstripsteak?lock=43185",
+      "/images/library/new-york-strip-steak.jpg",
   },
   {
     name: "Cobb Salad",
@@ -1337,7 +1337,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cobbsalad?lock=74245",
+      "/images/library/cobb-salad.jpg",
   },
   {
     name: "Hot Dog with Chili",
@@ -1347,7 +1347,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "An all-beef frankfurter topped with hearty beef chili, diced onions, and yellow mustard.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,hotdogwithchili?lock=61178",
+      "/images/library/hot-dog-with-chili.jpg",
   },
   {
     name: "Jambalaya",
@@ -1359,7 +1359,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,jambalaya?lock=3831",
+      "/images/library/jambalaya.jpg",
   },
   {
     name: "Shrimp and Grits",
@@ -1369,7 +1369,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Plump sautéed shrimp served over creamy, cheesy stone-ground grits with bacon and scallions.",
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,shrimpandgrits?lock=97805",
+      "/images/library/shrimp-and-grits.jpg",
   },
   {
     name: "Club Sandwich",
@@ -1379,7 +1379,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A triple-decker sandwich stacked with roasted turkey, ham, bacon, lettuce, tomato, and mayo.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,clubsandwich?lock=30681",
+      "/images/library/club-sandwich.jpg",
   },
   {
     name: "Beef Brisket",
@@ -1390,7 +1390,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 720,
     imageUrl:
-      "https://loremflickr.com/800/600/food,beefbrisket?lock=18415",
+      "/images/library/beef-brisket.jpg",
   },
   {
     name: "Lobster Roll",

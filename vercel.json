@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/generate-ai-images",
+      "schedule": "* * * * *"
+    }
+  ]
+}

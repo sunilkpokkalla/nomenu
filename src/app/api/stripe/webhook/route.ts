@@ -69,6 +69,22 @@ export async function POST(req: Request) {
           console.log(`Order ${orderId} marked as pending (paid).`);
         }
       }
+      
+      const type = session.metadata?.type;
+      const jobId = session.metadata?.job_id;
+      if (type === "ai_image_generation" && jobId) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { error: updateError } = await (supabase as any)
+          .from("ai_image_jobs")
+          .update({ status: "paid" })
+          .eq("id", jobId);
+          
+        if (updateError) {
+          console.error("Failed to mark ai image job as paid:", updateError);
+        } else {
+          console.log(`AI Image Job ${jobId} marked as paid.`);
+        }
+      }
     }
   } else if (event.type === "customer.subscription.deleted" || event.type === "customer.subscription.updated") {
     const subscription = event.data.object as Stripe.Subscription;

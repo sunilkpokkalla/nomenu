@@ -364,6 +364,54 @@ export default function LandingPage() {
               </div>
             </div>
 
+            {/* Bento Card 5 (Col span 2): AI Menu Builder */}
+            <div className="md:col-span-2 group rounded-[2rem] border border-slate-800 bg-slate-950 p-2 transition-all duration-300 hover:border-violet-900/50 hover:bg-violet-950/10">
+              <div className="bg-slate-900/50 rounded-[calc(2rem-0.5rem)] p-6 lg:p-10 flex flex-col justify-between h-full min-h-[320px]">
+                <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                  <div className="space-y-3 max-w-md">
+                    <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20">
+                      <Sparkles className="h-5 w-5" strokeWidth={1.5} />
+                    </div>
+                    <h4 className="font-extrabold text-xl text-white">AI Magic Auto-Builder</h4>
+                    <p className="text-sm text-slate-400 leading-relaxed font-medium">
+                      Paste a PDF or text list of your dishes, and our AI will automatically build your entire menu. It instantly generates hyper-appetizing descriptions and stunning studio-quality AI food photos for every item.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-2 bg-slate-950 border border-slate-800 rounded-xl p-3 shrink-0 self-start text-xs font-semibold text-violet-300">
+                     <span className="flex items-center gap-2"><Sparkles className="h-3 w-3" /> Magic Import</span>
+                     <span className="flex items-center gap-2"><Sparkles className="h-3 w-3" /> AI Writer</span>
+                     <span className="flex items-center gap-2"><Sparkles className="h-3 w-3" /> AI Image Gen</span>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex gap-6 text-xs font-semibold text-slate-400">
+                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-violet-400" /> 500+ Chef Library Items</div>
+                  <div className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-violet-400" /> Hyper-realistic Photos</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bento Card 6 (Col span 1): POS Sync */}
+            <div className="group rounded-[2rem] border border-slate-800 bg-slate-950 p-2 transition-all duration-300 hover:border-blue-900/50 hover:bg-blue-950/10">
+              <div className="bg-slate-900/50 rounded-[calc(2rem-0.5rem)] p-6 lg:p-8 flex flex-col justify-between h-full min-h-[320px]">
+                <div className="space-y-4">
+                  <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                    <Wifi className="h-5 w-5" strokeWidth={1.5} />
+                  </div>
+                  <h4 className="font-extrabold text-xl text-white">Square POS Sync</h4>
+                  <p className="text-sm text-slate-400 leading-relaxed font-medium">
+                    Automatically sync your Nomenu items, prices, and stock status directly with your Square POS. Never update two systems again.
+                  </p>
+                </div>
+
+                <div className="pt-6 border-t border-slate-800 mt-6">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-500 block">Integration</span>
+                  <span className="text-xs font-bold text-white mt-1 block">Live 2-Way Sync</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -666,19 +714,19 @@ export default function LandingPage() {
                   
                   <ul className="space-y-3 text-xs text-slate-350 font-medium">
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Digital Menus
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menus & Items
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menu Items
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI Magic Menu Import & AI Writer
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited QR Codes
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited AI Dish Images ($0.03/image)
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Square POS Integration
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Private Customer Feedback System
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 3 Premium Design Themes
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Detailed Scan Analytics & Timezones

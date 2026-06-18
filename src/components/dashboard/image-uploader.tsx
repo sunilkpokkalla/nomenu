@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Upload, Link as LinkIcon, X, AlertCircle, Loader2 } from "lucide-react";
+import { Upload, Link as LinkIcon, X, AlertCircle, Loader2, Image as ImageIcon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
-
 
 import imageCompression from 'browser-image-compression';
 
@@ -17,14 +16,43 @@ interface ImageUploaderProps {
 }
 
 export function ImageUploader({ value: externalValue, onChange, folder = "item-list" }: ImageUploaderProps) {
-  const [mode, setMode] = useState<"file" | "url">("file");
+  const [mode, setMode] = useState<"file" | "url" | "stock">("file");
   const [internalValue, setInternalValue] = useState<string>("");
   const [preview, setPreview] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [stockImages, setStockImages] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const value = externalValue !== undefined ? externalValue : internalValue;
+
+  // Load initial library images when switching to stock mode
+  useEffect(() => {
+    async function loadInitial() {
+      if (mode === "stock" && stockImages.length === 0 && !searchQuery) {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from('global_chef_library')
+          .select('*')
+          .limit(12);
+          
+        if (data && !error) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setStockImages(data.map((m: any) => ({
+            id: m.id,
+            url: m.image_url,
+            thumb: m.image_url,
+            alt: m.name,
+            photographer: m.name
+          })));
+        }
+      }
+    }
+    loadInitial();
+  }, [mode, stockImages.length, searchQuery]);
 
   useEffect(() => {
     if (externalValue !== undefined) {
@@ -116,6 +144,36 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const handleStockSearch = async () => {
+    if (!searchQuery.trim()) return;
+    setIsSearching(true);
+    setError("");
+    
+    try {
+      const supabase = createClient();
+      const { data, error: searchError } = await supabase
+        .from('global_chef_library')
+        .select('*')
+        .ilike('name', `%${searchQuery}%`)
+        .limit(12);
+        
+      if (searchError) throw searchError;
+        
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setStockImages((data || []).map((m: any) => ({
+        id: m.id,
+        url: m.image_url,
+        thumb: m.image_url,
+        alt: m.name,
+        photographer: m.name
+      })));
+    } catch (err: unknown) {
+      setError((err as Error).message);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   return (
     <div className="space-y-3">
       {/* Hidden input to submit the base64 or URL value with the parent form */}
@@ -153,10 +211,25 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
           <LinkIcon className="h-3.5 w-3.5" />
           Image URL
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            setMode("stock");
+            handleRemove();
+          }}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${
+            mode === "stock"
+              ? "bg-white text-slate-900 shadow-sm"
+              : "text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <ImageIcon className="h-3.5 w-3.5" />
+          Dish Library
+        </button>
       </div>
 
       {/* Inputs */}
-      {mode === "file" ? (
+      {mode === "file" && (
         <div className="space-y-2">
           <div className="flex items-center justify-center w-full relative">
             {isUploading && (
@@ -184,7 +257,9 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
             </label>
           </div>
         </div>
-      ) : (
+      )}
+
+      {mode === "url" && (
         <div className="space-y-1.5">
           <Input
             type="url"
@@ -194,6 +269,46 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
             className="text-xs"
           />
           <p className="text-[10px] text-slate-400">Paste any public web image address.</p>
+        </div>
+      )}
+
+      {mode === "stock" && (
+        <div className="space-y-3">
+          <div className="flex gap-2">
+            <Input 
+              type="text" 
+              placeholder="Search dishes (e.g. Burger, Pasta)" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleStockSearch();
+                }
+              }}
+              className="text-xs"
+            />
+            <Button type="button" size="sm" onClick={handleStockSearch} disabled={isSearching} className="shrink-0 bg-slate-900 text-white hover:bg-slate-800">
+              {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Search className="w-4 h-4 mr-1.5" /> Search</>}
+            </Button>
+          </div>
+          {stockImages.length > 0 && (
+            <div className="grid grid-cols-3 gap-2 max-h-56 overflow-y-auto p-1.5 pr-2 rounded-xl bg-slate-50 border border-slate-100">
+              {stockImages.map((img) => (
+                <button
+                  key={img.id}
+                  type="button"
+                  onClick={() => updateValue(img.url)}
+                  className="relative aspect-video rounded-lg overflow-hidden border border-slate-200 hover:ring-2 hover:ring-indigo-500 hover:shadow-md transition-all group outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <img src={img.thumb} alt={img.alt || "Food"} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent pt-4 pb-1.5 px-2 text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity truncate font-medium">
+                    {img.photographer}
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

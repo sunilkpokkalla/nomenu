@@ -17,7 +17,7 @@ export function SquareConnectButton({ isConnected }: { isConnected: boolean }) {
     if (!confirm("Are you sure you want to disconnect Square? Your menus will stop syncing automatically.")) return;
     
     setIsLoading(true);
-    // TODO: Build disconnect route
+    // Hit the disconnect API route which will clear the token and redirect back
     window.location.href = "/api/integrations/square/disconnect";
   };
 

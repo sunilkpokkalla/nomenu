@@ -13,6 +13,7 @@ import { EditItemModal } from "@/components/dashboard/edit-item-modal";
 import { ImportItemsModal } from "@/components/dashboard/import-items-modal";
 import { ManageCategoriesModal } from "@/components/dashboard/manage-categories-modal";
 import { ImportTemplateModal } from "@/components/dashboard/import-template-modal";
+import { MagicImportModal } from "@/components/dashboard/magic-import-modal";
 import { SquareSyncButton } from "@/components/dashboard/square-sync-button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
@@ -180,78 +181,85 @@ export function MenuItemsClient({
       {/* MAIN CONTENT */}
       <div className="flex-1 min-w-0 w-full space-y-6">
         {/* Header Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <div className="min-w-[200px] flex-1">
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 break-words">
-              {selectedMenuId === "all" ? "All Items" : selectedCategoryId === "all" ? `${selectedMenuName}` : `${selectedCategoryName}`}
-            </h1>
-            <p className="text-sm text-slate-500 mt-1">
-              Showing {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-             {selectedMenuId !== "all" && (
-                <SquareSyncButton 
-                  targetMenuId={selectedMenuId} 
-                  isConnected={!!restaurant.square_merchant_id} 
-                />
-              )}
-             {selectedMenuId !== "all" && (
-                <ImportItemsModal 
-                  menus={menus} 
-                  categories={restaurantCategories} 
-                  items={items}
-                  targetMenuId={selectedMenuId} 
-                />
-              )}
-              {selectedMenuId !== "all" && (
-                <ImportTemplateModal 
-                  menuId={selectedMenuId} 
-                  restaurantId={restaurant.id} 
-                />
-              )}
+        <div className="flex flex-col gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="min-w-[200px] flex-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 break-words">
+                {selectedMenuId === "all" ? "All Items" : selectedCategoryId === "all" ? `${selectedMenuName}` : `${selectedCategoryName}`}
+              </h1>
+              <p className="text-sm text-slate-500 mt-1">
+                Showing {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap items-center justify-end gap-2">
               {selectedMenuId !== "all" && (
                 <ManageCategoriesModal
                   categories={restaurantCategories.filter((c) => c.menu_id === selectedMenuId)}
                   targetMenuId={selectedMenuId}
                 />
               )}
-            <Sheet open={isCreateSheetOpen} onOpenChange={setIsCreateSheetOpen}>
-              <SheetTrigger asChild>
-                <Button className="shadow-sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Item
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-md overflow-y-auto border-l-0 sm:border-l">
-                <SheetHeader>
-                  <SheetTitle>Create Menu Item</SheetTitle>
-                  <SheetDescription>
-                    Add a new dish or drink to your digital menu.
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="mt-6">
-                  {menus.length === 0 ? (
-                    <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-                      <ShieldAlert className="inline mr-2 h-4 w-4 text-amber-600" />
-                      Please create a menu first.
-                      <Button className="mt-4 w-full" variant="outline" asChild>
-                        <Link href="/dashboard/menus">Create Menu</Link>
-                      </Button>
-                    </div>
-                  ) : (
-                    <CreateItemForm
-                      cuisineType={restaurant.cuisine_type}
-                      menus={menus}
-                      categories={restaurantCategories}
-                      createAction={createMenuItem}
-                      onSuccess={() => setIsCreateSheetOpen(false)}
-                    />
-                  )}
-                </div>
-              </SheetContent>
-            </Sheet>
+              <Sheet open={isCreateSheetOpen} onOpenChange={setIsCreateSheetOpen}>
+                <SheetTrigger asChild>
+                  <Button className="shadow-sm bg-slate-900 text-white hover:bg-slate-800">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Item
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="w-full sm:max-w-md overflow-y-auto border-l-0 sm:border-l">
+                  <SheetHeader>
+                    <SheetTitle>Create Menu Item</SheetTitle>
+                    <SheetDescription>
+                      Add a new dish or drink to your digital menu.
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="mt-6">
+                    {menus.length === 0 ? (
+                      <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                        <ShieldAlert className="inline mr-2 h-4 w-4 text-amber-600" />
+                        Please create a menu first.
+                        <Button className="mt-4 w-full" variant="outline" asChild>
+                          <Link href="/dashboard/menus">Create Menu</Link>
+                        </Button>
+                      </div>
+                    ) : (
+                      <CreateItemForm
+                        cuisineType={restaurant.cuisine_type}
+                        menus={menus}
+                        categories={restaurantCategories}
+                        createAction={createMenuItem}
+                        onSuccess={() => setIsCreateSheetOpen(false)}
+                      />
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
+
+          {selectedMenuId !== "all" && (
+            <div className="flex items-center gap-2 pt-4 border-t border-slate-100 overflow-x-auto pb-1 hide-scrollbar">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1 shrink-0">Import Tools:</span>
+              <MagicImportModal 
+                menuId={selectedMenuId} 
+                restaurantId={restaurant.id} 
+              />
+              <ImportItemsModal 
+                menus={menus} 
+                categories={restaurantCategories} 
+                items={items}
+                targetMenuId={selectedMenuId} 
+              />
+              <ImportTemplateModal 
+                menuId={selectedMenuId} 
+                restaurantId={restaurant.id} 
+              />
+              <SquareSyncButton 
+                targetMenuId={selectedMenuId} 
+                isConnected={!!restaurant.square_merchant_id} 
+              />
+            </div>
+          )}
         </div>
 
         {/* ITEMS LIST */}

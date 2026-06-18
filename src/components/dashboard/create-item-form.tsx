@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +39,7 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
   // Form state
   const [name, setName] = useState(initialData?.name || "");
   const [description, setDescription] = useState(initialData?.description || "");
+  const [isGeneratingDesc, setIsGeneratingDesc] = useState(false);
   const [price, setPrice] = useState(initialData ? initialData.price.toString() : "");
   const [calories, setCalories] = useState(initialData?.calories?.toString() || "");
   const initialCategory = categories.find(c => c.id === initialData?.category_id);
@@ -80,6 +81,26 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
     } else {
       setCategoryId("");
       setNewCategoryName(dish.category);
+    }
+  };
+
+  const handleGenerateDescription = async () => {
+    if (!name) return;
+    setIsGeneratingDesc(true);
+    try {
+      const res = await fetch("/api/menu/generate-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name })
+      });
+      const data = await res.json();
+      if (data.description) {
+        setDescription(data.description);
+      }
+    } catch (error) {
+      console.error("Failed to generate description:", error);
+    } finally {
+      setIsGeneratingDesc(false);
     }
   };
 
@@ -204,10 +225,12 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
             <Label htmlFor="description">Description</Label>
             <button
               type="button"
-              onClick={() => setDescription("Served with seasonal roasted vegetables and fresh garlic herb butter.")}
-              className="text-[10px] text-primary hover:underline font-bold uppercase tracking-wider"
+              onClick={handleGenerateDescription}
+              disabled={!name || isGeneratingDesc}
+              className="text-[10px] text-purple-600 hover:text-purple-700 hover:underline font-bold uppercase tracking-wider flex items-center gap-1 disabled:opacity-50"
             >
-              Autofill Example
+              {isGeneratingDesc ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+              AI Writer
             </button>
           </div>
           <Textarea

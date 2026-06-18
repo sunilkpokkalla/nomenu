@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, UtensilsCrossed, MapPin, Receipt, Eye } from "lucide-react";
+import { Plus, UtensilsCrossed, MapPin, Receipt, Eye, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,6 +29,7 @@ interface CreateMenuSheetProps {
 
 export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMenuSheetProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -40,8 +41,14 @@ export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMen
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
         <form action={async (formData) => {
-          await createAction(formData);
-          setIsOpen(false);
+          if (isSubmitting) return;
+          setIsSubmitting(true);
+          try {
+            await createAction(formData);
+            setIsOpen(false);
+          } finally {
+            setIsSubmitting(false);
+          }
         }} className="flex flex-col h-full max-h-screen">
           <div className="flex-1 overflow-y-auto p-6 space-y-8">
             <SheetHeader className="mb-2">
@@ -189,9 +196,9 @@ export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMen
 
           </div>
           <div className="p-4 border-t border-slate-100 bg-white mt-auto shrink-0 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
-            <Button type="submit" className="w-full h-11 text-sm font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm">
-              <Plus className="mr-2 h-4 w-4" />
-              Create Menu
+            <Button disabled={isSubmitting} type="submit" className="w-full h-11 text-sm font-semibold rounded-xl bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-sm">
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
+              {isSubmitting ? "Creating Menu..." : "Create Menu"}
             </Button>
           </div>
         </form>
