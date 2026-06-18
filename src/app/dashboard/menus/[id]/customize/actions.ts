@@ -98,8 +98,8 @@ export async function createPremiumMagicImportJob(
     if (cat.items) totalItems += cat.items.length;
   }
 
-  // Calculate amount ($0.30 per item)
-  const amountCents = totalItems * 30;
+  // Calculate amount ($0.25 per item)
+  const amountCents = totalItems * 25;
 
   const adminSupabase = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
