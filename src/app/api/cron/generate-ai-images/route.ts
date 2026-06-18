@@ -147,9 +147,18 @@ export async function GET(req: Request) {
             
           processedCount++;
         }
-      } catch (genError) {
-        console.error(`Failed to generate image for ${item.name}:`, genError);
-        // Continue to the next item so one failure doesn't block the rest
+      } catch (genError: any) {
+        const errMsg = genError?.message || String(genError);
+        console.error(`Failed to generate image for ${item.name}:`, errMsg);
+        
+        // If we hit the Google API rate limit (10 RPM), stop this cron job batch immediately.
+        // The remaining pending items will simply be processed in the next cron minute.
+        if (genError?.status === 429 || genError?.status === "RESOURCE_EXHAUSTED" || errMsg.includes('Quota') || errMsg.includes('RESOURCE_EXHAUSTED')) {
+          console.log("Rate limit hit, pausing cron batch until next run.");
+          break;
+        }
+        
+        // Otherwise continue to the next item so one random failure doesn't block the rest
       }
     }
 

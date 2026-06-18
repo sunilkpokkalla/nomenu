@@ -1400,7 +1400,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Chilled, sweet Maine lobster meat lightly dressed with mayo, served in a butter-toasted split-top bun.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,lobsterroll?lock=4879",
+      "/images/library/lobster-roll.jpg",
   },
   {
     name: "Chicken Pot Pie",
@@ -1410,7 +1410,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A comforting, creamy stew of chicken and vegetables baked under a flaky, golden pastry crust.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chickenpotpie?lock=67759",
+      "/images/library/chicken-pot-pie.jpg",
   },
   {
     name: "Bacon Cheeseburger",
@@ -1420,7 +1420,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Our classic cheeseburger elevated with two slices of thick-cut, crispy smoked bacon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,baconcheeseburger?lock=72496",
+      "/images/library/bacon-cheeseburger.jpg",
   },
   {
     name: "French Fries",
@@ -1432,7 +1432,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,frenchfries?lock=42641",
+      "/images/library/french-fries.jpg",
   },
   {
     name: "Coleslaw",
@@ -1444,7 +1444,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,coleslaw?lock=89628",
+      "/images/library/coleslaw.jpg",
   },
   {
     name: "Baked Potato",
@@ -1456,7 +1456,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bakedpotato?lock=32429",
+      "/images/library/baked-potato.jpg",
   },
   {
     name: "Corn on the Cob",
@@ -1467,7 +1467,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cornonthecob?lock=12885",
+      "/images/library/corn-on-the-cob.jpg",
   },
   {
     name: "Hush Puppies",
@@ -1477,7 +1477,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,hushpuppies?lock=62885",
+      "/images/library/hush-puppies.jpg",
   },
   {
     name: "Tater Tots",
@@ -1489,7 +1489,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tatertots?lock=25366",
+      "/images/library/tater-tots.jpg",
   },
   {
     name: "Mashed Potatoes & Gravy",
@@ -1498,7 +1498,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     description: "Creamy mashed potatoes topped with rich brown beef gravy. Authentic and freshly prepared by our expert chefs.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,mashedpotatoes%26gravy?lock=70849",
+      "/images/library/mashed-potatoes-gravy.jpg",
   },
   {
     name: "Baked Beans",

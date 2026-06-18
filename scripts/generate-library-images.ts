@@ -24,6 +24,8 @@ function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 }
 
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
 async function run() {
   console.log(`\n👨‍🍳 Starting AI Image Generation for ${GLOBAL_DISH_LIBRARY.length} items...`);
   console.log(`Estimated cost: ~${((GLOBAL_DISH_LIBRARY.length * 0.03)).toFixed(2)} USD`);
@@ -47,44 +49,61 @@ async function run() {
 
     console.log(`[${processed + skipped + 1}/${GLOBAL_DISH_LIBRARY.length}] Generating: ${dish.name}`);
 
-    try {
-      // 1. Ask Google Imagen 4 to generate the image
-      const prompt = `A highly professional, hyper-realistic food photography studio shot of a delicious single serving of "${dish.name}". ${dish.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
-      
-      const response = await ai.models.generateImages({
-        model: 'imagen-4.0-fast-generate-001',
-        prompt: prompt,
-        config: {
-          numberOfImages: 1,
-          outputMimeType: 'image/jpeg',
-          aspectRatio: '1:1'
+    let success = false;
+    let retries = 0;
+
+    while (!success && retries < 3) {
+      try {
+        // 1. Ask Google Imagen 4 to generate the image
+        const prompt = `A highly professional, hyper-realistic food photography studio shot of a delicious single serving of "${dish.name}". ${dish.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
+        
+        const response = await ai.models.generateImages({
+          model: 'imagen-4.0-fast-generate-001',
+          prompt: prompt,
+          config: {
+            numberOfImages: 1,
+            outputMimeType: 'image/jpeg',
+            aspectRatio: '1:1'
+          }
+        });
+
+        const base64Image = response.generatedImages?.[0]?.image?.imageBytes;
+
+        if (!base64Image) {
+          throw new Error("No image data returned from API.");
         }
-      });
 
-      const base64Image = response.generatedImages?.[0]?.image?.imageBytes;
+        // 2. Save the image to the public folder
+        const buffer = Buffer.from(base64Image, 'base64');
+        fs.writeFileSync(localFilePath, buffer);
+        console.log(`  ✓ Saved image: ${publicUrl}`);
 
-      if (!base64Image) {
-        throw new Error("No image data returned from API.");
+        // 3. Update the global-dish-library.ts file
+        libraryContent = libraryContent.replace(dish.imageUrl, publicUrl);
+        fs.writeFileSync(libraryFilePath, libraryContent);
+
+        processed++;
+        success = true;
+
+        // Wait 6.5 seconds to safely stay under the 10 requests per minute quota
+        await delay(6500);
+
+      } catch (error: any) {
+        const errMsg = error.message || String(error);
+        if (error?.status === 429 || error?.status === "RESOURCE_EXHAUSTED" || errMsg.includes('Quota') || errMsg.includes('RESOURCE_EXHAUSTED')) {
+          console.log(`  ⏳ Rate limit hit. Waiting 30 seconds before retrying...`);
+          await delay(30000);
+          retries++;
+        } else {
+          console.error(`  ❌ Failed:`, errMsg);
+          console.log(`\n⚠️ Stopping script due to unrecoverable API error.`);
+          process.exit(1);
+        }
       }
+    }
 
-      // 2. Save the image to the public folder
-      const buffer = Buffer.from(base64Image, 'base64');
-      fs.writeFileSync(localFilePath, buffer);
-      console.log(`  ✓ Saved image: ${publicUrl}`);
-
-      // 3. Update the global-dish-library.ts file
-      // We replace the exact loremflickr URL with the new local URL
-      libraryContent = libraryContent.replace(dish.imageUrl, publicUrl);
-      fs.writeFileSync(libraryFilePath, libraryContent);
-
-      processed++;
-
-      // Wait 3 seconds between requests to avoid API rate limits
-      await new Promise(resolve => setTimeout(resolve, 3000));
-
-    } catch (error: any) {
-      console.error(`  ❌ Failed:`, error.message || error);
-      console.log(`\n⚠️ Stopping script due to API error. \nDon't worry, progress is saved! You can run this script again later and it will resume exactly where it left off.`);
+    if (!success) {
+      console.log(`\n⚠️ Stopping script after maximum rate limit retries.`);
       process.exit(1);
     }
   }
