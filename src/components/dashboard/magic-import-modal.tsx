@@ -246,9 +246,9 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
                   >
                     <div className="flex justify-between items-center mb-1">
                       <p className="font-bold text-slate-900 flex items-center gap-1">👑 Premium AI Photos</p>
-                      <p className="font-bold text-purple-700">${((getTotalItems() * 25) / 100).toFixed(2)}</p>
+                      <p className="font-bold text-purple-700">${Math.max(0.50, (getTotalItems() * 25) / 100).toFixed(2)}</p>
                     </div>
-                    <p className="text-xs text-slate-500">Generate a unique, hyper-realistic HD photo for every single item using Google Imagen AI ($0.25 per item).</p>
+                    <p className="text-xs text-slate-500">Generate a unique, hyper-realistic HD photo for every single item using Google Imagen AI ($0.25 per item, $0.50 minimum).</p>
                   </div>
                 </div>
               </div>
@@ -259,7 +259,7 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
                 </Button>
                 <Button onClick={handleConfirmAndSave} disabled={isSaving} className={`flex-1 h-11 text-white rounded-xl ${imageOption === 'premium' ? 'bg-purple-600 hover:bg-purple-500' : 'bg-indigo-600 hover:bg-indigo-500'}`}>
                   {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                  {isSaving ? "Processing..." : imageOption === "premium" ? `Pay $${((getTotalItems() * 25) / 100).toFixed(2)} & Import` : "Confirm & Import All"}
+                  {isSaving ? "Processing..." : imageOption === "premium" ? `Pay $${Math.max(0.50, (getTotalItems() * 25) / 100).toFixed(2)} & Import` : "Confirm & Import All"}
                 </Button>
               </div>
             </div>

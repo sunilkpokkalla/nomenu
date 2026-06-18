@@ -99,7 +99,12 @@ export async function createPremiumMagicImportJob(
   }
 
   // Calculate amount ($0.25 per item)
-  const amountCents = totalItems * 25;
+  let amountCents = totalItems * 25;
+  
+  // Stripe enforces a strict minimum charge of $0.50 USD
+  if (amountCents > 0 && amountCents < 50) {
+    amountCents = 50;
+  }
 
   const adminSupabase = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
