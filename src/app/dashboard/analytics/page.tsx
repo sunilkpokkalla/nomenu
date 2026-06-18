@@ -102,7 +102,8 @@ export default async function AnalyticsPage(props: PageProps) {
   }
   const { data: orders } = await ordersQuery;
   
-  const ordersList = orders || [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ordersList = (orders || []) as any[];
   const totalOrders = ordersList.length;
   const totalRevenue = ordersList.reduce((acc, order) => acc + Number(order.total_amount), 0);
   const totalTips = ordersList.reduce((acc, order) => acc + Number(order.tip_amount || 0), 0);
