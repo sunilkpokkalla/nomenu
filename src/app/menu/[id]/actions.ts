@@ -86,6 +86,7 @@ export async function submitOrder(data: {
   reservationTime?: string | null;
   partySize?: number | null;
   totalAmount: number; // We'll recalculate this, but keep the signature for backwards compatibility
+  tipAmount?: number; // Optional tip
   items: {
     menu_item_id: string;
     quantity: number;
@@ -178,7 +179,8 @@ export async function submitOrder(data: {
   // Calculate final amount with taxes and fees
   const taxAmount = secureSubtotal * (taxRate / 100);
   const serviceFeeAmount = serviceChargeType === "flat" ? Number(serviceCharge) : secureSubtotal * (Number(serviceCharge) / 100);
-  const secureTotalAmount = secureSubtotal + taxAmount + serviceFeeAmount;
+  const safeTipAmount = data.tipAmount ? Math.max(0, data.tipAmount) : 0;
+  const secureTotalAmount = secureSubtotal + taxAmount + serviceFeeAmount + safeTipAmount;
 
   // 4. Insert Order Securely
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -191,6 +193,7 @@ export async function submitOrder(data: {
       reservation_time: safeReservationTime,
       party_size: safePartySize,
       total_amount: secureTotalAmount,
+      tip_amount: safeTipAmount,
       status: "pending"
     })
     .select("id, daily_order_number")

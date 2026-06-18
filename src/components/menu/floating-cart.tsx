@@ -39,6 +39,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [pickupTime, setPickupTime] = useState("ASAP");
+  const [tipAmount, setTipAmount] = useState<number | null>(null);
 
   const [partySize, setPartySize] = useState("");
   const [table, setTable] = useState(tableNumber || "");
@@ -166,7 +167,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
     const subtotal = totalPrice;
     const taxAmount = subtotal * (taxRate / 100);
     const serviceFeeAmount = serviceChargeType === "flat" ? serviceCharge : subtotal * (serviceCharge / 100);
-    const finalTotal = subtotal + taxAmount + serviceFeeAmount;
+    const finalTotal = subtotal + taxAmount + serviceFeeAmount + (tipAmount || 0);
 
     try {
       // If Stripe is connected, route to Stripe Checkout
@@ -202,6 +203,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
             customerPhone: customerPhone || null,
             reservationTime: pickupTime || null,
             partySize: partySize ? parseInt(partySize, 10) : null,
+            tipAmount: tipAmount || 0,
           })
         });
 
@@ -224,7 +226,8 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
         reservationTime: pickupTime || null,
         partySize: partySize ? parseInt(partySize, 10) : null,
         items: orderItems,
-        totalAmount: finalTotal
+        totalAmount: finalTotal,
+        tipAmount: tipAmount || 0
       });
 
       if (res.success && res.orderId) {
@@ -264,7 +267,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   const subtotal = totalPrice;
   const taxAmount = subtotal * (taxRate / 100);
   const serviceFeeAmount = serviceChargeType === "flat" ? serviceCharge : subtotal * (serviceCharge / 100);
-  const finalTotal = subtotal + taxAmount + serviceFeeAmount;
+  const finalTotal = subtotal + taxAmount + serviceFeeAmount + (tipAmount || 0);
 
   // Success Screen
   if (successOrder) {
@@ -455,6 +458,12 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                     <span>{formatPrice(serviceFeeAmount)}</span>
                   </div>
                 )}
+                {tipAmount ? (
+                  <div className="flex justify-between text-sm font-semibold opacity-70">
+                    <span>Tip</span>
+                    <span>{formatPrice(tipAmount)}</span>
+                  </div>
+                ) : null}
               </div>
               <div className="flex justify-between font-bold text-xl pt-1">
                 <span>Total</span>
@@ -552,6 +561,47 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                       </div>
                     </>
                   )}
+                  
+                  {plan === 'enterprise' && (
+                    <div className="space-y-2 col-span-2 mt-2">
+                      <label className="text-xs font-bold uppercase opacity-60 tracking-wider flex justify-between">
+                        <span>Add a Tip (Optional)</span>
+                        <span className="opacity-50 font-medium normal-case">100% goes to staff</span>
+                      </label>
+                      <div className="grid grid-cols-4 gap-2">
+                        {[15, 18, 20].map((pct) => {
+                          const amt = subtotal * (pct / 100);
+                          return (
+                            <button
+                              key={pct}
+                              type="button"
+                              onClick={() => setTipAmount(amt)}
+                              className={`py-2 rounded-xl text-sm font-bold border transition-all ${
+                                tipAmount === amt 
+                                  ? 'bg-slate-900 text-white border-slate-900 shadow-md scale-[1.02]' 
+                                  : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+                              }`}
+                            >
+                              {pct}%
+                            </button>
+                          );
+                        })}
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                          <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="Other"
+                            className="w-full bg-white border border-slate-200 rounded-xl pl-6 pr-2 py-2 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-black/20 h-full"
+                            onChange={(e) => setTipAmount(e.target.value ? parseFloat(e.target.value) : 0)}
+                            onFocus={() => setTipAmount(0)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                 </div>
 
                 <button

@@ -27,6 +27,7 @@ export async function GET(req: Request) {
     }
     
     return NextResponse.json(data || []);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error("Library API error:", err);
     return NextResponse.json({ error: err.message || "Internal server error" }, { status: 500 });

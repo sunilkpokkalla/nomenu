@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       apiVersion: "2026-05-27.dahlia",
       httpClient: Stripe.createFetchHttpClient(),
     });
-    const { restaurantId, items, returnUrl, orderId, tableNumber, customerName, customerPhone, reservationTime, partySize } = await req.json();
+    const { restaurantId, items, returnUrl, orderId, tableNumber, customerName, customerPhone, reservationTime, partySize, tipAmount } = await req.json();
 
     if (!restaurantId || !items || !items.length || !orderId) {
       return NextResponse.json({ error: "Invalid request payload" }, { status: 400 });
@@ -57,6 +57,23 @@ export async function POST(req: Request) {
       };
     });
 
+    const safeTipAmount = tipAmount ? Math.max(0, Number(tipAmount)) : 0;
+    if (safeTipAmount > 0) {
+      const tipAmountCents = Math.round(safeTipAmount * 100);
+      totalAmountCents += tipAmountCents;
+      lineItems.push({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "Tip",
+            description: "Thank you for your support!",
+          },
+          unit_amount: tipAmountCents,
+        },
+        quantity: 1,
+      });
+    }
+
     // 2.5% Platform Fee
     const applicationFeeAmountCents = Math.round(totalAmountCents * 0.025);
 
@@ -89,6 +106,7 @@ export async function POST(req: Request) {
       party_size: partySize ? Math.max(1, Math.floor(partySize)) : null,
       status: "awaiting_payment", // Will be flipped to 'pending' by the webhook
       total_amount: totalAmount,
+      tip_amount: safeTipAmount,
       payment_intent_id: null,
     });
 

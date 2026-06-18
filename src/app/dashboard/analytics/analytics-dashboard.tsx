@@ -22,7 +22,7 @@ interface AnalyticsDashboardProps {
   bottomItems: { id: string; name: string; image_url: string; quantity: number; revenue: number }[];
   topTables: { table_number: string; orders: number; revenue: number }[];
   categoryData: { name: string; value: number }[];
-  mockTips: number;
+  totalTips: number;
   planType?: string;
   totalFeedbacks?: number;
   averageRating?: number;
@@ -46,15 +46,16 @@ export function AnalyticsDashboard({
   bottomItems,
   topTables,
   categoryData,
-  mockTips,
+  totalTips,
   planType,
   totalFeedbacks,
   averageRating
 }: AnalyticsDashboardProps) {
   const router = useRouter();
 
-  // We don't need fake data anymore
+  // Prepare data for the small cards
   const displayRevenue = totalRevenue;
+  const displayTips = totalTips;
   const displayOrders = totalOrders;
   const displayScans = totalScans;
   const displayAov = aov;
@@ -65,7 +66,6 @@ export function AnalyticsDashboard({
   const displayTopItems = topItems;
   const displayBottomItems = bottomItems;
   const displayTopTables = topTables;
-  const displayTips = mockTips;
 
   const isLive = range === "today";
 
@@ -234,7 +234,7 @@ export function AnalyticsDashboard({
               <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
                 <div className="flex items-center gap-2 text-emerald-600 mb-1">
                   <DollarSign className="h-4 w-4" />
-                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Est. Tips</span>
+                  <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Collected Tips</span>
                 </div>
                 <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayTips)}</div>
               </div>

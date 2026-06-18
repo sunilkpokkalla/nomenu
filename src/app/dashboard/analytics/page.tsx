@@ -92,7 +92,7 @@ export default async function AnalyticsPage(props: PageProps) {
   // Fetch orders
   let ordersQuery = supabase
     .from("orders")
-    .select("id, total_amount, table_number, created_at")
+    .select("id, total_amount, tip_amount, table_number, created_at")
     .eq("restaurant_id", restaurant.id)
     .eq("status", "completed")
     .gte("created_at", startDate.toISOString());
@@ -105,6 +105,7 @@ export default async function AnalyticsPage(props: PageProps) {
   const ordersList = orders || [];
   const totalOrders = ordersList.length;
   const totalRevenue = ordersList.reduce((acc, order) => acc + Number(order.total_amount), 0);
+  const totalTips = ordersList.reduce((acc, order) => acc + Number(order.tip_amount || 0), 0);
   
   const aov = totalOrders > 0 ? totalRevenue / totalOrders : 0;
   const conversionRate = totalScans > 0 ? (totalOrders / totalScans) * 100 : 0;
@@ -360,7 +361,7 @@ export default async function AnalyticsPage(props: PageProps) {
         bottomItems={bottomItems}
         topTables={topTables}
         categoryData={categoryData}
-        mockTips={totalRevenue * 0.18} // Mocked until tip_amount is added to schema
+        totalTips={totalTips}
       />
     </div>
   );
