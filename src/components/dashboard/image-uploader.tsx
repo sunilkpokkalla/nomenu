@@ -13,9 +13,10 @@ interface ImageUploaderProps {
   value?: string;
   onChange?: (value: string) => void;
   folder?: "logo" | "item-list" | "general";
+  hideLibrary?: boolean;
 }
 
-export function ImageUploader({ value: externalValue, onChange, folder = "item-list" }: ImageUploaderProps) {
+export function ImageUploader({ value: externalValue, onChange, folder = "item-list", hideLibrary = false }: ImageUploaderProps) {
   const [mode, setMode] = useState<"file" | "url" | "stock">("file");
   const [internalValue, setInternalValue] = useState<string>("");
   const [preview, setPreview] = useState<string>("");
@@ -207,21 +208,23 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
           <LinkIcon className="h-3.5 w-3.5" />
           Image URL
         </button>
-        <button
-          type="button"
-          onClick={() => {
-            setMode("stock");
-            handleRemove();
-          }}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${
-            mode === "stock"
-              ? "bg-white text-slate-900 shadow-sm"
-              : "text-slate-500 hover:text-slate-800"
-          }`}
-        >
-          <ImageIcon className="h-3.5 w-3.5" />
-          Dish Library
-        </button>
+        {!hideLibrary && (
+          <button
+            type="button"
+            onClick={() => {
+              setMode("stock");
+              handleRemove();
+            }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${
+              mode === "stock"
+                ? "bg-white text-slate-900 shadow-sm"
+                : "text-slate-500 hover:text-slate-800"
+            }`}
+          >
+            <ImageIcon className="h-3.5 w-3.5" />
+            Dish Library
+          </button>
+        )}
       </div>
 
       {/* Inputs */}

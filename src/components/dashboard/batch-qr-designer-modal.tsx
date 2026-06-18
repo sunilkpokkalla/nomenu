@@ -252,7 +252,7 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
 
                     <div className="space-y-2">
                       <Label className="text-xs font-semibold text-slate-700">Custom Logo (Optional)</Label>
-                      <ImageUploader folder="logo"
+                      <ImageUploader folder="logo" hideLibrary={true}
                         value={customLogoUrl}
                         onChange={setCustomLogoUrl}
                       />
