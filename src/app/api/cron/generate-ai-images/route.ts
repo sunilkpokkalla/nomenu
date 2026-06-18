@@ -147,6 +147,7 @@ export async function GET(req: Request) {
             
           processedCount++;
         }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (genError: any) {
         const errMsg = genError?.message || String(genError);
         console.error(`Failed to generate image for ${item.name}:`, errMsg);

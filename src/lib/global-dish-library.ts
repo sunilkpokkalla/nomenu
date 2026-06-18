@@ -1509,7 +1509,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bakedbeans?lock=9657",
+      "/images/library/baked-beans.jpg",
   },
   {
     name: "Sweet Potato Fries",
@@ -1521,7 +1521,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,sweetpotatofries?lock=15935",
+      "/images/library/sweet-potato-fries.jpg",
   },
   {
     name: "Buttermilk Biscuits",
@@ -1532,7 +1532,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,buttermilkbiscuits?lock=59159",
+      "/images/library/buttermilk-biscuits.jpg",
   },
   {
     name: "New York Cheesecake",
@@ -1543,7 +1543,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,newyorkcheesecake?lock=13338",
+      "/images/library/new-york-cheesecake.jpg",
   },
   {
     name: "Apple Pie",
@@ -1554,7 +1554,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,applepie?lock=75168",
+      "/images/library/apple-pie.jpg",
   },
   {
     name: "Chocolate Brownie Sundae",
@@ -1565,7 +1565,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chocolatebrowniesundae?lock=28357",
+      "/images/library/chocolate-brownie-sundae.jpg",
   },
   {
     name: "Pecan Pie",
@@ -1576,7 +1576,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pecanpie?lock=22866",
+      "/images/library/pecan-pie.jpg",
   },
   {
     name: "Key Lime Pie",
@@ -1587,7 +1587,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,keylimepie?lock=41047",
+      "/images/library/key-lime-pie.jpg",
   },
   {
     name: "Banana Split",
@@ -1599,7 +1599,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,bananasplit?lock=32397",
+      "/images/library/banana-split.jpg",
   },
   {
     name: "Milkshake",

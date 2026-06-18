@@ -91,7 +91,8 @@ async function run() {
       } catch (error: any) {
         const errMsg = error.message || String(error);
         if (error?.status === 429 || error?.status === "RESOURCE_EXHAUSTED" || errMsg.includes('Quota') || errMsg.includes('RESOURCE_EXHAUSTED')) {
-          console.log(`  ⏳ Rate limit hit. Waiting 30 seconds before retrying...`);
+          console.log(`  ⏳ Rate limit hit. Google API says: "${errMsg.split('\n')[0]}"`);
+          console.log(`  ⏳ Waiting 30 seconds before retrying...`);
           await delay(30000);
           retries++;
         } else {
