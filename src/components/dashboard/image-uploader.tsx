@@ -5,7 +5,7 @@ import { Upload, Link as LinkIcon, X, AlertCircle, Loader2, Image as ImageIcon, 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
+// import { createClient } from "@/lib/supabase/client";
 
 import imageCompression from 'browser-image-compression';
 
@@ -33,21 +33,21 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
   useEffect(() => {
     async function loadInitial() {
       if (mode === "stock" && stockImages.length === 0 && !searchQuery) {
-        const supabase = createClient();
-        const { data, error } = await supabase
-          .from('global_chef_library')
-          .select('*')
-          .limit(12);
-          
-        if (data && !error) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          setStockImages(data.map((m: any) => ({
-            id: m.id,
-            url: m.image_url,
-            thumb: m.image_url,
-            alt: m.name,
-            photographer: m.name
-          })));
+        try {
+          const res = await fetch('/api/library');
+          const data = await res.json();
+          if (res.ok && data) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            setStockImages(data.map((m: any) => ({
+              id: m.id,
+              url: m.image_url,
+              thumb: m.image_url,
+              alt: m.name,
+              photographer: m.name
+            })));
+          }
+        } catch (err) {
+          console.error("Failed to load initial library:", err);
         }
       }
     }
@@ -150,14 +150,10 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
     setError("");
     
     try {
-      const supabase = createClient();
-      const { data, error: searchError } = await supabase
-        .from('global_chef_library')
-        .select('*')
-        .ilike('name', `%${searchQuery}%`)
-        .limit(12);
-        
-      if (searchError) throw searchError;
+      const res = await fetch(`/api/library?q=${encodeURIComponent(searchQuery)}`);
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error || "Failed to search library");
         
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setStockImages((data || []).map((m: any) => ({
