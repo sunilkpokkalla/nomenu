@@ -858,11 +858,11 @@ export async function updateMenuBranding(menuId: string, formData: FormData) {
     .eq("id", menuId);
 
   if (error) {
-    redirect(`/dashboard/customize?message=${encodeURIComponent(error.message)}`);
+    redirect(`/dashboard/menus/${menuId}/customize?message=${encodeURIComponent(error.message)}`);
   }
 
-  revalidatePath("/dashboard/customize");
-  redirect(`/dashboard/customize?success=Menu design updated successfully`);
+  revalidatePath(`/dashboard/menus/${menuId}/customize`);
+  redirect(`/dashboard/menus/${menuId}/customize?success=Menu design updated successfully`);
 }
 
 export async function importCategoriesAndItems(

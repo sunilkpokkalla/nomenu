@@ -24,7 +24,7 @@ export default async function MenuCustomizePage(
   // Get restaurant to check plan
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id, plan")
+    .select("id, plan, primary_color, accent_color, theme_style, wifi_password, address, phone")
     .eq("owner_id", user.id)
     .order("created_at", { ascending: true })
     .limit(1)
@@ -47,6 +47,20 @@ export default async function MenuCustomizePage(
 
   // Create curried action
   const updateMenuBrandingAction = updateMenuBranding.bind(null, menu.id);
+
+  const designConfig = menu.design_config as { primary_color?: string; accent_color?: string; theme_style?: string } | null;
+
+  const entityData = {
+    ...menu,
+    use_custom_design: designConfig !== null,
+    primary_color: designConfig?.primary_color || restaurant.primary_color,
+    accent_color: designConfig?.accent_color || restaurant.accent_color,
+    theme_style: designConfig?.theme_style || restaurant.theme_style,
+    wifi_password: restaurant.wifi_password,
+    address: restaurant.address,
+    phone: restaurant.phone,
+    plan: restaurant.plan,
+  };
 
   return (
     <div className="flex-1 space-y-6 p-8 pt-6">
@@ -77,7 +91,7 @@ export default async function MenuCustomizePage(
         </div>
       ) : (
         <BrandingForm 
-          entity={menu}
+          entity={entityData}
           type="menu"
           action={updateMenuBrandingAction} 
           successMessage={searchParams.success}
