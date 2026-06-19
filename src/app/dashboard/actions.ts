@@ -1152,6 +1152,21 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
     throw new Error("Unauthorized or restaurant not found");
   }
 
+  // 0. Fetch high-quality images from the global chef library
+  const allItemNames = template.categories.flatMap(c => c.items.map(i => i.name));
+  
+  const { data: globalMatches } = await supabase
+    .from('global_chef_library')
+    .select('name, image_url, description')
+    .in('name', allItemNames);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const matchMap = new Map<string, any>();
+  if (globalMatches) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalMatches as any[]).forEach((m: any) => matchMap.set(m.name.toLowerCase(), m));
+  }
+
   // 1. Create categories
   for (let i = 0; i < template.categories.length; i++) {
     const category = template.categories[i];
@@ -1174,16 +1189,19 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
     }
 
     // 2. Create items for this category
-    const itemsToInsert = category.items.map(item => ({
-      restaurant_id: restaurantId,
-      category_id: newCategory.id,
-      name: item.name,
-      description: item.description,
-      price: item.price,
-      is_available: true,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      image_url: (item as any).imageUrl || ""
-    }));
+    const itemsToInsert = category.items.map(item => {
+      const matchedItem = matchMap.get(item.name.toLowerCase());
+      return {
+        restaurant_id: restaurantId,
+        category_id: newCategory.id,
+        name: item.name,
+        description: matchedItem?.description || item.description,
+        price: item.price,
+        is_available: true,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        image_url: matchedItem?.image_url || (item as any).imageUrl || ""
+      };
+    });
 
     if (itemsToInsert.length > 0) {
       const { error: itemsError } = await supabase
