@@ -12,14 +12,14 @@ export async function GET(req: Request) {
     
     let dbQuery = supabase
       .from('global_chef_library')
-      .select('*')
-      .limit(12);
+      .select('*');
       
     if (query) {
       dbQuery = dbQuery.ilike('name', `%${query}%`);
     }
     
-    const { data, error } = await dbQuery;
+    // Apply limit AFTER the search query, otherwise it only searches the first 12 rows
+    const { data, error } = await dbQuery.limit(20);
     
     if (error) {
       console.error("Library search error:", error);
