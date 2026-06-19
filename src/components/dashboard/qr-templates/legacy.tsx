@@ -459,3 +459,119 @@ export function BistroGold({ brandName, headline, subtext, wifiPassword, logoUrl
     </div>
   );
 }
+
+// 12. Vintage Classic
+export function VintageClassic({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, id }: QrTemplateProps) {
+  return (
+    <div id={id} className="w-[450px] h-[675px] bg-[#f4ebd0] text-[#4a3b32] flex flex-col relative overflow-hidden p-10 box-border border-[12px] border-[#8b7355]/30" style={{ boxSizing: "border-box" }}>
+      {/* Import Google Fonts */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-lora { font-family: 'Lora', serif; }
+      `}} />
+
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] opacity-60 mix-blend-multiply pointer-events-none" />
+
+      <div className="flex-grow flex flex-col items-center justify-between z-10 border-[2px] border-[#8b7355]/40 p-6 relative">
+        
+        {/* Corner Ornaments */}
+        <div className="absolute top-2 left-2 w-4 h-4 border-t-[2px] border-l-[2px] border-[#8b7355]" />
+        <div className="absolute top-2 right-2 w-4 h-4 border-t-[2px] border-r-[2px] border-[#8b7355]" />
+        <div className="absolute bottom-2 left-2 w-4 h-4 border-b-[2px] border-l-[2px] border-[#8b7355]" />
+        <div className="absolute bottom-2 right-2 w-4 h-4 border-b-[2px] border-r-[2px] border-[#8b7355]" />
+
+        <div className="flex flex-col items-center text-center mt-4">
+          {logoUrl && (
+            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[60px] h-[60px] rounded-full object-cover border-[3px] border-[#8b7355] mb-4 filter sepia-[0.3]" />
+          )}
+          
+          <h1 className="font-playfair text-[42px] font-bold leading-none tracking-wide text-[#4a3b32] uppercase mb-2 text-center drop-shadow-[1px_1px_0_rgba(255,255,255,0.5)]">
+            {brandName}
+          </h1>
+          
+          <div className="flex items-center gap-2 mb-2 opacity-70">
+            <div className="w-10 h-[1px] bg-[#8b7355]" />
+            <div className="w-2 h-2 rotate-45 bg-[#8b7355]" />
+            <div className="w-10 h-[1px] bg-[#8b7355]" />
+          </div>
+
+          <h2 className="font-lora text-[14px] italic text-[#6b5847]">
+            {headline}
+          </h2>
+        </div>
+
+        <div className="relative p-2 my-6 bg-white border border-[#8b7355]/30 shadow-[0_4px_15px_rgba(139,115,85,0.2)] transform -rotate-1">
+          <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain filter sepia-[0.2] contrast-125 mix-blend-multiply" />
+        </div>
+
+        <div className="flex flex-col items-center text-center w-full mb-4">
+          <h3 className="font-playfair text-[20px] font-bold tracking-widest text-[#4a3b32] uppercase mb-4">
+            {subtext}
+          </h3>
+
+          {wifiPassword && (
+            <div className="font-lora text-[13px] border-t border-b border-[#8b7355]/30 py-2 px-8 flex flex-col items-center">
+              <span className="italic text-[#6b5847] mb-1">Guest Network</span>
+              <span className="font-bold tracking-widest text-[#4a3b32]">{wifiPassword}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// 13. Retro Vintage
+export function RetroVintage({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, id }: QrTemplateProps) {
+  return (
+    <div id={id} className="w-[450px] h-[675px] bg-[#d3e3d6] text-[#2c4c3b] flex flex-col relative overflow-hidden p-8 box-border" style={{ boxSizing: "border-box" }}>
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=DM+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+        .font-abril { font-family: 'Abril Fatface', serif; }
+        .font-dm { font-family: 'DM Sans', sans-serif; }
+      `}} />
+
+      <div className="absolute inset-0 border-[20px] border-[#2c4c3b] pointer-events-none" />
+      <div className="absolute inset-[24px] border-[2px] border-[#2c4c3b] pointer-events-none" />
+
+      <div className="flex-grow flex flex-col items-center justify-between z-10 pt-10 pb-6 px-6 bg-[url('https://www.transparenttextures.com/patterns/rice-paper-2.png')] mix-blend-multiply">
+        
+        <div className="flex flex-col items-center text-center">
+          <h2 className="font-dm text-[12px] font-bold tracking-[0.3em] uppercase text-[#2c4c3b] mb-4 border-b-2 border-[#2c4c3b] pb-1">
+            EST. 2024
+          </h2>
+          
+          <h1 className="font-abril text-[52px] leading-[0.9] text-[#2c4c3b] uppercase mb-4 text-center">
+            {brandName}
+          </h1>
+          
+          {logoUrl && (
+            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[45px] h-[45px] object-contain filter sepia hue-rotate-180 saturate-200 brightness-50" />
+          )}
+        </div>
+
+        <div className="relative p-3 my-4 bg-[#f9f9f9] border-[3px] border-[#2c4c3b] rounded-md shadow-[4px_4px_0px_#2c4c3b]">
+          <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[190px] h-[190px] object-contain mix-blend-multiply" />
+        </div>
+
+        <div className="flex flex-col items-center text-center w-full">
+          <div className="font-dm text-[16px] font-bold text-[#2c4c3b] uppercase bg-white border-2 border-[#2c4c3b] px-6 py-2 shadow-[2px_2px_0px_#2c4c3b] mb-4 rotate-2">
+            {headline}
+          </div>
+
+          <h3 className="font-dm text-[14px] font-bold tracking-widest text-[#2c4c3b] uppercase mb-4">
+            — {subtext} —
+          </h3>
+
+          {wifiPassword && (
+            <div className="font-dm text-[12px] font-bold flex gap-2 items-center bg-[#2c4c3b] text-white px-4 py-2 rounded-full">
+              <span className="uppercase tracking-widest opacity-80">WIFI:</span>
+              <span className="tracking-wider">{wifiPassword}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

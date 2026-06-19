@@ -11,6 +11,7 @@ import * as LegacyTemplates from './legacy';
 export type TemplateKey = 
   | 'neon-tube'  | 'dark-club'  | 'cyberpunk'  | 'liquid-night'  | 'speak-easy'
   | 'laser-grid'  | 'synthwave'  | 'v-i-p-lounge'  | 'industrial-techno'  | 'abstract-bass'
+  | 'confetti-party' | 'disco-fever'
   | 'swiss-grid'  | 'pure-whitespace'  | 'negative-space'  | 'bauhaus'  | 'the-exhibition'
   | 'typographic-hierarchy'  | 'outline-minimal'  | 'editorial'  | 'data-minimal'  | 'zen-center'
   | 'the-michelin'  | 'the-sommelier'  | 'omakase-minimal'  | 'the-chandelier'  | 'french-bistro'
@@ -21,7 +22,7 @@ export type TemplateKey =
   | 'local-pub'  | 'pizzeria'  | 'juice-bar'  | 'retro-diner'  | 'cozy-teahouse'
   | 'classic'  | 'instagram-square'  | 'minimalist'  | 'neon-cyber'  | 'luxury-gold'
   | 'brutalist'  | 'claymorphism'  | 'art-deco'  | 'modern-glass'  | 'polaroid-snapshot'
-  | 'bistro-gold' | 'lumina-bistro';
+  | 'bistro-gold' | 'lumina-bistro' | 'vintage-classic' | 'retro-vintage';
 
 export const templates: Record<TemplateKey, React.ComponentType<QrTemplateProps>> = {
   'neon-tube': NightlifeTemplates.NeonTube,
@@ -34,6 +35,8 @@ export const templates: Record<TemplateKey, React.ComponentType<QrTemplateProps>
   'v-i-p-lounge': NightlifeTemplates.VIPLounge,
   'industrial-techno': NightlifeTemplates.IndustrialTechno,
   'abstract-bass': NightlifeTemplates.AbstractBass,
+  'confetti-party': NightlifeTemplates.ConfettiParty,
+  'disco-fever': NightlifeTemplates.DiscoFever,
   'swiss-grid': MinimalistTemplates.SwissGrid,
   'pure-whitespace': MinimalistTemplates.PureWhitespace,
   'negative-space': MinimalistTemplates.NegativeSpace,
@@ -86,8 +89,9 @@ export const templates: Record<TemplateKey, React.ComponentType<QrTemplateProps>
   'polaroid-snapshot': LegacyTemplates.PolaroidSnapshot,
   'bistro-gold': LegacyTemplates.BistroGold,
   'lumina-bistro': LuminaTemplates.LuminaBistro,
+  'vintage-classic': LegacyTemplates.VintageClassic,
+  'retro-vintage': LegacyTemplates.RetroVintage,
 };
-
 export const templateCategories: QrTemplateCategory[] = [
   {
     id: 'nightlife',
@@ -103,6 +107,8 @@ export const templateCategories: QrTemplateCategory[] = [
       { id: 'v-i-p-lounge', name: 'V I P Lounge' },
       { id: 'industrial-techno', name: 'Industrial Techno' },
       { id: 'abstract-bass', name: 'Abstract Bass' },
+      { id: 'confetti-party', name: 'Confetti Party' },
+      { id: 'disco-fever', name: 'Disco Fever' },
     ]
   },
   {
@@ -185,6 +191,8 @@ export const templateCategories: QrTemplateCategory[] = [
       { id: 'modern-glass', name: 'Modern Glass' },
       { id: 'polaroid-snapshot', name: 'Polaroid Snapshot' },
       { id: 'bistro-gold', name: 'Bistro Gold' },
+      { id: 'vintage-classic', name: 'Vintage Classic' },
+      { id: 'retro-vintage', name: 'Retro Vintage' },
     ]
   },
 ];
