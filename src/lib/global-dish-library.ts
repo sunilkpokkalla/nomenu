@@ -1611,7 +1611,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,milkshake?lock=38756",
+      "/images/library/milkshake.jpg",
   },
   {
     name: "Chocolate Chip Cookies",
@@ -1622,7 +1622,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chocolatechipcookies?lock=52794",
+      "/images/library/chocolate-chip-cookies.jpg",
   },
   {
     name: "Red Velvet Cake",
@@ -1633,7 +1633,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,redvelvetcake?lock=39792",
+      "/images/library/red-velvet-cake.jpg",
   },
   {
     name: "S'mores",
@@ -1644,7 +1644,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,s%27mores?lock=56677",
+      "/images/library/s-mores.jpg",
   },
   {
     name: "Guacamole & Chips",
@@ -1656,7 +1656,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,guacamole%26chips?lock=51584",
+      "/images/library/guacamole-chips.jpg",
   },
   {
     name: "Queso Fundido",
@@ -1667,7 +1667,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,quesofundido?lock=87249",
+      "/images/library/queso-fundido.jpg",
   },
   {
     name: "Pico de Gallo",
@@ -1679,7 +1679,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,picodegallo?lock=33245",
+      "/images/library/pico-de-gallo.jpg",
   },
   {
     name: "Ceviche de Camarón",
@@ -1690,7 +1690,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cevichedecamar%C3%B3n?lock=10302",
+      "/images/library/ceviche-de-camar-n.jpg",
   },
   {
     name: "Nachos Supremos",
@@ -1702,7 +1702,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,nachossupremos?lock=49313",
+      "/images/library/nachos-supremos.jpg",
   },
   {
     name: "Elote",
@@ -1715,7 +1715,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,elote?lock=47358",
+      "/images/library/elote.jpg",
   },
   {
     name: "Taquitos Dorados",
@@ -1726,7 +1726,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,taquitosdorados?lock=96897",
+      "/images/library/taquitos-dorados.jpg",
   },
   {
     name: "Sopa de Tortilla",
@@ -1738,7 +1738,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,sopadetortilla?lock=98561",
+      "/images/library/sopa-de-tortilla.jpg",
   },
   {
     name: "Tostada de Tinga",
@@ -1750,7 +1750,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tostadadetinga?lock=25351",
+      "/images/library/tostada-de-tinga.jpg",
   },
   {
     name: "Chiles Toreados",
@@ -1763,7 +1763,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chilestoreados?lock=48065",
+      "/images/library/chiles-toreados.jpg",
   },
   {
     name: "Tacos al Pastor",
@@ -1774,7 +1774,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tacosalpastor?lock=54105",
+      "/images/library/tacos-al-pastor.jpg",
   },
   {
     name: "Enchiladas Verdes",
@@ -1785,7 +1785,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,enchiladasverdes?lock=88409",
+      "/images/library/enchiladas-verdes.jpg",
   },
   {
     name: "Fajitas de Pollo",
@@ -1795,7 +1795,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Sizzling strips of grilled chicken breast with bell peppers and onions, served with tortillas and guacamole.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,fajitasdepollo?lock=61926",
+      "/images/library/fajitas-de-pollo.jpg",
   },
   {
     name: "Carne Asada",
@@ -1806,7 +1806,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,carneasada?lock=95055",
+      "/images/library/carne-asada.jpg",
   },
   {
     name: "Mole Poblano",
@@ -1816,7 +1816,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A complex, rich, and dark sauce made of chilies and chocolate, poured over tender chicken pieces.",
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,molepoblano?lock=65723",
+      "/images/library/mole-poblano.jpg",
   },
   {
     name: "Burrito de Asada",
@@ -1826,7 +1826,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A massive flour tortilla stuffed with grilled steak, rice, beans, cheese, and pico de gallo.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,burritodeasada?lock=89975",
+      "/images/library/burrito-de-asada.jpg",
   },
   {
     name: "Quesadilla de Huitlacoche",
@@ -1838,7 +1838,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,quesadilladehuitlacoche?lock=96779",
+      "/images/library/quesadilla-de-huitlacoche.jpg",
   },
   {
     name: "Chiles Rellenos",
@@ -1849,7 +1849,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 35,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chilesrellenos?lock=53442",
+      "/images/library/chiles-rellenos.jpg",
   },
   {
     name: "Pozole Rojo",
@@ -1861,7 +1861,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pozolerojo?lock=40485",
+      "/images/library/pozole-rojo.jpg",
   },
   {
     name: "Tacos de Carnitas",
@@ -1872,7 +1872,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tacosdecarnitas?lock=17948",
+      "/images/library/tacos-de-carnitas.jpg",
   },
   {
     name: "Camarones al la Diabla",
@@ -1884,7 +1884,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,camaronesalladiabla?lock=25363",
+      "/images/library/camarones-al-la-diabla.jpg",
   },
   {
     name: "Chimichanga",
@@ -1894,7 +1894,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A large burrito filled with shredded beef and cheese, deep-fried until golden and crispy.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chimichanga?lock=11826",
+      "/images/library/chimichanga.jpg",
   },
   {
     name: "Tacos de Pescado",
@@ -1904,7 +1904,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Baja-style crispy battered fish served in tortillas with shredded cabbage and a creamy white sauce.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tacosdepescado?lock=72112",
+      "/images/library/tacos-de-pescado.jpg",
   },
   {
     name: "Tamales de Puerco",
@@ -1915,7 +1915,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tamalesdepuerco?lock=29455",
+      "/images/library/tamales-de-puerco.jpg",
   },
   {
     name: "Sopes con Chorizo",
@@ -1926,7 +1926,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,sopesconchorizo?lock=22509",
+      "/images/library/sopes-con-chorizo.jpg",
   },
   {
     name: "Barbacoa de Res",
@@ -1937,7 +1937,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://loremflickr.com/800/600/food,barbacoaderes?lock=32972",
+      "/images/library/barbacoa-de-res.jpg",
   },
   {
     name: "Tlayuda",
@@ -1948,7 +1948,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tlayuda?lock=3766",
+      "/images/library/tlayuda.jpg",
   },
   {
     name: "Enchiladas Suizas",
@@ -1959,7 +1959,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,enchiladassuizas?lock=6779",
+      "/images/library/enchiladas-suizas.jpg",
   },
   {
     name: "Cochinita Pibil",
@@ -1970,7 +1970,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 60,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cochinitapibil?lock=97688",
+      "/images/library/cochinita-pibil.jpg",
   },
   {
     name: "Fajitas Vegetarianas",
@@ -1982,7 +1982,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegan: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,fajitasvegetarianas?lock=90393",
+      "/images/library/fajitas-vegetarianas.jpg",
   },
   {
     name: "Arroz Mexicano",
@@ -1993,7 +1993,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 25,
     imageUrl:
-      "https://loremflickr.com/800/600/food,arrozmexicano?lock=31387",
+      "/images/library/arroz-mexicano.jpg",
   },
   {
     name: "Frijoles Refritos",
@@ -2005,7 +2005,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,frijolesrefritos?lock=8367",
+      "/images/library/frijoles-refritos.jpg",
   },
   {
     name: "Frijoles Charros",
@@ -2017,7 +2017,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 45,
     imageUrl:
-      "https://loremflickr.com/800/600/food,frijolescharros?lock=50920",
+      "/images/library/frijoles-charros.jpg",
   },
   {
     name: "Tortillas de Maíz Hechas a Mano",
@@ -2028,7 +2028,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tortillasdema%C3%ADzhechasamano?lock=95460",
+      "/images/library/tortillas-de-ma-z-hechas-a-mano.jpg",
   },
   {
     name: "Cebollitas Asadas",
@@ -2040,7 +2040,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,cebollitasasadas?lock=61536",
+      "/images/library/cebollitas-asadas.jpg",
   },
   {
     name: "Nopales en Ensalada",
@@ -2052,7 +2052,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,nopalesenensalada?lock=7119",
+      "/images/library/nopales-en-ensalada.jpg",
   },
   {
     name: "Plátanos Fritos",
@@ -2064,7 +2064,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,pl%C3%A1tanosfritos?lock=89176",
+      "/images/library/pl-tanos-fritos.jpg",
   },
   {
     name: "Salsa Roja y Verde",
@@ -2077,7 +2077,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isSpicy: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,salsarojayverde?lock=99103",
+      "/images/library/salsa-roja-y-verde.jpg",
   },
   {
     name: "Chicharrón",
@@ -2088,7 +2088,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chicharr%C3%B3n?lock=14",
+      "/images/library/chicharr-n.jpg",
   },
   {
     name: "Calabacitas con Elote",
@@ -2100,7 +2100,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,calabacitasconelote?lock=80895",
+      "/images/library/calabacitas-con-elote.jpg",
   },
   {
     name: "Churros con Chocolate",
@@ -2111,7 +2111,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,churrosconchocolate?lock=80849",
+      "/images/library/churros-con-chocolate.jpg",
   },
   {
     name: "Flan de Vainilla",
@@ -2123,7 +2123,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,flandevainilla?lock=97205",
+      "/images/library/flan-de-vainilla.jpg",
   },
   {
     name: "Tres Leches Cake",
@@ -2134,7 +2134,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,treslechescake?lock=96237",
+      "/images/library/tres-leches-cake.jpg",
   },
   {
     name: "Arroz con Leche",
@@ -2146,7 +2146,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,arrozconleche?lock=64234",
+      "/images/library/arroz-con-leche.jpg",
   },
   {
     name: "Sopapillas",
@@ -2157,7 +2157,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,sopapillas?lock=5677",
+      "/images/library/sopapillas.jpg",
   },
   {
     name: "Nieve de Garrafa",
@@ -2169,7 +2169,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,nievedegarrafa?lock=74558",
+      "/images/library/nieve-de-garrafa.jpg",
   },
   {
     name: "Carlota de Limón",
@@ -2180,7 +2180,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,carlotadelim%C3%B3n?lock=71388",
+      "/images/library/carlota-de-lim-n.jpg",
   },
   {
     name: "Paletas",
@@ -2192,7 +2192,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,paletas?lock=48014",
+      "/images/library/paletas.jpg",
   },
   {
     name: "Empanadas Dulces",
@@ -2203,7 +2203,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,empanadasdulces?lock=11670",
+      "/images/library/empanadas-dulces.jpg",
   },
   {
     name: "Capirotada",
@@ -2214,7 +2214,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 0,
     imageUrl:
-      "https://loremflickr.com/800/600/food,capirotada?lock=50679",
+      "/images/library/capirotada.jpg",
   },
   {
     name: "Edamame",
@@ -2226,7 +2226,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,edamame?lock=64679",
+      "/images/library/edamame.jpg",
   },
   {
     name: "Gyoza",
@@ -2236,7 +2236,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Six pan-fried dumplings filled with seasoned pork and cabbage, served with a soy-vinegar dip.",
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,gyoza?lock=41291",
+      "/images/library/gyoza.jpg",
   },
   {
     name: "Agedashi Tofu",
@@ -2247,7 +2247,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isVegetarian: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,agedashitofu?lock=33495",
+      "/images/library/agedashi-tofu.jpg",
   },
   {
     name: "Miso Soup",
@@ -2257,7 +2257,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Traditional soup made with fermented soybean paste, dashi, tofu cubes, and wakame seaweed.",
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,misosoup?lock=92141",
+      "/images/library/miso-soup.jpg",
   },
   {
     name: "Takoyaki",
@@ -2267,7 +2267,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Golden, savory battered octopus balls drizzled with sweet sauce, mayo, and bonito flakes.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,takoyaki?lock=43887",
+      "/images/library/takoyaki.jpg",
   },
   {
     name: "Wakame Salad",
@@ -2279,7 +2279,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 5,
     imageUrl:
-      "https://loremflickr.com/800/600/food,wakamesalad?lock=80140",
+      "/images/library/wakame-salad.jpg",
   },
   {
     name: "Yakitori",
@@ -2290,7 +2290,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,yakitori?lock=80581",
+      "/images/library/yakitori.jpg",
   },
   {
     name: "Tuna Tataki",
@@ -2301,7 +2301,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 10,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tunatataki?lock=45165",
+      "/images/library/tuna-tataki.jpg",
   },
   {
     name: "Karaage",
@@ -2311,7 +2311,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Japanese-style bite-sized fried chicken, marinated in soy sauce, ginger, and garlic, served with lemon.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,karaage?lock=34424",
+      "/images/library/karaage.jpg",
   },
   {
     name: "Chawanmushi",
@@ -2322,7 +2322,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chawanmushi?lock=34921",
+      "/images/library/chawanmushi.jpg",
   },
   {
     name: "Tonkotsu Ramen",
@@ -2332,7 +2332,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Hakata-style ramen featuring a rich, milky pork bone broth, thin noodles, chashu pork, and a soft-boiled egg.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tonkotsuramen?lock=1995",
+      "/images/library/tonkotsu-ramen.jpg",
   },
   {
     name: "Sushi Nigiri Platter",
@@ -2343,7 +2343,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,sushinigiriplatter?lock=27382",
+      "/images/library/sushi-nigiri-platter.jpg",
   },
   {
     name: "Sashimi Moriawase",
@@ -2354,7 +2354,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
     isGlutenFree: true,
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,sashimimoriawase?lock=77179",
+      "/images/library/sashimi-moriawase.jpg",
   },
   {
     name: "Katsudon",
@@ -2364,7 +2364,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "A comforting bowl of rice topped with a breaded, deep-fried pork cutlet, egg, and onions simmered in sweet soy broth.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,katsudon?lock=17399",
+      "/images/library/katsudon.jpg",
   },
   {
     name: "Chicken Teriyaki",
@@ -2374,7 +2374,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Grilled chicken breast glazed in a sweet, sticky soy-based sauce, served with steamed rice and vegetables.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,chickenteriyaki?lock=20223",
+      "/images/library/chicken-teriyaki.jpg",
   },
   {
     name: "Tempura Udon",
@@ -2384,7 +2384,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Thick, chewy wheat noodles in a hot dashi broth, served with light, crispy shrimp and vegetable tempura.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,tempuraudon?lock=85359",
+      "/images/library/tempura-udon.jpg",
   },
   {
     name: "Unadon (Eel Bowl)",
@@ -2394,7 +2394,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Grilled freshwater eel glazed with a sweet soy-based sauce, served over a bed of steamed white rice.",
     suggestedCookingTime: 20,
     imageUrl:
-      "https://loremflickr.com/800/600/food,unadon%28eelbowl%29?lock=7060",
+      "/images/library/unadon-eel-bowl.jpg",
   },
   {
     name: "Shoyu Ramen",
@@ -2404,7 +2404,7 @@ export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
       "Tokyo-style ramen with a clear, soy-sauce flavored broth, curly noodles, bamboo shoots, and roasted pork.",
     suggestedCookingTime: 15,
     imageUrl:
-      "https://loremflickr.com/800/600/food,shoyuramen?lock=86553",
+      "/images/library/shoyu-ramen.jpg",
   },
   {
     name: "Okonomiyaki",

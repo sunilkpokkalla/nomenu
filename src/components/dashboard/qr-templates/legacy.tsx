@@ -5,37 +5,53 @@ import React from "react";
 import { Wifi } from "lucide-react";
 import { QrTemplateProps } from "./types";
 
-// 1. Classic Portrait
-export function ClassicPortrait({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, colorEnd, id }: QrTemplateProps) {
+// 1. Classic Portrait (Swiss Editorial)
+export function ClassicPortrait({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, id }: QrTemplateProps) {
   return (
-    <div id={id} className="w-[450px] h-[675px] bg-white border border-slate-200 rounded-[20px] flex flex-col relative overflow-hidden" style={{ boxSizing: "border-box" }}>
-      <div className="w-full h-4" style={{ backgroundColor: colorStart }} />
-      <div className="flex-grow p-[30px] flex flex-col items-center justify-between box-border bg-gradient-to-b from-white to-slate-50">
-        <div className="flex flex-col items-center">
+    <div id={id} className="w-[450px] h-[675px] bg-[#FFFFFF] flex flex-col relative overflow-hidden box-border p-8 border-[1px] border-[#E5E5E5]">
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        .font-inter { font-family: 'Inter', sans-serif; }
+      `}} />
+      
+      {/* Strict Swiss Grid Lines */}
+      <div className="absolute top-8 bottom-8 left-8 w-[1px] bg-[#E5E5E5] pointer-events-none" />
+      <div className="absolute top-8 bottom-8 right-8 w-[1px] bg-[#E5E5E5] pointer-events-none" />
+      <div className="absolute top-8 left-8 right-8 h-[1px] bg-[#E5E5E5] pointer-events-none" />
+      <div className="absolute bottom-8 left-8 right-8 h-[1px] bg-[#E5E5E5] pointer-events-none" />
+
+      <div className="w-full h-full p-6 flex flex-col items-start justify-between box-border bg-white font-inter">
+        
+        {/* Extreme typographic contrast header */}
+        <div className="flex flex-col items-start w-full">
           {logoUrl && (
-            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[80px] h-[80px] rounded-full border-[3px] object-cover mb-4 shadow-md" style={{ borderColor: colorStart }} />
+            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[32px] h-[32px] object-contain mb-8 filter grayscale" />
           )}
-          <h1 className="text-[32px] font-bold text-slate-900 leading-tight text-center">{brandName}</h1>
-          <div className="w-[40px] h-[3px] mt-2 mb-4" style={{ backgroundColor: colorEnd }} />
-          <h2 className="text-[18px] font-bold text-slate-800 text-center">{headline}</h2>
+          <h2 className="text-[10px] font-semibold text-[#888] uppercase tracking-[0.3em] mb-2">{headline}</h2>
+          <h1 className="text-[48px] font-extrabold text-black leading-[0.9] tracking-tighter w-full hyphens-auto break-words">{brandName}</h1>
         </div>
 
-        <div className="border border-slate-200 p-4 rounded-[16px] bg-white shadow-sm">
-          <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[240px] h-[240px] object-contain" />
-        </div>
-
-        <div className="flex flex-col items-center w-full">
-          <div className="px-6 py-2 rounded-full text-white font-bold text-[18px] tracking-wider mb-2 shadow-md" style={{ backgroundColor: colorStart }}>
-            {subtext.toUpperCase()}
+        {/* Minimalist QR placement */}
+        <div className="w-full flex justify-end my-8 border-t border-b border-[#E5E5E5] py-4">
+          <div className="bg-white p-1">
+            <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[180px] h-[180px] object-contain mix-blend-multiply" />
           </div>
-          <p className="text-[12px] font-medium text-slate-500 mb-4">Camera scanning - No apps required</p>
+        </div>
+
+        {/* Structured Footer */}
+        <div className="flex flex-col items-start w-full">
+          <div className="text-[12px] font-medium text-black tracking-widest uppercase mb-6 bg-[#F5F5F5] px-3 py-1">
+            {subtext}
+          </div>
           
           {wifiPassword && (
-            <div className="w-full bg-slate-100 border border-slate-200 rounded-[12px] py-3 px-4 text-center">
-              <div className="text-[13px] font-bold text-slate-700 flex items-center justify-center gap-1.5 mb-1">
-                <Wifi className="w-4 h-4" /> Connect Guest WiFi
+            <div className="w-full border-t border-[#E5E5E5] pt-4 mt-auto">
+              <div className="flex justify-between items-center w-full">
+                <span className="text-[10px] font-semibold text-[#888] uppercase tracking-widest flex items-center gap-2">
+                  <Wifi className="w-3 h-3" /> NETWORK
+                </span>
+                <span className="text-[14px] font-bold text-black tracking-widest">{wifiPassword}</span>
               </div>
-              <div className="text-[12px] font-semibold text-slate-500">Password: {wifiPassword}</div>
             </div>
           )}
         </div>
@@ -44,26 +60,54 @@ export function ClassicPortrait({ brandName, headline, subtext, wifiPassword, lo
   );
 }
 
-// 2. Instagram Square
-export function InstagramSquare({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, colorEnd, id }: QrTemplateProps) {
+// 2. Instagram Square (Modern Social Card)
+export function InstagramSquare({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, id }: QrTemplateProps) {
   return (
-    <div id={id} className="w-[500px] h-[500px] rounded-[24px] p-[24px] flex items-center justify-center relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${colorStart}, ${colorEnd})`, boxSizing: "border-box" }}>
-      <div className="w-full h-full bg-white/95 backdrop-blur-xl rounded-[20px] shadow-2xl p-[30px] flex flex-col items-center justify-between box-border">
-        <div className="flex flex-col items-center">
-          {logoUrl && (
-            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[60px] h-[60px] rounded-full border-[2px] border-slate-200 object-cover mb-2 shadow-sm" />
+    <div id={id} className="w-[500px] h-[500px] bg-[#FAFAFA] flex items-center justify-center relative overflow-hidden p-8 box-border font-sans">
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600;700&display=swap');
+      `}} />
+      
+      {/* iOS-style background blur elements */}
+      <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-[#FF3366] rounded-full blur-[80px] opacity-20 mix-blend-multiply" />
+      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] bg-[#00C6FF] rounded-full blur-[80px] opacity-20 mix-blend-multiply" />
+      
+      {/* Main Card */}
+      <div className="w-full h-full bg-white/80 backdrop-blur-[40px] rounded-[32px] border border-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] p-8 flex flex-col justify-between box-border relative z-10">
+        
+        {/* Header Profile */}
+        <div className="flex items-center gap-4">
+          {logoUrl ? (
+            <div className="w-[48px] h-[48px] rounded-full p-[2px] bg-gradient-to-tr from-[#FF007A] via-[#7928CA] to-[#FF007A]">
+              <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-full h-full rounded-full border-2 border-white object-cover bg-white" />
+            </div>
+          ) : (
+            <div className="w-[48px] h-[48px] rounded-full bg-slate-200" />
           )}
-          <h1 className="text-[22px] font-extrabold text-slate-900 leading-none mb-1">{brandName}</h1>
-          <h2 className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.15em]">{headline}</h2>
+          <div className="flex flex-col">
+            <h1 className="text-[18px] font-bold text-slate-900 leading-tight">{brandName}</h1>
+            <h2 className="text-[13px] text-slate-500 font-medium">{headline}</h2>
+          </div>
         </div>
 
-        <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain drop-shadow-md" />
+        {/* Centered QR */}
+        <div className="w-full flex justify-center py-4">
+          <div className="bg-white p-4 rounded-[24px] shadow-[0_8px_24px_rgba(0,0,0,0.04)] border border-slate-100">
+            <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[180px] h-[180px] object-contain mix-blend-multiply" />
+          </div>
+        </div>
 
-        <div className="flex flex-col items-center w-full gap-2">
-          <div className="text-[18px] font-black text-slate-800 tracking-widest">{subtext.toUpperCase()}</div>
+        {/* Footer Actions */}
+        <div className="flex justify-between items-center w-full">
+          <div className="flex flex-col">
+            <div className="text-[14px] font-bold text-slate-900 tracking-tight">{subtext}</div>
+            <div className="text-[12px] text-slate-500">Scan to view</div>
+          </div>
+          
           {wifiPassword && (
-            <div className="bg-slate-100 px-4 py-1.5 rounded-full text-[11px] font-bold text-slate-600 shadow-inner flex items-center gap-1.5">
-              <Wifi className="w-3.5 h-3.5" /> WiFi: {wifiPassword}
+            <div className="bg-black text-white px-4 py-2 rounded-full text-[13px] font-semibold flex items-center gap-2 shadow-md">
+              <Wifi className="w-4 h-4" /> 
+              {wifiPassword}
             </div>
           )}
         </div>
@@ -104,55 +148,6 @@ export function Minimalist({ brandName, headline, subtext, wifiPassword, logoUrl
   );
 }
 
-// 4. Neon Cyber
-export function NeonCyber({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, colorEnd, id }: QrTemplateProps) {
-  return (
-    <div id={id} className="w-[450px] h-[675px] bg-slate-950 p-[24px] flex flex-col box-border relative overflow-hidden text-white font-mono" style={{ boxShadow: `inset 0 0 40px ${colorStart}40` }}>
-      <div className="absolute top-0 right-0 w-[200px] h-[200px] rounded-full blur-[80px] pointer-events-none" style={{ backgroundColor: colorStart, opacity: 0.3 }} />
-      <div className="absolute bottom-0 left-0 w-[200px] h-[200px] rounded-full blur-[80px] pointer-events-none" style={{ backgroundColor: colorEnd, opacity: 0.3 }} />
-      
-      <div className="relative z-10 w-full h-full border border-white/10 rounded-[16px] bg-black/40 backdrop-blur-md p-[24px] flex flex-col items-center justify-between box-border" style={{ boxShadow: `0 0 20px ${colorEnd}20` }}>
-        <div className="flex w-full items-center justify-between border-b border-white/10 pb-4">
-          <div className="flex items-center gap-3">
-            {logoUrl && (
-              <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[40px] h-[40px] rounded-md object-cover" style={{ boxShadow: `0 0 10px ${colorStart}` }} />
-            )}
-            <div>
-              <h1 className="text-[16px] font-bold tracking-wider">{brandName.toUpperCase()}</h1>
-              <span className="text-[10px] text-slate-400">SYS.MENU.ONLINE</span>
-            </div>
-          </div>
-          <div className="text-[10px] tracking-widest" style={{ color: colorEnd }}>[LIVE]</div>
-        </div>
-
-        <div className="relative my-4">
-          <div className="absolute -inset-2 bg-gradient-to-r blur-lg opacity-50" style={{ backgroundImage: `linear-gradient(to right, ${colorStart}, ${colorEnd})` }} />
-          <div className="relative bg-white p-3 rounded-lg shadow-2xl">
-            <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[220px] h-[220px] object-contain mix-blend-multiply" />
-          </div>
-        </div>
-
-        <div className="w-full flex flex-col gap-3">
-          <div className="w-full border border-white/20 bg-white/5 p-3 flex justify-between items-center rounded-lg">
-            <span className="text-[10px] text-slate-400">TARGET:</span>
-            <span className="text-[14px] font-bold tracking-widest">{subtext.toUpperCase()}</span>
-          </div>
-          <div className="w-full border border-white/20 bg-white/5 p-3 flex justify-between items-center rounded-lg">
-            <span className="text-[10px] text-slate-400">ACTION:</span>
-            <span className="text-[12px] font-bold" style={{ color: colorStart }}>{headline.toUpperCase()}</span>
-          </div>
-          
-          {wifiPassword && (
-            <div className="w-full border border-white/20 bg-white/5 p-3 flex justify-between items-center rounded-lg mt-2">
-              <span className="text-[10px] text-slate-400 flex items-center gap-1.5"><Wifi className="w-3 h-3" /> NET:</span>
-              <span className="text-[12px] font-bold text-slate-200">{wifiPassword}</span>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // 5. Luxury Gold
 export function LuxuryGold({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, id }: QrTemplateProps) {
@@ -318,39 +313,50 @@ export function ArtDeco({ brandName, headline, subtext, wifiPassword, logoUrl, q
   );
 }
 
-// 9. Modern Glass
+// 9. Modern Glass (Apple-style Glassmorphism)
 export function ModernGlass({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, colorEnd, id }: QrTemplateProps) {
   return (
-    <div id={id} className="w-[450px] h-[675px] bg-slate-100 p-[20px] box-border relative overflow-hidden flex items-center justify-center rounded-[24px]">
-      {/* Abstract background shapes */}
-      <div className="absolute -top-20 -left-20 w-[300px] h-[300px] rounded-full blur-[60px]" style={{ backgroundColor: colorStart, opacity: 0.4 }} />
-      <div className="absolute -bottom-20 -right-20 w-[350px] h-[350px] rounded-full blur-[60px]" style={{ backgroundColor: colorEnd, opacity: 0.4 }} />
-      <div className="absolute top-[30%] right-[-10%] w-[200px] h-[200px] rounded-full blur-[50px] bg-white opacity-60" />
+    <div id={id} className="w-[450px] h-[675px] bg-[#f5f5f7] p-[20px] box-border relative overflow-hidden flex items-center justify-center rounded-[32px] font-sans">
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap');
+      `}} />
 
-      {/* Glass card */}
-      <div className="w-full h-full bg-white/40 backdrop-blur-2xl rounded-[20px] border border-white/60 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] p-[30px] flex flex-col items-center justify-between box-border z-10">
+      {/* Dynamic blurred abstract background */}
+      <div className="absolute inset-0 bg-white" />
+      <div className="absolute -top-[10%] -left-[10%] w-[80%] h-[80%] rounded-full blur-[100px] opacity-70 mix-blend-multiply" style={{ backgroundColor: colorStart || '#007AFF' }} />
+      <div className="absolute -bottom-[10%] -right-[10%] w-[80%] h-[80%] rounded-full blur-[100px] opacity-70 mix-blend-multiply" style={{ backgroundColor: colorEnd || '#FF2D55' }} />
+      <div className="absolute top-[20%] right-[20%] w-[40%] h-[40%] rounded-full blur-[80px] bg-[#FFF200] opacity-50 mix-blend-multiply" />
+      
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 mix-blend-overlay pointer-events-none" />
+
+      {/* Glass card - true specular highlights */}
+      <div className="w-full h-full bg-white/30 backdrop-blur-[60px] rounded-[24px] border border-white/60 shadow-[0_30px_60px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.8)] p-[32px] flex flex-col items-center justify-between box-border z-10 relative">
         
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-full text-center">
           {logoUrl && (
-            <div className="w-[60px] h-[60px] rounded-2xl bg-white/60 border border-white/80 shadow-sm flex items-center justify-center mb-4 p-1 backdrop-blur-md">
-              <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-full h-full rounded-xl object-cover" />
+            <div className="w-[56px] h-[56px] rounded-[16px] bg-white/50 border border-white/80 shadow-[0_8px_16px_rgba(0,0,0,0.05)] flex items-center justify-center mb-6 p-1.5 backdrop-blur-md">
+              <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-full h-full rounded-[10px] object-cover" />
             </div>
           )}
-          <h1 className="text-[26px] font-extrabold text-slate-800 tracking-tight">{brandName}</h1>
-          <h2 className="text-[12px] font-bold text-slate-500 uppercase tracking-wider mt-1 bg-white/50 px-3 py-1 rounded-full">{headline}</h2>
+          <h1 className="text-[32px] font-bold text-black tracking-tight leading-none mb-2">{brandName}</h1>
+          <h2 className="text-[13px] font-semibold text-black/50 uppercase tracking-widest">{headline}</h2>
         </div>
 
-        <div className="bg-white/80 p-4 rounded-[20px] border border-white shadow-sm backdrop-blur-md">
-          <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[220px] h-[220px] object-contain mix-blend-multiply" />
+        <div className="bg-white/70 p-5 rounded-[32px] border border-white shadow-[0_20px_40px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,1)] backdrop-blur-md transition-transform hover:scale-[1.02]">
+          <div className="bg-white p-2 rounded-[24px] shadow-sm">
+            <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain mix-blend-multiply rounded-[16px]" />
+          </div>
         </div>
 
-        <div className="flex flex-col items-center w-full gap-3">
-          <div className="text-[18px] font-black text-slate-800 tracking-widest">{subtext.toUpperCase()}</div>
+        <div className="flex flex-col items-center w-full gap-4">
+          <div className="text-[15px] font-semibold text-black/80 tracking-wide text-center">{subtext}</div>
           
           {wifiPassword && (
-            <div className="w-full bg-white/50 border border-white/60 rounded-2xl p-3 flex justify-between items-center backdrop-blur-md shadow-sm">
-              <span className="text-[11px] font-bold text-slate-500 uppercase flex items-center gap-1.5"><Wifi className="w-3.5 h-3.5" /> WiFi</span>
-              <span className="text-[14px] font-bold text-slate-700">{wifiPassword}</span>
+            <div className="w-full bg-black/5 border border-white/40 rounded-[16px] p-4 flex justify-between items-center backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
+              <span className="text-[12px] font-semibold text-black/50 uppercase flex items-center gap-2">
+                <Wifi className="w-4 h-4" /> Wi-Fi
+              </span>
+              <span className="text-[15px] font-bold text-black">{wifiPassword}</span>
             </div>
           )}
         </div>
@@ -571,6 +577,184 @@ export function RetroVintage({ brandName, headline, subtext, wifiPassword, logoU
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// 15. Vintage Cloche (Teal & Gold)
+export function VintageCloche({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, id }: QrTemplateProps) {
+  return (
+    <div id={id} className="w-[450px] h-[675px] bg-[#293531] text-[#D4AF37] flex flex-col relative overflow-hidden box-border p-6 shadow-inner">
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cinzel:wght@400;600&display=swap');
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+      `}} />
+
+      {/* Corner Ornaments */}
+      <div className="absolute top-4 left-4 w-12 h-12 border-t border-l border-[#D4AF37] rounded-tl-xl opacity-80" />
+      <div className="absolute top-4 right-4 w-12 h-12 border-t border-r border-[#D4AF37] rounded-tr-xl opacity-80" />
+      <div className="absolute bottom-4 left-4 w-12 h-12 border-b border-l border-[#D4AF37] rounded-bl-xl opacity-80" />
+      <div className="absolute bottom-4 right-4 w-12 h-12 border-b border-r border-[#D4AF37] rounded-br-xl opacity-80" />
+      
+      {/* Decorative Corner Swirls (SVGs) */}
+      <svg className="absolute top-3 left-3 w-8 h-8 text-[#D4AF37] opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M12 2 C 2 2, 2 12, 12 12 C 22 12, 22 22, 12 22" />
+      </svg>
+      <svg className="absolute top-3 right-3 w-8 h-8 text-[#D4AF37] opacity-60 transform scale-x-[-1]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M12 2 C 2 2, 2 12, 12 12 C 22 12, 22 22, 12 22" />
+      </svg>
+      <svg className="absolute bottom-3 left-3 w-8 h-8 text-[#D4AF37] opacity-60 transform scale-y-[-1]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M12 2 C 2 2, 2 12, 12 12 C 22 12, 22 22, 12 22" />
+      </svg>
+      <svg className="absolute bottom-3 right-3 w-8 h-8 text-[#D4AF37] opacity-60 transform scale-[-1]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M12 2 C 2 2, 2 12, 12 12 C 22 12, 22 22, 12 22" />
+      </svg>
+
+      <div className="w-full h-full relative z-10 flex flex-col items-center justify-between py-6">
+        
+        {/* Top Section with Cloche */}
+        <div className="flex flex-col items-center w-full relative mt-4">
+          <div className="relative w-[280px] h-[120px] flex flex-col items-center justify-center">
+            {/* Cloche Dome SVG */}
+            <svg className="absolute inset-0 w-full h-full text-[#D4AF37]" viewBox="0 0 200 100" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 90 C 20 20, 180 20, 180 90" strokeLinecap="round" />
+              <path d="M10 90 C 10 110, 40 110, 40 90" strokeLinecap="round" />
+              <path d="M190 90 C 190 110, 160 110, 160 90" strokeLinecap="round" />
+              <path d="M90 10 C 90 0, 110 0, 110 10 Z" strokeLinecap="round" />
+              <path d="M100 20 V35 M85 25 L95 35 M115 25 L105 35" strokeWidth="1.5" />
+            </svg>
+            
+            <div className="z-10 flex flex-col items-center mt-6 text-center">
+              <h2 className="font-cinzel text-[11px] font-bold tracking-[0.3em] uppercase text-[#D4AF37] mb-1">{headline}</h2>
+              <h1 className="font-playfair text-[44px] font-bold text-white tracking-wide uppercase leading-none drop-shadow-md">{brandName}</h1>
+            </div>
+          </div>
+        </div>
+
+        {/* Center QR Code Container */}
+        <div className="bg-white p-3 shadow-[0_15px_30px_rgba(0,0,0,0.4)] mt-8 mb-4 relative flex items-center justify-center">
+          <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain mix-blend-multiply" />
+          
+          {/* Logo overlay on QR */}
+          {logoUrl && (
+            <div className="absolute w-[45px] h-[45px] bg-[#E88C5D] rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+              <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[25px] h-[25px] object-contain filter brightness-0 invert" />
+            </div>
+          )}
+        </div>
+
+        {/* Bottom Text Area */}
+        <div className="flex flex-col items-center text-center w-full mt-4">
+          <h3 className="font-cinzel text-[16px] font-semibold tracking-widest text-[#D4AF37] uppercase">{subtext}</h3>
+          
+          {wifiPassword && (
+            <div className="mt-6 flex items-center gap-2 font-cinzel text-[12px] text-[#D4AF37]/80 tracking-widest border border-[#D4AF37]/30 px-6 py-2 rounded-full">
+              <span>WIFI: {wifiPassword}</span>
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+// 16. Chalkboard Elegance
+export function ChalkboardMenu({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, id }: QrTemplateProps) {
+  return (
+    <div id={id} className="w-[450px] h-[675px] bg-[#1a1a1a] text-white flex flex-col relative overflow-hidden box-border p-5">
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Montserrat:wght@300;400&display=swap');
+        .font-caveat { font-family: 'Caveat', cursive; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+      `}} />
+      
+      {/* Chalkboard Texture Background */}
+      <div className="absolute inset-0 opacity-[0.15] mix-blend-screen bg-[url('https://www.transparenttextures.com/patterns/black-paper.png')]" />
+
+      {/* Double Border Frame */}
+      <div className="absolute inset-0 m-4 border-2 border-white/80 rounded-sm pointer-events-none" />
+      <div className="absolute inset-0 m-6 border border-white/40 rounded-sm pointer-events-none" />
+
+      {/* Decorative Corner Ornaments */}
+      <svg className="absolute top-2 left-2 w-12 h-12 text-white/90" viewBox="0 0 50 50" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M10 25 C 10 10, 25 10, 25 10 M10 25 C 10 40, 25 40, 25 40" />
+        <circle cx="20" cy="25" r="3" />
+        <path d="M30 15 C 20 20, 20 30, 30 35" />
+      </svg>
+      <svg className="absolute top-2 right-2 w-12 h-12 text-white/90 transform scale-x-[-1]" viewBox="0 0 50 50" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M10 25 C 10 10, 25 10, 25 10 M10 25 C 10 40, 25 40, 25 40" />
+        <circle cx="20" cy="25" r="3" />
+        <path d="M30 15 C 20 20, 20 30, 30 35" />
+      </svg>
+      <svg className="absolute bottom-2 left-2 w-12 h-12 text-white/90 transform scale-y-[-1]" viewBox="0 0 50 50" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M10 25 C 10 10, 25 10, 25 10 M10 25 C 10 40, 25 40, 25 40" />
+        <circle cx="20" cy="25" r="3" />
+        <path d="M30 15 C 20 20, 20 30, 30 35" />
+      </svg>
+      <svg className="absolute bottom-2 right-2 w-12 h-12 text-white/90 transform scale-[-1]" viewBox="0 0 50 50" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M10 25 C 10 10, 25 10, 25 10 M10 25 C 10 40, 25 40, 25 40" />
+        <circle cx="20" cy="25" r="3" />
+        <path d="M30 15 C 20 20, 20 30, 30 35" />
+      </svg>
+
+      <div className="w-full h-full relative z-10 flex flex-col items-center justify-between py-10 px-8">
+        
+        {/* Top Hand-drawn Title */}
+        <div className="flex flex-col items-center text-center">
+          <h2 className="font-montserrat text-[12px] font-light tracking-[0.4em] uppercase text-white/70 mb-2">{headline}</h2>
+          <h1 className="font-caveat text-[70px] font-bold text-white tracking-wide leading-none -rotate-2 drop-shadow-sm">{brandName}</h1>
+        </div>
+
+        {/* Center QR Code Container */}
+        <div className="bg-white p-3 shadow-lg border border-white/20 mt-6 relative flex items-center justify-center transform rotate-1">
+          <div className="absolute inset-0 border border-black/10 pointer-events-none m-1" />
+          <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[180px] h-[180px] object-contain mix-blend-multiply" />
+          
+          {/* Circular Logo overlay */}
+          {logoUrl && (
+            <div className="absolute w-[40px] h-[40px] bg-[#E88C5D] rounded-full flex items-center justify-center shadow-md border-2 border-white">
+              <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[20px] h-[20px] object-contain filter brightness-0 invert" />
+            </div>
+          )}
+        </div>
+
+        {/* Cutlery Graphics */}
+        <div className="flex justify-center gap-6 mt-8 opacity-90">
+          {/* Fork */}
+          <svg width="16" height="80" viewBox="0 0 16 80" fill="none" stroke="white" strokeWidth="1.5" className="opacity-80">
+            <path d="M3 5 V25 A 5 5 0 0 0 13 25 V5 M8 5 V20 M8 30 V75" />
+          </svg>
+          {/* Spoon */}
+          <svg width="20" height="80" viewBox="0 0 20 80" fill="none" stroke="white" strokeWidth="1.5" className="opacity-80">
+            <ellipse cx="10" cy="15" rx="6" ry="10" />
+            <path d="M10 25 V75" />
+          </svg>
+          {/* Knife */}
+          <svg width="12" height="80" viewBox="0 0 12 80" fill="none" stroke="white" strokeWidth="1.5" className="opacity-80">
+            <path d="M6 5 C 10 5, 10 30, 6 35 V75 H4 V35 C 0 30, 0 5, 6 5 Z" />
+          </svg>
+        </div>
+
+        {/* Bottom Text Area */}
+        <div className="flex flex-col items-center w-full mt-6 text-center">
+          <h3 className="font-montserrat text-[14px] font-light tracking-[0.2em] text-white/90 uppercase text-center mb-6">{subtext}</h3>
+          
+          {/* Flourish */}
+          <svg width="150" height="20" viewBox="0 0 150 20" fill="none" stroke="white" strokeWidth="1.5" className="opacity-60 mb-2">
+            <path d="M10 10 Q 30 0, 50 10 T 90 10 T 140 10" strokeLinecap="round" />
+            <path d="M60 10 Q 70 20, 80 10" strokeLinecap="round" />
+          </svg>
+          
+          {wifiPassword && (
+            <div className="font-montserrat text-[11px] font-light tracking-[0.1em] text-white/60 uppercase">
+              WIFI: {wifiPassword}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

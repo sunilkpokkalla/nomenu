@@ -15,39 +15,60 @@ const NightlifeFonts = () => (
   `}} />
 );
 
-// 1. Neon Tube
+// 1. Neon Tube (Hyper-Realistic Neon)
 export function NeonTube({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, colorEnd, id }: QrTemplateProps) {
+  const neonColor = colorStart || '#00FFFF';
+  
   return (
-    <div id={id} className="w-[450px] h-[675px] bg-[#050505] text-white flex flex-col relative overflow-hidden box-border p-10 font-rajdhani">
+    <div id={id} className="w-[450px] h-[675px] bg-[#0a0a0a] text-white flex flex-col relative overflow-hidden box-border p-10 font-rajdhani">
       <NightlifeFonts />
-      <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] rounded-full blur-[80px] opacity-30 pointer-events-none" style={{ backgroundColor: colorStart }} />
-      <div className="absolute bottom-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full blur-[80px] opacity-30 pointer-events-none" style={{ backgroundColor: colorEnd }} />
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
+        .font-monoton { font-family: 'Monoton', cursive; }
+      `}} />
       
-      <div className="w-full h-full border-2 rounded-[20px] p-8 flex flex-col justify-between items-center relative z-10 backdrop-blur-sm bg-black/40" style={{ borderColor: `${colorStart}40`, boxShadow: `0 0 20px ${colorStart}20, inset 0 0 20px ${colorEnd}20` }}>
+      {/* Brick Wall Texture */}
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/brick-wall-dark.png')] opacity-60 mix-blend-overlay" />
+      
+      {/* Global Ambient Glow */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-screen" style={{ background: `radial-gradient(circle at center, ${neonColor} 0%, transparent 70%)` }} />
+      
+      <div className="w-full h-full flex flex-col justify-between items-center relative z-10">
         
-        <div className="flex flex-col items-center text-center">
+        {/* Neon Sign Header */}
+        <div className="flex flex-col items-center text-center w-full">
           {logoUrl && (
-            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[50px] h-[50px] object-contain filter brightness-0 invert mb-4" />
+            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[50px] h-[50px] object-contain filter brightness-0 invert mb-4 opacity-90" style={{ filter: `drop-shadow(0 0 10px ${neonColor}) drop-shadow(0 0 20px ${neonColor})` }} />
           )}
-          <h1 className="font-bebas text-[54px] leading-none tracking-wider drop-shadow-lg" style={{ textShadow: `0 0 10px ${colorStart}, 0 0 20px ${colorStart}` }}>
-            {brandName}
-          </h1>
-          <h2 className="text-[16px] font-semibold tracking-widest text-white/70 uppercase mt-2">{headline}</h2>
+          
+          {/* Off-state tube behind text for realism */}
+          <div className="relative">
+            <h1 className="font-monoton text-[42px] leading-tight tracking-wider absolute inset-0 text-white/5 blur-[2px]">{brandName}</h1>
+            <h1 className="font-monoton text-[42px] leading-tight tracking-wider relative text-white" style={{ textShadow: `0 0 5px #fff, 0 0 10px #fff, 0 0 20px ${neonColor}, 0 0 40px ${neonColor}, 0 0 80px ${neonColor}` }}>
+              {brandName}
+            </h1>
+          </div>
+          
+          <h2 className="text-[14px] font-bold tracking-[0.4em] uppercase mt-6 text-white/80 border-t border-b py-2 w-full border-white/20" style={{ textShadow: `0 0 10px ${neonColor}` }}>{headline}</h2>
         </div>
 
-        <div className="relative p-2 rounded-xl bg-white/10 backdrop-blur-md border" style={{ borderColor: `${colorEnd}60`, boxShadow: `0 0 15px ${colorEnd}40` }}>
-          <div className="bg-white p-2 rounded-lg">
-            <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[180px] h-[180px] object-contain" />
+        {/* Neon Framed QR */}
+        <div className="relative p-1 rounded-2xl" style={{ boxShadow: `0 0 10px ${neonColor}, inset 0 0 10px ${neonColor}` }}>
+          <div className="absolute inset-0 rounded-2xl opacity-20 bg-white" />
+          <div className="bg-black p-3 rounded-xl border border-white/10 relative z-10">
+            <div className="bg-white p-2 rounded-lg">
+              <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[170px] h-[170px] object-contain mix-blend-multiply" />
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-center w-full">
-          <h3 className="font-syncopate text-[10px] uppercase tracking-[0.3em] text-white/50 mb-6">{subtext}</h3>
+        <div className="flex flex-col items-center w-full mt-4">
+          <h3 className="font-rajdhani text-[14px] uppercase tracking-widest text-white/60 mb-6 font-medium">{subtext}</h3>
           
           {wifiPassword && (
-            <div className="w-full bg-white/5 border rounded-lg p-3 flex justify-between items-center" style={{ borderColor: `${colorStart}30` }}>
-              <span className="text-[12px] uppercase tracking-widest text-white/50 flex items-center gap-2"><Wifi className="w-4 h-4"/> WiFi</span>
-              <span className="text-[16px] font-bold tracking-wider" style={{ color: colorStart, textShadow: `0 0 8px ${colorStart}` }}>{wifiPassword}</span>
+            <div className="w-full bg-black/60 border-2 rounded-xl p-4 flex justify-between items-center backdrop-blur-md" style={{ borderColor: `${neonColor}80`, boxShadow: `0 0 15px ${neonColor}40, inset 0 0 15px ${neonColor}40` }}>
+              <span className="text-[11px] uppercase tracking-[0.2em] text-white/70 flex items-center gap-2"><Wifi className="w-4 h-4"/> NETWORK</span>
+              <span className="text-[18px] font-bold tracking-widest text-white" style={{ textShadow: `0 0 10px ${neonColor}, 0 0 20px ${neonColor}` }}>{wifiPassword}</span>
             </div>
           )}
         </div>
@@ -97,44 +118,68 @@ export function DarkClub({ brandName, headline, subtext, wifiPassword, logoUrl, 
   );
 }
 
-// 3. Cyberpunk
+// 3. Cyberpunk (HUD Interface)
 export function Cyberpunk({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, id }: QrTemplateProps) {
+  const accent = colorStart || '#FCEE0A';
+  
   return (
-    <div id={id} className="w-[450px] h-[675px] bg-[#000000] text-[#fcee0a] flex flex-col relative overflow-hidden box-border font-rajdhani border-[4px] border-[#fcee0a]">
+    <div id={id} className="w-[450px] h-[675px] bg-[#050505] text-[#fcee0a] flex flex-col relative overflow-hidden box-border font-rajdhani border-[2px]" style={{ borderColor: accent, color: accent }}>
       <NightlifeFonts />
-      <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-[#fcee0a] clip-path-polygon" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 0)' }} />
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        .font-tech { font-family: 'Share Tech Mono', monospace; }
+      `}} />
+      
+      {/* Scanlines */}
+      <div className="absolute inset-0 pointer-events-none opacity-20" style={{ background: 'repeating-linear-gradient(to bottom, transparent, transparent 2px, #000 2px, #000 4px)' }} />
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/micro-carbon.png')] opacity-50 mix-blend-overlay" />
+
+      {/* Decorative HUD Elements */}
+      <div className="absolute top-4 right-4 flex gap-1">
+        {[1,2,3,4].map(i => <div key={i} className="w-2 h-4 border border-current opacity-50" style={{ backgroundColor: i < 3 ? accent : 'transparent' }} />)}
+      </div>
+      <div className="absolute bottom-4 left-4 font-tech text-[10px] opacity-60">
+        SYS.REQ // 90.0.12<br/>LOC.TRK // ACTIVE
+      </div>
       
       <div className="w-full h-full relative z-10 p-8 flex flex-col justify-between">
         
-        <div className="flex flex-col items-start w-full">
-          <div className="bg-[#fcee0a] text-black px-3 py-1 text-[12px] font-bold tracking-widest mb-4">
-            SYS_ONLINE
+        <div className="flex flex-col items-start w-full border-l-4 pl-4 mb-6" style={{ borderColor: accent }}>
+          <div className="text-black px-2 py-0.5 text-[10px] font-bold tracking-widest mb-3 font-tech" style={{ backgroundColor: accent }}>
+            WARNING // AUTHORIZED ONLY
           </div>
-          <h1 className="font-syncopate text-[28px] font-bold leading-tight uppercase mix-blend-difference text-white break-words w-[80%]">{brandName}</h1>
+          <h1 className="font-syncopate text-[32px] font-bold leading-tight uppercase text-white tracking-tighter drop-shadow-[2px_2px_0_rgba(252,238,10,0.5)]">
+            {brandName}
+          </h1>
           {logoUrl && (
-            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[40px] h-[40px] object-contain filter brightness-0 invert opacity-80 mt-4" />
+            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[45px] h-[45px] object-contain filter brightness-0 invert mt-4 opacity-90" />
           )}
         </div>
 
-        <div className="flex justify-end w-full py-4">
-          <div className="bg-[#000000] p-2 border-[2px] border-[#fcee0a] shadow-[6px_6px_0_0_#fcee0a]">
+        <div className="flex justify-center w-full py-4 relative group">
+          {/* Target Reticle Corners */}
+          <div className="absolute top-0 left-[10%] w-4 h-4 border-t-2 border-l-2 border-current" />
+          <div className="absolute top-0 right-[10%] w-4 h-4 border-t-2 border-r-2 border-current" />
+          <div className="absolute bottom-0 left-[10%] w-4 h-4 border-b-2 border-l-2 border-current" />
+          <div className="absolute bottom-0 right-[10%] w-4 h-4 border-b-2 border-r-2 border-current" />
+          
+          <div className="bg-black p-2 border-[1px] border-current shadow-[0_0_15px_rgba(252,238,10,0.2)]">
             <div className="bg-white p-2">
-              <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[180px] h-[180px] object-contain" />
+              <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain mix-blend-multiply" />
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col w-full text-white/90">
-          <div className="flex justify-between items-end border-b-2 border-[#fcee0a] pb-2 mb-2">
-            <h2 className="text-[16px] font-bold tracking-widest uppercase">{headline}</h2>
-            <span className="font-syncopate text-[10px] text-[#fcee0a]">V.2.0</span>
+        <div className="flex flex-col w-full text-white/90 mt-4">
+          <div className="flex justify-between items-end border-b border-white/20 pb-2 mb-3">
+            <h2 className="text-[14px] font-bold tracking-[0.2em] uppercase font-tech text-white">{headline}</h2>
+            <span className="font-tech text-[10px] uppercase" style={{ color: accent }}>{subtext}</span>
           </div>
-          <h3 className="text-[12px] uppercase tracking-widest text-white/50 mb-6">{subtext}</h3>
           
           {wifiPassword && (
-            <div className="bg-[#fcee0a] text-black w-full p-2 flex justify-between items-center font-bold">
-              <span className="uppercase text-[12px]">Net Access</span>
-              <span className="text-[16px]">{wifiPassword}</span>
+            <div className="w-full p-3 flex justify-between items-center font-tech border border-current bg-black/60 backdrop-blur-sm mt-2">
+              <span className="uppercase text-[11px] tracking-widest opacity-80">&gt; NET_KEY</span>
+              <span className="text-[16px] font-bold tracking-wider">{wifiPassword}</span>
             </div>
           )}
         </div>

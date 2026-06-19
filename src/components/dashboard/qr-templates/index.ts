@@ -9,29 +9,27 @@ import * as LuminaTemplates from './lumina';
 import * as LegacyTemplates from './legacy';
 
 export type TemplateKey = 
-  | 'neon-tube'  | 'dark-club'  | 'cyberpunk'  | 'liquid-night'  | 'speak-easy'
-  | 'laser-grid'  | 'synthwave'  | 'v-i-p-lounge'  | 'industrial-techno'  | 'abstract-bass'
+  | 'neon-tube'  | 'dark-club'  | 'cyberpunk'  | 'liquid-night'
+  | 'laser-grid'  | 'v-i-p-lounge'  | 'industrial-techno'  | 'abstract-bass'
   | 'confetti-party' | 'disco-fever'
   | 'swiss-grid'  | 'pure-whitespace'  | 'negative-space'  | 'bauhaus'  | 'the-exhibition'
   | 'typographic-hierarchy'  | 'outline-minimal'  | 'editorial'  | 'data-minimal'  | 'zen-center'
   | 'the-michelin'  | 'the-sommelier'  | 'omakase-minimal'  | 'the-chandelier'  | 'french-bistro'
   | 'modern-steakhouse'  | 'the-botanical'  | 'velvet-noir'  | 'classical-heritage'  | 'the-monolith'
   | 'fluid-gradient'  | 'brutalist-pop'  | 'glass-orbs'  | 'funky-retro'  | 'y2-k-aesthetic'
-  | 'architectural'  | 'holographic'  | 'monospace-terminal'  | 'pop-art'  | 'split-screen'
+  | 'architectural'  | 'holographic'  | 'monospace-terminal'  | 'split-screen'
   | 'morning-coffee'  | 'the-bakery'  | 'craft-burger'  | 'urban-cafe'  | 'sunday-brunch'
-  | 'local-pub'  | 'pizzeria'  | 'juice-bar'  | 'retro-diner'  | 'cozy-teahouse'
-  | 'classic'  | 'instagram-square'  | 'minimalist'  | 'neon-cyber'  | 'luxury-gold'
+  | 'vibrant-yellow' | 'aesthetic-cafe' | 'pizzeria'  | 'table-order'  | 'retro-diner'  | 'cozy-teahouse'  | 'restaurant-plate' | 'review-acrylic' | 'burger-sketches'
+  | 'classic'  | 'instagram-square'  | 'minimalist'  | 'luxury-gold'
   | 'brutalist'  | 'claymorphism'  | 'art-deco'  | 'modern-glass'  | 'polaroid-snapshot'
-  | 'bistro-gold' | 'lumina-bistro' | 'vintage-classic' | 'retro-vintage';
+  | 'bistro-gold' | 'lumina-bistro' | 'vintage-classic' | 'retro-vintage' | 'vintage-cloche' | 'chalkboard-menu';
 
 export const templates: Record<TemplateKey, React.ComponentType<QrTemplateProps>> = {
   'neon-tube': NightlifeTemplates.NeonTube,
   'dark-club': NightlifeTemplates.DarkClub,
   'cyberpunk': NightlifeTemplates.Cyberpunk,
   'liquid-night': NightlifeTemplates.LiquidNight,
-  'speak-easy': NightlifeTemplates.SpeakEasy,
   'laser-grid': NightlifeTemplates.LaserGrid,
-  'synthwave': NightlifeTemplates.Synthwave,
   'v-i-p-lounge': NightlifeTemplates.VIPLounge,
   'industrial-techno': NightlifeTemplates.IndustrialTechno,
   'abstract-bass': NightlifeTemplates.AbstractBass,
@@ -65,22 +63,24 @@ export const templates: Record<TemplateKey, React.ComponentType<QrTemplateProps>
   'architectural': CreativeTemplates.Architectural,
   'holographic': CreativeTemplates.Holographic,
   'monospace-terminal': CreativeTemplates.MonospaceTerminal,
-  'pop-art': CreativeTemplates.PopArt,
   'split-screen': CreativeTemplates.SplitScreen,
   'morning-coffee': CasualTemplates.MorningCoffee,
   'the-bakery': CasualTemplates.TheBakery,
   'craft-burger': CasualTemplates.CraftBurger,
   'urban-cafe': CasualTemplates.UrbanCafe,
   'sunday-brunch': CasualTemplates.SundayBrunch,
-  'local-pub': CasualTemplates.LocalPub,
+  'vibrant-yellow': CasualTemplates.VibrantYellow,
+  'aesthetic-cafe': CasualTemplates.AestheticCafe,
   'pizzeria': CasualTemplates.Pizzeria,
-  'juice-bar': CasualTemplates.JuiceBar,
+  'table-order': CasualTemplates.TableOrder,
   'retro-diner': CasualTemplates.RetroDiner,
   'cozy-teahouse': CasualTemplates.CozyTeahouse,
+  'restaurant-plate': CasualTemplates.RestaurantPlate,
+  'review-acrylic': CasualTemplates.ReviewAcrylic,
+  'burger-sketches': CasualTemplates.BurgerSketches,
   'classic': LegacyTemplates.ClassicPortrait,
   'instagram-square': LegacyTemplates.InstagramSquare,
   'minimalist': LegacyTemplates.Minimalist,
-  'neon-cyber': LegacyTemplates.NeonCyber,
   'luxury-gold': LegacyTemplates.LuxuryGold,
   'brutalist': LegacyTemplates.Brutalist,
   'claymorphism': LegacyTemplates.Claymorphism,
@@ -91,6 +91,8 @@ export const templates: Record<TemplateKey, React.ComponentType<QrTemplateProps>
   'lumina-bistro': LuminaTemplates.LuminaBistro,
   'vintage-classic': LegacyTemplates.VintageClassic,
   'retro-vintage': LegacyTemplates.RetroVintage,
+  'vintage-cloche': LegacyTemplates.VintageCloche,
+  'chalkboard-menu': LegacyTemplates.ChalkboardMenu,
 };
 export const templateCategories: QrTemplateCategory[] = [
   {
@@ -101,9 +103,7 @@ export const templateCategories: QrTemplateCategory[] = [
       { id: 'dark-club', name: 'Dark Club' },
       { id: 'cyberpunk', name: 'Cyberpunk' },
       { id: 'liquid-night', name: 'Liquid Night' },
-      { id: 'speak-easy', name: 'Speak Easy' },
       { id: 'laser-grid', name: 'Laser Grid' },
-      { id: 'synthwave', name: 'Synthwave' },
       { id: 'v-i-p-lounge', name: 'V I P Lounge' },
       { id: 'industrial-techno', name: 'Industrial Techno' },
       { id: 'abstract-bass', name: 'Abstract Bass' },
@@ -155,7 +155,6 @@ export const templateCategories: QrTemplateCategory[] = [
       { id: 'architectural', name: 'Architectural' },
       { id: 'holographic', name: 'Holographic' },
       { id: 'monospace-terminal', name: 'Monospace Terminal' },
-      { id: 'pop-art', name: 'Pop Art' },
       { id: 'split-screen', name: 'Split Screen' },
     ]
   },
@@ -168,11 +167,15 @@ export const templateCategories: QrTemplateCategory[] = [
       { id: 'craft-burger', name: 'Craft Burger' },
       { id: 'urban-cafe', name: 'Urban Cafe' },
       { id: 'sunday-brunch', name: 'Sunday Brunch' },
-      { id: 'local-pub', name: 'Local Pub' },
+      { id: 'vibrant-yellow', name: 'Vibrant Yellow' },
+      { id: 'aesthetic-cafe', name: 'Aesthetic Cafe' },
       { id: 'pizzeria', name: 'Pizzeria' },
-      { id: 'juice-bar', name: 'Juice Bar' },
+      { id: 'table-order', name: 'Table Order' },
       { id: 'retro-diner', name: 'Retro Diner' },
       { id: 'cozy-teahouse', name: 'Cozy Teahouse' },
+      { id: 'restaurant-plate', name: 'Restaurant Plate' },
+      { id: 'review-acrylic', name: 'Review Acrylic' },
+      { id: 'burger-sketches', name: 'Burger Sketches' },
       { id: 'lumina-bistro', name: 'Lumina Bistro' },
     ]
   },
@@ -183,7 +186,6 @@ export const templateCategories: QrTemplateCategory[] = [
       { id: 'classic', name: 'Classic Portrait' },
       { id: 'instagram-square', name: 'Instagram Square' },
       { id: 'minimalist', name: 'Minimalist' },
-      { id: 'neon-cyber', name: 'Neon Cyber' },
       { id: 'luxury-gold', name: 'Luxury Gold' },
       { id: 'brutalist', name: 'Brutalist' },
       { id: 'claymorphism', name: 'Claymorphism' },
@@ -193,6 +195,8 @@ export const templateCategories: QrTemplateCategory[] = [
       { id: 'bistro-gold', name: 'Bistro Gold' },
       { id: 'vintage-classic', name: 'Vintage Classic' },
       { id: 'retro-vintage', name: 'Retro Vintage' },
+      { id: 'vintage-cloche', name: 'Vintage Cloche' },
+      { id: 'chalkboard-menu', name: 'Chalkboard Menu' },
     ]
   },
 ];

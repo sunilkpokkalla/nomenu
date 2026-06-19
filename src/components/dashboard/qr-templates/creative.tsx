@@ -15,36 +15,48 @@ const CreativeFonts = () => (
   `}} />
 );
 
-// 1. Fluid Gradient
+// 1. Fluid Gradient (Aura Glassmorphism)
 export function FluidGradient({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, colorEnd, id }: QrTemplateProps) {
   return (
-    <div id={id} className="w-[450px] h-[675px] text-white flex flex-col relative overflow-hidden box-border p-8 font-cabinet" style={{ background: `linear-gradient(135deg, ${colorStart}, ${colorEnd})` }}>
+    <div id={id} className="w-[450px] h-[675px] text-white flex flex-col relative overflow-hidden box-border p-8 font-cabinet bg-black">
       <CreativeFonts />
-      <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[140%] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay pointer-events-none" />
       
-      <div className="w-full h-full relative z-10 flex flex-col items-center justify-between bg-white/10 backdrop-blur-xl border border-white/30 rounded-[32px] p-8 shadow-2xl">
+      {/* Deep Aura Background */}
+      <div className="absolute inset-0 opacity-80" style={{ background: `linear-gradient(135deg, ${colorStart || '#FF3366'}, ${colorEnd || '#4D00FF'})` }} />
+      <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[140%] bg-black opacity-30 blur-[100px]" />
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-40 mix-blend-overlay pointer-events-none" />
+      
+      {/* Precision Glass Card */}
+      <div className="w-full h-full relative z-10 flex flex-col items-center justify-between bg-white/5 backdrop-blur-3xl border border-white/20 rounded-[32px] p-8 shadow-[0_24px_48px_rgba(0,0,0,0.4)]">
         
+        {/* Subtle top edge highlight */}
+        <div className="absolute top-0 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+
         <div className="flex flex-col items-center text-center">
           {logoUrl && (
-            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[60px] h-[60px] object-contain filter drop-shadow-lg mb-4" />
+            <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-[50px] h-[50px] object-contain filter drop-shadow-[0_2px_10px_rgba(255,255,255,0.3)] mb-6" />
           )}
-          <h1 className="font-syne text-[40px] font-extrabold tracking-tighter leading-none mb-2">{brandName}</h1>
-          <h2 className="text-[14px] font-medium tracking-widest uppercase opacity-80">{headline}</h2>
+          <h1 className="font-syne text-[38px] font-extrabold tracking-tight leading-none mb-3 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">{brandName}</h1>
+          <h2 className="text-[12px] font-bold tracking-[0.3em] uppercase text-white/70">{headline}</h2>
         </div>
 
-        <div className="relative p-1 rounded-3xl bg-gradient-to-br from-white/40 to-white/5">
-          <div className="bg-white/90 p-4 rounded-2xl backdrop-blur-md">
-            <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[180px] h-[180px] object-contain mix-blend-multiply" />
+        <div className="relative p-[1px] rounded-3xl bg-gradient-to-br from-white/40 via-white/5 to-transparent shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          <div className="bg-black/20 p-4 rounded-[23px] backdrop-blur-md">
+            <div className="bg-white p-2 rounded-[16px]">
+              <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[170px] h-[170px] object-contain mix-blend-multiply rounded-[8px]" />
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col items-center w-full">
-          <h3 className="font-syne text-[16px] font-bold uppercase tracking-wider mb-6 text-center">{subtext}</h3>
+          <h3 className="font-syne text-[14px] font-bold uppercase tracking-[0.2em] mb-6 text-center text-white/80">{subtext}</h3>
           
           {wifiPassword && (
-            <div className="bg-white/20 px-6 py-2 rounded-full border border-white/40 flex items-center gap-2 backdrop-blur-md">
-              <Wifi className="w-4 h-4 opacity-80" />
-              <span className="text-[14px] font-bold">{wifiPassword}</span>
+            <div className="bg-black/30 px-6 py-3 rounded-2xl border border-white/10 flex items-center justify-between w-full backdrop-blur-md">
+              <span className="text-[10px] uppercase tracking-widest text-white/50 flex items-center gap-2">
+                <Wifi className="w-3 h-3" /> Network
+              </span>
+              <span className="text-[14px] font-bold tracking-wider">{wifiPassword}</span>
             </div>
           )}
         </div>
@@ -114,39 +126,54 @@ export function BrutalistPop({ brandName, headline, subtext, wifiPassword, logoU
   );
 }
 
-// 3. Glass Orbs
+// 3. Frosted Acrylic (formerly Glass Orbs)
 export function GlassOrbs({ brandName, headline, subtext, wifiPassword, logoUrl, qrImageUrl, colorStart, colorEnd, id }: QrTemplateProps) {
   return (
-    <div id={id} className="w-[450px] h-[675px] bg-[#f0f2f5] text-[#1c1d20] flex flex-col relative overflow-hidden box-border font-cabinet">
+    <div id={id} className="w-[450px] h-[675px] bg-[#111] text-white flex flex-col relative overflow-hidden box-border font-cabinet">
       <CreativeFonts />
-      <div className="absolute top-10 left-10 w-[200px] h-[200px] rounded-full blur-[40px] mix-blend-multiply opacity-60" style={{ backgroundColor: colorStart }} />
-      <div className="absolute bottom-10 right-10 w-[250px] h-[250px] rounded-full blur-[40px] mix-blend-multiply opacity-60" style={{ backgroundColor: colorEnd }} />
       
-      <div className="w-full h-full relative z-10 flex flex-col items-center justify-between p-10">
+      {/* High saturation deep background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#222]" />
+      <div className="absolute -top-20 -left-20 w-[300px] h-[300px] rounded-full blur-[80px] mix-blend-screen opacity-50" style={{ backgroundColor: colorStart || '#00F0FF' }} />
+      <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] rounded-full blur-[100px] mix-blend-screen opacity-40" style={{ backgroundColor: colorEnd || '#FF0055' }} />
+      
+      {/* Heavy noise overlay for physical texture */}
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/noise-lines.png')] opacity-30 mix-blend-overlay pointer-events-none" />
+      
+      <div className="w-full h-full relative z-10 flex flex-col items-center justify-between p-8">
         
-        <div className="flex flex-col items-center text-center">
+        <div className="w-full flex flex-col items-center text-center bg-white/5 backdrop-blur-[20px] border border-white/10 rounded-3xl p-6 shadow-2xl">
           {logoUrl && (
-            <div className="w-[60px] h-[60px] rounded-2xl bg-white/40 backdrop-blur-md border border-white/60 p-2 shadow-sm mb-4">
-              <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-full h-full object-contain" />
+            <div className="w-[50px] h-[50px] mb-4">
+              <img src={logoUrl} crossOrigin="anonymous" alt="Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
             </div>
           )}
-          <h1 className="font-syne text-[36px] font-bold tracking-tight mb-2">{brandName}</h1>
-          <h2 className="text-[14px] font-medium text-slate-500 uppercase tracking-widest bg-white/50 backdrop-blur-sm px-4 py-1 rounded-full">{headline}</h2>
+          <h1 className="font-syne text-[32px] font-extrabold tracking-tight mb-2 leading-none">{brandName}</h1>
+          <h2 className="text-[11px] font-bold text-white/50 uppercase tracking-[0.3em]">{headline}</h2>
         </div>
 
-        <div className="bg-white/60 p-4 rounded-[32px] backdrop-blur-xl border border-white shadow-[0_20px_40px_rgba(0,0,0,0.05)]">
-          <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[200px] h-[200px] object-contain mix-blend-multiply" />
-        </div>
-
-        <div className="flex flex-col items-center w-full">
-          <h3 className="text-[16px] font-bold text-slate-700 mb-6">{subtext}</h3>
-          
-          {wifiPassword && (
-            <div className="bg-white text-slate-800 px-6 py-3 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-3 font-semibold text-[14px]">
-              <Wifi className="w-4 h-4 text-slate-400" />
-              {wifiPassword}
+        <div className="relative group perspective-1000">
+          <div className="bg-white/10 p-[2px] rounded-[32px] backdrop-blur-[40px] border border-white/20 shadow-[0_30px_60px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.4)]">
+            <div className="bg-white p-3 rounded-[30px]">
+              <img src={qrImageUrl} crossOrigin="anonymous" alt="QR" className="w-[190px] h-[190px] object-contain mix-blend-multiply rounded-[20px]" />
             </div>
-          )}
+          </div>
+        </div>
+
+        <div className="w-full flex flex-col items-center">
+          <div className="w-full bg-white/5 backdrop-blur-[20px] border border-white/10 rounded-3xl p-6 flex flex-col items-center shadow-2xl">
+            <h3 className="text-[14px] font-bold text-white/80 uppercase tracking-widest mb-4">{subtext}</h3>
+            
+            {wifiPassword && (
+              <div className="w-full bg-black/40 text-white px-5 py-3 rounded-xl border border-white/5 flex justify-between items-center font-bold text-[14px]">
+                <div className="flex items-center gap-2 opacity-50">
+                  <Wifi className="w-4 h-4" />
+                  <span className="text-[10px] uppercase tracking-widest">Connect</span>
+                </div>
+                <span>{wifiPassword}</span>
+              </div>
+            )}
+          </div>
         </div>
 
       </div>
