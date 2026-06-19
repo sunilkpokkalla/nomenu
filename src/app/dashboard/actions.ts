@@ -1124,6 +1124,59 @@ export async function updateLocationZones(restaurantId: string, zones: string[])
   revalidatePath("/dashboard/qrcodes");
 }
 
+function levenshteinDistance(a: string, b: string): number {
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function findClosestMatch(itemName: string, globalMatches: any[]): any | null {
+  if (!globalMatches || globalMatches.length === 0) return null;
+  
+  const searchName = itemName.toLowerCase();
+  
+  // Try exact match first
+  const exact = globalMatches.find(m => m.name.toLowerCase() === searchName);
+  if (exact) return exact;
+  
+  // Try partial match (e.g. "Caviar" in "Caviar Tartlet" or "Gougère" in "Gougères")
+  const partial = globalMatches.find(m => 
+    m.name.toLowerCase().includes(searchName) || 
+    searchName.includes(m.name.toLowerCase())
+  );
+  if (partial) return partial;
+
+  // Try Levenshtein distance for typos/plurals
+  let bestMatch = null;
+  let minDistance = Infinity;
+
+  for (const match of globalMatches) {
+    const dist = levenshteinDistance(searchName, match.name.toLowerCase());
+    // Max allowable distance is 3 for small typos like plurals
+    if (dist < minDistance && dist <= 3) {
+      minDistance = dist;
+      bestMatch = match;
+    }
+  }
+
+  return bestMatch;
+}
+
 export async function applyMenuTemplate(menuId: string, restaurantId: string, templateId: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -1153,19 +1206,13 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
   }
 
   // 0. Fetch high-quality images from the global chef library
-  const allItemNames = template.categories.flatMap(c => c.items.map(i => i.name));
-  
+  // Fetch ALL global matches to allow for fuzzy searching
   const { data: globalMatches } = await supabase
     .from('global_chef_library')
-    .select('name, image_url, description')
-    .in('name', allItemNames);
+    .select('name, image_url, description');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const matchMap = new Map<string, any>();
-  if (globalMatches) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (globalMatches as any[]).forEach((m: any) => matchMap.set(m.name.toLowerCase(), m));
-  }
+  const allLibraryItems = (globalMatches as any[]) || [];
 
   // 1. Create categories
   for (let i = 0; i < template.categories.length; i++) {
@@ -1190,7 +1237,8 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
 
     // 2. Create items for this category
     const itemsToInsert = category.items.map(item => {
-      const matchedItem = matchMap.get(item.name.toLowerCase());
+      const matchedItem = findClosestMatch(item.name, allLibraryItems);
+      
       return {
         restaurant_id: restaurantId,
         category_id: newCategory.id,
@@ -1199,7 +1247,7 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
         price: item.price,
         is_available: true,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        image_url: matchedItem?.image_url || (item as any).imageUrl || ""
+        image_url: matchedItem?.image_url || (item as any).imageUrl || `https://loremflickr.com/800/600/food,${encodeURIComponent(item.name.split(' ')[0])}?lock=${Math.floor(Math.random() * 100000)}`
       };
     });
 
