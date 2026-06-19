@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { CustomCheckoutModal } from "./custom-checkout-modal";
+import { useRouter } from "next/navigation";
 
 export function SubscriptionButton({ 
   planId, 
@@ -15,60 +15,30 @@ export function SubscriptionButton({
   isElite: boolean;
   isAnnual?: boolean;
 }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
-  const handleCheckout = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch("/api/stripe/subscription-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planId, isAnnual }),
-      });
-      const data = await res.json();
-      if (data.clientSecret) {
-        setClientSecret(data.clientSecret);
-        setIsModalOpen(true);
-      } else if (data.url) {
-        // Fallback just in case
-        window.location.href = data.url;
-      } else {
-        throw new Error(data.error || "Failed to initiate checkout");
-      }
-    } catch (error: unknown) {
-      console.error(error);
-      alert(`Checkout failed: ${(error as Error).message || "Unknown error occurred"}`);
-    } finally {
-      setLoading(false);
-    }
+  const handleCheckout = () => {
+    setLoading(true);
+    // Redirect to the dedicated checkout page with the selected plan details
+    router.push(`/dashboard/checkout?planId=${planId}&planName=${encodeURIComponent(planName)}&annual=${isAnnual}`);
   };
 
   return (
-    <>
-      <button
-        onClick={handleCheckout}
-        disabled={loading}
-        className={`w-full py-4 rounded-xl text-sm font-black tracking-widest uppercase transition-all flex items-center justify-center gap-2
-          ${isElite 
-            ? "bg-slate-950 text-white shadow-lg shadow-slate-900/10 hover:bg-black hover:scale-[1.02]" 
-            : "bg-white text-slate-900 border border-slate-200 hover:bg-slate-50"
-          }
-          ${loading ? "opacity-70 pointer-events-none" : ""}
-        `}
-      >
-        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-        {loading ? "Preparing Checkout..." : `Upgrade to ${planName}`}
-      </button>
-
-      <CustomCheckoutModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        clientSecret={clientSecret}
-        planName={planName}
-      />
-    </>
+    <button
+      onClick={handleCheckout}
+      disabled={loading}
+      className={`w-full py-4 rounded-xl text-sm font-black tracking-widest uppercase transition-all flex items-center justify-center gap-2
+        ${isElite 
+          ? "bg-slate-950 text-white shadow-lg shadow-slate-900/10 hover:bg-black hover:scale-[1.02]" 
+          : "bg-white text-slate-900 border border-slate-200 hover:bg-slate-50"
+        }
+        ${loading ? "opacity-70 pointer-events-none" : ""}
+      `}
+    >
+      {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+      {loading ? "Preparing Checkout..." : `Upgrade to ${planName}`}
+    </button>
   );
 }
 
