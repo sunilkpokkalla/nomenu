@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { Palette } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { Suspense } from "react";
 import { CustomizeDashboardClient } from "./customize-client";
 import Link from "next/link";
 
@@ -68,10 +69,12 @@ export default async function CustomizePage(
           </Link>
         </div>
       ) : (
-        <CustomizeDashboardClient 
-          restaurant={restaurant} 
-          menus={menus || []} 
-        />
+        <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="w-8 h-8 border-4 border-slate-900 border-t-transparent rounded-full animate-spin"></div></div>}>
+          <CustomizeDashboardClient 
+            restaurant={restaurant} 
+            menus={menus || []} 
+          />
+        </Suspense>
       )}
       
       {/* Toast Messages */}

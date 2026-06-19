@@ -126,7 +126,7 @@ export function ResortTheme(props: MenuThemeProps) {
                 </div>
 
                 <div className={layoutMode === "grid" 
-                  ? "grid grid-cols-2 md:grid-cols-3 auto-rows-[220px] gap-4 sm:gap-6" 
+                  ? "grid grid-cols-2 md:grid-cols-3 auto-rows-[220px] gap-4 sm:gap-6 grid-flow-dense" 
                   : "flex flex-col gap-4 max-w-3xl mx-auto"}>
                   
                   {catItems.map((item, index) => {
@@ -140,7 +140,7 @@ export function ResortTheme(props: MenuThemeProps) {
                         className={`group cursor-pointer bg-white rounded-[32px] overflow-hidden shadow-[0_10px_30px_rgba(0,51,102,0.05)] hover:shadow-[0_20px_40px_rgba(0,105,148,0.15)] hover:-translate-y-1 transition-all duration-300 flex ${layoutMode === "list" ? "flex-col sm:flex-row p-4 gap-6 items-center h-auto" : `${bentoClass} flex-col relative`}`}
                       >
                         {item.image_url ? (
-                          <div className={`${layoutMode === "list" ? "w-full sm:w-40 h-40 rounded-[24px]" : "absolute inset-0 w-full h-full"} overflow-hidden z-0`}>
+                          <div className={`${layoutMode === "list" ? "relative w-full sm:w-40 h-40 shrink-0 rounded-[24px]" : "absolute inset-0 w-full h-full"} overflow-hidden z-0`}>
                             <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" fill />
                             {/* Gradient Overlay for Bento items */}
                             {layoutMode === "grid" && (
@@ -149,7 +149,7 @@ export function ResortTheme(props: MenuThemeProps) {
                           </div>
                         ) : (
                           // Fallback gradient if no image
-                          <div className={`${layoutMode === "list" ? "w-full sm:w-40 h-40 rounded-[24px]" : "absolute inset-0 w-full h-full"} bg-gradient-to-br from-[#E0F7FA] to-[#87CEEB]/30 z-0`}></div>
+                          <div className={`${layoutMode === "list" ? "relative w-full sm:w-40 h-40 shrink-0 rounded-[24px]" : "absolute inset-0 w-full h-full"} bg-gradient-to-br ${layoutMode === "grid" ? "from-[#003366] to-[#006994]" : "from-[#E0F7FA] to-[#87CEEB]/30"} z-0`}></div>
                         )}
                         
                         {/* Content Area */}

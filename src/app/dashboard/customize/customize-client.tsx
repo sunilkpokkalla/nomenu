@@ -1,18 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { BrandingForm } from "@/components/dashboard/branding-form";
 import { updateRestaurantBranding, updateMenuBranding } from "@/app/dashboard/actions";
 import { Label } from "@/components/ui/label";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: any, menus: any[] }) {
-  const [selectedScope, setSelectedScope] = useState<string>("global");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const userPlan = (restaurant.plan || "free").toLowerCase();
+  const [selectedScope, setSelectedScope] = useState<string>(searchParams.get("scope") || "global");
+
+  useEffect(() => {
+    const scope = searchParams.get("scope");
+    if (scope && scope !== selectedScope) {
+      setSelectedScope(scope);
+    }
+  }, [searchParams, selectedScope]);
 
   const handleScopeChange = (val: string) => {
     setSelectedScope(val);
+    const params = new URLSearchParams(searchParams.toString());
+    if (val === "global") {
+      params.delete("scope");
+    } else {
+      params.set("scope", val);
+    }
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const selectedMenu = selectedScope !== "global" ? menus.find(m => m.id === selectedScope) : null;
@@ -46,7 +63,7 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
 
   // Action wrapper for menu to inject menuId into the server action
   const menuActionWrapper = async (formData: FormData) => {
-    return updateMenuBranding(selectedMenu!.id, formData);
+    return updateMenuBranding(selectedMenu!.id, formData, `/dashboard/customize?scope=${selectedMenu!.id}`);
   };
 
   return (

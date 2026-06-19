@@ -836,7 +836,7 @@ export async function updateRestaurantPlan(formData: FormData) {
   redirect("/dashboard/billing?success=Plan%20updated%20successfully");
 }
 
-export async function updateMenuBranding(menuId: string, formData: FormData) {
+export async function updateMenuBranding(menuId: string, formData: FormData, redirectTo?: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
@@ -857,12 +857,15 @@ export async function updateMenuBranding(menuId: string, formData: FormData) {
     .update({ design_config })
     .eq("id", menuId);
 
+  const targetPath = redirectTo || `/dashboard/menus/${menuId}/customize`;
+  const paramChar = targetPath.includes('?') ? '&' : '?';
+
   if (error) {
-    redirect(`/dashboard/menus/${menuId}/customize?message=${encodeURIComponent(error.message)}`);
+    redirect(`${targetPath}${paramChar}message=${encodeURIComponent(error.message)}`);
   }
 
-  revalidatePath(`/dashboard/menus/${menuId}/customize`);
-  redirect(`/dashboard/menus/${menuId}/customize?success=Menu design updated successfully`);
+  revalidatePath(targetPath.split('?')[0]);
+  redirect(`${targetPath}${paramChar}success=Menu%20design%20updated%20successfully`);
 }
 
 export async function importCategoriesAndItems(

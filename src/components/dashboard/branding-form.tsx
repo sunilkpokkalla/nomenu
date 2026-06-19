@@ -66,7 +66,11 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
     const formData = new FormData(e.currentTarget);
     try {
       await action(formData);
-    } catch (err) {
+    } catch (err: unknown) {
+      const error = err as Error & { digest?: string };
+      if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+        throw err;
+      }
       console.error(err);
     } finally {
       setIsPending(false);

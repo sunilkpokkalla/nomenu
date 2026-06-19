@@ -63,11 +63,11 @@ export function OmakaseTheme(props: MenuThemeProps) {
             />
           </div>
 
-          <div className="flex-grow flex items-center overflow-x-auto scrollbar-none border-t sm:border-t-0 border-[#222]">
-            <div 
-              ref={categoryNavRef}
-              className="flex px-6 py-4 gap-8 shrink-0"
-            >
+          <div 
+            ref={categoryNavRef}
+            className="flex-grow flex items-center overflow-x-auto scrollbar-none border-t sm:border-t-0 border-[#222]"
+          >
+            <div className="flex px-6 py-4 gap-8 shrink-0">
               {categories.map(cat => (
                 <button
                   key={cat.id}
@@ -84,6 +84,17 @@ export function OmakaseTheme(props: MenuThemeProps) {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Subtle Filters & Layout Toggle */}
+        <div className="max-w-4xl mx-auto px-6 py-2.5 flex gap-6 overflow-x-auto scrollbar-none border-t border-[#222]">
+          <button onClick={() => setters.setFilterVeg(!filterVeg)} className={`text-[9px] uppercase tracking-[0.2em] transition-colors whitespace-nowrap ${filterVeg ? "text-white font-bold" : "text-[#555] hover:text-[#AAAAAA]"}`}>Vegetarian</button>
+          <button onClick={() => setters.setFilterVegan(!filterVegan)} className={`text-[9px] uppercase tracking-[0.2em] transition-colors whitespace-nowrap ${filterVegan ? "text-white font-bold" : "text-[#555] hover:text-[#AAAAAA]"}`}>Vegan</button>
+          <button onClick={() => setters.setFilterGF(!filterGF)} className={`text-[9px] uppercase tracking-[0.2em] transition-colors whitespace-nowrap ${filterGF ? "text-white font-bold" : "text-[#555] hover:text-[#AAAAAA]"}`}>Gluten Free</button>
+          <div className="flex-grow"></div>
+          <button onClick={() => setters.setLayoutMode(layoutMode === "grid" ? "list" : "grid")} className="text-[9px] uppercase tracking-[0.2em] text-[#555] hover:text-white transition-colors whitespace-nowrap">
+            {layoutMode === "grid" ? "List View" : "Grid View"}
+          </button>
         </div>
       </div>
 
@@ -112,10 +123,10 @@ export function OmakaseTheme(props: MenuThemeProps) {
                   <div 
                     key={item.id} 
                     onClick={() => setters.setSelectedItem(item)}
-                    className={`group cursor-pointer flex ${layoutMode === "grid" ? "flex-col gap-4 text-center items-center" : "flex-col md:flex-row gap-6 items-center md:items-start"}`}
+                    className={`group cursor-pointer flex ${layoutMode === "grid" ? "flex-col gap-4 text-center items-center" : "flex-row gap-5 sm:gap-6 items-start"}`}
                   >
                     {item.image_url && (
-                      <div className={`shrink-0 overflow-hidden bg-[#1A1A1A] relative ${layoutMode === "grid" ? "w-full aspect-square" : "w-full md:w-32 h-32 md:h-32"}`}>
+                      <div className={`shrink-0 overflow-hidden bg-[#1A1A1A] relative ${layoutMode === "grid" ? "w-full aspect-square" : "w-24 h-24 sm:w-32 sm:h-32"}`}>
                         <Image 
                           src={item.image_url} 
                           alt={item.name} 
@@ -124,19 +135,19 @@ export function OmakaseTheme(props: MenuThemeProps) {
                       </div>
                     )}
                     
-                    <div className={`flex-grow space-y-3 w-full ${layoutMode === "grid" ? "text-center" : "text-center md:text-left"}`}>
-                      <div className={`flex ${layoutMode === "grid" ? "flex-col items-center gap-1" : "flex-col md:flex-row justify-between items-center md:items-baseline gap-2"}`}>
-                        <h3 className="text-sm tracking-widest text-white uppercase group-hover:text-[#AAAAAA] transition-colors">{item.name}</h3>
-                        <span className="text-sm tracking-wider text-[#888888]">{currencySign}{item.price.toFixed(2)}</span>
+                    <div className={`flex-grow space-y-3 w-full ${layoutMode === "grid" ? "text-center" : "text-left"}`}>
+                      <div className={`flex ${layoutMode === "grid" ? "flex-col items-center gap-1" : "flex-col sm:flex-row justify-between items-start sm:items-baseline gap-1 sm:gap-2"}`}>
+                        <h3 className="text-sm tracking-widest text-white uppercase group-hover:text-[#AAAAAA] transition-colors leading-snug">{item.name}</h3>
+                        <span className="text-sm tracking-wider text-[#888888] shrink-0 mt-1 sm:mt-0">{currencySign}{item.price.toFixed(2)}</span>
                       </div>
                       
                       {item.description && (
-                        <p className="text-[11px] leading-relaxed text-[#777777] font-sans font-light">
+                        <p className="text-[11px] leading-relaxed text-[#777777] font-sans font-light line-clamp-3 sm:line-clamp-none">
                           {item.description}
                         </p>
                       )}
                       
-                      <div className={`flex flex-wrap gap-3 pt-2 ${layoutMode === "grid" ? "justify-center" : "justify-center md:justify-start"}`}>
+                      <div className={`flex flex-wrap gap-3 pt-1 ${layoutMode === "grid" ? "justify-center" : "justify-start"}`}>
                         {item.is_vegetarian && <span className="text-[8px] uppercase tracking-widest text-[#555555]">Vegetarian</span>}
                         {item.is_vegan && <span className="text-[8px] uppercase tracking-widest text-[#555555]">Vegan</span>}
                         {item.is_gluten_free && <span className="text-[8px] uppercase tracking-widest text-[#555555]">Gluten Free</span>}

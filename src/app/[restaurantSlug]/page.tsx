@@ -1,6 +1,40 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+
+export async function generateMetadata(
+  props: { params: Promise<{ restaurantSlug: string }> },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const params = await props.params;
+  const supabase = await createClient();
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("name, cuisine_type")
+    .eq("slug", params.restaurantSlug)
+    .maybeSingle();
+
+  if (!restaurant) {
+    return { title: "Restaurant Not Found | NoMenu" };
+  }
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${restaurant.name} | Digital Menu by NoMenu`,
+    description: `View the digital menu for ${restaurant.name}, offering amazing ${restaurant.cuisine_type || 'cuisine'}. Order directly from your phone.`,
+    openGraph: {
+      title: `${restaurant.name} | Digital Menu by NoMenu`,
+      description: `View the digital menu for ${restaurant.name}, offering amazing ${restaurant.cuisine_type || 'cuisine'}. Order directly from your phone.`,
+      images: [...previousImages],
+    },
+    twitter: {
+      title: `${restaurant.name} | Digital Menu by NoMenu`,
+      description: `View the digital menu for ${restaurant.name}. Order directly from your phone.`,
+    }
+  };
+}
 
 export default async function RestaurantRootPage(
   props: {

@@ -1,3 +1,4 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import { headers } from "next/headers";
 import { QrCode } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
@@ -8,6 +9,52 @@ import { MenuClientView } from "@/components/menu/menu-client-view";
 import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
 import { ReceiptTracker } from "@/components/menu/receipt-tracker";
+
+export async function generateMetadata(
+  props: { params: Promise<{ restaurantSlug: string, menuSlug: string }> },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const params = await props.params;
+  const supabase = await createClient();
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("id, name, cuisine_type")
+    .eq("slug", params.restaurantSlug)
+    .maybeSingle();
+
+  if (!restaurant) {
+    return { title: "Menu Not Found | NoMenu" };
+  }
+
+  const { data: menu } = await supabase
+    .from("menus")
+    .select("name, description")
+    .eq("restaurant_id", restaurant.id)
+    .eq("slug", params.menuSlug)
+    .maybeSingle();
+
+  if (!menu) {
+    return { title: `${restaurant.name} | NoMenu` };
+  }
+
+  const previousImages = (await parent).openGraph?.images || [];
+  const metaTitle = `${restaurant.name} - ${menu.name} | Digital Menu`;
+  const metaDesc = menu.description || `Browse the ${menu.name} at ${restaurant.name}. Order directly from your table with NoMenu.`;
+
+  return {
+    title: metaTitle,
+    description: metaDesc,
+    openGraph: {
+      title: metaTitle,
+      description: metaDesc,
+      images: [...previousImages],
+    },
+    twitter: {
+      title: metaTitle,
+      description: metaDesc,
+    }
+  };
+}
 
 export default async function StorefrontMenuPage(
   props: {

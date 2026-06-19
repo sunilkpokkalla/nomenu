@@ -30,6 +30,7 @@ import { ClientErrorLogger } from "@/components/client-error-logger";
 import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
     default: "NoMenu | Digital QR Menus for Restaurants",
     template: "%s | NoMenu"
@@ -39,6 +40,19 @@ export const metadata: Metadata = {
   authors: [{ name: "AmBrightTech LLC" }],
   creator: "AmBrightTech LLC",
   publisher: "AmBrightTech LLC",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: "NoMenu",
+    title: "NoMenu | Digital QR Menus for Restaurants",
+    description: "Create and manage beautiful digital QR code menus for your restaurant in minutes. Fast, contactless, and easy to update.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NoMenu | Digital QR Menus for Restaurants",
+    description: "Create and manage beautiful digital QR code menus for your restaurant in minutes. Fast, contactless, and easy to update.",
+  },
 };
 
 import { SupabaseHashListener } from "@/components/supabase-hash-listener";
