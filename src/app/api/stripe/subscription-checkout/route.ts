@@ -85,26 +85,34 @@ export async function POST(req: Request) {
         .eq("id", restaurant.id);
     }
 
-    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL;
-
-    const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
+    const subscription = await stripe.subscriptions.create({
       customer: customerId,
-      line_items: [
+      items: [
         {
           price: priceId,
-          quantity: 1,
         },
       ],
-      success_url: `${origin}/dashboard/billing?success=Subscription%20updated%20successfully!`,
-      cancel_url: `${origin}/dashboard/billing?canceled=true`,
+      payment_behavior: "default_incomplete",
+      payment_settings: { save_default_payment_method: "on_subscription" },
+      expand: ["latest_invoice.payment_intent"],
       metadata: {
         restaurant_id: restaurant.id,
-        plan_id: planId, // Let the webhook know what plan this is for
+        plan_id: planId,
       },
     });
 
-    return NextResponse.json({ url: session.url });
+    const invoice = subscription.latest_invoice as Stripe.Invoice;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const paymentIntent = (invoice as any).payment_intent as Stripe.PaymentIntent;
+
+    if (!paymentIntent || !paymentIntent.client_secret) {
+      throw new Error("Failed to create payment intent. Please try again.");
+    }
+
+    return NextResponse.json({ 
+      subscriptionId: subscription.id,
+      clientSecret: paymentIntent.client_secret 
+    });
   } catch (error: unknown) {
     console.error("Stripe Subscription Checkout Error:", error);
     return NextResponse.json({ error: (error as Error).message }, { status: 500 });
