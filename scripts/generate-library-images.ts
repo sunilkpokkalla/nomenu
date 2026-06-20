@@ -60,8 +60,14 @@ async function run() {
     while (!success && retries < 3) {
       try {
         // 1. Ask Fal.ai (Flux) to generate the image
-        const cuisineStr = dish.cuisines && dish.cuisines.length > 0 ? dish.cuisines.join(' and ') + ' cuisine' : 'food';
-        const prompt = `A highly professional, hyper-realistic food photography studio shot of an authentic ${cuisineStr} dish called "${dish.name}". ${dish.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
+        const cuisineStr = dish.cuisines && dish.cuisines.length > 0 ? dish.cuisines.join(' and ') + ' cuisine' : '';
+        
+        let prompt = '';
+        if (dish.category === 'Beverages' || dish.category === 'Drinks') {
+          prompt = `A highly professional, hyper-realistic beverage photography studio shot of a refreshing ${cuisineStr} drink called "${dish.name}". ${dish.description || ''} Served in an elegant glass with condensation, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the drink, vibrant colors, clean minimal background. Absolutely no food, no plates, no text, no words, no logos.`;
+        } else {
+          prompt = `A highly professional, hyper-realistic food photography studio shot of an authentic ${cuisineStr ? cuisineStr + ' dish' : 'food'} called "${dish.name}". ${dish.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
+        }
         
         const result = await fal.subscribe("fal-ai/flux/schnell", {
           input: {
