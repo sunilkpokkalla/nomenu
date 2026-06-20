@@ -2,7 +2,6 @@ import React from "react";
 import { X, Heart, Star, Flame, Waves } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
-import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -46,8 +45,6 @@ export function ResortTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#F0F8FF] text-[#003366] font-sans pb-32" style={{ fontFamily: '"Inter", "system-ui", sans-serif' }}>
-      <RestaurantInfoModal restaurant={restaurant} />
-      
       {/* Resort Header */}
       <header className="relative w-full pt-20 pb-12 px-6 flex flex-col items-center text-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#87CEEB]/30 to-transparent z-0"></div>
@@ -58,6 +55,7 @@ export function ResortTheme(props: MenuThemeProps) {
           <h1 className="text-4xl sm:text-5xl font-black tracking-tighter text-[#003366] mb-3">
             {restaurant.name}
           </h1>
+
           <p className="text-[#006994] font-semibold tracking-widest uppercase text-xs">
             {restaurant.cuisine_type || "Oasis Resort & Beach Club"}
           </p>

@@ -137,7 +137,7 @@ export default async function SettingsPage(
               </div>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-4">
               <div className="space-y-2">
                 <Label htmlFor="maxTakeawayPerSlot">Takeaway Capacity per 15-Min</Label>
                 <Input 
@@ -163,6 +163,17 @@ export default async function SettingsPage(
                   required 
                 />
                 <p className="text-[10px] text-muted-foreground">Limits Priority Reservations per slot.</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="openingTime">Kitchen Opening Time</Label>
+                <Input 
+                  id="openingTime" 
+                  name="openingTime" 
+                  type="time" 
+                  defaultValue={restaurant.opening_time ? restaurant.opening_time.substring(0, 5) : "09:00"} 
+                  required 
+                />
+                <p className="text-[10px] text-muted-foreground">Earliest time the cart allows orders.</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="closingTime">Kitchen Closing Time</Label>

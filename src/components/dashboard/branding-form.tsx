@@ -117,8 +117,28 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
       accentBg: "bg-rose-50 text-rose-700 border border-black font-extrabold rounded-full px-1.5",
       headerGradient: `linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.75)), linear-gradient(135deg, ${accentColor}, ${primaryColor})`,
       fontClass: "font-sans"
+    },
+    botanical: {
+      frameBg: "bg-[#F9FBE7]",
+      textPrimary: "text-[#33691E] font-serif",
+      textSecondary: "text-[#558B2F] font-sans text-[8px]",
+      cardBg: "bg-white border border-[#DCEDC8] rounded-3xl p-3 shadow-sm",
+      itemBorder: "border-b border-[#DCEDC8]/50",
+      accentBg: "bg-[#F1F8E9] text-[#33691E] border border-[#DCEDC8] rounded-full",
+      headerGradient: "",
+      fontClass: "font-serif"
+    },
+    cyberneon: {
+      frameBg: "bg-[#09090B]",
+      textPrimary: "text-[#00FF41] font-mono",
+      textSecondary: "text-[#008F11] font-mono text-[8px]",
+      cardBg: "bg-[#18181B] border-l-2 border-[#00FF41] rounded-none p-3 shadow-[0_0_15px_rgba(0,255,65,0.15)]",
+      itemBorder: "border-b border-[#27272A]",
+      accentBg: "bg-[#00FF41]/10 text-[#00FF41] border border-[#00FF41]/30 font-bold",
+      headerGradient: "",
+      fontClass: "font-mono tracking-tighter"
     }
-  }[themeStyle as "bistro" | "minimalist" | "luxury" | "vibrant"] || {
+  }[themeStyle as "bistro" | "minimalist" | "luxury" | "vibrant" | "botanical" | "cyberneon"] || {
     frameBg: "bg-slate-50",
     textPrimary: "text-slate-900",
     textSecondary: "text-slate-500",
@@ -130,9 +150,9 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-16 items-start max-w-[1400px] mx-auto w-full">
+    <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start max-w-[1400px] mx-auto w-full">
       {/* LEFT: SETTINGS PANEL */}
-      <div className="flex-1 w-full space-y-16">
+      <div className="flex-1 w-full space-y-8">
         
         {/* Header Intro */}
         <div>
@@ -140,7 +160,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           <p className="text-slate-500 font-medium">Design the digital experience your guests see when they scan the QR code.</p>
         </div>
 
-        <form id="branding-settings-form" onSubmit={handleSubmit} className="space-y-16">
+        <form id="branding-settings-form" onSubmit={handleSubmit} className="space-y-10">
           
           {type === "menu" && (
             <div className="bg-slate-100 p-6 rounded-3xl flex items-center justify-between border border-slate-200/60">
@@ -165,49 +185,63 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           <div className={type === "menu" && !useCustomDesign ? "opacity-40 pointer-events-none transition-all duration-300 grayscale" : "transition-all duration-300"}>
             
             {/* Color Palette */}
-            <section>
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-6 border-b border-slate-100 pb-3">Color Palette</h2>
-              <div className="grid gap-6 sm:grid-cols-2">
-                
-                <div className="group flex items-center gap-5 p-4 rounded-[2rem] bg-slate-50 border border-slate-100 transition-all hover:bg-white hover:border-slate-200 hover:shadow-xl hover:shadow-slate-200/20">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-inner ring-1 ring-black/5 flex-shrink-0 cursor-pointer">
-                    <input type="color" id="primaryColorPicker" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="absolute -top-4 -left-4 w-24 h-24 cursor-pointer" />
+            {["minimalist", "vibrant", "botanical"].includes(themeStyle) ? (
+              <section>
+                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-5 border-b border-slate-100 pb-3">Brand Colors</h2>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  
+                  <div className="flex-1 flex items-center gap-3 p-2.5 pl-3 rounded-2xl bg-white border border-slate-200 transition-all hover:border-slate-300 hover:shadow-sm">
+                    <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-inner ring-1 ring-black/5 flex-shrink-0 cursor-pointer">
+                      <input type="color" id="primaryColorPicker" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} className="absolute -top-2 -left-2 w-12 h-12 cursor-pointer" />
+                    </div>
+                    <div className="flex-1">
+                      <Label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-0.5">Primary Color</Label>
+                      <Input type="text" name="primaryColor" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} maxLength={7} required className="border-0 bg-transparent text-sm font-mono tracking-wider shadow-none p-0 h-auto focus-visible:ring-0 text-slate-900 uppercase" />
+                    </div>
                   </div>
-                  <div className="flex-1 space-y-1">
-                    <Label className="text-sm font-bold text-slate-900">Primary Color</Label>
-                    <Input type="text" name="primaryColor" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} maxLength={7} required className="border-0 bg-transparent text-lg font-mono tracking-wider shadow-none px-0 h-auto focus-visible:ring-0 text-slate-500 uppercase" />
-                  </div>
-                </div>
 
-                <div className="group flex items-center gap-5 p-4 rounded-[2rem] bg-slate-50 border border-slate-100 transition-all hover:bg-white hover:border-slate-200 hover:shadow-xl hover:shadow-slate-200/20">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-inner ring-1 ring-black/5 flex-shrink-0 cursor-pointer">
-                    <input type="color" id="accentColorPicker" value={accentColor} onChange={(e) => setAccentColor(e.target.value)} className="absolute -top-4 -left-4 w-24 h-24 cursor-pointer" />
+                  <div className="flex-1 flex items-center gap-3 p-2.5 pl-3 rounded-2xl bg-white border border-slate-200 transition-all hover:border-slate-300 hover:shadow-sm">
+                    <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-inner ring-1 ring-black/5 flex-shrink-0 cursor-pointer">
+                      <input type="color" id="accentColorPicker" value={accentColor} onChange={(e) => setAccentColor(e.target.value)} className="absolute -top-2 -left-2 w-12 h-12 cursor-pointer" />
+                    </div>
+                    <div className="flex-1">
+                      <Label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-0.5">Accent Color</Label>
+                      <Input type="text" name="accentColor" value={accentColor} onChange={(e) => setAccentColor(e.target.value)} maxLength={7} required className="border-0 bg-transparent text-sm font-mono tracking-wider shadow-none p-0 h-auto focus-visible:ring-0 text-slate-900 uppercase" />
+                    </div>
                   </div>
-                  <div className="flex-1 space-y-1">
-                    <Label className="text-sm font-bold text-slate-900">Accent Color</Label>
-                    <Input type="text" name="accentColor" value={accentColor} onChange={(e) => setAccentColor(e.target.value)} maxLength={7} required className="border-0 bg-transparent text-lg font-mono tracking-wider shadow-none px-0 h-auto focus-visible:ring-0 text-slate-500 uppercase" />
-                  </div>
-                </div>
 
-              </div>
-            </section>
+                </div>
+              </section>
+            ) : (
+              <>
+                <input type="hidden" name="primaryColor" value={primaryColor} />
+                <input type="hidden" name="accentColor" value={accentColor} />
+              </>
+            )}
 
             {/* Layout Themes */}
-            <section className="mt-16">
+            <section className="mt-2">
               <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-6 border-b border-slate-100 pb-3">Layout Themes</h2>
               <input type="hidden" name="themeStyle" value={themeStyle} />
               
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {[
-                  { id: "noir", name: "Noir Editorial", desc: "Luxury Dark Mode", icon: "🍸", badge: "ELITE" },
-                  { id: "brasserie", name: "Brasserie", desc: "Warm & Natural", icon: "🍷", badge: "PRO" },
-                  { id: "bentopop", name: "Bento Pop", desc: "Vibrant Grid", icon: "🍱", badge: "PRO" },
-                  { id: "zen", name: "Zen Minimalist", desc: "Pure Whitespace", icon: "🍵", badge: null },
+                  // FREE TIER
                   { id: "minimalist", name: "Classic Minimalist", desc: "Clean & Simple", icon: "🍽️", badge: null },
-                  { id: "omakase", name: "Omakase", desc: "Zen Dark Mode", icon: "🍣", badge: "PRO" },
+                  { id: "zen", name: "Zen Minimalist", desc: "Pure Whitespace", icon: "🍵", badge: null },
+                  
+                  // PRO TIER
+                  { id: "vibrant", name: "Vibrant", desc: "Neo-brutalism", icon: "🍔", badge: "PRO" },
+                  { id: "botanical", name: "Botanical", desc: "Organic Cafe", icon: "🌿", badge: "PRO" },
                   { id: "bistro", name: "Bistro", desc: "Classic Serif", icon: "🍷", badge: "PRO" },
+                  { id: "brasserie", name: "Brasserie", desc: "Warm & Natural", icon: "🍷", badge: "PRO" },
+                  { id: "omakase", name: "Omakase", desc: "Zen Dark Mode", icon: "🍣", badge: "PRO" },
+                  { id: "bentopop", name: "Bento Pop", desc: "Vibrant Grid", icon: "🍱", badge: "PRO" },
+                  
+                  // ELITE TIER
+                  { id: "cyberneon", name: "Cyber Neon", desc: "Tech Nightlife", icon: "👾", badge: "ELITE" },
+                  { id: "noir", name: "Noir Editorial", desc: "Luxury Dark Mode", icon: "🍸", badge: "ELITE" },
                   { id: "luxury", name: "Lumina", desc: "Gold Cinematic", icon: "✨", badge: "ELITE" },
-                  { id: "vibrant", name: "Vibrant", desc: "Neo-brutalism", icon: "🍔", badge: "ELITE" },
                   { id: "resort", name: "Oasis", desc: "Beach Club", icon: "🌊", badge: "ELITE" },
                   { id: "popdiner", name: "Pop Diner", desc: "Street Art", icon: "⚡", badge: "ELITE" },
                   { id: "editorial", name: "Editorial", desc: "Magazine Style", icon: "📖", badge: "ELITE" },
@@ -243,8 +277,8 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
               </div>
             </section>
 
-            {/* Dining Amenities */}
-            <section className="mt-16">
+            {/* Advanced UI Adjustments */}
+            <section className="mt-4">
               <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-6 border-b border-slate-100 pb-3 flex items-center gap-2">
                 <Wifi className="h-4 w-4" /> Amenities
               </h2>
@@ -381,6 +415,18 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
               <h1 className="text-3xl font-serif font-light text-[#1A1918] mb-2">{entity.name}</h1>
               <p className="text-[7px] tracking-[0.25em] uppercase text-[#8C8881]">{entity.cuisine_type || "Editorial"}</p>
             </div>
+          ) : themeStyle === "botanical" ? (
+            <div className="pt-16 pb-12 px-6 text-center bg-[#F1F8E9] border-b border-[#DCEDC8] shrink-0 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#DCEDC8] rounded-full blur-3xl opacity-50 -mr-10 -mt-10 pointer-events-none"></div>
+              <h1 className="text-3xl font-serif text-[#33691E] tracking-tight mb-2 relative z-10">{entity.name}</h1>
+              <p className="text-[9px] tracking-[0.2em] uppercase text-[#689F38] relative z-10">{entity.cuisine_type || "Botanical"}</p>
+            </div>
+          ) : themeStyle === "cyberneon" ? (
+            <div className="pt-12 pb-8 px-4 text-center bg-[#09090B] border-b-2 border-[#00FF41] shrink-0 relative">
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-[#00FF41] shadow-[0_0_15px_#00FF41]"></div>
+              <h1 className="text-3xl font-mono font-bold tracking-tighter uppercase text-[#00FF41] drop-shadow-[0_0_8px_rgba(0,255,65,0.6)] mb-2">{entity.name}</h1>
+              <p className="text-[8px] tracking-[0.3em] uppercase text-[#008F11]">{entity.cuisine_type || "Cybernetics"}</p>
+            </div>
           ) : (
             <div
               className="h-28 w-full relative flex items-end justify-center p-4 text-white transition-all duration-300"
@@ -436,6 +482,14 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
             <div className="px-5 py-3 z-20 shrink-0 bg-[#F9F8F6] border-b border-[#E2DFD8] text-center flex flex-col items-center gap-1">
               <p className="text-[7px] text-[#5C5A56] tracking-widest uppercase">📍 {entity.address || "123 Editorial Ave"}</p>
             </div>
+          ) : themeStyle === "botanical" ? (
+            <div className="px-5 py-4 z-20 shrink-0 bg-white shadow-sm border-b border-[#DCEDC8] text-center flex flex-col items-center gap-1.5 rounded-b-3xl -mt-4 relative mx-2">
+              <p className="text-[8px] text-[#689F38] tracking-widest uppercase">📍 {entity.address || "123 Eden Path"}</p>
+            </div>
+          ) : themeStyle === "cyberneon" ? (
+            <div className="px-5 py-2 z-20 shrink-0 bg-[#18181B] border-y border-[#00FF41]/30 text-center flex flex-col items-center gap-1 font-mono">
+              <p className="text-[7px] text-[#008F11] tracking-widest uppercase">LOC // {entity.address || "SECTOR 7G"}</p>
+            </div>
           ) : (
             <div className="px-4 -mt-4 z-10">
               <div className={`${previewTheme.cardBg} space-y-1.5 text-[10px] ${previewTheme.textSecondary} shadow-lg rounded-xl`}>
@@ -453,24 +507,24 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           )}
 
           {/* Menu Items List */}
-          <div className={`p-4 space-y-4 flex-grow overflow-y-auto scrollbar-hide mt-2 ${themeStyle === "luxury" ? "bg-[#0C0C0E]" : themeStyle === "vibrant" ? "bg-[#FEF3C7]" : themeStyle === "omakase" ? "bg-[#0F0F0F]" : themeStyle === "popdiner" ? "bg-[#FFD166] p-5 gap-5" : themeStyle === "editorial" ? "bg-[#F9F8F6] p-5 gap-8" : themeStyle === "lounge" ? "bg-[#0A0A0A]" : themeStyle === "resort" ? "bg-[#F0F8FF]" : "bg-slate-50/50"}`}>
+          <div className={`p-4 space-y-4 flex-grow overflow-y-auto scrollbar-hide mt-2 ${themeStyle === "luxury" ? "bg-[#0C0C0E]" : themeStyle === "vibrant" ? "bg-[#FEF3C7]" : themeStyle === "omakase" ? "bg-[#0F0F0F]" : themeStyle === "popdiner" ? "bg-[#FFD166] p-5 gap-5" : themeStyle === "editorial" ? "bg-[#F9F8F6] p-5 gap-8" : themeStyle === "lounge" ? "bg-[#0A0A0A]" : themeStyle === "resort" ? "bg-[#F0F8FF]" : themeStyle === "botanical" ? "bg-[#F9FBE7]" : themeStyle === "cyberneon" ? "bg-[#09090B]" : "bg-slate-50/50"}`}>
             {[
               { name: "French Onion Soup", desc: "Classic beef broth, caramelized onions, gruyere.", price: "$12.00", img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
               { name: "Steak Frites", desc: "Prime ribeye, truffle fries, peppercorn sauce.", price: "$32.00", img: "https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
               { name: "Seared Scallops", desc: "Cauliflower purée, brown butter capers.", price: "$28.00", img: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?q=80&w=400&auto=format&fit=crop", tags: ["GF"] }
             ].map((item, idx) => (
-              <div key={idx} className={`flex gap-3.5 p-2.5 rounded-xl ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl" : themeStyle === "omakase" ? "bg-transparent rounded-none border-b border-[#222] pb-4" : themeStyle === "popdiner" ? "bg-white border-[3px] border-black flex-col shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rotate-1" : themeStyle === "editorial" ? "bg-transparent rounded-none flex-col gap-3 pb-6 border-b border-[#E2DFD8]" : themeStyle === "lounge" ? "bg-[#141414] border border-white/5 rounded-2xl shadow-xl flex-col pb-3" : themeStyle === "resort" ? "bg-white rounded-2xl shadow-md flex-col pb-3" : "bg-white shadow-sm border border-slate-100"}`}>
-                <div className={`shrink-0 overflow-hidden relative ${themeStyle === "bistro" ? "w-16 h-16 rounded" : themeStyle === "luxury" ? "w-16 h-16 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-20 h-20 rounded-xl border-2 border-black rotate-[2deg]" : themeStyle === "omakase" ? "w-16 h-16 rounded-none grayscale" : themeStyle === "popdiner" ? "w-full h-32 border-b-2 border-black bg-[#118AB2]" : themeStyle === "editorial" ? "w-full h-32 bg-[#E2DFD8] rounded-none" : themeStyle === "lounge" ? "w-full h-32 rounded-t-xl" : themeStyle === "resort" ? "w-full h-32 rounded-t-xl" : "w-14 h-14 rounded-lg"}`}>
+              <div key={idx} className={`flex gap-3.5 p-2.5 rounded-xl ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl" : themeStyle === "omakase" ? "bg-transparent rounded-none border-b border-[#222] pb-4" : themeStyle === "popdiner" ? "bg-white border-[3px] border-black flex-col shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rotate-1" : themeStyle === "editorial" ? "bg-transparent rounded-none flex-col gap-3 pb-6 border-b border-[#E2DFD8]" : themeStyle === "lounge" ? "bg-[#141414] border border-white/5 rounded-2xl shadow-xl flex-col pb-3" : themeStyle === "resort" ? "bg-white rounded-2xl shadow-md flex-col pb-3" : themeStyle === "botanical" ? "bg-white border border-[#DCEDC8] rounded-3xl p-3" : themeStyle === "cyberneon" ? "bg-[#18181B] border-l-2 border-[#00FF41] rounded-none shadow-[0_0_15px_rgba(0,255,65,0.05)]" : "bg-white shadow-sm border border-slate-100"}`}>
+                <div className={`shrink-0 overflow-hidden relative ${themeStyle === "bistro" ? "w-16 h-16 rounded" : themeStyle === "luxury" ? "w-16 h-16 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-20 h-20 rounded-xl border-2 border-black rotate-[2deg]" : themeStyle === "omakase" ? "w-16 h-16 rounded-none grayscale" : themeStyle === "popdiner" ? "w-full h-32 border-b-2 border-black bg-[#118AB2]" : themeStyle === "editorial" ? "w-full h-32 bg-[#E2DFD8] rounded-none" : themeStyle === "lounge" ? "w-full h-32 rounded-t-xl" : themeStyle === "resort" ? "w-full h-32 rounded-t-xl" : themeStyle === "botanical" ? "w-16 h-16 rounded-full border-2 border-[#F1F8E9]" : themeStyle === "cyberneon" ? "w-16 h-16 rounded-none border border-[#00FF41]/30 grayscale contrast-125" : "w-14 h-14 rounded-lg"}`}>
                   <Image src={item.img} alt={item.name} className="w-full h-full object-cover" fill />
                 </div>
                 <div className={`flex-1 space-y-1.5 ${themeStyle === "lounge" || themeStyle === "resort" ? "px-3" : ""}`}>
                   <div className={`flex ${themeStyle === "popdiner" ? "justify-between items-start gap-2" : "justify-between items-start"}`}>
-                    <h4 className={`text-xs font-bold leading-tight ${themeStyle === "luxury" ? "text-zinc-100 font-serif" : themeStyle === "vibrant" ? "text-black font-black uppercase tracking-tight" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "popdiner" ? "text-black font-black uppercase tracking-tighter text-xl" : themeStyle === "editorial" ? "text-[#1A1918] font-serif text-lg" : themeStyle === "lounge" ? "text-white" : themeStyle === "resort" ? "text-[#003366] font-black" : "text-slate-800"}`}>{item.name}</h4>
+                    <h4 className={`text-xs font-bold leading-tight ${themeStyle === "luxury" ? "text-zinc-100 font-serif" : themeStyle === "vibrant" ? "text-black font-black uppercase tracking-tight" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "popdiner" ? "text-black font-black uppercase tracking-tighter text-xl" : themeStyle === "editorial" ? "text-[#1A1918] font-serif text-lg" : themeStyle === "lounge" ? "text-white" : themeStyle === "resort" ? "text-[#003366] font-black" : themeStyle === "botanical" ? "text-[#33691E] font-serif" : themeStyle === "cyberneon" ? "text-[#00FF41] font-mono tracking-tight" : "text-slate-800"}`}>{item.name}</h4>
                   </div>
-                  <p className={`text-[9px] leading-snug ${themeStyle === "luxury" ? "text-zinc-400 font-serif" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light tracking-wide" : themeStyle === "popdiner" ? "text-gray-700 font-bold" : themeStyle === "editorial" ? "text-[#5C5A56] font-serif" : themeStyle === "lounge" ? "text-white/50" : themeStyle === "resort" ? "text-[#006994]" : "text-slate-500"}`}>{item.desc}</p>
+                  <p className={`text-[9px] leading-snug ${themeStyle === "luxury" ? "text-zinc-400 font-serif" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light tracking-wide" : themeStyle === "popdiner" ? "text-gray-700 font-bold" : themeStyle === "editorial" ? "text-[#5C5A56] font-serif" : themeStyle === "lounge" ? "text-white/50" : themeStyle === "resort" ? "text-[#006994]" : themeStyle === "botanical" ? "text-[#558B2F]" : themeStyle === "cyberneon" ? "text-[#008F11] font-mono" : "text-slate-500"}`}>{item.desc}</p>
                 </div>
                 {themeStyle !== "popdiner" && (
-                  <span className={`text-[11px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif mt-0.5" : themeStyle === "vibrant" ? "bg-rose-500 text-white border-2 border-black px-2 py-0.5 rounded-lg rotate-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] self-start mt-1" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "editorial" ? "text-[#1A1918] font-serif" : themeStyle === "lounge" ? "text-[#D4AF37] ml-3 pb-1" : themeStyle === "resort" ? "text-[#003366] ml-3 pb-1" : "text-slate-900 self-start mt-0.5"}`}>{item.price}</span>
+                  <span className={`text-[11px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif mt-0.5" : themeStyle === "vibrant" ? "bg-rose-500 text-white border-2 border-black px-2 py-0.5 rounded-lg rotate-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] self-start mt-1" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "editorial" ? "text-[#1A1918] font-serif" : themeStyle === "lounge" ? "text-[#D4AF37] ml-3 pb-1" : themeStyle === "resort" ? "text-[#003366] ml-3 pb-1" : themeStyle === "botanical" ? "text-[#33691E] font-serif" : themeStyle === "cyberneon" ? "text-[#00FF41] font-mono bg-[#00FF41]/10 border border-[#00FF41]/30 px-1 py-0.5 h-fit mt-0.5" : "text-slate-900 self-start mt-0.5"}`}>{item.price}</span>
                 )}
               </div>
             ))}

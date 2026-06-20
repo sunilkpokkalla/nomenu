@@ -738,6 +738,7 @@ export async function updateRestaurantSettings(formData: FormData) {
       prep_time_minutes: parseInt(field(formData, "prepTimeMinutes") || "20", 10),
       max_takeaway_per_slot: parseInt(field(formData, "maxTakeawayPerSlot") || "5", 10),
       max_reserve_per_slot: parseInt(field(formData, "maxReservePerSlot") || "2", 10),
+      opening_time: (field(formData, "openingTime") || "09:00") + ":00",
       closing_time: (field(formData, "closingTime") || "23:00") + ":00",
     })
     .eq("id", restaurant.id);

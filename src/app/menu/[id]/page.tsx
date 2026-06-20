@@ -141,7 +141,9 @@ export default async function PublicMenuPage(
           accent_color: activeAccentColor,
           theme_style: activeThemeStyle,
           currency: restaurant.currency,
-          plan: restaurant.plan
+          plan: restaurant.plan,
+          opening_time: restaurant.opening_time,
+          closing_time: restaurant.closing_time
         }}
         categories={categoriesList}
         items={itemsList}
@@ -166,6 +168,7 @@ export default async function PublicMenuPage(
           prepTimeMinutes={restaurant.prep_time_minutes ?? 20}
           maxTakeawayPerSlot={restaurant.max_takeaway_per_slot ?? 5}
           maxReservePerSlot={restaurant.max_reserve_per_slot ?? 2}
+          openingTime={restaurant.opening_time ? restaurant.opening_time.substring(0, 5) : "09:00"}
           closingTime={restaurant.closing_time ? restaurant.closing_time.substring(0, 5) : "23:00"}
         />
       )}

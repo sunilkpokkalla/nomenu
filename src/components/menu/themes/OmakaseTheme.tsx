@@ -4,7 +4,6 @@ import React from "react";
 import { Leaf, Flame, Sparkles, Info, X } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
-import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 
 import { FeedbackFAB } from "../feedback-fab";
@@ -35,13 +34,12 @@ export function OmakaseTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#CCCCCC] font-sans pb-32">
-      <RestaurantInfoModal restaurant={restaurant} />
-      
       {/* Omakase Header */}
       <header className="px-6 py-20 text-center max-w-3xl mx-auto">
         <h1 className="text-3xl sm:text-4xl tracking-[0.4em] font-light text-white uppercase mb-6">
           {restaurant.name}
         </h1>
+
         <div className="flex items-center justify-center gap-4 text-xs tracking-widest text-[#777777] uppercase">
           <span>{restaurant.cuisine_type || "Cuisine"}</span>
           <span className="w-1 h-1 rounded-full bg-[#333333]"></span>

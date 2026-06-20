@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+import { fal } from '@fal-ai/client';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -6,6 +6,14 @@ import { GLOBAL_DISH_LIBRARY } from '../src/lib/global-dish-library';
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
+
+// Ensure FAL_KEY is present
+if (!process.env.FAL_KEY) {
+  console.error("❌ ERROR: FAL_KEY is missing from .env.local!");
+  console.log("Please add your Fal.ai API key to your .env.local file like this:");
+  console.log("FAL_KEY=your_key_here");
+  process.exit(1);
+}
 
 // Setup paths
 const publicImagesDir = path.join(process.cwd(), 'public', 'images', 'library');
@@ -16,9 +24,6 @@ if (!fs.existsSync(publicImagesDir)) {
   fs.mkdirSync(publicImagesDir, { recursive: true });
 }
 
-// Initialize Gemini API
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 // Helper to make filenames safe
 function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -27,8 +32,8 @@ function slugify(text: string) {
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 async function run() {
-  console.log(`\n👨‍🍳 Starting AI Image Generation for ${GLOBAL_DISH_LIBRARY.length} items...`);
-  console.log(`Estimated cost: ~${((GLOBAL_DISH_LIBRARY.length * 0.03)).toFixed(2)} USD`);
+  console.log(`\n👨‍🍳 Starting AI Image Generation (Fal.ai Flux) for ${GLOBAL_DISH_LIBRARY.length} items...`);
+  console.log(`Estimated cost on Flux Schnell: ~${((GLOBAL_DISH_LIBRARY.length * 0.003)).toFixed(2)} USD`);
   console.log(`Images will be saved to: /public/images/library/\n`);
 
   let libraryContent = fs.readFileSync(libraryFilePath, 'utf8');
@@ -54,27 +59,29 @@ async function run() {
 
     while (!success && retries < 3) {
       try {
-        // 1. Ask Google Imagen 4 to generate the image
-        const prompt = `A highly professional, hyper-realistic food photography studio shot of a delicious single serving of "${dish.name}". ${dish.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
+        // 1. Ask Fal.ai (Flux) to generate the image
+        const cuisineStr = dish.cuisines && dish.cuisines.length > 0 ? dish.cuisines.join(' and ') + ' cuisine' : 'food';
+        const prompt = `A highly professional, hyper-realistic food photography studio shot of an authentic ${cuisineStr} dish called "${dish.name}". ${dish.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
         
-        const response = await ai.models.generateImages({
-          model: 'imagen-4.0-fast-generate-001',
-          prompt: prompt,
-          config: {
-            numberOfImages: 1,
-            outputMimeType: 'image/jpeg',
-            aspectRatio: '1:1'
+        const result = await fal.subscribe("fal-ai/flux/schnell", {
+          input: {
+            prompt: prompt,
+            image_size: "square_hd",
+            num_images: 1,
+            num_inference_steps: 4,
           }
         });
 
-        const base64Image = response.generatedImages?.[0]?.image?.imageBytes;
+        const imageUrl = result.data.images[0].url;
 
-        if (!base64Image) {
+        if (!imageUrl) {
           throw new Error("No image data returned from API.");
         }
 
-        // 2. Save the image to the public folder
-        const buffer = Buffer.from(base64Image, 'base64');
+        // 2. Download the image and save to public folder
+        const response = await fetch(imageUrl);
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
         fs.writeFileSync(localFilePath, buffer);
         console.log(`  ✓ Saved image: ${publicUrl}`);
 
@@ -85,16 +92,20 @@ async function run() {
         processed++;
         success = true;
 
-        // Wait 6.5 seconds to safely stay under the 10 requests per minute quota
-        await delay(6500);
+        // Wait 1 second to be polite to the API
+        await delay(1000);
 
       } catch (error: any) {
         const errMsg = error.message || String(error);
-        if (error?.status === 429 || error?.status === "RESOURCE_EXHAUSTED" || errMsg.includes('Quota') || errMsg.includes('RESOURCE_EXHAUSTED')) {
-          console.log(`  ⏳ Rate limit hit. Google API says: "${errMsg.split('\n')[0]}"`);
-          console.log(`  ⏳ Waiting 30 seconds before retrying...`);
-          await delay(30000);
+        if (errMsg.includes('429') || errMsg.includes('Rate limit') || errMsg.includes('fetch')) {
+          console.log(`  ⏳ Rate limit or network issue hit: "${errMsg.split('\n')[0]}"`);
+          console.log(`  ⏳ Waiting 5 seconds before retrying...`);
+          await delay(5000);
           retries++;
+        } else if (errMsg.includes('Forbidden') || errMsg.includes('403')) {
+          console.warn(`  ⚠️ Forbidden error (likely safety filter or out of credits). Skipping ${dish.name}.`);
+          skipped++;
+          success = true; // Pretend success to break the while loop and skip this item
         } else {
           console.error(`  ❌ Failed:`, errMsg);
           console.log(`\n⚠️ Stopping script due to unrecoverable API error.`);
@@ -104,7 +115,7 @@ async function run() {
     }
 
     if (!success) {
-      console.log(`\n⚠️ Stopping script after maximum rate limit retries.`);
+      console.log(`\n⚠️ Stopping script after maximum retries.`);
       process.exit(1);
     }
   }

@@ -6,7 +6,7 @@ import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt } from "lucide-react";
 import { submitOrder, getOrderReceipt, getSlotAvailability } from "@/app/menu/[id]/actions";
 
-export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel, fulfillmentType, prepTimeMinutes, maxTakeawayPerSlot = 5, maxReservePerSlot = 5, closingTime = "23:00:00", plan }: {
+export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel, fulfillmentType, prepTimeMinutes, maxTakeawayPerSlot = 5, maxReservePerSlot = 5, openingTime = "09:00:00", closingTime = "23:00:00", plan }: {
   restaurantId: string;
   menuId: string;
   tableNumber?: string;
@@ -22,6 +22,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   prepTimeMinutes?: number;
   maxTakeawayPerSlot?: number;
   maxReservePerSlot?: number;
+  openingTime?: string;
   closingTime?: string;
   plan?: string;
 }) {
@@ -44,6 +45,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   const [partySize, setPartySize] = useState("");
   const [table, setTable] = useState(tableNumber || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isClosed, setIsClosed] = useState(false);
   const [successOrder, setSuccessOrder] = useState<{ id: string, dailyNumber: number } | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [receipt, setReceipt] = useState<any>(null);
@@ -67,18 +69,31 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
           console.error("Failed to load slot availability", e);
         }
         
+        const openHours = parseInt(openingTime?.split(':')[0] || "09", 10);
+        const openMins = parseInt(openingTime?.split(':')[1] || "00", 10);
+        const openTimeDate = new Date(now);
+        openTimeDate.setHours(openHours, openMins, 0, 0);
+
         const closeHours = parseInt(closingTime?.split(':')[0] || "23", 10);
         const closeMins = parseInt(closingTime?.split(':')[1] || "00", 10);
         const endTime = new Date(now);
         endTime.setHours(closeHours, closeMins, 0, 0);
 
-        const startTime = new Date(now.getTime() + prep * 60000);
+        const closed = now < openTimeDate || now >= endTime;
+        setIsClosed(closed);
+
+        let baseTime = now;
+        if (now < openTimeDate) {
+          baseTime = openTimeDate;
+        }
+
+        const startTime = new Date(baseTime.getTime() + prep * 60000);
         const remainder = 15 - (startTime.getMinutes() % 15);
         startTime.setMinutes(startTime.getMinutes() + remainder);
         startTime.setSeconds(0);
         startTime.setMilliseconds(0);
 
-        if (activeFulfillmentType === 'pickup' && startTime <= endTime) {
+        if (activeFulfillmentType === 'pickup' && startTime <= endTime && now >= openTimeDate && !closed) {
           slots.push({
             label: `ASAP (Ready in ~${prep} mins)`,
             value: "ASAP",
@@ -86,7 +101,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
         }
 
         let currentSlot = startTime;
-        while (currentSlot <= endTime) {
+        while (currentSlot <= endTime && !closed) {
           const iso = currentSlot.toISOString();
           const counts = availability[iso] || { takeawayCount: 0, reserveCount: 0 };
           const currentCount = activeFulfillmentType === 'pickup' ? counts.takeawayCount : counts.reserveCount;
@@ -108,7 +123,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
       }
     }
     loadTimeSlots();
-  }, [activeFulfillmentType, prepTimeMinutes, restaurantId, maxTakeawayPerSlot, maxReservePerSlot, closingTime]);
+  }, [activeFulfillmentType, prepTimeMinutes, restaurantId, maxTakeawayPerSlot, maxReservePerSlot, openingTime, closingTime]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -606,12 +621,14 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
 
                 <button
                   type="submit"
-                  disabled={isSubmitting || (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0)}
+                  disabled={isSubmitting || isClosed || (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0)}
                   className="w-full py-4 rounded-xl font-bold flex justify-center items-center gap-2 shadow-lg hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
                   style={{ backgroundColor: btnColor, color: textColor }}
                 >
                   {isSubmitting ? (
                     <span className="animate-pulse">Processing...</span>
+                  ) : isClosed ? (
+                    "Currently Closed"
                   ) : (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0) ? (
                     "Kitchen Closed"
                   ) : (

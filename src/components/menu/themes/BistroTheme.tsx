@@ -2,7 +2,6 @@ import React from "react";
 import { X, Star, UtensilsCrossed } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
-import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -46,8 +45,6 @@ export function BistroTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A] pb-32" style={{ fontFamily: '"Georgia", serif' }}>
-      <RestaurantInfoModal restaurant={restaurant} />
-      
       {/* Bistro Header */}
       <header className="w-full pt-16 pb-12 px-6 flex flex-col items-center text-center border-b-[1px] border-[#1A1A1A]">
         <div className="mb-8">
@@ -56,6 +53,7 @@ export function BistroTheme(props: MenuThemeProps) {
         <h1 className="text-4xl sm:text-6xl font-normal tracking-wide text-[#1A1A1A] mb-4 uppercase">
           {restaurant.name}
         </h1>
+
         <p className="text-[#666666] font-sans tracking-[0.3em] uppercase text-[10px]">
           {restaurant.cuisine_type || "Classic Bistro & Dining"}
         </p>

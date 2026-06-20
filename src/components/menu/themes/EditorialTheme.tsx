@@ -2,7 +2,6 @@ import React from "react";
 import { X, Heart, Star, Flame, Sparkles } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
-import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -32,8 +31,6 @@ export function EditorialTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#F9F8F6] text-[#1A1918] pb-32" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
-      <RestaurantInfoModal restaurant={restaurant} />
-      
       {/* Editorial Header */}
       <header className="relative w-full pt-24 pb-16 px-6 flex flex-col items-center text-center border-b border-[#E2DFD8]">
         <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
@@ -43,6 +40,7 @@ export function EditorialTheme(props: MenuThemeProps) {
           <h1 className="text-5xl sm:text-7xl font-serif tracking-tight text-[#1A1918] mb-6 leading-none" style={{ fontFamily: '"Playfair Display", "Times New Roman", serif' }}>
             {restaurant.name}
           </h1>
+
           <div className="w-16 h-[1px] bg-[#1A1918] opacity-30 mb-6"></div>
           <p className="max-w-md text-[#5C5A56] text-sm leading-relaxed font-light">
             A curated selection of culinary experiences, beautifully crafted and thoughtfully presented.

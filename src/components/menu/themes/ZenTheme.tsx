@@ -8,9 +8,10 @@ import {
   Phone,
   Sparkles
 } from "lucide-react";
-import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
+import { useCart } from "../cart-context";
+import { FeedbackFAB } from "../feedback-fab";
 
 export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,6 +20,20 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
   // Modals
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [showAmenities, setShowAmenities] = useState(false);
+  const [orderQuantity, setOrderQuantity] = useState(1);
+  const [orderNotes, setOrderNotes] = useState("");
+  
+  const { addToCart } = useCart();
+  const canOrder = true;
+  const canFeedback = true;
+
+  const handleAddToCart = () => {
+    if (!selectedItem) return;
+    addToCart(selectedItem, orderQuantity, orderNotes);
+    setSelectedItem(null);
+    setOrderQuantity(1);
+    setOrderNotes("");
+  };
 
   const currencySymbol = restaurant.currency || "USD";
 
@@ -82,7 +97,6 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-zinc-100">
-      <RestaurantInfoModal restaurant={restaurant} />
       <div className="mx-auto max-w-md min-h-screen bg-white flex flex-col pb-28 relative">
         
         {/* Pure Minimal Header */}
@@ -90,6 +104,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
           <h1 className="text-3xl font-light tracking-[0.25em] uppercase text-zinc-900 mb-6">
             {restaurant.name}
           </h1>
+
           
           <div className="w-8 h-[1px] bg-zinc-200 mx-auto mb-6"></div>
           
@@ -241,6 +256,76 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
         </div>
 
       </div>
+
+      {selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/95 backdrop-blur-md">
+          <div className="w-full max-w-xl flex flex-col max-h-[90vh]">
+            
+            <button 
+              onClick={() => setSelectedItem(null)}
+              className="absolute top-6 right-6 text-zinc-400 hover:text-zinc-900 transition-colors z-10"
+            >
+              <X size={24} strokeWidth={1} />
+            </button>
+            
+            <div className="p-8 sm:p-12 flex flex-col flex-grow overflow-y-auto bg-white border border-zinc-100 shadow-2xl">
+              
+              {selectedItem.image_url && (
+                <div className="w-full h-64 mb-10 overflow-hidden bg-zinc-50 relative">
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale-[20%]" fill />
+                </div>
+              )}
+              
+              <div className="text-center mb-8">
+                <h2 className="text-xl tracking-[0.2em] font-light text-zinc-900 uppercase mb-4">{selectedItem.name}</h2>
+                <div className="text-zinc-500 font-medium tracking-widest text-sm">
+                  {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{Number(selectedItem.price).toFixed(2)}
+                </div>
+              </div>
+              
+              <p className="text-sm text-zinc-500 leading-relaxed text-center font-light mb-10 max-w-md mx-auto">
+                {selectedItem.description}
+              </p>
+
+              {canOrder && (
+                <div className="max-w-md mx-auto w-full space-y-8">
+                  <div className="flex justify-between items-center border-b border-zinc-100 pb-4">
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-400 font-medium">Quantity</span>
+                    <div className="flex items-center gap-6 text-zinc-900">
+                      <button onClick={() => setOrderQuantity(Math.max(1, orderQuantity - 1))} className="text-zinc-400 hover:text-zinc-900 transition-colors px-2">-</button>
+                      <span className="text-sm tracking-widest w-4 text-center font-medium">{orderQuantity}</span>
+                      <button onClick={() => setOrderQuantity(orderQuantity + 1)} className="text-zinc-400 hover:text-zinc-900 transition-colors px-2">+</button>
+                    </div>
+                  </div>
+
+                  <div className="border-b border-zinc-100 pb-4">
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-zinc-400 font-medium mb-4">Requests</label>
+                    <input 
+                      type="text"
+                      value={orderNotes}
+                      onChange={(e) => setOrderNotes(e.target.value)}
+                      placeholder="Special instructions..."
+                      className="w-full bg-transparent text-sm text-zinc-900 placeholder-zinc-300 focus:outline-none font-light"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-12 pt-8 text-center border-t border-zinc-100">
+                <button 
+                  onClick={() => canOrder ? handleAddToCart() : setSelectedItem(null)}
+                  className="px-12 py-4 bg-zinc-900 text-white text-[10px] tracking-[0.3em] uppercase hover:bg-black transition-colors w-full sm:w-auto font-medium"
+                >
+                  {canOrder ? `Add to order — ${currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}${(selectedItem.price * orderQuantity).toFixed(2)}` : "Return"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
+
     </div>
   );
 }

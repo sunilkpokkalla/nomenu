@@ -40,6 +40,7 @@ export interface Database {
           prep_time_minutes: number | null;
           max_takeaway_per_slot: number | null;
           max_reserve_per_slot: number | null;
+          opening_time: string | null;
           closing_time: string | null;
         };
         Insert: {
@@ -72,6 +73,7 @@ export interface Database {
           prep_time_minutes?: number | null;
           max_takeaway_per_slot?: number | null;
           max_reserve_per_slot?: number | null;
+          opening_time?: string | null;
           closing_time?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;

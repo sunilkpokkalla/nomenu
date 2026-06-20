@@ -2,7 +2,6 @@ import React from "react";
 import { X, Heart, Star, Flame, Zap } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
-import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps } from "../types";
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
@@ -32,8 +31,6 @@ export function PopDinerTheme(props: MenuThemeProps) {
 
   return (
     <div className="min-h-screen bg-[#FFD166] text-black font-sans pb-32" style={{ fontFamily: '"Inter", "system-ui", sans-serif' }}>
-      <RestaurantInfoModal restaurant={restaurant} />
-      
       {/* Pop Diner Header */}
       <header className="relative w-full pt-16 pb-10 px-6 flex flex-col items-center text-center border-b-4 border-black bg-[#EF476F]">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIiBmaWxsPSJyZ2JhKDAsMCwwLDAuMSkiLz4KPC9zdmc+')] opacity-50 pointer-events-none mix-blend-overlay"></div>
@@ -44,6 +41,7 @@ export function PopDinerTheme(props: MenuThemeProps) {
           <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] mb-4 -rotate-1">
             {restaurant.name}
           </h1>
+
           <div className="inline-block bg-black text-[#FFD166] text-xs font-black uppercase tracking-widest px-4 py-2 border-2 border-white rounded-md transform rotate-2 shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
             {restaurant.cuisine_type || "Vibrant Pop Diner"}
           </div>

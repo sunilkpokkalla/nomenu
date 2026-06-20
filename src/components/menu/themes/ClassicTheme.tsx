@@ -20,7 +20,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FeedbackFAB } from "../feedback-fab";
 import { useCart } from "../cart-context";
 
-import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps } from "../types";
 import Image from "next/image";
 
@@ -175,8 +174,56 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
       layoutSwitchBg: "bg-[#FEFCE8] border-2 border-black",
       layoutSwitchActive: "bg-[#FF5A5F] text-white",
       layoutSwitchInactive: "text-black hover:bg-slate-100"
+    },
+    botanical: {
+      bodyBg: "bg-[#F9FBE7]",
+      cardBg: "bg-white border border-[#DCEDC8] rounded-[24px] shadow-sm",
+      cardHover: "hover:shadow-md hover:border-[#C5E1A5] transition-all",
+      titleFont: "font-serif text-[#33691E]",
+      bodyFont: "font-sans text-[#558B2F] font-light",
+      itemBorder: "border-[#DCEDC8]/50",
+      accentBg: "bg-[#F1F8E9] text-[#33691E] border border-[#DCEDC8] rounded-full",
+      pillActive: "bg-[#33691E] text-white border-[#33691E] font-medium rounded-full",
+      pillInactive: "bg-white text-[#558B2F] border-[#DCEDC8] hover:bg-[#F1F8E9] rounded-full",
+      categoryBar: "bg-[#F9FBE7]/95 border-b border-[#DCEDC8]",
+      badgePopular: "bg-[#F1F8E9] text-[#33691E] border border-[#DCEDC8] font-serif rounded-full px-2",
+      shellShadow: "shadow-2xl shadow-green-900/5",
+      fontFamilyClass: "font-serif",
+      containerBg: "bg-[#F1F8E9]",
+      searchBg: "bg-white",
+      searchBorder: "border-[#DCEDC8]",
+      searchText: "text-[#33691E] placeholder-[#8BC34A]",
+      searchFocus: "focus:ring-[#33691E] focus:border-[#33691E]",
+      searchIcon: "text-[#8BC34A]",
+      layoutSwitchBg: "bg-white border-[#DCEDC8] rounded-full",
+      layoutSwitchActive: "bg-[#33691E] text-white rounded-full",
+      layoutSwitchInactive: "text-[#558B2F] hover:bg-[#F1F8E9] rounded-full"
+    },
+    cyberneon: {
+      bodyBg: "bg-[#09090B]",
+      cardBg: "bg-[#18181B] border-l-2 border-[#00FF41] rounded-none shadow-[0_0_15px_rgba(0,255,65,0.1)]",
+      cardHover: "hover:shadow-[0_0_25px_rgba(0,255,65,0.2)] hover:bg-[#1F1F23] transition-all duration-300",
+      titleFont: "font-mono font-bold text-[#00FF41] tracking-tight",
+      bodyFont: "font-mono text-[#008F11] text-sm",
+      itemBorder: "border-[#27272A]",
+      accentBg: "bg-[#00FF41]/10 text-[#00FF41] border border-[#00FF41]/30 uppercase tracking-widest",
+      pillActive: "bg-[#00FF41] text-black border-[#00FF41] font-bold rounded-none",
+      pillInactive: "bg-[#09090B] text-[#008F11] border-[#00FF41]/30 hover:bg-[#00FF41]/10 rounded-none",
+      categoryBar: "bg-[#09090B]/95 border-b border-[#00FF41]/30",
+      badgePopular: "bg-[#00FF41]/20 text-[#00FF41] border border-[#00FF41] font-mono rounded-none uppercase text-[9px] tracking-widest px-1",
+      shellShadow: "shadow-2xl shadow-[#00FF41]/10",
+      fontFamilyClass: "font-mono",
+      containerBg: "bg-[#000000]",
+      searchBg: "bg-[#18181B]",
+      searchBorder: "border-[#00FF41]/50",
+      searchText: "text-[#00FF41] placeholder-[#008F11]",
+      searchFocus: "focus:ring-[#00FF41] focus:border-[#00FF41] shadow-[0_0_10px_rgba(0,255,65,0.2)]",
+      searchIcon: "text-[#008F11]",
+      layoutSwitchBg: "bg-[#18181B] border-[#00FF41]/30 rounded-none",
+      layoutSwitchActive: "bg-[#00FF41] text-black",
+      layoutSwitchInactive: "text-[#008F11] hover:bg-[#00FF41]/10"
     }
-  }[themeStyle as "bistro" | "minimalist" | "luxury" | "vibrant"] || {
+  }[themeStyle as "bistro" | "minimalist" | "luxury" | "vibrant" | "botanical" | "cyberneon"] || {
     bodyBg: "bg-slate-50",
     cardBg: "bg-white border shadow-sm rounded-xl",
     cardHover: "hover:shadow-md",
@@ -291,7 +338,6 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme.containerBg} ${theme.fontFamilyClass}`}>
-      <RestaurantInfoModal restaurant={restaurant} />
       <div className={`mx-auto max-w-md min-h-screen ${theme.bodyBg} ${theme.shellShadow} flex flex-col pb-28 relative`}>
         
         {/* Banner Section */}
@@ -299,6 +345,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
           <div className="text-center relative bg-[#1C1917] overflow-hidden shrink-0 flex flex-col">
             <div className="pt-12 pb-10 px-6 z-10 space-y-1">
               <h1 className="text-4xl font-serif text-[#D4AF37] tracking-wider uppercase drop-shadow-md">{restaurant.name}</h1>
+
               <div className="flex items-center justify-center gap-4 mt-3">
                 <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#D4AF37]/60"></span>
                 <span className="text-[11px] text-[#D4AF37] uppercase tracking-[0.3em] font-sans font-medium">

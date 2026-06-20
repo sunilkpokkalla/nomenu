@@ -14,7 +14,6 @@ import {
   Clock,
   ChevronRight
 } from "lucide-react";
-import { RestaurantInfoModal } from "../restaurant-info-modal";
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 import { useCart } from "../cart-context";
@@ -105,7 +104,6 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-amber-500/30">
-      <RestaurantInfoModal restaurant={restaurant} />
       <div className="mx-auto max-w-md min-h-screen bg-[#0A0A0A] shadow-2xl shadow-black flex flex-col pb-28 relative">
         
         {/* Cinematic Hero */}
@@ -126,6 +124,7 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
             <h1 className="text-5xl font-serif tracking-wide text-white drop-shadow-2xl">
               {restaurant.name}
             </h1>
+
           </div>
         </div>
 

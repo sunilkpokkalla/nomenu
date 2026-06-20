@@ -25,16 +25,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
   const addToCart = (menuItem: MenuItem, quantity: number, notes: string) => {
+    // Safety check: ensure quantity is a valid number, otherwise default to 1
+    const safeQuantity = isNaN(quantity) || quantity === undefined ? 1 : quantity;
+    
     setItems(prev => {
-      const existing = prev.find(i => i.menuItem.id === menuItem.id && i.notes === notes);
+      // Filter out any corrupted items that might be stuck in state
+      const cleanPrev = prev.filter(i => i.quantity !== undefined && !isNaN(i.quantity));
+      
+      const existing = cleanPrev.find(i => i.menuItem.id === menuItem.id && i.notes === notes);
       if (existing) {
-        return prev.map(i => 
+        return cleanPrev.map(i => 
           i.menuItem.id === menuItem.id && i.notes === notes
-            ? { ...i, quantity: i.quantity + quantity }
+            ? { ...i, quantity: i.quantity + safeQuantity }
             : i
         );
       }
-      return [...prev, { menuItem, quantity, notes }];
+      return [...cleanPrev, { menuItem, quantity: safeQuantity, notes }];
     });
   };
 
@@ -52,11 +58,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = () => setItems([]);
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + (item.menuItem.price * item.quantity), 0);
+  const validItems = items.filter(i => i.quantity !== undefined && !isNaN(i.quantity));
+  const totalItems = validItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = validItems.reduce((sum, item) => sum + (Number(item.menuItem.price) * item.quantity), 0);
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice }}>
+    <CartContext.Provider value={{ items: validItems, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice }}>
       {children}
     </CartContext.Provider>
   );
