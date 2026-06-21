@@ -720,7 +720,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menus & Items
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 5 Magic AI Credits
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 10 Magic AI Credits
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI Image Generation & Menu Writer
@@ -768,7 +768,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Everything in Pro</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>10 Magic AI Credits</strong>
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>25 Magic AI Credits</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Real-Time Live Ordering Dashboard</strong>
@@ -818,7 +818,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Everything in Elite</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>25 Magic AI Credits</strong>
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>50 Magic AI Credits</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Dine-in, Takeaway & Priority Reserve</strong>
