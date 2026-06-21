@@ -2,13 +2,9 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 import { createClient } from "@/lib/supabase/server";
-import Stripe from "stripe";
+import { fetchStripe } from "@/lib/stripe-fetch";
 export async function POST(req: Request) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2026-05-27.dahlia",
-      httpClient: Stripe.createFetchHttpClient(),
-    });
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -35,9 +31,12 @@ export async function POST(req: Request) {
 
 
 
-    const portalSession = await stripe.billingPortal.sessions.create({
-      customer: restaurant.stripe_customer_id,
-      return_url: `${origin}/dashboard/billing`,
+    const portalSession = await fetchStripe("/billing_portal/sessions", {
+      method: "POST",
+      body: {
+        customer: restaurant.stripe_customer_id,
+        return_url: `${origin}/dashboard/billing`,
+      }
     });
 
     return NextResponse.json({ url: portalSession.url });

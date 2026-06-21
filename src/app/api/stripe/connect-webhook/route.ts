@@ -2,14 +2,9 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 import { createClient } from "@supabase/supabase-js";
-import Stripe from "stripe";
+import { verifyStripeWebhook } from "@/lib/stripe-fetch";
 
 export async function POST(req: Request) {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2026-05-27.dahlia",
-    httpClient: Stripe.createFetchHttpClient(),
-  });
-  
   // Notice we use a different secret for connect webhooks!
   const endpointSecret = process.env.STRIPE_CONNECT_WEBHOOK_SECRET!;
 
@@ -22,18 +17,21 @@ export async function POST(req: Request) {
   const payload = await req.text();
   const signature = req.headers.get("stripe-signature") || "";
 
-  let event: Stripe.Event;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let event: any;
 
   try {
-    event = stripe.webhooks.constructEvent(payload, signature, endpointSecret);
+    if (!verifyStripeWebhook(payload, signature, endpointSecret)) {
+      throw new Error("Invalid signature");
+    }
+    event = JSON.parse(payload);
   } catch (err: unknown) {
     console.error("Connect Webhook signature verification failed:", (err as Error).message);
     return NextResponse.json({ error: "Connect Webhook Error" }, { status: 400 });
   }
 
-  // Handle Webhook Events (for Connected Accounts)
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
+    const session = event.data.object;
     
     // In Direct Charges, the order metadata comes directly from the session
     if (session.mode === "payment") {

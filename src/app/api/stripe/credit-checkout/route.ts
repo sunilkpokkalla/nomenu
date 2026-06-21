@@ -1,6 +1,6 @@
-import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { fetchStripe } from "@/lib/stripe-fetch";
 
 export async function POST(req: Request) {
   try {
@@ -21,33 +21,31 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
     }
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2026-05-27.dahlia",
-      httpClient: Stripe.createFetchHttpClient(),
-    });
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "20 Magic Generation Credits",
-              description: "AI-powered custom dish generation with Fal AI photography.",
+    const session = await fetchStripe("/checkout/sessions", {
+      method: "POST",
+      body: {
+        payment_method_types: ["card"],
+        mode: "payment",
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: "20 Magic Generation Credits",
+                description: "AI-powered custom dish generation with Fal AI photography.",
+              },
+              unit_amount: 500, // $5.00
             },
-            unit_amount: 500, // $5.00
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        metadata: {
+          type: "magic_credits",
+          restaurant_id: restaurant.id,
         },
-      ],
-      metadata: {
-        type: "magic_credits",
-        restaurant_id: restaurant.id,
-      },
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard?success=Credits%20Purchased`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard`,
+        success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard?success=Credits%20Purchased`,
+        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard`,
+      }
     });
 
     return NextResponse.json({ url: session.url });

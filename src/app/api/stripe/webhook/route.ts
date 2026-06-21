@@ -2,13 +2,9 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 import { createClient } from "@supabase/supabase-js";
-import Stripe from "stripe";
+import { verifyStripeWebhook } from "@/lib/stripe-fetch";
 
 export async function POST(req: Request) {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2026-05-27.dahlia",
-    httpClient: Stripe.createFetchHttpClient(),
-  });
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
   // Instantiate supabase inside the handler to prevent build-time crashes on Vercel
@@ -20,10 +16,14 @@ export async function POST(req: Request) {
   const payload = await req.text();
   const signature = req.headers.get("stripe-signature") || "";
 
-  let event: Stripe.Event;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let event: any;
 
   try {
-    event = stripe.webhooks.constructEvent(payload, signature, endpointSecret);
+    if (!verifyStripeWebhook(payload, signature, endpointSecret)) {
+      throw new Error("Invalid signature");
+    }
+    event = JSON.parse(payload);
   } catch (err: unknown) {
     console.error("Webhook signature verification failed:", (err as Error).message);
     return NextResponse.json({ error: "Webhook Error" }, { status: 400 });
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
   // Handle Webhook Events
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
+    const session = event.data.object;
     
     // Is this a SaaS subscription upgrade?
     if (session.mode === "subscription") {
@@ -128,7 +128,7 @@ export async function POST(req: Request) {
       }
     }
   } else if (event.type === "customer.subscription.deleted" || event.type === "customer.subscription.updated" || event.type === "customer.subscription.created") {
-    const subscription = event.data.object as Stripe.Subscription;
+    const subscription = event.data.object;
     
     // If subscription was canceled or past due, downgrade to free
     if (subscription.status === "canceled" || subscription.status === "unpaid") {

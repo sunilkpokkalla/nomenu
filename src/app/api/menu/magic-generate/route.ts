@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { GoogleGenAI } from '@google/genai';
-import { fal } from "@fal-ai/client";
 import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 30; // Vercel max duration for longer image generation
@@ -43,8 +41,6 @@ export async function POST(req: Request) {
     }
 
     // Step 1: Generate the Dish Details (Text) using Gemini
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    
     const prompt = `You are an expert, world-class culinary chef and restaurant consultant.
     The user wants to add a dish to their menu based on the search query: "${query}".
     
@@ -61,15 +57,18 @@ export async function POST(req: Request) {
       "isSpicy": boolean
     }`;
     
-    const textResponse = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-      }
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json" }
+      })
     });
-
-    const text = textResponse.text?.trim() || "{}";
+    
+    if (!res.ok) throw new Error(`Gemini API error: ${res.statusText}`);
+    const textResponse = await res.json();
+    const text = textResponse.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "{}";
     const generatedDish = JSON.parse(text);
 
     // Step 2: Generate the Image using Fal AI (Flux Schnell for fast, high-quality images)
@@ -77,17 +76,26 @@ export async function POST(req: Request) {
       if (process.env.FAL_KEY) {
         const imagePrompt = `Professional high-end food photography of ${generatedDish.name}, ${generatedDish.description}, served on a beautiful plate, cinematic lighting, highly detailed, appetizing, restaurant quality, 4k`;
         
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result: any = await fal.subscribe("fal-ai/flux/schnell", {
-          input: {
+        const falRes = await fetch("https://fal.run/fal-ai/flux/schnell", {
+          method: "POST",
+          headers: {
+            "Authorization": `Key ${process.env.FAL_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
             prompt: imagePrompt,
             image_size: "landscape_4_3",
             num_inference_steps: 4
-          }
+          })
         });
         
-        if (result.data && result.data.images && result.data.images.length > 0) {
-          generatedDish.imageUrl = result.data.images[0].url;
+        if (falRes.ok) {
+          const result = await falRes.json();
+          if (result.images && result.images.length > 0) {
+            generatedDish.imageUrl = result.images[0].url;
+          }
+        } else {
+          console.error("Fal API error:", await falRes.text());
         }
       } else {
         console.warn("FAL_KEY is not set. Skipping image generation.");

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { SquareClient, SquareEnvironment } from "square";
+
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -31,22 +31,24 @@ export async function GET(request: Request) {
       );
     }
 
-    // Initialize Square Client
-    const squareClient = new SquareClient({
-      environment: process.env.NODE_ENV === "production" ? SquareEnvironment.Production : SquareEnvironment.Production, // or Sandbox
+    const squareEnv = process.env.NODE_ENV === "production" ? "connect.squareup.com" : "connect.squareup.com";
+    const res = await fetch(`https://${squareEnv}/oauth2/token`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        client_id: clientId,
+        client_secret: clientSecret,
+        code: code,
+        grant_type: "authorization_code"
+      })
     });
 
-    // Exchange the authorization code for an access token
-    const response = await squareClient.oAuth.obtainToken({
-      clientId: clientId,
-      clientSecret: clientSecret,
-      code: code,
-      grantType: "authorization_code",
-    });
+    if (!res.ok) {
+      throw new Error(`Square OAuth error: ${res.statusText} - ${await res.text()}`);
+    }
+    const tokenData = await res.json();
 
-    const tokenData = response;
-
-    if (!tokenData.accessToken || !tokenData.merchantId) {
+    if (!tokenData.access_token || !tokenData.merchant_id) {
       throw new Error("Missing access token or merchant ID in Square response");
     }
 
@@ -78,9 +80,9 @@ export async function GET(request: Request) {
     const { error: updateError } = await supabase
       .from("restaurants")
       .update({
-        square_access_token: tokenData.accessToken,
-        square_refresh_token: tokenData.refreshToken || null,
-        square_merchant_id: tokenData.merchantId,
+        square_access_token: tokenData.access_token,
+        square_refresh_token: tokenData.refresh_token || null,
+        square_merchant_id: tokenData.merchant_id,
       })
       .eq("id", restaurant.id);
 

@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import Stripe from "stripe";
+import { fetchStripe } from "@/lib/stripe-fetch";
 
 export async function updateOrderStatus(orderId: string, status: string) {
   const supabase = await createClient();
@@ -35,15 +35,15 @@ export async function updateOrderStatus(orderId: string, status: string) {
 
       // 3. Issue the refund via Stripe
       try {
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-          apiVersion: "2026-05-27.dahlia",
-          httpClient: Stripe.createFetchHttpClient(),
+        await fetchStripe("/refunds", {
+          method: "POST",
+          headers: {
+            "Stripe-Account": restaurant.stripe_account_id
+          },
+          body: {
+            payment_intent: order.payment_intent_id
+          }
         });
-
-        await stripe.refunds.create(
-          { payment_intent: order.payment_intent_id },
-          { stripeAccount: restaurant.stripe_account_id }
-        );
         console.log(`Successfully refunded payment intent ${order.payment_intent_id} for order ${orderId}`);
       } catch (stripeError: unknown) {
         console.error("Stripe Refund Error:", stripeError);

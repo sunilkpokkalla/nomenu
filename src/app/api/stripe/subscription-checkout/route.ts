@@ -2,15 +2,11 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 import { createClient } from "@/lib/supabase/server";
-import Stripe from "stripe";
+import { fetchStripe } from "@/lib/stripe-fetch";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2026-05-27.dahlia",
-      httpClient: Stripe.createFetchHttpClient(),
-    });
     const { planId, isAnnual } = await req.json();
 
     if (!planId) {
@@ -67,14 +63,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid plan or missing price ID in environment variables." }, { status: 400 });
     }
 
-    // Create or retrieve Stripe Customer
     let customerId = restaurant.stripe_customer_id;
     if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: {
-          restaurant_id: restaurant.id,
-        },
+      const customer = await fetchStripe("/customers", {
+        method: "POST",
+        body: {
+          email: user.email,
+          metadata: {
+            restaurant_id: restaurant.id,
+          },
+        }
       });
       customerId = customer.id;
 
@@ -85,25 +83,28 @@ export async function POST(req: Request) {
         .eq("id", restaurant.id);
     }
 
-    const subscription = await stripe.subscriptions.create({
-      customer: customerId,
-      items: [
-        {
-          price: priceId,
+    const subscription = await fetchStripe("/subscriptions", {
+      method: "POST",
+      body: {
+        customer: customerId,
+        items: [
+          {
+            price: priceId,
+          },
+        ],
+        payment_behavior: "default_incomplete",
+        payment_settings: { save_default_payment_method: "on_subscription" },
+        expand: ["latest_invoice.payment_intent"],
+        metadata: {
+          restaurant_id: restaurant.id,
+          plan_id: planId,
         },
-      ],
-      payment_behavior: "default_incomplete",
-      payment_settings: { save_default_payment_method: "on_subscription" },
-      expand: ["latest_invoice.payment_intent"],
-      metadata: {
-        restaurant_id: restaurant.id,
-        plan_id: planId,
-      },
+      }
     });
 
-    const invoice = subscription.latest_invoice as Stripe.Invoice;
+    const invoice = subscription.latest_invoice;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const paymentIntent = (invoice as any).payment_intent as Stripe.PaymentIntent;
+    const paymentIntent = (invoice as any).payment_intent;
 
     if (!paymentIntent || !paymentIntent.client_secret) {
       throw new Error("Failed to create payment intent. Please try again.");

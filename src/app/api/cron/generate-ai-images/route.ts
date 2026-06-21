@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import { GoogleGenAI } from '@google/genai';
 import { v4 as uuidv4 } from "uuid";
 
 // Note: Use Vercel maxDuration if possible
@@ -70,8 +69,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ message: `Job ${job.id} completed.` });
     }
 
-    // 5. Initialize GenAI
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    // 5. Initialize processing
     let processedCount = 0;
 
     for (const item of items) {
@@ -110,17 +108,25 @@ export async function GET(req: Request) {
         // Use Imagen 4 to generate the food photo
         const prompt = `A highly professional, hyper-realistic food photography studio shot of a delicious single serving of "${item.name}". ${item.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
         
-        const response = await ai.models.generateImages({
-          model: 'imagen-4.0-fast-generate-001',
-          prompt: prompt,
-          config: {
-            numberOfImages: 1,
-            outputMimeType: 'image/jpeg',
-            aspectRatio: '1:1'
-          }
+        const imgRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-fast-generate-001:predict?key=${process.env.GEMINI_API_KEY}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            instances: [{ prompt }],
+            parameters: {
+              sampleCount: 1,
+              outputMimeType: "image/jpeg",
+              aspectRatio: "1:1"
+            }
+          })
         });
 
-        const base64Image = response.generatedImages?.[0]?.image?.imageBytes;
+        if (!imgRes.ok) {
+          throw new Error(`Imagen API error: ${imgRes.statusText} - ${await imgRes.text()}`);
+        }
+
+        const response = await imgRes.json();
+        const base64Image = response.predictions?.[0]?.bytesBase64Encoded;
         
         if (base64Image) {
           const buffer = Buffer.from(base64Image, 'base64');

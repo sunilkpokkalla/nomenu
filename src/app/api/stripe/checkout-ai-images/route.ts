@@ -2,14 +2,10 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 import { createClient } from "@/lib/supabase/server";
-import Stripe from "stripe";
+import { fetchStripe } from "@/lib/stripe-fetch";
 
 export async function POST(req: Request) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2026-05-27.dahlia",
-      httpClient: Stripe.createFetchHttpClient(),
-    });
     
     const { jobId, returnUrl } = await req.json();
 
@@ -48,30 +44,33 @@ export async function POST(req: Request) {
 
     // Create the Checkout Session
     // This is a direct charge to the platform, so we do NOT pass a stripeAccount parameter.
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "Premium AI Image Generation",
-              description: `Generate ${job.total_items} unique HD photos using Google Imagen AI.`,
+    const session = await fetchStripe("/checkout/sessions", {
+      method: "POST",
+      body: {
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: "Premium AI Image Generation",
+                description: `Generate ${job.total_items} unique HD photos using Google Imagen AI.`,
+              },
+              unit_amount: job.amount_cents,
             },
-            unit_amount: job.amount_cents,
-          },
-          quantity: 1,
+            quantity: 1,
+          }
+        ],
+        mode: "payment",
+        success_url: successUrl.toString(),
+        cancel_url: cancelUrl.toString(),
+        client_reference_id: job.id,
+        metadata: {
+          type: "ai_image_generation",
+          job_id: job.id,
+          restaurant_id: job.restaurant_id,
+          menu_id: job.menu_id
         }
-      ],
-      mode: "payment",
-      success_url: successUrl.toString(),
-      cancel_url: cancelUrl.toString(),
-      client_reference_id: job.id,
-      metadata: {
-        type: "ai_image_generation",
-        job_id: job.id,
-        restaurant_id: job.restaurant_id,
-        menu_id: job.menu_id
       }
     });
 

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { GoogleGenAI } from '@google/genai';
 
 export const maxDuration = 60; // Allow more time for AI processing
 
@@ -28,8 +27,6 @@ export async function POST(req: Request) {
     const buffer = await file.arrayBuffer();
     const base64Data = Buffer.from(buffer).toString("base64");
     const mimeType = file.type;
-
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     const prompt = `
       You are an expert menu digitizer.
@@ -60,28 +57,36 @@ export async function POST(req: Request) {
       }
     `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: [
-        {
-          role: 'user',
-          parts: [
-            { text: prompt },
-            {
-              inlineData: {
-                data: base64Data,
-                mimeType: mimeType
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              { text: prompt },
+              {
+                inlineData: {
+                  data: base64Data,
+                  mimeType: mimeType
+                }
               }
-            }
-          ]
+            ]
+          }
+        ],
+        generationConfig: {
+          responseMimeType: "application/json"
         }
-      ],
-      config: {
-        responseMimeType: "application/json",
-      }
+      })
     });
 
-    const responseText = response.text;
+    if (!res.ok) {
+      throw new Error(`Gemini API error: ${res.statusText} - ${await res.text()}`);
+    }
+
+    const responseData = await res.json();
+    const responseText = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!responseText) {
       throw new Error("AI returned an empty response.");
     }

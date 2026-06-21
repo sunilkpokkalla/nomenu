@@ -3,14 +3,10 @@ export const dynamic = 'force-dynamic';
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import Stripe from "stripe";
+import { fetchStripe } from "@/lib/stripe-fetch";
 
 export async function POST(req: Request) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2026-05-27.dahlia",
-      httpClient: Stripe.createFetchHttpClient(),
-    });
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -36,13 +32,16 @@ export async function POST(req: Request) {
 
     // Real Stripe Connect Flow
     if (!stripeAccountId) {
-      const account = await stripe.accounts.create({
-        type: "express",
-        email: user.email,
-        capabilities: {
-          card_payments: { requested: true },
-          transfers: { requested: true },
-        },
+      const account = await fetchStripe("/accounts", {
+        method: "POST",
+        body: {
+          type: "express",
+          email: user.email,
+          capabilities: {
+            card_payments: { requested: true },
+            transfers: { requested: true },
+          },
+        }
       });
       stripeAccountId = account.id;
 
@@ -52,19 +51,24 @@ export async function POST(req: Request) {
         .eq("id", restaurant.id);
     } else {
       // Check if they already finished onboarding
-      const account = await stripe.accounts.retrieve(stripeAccountId);
+      const account = await fetchStripe(`/accounts/${stripeAccountId}`);
       if (account.details_submitted) {
         // Generate a dashboard login link so they can see their money
-        const loginLink = await stripe.accounts.createLoginLink(stripeAccountId);
+        const loginLink = await fetchStripe(`/accounts/${stripeAccountId}/login_links`, {
+          method: "POST"
+        });
         return NextResponse.json({ url: loginLink.url });
       }
     }
 
-    const accountLink = await stripe.accountLinks.create({
-      account: stripeAccountId,
-      refresh_url: `${origin}/dashboard/payouts`,
-      return_url: `${origin}/dashboard/payouts?success=true`,
-      type: "account_onboarding",
+    const accountLink = await fetchStripe("/account_links", {
+      method: "POST",
+      body: {
+        account: stripeAccountId,
+        refresh_url: `${origin}/dashboard/payouts`,
+        return_url: `${origin}/dashboard/payouts?success=true`,
+        type: "account_onboarding",
+      }
     });
 
     return NextResponse.json({ url: accountLink.url });

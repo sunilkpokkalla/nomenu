@@ -2,15 +2,11 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 import { createClient } from "@/lib/supabase/server";
-import Stripe from "stripe";
+import { fetchStripe } from "@/lib/stripe-fetch";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2026-05-27.dahlia",
-      httpClient: Stripe.createFetchHttpClient(),
-    });
     const { restaurantId, items, returnUrl, orderId, tableNumber, customerName, customerPhone, reservationTime, partySize, tipAmount } = await req.json();
 
     if (!restaurantId || !items || !items.length || !orderId) {
@@ -137,22 +133,26 @@ export async function POST(req: Request) {
     cancelUrl.searchParams.set("canceled", "true");
 
     // Create the Checkout Session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"], // Apple Pay and Google Pay are included automatically
-      line_items: lineItems,
-      mode: "payment",
-      success_url: successUrl.toString(),
-      cancel_url: cancelUrl.toString(),
-      client_reference_id: orderId,
-      payment_intent_data: {
-        application_fee_amount: applicationFeeAmountCents,
+    const session = await fetchStripe("/checkout/sessions", {
+      method: "POST",
+      headers: {
+        "Stripe-Account": restaurant.stripe_account_id
       },
-      metadata: {
-        restaurant_id: restaurantId,
-        order_id: orderId,
+      body: {
+        payment_method_types: ["card"], // Apple Pay and Google Pay are included automatically
+        line_items: lineItems,
+        mode: "payment",
+        success_url: successUrl.toString(),
+        cancel_url: cancelUrl.toString(),
+        client_reference_id: orderId,
+        payment_intent_data: {
+          application_fee_amount: applicationFeeAmountCents,
+        },
+        metadata: {
+          restaurant_id: restaurantId,
+          order_id: orderId,
+        }
       }
-    }, {
-      stripeAccount: restaurant.stripe_account_id
     });
 
     return NextResponse.json({ url: session.url });
