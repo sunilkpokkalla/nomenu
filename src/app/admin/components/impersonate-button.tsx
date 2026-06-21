@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { generateImpersonationOtp } from "../actions";
+import { generateImpersonationOtp } from "../impersonate-action";
 import { UserCircle, Loader2, AlertCircle, AlertTriangle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
