@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     
     const prompt = type === 'menu' 
       ? `Write a very short, appetizing, 1 to 2 sentence description for a restaurant menu named "${name}" (e.g. Lunch Menu, Dinner Menu). Keep it professional, enticing, and do not use quotes.`
-      : `Write a very short, appetizing, 1 to 2 sentence restaurant menu description for a dish named "${name}". Keep it professional, enticing, and do not include the name of the dish in the description. Do not use quotes.`;
+      : `Write a very short, accurate, 1 to 2 sentence restaurant menu description for a dish named "${name}". Keep it professional and appetizing, but strictly respect the authentic culinary profile of the dish. Do not hallucinate flavors (e.g., do not call a plain steamed dish "spicy" or a savory dish "sweet"). Do not include the name of the dish in the description. Do not use quotes.`;
     
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
