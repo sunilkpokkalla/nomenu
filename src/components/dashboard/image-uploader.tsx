@@ -17,7 +17,7 @@ interface ImageUploaderProps {
 }
 
 export function ImageUploader({ value: externalValue, onChange, folder = "item-list", hideLibrary = false }: ImageUploaderProps) {
-  const [mode, setMode] = useState<"file" | "url" | "stock">("file");
+  const [mode, setMode] = useState<"file" | "stock">("file");
   const [internalValue, setInternalValue] = useState<string>("");
   const [preview, setPreview] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -58,10 +58,6 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
   useEffect(() => {
     if (externalValue !== undefined) {
       setPreview(externalValue);
-      // If external value is a URL, switch to URL mode
-      if (externalValue && externalValue.startsWith("http")) {
-        setMode("url");
-      }
     }
   }, [externalValue]);
 
@@ -133,12 +129,6 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
     }
   };
 
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError("");
-    const url = e.target.value.trim();
-    updateValue(url);
-  };
-
   const handleRemove = () => {
     updateValue("");
     setError("");
@@ -193,21 +183,7 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
           <Upload className="h-3.5 w-3.5" />
           Upload File
         </button>
-        <button
-          type="button"
-          onClick={() => {
-            setMode("url");
-            handleRemove();
-          }}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${
-            mode === "url"
-              ? "bg-white text-slate-900 shadow-sm"
-              : "text-slate-500 hover:text-slate-800"
-          }`}
-        >
-          <LinkIcon className="h-3.5 w-3.5" />
-          Image URL
-        </button>
+
         {!hideLibrary && (
           <button
             type="button"
@@ -258,18 +234,6 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
         </div>
       )}
 
-      {mode === "url" && (
-        <div className="space-y-1.5">
-          <Input
-            type="url"
-            placeholder="e.g. https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
-            onChange={handleUrlChange}
-            value={mode === "url" ? value : ""}
-            className="text-xs"
-          />
-          <p className="text-[10px] text-slate-400">Paste any public web image address.</p>
-        </div>
-      )}
 
       {mode === "stock" && (
         <div className="space-y-3">
