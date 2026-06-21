@@ -441,43 +441,72 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                       })}
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-dashed rounded-xl shadow-sm">
-                      <Search className="h-12 w-12 text-slate-300" />
-                      <h4 className="font-semibold text-slate-900 mt-3">No matching dishes found</h4>
-                      <p className="text-xs text-slate-500 mt-1 max-w-xs mb-6">
-                        Try searching for something else or browse categories. You can always add custom dishes manually.
-                      </p>
-                      
-                      {searchQuery && (
-                        <div className="flex flex-col items-center space-y-3">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-semibold text-slate-500">
-                              Magic Credits: <span className={magicCredits === 0 ? "text-red-500 font-bold" : "text-amber-600 font-bold"}>{magicCredits ?? '...'}</span>
+                    <div className="flex flex-col md:flex-row items-center justify-center p-8 md:p-12 gap-8 text-center md:text-left bg-white border border-dashed rounded-xl shadow-sm">
+                      <div className="flex-1 flex flex-col items-center md:items-start max-w-sm">
+                        <Search className="h-12 w-12 text-slate-300" />
+                        <h4 className="font-semibold text-slate-900 mt-3">No matching dishes found</h4>
+                        <p className="text-xs text-slate-500 mt-1 mb-6">
+                          Try searching for something else or browse categories. You can always add custom dishes manually.
+                        </p>
+                        
+                        {searchQuery && (
+                          <div className="flex flex-col items-center md:items-start space-y-3 w-full">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-xs font-semibold text-slate-500">
+                                Magic Credits: <span className={magicCredits === 0 ? "text-red-500 font-bold" : "text-amber-600 font-bold"}>{magicCredits ?? '...'}</span>
+                              </span>
+                            </div>
+                            
+                            {(magicCredits !== null && magicCredits <= 0) ? (
+                              <Button 
+                                onClick={handleBuyCredits} 
+                                className="bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md transition-all hover:-translate-y-0.5 w-full"
+                              >
+                                <Sparkles className="h-4 w-4 mr-2" />
+                                Buy 20 Magic Credits ($5.00)
+                              </Button>
+                            ) : (
+                              <Button 
+                                onClick={handleMagicGenerate} 
+                                disabled={isGenerating || magicCredits === null}
+                                className="bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md transition-all hover:-translate-y-0.5 w-full"
+                              >
+                                <Sparkles className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-pulse' : ''}`} />
+                                {isGenerating ? "Consulting AI Chef..." : `Generate "${searchQuery}" with AI`}
+                              </Button>
+                            )}
+                            <span className="text-[10px] text-amber-600/80 font-semibold uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-100 self-center md:self-start">
+                              1 Credit Per Dish
                             </span>
                           </div>
+                        )}
+                      </div>
+
+                      {searchQuery && (
+                        <>
+                          <div className="hidden md:block w-px bg-slate-200 self-stretch min-h-[150px]"></div>
                           
-                          {(magicCredits !== null && magicCredits <= 0) ? (
-                            <Button 
-                              onClick={handleBuyCredits} 
-                              className="bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md transition-all hover:-translate-y-0.5 min-w-[250px]"
-                            >
-                              <Sparkles className="h-4 w-4 mr-2" />
-                              Buy 20 Magic Credits ($5.00)
-                            </Button>
-                          ) : (
-                            <Button 
-                              onClick={handleMagicGenerate} 
-                              disabled={isGenerating || magicCredits === null}
-                              className="bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md transition-all hover:-translate-y-0.5 min-w-[250px]"
-                            >
-                              <Sparkles className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-pulse' : ''}`} />
-                              {isGenerating ? "Consulting AI Chef..." : `Generate "${searchQuery}" with AI`}
-                            </Button>
-                          )}
-                          <span className="text-[10px] text-amber-600/80 font-semibold uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-100">
-                            1 Credit Per Dish
-                          </span>
-                        </div>
+                          <div className="flex-1 flex flex-col items-center md:items-start max-w-xs text-left">
+                            <div className="text-[10px] text-slate-500 bg-amber-50/50 p-4 rounded-xl border border-amber-100/60 shadow-sm w-full">
+                              <p className="font-bold text-amber-800 mb-2 flex items-center gap-1 text-sm">
+                                <Sparkles className="w-4 h-4" /> What is Magic AI?
+                              </p>
+                              <p className="leading-relaxed mb-4 text-slate-600 text-xs">
+                                Each credit instantly generates a premium food photo, culinary description, and price using our expert AI models.
+                              </p>
+                              
+                              <div className="w-full bg-amber-100/50 rounded-lg p-3">
+                                <p className="font-bold text-amber-900 mb-2 uppercase tracking-wider text-[9px]">Bonus Credits per Plan</p>
+                                <div className="grid grid-cols-2 gap-x-3 gap-y-2 w-full text-amber-700/80 font-medium text-xs">
+                                  <span>Free: <b className="text-amber-900">2</b></span>
+                                  <span>Pro: <b className="text-amber-900">5</b></span>
+                                  <span>Elite: <b className="text-amber-900">10</b></span>
+                                  <span>Enterprise: <b className="text-amber-900">25</b></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </>
                       )}
                     </div>
                   )}
