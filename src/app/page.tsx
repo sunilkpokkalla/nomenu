@@ -682,6 +682,9 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 30 Menu Items
                     </li>
                     <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 2 Free Magic AI Credits
+                    </li>
+                    <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 1 Generated QR Code
                     </li>
                     <li className="flex items-start gap-2.5">
@@ -717,7 +720,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menus & Items
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI Magic Menu Import
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 5 Magic AI Credits / month
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI Image Generation & Menu Writer
@@ -765,6 +768,9 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Everything in Pro</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>10 Magic AI Credits / month</strong>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Real-Time Live Ordering Dashboard</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
@@ -810,6 +816,9 @@ export default function LandingPage() {
                   <ul className="space-y-3 text-xs text-slate-300 font-medium">
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Everything in Elite</strong>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>25 Magic AI Credits / month</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Dine-in, Takeaway & Priority Reserve</strong>
