@@ -142,24 +142,26 @@ export default async function MenusPage(
                           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200/60 text-slate-600 shadow-inner">
                             <FormatIcon className="h-6 w-6" />
                           </div>
-                          <div className="flex items-center gap-4">
-                            <form action={toggleAction} className="flex items-center gap-2" title={menu.is_active ? "Active" : "Inactive"}>
+                          <div className="flex items-center justify-end gap-2 sm:gap-3 flex-wrap">
+                            <form action={toggleAction} className="flex items-center gap-1.5 sm:gap-2 shrink-0" title={menu.is_active ? "Active" : "Inactive"}>
                               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                                 {menu.is_active ? "Live" : "Draft"}
                               </span>
                               <Switch 
                                 checked={menu.is_active} 
                                 type="submit" 
-                                className="scale-90 data-[state=checked]:bg-indigo-600"
+                                className="scale-[0.8] sm:scale-90 data-[state=checked]:bg-indigo-600 origin-right"
                               />
                             </form>
-                            <div className="h-5 w-px bg-slate-200" />
-                            <EditMenuModal 
-                              menu={menu} 
-                              cuisineType={restaurant.cuisine_type} 
-                              editAction={editMenu} 
-                            />
-                            <div className="h-5 w-px bg-slate-200" />
+                            <div className="hidden sm:block h-5 w-px bg-slate-200 shrink-0" />
+                            <div className="shrink-0">
+                              <EditMenuModal 
+                                menu={menu} 
+                                cuisineType={restaurant.cuisine_type} 
+                                editAction={editMenu} 
+                              />
+                            </div>
+                            <div className="hidden sm:block h-5 w-px bg-slate-200 shrink-0" />
                             <DeleteConfirmForm
                               action={deleteMenu}
                               confirmMessage="Delete this menu and ALL its items?"
