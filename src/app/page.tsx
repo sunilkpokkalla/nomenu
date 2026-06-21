@@ -682,7 +682,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Up to 30 Menu Items
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 2 Free Magic AI Credits
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 1 Free Magic AI Credit
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 1 Generated QR Code
