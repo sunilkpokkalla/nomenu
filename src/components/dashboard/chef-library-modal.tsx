@@ -334,12 +334,20 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                       : "Instantly create professional menu items with pre-written gourmet descriptions."}
                 </p>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex flex-col items-end gap-2 ml-4 shrink-0 mt-[-4px]">
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition ml-auto"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+                {!selectedDish && (
+                  <div className={`text-[11px] px-2.5 py-1 rounded-md border font-semibold flex items-center gap-1.5 shadow-sm transition-all ${magicCredits === 0 ? "bg-red-50 text-red-700 border-red-200" : "bg-gradient-to-r from-amber-50 to-orange-50 text-amber-800 border-amber-200"}`}>
+                    <Sparkles className="h-3 w-3" />
+                    <span>You have <b className="text-amber-900 text-sm mx-0.5">{magicCredits ?? '...'}</b> free {magicCredits === 1 ? 'credit' : 'credits'} to use</span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* BROWSE MODE */}
@@ -453,7 +461,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                           <div className="flex flex-col items-center md:items-start space-y-3 w-full">
                             <div className="flex items-center gap-2 mb-2">
                               <span className="text-xs font-semibold text-slate-500">
-                                Magic Credits: <span className={magicCredits === 0 ? "text-red-500 font-bold" : "text-amber-600 font-bold"}>{magicCredits ?? '...'}</span>
+                                You have <span className={magicCredits === 0 ? "text-red-500 font-bold text-sm" : "text-amber-600 font-bold text-sm"}>{magicCredits ?? '...'}</span> free {magicCredits === 1 ? 'credit' : 'credits'} to use
                               </span>
                             </div>
                             
