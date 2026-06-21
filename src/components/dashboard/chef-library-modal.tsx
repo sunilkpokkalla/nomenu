@@ -334,20 +334,13 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                       : "Instantly create professional menu items with pre-written gourmet descriptions."}
                 </p>
               </div>
-              <div className="flex flex-col items-end gap-2 ml-4 shrink-0 mt-[-4px]">
-                <button 
-                  onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition ml-auto"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-                {!selectedDish && (
-                  <div className={`text-[11px] px-2.5 py-1 rounded-md border font-semibold flex items-center gap-1.5 shadow-sm transition-all ${magicCredits === 0 ? "bg-red-50 text-red-700 border-red-200" : "bg-gradient-to-r from-amber-50 to-orange-50 text-amber-800 border-amber-200"}`}>
-                    <Sparkles className="h-3 w-3" />
-                    <span>You have <b className="text-amber-900 text-sm mx-0.5">{magicCredits ?? '...'}</b> free {magicCredits === 1 ? 'credit' : 'credits'} to use</span>
-                  </div>
-                )}
               </div>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
 
             {/* BROWSE MODE */}
