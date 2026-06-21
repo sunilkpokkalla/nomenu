@@ -42,6 +42,7 @@ export interface Database {
           max_reserve_per_slot: number | null;
           opening_time: string | null;
           closing_time: string | null;
+          magic_credits: number | null;
         };
         Insert: {
           id?: string;
@@ -75,6 +76,7 @@ export interface Database {
           max_reserve_per_slot?: number | null;
           opening_time?: string | null;
           closing_time?: string | null;
+          magic_credits?: number | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];

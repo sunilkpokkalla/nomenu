@@ -38,18 +38,35 @@ export async function POST(req: Request) {
       const restaurantId = session.metadata?.restaurant_id;
       const planId = session.metadata?.plan_id;
       if (restaurantId && planId) {
-        // Update restaurant plan to active subscription
-        const { error: updateError } = await supabase
+        // Fetch current plan to see if it's an upgrade
+        const { data: restaurant } = await supabase
           .from("restaurants")
-          .update({
-            plan: planId,
-            stripe_subscription_id: session.subscription as string,
-          })
-          .eq("id", restaurantId);
-        if (updateError) {
-          console.error("Failed to upgrade SaaS plan:", updateError);
-        } else {
-          console.log(`Restaurant ${restaurantId} upgraded to ${planId}`);
+          .select("plan, magic_credits")
+          .eq("id", restaurantId)
+          .single();
+
+        if (restaurant && restaurant.plan !== planId) {
+          let bonus = 0;
+          if (planId === "pro") bonus = 5;
+          else if (planId === "elite") bonus = 10;
+          else if (planId === "enterprise") bonus = 25;
+
+          const newCredits = (restaurant.magic_credits || 0) + bonus;
+
+          // Update restaurant plan to active subscription and grant credits
+          const { error: updateError } = await supabase
+            .from("restaurants")
+            .update({
+              plan: planId,
+              stripe_subscription_id: session.subscription as string,
+              magic_credits: newCredits
+            })
+            .eq("id", restaurantId);
+          if (updateError) {
+            console.error("Failed to upgrade SaaS plan:", updateError);
+          } else {
+            console.log(`Restaurant ${restaurantId} upgraded to ${planId}. Added ${bonus} magic credits.`);
+          }
         }
       }
     } else if (session.mode === "payment") {
@@ -110,7 +127,7 @@ export async function POST(req: Request) {
         }
       }
     }
-  } else if (event.type === "customer.subscription.deleted" || event.type === "customer.subscription.updated") {
+  } else if (event.type === "customer.subscription.deleted" || event.type === "customer.subscription.updated" || event.type === "customer.subscription.created") {
     const subscription = event.data.object as Stripe.Subscription;
     
     // If subscription was canceled or past due, downgrade to free
@@ -124,6 +141,39 @@ export async function POST(req: Request) {
         console.error("Failed to downgrade canceled subscription:", error);
       } else {
         console.log(`Downgraded subscription ${subscription.id} to free`);
+      }
+    } else if (subscription.status === "active") {
+      const planId = subscription.metadata?.plan_id;
+      const restaurantId = subscription.metadata?.restaurant_id;
+      
+      if (restaurantId && planId) {
+        const { data: restaurant } = await supabase
+          .from("restaurants")
+          .select("plan, magic_credits")
+          .eq("id", restaurantId)
+          .single();
+          
+        if (restaurant && restaurant.plan !== planId) {
+          let bonus = 0;
+          if (planId === "pro") bonus = 5;
+          else if (planId === "elite") bonus = 10;
+          else if (planId === "enterprise") bonus = 25;
+          
+          const newCredits = (restaurant.magic_credits || 0) + bonus;
+          
+          const { error: updateError } = await supabase
+            .from("restaurants")
+            .update({
+              plan: planId,
+              stripe_subscription_id: subscription.id,
+              magic_credits: newCredits
+            })
+            .eq("id", restaurantId);
+            
+          if (!updateError) {
+            console.log(`Upgraded restaurant ${restaurantId} to ${planId}. Added ${bonus} magic credits.`);
+          }
+        }
       }
     }
   }
