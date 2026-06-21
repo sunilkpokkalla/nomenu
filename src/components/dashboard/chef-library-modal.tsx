@@ -334,7 +334,6 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                       : "Instantly create professional menu items with pre-written gourmet descriptions."}
                 </p>
               </div>
-              </div>
               <button 
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition"
