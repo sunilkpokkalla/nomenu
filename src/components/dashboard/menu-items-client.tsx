@@ -416,7 +416,6 @@ export function MenuItemsClient({
           </div>
         )}
       </div>
-    </>
   );
 }
 
