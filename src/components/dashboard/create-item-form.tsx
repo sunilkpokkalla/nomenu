@@ -45,7 +45,7 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
   const initialCategory = categories.find(c => c.id === initialData?.category_id);
   const [menuId, setMenuId] = useState(initialCategory?.menu_id || menus[0]?.id || "");
   const [categoryId, setCategoryId] = useState(initialData?.category_id || "");
-  const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryName, setNewCategoryName] = useState(initialCategory?.name || "");
   
   // Dietary states
   const [isPopular, setIsPopular] = useState(initialData?.is_popular ?? false);
@@ -77,7 +77,7 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
     );
     if (categoryMatch) {
       setCategoryId(categoryMatch.id);
-      setNewCategoryName("");
+      setNewCategoryName(categoryMatch.name); // Set the name to show in the input
     } else {
       setCategoryId("");
       setNewCategoryName(dish.category);
@@ -189,35 +189,29 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
           </div>
 
         <div className="space-y-2 border-t pt-3">
-          <Label htmlFor="categoryId">Category</Label>
-          <select
-            id="categoryId"
-            name="categoryId"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-          >
-            <option value="">— Create New Category (Enter below) —</option>
-            {filteredCategories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="newCategoryName">Or Create New Category</Label>
+          <Label htmlFor="newCategoryName">Category</Label>
           <Input
             id="newCategoryName"
             name="newCategoryName"
-            placeholder="e.g. Starters, Desserts, Cocktails"
+            list="category-suggestions"
+            placeholder="Search categories or type to create new..."
             value={newCategoryName}
-            onChange={(e) => setNewCategoryName(e.target.value)}
+            onChange={(e) => {
+              setNewCategoryName(e.target.value);
+              setCategoryId(""); // Clear exact ID so backend uses name matching
+            }}
+            autoComplete="off"
+            required
           />
+          <datalist id="category-suggestions">
+            {filteredCategories.map((cat) => (
+              <option key={cat.id} value={cat.name} />
+            ))}
+          </datalist>
           <p className="text-xs text-muted-foreground">
-            Creates category in the chosen menu if select above is set to create new.
+            Select an existing category or type a new one to create it instantly.
           </p>
+          <input type="hidden" name="categoryId" value={categoryId} />
         </div>
 
         <div className="space-y-2 border-t pt-3">
