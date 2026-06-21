@@ -1,4 +1,3 @@
-import { fal } from '@fal-ai/client';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -59,7 +58,7 @@ async function run() {
 
     while (!success && retries < 3) {
       try {
-        // 1. Ask Fal.ai (Flux) to generate the image
+        // 1. Ask Fal.ai (Flux) via REST to generate the image
         const cuisineStr = dish.cuisines && dish.cuisines.length > 0 ? dish.cuisines.join(' and ') + ' cuisine' : '';
         
         let prompt = '';
@@ -69,24 +68,34 @@ async function run() {
           prompt = `A highly professional, hyper-realistic food photography studio shot of an authentic ${cuisineStr ? cuisineStr + ' dish' : 'food'} called "${dish.name}". ${dish.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
         }
         
-        const result = await fal.subscribe("fal-ai/flux/schnell", {
-          input: {
+        const imgRes = await fetch("https://fal.run/fal-ai/flux/schnell", {
+          method: "POST",
+          headers: {
+            "Authorization": `Key ${process.env.FAL_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
             prompt: prompt,
             image_size: "square_hd",
             num_images: 1,
-            num_inference_steps: 4,
-          }
+            num_inference_steps: 4
+          })
         });
 
-        const imageUrl = result.data.images[0].url;
+        if (!imgRes.ok) {
+          throw new Error(`Fal API error: ${imgRes.statusText} - ${await imgRes.text()}`);
+        }
+
+        const response = await imgRes.json();
+        const imageUrl = response.images?.[0]?.url;
 
         if (!imageUrl) {
           throw new Error("No image data returned from API.");
         }
 
         // 2. Download the image and save to public folder
-        const response = await fetch(imageUrl);
-        const arrayBuffer = await response.arrayBuffer();
+        const imgDownload = await fetch(imageUrl);
+        const arrayBuffer = await imgDownload.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         fs.writeFileSync(localFilePath, buffer);
         console.log(`  ✓ Saved image: ${publicUrl}`);

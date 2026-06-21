@@ -105,31 +105,34 @@ export async function GET(req: Request) {
 
         console.log(`Cache miss. Generating new AI image for: ${item.name}`);
         
-        // Use Imagen 4 to generate the food photo
+        // Use Fal.ai (Flux) via REST to generate the food photo
         const prompt = `A highly professional, hyper-realistic food photography studio shot of a delicious single serving of "${item.name}". ${item.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;
         
-        const imgRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-fast-generate-001:predict?key=${process.env.GEMINI_API_KEY}`, {
+        const imgRes = await fetch("https://fal.run/fal-ai/flux/schnell", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Authorization": `Key ${process.env.FAL_KEY}`,
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({
-            instances: [{ prompt }],
-            parameters: {
-              sampleCount: 1,
-              outputMimeType: "image/jpeg",
-              aspectRatio: "1:1"
-            }
+            prompt: prompt,
+            image_size: "square_hd",
+            num_images: 1,
+            num_inference_steps: 4
           })
         });
 
         if (!imgRes.ok) {
-          throw new Error(`Imagen API error: ${imgRes.statusText} - ${await imgRes.text()}`);
+          throw new Error(`Fal API error: ${imgRes.statusText} - ${await imgRes.text()}`);
         }
 
         const response = await imgRes.json();
-        const base64Image = response.predictions?.[0]?.bytesBase64Encoded;
+        const imageUrl = response.images?.[0]?.url;
         
-        if (base64Image) {
-          const buffer = Buffer.from(base64Image, 'base64');
+        if (imageUrl) {
+          const imageRes = await fetch(imageUrl);
+          const arrayBuffer = await imageRes.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
           const fileName = `ai_generated/${job.restaurant_id}/${item.id}_${uuidv4()}.jpg`;
 
           // Upload to Supabase Storage
