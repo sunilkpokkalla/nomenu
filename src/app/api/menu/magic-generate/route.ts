@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from '@google/genai';
+import { fal } from "@fal-ai/client";
+
+export const maxDuration = 30; // Vercel max duration for longer image generation
 
 export async function POST(req: Request) {
   try {
@@ -13,6 +16,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Gemini API key is not configured" }, { status: 500 });
     }
 
+    // Step 1: Generate the Dish Details (Text) using Gemini
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     
     const prompt = `You are an expert, world-class culinary chef and restaurant consultant.
@@ -31,7 +35,7 @@ export async function POST(req: Request) {
       "isSpicy": boolean
     }`;
     
-    const response = await ai.models.generateContent({
+    const textResponse = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
@@ -39,8 +43,33 @@ export async function POST(req: Request) {
       }
     });
 
-    const text = response.text?.trim() || "{}";
+    const text = textResponse.text?.trim() || "{}";
     const generatedDish = JSON.parse(text);
+
+    // Step 2: Generate the Image using Fal AI (Flux Schnell for fast, high-quality images)
+    try {
+      if (process.env.FAL_KEY) {
+        const imagePrompt = `Professional high-end food photography of ${generatedDish.name}, ${generatedDish.description}, served on a beautiful plate, cinematic lighting, highly detailed, appetizing, restaurant quality, 4k`;
+        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const result: any = await fal.subscribe("fal-ai/flux/schnell", {
+          input: {
+            prompt: imagePrompt,
+            image_size: "landscape_4_3",
+            num_inference_steps: 4
+          }
+        });
+        
+        if (result.data && result.data.images && result.data.images.length > 0) {
+          generatedDish.imageUrl = result.data.images[0].url;
+        }
+      } else {
+        console.warn("FAL_KEY is not set. Skipping image generation.");
+      }
+    } catch (imageError) {
+      console.error("Fal AI Image Generation Error:", imageError);
+      // We don't want to fail the whole request just because the image failed
+    }
 
     return NextResponse.json({ dish: generatedDish });
   } catch (error: unknown) {
