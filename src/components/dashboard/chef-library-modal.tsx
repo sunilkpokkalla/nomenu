@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { 
   X, 
   Search, 
@@ -50,6 +50,37 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
   const [selectedCuisine, setSelectedCuisine] = useState("all");
   const [selectedDish, setSelectedDish] = useState<LibraryDish | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [magicCredits, setMagicCredits] = useState<number | null>(null);
+
+  // Fetch credits when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      fetch("/api/restaurant/credits")
+        .then(res => res.json())
+        .then(data => {
+          if (data.magic_credits !== undefined) {
+            setMagicCredits(data.magic_credits);
+          }
+        })
+        .catch(err => console.error("Failed to fetch credits", err));
+    }
+  }, [isOpen]);
+
+  // Handle Stripe checkout for Magic Credits
+  const handleBuyCredits = async () => {
+    try {
+      const res = await fetch("/api/stripe/credit-checkout", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || "Failed to initiate checkout");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to initiate checkout");
+    }
+  };
 
   // Configuration Form State
   const [formName, setFormName] = useState("");
@@ -177,9 +208,17 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: searchQuery }),
       });
-      if (!res.ok) throw new Error("Generation failed");
       const data = await res.json();
+      if (!res.ok) {
+        if (data.code === "OUT_OF_CREDITS") {
+          alert("You are out of Magic Credits! Please purchase more to continue.");
+          setMagicCredits(0);
+          return;
+        }
+        throw new Error("Generation failed");
+      }
       if (data.dish) {
+        setMagicCredits(prev => (prev !== null && prev > 0) ? prev - 1 : prev);
         handleSelectDish(data.dish);
       }
     } catch (error) {
@@ -411,16 +450,32 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                       
                       {searchQuery && (
                         <div className="flex flex-col items-center space-y-3">
-                          <Button 
-                            onClick={handleMagicGenerate} 
-                            disabled={isGenerating}
-                            className="bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md transition-all hover:-translate-y-0.5 min-w-[250px]"
-                          >
-                            <Sparkles className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-pulse' : ''}`} />
-                            {isGenerating ? "Consulting AI Chef..." : `Generate "${searchQuery}" with AI`}
-                          </Button>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs font-semibold text-slate-500">
+                              Magic Credits: <span className={magicCredits === 0 ? "text-red-500 font-bold" : "text-amber-600 font-bold"}>{magicCredits ?? '...'}</span>
+                            </span>
+                          </div>
+                          
+                          {(magicCredits !== null && magicCredits <= 0) ? (
+                            <Button 
+                              onClick={handleBuyCredits} 
+                              className="bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md transition-all hover:-translate-y-0.5 min-w-[250px]"
+                            >
+                              <Sparkles className="h-4 w-4 mr-2" />
+                              Buy 20 Magic Credits ($5.00)
+                            </Button>
+                          ) : (
+                            <Button 
+                              onClick={handleMagicGenerate} 
+                              disabled={isGenerating || magicCredits === null}
+                              className="bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md transition-all hover:-translate-y-0.5 min-w-[250px]"
+                            >
+                              <Sparkles className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-pulse' : ''}`} />
+                              {isGenerating ? "Consulting AI Chef..." : `Generate "${searchQuery}" with AI`}
+                            </Button>
+                          )}
                           <span className="text-[10px] text-amber-600/80 font-semibold uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-100">
-                            Pro Feature
+                            1 Credit Per Dish
                           </span>
                         </div>
                       )}

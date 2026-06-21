@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from '@google/genai';
 import { fal } from "@fal-ai/client";
+import { createClient } from "@/lib/supabase/server";
 
 export const maxDuration = 30; // Vercel max duration for longer image generation
 
@@ -14,6 +15,31 @@ export async function POST(req: Request) {
 
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json({ error: "Gemini API key is not configured" }, { status: 500 });
+    }
+
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Get the user's restaurant and check credits
+    const { data: restaurant, error: restaurantError } = await supabase
+      .from("restaurants")
+      .select("id, magic_credits")
+      .eq("owner_id", user.id)
+      .single();
+
+    if (restaurantError || !restaurant) {
+      return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
+    }
+
+    if (restaurant.magic_credits <= 0) {
+      return NextResponse.json({ 
+        error: "Out of Magic Credits", 
+        code: "OUT_OF_CREDITS" 
+      }, { status: 403 });
     }
 
     // Step 1: Generate the Dish Details (Text) using Gemini
@@ -69,6 +95,18 @@ export async function POST(req: Request) {
     } catch (imageError) {
       console.error("Fal AI Image Generation Error:", imageError);
       // We don't want to fail the whole request just because the image failed
+    }
+
+    // Step 3: Deduct 1 Magic Credit
+    const { error: updateError } = await supabase
+      .from("restaurants")
+      .update({ magic_credits: restaurant.magic_credits - 1 })
+      .eq("id", restaurant.id);
+
+    if (updateError) {
+      console.error("Failed to deduct credit:", updateError);
+      // We still return the dish even if credit deduction fails, 
+      // but ideally this shouldn't happen.
     }
 
     return NextResponse.json({ dish: generatedDish });

@@ -72,7 +72,31 @@ export async function POST(req: Request) {
       
       const type = session.metadata?.type;
       const jobId = session.metadata?.job_id;
-      if (type === "ai_image_generation" && jobId) {
+      
+      if (type === "magic_credits") {
+        const restaurantId = session.metadata?.restaurant_id;
+        if (restaurantId) {
+          // Add 20 magic credits to the restaurant
+          const { data: restaurant } = await supabase
+            .from("restaurants")
+            .select("magic_credits")
+            .eq("id", restaurantId)
+            .single();
+            
+          const currentCredits = restaurant?.magic_credits || 0;
+          
+          const { error: updateError } = await supabase
+            .from("restaurants")
+            .update({ magic_credits: currentCredits + 20 })
+            .eq("id", restaurantId);
+            
+          if (updateError) {
+            console.error("Failed to add magic credits:", updateError);
+          } else {
+            console.log(`Added 20 magic credits to restaurant ${restaurantId}`);
+          }
+        }
+      } else if (type === "ai_image_generation" && jobId) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { error: updateError } = await (supabase as any)
           .from("ai_image_jobs")
