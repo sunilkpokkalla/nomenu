@@ -14,8 +14,14 @@ export function ImpersonateButton({ userId, restaurantName }: { userId: string, 
     setIsLoading(true);
     setError(null);
     try {
-      const { email, otp } = await generateImpersonationOtp(userId);
+      const res = await generateImpersonationOtp(userId);
       
+      if (!res.success || !res.email || !res.otp) {
+        throw new Error(res.error || "Failed to generate link");
+      }
+
+      const { email, otp } = res;
+
       const supabase = createClient();
       const { error: verifyError } = await supabase.auth.verifyOtp({
         email,
