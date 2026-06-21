@@ -6,6 +6,7 @@ import { CopyButton } from "./components/copy-button";
 import { MarketingButton } from "./components/marketing-button";
 import { formatDistanceToNow } from "date-fns";
 import { Store, CreditCard, Users, ExternalLink, MapPin, Phone, Mail } from "lucide-react";
+import { AdminMenuDropdown } from "./components/admin-menu-dropdown";
 
 export const dynamic = 'force-dynamic';
 
@@ -38,7 +39,7 @@ export default async function AdminPage(
   // Get paginated and filtered list
   let supabaseQuery = adminSupabase
     .from("restaurants")
-    .select("*", { count: "exact" })
+    .select("*, menus(slug, name, is_active)", { count: "exact" })
     .order("created_at", { ascending: false })
     .range(from, to);
 
@@ -193,16 +194,7 @@ export default async function AdminPage(
                     </td>
                     <td className="px-6 py-5 text-right">
                       <div className="flex items-center justify-end gap-3">
-                        <a 
-                          href={`/${restaurant.slug}`} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 px-3 py-1.5 rounded-md transition-colors"
-                          title="View Live Menu"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          View Menu
-                        </a>
+                        <AdminMenuDropdown restaurantSlug={restaurant.slug} menus={restaurant.menus as { slug: string; name: string; is_active: boolean }[]} />
                         {restaurant.owner_id && (
                           <ImpersonateButton userId={restaurant.owner_id} restaurantName={restaurant.name} />
                         )}
