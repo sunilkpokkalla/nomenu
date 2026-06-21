@@ -3,6 +3,7 @@ import { ImpersonateButton } from "./components/impersonate-button";
 import { AdminSearch } from "./components/admin-search";
 import { AdminPagination } from "./components/admin-pagination";
 import { CopyButton } from "./components/copy-button";
+import { MarketingButton } from "./components/marketing-button";
 import { formatDistanceToNow } from "date-fns";
 import { Store, CreditCard, Users, ExternalLink, MapPin, Phone, Mail } from "lucide-react";
 
@@ -102,6 +103,9 @@ export default async function AdminPage(
           </div>
         </div>
       </div>
+
+      {/* Marketing Tools */}
+      <MarketingButton />
 
       {/* Fleet Data Table */}
       <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden">

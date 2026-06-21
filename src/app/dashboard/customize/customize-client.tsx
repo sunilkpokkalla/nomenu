@@ -42,6 +42,7 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
     use_custom_design: !!selectedMenu.design_config,
     primary_color: selectedMenu.design_config?.primary_color || restaurant.primary_color,
     accent_color: selectedMenu.design_config?.accent_color || restaurant.accent_color,
+    logo_url: selectedMenu.design_config?.logo_url || restaurant.logo_url,
     theme_style: selectedMenu.design_config?.theme_style || restaurant.theme_style,
     wifi_password: restaurant.wifi_password, // Menus don't override wifi
     plan: restaurant.plan, // Pass global plan for pro-gating
@@ -54,6 +55,7 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
     cuisine_type: restaurant.cuisine_type,
     primary_color: restaurant.primary_color,
     accent_color: restaurant.accent_color,
+    logo_url: restaurant.logo_url,
     theme_style: restaurant.theme_style,
     wifi_password: restaurant.wifi_password,
     plan: restaurant.plan,

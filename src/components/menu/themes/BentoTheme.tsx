@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
+import { useCart } from "../cart-context";
 
 export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,8 +22,18 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
   // Modals
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [showAmenities, setShowAmenities] = useState(false);
+  const [orderQuantity, setOrderQuantity] = useState(1);
+  const [orderNotes, setOrderNotes] = useState("");
+
+  useEffect(() => {
+    setOrderQuantity(1);
+    setOrderNotes("");
+  }, [selectedItem]);
 
   const currencySymbol = restaurant.currency || "USD";
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
+  const { addToCart } = useCart();
 
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const categoryNavRef = useRef<HTMLDivElement>(null);
@@ -240,6 +251,96 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
         </div>
 
       </div>
+
+      {selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-sans animate-in fade-in duration-300">
+          <div className="bg-white w-full max-w-md border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex flex-col max-h-[90vh]">
+            <div className="p-4 border-b-4 border-black flex justify-between items-center bg-[#FFD166]">
+              <h2 className="text-xl font-black text-black uppercase">Item Details</h2>
+              <button onClick={() => setSelectedItem(null)} className="text-black hover:bg-black hover:text-white p-1 border-2 border-transparent hover:border-black transition-colors">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="overflow-y-auto flex-grow bg-white pb-6">
+              {selectedItem.image_url && (
+                <div className="w-full aspect-video border-b-4 border-black bg-slate-100 relative">
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" fill />
+                </div>
+              )}
+              
+              <div className="p-6 space-y-6">
+                <div>
+                  <div className="flex justify-between items-start gap-4 mb-2">
+                    <h3 className="text-2xl font-black text-black uppercase leading-tight">{selectedItem.name}</h3>
+                    <span className="text-xl font-black text-[#EF476F] shrink-0 border-2 border-black px-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-white">
+                      {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price).toFixed(2)}
+                    </span>
+                  </div>
+                  {selectedItem.description && (
+                    <p className="text-black font-bold text-sm leading-snug mt-4 bg-slate-100 p-3 border-2 border-black border-dashed">
+                      {selectedItem.description}
+                    </p>
+                  )}
+                </div>
+
+                {canOrder && (
+                  <div className="space-y-6 pt-6 border-t-4 border-black border-dashed">
+                    <div className="space-y-2">
+                      <label className="text-xs uppercase font-black text-black">Special Requests</label>
+                      <textarea
+                        value={orderNotes}
+                        onChange={(e) => setOrderNotes(e.target.value)}
+                        placeholder="ALLERGIES? PREFERENCES?"
+                        className="w-full bg-white border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] p-3 text-sm text-black font-bold focus:outline-none focus:translate-y-[2px] focus:translate-x-[2px] focus:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all resize-none uppercase"
+                        rows={2}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between border-4 border-black p-3 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+                      <span className="text-sm uppercase font-black text-black">Quantity</span>
+                      <div className="flex items-center gap-4">
+                        <button 
+                          onClick={() => setOrderQuantity(Math.max(1, orderQuantity - 1))}
+                          className="w-8 h-8 flex items-center justify-center border-2 border-black font-black hover:bg-black hover:text-white transition-colors"
+                        >
+                          -
+                        </button>
+                        <span className="w-6 text-center text-black font-black text-lg">{orderQuantity}</span>
+                        <button 
+                          onClick={() => setOrderQuantity(orderQuantity + 1)}
+                          className="w-8 h-8 flex items-center justify-center border-2 border-black font-black hover:bg-black hover:text-white transition-colors bg-[#118AB2] text-white"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="p-6 bg-slate-100 border-t-4 border-black">
+              <button 
+                onClick={() => {
+                  if (canOrder) {
+                    addToCart(selectedItem, orderQuantity, orderNotes);
+                  }
+                  setSelectedItem(null);
+                }}
+                className={`w-full py-4 border-4 border-black text-black uppercase font-black text-lg flex justify-between items-center px-6 transition-all hover:translate-y-[2px] hover:translate-x-[2px] shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] ${canOrder ? 'bg-[#EF476F] text-white' : 'bg-white'}`}
+              >
+                <span>{canOrder ? "Add To Order" : "Close"}</span>
+                {canOrder && (
+                  <span>
+                    {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price * orderQuantity).toFixed(2)}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

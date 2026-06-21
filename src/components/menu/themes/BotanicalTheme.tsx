@@ -1,18 +1,9 @@
-import { MenuThemeProps } from "../types";
+import { MenuThemeProps, MenuItem } from "../types";
 import { Plus, Minus, ShoppingBag, Leaf, Info } from "lucide-react";
 import { FeedbackFAB } from "../feedback-fab";
 import { useState } from "react";
 import Image from "next/image";
-
-type OrderItem = {
-  item_id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  notes: string;
-};
-
-
+import { useCart } from "../cart-context";
 export function BotanicalTheme({ restaurant, categories: rawCategories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
@@ -24,8 +15,7 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
     items: items.filter(item => item.category_id === cat.id && item.is_available)
   })).filter(cat => cat.items.length > 0);
 
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const { items: cartItems, addToCart, updateQuantity } = useCart();
   const [activeCategory, setActiveCategory] = useState<string>(
     categories.length > 0 ? categories[0].name : ""
   );
@@ -34,43 +24,10 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
   const accentColor = restaurant.accent_color || "#3E5739";
   const welcomeMessage = "Locally sourced, organically inspired.";
 
-  const handleAddToCart = (item: { id: string; name: string; price: number }) => {
+  const handleAddToCart = (item: MenuItem) => {
     if (!canOrder) return;
-    setOrderItems((prev) => {
-      const existing = prev.find((i) => i.item_id === item.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.item_id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [
-        ...prev,
-        {
-          item_id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: 1,
-          notes: "",
-        },
-      ];
-    });
+    addToCart(item, 1, "");
   };
-
-  const handleUpdateQuantity = (itemId: string, delta: number) => {
-    setOrderItems((prev) => {
-      return prev
-        .map((item) => {
-          if (item.item_id === itemId) {
-            return { ...item, quantity: Math.max(0, item.quantity + delta) };
-          }
-          return item;
-        })
-        .filter((item) => item.quantity > 0);
-    });
-  };
-
-  const cartTotal = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const totalItems = orderItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#2C3B29] font-serif pb-32 selection:bg-[#3E5739] selection:text-white">
@@ -156,15 +113,15 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
                       
                       {canOrder && (
                         <div className="flex items-center gap-3">
-                          {orderItems.find((i) => i.item_id === item.id) ? (
+                          {cartItems.find((i) => i.menuItem.id === item.id) ? (
                             <div className="flex items-center gap-3 bg-[#EAE3D2]/50 rounded-full p-1 border border-[#EAE3D2]">
-                              <button onClick={() => handleUpdateQuantity(item.id, -1)} className="p-1.5 hover:bg-white rounded-full transition-colors text-[#3E5739]">
+                              <button onClick={() => updateQuantity(item.id, cartItems.find((i) => i.menuItem.id === item.id)!.quantity - 1)} className="p-1.5 hover:bg-white rounded-full transition-colors text-[#3E5739]">
                                 <Minus className="w-4 h-4" />
                               </button>
                               <span className="w-4 text-center font-sans font-medium text-sm">
-                                {orderItems.find((i) => i.item_id === item.id)?.quantity}
+                                {cartItems.find((i) => i.menuItem.id === item.id)?.quantity}
                               </span>
-                              <button onClick={() => handleUpdateQuantity(item.id, 1)} className="p-1.5 hover:bg-white rounded-full transition-colors text-[#3E5739]">
+                              <button onClick={() => updateQuantity(item.id, cartItems.find((i) => i.menuItem.id === item.id)!.quantity + 1)} className="p-1.5 hover:bg-white rounded-full transition-colors text-[#3E5739]">
                                 <Plus className="w-4 h-4" />
                               </button>
                             </div>
@@ -194,73 +151,7 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
 
       {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
 
-      {/* Cart Modal - Earthy style */}
-      {canOrder && isOrderModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center bg-[#2C3B29]/40 backdrop-blur-sm p-4 font-sans">
-          <div className="bg-[#FDFBF7] w-full max-w-lg rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-[#EAE3D2]">
-            <div className="p-6 border-b border-[#EAE3D2] flex justify-between items-center bg-[#EAE3D2]/30">
-              <h2 className="text-xl font-serif text-[#2C3B29]">Your Basket</h2>
-              <button onClick={() => setIsOrderModalOpen(false)} className="text-[#8A9A86] hover:text-[#2C3B29] p-2 rounded-full hover:bg-white transition-colors">
-                ✕
-              </button>
-            </div>
-            
-            <div className="p-6 max-h-[50vh] overflow-y-auto space-y-6">
-              {orderItems.length === 0 ? (
-                <div className="text-center text-[#8A9A86] py-8 font-serif italic">Your basket is empty.</div>
-              ) : (
-                orderItems.map((item) => (
-                  <div key={item.item_id} className="flex justify-between items-start gap-4 pb-6 border-b border-[#EAE3D2]/50 last:border-0 last:pb-0">
-                    <div className="flex-1">
-                      <h4 className="font-serif text-[#2C3B29] text-lg">{item.name}</h4>
-                      <div className="text-[#3E5739] font-medium mt-1">${(item.price * item.quantity).toFixed(2)}</div>
-                    </div>
-                    <div className="flex items-center gap-3 bg-[#EAE3D2]/50 rounded-full p-1 border border-[#EAE3D2]">
-                      <button onClick={() => handleUpdateQuantity(item.item_id, -1)} className="p-2 hover:bg-white rounded-full transition-colors text-[#3E5739]">
-                        <Minus className="w-4 h-4" />
-                      </button>
-                      <span className="w-4 text-center font-medium text-sm text-[#2C3B29]">
-                        {item.quantity}
-                      </span>
-                      <button onClick={() => handleUpdateQuantity(item.item_id, 1)} className="p-2 hover:bg-white rounded-full transition-colors text-[#3E5739]">
-                        <Plus className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-
-            {orderItems.length > 0 && (
-              <div className="p-6 bg-[#EAE3D2]/30 border-t border-[#EAE3D2]">
-                <div className="flex justify-between items-center mb-6 text-lg font-serif">
-                  <span className="text-[#556B50]">Total Harvest</span>
-                  <span className="font-medium text-[#2C3B29] text-2xl">${cartTotal.toFixed(2)}</span>
-                </div>
-                <button className="w-full py-4 rounded-full bg-[#3E5739] text-white font-medium hover:bg-[#2C3B29] transition-colors uppercase tracking-widest text-sm">
-                  Send to Kitchen
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Floating Cart Button */}
-      {canOrder && totalItems > 0 && !isOrderModalOpen && (
-        <button
-          onClick={() => setIsOrderModalOpen(true)}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#3E5739] text-white px-8 py-4 rounded-full shadow-xl flex items-center gap-4 hover:scale-105 transition-transform font-sans"
-        >
-          <div className="relative">
-            <ShoppingBag className="w-5 h-5" />
-            <span className="absolute -top-2 -right-3 bg-[#EAE3D2] text-[#2C3B29] text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
-              {totalItems}
-            </span>
-          </div>
-          <span className="font-medium tracking-widest uppercase text-sm">Basket • ${cartTotal.toFixed(2)}</span>
-        </button>
-      )}
+      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
     </div>
   );
 }

@@ -76,7 +76,36 @@ export async function GET(req: Request) {
 
     for (const item of items) {
       try {
-        console.log(`Generating image for: ${item.name}`);
+        console.log(`Processing image for: ${item.name}`);
+        
+        // Step A: Check Global Library (Cache Hit)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: cachedItem } = await (supabase as any)
+          .from("global_chef_library")
+          .select("image_url")
+          .ilike("name", item.name)
+          .not("image_url", "is", null)
+          .limit(1)
+          .maybeSingle();
+
+        if (cachedItem && cachedItem.image_url) {
+          console.log(`Cache hit for ${item.name}! Using global library image.`);
+          // Update item in database with the free cached image
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (supabase as any)
+            .from("menu_items")
+            .update({ 
+              image_url: cachedItem.image_url,
+              pending_ai_image: false,
+              is_available: true
+            })
+            .eq("id", item.id);
+            
+          processedCount++;
+          continue; // Skip the Gemini generation!
+        }
+
+        console.log(`Cache miss. Generating new AI image for: ${item.name}`);
         
         // Use Imagen 4 to generate the food photo
         const prompt = `A highly professional, hyper-realistic food photography studio shot of a delicious single serving of "${item.name}". ${item.description || ''} Beautifully plated, 85mm lens, shallow depth of field, dramatic studio lighting, sharp focus on the food, vibrant appetizing colors, clean minimal background. Absolutely no text, no words, no logos.`;

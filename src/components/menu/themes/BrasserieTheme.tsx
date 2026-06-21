@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
+import { useCart } from "../cart-context";
 
 export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,8 +20,18 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
   // Modals
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [showAmenities, setShowAmenities] = useState(false);
+  const [orderQuantity, setOrderQuantity] = useState(1);
+  const [orderNotes, setOrderNotes] = useState("");
+
+  useEffect(() => {
+    setOrderQuantity(1);
+    setOrderNotes("");
+  }, [selectedItem]);
 
   const currencySymbol = restaurant.currency || "USD";
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
+  const { addToCart } = useCart();
 
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const categoryNavRef = useRef<HTMLDivElement>(null);
@@ -252,6 +263,96 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
         </div>
 
       </div>
+
+      {selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#292524]/20 backdrop-blur-sm p-4 font-sans animate-in fade-in duration-300">
+          <div className="bg-[#FDFBF7] w-full max-w-md rounded-[2.5rem] shadow-2xl shadow-stone-200/50 flex flex-col max-h-[90vh] overflow-hidden border border-[#E7E5E4]">
+            <div className="p-6 border-b border-[#E7E5E4] flex justify-between items-center bg-[#FDFBF7]">
+              <h2 className="text-xl font-serif text-[#292524]">Item Details</h2>
+              <button onClick={() => setSelectedItem(null)} className="text-[#A8A29E] hover:text-[#292524] p-2 rounded-full transition-colors bg-stone-100 hover:bg-stone-200">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="overflow-y-auto flex-grow bg-[#FDFBF7] pb-8">
+              {selectedItem.image_url && (
+                <div className="w-full aspect-video bg-stone-100 relative">
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" fill />
+                </div>
+              )}
+              
+              <div className="p-8 space-y-6">
+                <div>
+                  <div className="flex justify-between items-start gap-4 mb-2">
+                    <h3 className="text-2xl font-serif text-[#292524] leading-snug">{selectedItem.name}</h3>
+                    <span className="text-lg font-sans font-medium text-[#57534E] shrink-0 mt-1">
+                      {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price).toFixed(2)}
+                    </span>
+                  </div>
+                  {selectedItem.description && (
+                    <p className="text-[#78716C] font-sans text-sm leading-relaxed mt-4">
+                      {selectedItem.description}
+                    </p>
+                  )}
+                </div>
+
+                {canOrder && (
+                  <div className="space-y-8 pt-8 border-t border-[#E7E5E4]">
+                    <div className="space-y-3">
+                      <label className="text-[11px] uppercase tracking-widest text-[#78716C] font-semibold">Special Requests</label>
+                      <textarea
+                        value={orderNotes}
+                        onChange={(e) => setOrderNotes(e.target.value)}
+                        placeholder="Any allergies or dietary requirements?"
+                        className="w-full bg-white border border-[#E7E5E4] rounded-2xl p-4 text-sm text-[#292524] placeholder-[#A8A29E] focus:outline-none focus:border-[#A8A29E] focus:ring-1 focus:ring-[#A8A29E] transition-all resize-none shadow-sm"
+                        rows={2}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between bg-white border border-[#E7E5E4] p-2 pr-6 rounded-full shadow-sm">
+                      <span className="text-[11px] uppercase tracking-widest text-[#78716C] font-semibold pl-4">Quantity</span>
+                      <div className="flex items-center gap-4">
+                        <button 
+                          onClick={() => setOrderQuantity(Math.max(1, orderQuantity - 1))}
+                          className="w-8 h-8 flex items-center justify-center rounded-full text-[#57534E] hover:text-[#292524] hover:bg-stone-100 transition-colors"
+                        >
+                          -
+                        </button>
+                        <span className="w-4 text-center text-[#292524] font-medium">{orderQuantity}</span>
+                        <button 
+                          onClick={() => setOrderQuantity(orderQuantity + 1)}
+                          className="w-8 h-8 flex items-center justify-center rounded-full text-[#57534E] hover:text-[#292524] hover:bg-stone-100 transition-colors"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="p-6 bg-white border-t border-[#E7E5E4]">
+              <button 
+                onClick={() => {
+                  if (canOrder) {
+                    addToCart(selectedItem, orderQuantity, orderNotes);
+                  }
+                  setSelectedItem(null);
+                }}
+                className="w-full py-4 rounded-full bg-[#292524] text-white hover:bg-[#44403C] transition-colors font-sans font-medium text-sm flex justify-between items-center px-8 shadow-md hover:shadow-lg"
+              >
+                <span>{canOrder ? "Add to order" : "Close"}</span>
+                {canOrder && (
+                  <span className="opacity-90">
+                    {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price * orderQuantity).toFixed(2)}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

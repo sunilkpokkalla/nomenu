@@ -47,7 +47,8 @@ export async function createRestaurant(formData: FormData) {
     currency: field(formData, "currency") ?? "USD",
     timezone: field(formData, "timezone") ?? "UTC",
     primary_color: "#2563EB",
-    accent_color: "#F59E0B",
+    accent_color: field(formData, "accentColor") ?? "#F59E0B",
+    logo_url: field(formData, "logoUrl") || null,
     theme_style: "minimalist",
   });
 
@@ -772,6 +773,7 @@ export async function updateRestaurantBranding(formData: FormData) {
 
   const primaryColor = field(formData, "primaryColor") ?? "#2563EB";
   const accentColor = field(formData, "accentColor") ?? "#F59E0B";
+  const logoUrl = field(formData, "logoUrl") || null;
   const themeStyle = field(formData, "themeStyle") ?? "minimalist";
   const wifiPassword = field(formData, "wifiPassword");
 
@@ -787,6 +789,7 @@ export async function updateRestaurantBranding(formData: FormData) {
     .update({
       primary_color: primaryColor,
       accent_color: accentColor,
+      logo_url: logoUrl,
       theme_style: themeStyle,
       wifi_password: wifiPassword,
     })

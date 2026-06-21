@@ -123,8 +123,9 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
     }
 
     return GLOBAL_DISH_LIBRARY.filter(dish => {
-      const isMatchedCountry = dish.cuisines.some(c => matchedCountryCuisines.includes(c));
-      const isGeneric = dish.cuisines.some(c => ["breakfast", "drinks", "kids", "cafe", "bistro", "pub", "fast food"].includes(c));
+      const cuisines = dish.cuisines || [];
+      const isMatchedCountry = cuisines.some(c => matchedCountryCuisines.includes(c));
+      const isGeneric = cuisines.some(c => ["breakfast", "drinks", "kids", "cafe", "bistro", "pub", "fast food"].includes(c));
       return isMatchedCountry || isGeneric;
     });
   }, [matchedCountryCuisines]);

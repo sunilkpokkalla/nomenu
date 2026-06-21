@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import { ImageUploader } from "@/components/dashboard/image-uploader";
 
 interface BrandingFormProps {
   entity: {
@@ -15,6 +16,7 @@ interface BrandingFormProps {
     cuisine_type?: string | null;
     primary_color?: string | null;
     accent_color?: string | null;
+    logo_url?: string | null;
     theme_style?: string | null;
     wifi_password?: string | null;
     plan?: string | null;
@@ -33,6 +35,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
   const [primaryColor, setPrimaryColor] = useState(entity.primary_color || "#2563EB");
   const [accentColor, setAccentColor] = useState(entity.accent_color || "#F59E0B");
   const [themeStyle, setThemeStyle] = useState(entity.theme_style || "minimalist");
+  const [logoUrl, setLogoUrl] = useState(entity.logo_url || "");
   const [wifiPassword, setWifiPassword] = useState(entity.wifi_password || "");
   const [isPending, setIsPending] = useState(false);
 
@@ -184,6 +187,15 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
 
           <div className={type === "menu" && !useCustomDesign ? "opacity-40 pointer-events-none transition-all duration-300 grayscale" : "transition-all duration-300"}>
             
+            {/* Logo Upload */}
+            <section className="mb-10">
+              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-5 border-b border-slate-100 pb-3">Brand Logo</h2>
+              <input type="hidden" name="logoUrl" value={logoUrl} />
+              <div className="max-w-[200px] rounded-2xl bg-white border border-slate-200 p-2 shadow-sm">
+                 <ImageUploader value={logoUrl} onChange={setLogoUrl} folder="logo" hideLibrary={true} />
+              </div>
+            </section>
+
             {/* Color Palette */}
             {["minimalist", "vibrant", "botanical"].includes(themeStyle) ? (
               <section>
@@ -228,11 +240,11 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                 {[
                   // FREE TIER
                   { id: "minimalist", name: "Classic Minimalist", desc: "Clean & Simple", icon: "🍽️", badge: null },
-                  { id: "zen", name: "Zen Minimalist", desc: "Pure Whitespace", icon: "🍵", badge: null },
+                  { id: "botanical", name: "Botanical", desc: "Organic Cafe", icon: "🌿", badge: null },
                   
                   // PRO TIER
                   { id: "vibrant", name: "Vibrant", desc: "Neo-brutalism", icon: "🍔", badge: "PRO" },
-                  { id: "botanical", name: "Botanical", desc: "Organic Cafe", icon: "🌿", badge: "PRO" },
+                  { id: "zen", name: "Zen Minimalist", desc: "Pure Whitespace", icon: "🍵", badge: "PRO" },
                   { id: "bistro", name: "Bistro", desc: "Classic Serif", icon: "🍷", badge: "PRO" },
                   { id: "brasserie", name: "Brasserie", desc: "Warm & Natural", icon: "🍷", badge: "PRO" },
                   { id: "omakase", name: "Omakase", desc: "Zen Dark Mode", icon: "🍣", badge: "PRO" },
@@ -361,7 +373,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
                 </div>
               </div>
               <div className="w-full h-[90px] relative border-t border-[#D4AF37]/30 shadow-inner">
-                <Image src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=400&auto=format&fit=crop" alt="Hero Dish" className="w-full h-full object-cover" fill />
+                <Image src="/images/library/ghee-karam-dosa.jpg" alt="Hero Dish" className="w-full h-full object-cover" fill />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/50 to-transparent"></div>
               </div>
             </div>
@@ -509,9 +521,9 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
           {/* Menu Items List */}
           <div className={`p-4 space-y-4 flex-grow overflow-y-auto scrollbar-hide mt-2 ${themeStyle === "luxury" ? "bg-[#0C0C0E]" : themeStyle === "vibrant" ? "bg-[#FEF3C7]" : themeStyle === "omakase" ? "bg-[#0F0F0F]" : themeStyle === "popdiner" ? "bg-[#FFD166] p-5 gap-5" : themeStyle === "editorial" ? "bg-[#F9F8F6] p-5 gap-8" : themeStyle === "lounge" ? "bg-[#0A0A0A]" : themeStyle === "resort" ? "bg-[#F0F8FF]" : themeStyle === "botanical" ? "bg-[#F9FBE7]" : themeStyle === "cyberneon" ? "bg-[#09090B]" : "bg-slate-50/50"}`}>
             {[
-              { name: "French Onion Soup", desc: "Classic beef broth, caramelized onions, gruyere.", price: "$12.00", img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
-              { name: "Steak Frites", desc: "Prime ribeye, truffle fries, peppercorn sauce.", price: "$32.00", img: "https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=400&auto=format&fit=crop", tags: ["POPULAR"] },
-              { name: "Seared Scallops", desc: "Cauliflower purée, brown butter capers.", price: "$28.00", img: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?q=80&w=400&auto=format&fit=crop", tags: ["GF"] }
+              { name: "Masala Dosa", desc: "Crispy rice crepe filled with spiced potatoes.", price: "$12.00", img: "/images/library/masala-dosa.jpg", tags: ["POPULAR"] },
+              { name: "Ghee Karam Idly", desc: "Soft steamed rice cakes tossed in fiery podi.", price: "$10.00", img: "/images/library/ghee-karam-idly.jpg", tags: ["POPULAR"] },
+              { name: "Chicken Dosa", desc: "Crispy crepe stuffed with spicy chicken tikka.", price: "$14.00", img: "/images/library/chicken-dosa.jpg", tags: ["GF"] }
             ].map((item, idx) => (
               <div key={idx} className={`flex gap-3.5 p-2.5 rounded-xl ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl" : themeStyle === "omakase" ? "bg-transparent rounded-none border-b border-[#222] pb-4" : themeStyle === "popdiner" ? "bg-white border-[3px] border-black flex-col shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rotate-1" : themeStyle === "editorial" ? "bg-transparent rounded-none flex-col gap-3 pb-6 border-b border-[#E2DFD8]" : themeStyle === "lounge" ? "bg-[#141414] border border-white/5 rounded-2xl shadow-xl flex-col pb-3" : themeStyle === "resort" ? "bg-white rounded-2xl shadow-md flex-col pb-3" : themeStyle === "botanical" ? "bg-white border border-[#DCEDC8] rounded-3xl p-3" : themeStyle === "cyberneon" ? "bg-[#18181B] border-l-2 border-[#00FF41] rounded-none shadow-[0_0_15px_rgba(0,255,65,0.05)]" : "bg-white shadow-sm border border-slate-100"}`}>
                 <div className={`shrink-0 overflow-hidden relative ${themeStyle === "bistro" ? "w-16 h-16 rounded" : themeStyle === "luxury" ? "w-16 h-16 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-20 h-20 rounded-xl border-2 border-black rotate-[2deg]" : themeStyle === "omakase" ? "w-16 h-16 rounded-none grayscale" : themeStyle === "popdiner" ? "w-full h-32 border-b-2 border-black bg-[#118AB2]" : themeStyle === "editorial" ? "w-full h-32 bg-[#E2DFD8] rounded-none" : themeStyle === "lounge" ? "w-full h-32 rounded-t-xl" : themeStyle === "resort" ? "w-full h-32 rounded-t-xl" : themeStyle === "botanical" ? "w-16 h-16 rounded-full border-2 border-[#F1F8E9]" : themeStyle === "cyberneon" ? "w-16 h-16 rounded-none border border-[#00FF41]/30 grayscale contrast-125" : "w-14 h-14 rounded-lg"}`}>

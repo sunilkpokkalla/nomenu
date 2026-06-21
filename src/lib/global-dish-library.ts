@@ -1,3 +1,5 @@
+import { TEMPLATE_DISHES } from "./template-dishes";
+
 export interface LibraryDish {
   name: string;
   category: string;
@@ -12,6 +14,7 @@ export interface LibraryDish {
 }
 
 export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
+  ...TEMPLATE_DISHES as LibraryDish[],
   {
     name: "Soupe à l'Oignon Gratinée",
     category: "Starters",

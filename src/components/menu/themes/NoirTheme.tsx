@@ -19,6 +19,10 @@ import Image from "next/image";
 import { useCart } from "../cart-context";
 
 export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
+  const { addToCart } = useCart();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("");
   
@@ -31,6 +35,13 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
   // Modals
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [showAmenities, setShowAmenities] = useState(false);
+  const [orderQuantity, setOrderQuantity] = useState(1);
+  const [orderNotes, setOrderNotes] = useState("");
+
+  useEffect(() => {
+    setOrderQuantity(1);
+    setOrderNotes("");
+  }, [selectedItem]);
 
   const currencySymbol = restaurant.currency || "USD";
 
@@ -290,6 +301,96 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
         </div>
 
       </div>
+
+      {selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0A0A0A]/80 backdrop-blur-md p-4 font-sans animate-in fade-in duration-300">
+          <div className="bg-[#111111] w-full max-w-md rounded-t-3xl shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.8)] overflow-hidden border border-zinc-800/50 flex flex-col max-h-[90vh]">
+            <div className="p-6 border-b border-zinc-800 flex justify-between items-center bg-[#0A0A0A]">
+              <h2 className="text-xl font-serif text-white tracking-widest uppercase">Details</h2>
+              <button onClick={() => setSelectedItem(null)} className="text-zinc-500 hover:text-white p-2 rounded-full transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="overflow-y-auto flex-grow bg-[#0A0A0A] pb-8">
+              {selectedItem.image_url && (
+                <div className="w-full aspect-video relative bg-zinc-900 border-b border-zinc-800">
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover opacity-80" fill />
+                </div>
+              )}
+              
+              <div className="p-6 space-y-6">
+                <div>
+                  <div className="flex justify-between items-start gap-4 mb-2">
+                    <h3 className="text-2xl font-serif text-white tracking-wide">{selectedItem.name}</h3>
+                    <span className="text-lg text-amber-500 font-medium shrink-0">
+                      {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price).toFixed(2)}
+                    </span>
+                  </div>
+                  {selectedItem.description && (
+                    <p className="text-zinc-400 font-light leading-relaxed text-sm">
+                      {selectedItem.description}
+                    </p>
+                  )}
+                </div>
+
+                {canOrder && (
+                  <div className="space-y-6 pt-6 border-t border-zinc-800">
+                    <div className="space-y-3">
+                      <label className="text-xs uppercase tracking-widest text-zinc-500 font-semibold">Special Requests</label>
+                      <textarea
+                        value={orderNotes}
+                        onChange={(e) => setOrderNotes(e.target.value)}
+                        placeholder="Any allergies or dietary requirements?"
+                        className="w-full bg-[#111111] border border-zinc-800 rounded-lg p-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500/50 transition-colors resize-none"
+                        rows={2}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs uppercase tracking-widest text-zinc-500 font-semibold">Quantity</span>
+                      <div className="flex items-center gap-4 bg-[#111111] rounded-full p-1 border border-zinc-800">
+                        <button 
+                          onClick={() => setOrderQuantity(Math.max(1, orderQuantity - 1))}
+                          className="w-8 h-8 flex items-center justify-center rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                        >
+                          -
+                        </button>
+                        <span className="w-4 text-center text-white font-medium">{orderQuantity}</span>
+                        <button 
+                          onClick={() => setOrderQuantity(orderQuantity + 1)}
+                          className="w-8 h-8 flex items-center justify-center rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div className="p-6 bg-[#111111] border-t border-zinc-800">
+              <button 
+                onClick={() => {
+                  if (canOrder) {
+                    addToCart(selectedItem, orderQuantity, orderNotes);
+                  }
+                  setSelectedItem(null);
+                }}
+                className="w-full py-4 rounded-full bg-white text-[#0A0A0A] hover:bg-zinc-200 transition-colors font-medium tracking-widest uppercase text-xs flex justify-between items-center px-6"
+              >
+                <span>{canOrder ? "Add to Order" : "Close"}</span>
+                {canOrder && (
+                  <span>
+                    {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price * orderQuantity).toFixed(2)}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
