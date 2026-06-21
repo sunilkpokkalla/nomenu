@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
     }
 
-    if (restaurant.magic_credits <= 0) {
+    if ((restaurant.magic_credits ?? 0) <= 0) {
       return NextResponse.json({ 
         error: "Out of Magic Credits", 
         code: "OUT_OF_CREDITS" 
@@ -100,7 +100,7 @@ export async function POST(req: Request) {
     // Step 3: Deduct 1 Magic Credit
     const { error: updateError } = await supabase
       .from("restaurants")
-      .update({ magic_credits: restaurant.magic_credits - 1 })
+      .update({ magic_credits: (restaurant.magic_credits ?? 0) - 1 })
       .eq("id", restaurant.id);
 
     if (updateError) {

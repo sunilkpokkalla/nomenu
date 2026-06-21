@@ -421,6 +421,7 @@ export function MenuItemsClient({
 }
 
 // Subcomponent for handling instant optimistic toggle without form submission issues
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function OptimisticItemToggle({ item }: { item: any }) {
   const [optimisticAvailable, setOptimisticAvailable] = useState(item.is_available);
   const [isPending, startTransition] = useTransition();
