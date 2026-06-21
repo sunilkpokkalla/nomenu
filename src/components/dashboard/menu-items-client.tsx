@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { Flame, Leaf, Award, ShieldAlert, Sparkles, Trash2, Plus, Clock, MoreHorizontal, Edit2, ChevronRight, Folder, UtensilsCrossed } from "lucide-react";
 import Link from "next/link";
 import { deleteMenuItem, toggleMenuItemStatus, createMenuItem } from "@/app/dashboard/actions";
@@ -362,16 +362,7 @@ export function MenuItemsClient({
                           {/* Inline Actions */}
                           <div className="shrink-0 flex flex-col items-end gap-3 ml-2 border-l border-slate-100 pl-4">
                             {/* Toggle Availability */}
-                            <form action={toggleAction} className="flex items-center gap-2" title={item.is_available ? "In Stock" : "Sold Out"}>
-                              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                                {item.is_available ? "In Stock" : "Sold Out"}
-                              </span>
-                              <Switch 
-                                checked={item.is_available} 
-                                type="submit" 
-                                className="scale-75 origin-right"
-                              />
-                            </form>
+                            <OptimisticItemToggle item={item} />
                             
                             <div className="flex items-center gap-1 mt-auto">
                               <EditItemModal 
@@ -425,6 +416,40 @@ export function MenuItemsClient({
           </div>
         )}
       </div>
+    </>
+  );
+}
+
+// Subcomponent for handling instant optimistic toggle without form submission issues
+function OptimisticItemToggle({ item }: { item: any }) {
+  const [optimisticAvailable, setOptimisticAvailable] = useState(item.is_available);
+  const [isPending, startTransition] = useTransition();
+
+  // Sync state if server revalidates and prop changes
+  useEffect(() => {
+    setOptimisticAvailable(item.is_available);
+  }, [item.is_available]);
+
+  const handleToggle = (checked: boolean) => {
+    const previousState = optimisticAvailable;
+    setOptimisticAvailable(checked);
+    
+    startTransition(async () => {
+      await toggleMenuItemStatus(item.id, previousState);
+    });
+  };
+
+  return (
+    <div className="flex items-center gap-2" title={optimisticAvailable ? "In Stock" : "Sold Out"}>
+      <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+        {optimisticAvailable ? "In Stock" : "Sold Out"}
+      </span>
+      <Switch 
+        checked={optimisticAvailable} 
+        onCheckedChange={handleToggle}
+        disabled={isPending}
+        className="scale-75 origin-right"
+      />
     </div>
   );
 }
