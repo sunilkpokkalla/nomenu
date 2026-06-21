@@ -49,6 +49,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCuisine, setSelectedCuisine] = useState("all");
   const [selectedDish, setSelectedDish] = useState<LibraryDish | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // Configuration Form State
   const [formName, setFormName] = useState("");
@@ -165,6 +166,29 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
   const filteredCategories = useMemo(() => {
     return categories.filter(cat => cat.menu_id === formMenuId);
   }, [categories, formMenuId]);
+
+  // Handle generating a custom dish via AI
+  const handleMagicGenerate = async () => {
+    if (!searchQuery) return;
+    setIsGenerating(true);
+    try {
+      const res = await fetch("/api/menu/magic-generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: searchQuery }),
+      });
+      if (!res.ok) throw new Error("Generation failed");
+      const data = await res.json();
+      if (data.dish) {
+        handleSelectDish(data.dish);
+      }
+    } catch (error) {
+      console.error("AI Generation Error:", error);
+      alert("Failed to generate dish. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   // Handle selecting a dish to start configuration
   const handleSelectDish = (dish: LibraryDish) => {
@@ -381,9 +405,25 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                     <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-dashed rounded-xl shadow-sm">
                       <Search className="h-12 w-12 text-slate-300" />
                       <h4 className="font-semibold text-slate-900 mt-3">No matching dishes found</h4>
-                      <p className="text-xs text-slate-500 mt-1 max-w-xs">
+                      <p className="text-xs text-slate-500 mt-1 max-w-xs mb-6">
                         Try searching for something else or browse categories. You can always add custom dishes manually.
                       </p>
+                      
+                      {searchQuery && (
+                        <div className="flex flex-col items-center space-y-3">
+                          <Button 
+                            onClick={handleMagicGenerate} 
+                            disabled={isGenerating}
+                            className="bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md transition-all hover:-translate-y-0.5 min-w-[250px]"
+                          >
+                            <Sparkles className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-pulse' : ''}`} />
+                            {isGenerating ? "Consulting AI Chef..." : `Generate "${searchQuery}" with AI`}
+                          </Button>
+                          <span className="text-[10px] text-amber-600/80 font-semibold uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-100">
+                            Pro Feature
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
