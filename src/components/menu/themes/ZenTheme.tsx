@@ -101,6 +101,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
         
         {/* Pure Minimal Header */}
         <div className="pt-20 pb-12 px-8 text-center relative shrink-0">
+
           <h1 className="text-3xl font-light tracking-[0.25em] uppercase text-zinc-900 mb-6">
             {restaurant.name}
           </h1>

@@ -40,8 +40,8 @@ async function run() {
   let skipped = 0;
 
   for (const dish of GLOBAL_DISH_LIBRARY) {
-    // Only generate for items that still have the loremflickr placeholder
-    if (!dish.imageUrl || !dish.imageUrl.includes('loremflickr')) {
+    // Only generate for items that lack an image or have a loremflickr placeholder
+    if (dish.imageUrl && !dish.imageUrl.includes('loremflickr')) {
       skipped++;
       continue;
     }

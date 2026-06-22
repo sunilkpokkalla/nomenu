@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     const mimeType = file.type;
 
     const prompt = `
-      You are an expert menu digitizer.
+      You are an expert menu digitizer and a world-class culinary copywriter.
       Extract all categories, items, descriptions, and prices from this menu image/PDF.
       
       RULES:
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       2. Prices MUST be numbers (e.g., 12.99, not "$12.99"). If price is missing, use 0.
       3. Do your best to categorize items logically if categories are not explicit.
       4. Ensure spelling and capitalization are correct.
-      5. Include a description if one is present on the menu.
+      5. DESCRIPTIONS: If the physical menu provides a description, use it exactly as written. If the physical menu does NOT provide a description for an item, YOU MUST use your culinary knowledge to invent a highly appetizing, short 1-2 sentence description for it. NO item should ever have an empty description.
       
       Output Schema Requirements:
       {
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
             "items": [
               {
                 "name": "Item Name",
-                "description": "Item description (leave empty string if none)",
+                "description": "The extracted or AI-generated appetizing description",
                 "price": 10.50
               }
             ]
@@ -116,23 +116,61 @@ export async function POST(req: Request) {
       });
     }
 
-    // Apply loremflickr placeholders dynamically, or match from library
+    // Apply image mappings asynchronously
+    const categories = parsedJson.categories || [];
+    
+    // Process categories sequentially to prevent overwhelming APIs
+    for (const cat of categories) {
+      if (!cat.items) continue;
+      
+      // Process items concurrently within the category
+      await Promise.all(cat.items.map(async (item: { name: string; description?: string; imageUrl?: string | null; price?: number }) => {
+        const matchedItem = matchMap.get(item.name.toLowerCase());
+        let finalImageUrl = matchedItem?.image_url || null;
+        
+        // ----------------------------------------------------
+        // FALLBACK: Unsplash and Pexels
+        // ----------------------------------------------------
+        if (!finalImageUrl) {
+          try {
+            const searchQuery = encodeURIComponent(item.name + " food plate");
+            
+            // 1. Try Unsplash First
+            if (process.env.UNSPLASH_API_KEY) {
+              const unsplashRes = await fetch(`https://api.unsplash.com/search/photos?query=${searchQuery}&per_page=1&client_id=${process.env.UNSPLASH_API_KEY}`);
+              if (unsplashRes.ok) {
+                const uData = await unsplashRes.json();
+                if (uData.results && uData.results.length > 0) {
+                  finalImageUrl = uData.results[0].urls.regular;
+                }
+              }
+            }
+            
+            // 2. Try Pexels Second (if Unsplash didn't work or isn't configured)
+            if (!finalImageUrl && process.env.PEXELS_API_KEY) {
+              const pexelsRes = await fetch(`https://api.pexels.com/v1/search?query=${searchQuery}&per_page=1`, {
+                headers: { Authorization: process.env.PEXELS_API_KEY }
+              });
+              if (pexelsRes.ok) {
+                const pData = await pexelsRes.json();
+                if (pData.photos && pData.photos.length > 0) {
+                  finalImageUrl = pData.photos[0].src.large;
+                }
+              }
+            }
+          } catch (fallbackErr) {
+            console.error("Fallback image fetch failed for", item.name, fallbackErr);
+          }
+        }
+        
+        item.imageUrl = finalImageUrl;
+        item.description = item.description || matchedItem?.description || "";
+      }));
+    }
+
     const formattedData = {
       ...parsedJson,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      categories: parsedJson.categories?.map((cat: any) => ({
-        ...cat,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        items: cat.items?.map((item: any) => {
-          const matchedItem = matchMap.get(item.name.toLowerCase());
-          
-          return {
-            ...item,
-            imageUrl: matchedItem?.image_url || `https://loremflickr.com/800/600/food,${encodeURIComponent(item.name.split(' ')[0])}?lock=${Math.floor(Math.random() * 100000)}`,
-            description: item.description || matchedItem?.description || ""
-          };
-        }) || []
-      })) || []
+      categories: categories
     };
 
     return NextResponse.json(formattedData);

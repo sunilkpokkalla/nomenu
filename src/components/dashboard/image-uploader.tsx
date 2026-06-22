@@ -213,13 +213,19 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
                 <p className="text-xs font-medium text-slate-700">Uploading to storage...</p>
               </div>
             )}
-            <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-200 border-dashed rounded-lg cursor-pointer bg-white hover:bg-slate-50 transition-colors">
-              <div className="flex flex-col items-center justify-center pt-4 pb-4">
-                <Upload className="w-6 h-6 text-slate-400 mb-1" />
-                <p className="text-xs text-slate-500">
-                  <span className="font-semibold">Click to upload</span> or drag and drop
-                </p>
-                <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG, or WebP (max 5MB)</p>
+            <label className={`flex flex-col items-center justify-center cursor-pointer bg-white hover:bg-slate-50 transition-colors border-2 border-dashed ${folder === 'logo' ? 'w-32 h-32 rounded-full mx-auto border-slate-300 shadow-sm' : 'w-full h-24 rounded-lg border-slate-200'}`}>
+              <div className="flex flex-col items-center justify-center p-4 text-center">
+                <Upload className={`${folder === 'logo' ? 'w-5 h-5 mb-2' : 'w-6 h-6 mb-1'} text-slate-400`} />
+                {folder === 'logo' ? (
+                  <p className="text-[10px] text-slate-500 font-semibold leading-tight">Upload Logo</p>
+                ) : (
+                  <>
+                    <p className="text-xs text-slate-500">
+                      <span className="font-semibold">Click to upload</span> or drag and drop
+                    </p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG, or WebP (max 5MB)</p>
+                  </>
+                )}
               </div>
               <input
                 ref={fileInputRef}
@@ -285,8 +291,8 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
 
       {/* Preview box */}
       {preview && (
-        <div className="relative rounded-xl border border-slate-200 p-2 bg-white flex items-center gap-3">
-          <div className="h-12 w-12 rounded-lg overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center">
+        <div className={`relative bg-white flex items-center ${folder === 'logo' ? 'flex-col gap-3 justify-center text-center p-4 rounded-xl border border-slate-100 shadow-sm' : 'flex-row gap-3 p-2 rounded-xl border border-slate-200'}`}>
+          <div className={`${folder === 'logo' ? 'h-24 w-24 rounded-full shadow-md ring-4 ring-slate-50' : 'h-12 w-12 rounded-lg'} overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center`}>
             <img
               src={preview}
               alt="Preview"
@@ -295,17 +301,17 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
             />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">Image Loaded</p>
-            <p className="text-[9px] text-slate-400 truncate max-w-[200px]">{value}</p>
+            <p className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">{folder === 'logo' ? 'Brand Logo Active' : 'Image Loaded'}</p>
+            {folder !== 'logo' && <p className="text-[9px] text-slate-400 truncate max-w-[200px]">{value}</p>}
           </div>
           <Button
             type="button"
-            variant="ghost"
+            variant={folder === 'logo' ? 'outline' : 'ghost'}
             size="sm"
             onClick={handleRemove}
-            className="h-7 w-7 p-0 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 cursor-pointer"
+            className={folder === 'logo' ? 'mt-2 h-8 text-xs text-rose-600 border-rose-200 hover:bg-rose-50' : 'h-7 w-7 p-0 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 cursor-pointer'}
           >
-            <X className="h-4 w-4" />
+            {folder === 'logo' ? 'Remove Logo' : <X className="h-4 w-4" />}
           </Button>
         </div>
       )}

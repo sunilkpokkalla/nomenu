@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { 
   X, 
   Search, 
@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { GLOBAL_DISH_LIBRARY, LibraryDish } from "@/lib/global-dish-library";
+import { Loader2 } from "lucide-react";
 import { createMenuItem } from "@/app/dashboard/actions";
 import Image from "next/image";
 
@@ -52,6 +53,11 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
   const [isGenerating, setIsGenerating] = useState(false);
   const [magicCredits, setMagicCredits] = useState<number | null>(null);
 
+  // Supabase-powered search state
+  const [searchResults, setSearchResults] = useState<LibraryDish[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Fetch credits when modal opens
   useEffect(() => {
     if (isOpen) {
@@ -65,6 +71,44 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
         .catch(err => console.error("Failed to fetch credits", err));
     }
   }, [isOpen]);
+
+  // Debounced Supabase search — fires when user types
+  useEffect(() => {
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    searchDebounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/library?q=${encodeURIComponent(searchQuery.trim())}`);
+        if (res.ok) {
+          const data = await res.json();
+          // Map Supabase shape to LibraryDish shape
+          const mapped: LibraryDish[] = data.map((row: { name: string; description: string; category_id: string | null; image_url: string | null; }) => ({
+            name: row.name,
+            description: row.description || "",
+            category: row.category_id || "Other",
+            cuisines: [],
+            imageUrl: row.image_url || undefined,
+          }));
+          setSearchResults(mapped);
+        }
+      } catch (err) {
+        console.error("Library search error:", err);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300);
+
+    return () => {
+      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    };
+  }, [searchQuery]);
 
   // Handle Stripe checkout for Magic Credits
   const handleBuyCredits = async () => {
@@ -162,9 +206,21 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
     });
   }, [matchedCountryCuisines]);
 
-  // Filtered dishes computed on state change and search
+  // Filtered dishes: use Supabase results when searching, local library for tabs
   const filteredDishes = useMemo(() => {
-    return restaurantLibrary.filter(dish => {
+    // When searching — use live Supabase results
+    if (searchQuery.trim()) return searchResults;
+
+    // Deduplicate local library for tab browsing
+    const seen = new Set<string>();
+    const deduped = restaurantLibrary.filter(dish => {
+      const key = dish.name.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    return deduped.filter(dish => {
       // 1. Search Query Match
       if (searchQuery) {
         const matchesSearch = 
@@ -173,7 +229,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
         if (!matchesSearch) return false;
       }
 
-      // 2. Cuisine Pill Filter Match
+      // 2. Cuisine Pill Filter Match (only applies when NOT searching)
       if (selectedCuisine === "all") return true;
       
       if (selectedCuisine === "french") return dish.cuisines.includes("french") || dish.cuisines.includes("bistro");
@@ -184,12 +240,12 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
       if (selectedCuisine === "indian") return dish.cuisines.includes("indian");
       if (selectedCuisine === "spanish") return dish.cuisines.includes("spanish") || dish.cuisines.includes("tapas");
       if (selectedCuisine === "breakfast") return dish.cuisines.includes("cafe") || dish.cuisines.includes("coffee") || dish.cuisines.includes("bakery") || dish.cuisines.includes("breakfast");
-      if (selectedCuisine === "drinks") return dish.cuisines.includes("bar") || dish.cuisines.includes("cocktail") || dish.cuisines.includes("drinks") || dish.cuisines.includes("beverages");
+      if (selectedCuisine === "drinks") return dish.cuisines.includes("bar") || dish.cuisines.includes("cocktail") || dish.cuisines.includes("drinks") || dish.cuisines.includes("beverages") || dish.category === "Beverages" || dish.category === "Cocktails" || dish.category === "Drinks";
       if (selectedCuisine === "kids") return dish.cuisines.includes("kids menu");
 
       return true;
     });
-  }, [searchQuery, selectedCuisine, restaurantLibrary]);
+  }, [searchQuery, selectedCuisine, restaurantLibrary, searchResults]);
 
   const activeCuisineTab = selectedCuisine;
 
@@ -351,11 +407,14 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                     <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     <Input
                       type="text"
-                      placeholder="Search classics... (e.g. Steak, Burger, Tiramisu, Espresso, Carbonara)"
+                      placeholder="Search 965+ dishes... (e.g. Takoyaki, Negroni, Crème Brûlée, Mango Lassi)"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-9 h-10 border-slate-200 focus:ring-slate-900 focus:border-slate-900"
+                      className="pl-9 pr-9 h-10 border-slate-200 focus:ring-slate-900 focus:border-slate-900"
                     />
+                    {isSearching && (
+                      <Loader2 className="absolute right-3 top-3 h-4 w-4 text-slate-400 animate-spin" />
+                    )}
                   </div>
                   
                   {/* Category Pill Filters */}
@@ -382,6 +441,11 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
 
                 {/* DISHES LIST */}
                 <div className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-sm font-medium text-slate-500">
+                      Showing {filteredDishes.length} {filteredDishes.length === 1 ? 'item' : 'items'}
+                    </p>
+                  </div>
                   {filteredDishes.length > 0 ? (
                     <div className="grid gap-4 sm:grid-cols-2">
                       {filteredDishes.map((dish, index) => {

@@ -234,7 +234,7 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
                     className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${imageOption === "free" ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-200 hover:border-slate-300'}`}
                   >
                     <div className="flex justify-between items-center mb-1">
-                      <p className="font-bold text-slate-900 flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div> Standard Library (Free)</p>
+                      <div className="font-bold text-slate-900 flex items-center gap-2"><span className="w-4 h-4 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></span> Standard Library (Free)</div>
                       <p className="font-bold text-slate-900">$0.00</p>
                     </div>
                     <p className="text-xs text-slate-500">Automatically attaches verified, safe photos from our curated Global Chef Library. Items without a match will remain blank for you to upload your own custom photo.</p>

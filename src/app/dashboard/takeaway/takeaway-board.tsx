@@ -90,6 +90,9 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
       const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
       if (!AudioContext) return;
       const ctx = new AudioContext();
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
       
       // First note
       const osc1 = ctx.createOscillator();

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const maxDuration = 30; // Vercel max duration for longer image generation
 
@@ -20,6 +21,21 @@ export async function POST(req: Request) {
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Rate limit: 5 magic generates per minute per user
+    const { allowed, resetAt } = checkRateLimit(`magic:${user.id}`, {
+      maxRequests: 5,
+      windowMs: 60 * 1000,
+    });
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please wait before generating more dishes." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(Math.ceil((resetAt - Date.now()) / 1000)) },
+        }
+      );
     }
 
     // Get the user's restaurant and check credits

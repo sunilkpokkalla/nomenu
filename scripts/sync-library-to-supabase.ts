@@ -2,6 +2,10 @@ import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
 import { GLOBAL_DISH_LIBRARY } from '../src/lib/global-dish-library';
 
+function slugify(text: string) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+}
+
 dotenv.config({ path: '.env.local' });
 
 const supabase = createClient(
@@ -30,7 +34,16 @@ async function run() {
   const toInsert: any[] = [];
   const toUpdate: any[] = [];
 
+  // Deduplicate by name to prevent "ON CONFLICT DO UPDATE command cannot affect row a second time"
+  const uniqueLibrary = new Map();
   for (const dish of GLOBAL_DISH_LIBRARY) {
+    uniqueLibrary.set(dish.name.toLowerCase(), dish);
+  }
+
+  for (const dish of uniqueLibrary.values()) {
+    const slug = slugify(dish.name);
+    const finalImageUrl = dish.imageUrl || `/images/library/${slug}.jpg`;
+
     const existingId = existingMap.get(dish.name.toLowerCase());
     if (existingId) {
       toUpdate.push({
@@ -38,14 +51,14 @@ async function run() {
         name: dish.name,
         description: dish.description || null,
         category_id: dish.category || null,
-        image_url: dish.imageUrl || null,
+        image_url: finalImageUrl,
       });
     } else {
       toInsert.push({
         name: dish.name,
         description: dish.description || null,
         category_id: dish.category || null,
-        image_url: dish.imageUrl || null,
+        image_url: finalImageUrl,
       });
     }
   }

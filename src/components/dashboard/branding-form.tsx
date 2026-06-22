@@ -16,7 +16,6 @@ interface BrandingFormProps {
     cuisine_type?: string | null;
     primary_color?: string | null;
     accent_color?: string | null;
-    logo_url?: string | null;
     theme_style?: string | null;
     wifi_password?: string | null;
     plan?: string | null;
@@ -35,7 +34,6 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
   const [primaryColor, setPrimaryColor] = useState(entity.primary_color || "#2563EB");
   const [accentColor, setAccentColor] = useState(entity.accent_color || "#F59E0B");
   const [themeStyle, setThemeStyle] = useState(entity.theme_style || "minimalist");
-  const [logoUrl, setLogoUrl] = useState(entity.logo_url || "");
   const [wifiPassword, setWifiPassword] = useState(entity.wifi_password || "");
   const [isPending, setIsPending] = useState(false);
 
@@ -187,14 +185,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
 
           <div className={type === "menu" && !useCustomDesign ? "opacity-40 pointer-events-none transition-all duration-300 grayscale" : "transition-all duration-300"}>
             
-            {/* Logo Upload */}
-            <section className="mb-10">
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-5 border-b border-slate-100 pb-3">Brand Logo</h2>
-              <input type="hidden" name="logoUrl" value={logoUrl} />
-              <div className="max-w-[200px] rounded-2xl bg-white border border-slate-200 p-2 shadow-sm">
-                 <ImageUploader value={logoUrl} onChange={setLogoUrl} folder="logo" hideLibrary={true} />
-              </div>
-            </section>
+            {/* Logo Upload Removed by user request */}
 
             {/* Color Palette */}
             {["minimalist", "vibrant", "botanical"].includes(themeStyle) ? (
@@ -399,7 +390,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
             </div>
           ) : themeStyle === "vibrant" ? (
             <div className="pt-10 pb-8 px-4 text-center border-b-4 border-black relative bg-[#FFD166] shrink-0">
-              <div className="text-center z-10 space-y-1">
+              <div className="text-center z-10 flex flex-col items-center space-y-1">
                 <h1 className="text-2xl font-black tracking-tight text-black font-sans uppercase drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                   {entity.name}
                 </h1>
@@ -441,7 +432,7 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
             </div>
           ) : (
             <div
-              className="h-28 w-full relative flex items-end justify-center p-4 text-white transition-all duration-300"
+              className="h-28 w-full relative flex flex-col items-center justify-end p-4 text-white transition-all duration-300"
               style={{
                 background: previewTheme.headerGradient,
               }}

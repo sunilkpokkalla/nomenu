@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { slugify } from "@/lib/utils/slugify";
 import type { Database } from "@/types/database";
+import { generateAiDescription } from "@/lib/ai-server";
+import { searchFreeFoodImage } from "@/lib/image-search";
 
 function field(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -38,9 +40,27 @@ export async function createRestaurant(formData: FormData) {
     redirect("/dashboard?message=Restaurant%20name%20is%20required");
   }
 
+  const baseSlug = slugify(name);
+  let finalSlug = baseSlug;
+  let counter = 2;
+  
+  while (true) {
+    const { data: collision } = await supabase
+      .from("restaurants")
+      .select("id")
+      .eq("slug", finalSlug)
+      .maybeSingle();
+      
+    if (!collision) break;
+    
+    finalSlug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+
   const { error } = await supabase.from("restaurants").insert({
     owner_id: user.id,
     name,
+    slug: finalSlug,
     cuisine_type: field(formData, "cuisineType"),
     address: field(formData, "address"),
     phone: field(formData, "phone"),
@@ -48,7 +68,6 @@ export async function createRestaurant(formData: FormData) {
     timezone: field(formData, "timezone") ?? "UTC",
     primary_color: "#2563EB",
     accent_color: field(formData, "accentColor") ?? "#F59E0B",
-    logo_url: field(formData, "logoUrl") || null,
     theme_style: "minimalist",
   });
 
@@ -388,14 +407,25 @@ export async function createMenuItem(formData: FormData) {
     redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Category%20is%20required` : "/dashboard/items?message=Category%20is%20required");
   }
 
-  const description = field(formData, "description");
+  const rawDescription = field(formData, "description");
   const isAvailable = formData.get("isAvailable") === "true";
   const isPopular = formData.get("isPopular") === "true";
   const isVegetarian = formData.get("isVegetarian") === "true";
   const isVegan = formData.get("isVegan") === "true";
   const isGlutenFree = formData.get("isGlutenFree") === "true";
   const isSpicy = formData.get("isSpicy") === "true";
-  const imageUrl = field(formData, "imageUrl");
+  let imageUrl = field(formData, "imageUrl");
+
+  // 🤖 Auto-generate description if empty (works for all plans)
+  let description = rawDescription;
+  if (!description && name) {
+    description = await generateAiDescription(name, 'item');
+  }
+
+  // 🖼️ Auto-fetch free stock image if no image provided (all plans — no cost)
+  if (!imageUrl && name) {
+    imageUrl = await searchFreeFoodImage(name);
+  }
 
   const insertPayload: Database["public"]["Tables"]["menu_items"]["Insert"] = {
     category_id: categoryId,
@@ -501,14 +531,25 @@ export async function editMenuItem(formData: FormData) {
     redirect(menuId ? `/dashboard/items?menuId=${menuId}&message=Category%20is%20required` : "/dashboard/items?message=Category%20is%20required");
   }
 
-  const description = field(formData, "description");
+  const rawDescription = field(formData, "description");
   const isAvailable = formData.get("isAvailable") === "true";
   const isPopular = formData.get("isPopular") === "true";
   const isVegetarian = formData.get("isVegetarian") === "true";
   const isVegan = formData.get("isVegan") === "true";
   const isGlutenFree = formData.get("isGlutenFree") === "true";
   const isSpicy = formData.get("isSpicy") === "true";
-  const imageUrl = field(formData, "imageUrl");
+  let imageUrl = field(formData, "imageUrl");
+
+  // 🤖 Auto-generate description if empty (works for all plans)
+  let description = rawDescription;
+  if (!description && name) {
+    description = await generateAiDescription(name, 'item');
+  }
+
+  // 🖼️ Auto-fetch free stock image if no image provided (all plans — no cost)
+  if (!imageUrl && name) {
+    imageUrl = await searchFreeFoodImage(name);
+  }
 
   const updatePayload: Database["public"]["Tables"]["menu_items"]["Update"] = {
     category_id: categoryId,
@@ -773,7 +814,6 @@ export async function updateRestaurantBranding(formData: FormData) {
 
   const primaryColor = field(formData, "primaryColor") ?? "#2563EB";
   const accentColor = field(formData, "accentColor") ?? "#F59E0B";
-  const logoUrl = field(formData, "logoUrl") || null;
   const themeStyle = field(formData, "themeStyle") ?? "minimalist";
   const wifiPassword = field(formData, "wifiPassword");
 
@@ -789,7 +829,6 @@ export async function updateRestaurantBranding(formData: FormData) {
     .update({
       primary_color: primaryColor,
       accent_color: accentColor,
-      logo_url: logoUrl,
       theme_style: themeStyle,
       wifi_password: wifiPassword,
     })

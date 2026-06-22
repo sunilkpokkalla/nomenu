@@ -364,6 +364,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
 
         {themeStyle === "minimalist" && (
           <div className="pt-16 pb-8 px-8 text-left bg-white border-b border-zinc-150 shrink-0">
+
             <h1 className="text-3xl font-light tracking-tight text-black uppercase font-sans-minimalist">
               {restaurant.name}
             </h1>
@@ -382,6 +383,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
         {themeStyle === "luxury" && (
           <div className="pt-16 pb-10 px-8 text-center bg-black relative border-b border-zinc-900/60 overflow-hidden shrink-0">
             <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent pointer-events-none"></div>
+
             <h1 className="text-3xl font-bold tracking-[0.15em] uppercase bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 text-transparent bg-clip-text font-serif-luxury drop-shadow-lg">
               {restaurant.name}
             </h1>
@@ -397,7 +399,8 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
             <div className="absolute top-2 left-2 w-4 h-4 bg-[#FF5A5F] rounded-full border-2 border-black"></div>
             <div className="absolute bottom-2 right-2 w-6 h-6 bg-[#06D6A0] rounded-none border-2 border-black rotate-45"></div>
             
-            <div className="text-center z-10 space-y-2">
+            <div className="text-center z-10 flex flex-col items-center space-y-2">
+
               <h1 className="text-4xl font-black tracking-tight text-black font-sans-vibrant uppercase drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                 {restaurant.name}
               </h1>

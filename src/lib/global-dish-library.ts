@@ -1,4 +1,6 @@
 import { TEMPLATE_DISHES } from "./template-dishes";
+import { NEW_GLOBAL_ADDITIONS } from "./global-library-additions";
+import { DRINKS_AND_DESSERTS } from "./drinks-desserts-library";
 
 export interface LibraryDish {
   name: string;
@@ -15,6 +17,8 @@ export interface LibraryDish {
 
 export const GLOBAL_DISH_LIBRARY: LibraryDish[] = [
   ...TEMPLATE_DISHES as LibraryDish[],
+  ...NEW_GLOBAL_ADDITIONS,
+  ...DRINKS_AND_DESSERTS,
   {
     name: "Soupe à l'Oignon Gratinée",
     category: "Starters",

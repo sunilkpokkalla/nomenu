@@ -129,6 +129,7 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent" />
           
           <div className="absolute bottom-0 left-0 w-full px-8 pb-8 flex flex-col items-center text-center translate-y-4">
+
             <p className="text-[10px] tracking-[0.3em] uppercase text-amber-500 font-semibold mb-3">
               {restaurant.cuisine_type || "Fine Dining"}
             </p>

@@ -13,13 +13,11 @@ import { ImageUploader } from "@/components/dashboard/image-uploader";
 import { createRestaurant } from "@/app/dashboard/actions";
 
 export function OnboardingForm() {
-  const [logoUrl, setLogoUrl] = useState("");
   const [accentColor, setAccentColor] = useState("#F59E0B");
 
   return (
     <form action={createRestaurant} className="space-y-5">
       {/* Hidden inputs to send state to server action */}
-      <input type="hidden" name="logoUrl" value={logoUrl} />
       <input type="hidden" name="accentColor" value={accentColor} />
 
       <div className="space-y-1.5">
@@ -33,14 +31,7 @@ export function OnboardingForm() {
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Brand Logo</Label>
-          <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-2">
-             <ImageUploader value={logoUrl} onChange={setLogoUrl} folder="logo" hideLibrary={true} />
-          </div>
-        </div>
-
+      <div>
         <div className="space-y-1.5">
           <Label htmlFor="accentColorPicker" className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Brand Color</Label>
           <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-2 h-[72px]">
