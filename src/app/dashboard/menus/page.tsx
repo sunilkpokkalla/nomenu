@@ -227,7 +227,7 @@ export default async function MenusPage(
                                   baseMenuUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/${menu.slug}`;
                                 }
                               }
-                              return <MenuShareModal baseMenuUrl={baseMenuUrl} menuName={menu.name} plan={restaurant.plan?.toLowerCase() || 'free'} />;
+                              return <MenuShareModal baseMenuUrl={baseMenuUrl} menuName={menu.name} plan={restaurant.plan?.toLowerCase() || 'free'} primaryColor={restaurant.primary_color} />;
                             })()}
                           </div>
                         </div>
