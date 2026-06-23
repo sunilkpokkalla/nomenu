@@ -14,18 +14,27 @@ const TEMPLATES = {
     name: "The Soulful Pitch (Cold Email)",
     subject: "Getting you back to the kitchen",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu Digital Menus" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi there,</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">I’m reaching out because I know you opened a restaurant because you love food and hospitality, not because you wanted to manage printers, apologize for outdated prices, or fight with clunky POS systems.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">We believe technology in a restaurant should be completely invisible—it should just work. We've built a system that lets you replace your paper menus with stunning digital QR menus that you can update instantly from your phone. Plus, it routes orders directly to a beautiful Kitchen Display System so you never lose a paper ticket again.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Stop wrestling with operations and get back to doing what you do best.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">See Nomenu in Action</a>
+  </div>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Do you have 5 minutes next Tuesday for me to show you how Nomenu can transform your business?</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
   },
   pro_upgrade: {
     name: "Pro Upgrade Push",
     subject: "Unlock Premium Themes & Custom Domains",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu Pro" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
   <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Take your brand to the next level.</h2>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">You have already set up your digital menu, but did you know you can completely transform how it looks to your guests?</p>
   <ul style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
