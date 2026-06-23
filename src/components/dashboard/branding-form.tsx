@@ -41,24 +41,26 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
   const isPro = ["pro", "elite", "enterprise"].includes(userPlan);
   const isElite = ["elite", "enterprise"].includes(userPlan);
 
-  const proThemes = ["bistro", "omakase", "brutalist"];
-  const requiresElite = themeStyle !== "minimalist" && !proThemes.includes(themeStyle);
+  const freeThemes = ["minimalist", "botanical"];
+  const proThemes = ["vibrant", "zen", "bistro", "brasserie", "omakase", "bentopop"];
+  const requiresPro = !freeThemes.includes(themeStyle);
+  const requiresElite = !freeThemes.includes(themeStyle) && !proThemes.includes(themeStyle);
 
   let isLocked = false;
   let lockMessage = "";
   let upgradeTarget = "";
   let lockTitle = "";
 
-  if (!isPro) {
-    isLocked = true;
-    lockTitle = "Premium Branding Locked";
-    lockMessage = "Custom colors, themes, and layout designs are reserved for Pro and Elite accounts. Preview them below, then upgrade to apply to your live menu.";
-    upgradeTarget = "Upgrade to Pro";
-  } else if (!isElite && requiresElite) {
+  if (!isElite && requiresElite) {
     isLocked = true;
     lockTitle = "Elite Theme Locked";
     lockMessage = `The ${themeStyle} template is an exclusive Elite feature. Upgrade your plan to apply this ultra-premium design.`;
     upgradeTarget = "Upgrade to Elite";
+  } else if (!isPro && requiresPro) {
+    isLocked = true;
+    lockTitle = "Pro Theme Locked";
+    lockMessage = `The ${themeStyle} template is a Pro feature. Upgrade your plan to apply this premium design.`;
+    upgradeTarget = "Upgrade to Pro";
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
