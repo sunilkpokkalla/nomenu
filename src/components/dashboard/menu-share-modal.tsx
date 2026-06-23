@@ -29,7 +29,10 @@ export function MenuShareModal({ baseMenuUrl, menuName, plan }: { baseMenuUrl: s
     }
   };
 
-  const getQrUrl = (url: string) => `/api/qr?data=${encodeURIComponent(url)}`;
+  const getQrUrl = (url: string) => {
+    const primaryColor = restaurant?.primary_color || "#0F172A";
+    return `/api/qr?data=${encodeURIComponent(url)}&color=${encodeURIComponent(primaryColor)}`;
+  };
 
   return (
     <Dialog>

@@ -104,7 +104,8 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
   if (restaurant.slug) { // Mock the URL since we don't have menu slug easily here, or just use the generic one for the QR image
     previewPublicUrl = `${baseUrl}/menu/${previewQr.menu_id}?qr=${previewQr.id}`;
   }
-  const previewQrImageApiUrl = `/api/qr?data=${encodeURIComponent(previewPublicUrl)}`;
+  const primaryColor = restaurant.primary_color || "#0F172A";
+  const previewQrImageApiUrl = `/api/qr?data=${encodeURIComponent(previewPublicUrl)}&color=${encodeURIComponent(primaryColor)}`;
 
   return (
     <>
@@ -308,7 +309,8 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
           {selectedQrs.map((qr) => {
             const TemplateComponent = templates[template] || templates["classic"];
             const publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
-            const qrImageUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
+            const primaryColor = restaurant.primary_color || "#0F172A";
+            const qrImageUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}&color=${encodeURIComponent(primaryColor)}`;
             
             return (
               <div key={qr.id} className="qr-card-wrapper inline-block" style={{ width: 'fit-content' }}>

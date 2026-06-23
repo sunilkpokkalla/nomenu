@@ -125,7 +125,8 @@ export function QrCodesClient({
                       publicUrl += modeParam;
                     }
                     
-                    const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
+                    const primaryColor = restaurant.primary_color || "#0F172A";
+                    const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}&color=${encodeURIComponent(primaryColor)}`;
                     const isSelected = selectedQrIds.has(qr.id);
                     
                     return (

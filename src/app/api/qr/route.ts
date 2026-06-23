@@ -5,10 +5,16 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const data = searchParams.get("data");
+    const colorParam = searchParams.get("color");
 
     if (!data) {
       return new NextResponse("Missing data parameter", { status: 400 });
     }
+
+    // Default to slate-900 if no color is provided or if it's invalid
+    const darkColor = colorParam && /^#([0-9A-F]{3}){1,2}$/i.test(colorParam) 
+      ? colorParam 
+      : "#0F172A";
 
     // Generate QR code as a buffer
     const buffer = await QRCode.toBuffer(data, {
@@ -16,7 +22,7 @@ export async function GET(req: NextRequest) {
       margin: 1,
       width: 500,
       color: {
-        dark: "#0F172A", // slate-900
+        dark: darkColor,
         light: "#FFFFFF",
       },
     });
