@@ -182,7 +182,7 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
                       onChange={(e) => {
                         const selectedId = e.target.value as TemplateKey;
                         const isFreePlan = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
-                        const isLocked = isFreePlan && selectedId !== "classic";
+                        const isLocked = isFreePlan && !["classic", "instagram-square", "minimalist"].includes(selectedId);
                         
                         if (!isLocked) {
                           setTemplate(selectedId);
@@ -194,7 +194,7 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
                         <optgroup key={category.id} label={category.name} className="font-bold text-slate-500">
                           {category.templates.map((t: {id: string; name: string}) => {
                             const isFreePlan = !restaurant.plan || restaurant.plan.toLowerCase() === "free";
-                            const isLocked = isFreePlan && t.id !== "classic";
+                            const isLocked = isFreePlan && !["classic", "instagram-square", "minimalist"].includes(t.id);
                             return (
                                 <option 
                                   key={t.id} 
