@@ -24,7 +24,6 @@ export function ImpersonateButton({ userId, restaurantName }: { userId: string, 
 
       const supabase = createClient();
       const { error: verifyError } = await supabase.auth.verifyOtp({
-        email,
         token_hash: otp,
         type: 'magiclink'
       });
