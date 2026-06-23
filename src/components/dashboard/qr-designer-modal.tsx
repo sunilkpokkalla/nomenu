@@ -310,28 +310,12 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                     <Label className="font-bold text-slate-700 flex items-center gap-2 px-1">
                       <ImageIcon className="h-4 w-4 text-indigo-500" /> Card Logo
                     </Label>
-                    {!restaurant.plan || restaurant.plan.toLowerCase() === "free" ? (
-                      <div className="p-4 bg-slate-950 rounded-xl flex items-center gap-3 shadow-lg shadow-slate-900/10">
-                        <div className="h-8 w-8 rounded-full bg-indigo-500/20 flex items-center justify-center shrink-0">
-                          <ImageIcon className="h-4 w-4 text-indigo-400" />
-                        </div>
-                        <div className="text-left">
-                          <p className="text-[11px] text-white font-bold mb-0.5">
-                            Custom Logo is Premium
-                          </p>
-                          <p className="text-[10px] text-slate-400 font-medium">
-                            Upgrade to upload your restaurant logo.
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="bg-slate-50 p-2 rounded-xl border border-slate-200">
-                        <ImageUploader folder="logo" hideLibrary={true}
-                          value={customLogoUrl} 
-                          onChange={setCustomLogoUrl} 
-                        />
-                      </div>
-                    )}
+                    <div className="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                      <ImageUploader folder="logo" hideLibrary={true}
+                        value={customLogoUrl} 
+                        onChange={setCustomLogoUrl} 
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
