@@ -31,24 +31,7 @@ export function OnboardingForm() {
         />
       </div>
 
-      <div>
-        <div className="space-y-1.5">
-          <Label htmlFor="accentColorPicker" className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Brand Color</Label>
-          <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/50 p-2 h-[72px]">
-            <input 
-              type="color" 
-              id="accentColorPicker"
-              value={accentColor}
-              onChange={(e) => setAccentColor(e.target.value)}
-              className="h-10 w-10 cursor-pointer rounded-lg border-0 p-0 bg-transparent"
-            />
-            <div className="flex-1">
-               <p className="text-xs font-bold text-slate-700">Accent Hue</p>
-               <p className="text-[10px] text-slate-400 font-mono">{accentColor.toUpperCase()}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
       <div className="space-y-1.5">
         <Label htmlFor="cuisineSelect" className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Cuisine / Service Style</Label>
