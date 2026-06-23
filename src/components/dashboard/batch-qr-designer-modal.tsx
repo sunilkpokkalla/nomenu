@@ -272,7 +272,11 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
                         />
                         <Input 
                           value={qrColor} 
-                          onChange={(e) => setQrColor(e.target.value)} 
+                          onChange={(e) => {
+                            let val = e.target.value;
+                            if (val && !val.startsWith('#')) val = '#' + val;
+                            setQrColor(val);
+                          }} 
                           className="h-10 flex-1 text-xs font-bold font-mono text-slate-700 bg-slate-50 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 uppercase"
                           placeholder="#0F172A"
                           maxLength={7}
