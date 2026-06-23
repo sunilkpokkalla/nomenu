@@ -256,10 +256,10 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                     </div>
                   </div>
                   {(!restaurant.plan || restaurant.plan.toLowerCase() === "free") && (
-                    <div className="mt-2 p-3 bg-slate-950 rounded-xl flex items-start gap-2 shadow-lg shadow-slate-900/10">
-                      <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                      <p className="text-[10px] text-slate-300 font-medium leading-relaxed">
-                        <strong className="text-white block mb-0.5">Unlock Premium Designs</strong>
+                    <div className="mt-2 p-3 bg-indigo-50 rounded-xl flex items-start gap-2 border border-indigo-100 shadow-sm">
+                      <Sparkles className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                      <p className="text-[10px] text-indigo-800 font-medium leading-relaxed">
+                        <strong className="text-indigo-950 block mb-0.5">Unlock Premium Designs</strong>
                         Upgrade your plan to access 10+ premium layout designs and color themes.
                       </p>
                     </div>
