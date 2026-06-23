@@ -48,6 +48,26 @@ export default async function AdminLayout({
           </div>
         </div>
       </header>
+
+      {/* Admin Sub-navigation */}
+      <div className="border-b border-white/10 bg-black/50">
+        <div className="container mx-auto px-4">
+          <nav className="flex items-center gap-8 text-sm font-medium h-12">
+            <Link 
+              href="/admin" 
+              className="text-white/70 hover:text-white transition-colors h-full flex items-center border-b-2 border-transparent hover:border-white/50 data-[active=true]:border-indigo-500 data-[active=true]:text-white"
+            >
+              Fleet Overview
+            </Link>
+            <Link 
+              href="/admin/marketing" 
+              className="text-white/70 hover:text-white transition-colors h-full flex items-center border-b-2 border-transparent hover:border-white/50 data-[active=true]:border-indigo-500 data-[active=true]:text-white"
+            >
+              Campaigns
+            </Link>
+          </nav>
+        </div>
+      </div>
       
       <main className="flex-1 container mx-auto px-4 py-8">
         {children}
