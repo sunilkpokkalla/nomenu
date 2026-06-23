@@ -46,6 +46,51 @@ const TEMPLATES = {
     <a href="https://nomenu.us/dashboard/billing" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Upgrade to Pro Today</a>
   </div>
 </div>`
+  },
+  serverless_seamless: {
+    name: "Seamless Operations Without Servers",
+    subject: "Run your dining room without waitstaff",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu Seamless Operations" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Eliminate front-of-house friction.</h2>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Are you struggling to hire and retain reliable servers? Or dealing with constant order mistakes being run back to the kitchen?</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Nomenu completely bridges the gap between your guests and your kitchen. Guests scan, browse your beautiful visual menu, and send orders directly to your Nomenu Kitchen Display System (KDS).</p>
+  <ul style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+    <li><strong>No Servers Needed:</strong> Guests order at their own pace directly from their phones.</li>
+    <li><strong>Zero Order Mistakes:</strong> Exactly what the guest selects is what the kitchen sees.</li>
+    <li><strong>Faster Table Turns:</strong> No waiting for a server to take the order or drop the check.</li>
+  </ul>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Explore Serverless Ordering</a>
+  </div>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Let technology handle the ordering, so your staff can focus purely on hospitality and food quality.</p>
+</div>`
+  },
+  modern_qr: {
+    name: "The Modern QR Experience",
+    subject: "Stop printing menus. Start shining.",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Your food deserves better than a sticky, outdated paper menu.</h2>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Did you know the average restaurant spends over $1,200 a year just reprinting menus due to price changes and stains?</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Nomenu turns your menu into a vibrant, digital experience. Update prices instantly from your phone, hide items when you 86 them in the kitchen, and showcase your best dishes with stunning photography.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Create Your Free Digital Menu</a>
+  </div>
+</div>`
+  },
+  revenue_booster: {
+    name: "Revenue Booster",
+    subject: "Increase check sizes by 20% effortlessly",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">People eat with their eyes.</h2>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">When a guest sees a high-definition photo of a sizzling appetizer or a perfectly crafted cocktail, they are 20% more likely to order it compared to reading plain text on a piece of paper.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">With Nomenu, you can easily attach photos to your high-margin items. You essentially give your restaurant an automated, silent upseller that never forgets to recommend the specials.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Boost Your Revenue Today</a>
+  </div>
+</div>`
   }
 };
 
