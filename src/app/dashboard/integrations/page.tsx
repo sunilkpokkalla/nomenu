@@ -104,7 +104,7 @@ export default async function IntegrationsPage(
                       Requires Pro Plan
                     </span>
                     <Button variant="outline" className="font-bold text-indigo-600 border-indigo-200 hover:bg-indigo-50" asChild>
-                      <Link href="/dashboard/settings">Upgrade Plan</Link>
+                      <Link href="/dashboard/billing">Upgrade Plan</Link>
                     </Button>
                   </>
                 ) : (
