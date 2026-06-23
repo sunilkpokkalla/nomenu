@@ -818,10 +818,11 @@ export async function updateRestaurantBranding(formData: FormData) {
   const wifiPassword = field(formData, "wifiPassword");
 
   // Premium theme style gating
-  const isPremiumTheme = themeStyle !== "minimalist";
+  const freeThemes = ["minimalist", "botanical"];
+  const isPremiumTheme = !freeThemes.includes(themeStyle);
   const currentPlan = restaurant.plan || "free";
   if (isPremiumTheme && currentPlan === "free") {
-    redirect("/dashboard/customize?message=Upgrade%20to%20Growth%20or%20Pro%20plan%20to%20use%20premium%2520layouts.");
+    redirect("/dashboard/customize?message=Upgrade%20to%20a%20Pro%20or%20Elite%20plan%20to%20use%20premium%20layouts.");
   }
 
   const { error } = await supabase
