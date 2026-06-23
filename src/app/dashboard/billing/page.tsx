@@ -91,24 +91,12 @@ export default async function BillingPage(
 
   // Fetch Free Plan Usage
   let menuCount = 0;
-  let orderCount = 0;
   if (currentPlan === "free") {
     const { count: mCount } = await supabase
       .from("menus")
       .select("*", { count: "exact", head: true })
       .eq("restaurant_id", restaurant.id);
     menuCount = mCount || 0;
-
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0,0,0,0);
-    
-    const { count: oCount } = await supabase
-      .from("orders")
-      .select("*", { count: "exact", head: true })
-      .eq("restaurant_id", restaurant.id)
-      .gte("created_at", startOfMonth.toISOString());
-    orderCount = oCount || 0;
   }
 
   return (
@@ -170,8 +158,8 @@ export default async function BillingPage(
 
         {/* Free Plan Usage Tracker */}
         {currentPlan === "free" && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+          <div className="mt-4">
+            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm max-w-sm">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-bold text-slate-900">Menus Created</span>
                 <span className="text-sm font-bold text-slate-500">{menuCount} / 1</span>
@@ -180,18 +168,6 @@ export default async function BillingPage(
                 <div 
                   className={`h-full ${menuCount >= 1 ? 'bg-rose-500' : 'bg-slate-900'}`} 
                   style={{ width: `${Math.min((menuCount / 1) * 100, 100)}%` }} 
-                />
-              </div>
-            </div>
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-bold text-slate-900">Orders This Month</span>
-                <span className="text-sm font-bold text-slate-500">{orderCount} / 50</span>
-              </div>
-              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full ${orderCount >= 50 ? 'bg-rose-500' : 'bg-slate-900'}`} 
-                  style={{ width: `${Math.min((orderCount / 50) * 100, 100)}%` }} 
                 />
               </div>
             </div>
