@@ -16,7 +16,7 @@ import {
 
 import { Lock } from "lucide-react";
 
-export function MenuShareModal({ baseMenuUrl, menuName, plan, primaryColor }: { baseMenuUrl: string, menuName: string, plan: string, primaryColor?: string | null }) {
+export function MenuShareModal({ baseMenuUrl, menuName, plan }: { baseMenuUrl: string, menuName: string, plan: string }) {
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
   const handleCopy = async (url: string, type: string) => {
@@ -29,10 +29,7 @@ export function MenuShareModal({ baseMenuUrl, menuName, plan, primaryColor }: { 
     }
   };
 
-  const getQrUrl = (url: string) => {
-    const color = primaryColor || "#0F172A";
-    return `/api/qr?data=${encodeURIComponent(url)}&color=${encodeURIComponent(color)}`;
-  };
+  const getQrUrl = (url: string) => `/api/qr?data=${encodeURIComponent(url)}`;
 
   return (
     <Dialog>

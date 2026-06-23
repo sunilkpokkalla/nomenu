@@ -45,6 +45,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
   const [subtext, setSubtext] = useState(qr.label || "Table");
   const [showWifi, setShowWifi] = useState(!!restaurant.wifi_password);
   const [customLogoUrl, setCustomLogoUrl] = useState<string>(restaurant.logo_url || "");
+  const [qrColor, setQrColor] = useState<string>("#0F172A");
 
   const printRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -191,7 +192,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                     subtext={subtext}
                     wifiPassword={showWifi ? restaurant.wifi_password : null}
                     logoUrl={customLogoUrl || null}
-                    qrImageUrl={qrImageApiUrl}
+                    qrImageUrl={`${qrImageApiUrl}${qrImageApiUrl.includes('?') ? '&' : '?'}color=${encodeURIComponent(qrColor)}`}
                     qrDataUrl={fullMenuUrl}
                     colorStart={colorStart}
                     colorEnd={colorEnd}
@@ -314,6 +315,28 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                       <ImageUploader folder="logo" hideLibrary={true}
                         value={customLogoUrl} 
                         onChange={setCustomLogoUrl} 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-2">
+                    <Label htmlFor="qrColor" className="font-bold text-slate-700 flex items-center gap-2 px-1">
+                      <Palette className="h-4 w-4 text-indigo-500" /> QR Code Color
+                    </Label>
+                    <div className="flex gap-3 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                      <Input 
+                        id="qrColor" 
+                        type="color" 
+                        value={qrColor} 
+                        onChange={(e) => setQrColor(e.target.value)} 
+                        className="h-10 w-16 p-1 cursor-pointer bg-white border-slate-300 rounded-lg"
+                      />
+                      <Input 
+                        value={qrColor} 
+                        onChange={(e) => setQrColor(e.target.value)} 
+                        className="h-10 flex-1 text-xs font-bold font-mono text-slate-700 bg-white border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 uppercase"
+                        placeholder="#0F172A"
+                        maxLength={7}
                       />
                     </div>
                   </div>

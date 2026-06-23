@@ -40,6 +40,7 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
   const [headline, setHeadline] = useState("Scan to View Menu");
   const [showWifi, setShowWifi] = useState(!!restaurant.wifi_password);
   const [customLogoUrl, setCustomLogoUrl] = useState<string>(restaurant.logo_url || "");
+  const [qrColor, setQrColor] = useState<string>("#0F172A");
 
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -104,8 +105,7 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
   if (restaurant.slug) { // Mock the URL since we don't have menu slug easily here, or just use the generic one for the QR image
     previewPublicUrl = `${baseUrl}/menu/${previewQr.menu_id}?qr=${previewQr.id}`;
   }
-  const primaryColor = restaurant.primary_color || "#0F172A";
-  const previewQrImageApiUrl = `/api/qr?data=${encodeURIComponent(previewPublicUrl)}&color=${encodeURIComponent(primaryColor)}`;
+  const previewQrImageApiUrl = `/api/qr?data=${encodeURIComponent(previewPublicUrl)}&color=${encodeURIComponent(qrColor)}`;
 
   return (
     <>
@@ -260,6 +260,26 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
                       <p className="text-[11px] font-medium text-slate-500">Upload a logo to replace the default icon.</p>
                     </div>
 
+                    <div className="space-y-2">
+                      <Label htmlFor="qrColor" className="text-xs font-semibold text-slate-700">QR Code Color</Label>
+                      <div className="flex gap-3">
+                        <Input 
+                          id="qrColor" 
+                          type="color" 
+                          value={qrColor} 
+                          onChange={(e) => setQrColor(e.target.value)} 
+                          className="h-10 w-16 p-1 cursor-pointer bg-slate-50 border-slate-200 rounded-xl"
+                        />
+                        <Input 
+                          value={qrColor} 
+                          onChange={(e) => setQrColor(e.target.value)} 
+                          className="h-10 flex-1 text-xs font-bold font-mono text-slate-700 bg-slate-50 border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 uppercase"
+                          placeholder="#0F172A"
+                          maxLength={7}
+                        />
+                      </div>
+                    </div>
+
                     {restaurant.wifi_password && (
                       <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-slate-300 transition-colors">
                         <div className="flex items-center gap-3.5">
@@ -309,8 +329,7 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
           {selectedQrs.map((qr) => {
             const TemplateComponent = templates[template] || templates["classic"];
             const publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
-            const primaryColor = restaurant.primary_color || "#0F172A";
-            const qrImageUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}&color=${encodeURIComponent(primaryColor)}`;
+            const qrImageUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}&color=${encodeURIComponent(qrColor)}`;
             
             return (
               <div key={qr.id} className="qr-card-wrapper inline-block" style={{ width: 'fit-content' }}>
