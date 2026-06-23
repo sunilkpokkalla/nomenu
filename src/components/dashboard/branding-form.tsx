@@ -180,8 +180,68 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
       accentBg: "bg-[#1C1917] text-white",
       headerGradient: "",
       fontClass: "font-serif"
+    },
+    omakase: {
+      frameBg: "bg-[#0F0F0F]",
+      textPrimary: "text-white font-sans font-light tracking-widest uppercase",
+      textSecondary: "text-[#777] font-sans text-[8px]",
+      cardBg: "bg-transparent border-b border-[#222] p-0 pb-4",
+      itemBorder: "border-[#222]",
+      accentBg: "bg-transparent text-[#888]",
+      headerGradient: "",
+      fontClass: "font-sans"
+    },
+    popdiner: {
+      frameBg: "bg-[#FAFAFA]",
+      textPrimary: "text-[#1A1A1A] font-serif font-black",
+      textSecondary: "text-[#666] font-sans text-[8px]",
+      cardBg: "bg-white border-0 shadow-none p-0",
+      itemBorder: "border-0",
+      accentBg: "bg-[#8B1E28] text-white",
+      headerGradient: "",
+      fontClass: "font-serif"
+    },
+    editorial: {
+      frameBg: "bg-[#F9F8F6]",
+      textPrimary: "text-[#1A1918] font-serif",
+      textSecondary: "text-[#5C5A56] font-sans text-[8px]",
+      cardBg: "bg-transparent border-0 shadow-none p-0",
+      itemBorder: "border-[#E2DFD8]",
+      accentBg: "bg-[#1A1918] text-white",
+      headerGradient: "",
+      fontClass: "font-serif"
+    },
+    lounge: {
+      frameBg: "bg-[#0A0A0A]",
+      textPrimary: "text-white font-sans font-bold",
+      textSecondary: "text-white/50 font-sans text-[8px]",
+      cardBg: "bg-[#141414] border border-white/5 shadow-xl p-0",
+      itemBorder: "border-white/5",
+      accentBg: "bg-[#D4AF37]/10 text-[#D4AF37]",
+      headerGradient: "",
+      fontClass: "font-sans"
+    },
+    resort: {
+      frameBg: "bg-[#F0F8FF]",
+      textPrimary: "text-[#003366] font-sans font-black",
+      textSecondary: "text-[#006994] font-sans text-[8px]",
+      cardBg: "bg-white shadow-md p-0",
+      itemBorder: "border-[#87CEEB]/20",
+      accentBg: "bg-[#003366] text-white",
+      headerGradient: "",
+      fontClass: "font-sans"
+    },
+    boutique: {
+      frameBg: "bg-[#FFF5F8]",
+      textPrimary: "text-[#4A3B42] font-sans font-bold",
+      textSecondary: "text-[#8B7382] font-sans text-[8px]",
+      cardBg: "bg-white shadow-[0_8px_30px_rgba(255,182,193,0.15)] p-0 rounded-3xl",
+      itemBorder: "border-[#FFE4E1]",
+      accentBg: "bg-[#FF91A4]/10 text-[#FF91A4]",
+      headerGradient: "",
+      fontClass: "font-sans"
     }
-  }[themeStyle as "bistro" | "minimalist" | "luxury" | "vibrant" | "botanical" | "cyberneon" | "zen" | "bentopop" | "noir" | "brasserie"] || {
+  }[themeStyle as "bistro" | "minimalist" | "luxury" | "vibrant" | "botanical" | "cyberneon" | "zen" | "bentopop" | "noir" | "brasserie" | "omakase" | "popdiner" | "editorial" | "lounge" | "resort" | "boutique"] || {
     frameBg: "bg-slate-50",
     textPrimary: "text-slate-900",
     textSecondary: "text-slate-500",
@@ -559,21 +619,21 @@ export function BrandingForm({ entity, type, action, successMessage, errorMessag
               { name: "Ghee Karam Idly", desc: "Soft steamed rice cakes tossed in fiery podi.", price: "$10.00", img: "/images/library/ghee-karam-idly.jpg", tags: ["POPULAR"] },
               { name: "Chicken Dosa", desc: "Crispy crepe stuffed with spicy chicken tikka.", price: "$14.00", img: "/images/library/chicken-dosa.jpg", tags: ["GF"] }
             ].map((item, idx) => (
-              <div key={idx} className={`flex gap-3.5 p-2.5 rounded-xl ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl" : themeStyle === "omakase" ? "bg-transparent rounded-none border-b border-[#222] pb-4" : themeStyle === "popdiner" ? "bg-white border-0 flex-col p-0 pb-4 gap-0 group" : themeStyle === "editorial" ? "bg-transparent rounded-none flex-col gap-3 pb-6 border-b border-[#E2DFD8]" : themeStyle === "lounge" ? "bg-[#141414] border border-white/5 rounded-2xl shadow-xl flex-col pb-3" : themeStyle === "resort" ? "bg-white rounded-2xl shadow-md flex-col pb-3" : themeStyle === "botanical" ? "bg-white border border-[#DCEDC8] rounded-3xl p-3" : themeStyle === "cyberneon" ? "bg-[#18181B] border-l-2 border-[#00FF41] rounded-none shadow-[0_0_15px_rgba(0,255,65,0.05)]" : themeStyle === "zen" ? "bg-transparent rounded-none border-0 flex-col gap-4 p-0" : themeStyle === "bentopop" ? "bg-white border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-none flex-col p-0 gap-0" : themeStyle === "noir" ? "bg-transparent flex-col gap-3 p-0" : themeStyle === "brasserie" ? "bg-transparent border-b border-[#E7E5E4] rounded-none flex-row p-0 pb-5" : themeStyle === "bistro" ? "bg-transparent border-t border-[#E7E5E4]/60 rounded-none p-3 pt-4 items-center flex-col text-center" : "bg-white shadow-sm border border-slate-100"}`}>
-                <div className={`shrink-0 overflow-hidden relative ${themeStyle === "bistro" ? "w-16 h-16 rounded" : themeStyle === "luxury" ? "w-16 h-16 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-20 h-20 rounded-xl border-2 border-black rotate-[2deg]" : themeStyle === "omakase" ? "w-16 h-16 rounded-none grayscale" : themeStyle === "popdiner" ? "w-full aspect-[4/3] bg-[#F5F5F5]" : themeStyle === "editorial" ? "w-full h-32 bg-[#E2DFD8] rounded-none" : themeStyle === "lounge" ? "w-full h-32 rounded-t-xl" : themeStyle === "resort" ? "w-full h-32 rounded-t-xl" : themeStyle === "botanical" ? "w-16 h-16 rounded-full border-2 border-[#F1F8E9]" : themeStyle === "cyberneon" ? "w-16 h-16 rounded-none border border-[#00FF41]/30 grayscale contrast-125" : themeStyle === "zen" ? "w-full aspect-square grayscale-[20%] rounded-none" : themeStyle === "bentopop" ? "w-full aspect-square border-b-4 border-black rounded-none" : themeStyle === "noir" ? "w-full aspect-[4/3] rounded-sm opacity-80" : themeStyle === "brasserie" ? "w-20 h-20 rounded-md" : "w-14 h-14 rounded-lg"}`}>
+              <div key={idx} className={`flex gap-3.5 p-2.5 rounded-xl ${themeStyle === "luxury" ? "bg-zinc-900/40 border border-zinc-800/50" : themeStyle === "vibrant" ? "bg-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] rounded-2xl" : themeStyle === "omakase" ? "bg-transparent rounded-none border-b border-[#222] pb-4" : themeStyle === "popdiner" ? "bg-white border-0 flex-col p-0 pb-4 gap-0 group" : themeStyle === "editorial" ? "bg-transparent rounded-none flex-col gap-3 pb-6 border-b border-[#E2DFD8]" : themeStyle === "lounge" ? "bg-[#141414] border border-white/5 rounded-2xl shadow-xl flex-col pb-3" : themeStyle === "resort" ? "bg-white rounded-2xl shadow-md flex-col pb-3" : themeStyle === "botanical" ? "bg-white border border-[#DCEDC8] rounded-3xl p-3" : themeStyle === "cyberneon" ? "bg-[#18181B] border-l-2 border-[#00FF41] rounded-none shadow-[0_0_15px_rgba(0,255,65,0.05)]" : themeStyle === "zen" ? "bg-transparent rounded-none border-0 flex-col gap-4 p-0" : themeStyle === "bentopop" ? "bg-white border-4 border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-none flex-col p-0 gap-0" : themeStyle === "noir" ? "bg-transparent flex-col gap-3 p-0" : themeStyle === "brasserie" ? "bg-transparent border-b border-[#E7E5E4] rounded-none flex-row p-0 pb-5" : themeStyle === "bistro" ? "bg-transparent border-t border-[#E7E5E4]/60 rounded-none p-3 pt-4 items-center flex-col text-center" : themeStyle === "boutique" ? "bg-white rounded-3xl border border-[#FFE4E1] shadow-[0_8px_30px_rgba(255,182,193,0.15)] p-3" : "bg-white shadow-sm border border-slate-100"}`}>
+                <div className={`shrink-0 overflow-hidden relative ${themeStyle === "bistro" ? "w-16 h-16 rounded" : themeStyle === "luxury" ? "w-16 h-16 rounded-md opacity-80" : themeStyle === "vibrant" ? "w-20 h-20 rounded-xl border-2 border-black rotate-[2deg]" : themeStyle === "omakase" ? "w-16 h-16 rounded-none grayscale" : themeStyle === "popdiner" ? "w-full aspect-[4/3] bg-[#F5F5F5]" : themeStyle === "editorial" ? "w-full h-32 bg-[#E2DFD8] rounded-none" : themeStyle === "lounge" ? "w-full h-32 rounded-t-xl" : themeStyle === "resort" ? "w-full h-32 rounded-t-xl" : themeStyle === "botanical" ? "w-16 h-16 rounded-full border-2 border-[#F1F8E9]" : themeStyle === "cyberneon" ? "w-16 h-16 rounded-none border border-[#00FF41]/30 grayscale contrast-125" : themeStyle === "zen" ? "w-full aspect-square grayscale-[20%] rounded-none" : themeStyle === "bentopop" ? "w-full aspect-square border-b-4 border-black rounded-none" : themeStyle === "noir" ? "w-full aspect-[4/3] rounded-sm opacity-80" : themeStyle === "brasserie" ? "w-20 h-20 rounded-md" : themeStyle === "boutique" ? "w-16 h-16 rounded-[20px]" : "w-14 h-14 rounded-lg"}`}>
                   <Image src={item.img} alt={item.name} className="w-full h-full object-cover" fill />
                 </div>
                 <div className={`flex-1 space-y-1.5 ${themeStyle === "lounge" || themeStyle === "resort" ? "px-3" : themeStyle === "bentopop" ? "p-3 flex-col flex-grow" : themeStyle === "zen" || themeStyle === "noir" ? "flex-col w-full" : ""}`}>
                   <div className={`flex ${themeStyle === "bentopop" ? "justify-between items-start gap-2" : themeStyle === "popdiner" ? "justify-between items-baseline gap-4 mt-3 px-4" : themeStyle === "noir" || themeStyle === "bistro" ? "justify-between items-baseline gap-4" : themeStyle === "zen" ? "flex-col gap-1" : "justify-between items-start"}`}>
-                    <h4 className={`text-xs font-bold leading-tight ${themeStyle === "luxury" ? "text-zinc-100 font-serif" : themeStyle === "vibrant" ? "text-black font-black uppercase tracking-tight" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "popdiner" ? "text-[#121212] font-serif text-lg leading-tight" : themeStyle === "editorial" ? "text-[#1A1918] font-serif text-lg" : themeStyle === "lounge" ? "text-white" : themeStyle === "resort" ? "text-[#003366] font-black" : themeStyle === "botanical" ? "text-[#33691E] font-serif" : themeStyle === "cyberneon" ? "text-[#00FF41] font-mono tracking-tight" : themeStyle === "zen" ? "font-light text-lg tracking-wide text-zinc-900" : themeStyle === "bentopop" ? "font-black text-sm text-black uppercase leading-tight" : themeStyle === "noir" ? "font-serif text-lg text-zinc-200 tracking-wide" : themeStyle === "brasserie" ? "font-serif text-slate-800 text-sm" : themeStyle === "bistro" ? "font-serif text-[#1C1917] font-bold text-sm" : "text-slate-800"}`}>{item.name}</h4>
+                    <h4 className={`text-xs font-bold leading-tight ${themeStyle === "luxury" ? "text-zinc-100 font-serif" : themeStyle === "vibrant" ? "text-black font-black uppercase tracking-tight" : themeStyle === "omakase" ? "text-white uppercase tracking-widest font-light" : themeStyle === "popdiner" ? "text-[#121212] font-serif text-lg leading-tight" : themeStyle === "editorial" ? "text-[#1A1918] font-serif text-lg" : themeStyle === "lounge" ? "text-white" : themeStyle === "resort" ? "text-[#003366] font-black" : themeStyle === "botanical" ? "text-[#33691E] font-serif" : themeStyle === "cyberneon" ? "text-[#00FF41] font-mono tracking-tight" : themeStyle === "zen" ? "font-light text-lg tracking-wide text-zinc-900" : themeStyle === "bentopop" ? "font-black text-sm text-black uppercase leading-tight" : themeStyle === "noir" ? "font-serif text-lg text-zinc-200 tracking-wide" : themeStyle === "brasserie" ? "font-serif text-slate-800 text-sm" : themeStyle === "bistro" ? "font-serif text-[#1C1917] font-bold text-sm" : themeStyle === "boutique" ? "font-sans text-[#4A3B42]" : "text-slate-800"}`}>{item.name}</h4>
                     {themeStyle === "popdiner" && (
                       <span className="text-[#121212] font-light text-xs">{item.price}</span>
                     )}
                   </div>
-                  <p className={`text-[9px] leading-snug ${themeStyle === "luxury" ? "text-zinc-400 font-serif" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light tracking-wide" : themeStyle === "popdiner" ? "text-[#666666] font-light text-xs" : themeStyle === "editorial" ? "text-[#5C5A56] font-serif" : themeStyle === "lounge" ? "text-white/50" : themeStyle === "resort" ? "text-[#006994]" : themeStyle === "botanical" ? "text-[#558B2F]" : themeStyle === "cyberneon" ? "text-[#008F11] font-mono" : themeStyle === "zen" ? "text-[10px] font-light text-zinc-400 leading-relaxed" : themeStyle === "bentopop" ? "text-[8px] font-bold text-slate-600 leading-snug mt-2" : themeStyle === "noir" ? "text-[9px] font-light text-zinc-500 leading-relaxed" : themeStyle === "brasserie" ? "text-[9px] text-[#78716C] font-serif leading-relaxed" : themeStyle === "bistro" ? "text-[9px] text-[#57534E] leading-relaxed italic" : "text-slate-500"}`}>{item.desc}</p>
+                  <p className={`text-[9px] leading-snug ${themeStyle === "luxury" ? "text-zinc-400 font-serif" : themeStyle === "vibrant" ? "text-slate-700 font-medium" : themeStyle === "omakase" ? "text-[#777] font-light tracking-wide" : themeStyle === "popdiner" ? "text-[#666666] font-light text-xs" : themeStyle === "editorial" ? "text-[#5C5A56] font-serif" : themeStyle === "lounge" ? "text-white/50" : themeStyle === "resort" ? "text-[#006994]" : themeStyle === "botanical" ? "text-[#558B2F]" : themeStyle === "cyberneon" ? "text-[#008F11] font-mono" : themeStyle === "zen" ? "text-[10px] font-light text-zinc-400 leading-relaxed" : themeStyle === "bentopop" ? "text-[8px] font-bold text-slate-600 leading-snug mt-2" : themeStyle === "noir" ? "text-[9px] font-light text-zinc-500 leading-relaxed" : themeStyle === "brasserie" ? "text-[9px] text-[#78716C] font-serif leading-relaxed" : themeStyle === "bistro" ? "text-[9px] text-[#57534E] leading-relaxed italic" : themeStyle === "boutique" ? "text-[#8B7382]" : "text-slate-500"}`}>{item.desc}</p>
                 </div>
                 {themeStyle !== "popdiner" && (
-                  <span className={`text-[11px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif mt-0.5" : themeStyle === "vibrant" ? "bg-rose-500 text-white border-2 border-black px-2 py-0.5 rounded-lg rotate-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] self-start mt-1" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "editorial" ? "text-[#1A1918] font-serif" : themeStyle === "lounge" ? "text-[#D4AF37] ml-3 pb-1" : themeStyle === "resort" ? "text-[#003366] ml-3 pb-1" : themeStyle === "botanical" ? "text-[#33691E] font-serif" : themeStyle === "cyberneon" ? "text-[#00FF41] font-mono bg-[#00FF41]/10 border border-[#00FF41]/30 px-1 py-0.5 h-fit mt-0.5" : themeStyle === "zen" ? "font-medium text-xs text-zinc-500 tracking-wider -order-1 mb-2" : themeStyle === "bentopop" ? "font-black text-sm text-[#EF476F]" : themeStyle === "noir" ? "font-sans text-[10px] text-amber-500 tracking-wider" : themeStyle === "brasserie" ? "font-medium text-sm text-[#854d0e]" : themeStyle === "bistro" ? "text-[#D4AF37] text-[10px] font-medium" : "text-slate-900 self-start mt-0.5"}`}>{item.price}</span>
+                  <span className={`text-[11px] font-extrabold shrink-0 ${themeStyle === "luxury" ? "text-amber-400 font-serif mt-0.5" : themeStyle === "vibrant" ? "bg-rose-500 text-white border-2 border-black px-2 py-0.5 rounded-lg rotate-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] self-start mt-1" : themeStyle === "omakase" ? "text-[#888] tracking-widest font-light" : themeStyle === "editorial" ? "text-[#1A1918] font-serif" : themeStyle === "lounge" ? "text-[#D4AF37] ml-3 pb-1" : themeStyle === "resort" ? "text-[#003366] ml-3 pb-1" : themeStyle === "botanical" ? "text-[#33691E] font-serif" : themeStyle === "cyberneon" ? "text-[#00FF41] font-mono bg-[#00FF41]/10 border border-[#00FF41]/30 px-1 py-0.5 h-fit mt-0.5" : themeStyle === "zen" ? "font-medium text-xs text-zinc-500 tracking-wider -order-1 mb-2" : themeStyle === "bentopop" ? "font-black text-sm text-[#EF476F]" : themeStyle === "noir" ? "font-sans text-[10px] text-amber-500 tracking-wider" : themeStyle === "brasserie" ? "font-medium text-sm text-[#854d0e]" : themeStyle === "bistro" ? "text-[#D4AF37] text-[10px] font-medium" : themeStyle === "boutique" ? "text-[#FF91A4]" : "text-slate-900 self-start mt-0.5"}`}>{item.price}</span>
                 )}
               </div>
             ))}
