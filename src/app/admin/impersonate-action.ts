@@ -36,11 +36,11 @@ export async function generateImpersonationOtp(userId: string) {
       email: targetUser.user.email,
     });
 
-    if (linkError || !linkData.properties?.email_otp) {
+    if (linkError || !linkData.properties?.hashed_token) {
       return { success: false, error: `Failed to generate magic link: ${linkError?.message}` };
     }
 
-    return { success: true, email: targetUser.user.email, otp: linkData.properties.email_otp };
+    return { success: true, email: targetUser.user.email, otp: linkData.properties.hashed_token };
   } catch (err: unknown) {
     console.error("generateImpersonationOtp error:", err);
     return { success: false, error: err instanceof Error ? err.message : "Unknown server error occurred" };

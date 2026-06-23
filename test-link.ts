@@ -1,22 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
-import dotenv from "dotenv";
-dotenv.config({ path: ".env.local" });
-
-const adminSupabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY!
-);
-
-async function test() {
-  const { data, error } = await adminSupabase.auth.admin.generateLink({
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY!);
+async function main() {
+  const { data, error } = await supabase.auth.admin.generateLink({
     type: "magiclink",
-    email: "admin@nomenu.us", // use a known email
-    options: {
-      redirectTo: "http://localhost:3002/dashboard"
-    }
+    email: "sunil@gmail.com", // just an example email, maybe the user's email
   });
-  console.log("Data properties:", data.properties);
-  console.log("Error:", error);
+  console.log("data:", JSON.stringify(data, null, 2));
 }
-
-test();
+main();
