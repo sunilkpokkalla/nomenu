@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     // Get the restaurant's stripe_account_id
     const { data: _restaurantData, error: fetchError } = await supabase
       .from("restaurants")
-      .select("stripe_account_id, plan, prep_time_minutes")
+      .select("stripe_account_id, plan, prep_time_minutes, currency")
       .eq("id", restaurantId)
       .single();
 
@@ -32,6 +32,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Restaurant has not configured payments." }, { status: 400 });
     }
 
+    const restaurantCurrency = (restaurant.currency || "usd").toLowerCase();
+
     // Build line items for Stripe Checkout
     let totalAmountCents = 0;
     const lineItems = items.map((item: {price: number, quantity: number, name: string, id?: string, item_id?: string}) => {
@@ -40,7 +42,7 @@ export async function POST(req: Request) {
       
       return {
         price_data: {
-          currency: "usd",
+          currency: restaurantCurrency,
           product_data: {
             name: item.name,
             metadata: {
@@ -59,7 +61,7 @@ export async function POST(req: Request) {
       totalAmountCents += tipAmountCents;
       lineItems.push({
         price_data: {
-          currency: "usd",
+          currency: restaurantCurrency,
           product_data: {
             name: "Tip",
             description: "Thank you for your support!",
