@@ -5,7 +5,7 @@ import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { differenceInMinutes } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
-import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings } from "lucide-react";
+import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings, Volume2, VolumeX } from "lucide-react";
 import { updateOrderStatus, toggleOrderPaymentStatus } from "./actions";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
@@ -43,8 +43,10 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
   const [autoArchiveMinutes, setAutoArchiveMinutes] = useState<number | null>(30);
   const [cancelOrderPrompt, setCancelOrderPrompt] = useState<Order | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
   const knownOrderIds = useRef<Set<string>>(new Set(initialOrders.map(o => o.id)));
   const completedTimes = useRef<Map<string, number>>(new Map());
 
@@ -81,15 +83,40 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     }
   }, [orders, selectedDateStr, locationLabel]);
 
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (AudioCtx && !audioContextRef.current) {
+      audioContextRef.current = new AudioCtx();
+    }
+
+    const unlockAudio = () => {
+      if (audioContextRef.current) {
+        if (audioContextRef.current.state === 'suspended') {
+          audioContextRef.current.resume().then(() => {
+            setSoundEnabled(true);
+          }).catch(e => console.error(e));
+        } else if (audioContextRef.current.state === 'running') {
+          setSoundEnabled(true);
+        }
+      }
+    };
+
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
+    window.addEventListener('keydown', unlockAudio);
+
+    return () => {
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+    };
+  }, []);
+
   const playNotificationSound = () => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContext) return;
-      const ctx = new AudioContext();
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
+      const ctx = audioContextRef.current;
+      if (!ctx || ctx.state !== 'running') return;
       
       // First note
       const osc1 = ctx.createOscillator();
@@ -296,6 +323,13 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
         </h2>
         
         <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 mr-2" title={soundEnabled ? "Order notification sounds enabled" : "Click anywhere to enable order sounds"}>
+            {soundEnabled ? (
+              <Volume2 className={`w-5 h-5 ${isKdsMode ? "text-emerald-400" : "text-emerald-500"}`} />
+            ) : (
+              <VolumeX className={`w-5 h-5 animate-pulse ${isKdsMode ? "text-red-400" : "text-red-500"}`} />
+            )}
+          </div>
           {!isKdsMode && (
             <div className="flex items-center gap-2">
               <div className="relative flex items-center">
