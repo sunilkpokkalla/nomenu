@@ -92,8 +92,8 @@ export async function sendCampaignAction(formData: FormData) {
     }
 
     return { success: true, count: sentCount, message: `Successfully sent ${sentCount} emails.` };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Campaign error:", error);
-    return { success: false, error: error.message || "Failed to send campaign" };
+    return { success: false, error: error instanceof Error ? error.message : "Failed to send campaign" };
   }
 }
