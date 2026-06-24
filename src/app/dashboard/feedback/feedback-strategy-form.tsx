@@ -14,6 +14,27 @@ interface FeedbackStrategyFormProps {
   initialRecoveryMessage: string;
 }
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const OFFER_PRESETS = [
+  "15% off your next visit with code MAKEITRIGHT15",
+  "A complimentary dessert or a signature non-alcoholic beverage on your next visit.",
+  "Free appetizer on your next order.",
+  ""
+];
+
+const MESSAGE_PRESETS = [
+  "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally.",
+  "We sincerely apologize that your recent visit fell short of expectations. A manager will contact you at {contact} to make it right.",
+  "We appreciate your honest feedback. Our team is reviewing it and will contact you at {contact}."
+];
+
 export function FeedbackStrategyForm({
   initialLoyaltyPin,
   initialRecoveryOffer,
@@ -71,7 +92,7 @@ export function FeedbackStrategyForm({
         </div>
 
         <div className="pt-4 border-t border-slate-100 space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
               <Globe className="w-4 h-4 text-primary" /> Service Recovery (1-3 Stars)
             </h3>
@@ -79,7 +100,7 @@ export function FeedbackStrategyForm({
               type="button" 
               variant="outline" 
               size="sm" 
-              className="h-8 text-xs gap-1.5 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border-indigo-200"
+              className="h-8 text-xs gap-1.5 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border-indigo-200 shrink-0"
               onClick={handleGenerate}
               disabled={isGenerating}
             >
@@ -89,8 +110,22 @@ export function FeedbackStrategyForm({
           </div>
           
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="recoveryOfferText">Apology Offer (Optional)</Label>
+            <div className="space-y-2 flex flex-col">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="recoveryOfferText">Apology Offer (Optional)</Label>
+                <Select onValueChange={(val) => setRecoveryOffer(val === "none" ? "" : val)}>
+                  <SelectTrigger className="h-6 w-[120px] text-[10px] px-2 py-0 border-slate-200">
+                    <SelectValue placeholder="Use preset..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {OFFER_PRESETS.map((preset, idx) => (
+                      <SelectItem key={idx} value={preset || "none"} className="text-[11px]">
+                        {preset ? `Preset ${idx + 1}` : "No offer"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <Textarea 
                 id="recoveryOfferText" 
                 name="recoveryOfferText" 
@@ -98,10 +133,25 @@ export function FeedbackStrategyForm({
                 onChange={(e) => setRecoveryOffer(e.target.value)}
                 placeholder="e.g. 15% off your next visit with code MAKEITRIGHT15"
                 rows={4}
+                className="resize-none"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="recoveryMessage">Follow-up Message</Label>
+            <div className="space-y-2 flex flex-col">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="recoveryMessage">Follow-up Message</Label>
+                <Select onValueChange={(val) => setRecoveryMessage(val)}>
+                  <SelectTrigger className="h-6 w-[120px] text-[10px] px-2 py-0 border-slate-200">
+                    <SelectValue placeholder="Use preset..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {MESSAGE_PRESETS.map((preset, idx) => (
+                      <SelectItem key={idx} value={preset} className="text-[11px]">
+                        Preset {idx + 1}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <Textarea 
                 id="recoveryMessage" 
                 name="recoveryMessage" 
@@ -109,8 +159,9 @@ export function FeedbackStrategyForm({
                 onChange={(e) => setRecoveryMessage(e.target.value)}
                 placeholder="Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."
                 rows={4}
+                className="resize-none"
               />
-              <p className="text-[10px] text-muted-foreground">Use {'{contact}'} as a placeholder for their email/phone.</p>
+              <p className="text-[10px] text-muted-foreground mt-auto pt-1">Use {'{contact}'} as a placeholder for their email/phone.</p>
             </div>
           </div>
         </div>
