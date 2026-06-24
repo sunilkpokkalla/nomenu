@@ -7,7 +7,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
 import { FeedbackAnalytics, FeedbackData } from "./feedback-analytics";
 import { FeedbackList } from "./feedback-list";
-import { FeedbackSettingsModal } from "./feedback-settings-modal";
+import { FeedbackStrategyForm } from "./feedback-strategy-form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata = {
   title: "Customer Feedback | NoMenu Dashboard",
@@ -59,16 +60,9 @@ export default async function FeedbackPage() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Customer Feedback</h1>
-          <p className="text-slate-500">See what your customers are saying about your menu.</p>
-        </div>
-        <FeedbackSettingsModal 
-          initialLoyaltyPin={restaurant.loyalty_pin || "1234"}
-          initialRecoveryOffer={restaurant.recovery_offer_text || "15% off your next visit with code MAKEITRIGHT15"}
-          initialRecoveryMessage={restaurant.recovery_message || "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."}
-        />
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Customer Feedback</h1>
+        <p className="text-slate-500">See what your customers are saying about your menu.</p>
       </div>
 
       {!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.trim().toLowerCase()) ? (
@@ -88,12 +82,29 @@ export default async function FeedbackPage() {
           </Link>
         </div>
       ) : (
-        <div>
-          <div className="mb-8">
-            <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
-          </div>
-          <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
-        </div>
+        <Tabs defaultValue="reviews" className="w-full">
+          <TabsList className="mb-8">
+            <TabsTrigger value="reviews">Customer Reviews</TabsTrigger>
+            <TabsTrigger value="strategy">Strategy Settings</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="reviews" className="space-y-8 mt-0 focus-visible:outline-none focus-visible:ring-0">
+            <div className="mb-8">
+              <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
+            </div>
+            <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
+          </TabsContent>
+          
+          <TabsContent value="strategy" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+            <div className="max-w-2xl">
+              <FeedbackStrategyForm 
+                initialLoyaltyPin={restaurant.loyalty_pin || "1234"}
+                initialRecoveryOffer={restaurant.recovery_offer_text || "15% off your next visit with code MAKEITRIGHT15"}
+                initialRecoveryMessage={restaurant.recovery_message || "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."}
+              />
+            </div>
+          </TabsContent>
+        </Tabs>
       )}
     </div>
   );
