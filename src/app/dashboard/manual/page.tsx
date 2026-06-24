@@ -57,6 +57,24 @@ export default function ManualIndexPage() {
         </Link>
 
         <Link 
+          href="/dashboard/manual/feedback"
+          className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-yellow-100 text-yellow-600 group-hover:scale-110 transition-transform duration-300">
+              <BookOpen className="w-7 h-7" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Customer Feedback</h2>
+            <p className="text-slate-500 leading-relaxed">
+              Manage your real-time customer feedback, configure the Gemini AI service recovery strategies, and export your data.
+            </p>
+          </div>
+          <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+            Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
+          </div>
+        </Link>
+
+        <Link 
           href="/dashboard/manual/customize"
           className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
         >
@@ -121,24 +139,6 @@ export default function ManualIndexPage() {
             <h2 className="text-2xl font-bold text-slate-900 mb-3">Analytics & Payouts</h2>
             <p className="text-slate-500 leading-relaxed">
               Understand your sales data, read the performance charts, and track your Stripe payouts.
-            </p>
-          </div>
-          <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
-            Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
-          </div>
-        </Link>
-
-        <Link 
-          href="/dashboard/manual/feedback"
-          className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between md:col-span-2"
-        >
-          <div>
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-yellow-100 text-yellow-600 group-hover:scale-110 transition-transform duration-300">
-              <BookOpen className="w-7 h-7" />
-            </div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-3">Customer Feedback & AI</h2>
-            <p className="text-slate-500 leading-relaxed">
-              Manage your real-time customer feedback, configure the Gemini AI service recovery strategies, and export your customer data.
             </p>
           </div>
           <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
