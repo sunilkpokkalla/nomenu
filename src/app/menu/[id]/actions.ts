@@ -51,7 +51,30 @@ export async function submitFeedback(
     }
   }
 
-  return { success: true, loyaltyCardId, feedbackId: feedbackData.id };
+  // Fetch recovery settings for 1-3 star reviews
+  let recoveryOfferText = '15% off your next visit with code MAKEITRIGHT15';
+  let recoveryMessage = 'Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally.';
+  
+  if (rating <= 3) {
+    const { data: restaurant } = await supabase
+      .from("restaurants")
+      .select("recovery_offer_text, recovery_message")
+      .eq("id", restaurantId)
+      .single();
+      
+    if (restaurant) {
+      if (restaurant.recovery_offer_text) recoveryOfferText = restaurant.recovery_offer_text;
+      if (restaurant.recovery_message) recoveryMessage = restaurant.recovery_message;
+    }
+  }
+
+  return { 
+    success: true, 
+    loyaltyCardId, 
+    feedbackId: feedbackData.id,
+    recoveryOfferText,
+    recoveryMessage
+  };
 }
 
 export async function updateFeedbackContact(feedbackId: string, contactInfo: string) {

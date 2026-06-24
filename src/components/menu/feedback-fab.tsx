@@ -22,6 +22,8 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [error, setError] = useState("");
   const [loyaltyCardId, setLoyaltyCardId] = useState<string | null>(null);
   const [feedbackId, setFeedbackId] = useState<string | null>(null);
+  const [recoveryOffer, setRecoveryOffer] = useState<string>("");
+  const [recoveryMessage, setRecoveryMessage] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +46,9 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       if (result.feedbackId) {
         setFeedbackId(result.feedbackId);
       }
+      if (result.recoveryOfferText) setRecoveryOffer(result.recoveryOfferText);
+      if (result.recoveryMessage) setRecoveryMessage(result.recoveryMessage);
+      
       if (result.loyaltyCardId) {
         setLoyaltyCardId(result.loyaltyCardId);
         // Save to browser memory
@@ -121,13 +126,15 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                       </div>
                       <h4 className="text-xl font-bold text-slate-900 mb-2">We're so sorry.</h4>
                       <p className="text-slate-600 text-sm">
-                        We clearly missed the mark today, and we want to make it right. Please give us a second chance on your next visit with this discount code:
+                        We clearly missed the mark today, and we want to make it right. Please give us a second chance on your next visit with this offer:
                       </p>
                       
-                      <div className="bg-slate-100 border border-slate-200 border-dashed rounded-xl p-4 text-center">
-                        <span className="font-mono text-lg font-bold tracking-widest text-slate-800 uppercase">MAKEITRIGHT15</span>
-                        <p className="text-xs text-slate-500 mt-2">Show this to your server for 15% off</p>
-                      </div>
+                      {recoveryOffer && (
+                        <div className="bg-slate-100 border border-slate-200 border-dashed rounded-xl p-4 text-center">
+                          <span className="font-mono text-base font-bold tracking-widest text-slate-800 uppercase">{recoveryOffer}</span>
+                          <p className="text-xs text-slate-500 mt-2">Show this to your server</p>
+                        </div>
+                      )}
 
                       {!contactInfo ? (
                         <div className="pt-4 border-t border-slate-100 space-y-3">
@@ -159,7 +166,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                       ) : (
                         <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                           <p className="text-sm text-slate-600">
-                            <strong>Thank you.</strong> Our manager has been notified and will reach out to you at {contactInfo} to apologize personally.
+                            <strong>Thank you.</strong> {recoveryMessage.replace('{contact}', contactInfo)}
                           </p>
                         </div>
                       )}

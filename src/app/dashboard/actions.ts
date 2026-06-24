@@ -783,6 +783,8 @@ export async function updateRestaurantSettings(formData: FormData) {
       opening_time: (field(formData, "openingTime") || "09:00") + ":00",
       closing_time: (field(formData, "closingTime") || "23:00") + ":00",
       loyalty_pin: field(formData, "loyaltyPin") || "1234",
+      recovery_offer_text: field(formData, "recoveryOfferText"),
+      recovery_message: field(formData, "recoveryMessage"),
     })
     .eq("id", restaurant.id);
 

@@ -232,6 +232,39 @@ export default async function SettingsPage(
               </div>
             </div>
 
+            <div className="pt-4 border-t border-slate-100">
+              <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <Globe className="w-5 h-5 text-primary" /> Service Recovery Strategy
+              </h3>
+              <p className="text-sm text-slate-600 mb-4">
+                Configure what is shown to customers when they leave a 1, 2, or 3-star review.
+              </p>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="recoveryOfferText">Apology Offer (Optional)</Label>
+                  <Textarea 
+                    id="recoveryOfferText" 
+                    name="recoveryOfferText" 
+                    defaultValue={restaurant.recovery_offer_text || "15% off your next visit with code MAKEITRIGHT15"} 
+                    placeholder="e.g. 15% off your next visit with code MAKEITRIGHT15"
+                    rows={2}
+                  />
+                  <p className="text-[10px] text-muted-foreground">The discount or offer shown to win them back.</p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="recoveryMessage">Follow-up Message</Label>
+                  <Textarea 
+                    id="recoveryMessage" 
+                    name="recoveryMessage" 
+                    defaultValue={restaurant.recovery_message || "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."} 
+                    placeholder="Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."
+                    rows={2}
+                  />
+                  <p className="text-[10px] text-muted-foreground">Use {'{contact}'} as a placeholder for their email/phone.</p>
+                </div>
+              </div>
+            </div>
+
             <Button type="submit" className="w-full sm:w-auto">
               <Save className="mr-2 h-4 w-4" /> Save Changes
             </Button>
