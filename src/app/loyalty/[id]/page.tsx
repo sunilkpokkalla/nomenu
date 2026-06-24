@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LoyaltyCardUI } from "./loyalty-card-ui";
 
+export const dynamic = 'force-dynamic';
+
 export default async function LoyaltyCardPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const cardId = params.id;
