@@ -23,16 +23,16 @@ import {
 } from "@/components/ui/select";
 
 const OFFER_PRESETS = [
-  "15% off your next visit with code MAKEITRIGHT15",
-  "A complimentary dessert or a signature non-alcoholic beverage on your next visit.",
-  "Free appetizer on your next order.",
-  ""
+  { label: "Percentage Discount", value: "15% off your next visit with code MAKEITRIGHT15" },
+  { label: "Complimentary Item", value: "A complimentary dessert or a signature non-alcoholic beverage on your next visit." },
+  { label: "Free Appetizer", value: "Free appetizer on your next order." },
+  { label: "No Offer (Message Only)", value: "" }
 ];
 
 const MESSAGE_PRESETS = [
-  "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally.",
-  "We sincerely apologize that your recent visit fell short of expectations. A manager will contact you at {contact} to make it right.",
-  "We appreciate your honest feedback. Our team is reviewing it and will contact you at {contact}."
+  { label: "Standard: Manager Reach Out", value: "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally." },
+  { label: "Formal: Make It Right", value: "We sincerely apologize that your recent visit fell short of expectations. A manager will contact you at {contact} to make it right." },
+  { label: "Appreciative: Honest Feedback", value: "We appreciate your honest feedback. Our team is reviewing it and will contact you at {contact}." }
 ];
 
 export function FeedbackStrategyForm({
@@ -114,13 +114,13 @@ export function FeedbackStrategyForm({
               <div className="flex items-center justify-between">
                 <Label htmlFor="recoveryOfferText">Apology Offer (Optional)</Label>
                 <Select onValueChange={(val) => setRecoveryOffer(val === "none" ? "" : val)}>
-                  <SelectTrigger className="h-6 w-[120px] text-[10px] px-2 py-0 border-slate-200">
+                  <SelectTrigger className="h-6 w-[160px] text-[10px] px-2 py-0 border-slate-200">
                     <SelectValue placeholder="Use preset..." />
                   </SelectTrigger>
                   <SelectContent>
                     {OFFER_PRESETS.map((preset, idx) => (
-                      <SelectItem key={idx} value={preset || "none"} className="text-[11px]">
-                        {preset ? `Preset ${idx + 1}` : "No offer"}
+                      <SelectItem key={idx} value={preset.value || "none"} className="text-[11px]">
+                        {preset.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -140,13 +140,13 @@ export function FeedbackStrategyForm({
               <div className="flex items-center justify-between">
                 <Label htmlFor="recoveryMessage">Follow-up Message</Label>
                 <Select onValueChange={(val) => setRecoveryMessage(val)}>
-                  <SelectTrigger className="h-6 w-[120px] text-[10px] px-2 py-0 border-slate-200">
+                  <SelectTrigger className="h-6 w-[160px] text-[10px] px-2 py-0 border-slate-200">
                     <SelectValue placeholder="Use preset..." />
                   </SelectTrigger>
                   <SelectContent>
                     {MESSAGE_PRESETS.map((preset, idx) => (
-                      <SelectItem key={idx} value={preset} className="text-[11px]">
-                        Preset {idx + 1}
+                      <SelectItem key={idx} value={preset.value} className="text-[11px]">
+                        {preset.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
