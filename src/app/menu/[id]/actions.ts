@@ -51,7 +51,17 @@ export async function submitFeedback(
     }
   }
 
-  return { success: true, loyaltyCardId };
+  return { success: true, loyaltyCardId, feedbackId: feedbackData.id };
+}
+
+export async function updateFeedbackContact(feedbackId: string, contactInfo: string) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+  
+  await supabase.from("customer_feedback").update({ contact_info: contactInfo }).eq("id", feedbackId);
+  return { success: true };
 }
 
 export async function getReceipts(orderIds: string[]) {

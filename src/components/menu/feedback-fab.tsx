@@ -21,6 +21,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [loyaltyCardId, setLoyaltyCardId] = useState<string | null>(null);
+  const [feedbackId, setFeedbackId] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +41,9 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       setError(result.error);
     } else {
       setIsSuccess(true);
+      if (result.feedbackId) {
+        setFeedbackId(result.feedbackId);
+      }
       if (result.loyaltyCardId) {
         setLoyaltyCardId(result.loyaltyCardId);
         // Save to browser memory
@@ -50,16 +54,6 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
         } catch (e) {
           console.error("Failed to save loyalty card to local storage", e);
         }
-      } else {
-        setTimeout(() => {
-          setIsOpen(false);
-          // Reset state after closing
-          setTimeout(() => {
-            setIsSuccess(false);
-            setRating(0);
-            setComment("");
-          }, 300);
-        }, 2000);
       }
     }
   };
@@ -94,27 +88,81 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
             <div className="p-6">
               {isSuccess ? (
                 <div className="flex flex-col items-center justify-center py-8 text-center animate-in fade-in zoom-in duration-300">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                    <CheckCircle2 className="w-8 h-8 text-green-600" />
-                  </div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-2">Thank you!</h4>
-                  <p className="text-slate-500 mb-6">Your feedback helps us improve.</p>
-                  
-                  {loyaltyCardId && (
-                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full animate-in zoom-in-95 duration-500 delay-150 fill-mode-both">
-                      <div className="flex justify-center mb-3">
-                        <Star className="w-8 h-8 text-amber-400 fill-amber-400 animate-pulse" />
+                  {rating >= 4 ? (
+                    <>
+                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <CheckCircle2 className="w-8 h-8 text-green-600" />
                       </div>
-                      <h5 className="font-bold text-amber-900 text-lg mb-2">You unlocked a VIP Card!</h5>
-                      <p className="text-amber-700 text-sm mb-4">
-                        As a thank you for your 5-star review, click below to claim your digital loyalty card.
+                      <h4 className="text-xl font-bold text-slate-900 mb-2">Thank you!</h4>
+                      <p className="text-slate-500 mb-6">Your feedback helps us improve.</p>
+                      
+                      {loyaltyCardId && (
+                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full animate-in zoom-in-95 duration-500 delay-150 fill-mode-both">
+                          <div className="flex justify-center mb-3">
+                            <Star className="w-8 h-8 text-amber-400 fill-amber-400 animate-pulse" />
+                          </div>
+                          <h5 className="font-bold text-amber-900 text-lg mb-2">You unlocked a VIP Card!</h5>
+                          <p className="text-amber-700 text-sm mb-4">
+                            As a thank you for your 5-star review, click below to claim your digital loyalty card.
+                          </p>
+                          <a 
+                            href={`/loyalty/${loyaltyCardId}`}
+                            className="block w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center"
+                          >
+                            Claim My Card
+                          </a>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="space-y-6 w-full animate-in zoom-in-95 duration-500">
+                      <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <MessageSquare className="w-8 h-8 text-slate-400" />
+                      </div>
+                      <h4 className="text-xl font-bold text-slate-900 mb-2">We're so sorry.</h4>
+                      <p className="text-slate-600 text-sm">
+                        We clearly missed the mark today, and we want to make it right. Please give us a second chance on your next visit with this discount code:
                       </p>
-                      <a 
-                        href={`/loyalty/${loyaltyCardId}`}
-                        className="block w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center"
-                      >
-                        Claim My Card
-                      </a>
+                      
+                      <div className="bg-slate-100 border border-slate-200 border-dashed rounded-xl p-4 text-center">
+                        <span className="font-mono text-lg font-bold tracking-widest text-slate-800 uppercase">MAKEITRIGHT15</span>
+                        <p className="text-xs text-slate-500 mt-2">Show this to your server for 15% off</p>
+                      </div>
+
+                      {!contactInfo ? (
+                        <div className="pt-4 border-t border-slate-100 space-y-3">
+                          <p className="text-sm font-semibold text-slate-900">Want the manager to reach out?</p>
+                          <p className="text-xs text-slate-500">Leave your phone number or email and we will contact you personally.</p>
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              value={contactInfo}
+                              onChange={(e) => setContactInfo(e.target.value)}
+                              placeholder="Email or Phone"
+                              className="flex-1 rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
+                            />
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                if (contactInfo && feedbackId) {
+                                  await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackContact(feedbackId, contactInfo));
+                                  alert("Thank you. A manager will reach out soon.");
+                                  setIsOpen(false);
+                                }
+                              }}
+                              className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
+                            >
+                              Send
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                          <p className="text-sm text-slate-600">
+                            <strong>Thank you.</strong> Our manager has been notified and will reach out to you at {contactInfo} to apologize personally.
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
