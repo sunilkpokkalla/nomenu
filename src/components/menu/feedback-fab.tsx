@@ -20,6 +20,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [loyaltyCardId, setLoyaltyCardId] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,15 +40,19 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       setError(result.error);
     } else {
       setIsSuccess(true);
-      setTimeout(() => {
-        setIsOpen(false);
-        // Reset state after closing
+      if (result.loyaltyCardId) {
+        setLoyaltyCardId(result.loyaltyCardId);
+      } else {
         setTimeout(() => {
-          setIsSuccess(false);
-          setRating(0);
-          setComment("");
-        }, 300);
-      }, 2000);
+          setIsOpen(false);
+          // Reset state after closing
+          setTimeout(() => {
+            setIsSuccess(false);
+            setRating(0);
+            setComment("");
+          }, 300);
+        }, 2000);
+      }
     }
   };
 
@@ -85,7 +90,25 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                     <CheckCircle2 className="w-8 h-8 text-green-600" />
                   </div>
                   <h4 className="text-xl font-bold text-slate-900 mb-2">Thank you!</h4>
-                  <p className="text-slate-500">Your feedback helps us improve.</p>
+                  <p className="text-slate-500 mb-6">Your feedback helps us improve.</p>
+                  
+                  {loyaltyCardId && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full animate-in zoom-in-95 duration-500 delay-150 fill-mode-both">
+                      <div className="flex justify-center mb-3">
+                        <Star className="w-8 h-8 text-amber-400 fill-amber-400 animate-pulse" />
+                      </div>
+                      <h5 className="font-bold text-amber-900 text-lg mb-2">You unlocked a VIP Card!</h5>
+                      <p className="text-amber-700 text-sm mb-4">
+                        As a thank you for your 5-star review, click below to claim your digital loyalty card.
+                      </p>
+                      <a 
+                        href={`/loyalty/${loyaltyCardId}`}
+                        className="block w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center"
+                      >
+                        Claim My Card
+                      </a>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">

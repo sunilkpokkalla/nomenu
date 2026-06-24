@@ -20,7 +20,7 @@ export async function submitFeedback(
   if (!restaurantId) return { error: "Restaurant ID is required." };
   if (rating < 1 || rating > 5) return { error: "Rating must be between 1 and 5." };
 
-  const { error } = await supabase.from("customer_feedback").insert({
+  const { data: feedbackData, error } = await supabase.from("customer_feedback").insert({
     restaurant_id: restaurantId,
     rating,
     comment: comment?.trim() || null,
@@ -28,14 +28,30 @@ export async function submitFeedback(
     contact_info: contactInfo?.trim() || null,
     table_number: tableNumber?.trim() || null,
     qr_code_id: qrCodeId?.trim() || null,
-  });
+  }).select("id").single();
 
-  if (error) {
+  if (error || !feedbackData) {
     console.error("Error submitting feedback:", error);
     return { error: "Failed to submit feedback. Please try again." };
   }
 
-  return { success: true };
+  // Generate Loyalty Card for 4 and 5 star reviews
+  let loyaltyCardId = null;
+  if (rating >= 4) {
+    const { data: cardData, error: cardError } = await supabase.from("loyalty_cards").insert({
+      restaurant_id: restaurantId,
+      feedback_id: feedbackData.id,
+      stamps: 0,
+    }).select("id").single();
+
+    if (!cardError && cardData) {
+      loyaltyCardId = cardData.id;
+    } else {
+      console.error("Error generating loyalty card:", cardError);
+    }
+  }
+
+  return { success: true, loyaltyCardId };
 }
 
 export async function getReceipts(orderIds: string[]) {

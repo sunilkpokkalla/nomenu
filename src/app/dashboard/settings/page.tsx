@@ -211,13 +211,33 @@ export default async function SettingsPage(
               </div>
             </div>
 
+            <div className="pt-4 border-t border-slate-100">
+              <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <Globe className="w-5 h-5 text-primary" /> Loyalty Program
+              </h3>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="loyaltyPin">Staff Stamp PIN (4 Digits)</Label>
+                  <Input 
+                    id="loyaltyPin" 
+                    name="loyaltyPin" 
+                    type="text" 
+                    maxLength={4}
+                    pattern="\d{4}"
+                    defaultValue={restaurant.loyalty_pin || "1234"} 
+                    placeholder="e.g. 1234" 
+                  />
+                  <p className="text-[10px] text-muted-foreground">Used by staff to stamp a customer's digital 5-star loyalty card.</p>
+                </div>
+              </div>
+            </div>
+
             <Button type="submit" className="w-full sm:w-auto">
               <Save className="mr-2 h-4 w-4" /> Save Changes
             </Button>
           </form>
         </CardContent>
       </Card>
-
     </div>
   );
 }

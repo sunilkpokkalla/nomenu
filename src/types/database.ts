@@ -43,6 +43,7 @@ export interface Database {
           opening_time: string | null;
           closing_time: string | null;
           magic_credits: number | null;
+          loyalty_pin: string | null;
         };
         Insert: {
           id?: string;
@@ -77,9 +78,41 @@ export interface Database {
           opening_time?: string | null;
           closing_time?: string | null;
           magic_credits?: number | null;
+          loyalty_pin?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];
+      };
+      loyalty_cards: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          feedback_id: string | null;
+          stamps: number;
+          created_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          feedback_id?: string | null;
+          stamps?: number;
+          created_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["loyalty_cards"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_cards_restaurant_id_fkey";
+            columns: ["restaurant_id"];
+            referencedRelation: "restaurants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "loyalty_cards_feedback_id_fkey";
+            columns: ["feedback_id"];
+            referencedRelation: "customer_feedback";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       menus: {
         Row: {
