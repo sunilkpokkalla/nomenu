@@ -15,8 +15,14 @@ export const metadata = {
   description: "View and manage customer feedback.",
 };
 
-export default async function FeedbackPage() {
+export default async function FeedbackPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const supabase = await createClient();
+  const params = await searchParams;
+  const tab = params.tab === "strategy" ? "strategy" : "reviews";
 
   const {
     data: { user },
@@ -82,7 +88,7 @@ export default async function FeedbackPage() {
           </Link>
         </div>
       ) : (
-        <Tabs defaultValue="reviews" className="w-full">
+        <Tabs defaultValue={tab} className="w-full">
           <TabsList className="mb-8">
             <TabsTrigger value="reviews">Customer Reviews</TabsTrigger>
             <TabsTrigger value="strategy">Strategy Settings</TabsTrigger>

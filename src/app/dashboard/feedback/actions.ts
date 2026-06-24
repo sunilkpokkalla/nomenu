@@ -43,11 +43,11 @@ export async function updateFeedbackStrategy(formData: FormData) {
     .eq("id", restaurant.id);
 
   if (error) {
-    redirect(`/dashboard/feedback?message=${encodeURIComponent(error.message)}`);
+    redirect(`/dashboard/feedback?tab=strategy&message=${encodeURIComponent(error.message)}`);
   }
 
   revalidatePath("/dashboard/feedback");
-  redirect("/dashboard/feedback?success=Strategy%20settings%20updated%20successfully");
+  redirect("/dashboard/feedback?tab=strategy&success=Strategy%20settings%20updated%20successfully");
 }
 
 export async function generateRecoveryStrategy() {
