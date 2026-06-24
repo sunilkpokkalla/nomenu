@@ -44,6 +44,8 @@ export interface Database {
           closing_time: string | null;
           magic_credits: number | null;
           loyalty_pin: string | null;
+          recovery_offer_text: string | null;
+          recovery_message: string | null;
         };
         Insert: {
           id?: string;
@@ -79,6 +81,8 @@ export interface Database {
           closing_time?: string | null;
           magic_credits?: number | null;
           loyalty_pin?: string | null;
+          recovery_offer_text?: string | null;
+          recovery_message?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];
