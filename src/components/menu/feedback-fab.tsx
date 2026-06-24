@@ -42,6 +42,14 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       setIsSuccess(true);
       if (result.loyaltyCardId) {
         setLoyaltyCardId(result.loyaltyCardId);
+        // Save to browser memory
+        try {
+          const storedCards = JSON.parse(localStorage.getItem('nomenu_loyalty_cards') || '{}');
+          storedCards[restaurantId] = result.loyaltyCardId;
+          localStorage.setItem('nomenu_loyalty_cards', JSON.stringify(storedCards));
+        } catch (e) {
+          console.error("Failed to save loyalty card to local storage", e);
+        }
       } else {
         setTimeout(() => {
           setIsOpen(false);
