@@ -6,7 +6,7 @@ import { toZonedTime } from "date-fns-tz";
 import { 
   MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, 
   Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, Download
 } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
@@ -169,6 +169,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
       const lowerQuery = searchQuery.toLowerCase();
       result = result.filter(fb => 
         (fb.customer_name?.toLowerCase().includes(lowerQuery)) ||
+        (fb.contact_info?.toLowerCase().includes(lowerQuery)) ||
         (fb.comment?.toLowerCase().includes(lowerQuery)) ||
         (fb.table_number?.toLowerCase().includes(lowerQuery)) ||
         (fb.qr_codes?.label?.toLowerCase().includes(lowerQuery))
@@ -192,6 +193,45 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   // Pagination logic
   const totalPages = Math.ceil(processedFeedbacks.length / itemsPerPage);
   const paginatedFeedbacks = processedFeedbacks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handleDownloadCSV = () => {
+    if (processedFeedbacks.length === 0) return;
+
+    const headers = ["Date", "Time", "Customer Name", "Contact Info", "Table/Location", "Rating", "Sentiment", "Comment"];
+    
+    const escapeCSV = (str?: string | null) => {
+      if (!str) return "";
+      const escaped = str.toString().replace(/"/g, '""');
+      return `"${escaped}"`;
+    };
+
+    const rows = processedFeedbacks.map(fb => {
+      const fbDate = toZonedTime(new Date(fb.created_at), timezone);
+      const sentiment = fb.rating >= 4 ? "Positive" : fb.rating === 3 ? "Neutral" : "Needs Attention";
+      const location = [fb.table_number ? `T-${fb.table_number}` : "", fb.qr_codes?.label || ""].filter(Boolean).join(" ");
+      
+      return [
+        escapeCSV(format(fbDate, "yyyy-MM-dd")),
+        escapeCSV(format(fbDate, "HH:mm:ss")),
+        escapeCSV(fb.customer_name),
+        escapeCSV(fb.contact_info),
+        escapeCSV(location),
+        escapeCSV(fb.rating.toString()),
+        escapeCSV(sentiment),
+        escapeCSV(fb.comment)
+      ].join(",");
+    });
+
+    const csvContent = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `nomenu-customer-feedback-${format(new Date(), "yyyy-MM-dd")}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleSort = (col: SortColumn) => {
     if (sortColumn === col) {
@@ -270,6 +310,17 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
             </select>
             <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
+
+          {/* Download CSV */}
+          <button
+            onClick={handleDownloadCSV}
+            disabled={processedFeedbacks.length === 0}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            title="Download CSV"
+          >
+            <Download className="w-4 h-4 text-slate-500" />
+            <span className="hidden sm:inline">Export</span>
+          </button>
         </div>
       </div>
 
@@ -348,33 +399,41 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                       
                       {/* Customer Info */}
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          {fb.customer_name ? (
-                            <div className="flex items-center gap-1.5 text-slate-700 font-medium">
-                              <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center">
-                                <User className="w-3.5 h-3.5 text-slate-500" />
+                        <div className="flex flex-col gap-1.5">
+                          <div className="flex items-center gap-3">
+                            {fb.customer_name ? (
+                              <div className="flex items-center gap-1.5 text-slate-700 font-medium">
+                                <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center">
+                                  <User className="w-3.5 h-3.5 text-slate-500" />
+                                </div>
+                                {fb.customer_name}
                               </div>
-                              {fb.customer_name}
-                            </div>
-                          ) : (
-                            <span className="text-slate-400 italic text-xs">Anonymous</span>
-                          )}
-                          
-                          {(fb.table_number || fb.qr_codes?.label) && (
-                            <div className="flex gap-1.5 items-center">
-                              <span className="text-slate-300">•</span>
-                              {fb.table_number && (
-                                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md uppercase">
-                                  <MapPin className="w-3 h-3" /> T-{fb.table_number}
-                                </span>
-                              )}
-                              {fb.qr_codes?.label && (
-                                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-fuchsia-700 bg-fuchsia-50 border border-fuchsia-100 px-1.5 py-0.5 rounded-md uppercase">
-                                  <QrCode className="w-3 h-3" /> 
-                                  {fb.qr_codes.label} 
-                                  {fb.qr_codes.location_zone && ` (${fb.qr_codes.location_zone})`}
-                                </span>
-                              )}
+                            ) : (
+                              <span className="text-slate-400 italic text-xs">Anonymous</span>
+                            )}
+                            
+                            {(fb.table_number || fb.qr_codes?.label) && (
+                              <div className="flex gap-1.5 items-center">
+                                <span className="text-slate-300">•</span>
+                                {fb.table_number && (
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md uppercase">
+                                    <MapPin className="w-3 h-3" /> T-{fb.table_number}
+                                  </span>
+                                )}
+                                {fb.qr_codes?.label && (
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-fuchsia-700 bg-fuchsia-50 border border-fuchsia-100 px-1.5 py-0.5 rounded-md uppercase">
+                                    <QrCode className="w-3 h-3" /> 
+                                    {fb.qr_codes.label} 
+                                    {fb.qr_codes.location_zone && ` (${fb.qr_codes.location_zone})`}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          {fb.contact_info && (
+                            <div className="flex items-center gap-1 text-xs text-slate-500 pl-7">
+                              <Mail className="w-3 h-3" />
+                              {fb.contact_info}
                             </div>
                           )}
                         </div>
