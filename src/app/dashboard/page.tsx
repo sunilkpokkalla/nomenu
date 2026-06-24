@@ -28,6 +28,8 @@ import { WelcomeChecklist } from "@/components/dashboard/welcome-checklist";
 import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
 import { OnboardingForm } from "@/components/dashboard/onboarding-form";
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage(
   props: {
     searchParams: Promise<{ message?: string }>;
@@ -47,7 +49,7 @@ export default async function DashboardPage(
     redirect("/login");
   }
 
-  const { data: restaurant } = await supabase
+  const { data: restaurant, error: restaurantError } = await supabase
     .from("restaurants")
     .select("*")
     .eq("owner_id", user.id)
@@ -55,7 +57,16 @@ export default async function DashboardPage(
     .limit(1)
     .maybeSingle();
 
+  if (restaurantError) {
+    console.error("Dashboard page: Error fetching restaurant:", restaurantError);
+  }
+
   if (!restaurant) {
+    const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
+    if (user.email && adminEmails.includes(user.email)) {
+      redirect("/admin");
+    }
+
     return (
       <div className="mx-auto min-h-[100dvh] grid lg:grid-cols-[1.2fr_1fr] bg-slate-50 font-sans-vibrant">
         {/* Left Column - Editorial onboarding */}
