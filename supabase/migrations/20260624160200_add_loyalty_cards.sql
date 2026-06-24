@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS loyalty_cards (
   restaurant_id UUID REFERENCES restaurants(id) ON DELETE CASCADE,
   feedback_id UUID REFERENCES customer_feedback(id) ON DELETE SET NULL,
   stamps INTEGER DEFAULT 0,
+  last_stamp_at TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

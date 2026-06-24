@@ -29,7 +29,7 @@ export async function addStamp(cardId: string, restaurantId: string, pin: string
   // 2. Get the current card
   const { data: card, error: cardError } = await supabase
     .from("loyalty_cards")
-    .select("stamps")
+    .select("stamps, last_stamp_at")
     .eq("id", cardId)
     .single();
 
@@ -41,11 +41,25 @@ export async function addStamp(cardId: string, restaurantId: string, pin: string
     return { error: "Card is already full!" };
   }
 
-  // 3. Increment stamps
+  // 3. Enforce 24-hour cooldown
+  if (card.last_stamp_at) {
+    const lastStamp = new Date(card.last_stamp_at).getTime();
+    const now = Date.now();
+    const hoursSinceLastStamp = (now - lastStamp) / (1000 * 60 * 60);
+
+    if (hoursSinceLastStamp < 24) {
+      return { error: "This card was already stamped today. Please come back tomorrow!" };
+    }
+  }
+
+  // 4. Increment stamps and update last_stamp_at
   const newStamps = card.stamps + 1;
   const { error: updateError } = await supabase
     .from("loyalty_cards")
-    .update({ stamps: newStamps })
+    .update({ 
+      stamps: newStamps,
+      last_stamp_at: new Date().toISOString()
+    })
     .eq("id", cardId);
 
   if (updateError) {

@@ -89,6 +89,7 @@ export interface Database {
           restaurant_id: string;
           feedback_id: string | null;
           stamps: number;
+          last_stamp_at: string | null;
           created_at: string | null;
         };
         Insert: {
@@ -96,6 +97,7 @@ export interface Database {
           restaurant_id: string;
           feedback_id?: string | null;
           stamps?: number;
+          last_stamp_at?: string | null;
           created_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["loyalty_cards"]["Insert"]>;
