@@ -37,6 +37,7 @@ export default function MenusManualPage() {
           <li><a href="#adding-categories" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">2. Adding Categories</a></li>
           <li><a href="#creating-items" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">3. Creating Food Items</a></li>
           <li><a href="#allergens" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">4. Managing Allergens & Dietary Tags</a></li>
+          <li><a href="#ai-features" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">5. AI Integration & Magic Import</a></li>
         </ul>
       </div>
 
@@ -151,6 +152,34 @@ export default function MenusManualPage() {
           <p className="text-slate-500 mt-4 text-sm">
             Toggling these on will display beautiful badges next to the item on your live menu, helping customers with dietary restrictions order safely.
           </p>
+        </section>
+
+        {/* Section 5 */}
+        <section id="ai-features" className="scroll-mt-24 space-y-4">
+          <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
+            <span className="bg-slate-200 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center text-sm">5</span>
+            AI Integration & Magic Import
+          </h2>
+          <p className="text-slate-600 leading-relaxed text-lg">
+            NoMenu has Google Gemini AI integrated directly into your workflow to save you hours of manual data entry.
+          </p>
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-2xl border border-indigo-100 shadow-sm mt-4">
+            <h4 className="font-bold text-indigo-900 mb-4 flex items-center gap-2">
+              ✨ Magic AI Import
+            </h4>
+            <p className="text-indigo-800 mb-4">Have an old menu in a PDF, Word document, or on your website? Don't type it out manually!</p>
+            <ul className="list-disc list-inside space-y-2 text-indigo-800 ml-2 mb-6">
+              <li>Click <strong>Magic Import</strong> inside your menu's category page.</li>
+              <li>Paste the raw text of your entire menu into the box.</li>
+              <li>The AI will automatically read it, sort the items into categories, extract prices, and write mouth-watering descriptions for every dish.</li>
+            </ul>
+
+            <h4 className="font-bold text-indigo-900 mb-4 flex items-center gap-2">
+              🤖 AI Writer for Items & Categories
+            </h4>
+            <p className="text-indigo-800 mb-2">Struggling to write a description for a new dish?</p>
+            <p className="text-indigo-800">Just type the name of the dish (e.g. "Truffle Fries") and click the <strong>✨ AI Writer</strong> button inside the item creation form. Our AI will instantly generate an appetizing, professional description that drives sales.</p>
+          </div>
         </section>
 
       </div>
