@@ -96,13 +96,11 @@ export default async function FeedbackPage() {
           </TabsContent>
           
           <TabsContent value="strategy" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-            <div className="max-w-4xl">
-              <FeedbackStrategyForm 
-                initialLoyaltyPin={restaurant.loyalty_pin || "1234"}
-                initialRecoveryOffer={restaurant.recovery_offer_text || "15% off your next visit with code MAKEITRIGHT15"}
-                initialRecoveryMessage={restaurant.recovery_message || "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."}
-              />
-            </div>
+            <FeedbackStrategyForm 
+              initialLoyaltyPin={restaurant.loyalty_pin || "1234"}
+              initialRecoveryOffer={restaurant.recovery_offer_text || "15% off your next visit with code MAKEITRIGHT15"}
+              initialRecoveryMessage={restaurant.recovery_message || "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."}
+            />
           </TabsContent>
         </Tabs>
       )}
