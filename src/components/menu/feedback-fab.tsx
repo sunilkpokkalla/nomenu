@@ -103,7 +103,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                           </div>
                           <h5 className="font-bold text-amber-900 text-lg mb-2">You unlocked a VIP Card!</h5>
                           <p className="text-amber-700 text-sm mb-4">
-                            As a thank you for your 5-star review, click below to claim your digital loyalty card.
+                            As a thank you for your {rating}-star review, click below to claim your digital loyalty card.
                           </p>
                           <a 
                             href={`/loyalty/${loyaltyCardId}`}
