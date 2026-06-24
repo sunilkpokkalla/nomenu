@@ -476,7 +476,22 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                       </div>
                                       
                                       {fb.contact_info ? (
-                                        <button className="w-full mt-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm">
+                                        <button 
+                                          onClick={() => {
+                                            const isEmail = fb.contact_info?.includes('@');
+                                            const message = retentionOffers[fb.id].text;
+                                            
+                                            if (isEmail) {
+                                              const subject = encodeURIComponent("So sorry about your experience - let us make it right");
+                                              const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant, and I saw your recent feedback. I am so sorry we missed the mark. \n\n${message}\n\nPlease let me know when you plan to come back so I can ensure you have a perfect experience.\n\nBest,\nManager`);
+                                              window.open(`mailto:${fb.contact_info}?subject=${subject}&body=${body}`, '_blank');
+                                            } else {
+                                              const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'}, this is the manager. I saw your feedback & am so sorry. ${message}. Show this text on your next visit!`);
+                                              window.open(`sms:${fb.contact_info}?body=${body}`, '_blank');
+                                            }
+                                          }}
+                                          className="w-full mt-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                        >
                                           <Send className="w-4 h-4" />
                                           Send Offer to Customer
                                         </button>
@@ -512,7 +527,22 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                       </div>
                                       
                                       {fb.contact_info ? (
-                                        <button className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm">
+                                        <button 
+                                          onClick={() => {
+                                            const isEmail = fb.contact_info?.includes('@');
+                                            const message = loyaltyIdeas[fb.id].text;
+                                            
+                                            if (isEmail) {
+                                              const subject = encodeURIComponent("Thank you for your amazing review!");
+                                              const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant. We saw your recent glowing review and it made our whole team's day!\n\nAs a token of our appreciation, ${message}\n\nPlease let us know when you plan to come back!\n\nBest,\nManager`);
+                                              window.open(`mailto:${fb.contact_info}?subject=${subject}&body=${body}`, '_blank');
+                                            } else {
+                                              const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'}, manager here! Thanks for the amazing review! As a thank you, ${message}. Show this text on your next visit!`);
+                                              window.open(`sms:${fb.contact_info}?body=${body}`, '_blank');
+                                            }
+                                          }}
+                                          className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                        >
                                           <Send className="w-4 h-4" />
                                           Send Reward to Customer
                                         </button>
