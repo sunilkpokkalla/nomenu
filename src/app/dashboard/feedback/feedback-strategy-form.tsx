@@ -27,7 +27,7 @@ export function FeedbackStrategyForm({
     setIsGenerating(true);
     try {
       const result = await generateRecoveryStrategy();
-      if (result.success && result.offer && result.message) {
+      if ("success" in result && result.success && result.offer && result.message) {
         setRecoveryOffer(result.offer);
         setRecoveryMessage(result.message);
       } else {
@@ -97,7 +97,7 @@ export function FeedbackStrategyForm({
                 value={recoveryOffer}
                 onChange={(e) => setRecoveryOffer(e.target.value)}
                 placeholder="e.g. 15% off your next visit with code MAKEITRIGHT15"
-                rows={2}
+                rows={4}
               />
             </div>
             <div className="space-y-2">
@@ -108,7 +108,7 @@ export function FeedbackStrategyForm({
                 value={recoveryMessage}
                 onChange={(e) => setRecoveryMessage(e.target.value)}
                 placeholder="Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."
-                rows={2}
+                rows={4}
               />
               <p className="text-[10px] text-muted-foreground">Use {'{contact}'} as a placeholder for their email/phone.</p>
             </div>
