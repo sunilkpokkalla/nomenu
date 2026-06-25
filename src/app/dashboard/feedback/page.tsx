@@ -8,6 +8,9 @@ import { getSupabaseEnv } from "@/lib/env";
 import { FeedbackAnalytics, FeedbackData } from "./feedback-analytics";
 import { FeedbackList } from "./feedback-list";
 import { FeedbackStrategyForm } from "./feedback-strategy-form";
+import { LoyaltyQrGenerator } from "./loyalty-qr-generator";
+import { LoyaltyDesignEditor } from "./loyalty-design-editor";
+import { CustomerDirectory } from "./customer-directory";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata = {
@@ -35,7 +38,7 @@ export default async function FeedbackPage({
   // Get user's restaurant
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id, timezone, plan, loyalty_pin, recovery_offer_text, recovery_message")
+    .select("id, timezone, plan, recovery_offer_text, recovery_message, primary_color, loyalty_stamp_color, loyalty_stamp_icon, loyalty_card_layout, loyalty_reward_text, name, logo_url")
     .eq("owner_id", user.id)
     .order("created_at", { ascending: true })
     .limit(1)
@@ -51,10 +54,29 @@ export default async function FeedbackPage({
     );
   }
 
+  const plan = restaurant.plan?.toLowerCase() || "free";
+  
+  if (false && plan === "free") {
+    return (
+      <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500 flex flex-col items-center justify-center min-h-[60vh] text-center">
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8 max-w-md shadow-sm">
+          <MessageSquare className="h-12 w-12 text-blue-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Upgrade to Unlock Feedback</h2>
+          <p className="text-slate-600 mb-6">
+            Collect real-time customer feedback, intercept negative reviews before they hit Google, and build loyalty with digital reward cards.
+          </p>
+          <Link href="/dashboard/billing" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-colors">
+            Upgrade to Pro
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   // Fetch feedback
   const { data: feedbacks, error } = await supabase
     .from("customer_feedback")
-    .select("*, qr_codes(label, location_zone)")
+    .select("*, qr_codes(label, location_zone), loyalty_cards(id, stamps, last_stamp_at)")
     .eq("restaurant_id", restaurant.id)
     .order("created_at", { ascending: false });
 
@@ -67,11 +89,11 @@ export default async function FeedbackPage({
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Customer Feedback</h1>
-        <p className="text-slate-500">See what your customers are saying about your menu.</p>
+        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Feedback & Loyalty</h1>
+        <p className="text-slate-500">Manage customer feedback, automated service recovery, and your digital loyalty program.</p>
       </div>
 
-      {!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.trim().toLowerCase()) ? (
+      {false ? (
         <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12">
           <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
             <MessageSquare className="w-8 h-8 text-slate-400" />
@@ -89,9 +111,15 @@ export default async function FeedbackPage({
         </div>
       ) : (
         <Tabs defaultValue={tab} className="w-full">
-          <TabsList className="mb-8">
-            <TabsTrigger value="reviews">Customer Reviews</TabsTrigger>
-            <TabsTrigger value="strategy">Strategy Settings</TabsTrigger>
+          <TabsList className="mb-8 p-1 h-auto bg-slate-100/80 rounded-xl overflow-x-auto justify-start flex-nowrap hide-scrollbar flex w-full md:w-auto md:inline-flex border border-slate-200">
+            <TabsTrigger value="reviews" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Customer Reviews</TabsTrigger>
+            <TabsTrigger value="strategy" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Service Recovery</TabsTrigger>
+            
+            <div className="w-px h-6 bg-slate-300 mx-3 self-center shrink-0"></div>
+            
+            <TabsTrigger value="directory" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Members</TabsTrigger>
+            <TabsTrigger value="design" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Card Design</TabsTrigger>
+            <TabsTrigger value="scanner" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-bold text-amber-700 data-[state=active]:text-amber-900 data-[state=active]:bg-amber-100 transition-all">Staff Scanner (QR)</TabsTrigger>
           </TabsList>
           
           <TabsContent value="reviews" className="space-y-8 mt-0 focus-visible:outline-none focus-visible:ring-0">
@@ -100,13 +128,33 @@ export default async function FeedbackPage({
             </div>
             <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
           </TabsContent>
+
+          <TabsContent value="directory" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+            <CustomerDirectory feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
+          </TabsContent>
           
           <TabsContent value="strategy" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
             <FeedbackStrategyForm 
-              initialLoyaltyPin={restaurant.loyalty_pin || "1234"}
               initialRecoveryOffer={restaurant.recovery_offer_text || "15% off your next visit with code MAKEITRIGHT15"}
               initialRecoveryMessage={restaurant.recovery_message || "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."}
             />
+          </TabsContent>
+
+          <TabsContent value="design" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+            <LoyaltyDesignEditor 
+              restaurantId={restaurant.id}
+              initialColor={restaurant.loyalty_stamp_color || "amber"}
+              initialIcon={restaurant.loyalty_stamp_icon || "star"}
+              initialLayout={restaurant.loyalty_card_layout || "classic"}
+              initialRewardText={restaurant.loyalty_reward_text}
+              restaurantName={restaurant.name}
+              primaryColor={restaurant.primary_color || "#000000"}
+              restaurantLogo={restaurant.logo_url}
+            />
+          </TabsContent>
+
+          <TabsContent value="scanner" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+            <LoyaltyQrGenerator restaurantId={restaurant.id} />
           </TabsContent>
         </Tabs>
       )}

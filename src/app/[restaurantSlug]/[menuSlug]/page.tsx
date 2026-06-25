@@ -74,7 +74,7 @@ export default async function StorefrontMenuPage(
   // 1. Fetch restaurant details by slug
   const { data: _restaurantData } = await supabase
     .from("restaurants")
-    .select("*, stripe_account_id")
+    .select("*, stripe_account_id, loyalty_pin_code")
     .eq("slug", restaurantSlug)
     .maybeSingle();
 
@@ -205,7 +205,8 @@ export default async function StorefrontMenuPage(
           accent_color: activeAccentColor,
           theme_style: activeThemeStyle,
           currency: restaurant.currency,
-          plan: restaurant.plan
+          plan: restaurant.plan,
+          loyalty_pin_code: restaurant.loyalty_pin_code
         }}
         categories={categoriesList}
         items={itemsList}

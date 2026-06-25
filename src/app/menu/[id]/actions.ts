@@ -9,7 +9,8 @@ export async function submitFeedback(
   customerName?: string,
   contactInfo?: string,
   tableNumber?: string,
-  qrCodeId?: string
+  qrCodeId?: string,
+  existingLoyaltyCardId?: string
 ) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -20,7 +21,22 @@ export async function submitFeedback(
   if (!restaurantId) return { error: "Restaurant ID is required." };
   if (rating < 1 || rating > 5) return { error: "Rating must be between 1 and 5." };
 
-  const { data: feedbackData, error } = await supabase.from("customer_feedback").insert({
+  // Fetch restaurant details for both loyalty config (4-5 stars) and recovery config (1-3 stars)
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("name, logo_url, primary_color, loyalty_card_layout, loyalty_stamp_color, loyalty_stamp_icon, loyalty_reward_text, recovery_offer_text, recovery_message, loyalty_pin_code")
+    .eq("id", restaurantId)
+    .single();
+
+  // Generate or Update Loyalty Card for 4 and 5 star reviews
+  let loyaltyCardId = null;
+  let loyaltyConfig = null;
+  let loyaltyStamps = 0;
+  
+  const isLoyaltyEligible = rating >= 4 && !existingLoyaltyCardId;
+
+  // We need to save the feedback if we haven't already.
+  const { data: feedbackData, error: feedbackError } = await supabase.from("customer_feedback").insert({
     restaurant_id: restaurantId,
     rating,
     comment: comment?.trim() || null,
@@ -30,22 +46,78 @@ export async function submitFeedback(
     qr_code_id: qrCodeId?.trim() || null,
   }).select("id").single();
 
-  if (error || !feedbackData) {
-    console.error("Error submitting feedback:", error);
+  if (feedbackError) {
+    console.error("Error submitting feedback:", feedbackError);
     return { error: "Failed to submit feedback. Please try again." };
   }
+  const finalFeedbackId = feedbackData.id;
 
-  // Generate Loyalty Card for 4 and 5 star reviews
-  let loyaltyCardId = null;
-  if (rating >= 4) {
-    const { data: cardData, error: cardError } = await supabase.from("loyalty_cards").insert({
-      restaurant_id: restaurantId,
-      feedback_id: feedbackData.id,
-      stamps: 0,
-    }).select("id").single();
+  if (isLoyaltyEligible) {
+    let cardData = null;
+    let cardError = null;
+
+    if (existingLoyaltyCardId) {
+      // Fetch existing card to verify it belongs to this restaurant
+      const { data: existingCard } = await supabase
+        .from("loyalty_cards")
+        .select("id, stamps, last_stamp_at, created_at")
+        .eq("id", existingLoyaltyCardId)
+        .eq("restaurant_id", restaurantId)
+        .maybeSingle();
+
+      if (existingCard) {
+        // Check 12-hour cooldown
+        const lastStampTime = existingCard.last_stamp_at 
+          ? new Date(existingCard.last_stamp_at).getTime() 
+          : new Date(existingCard.created_at).getTime();
+        
+        const twelveHoursInMs = 12 * 60 * 60 * 1000;
+        const now = new Date().getTime();
+
+        if (now - lastStampTime >= twelveHoursInMs) {
+          // Add 1 stamp to the existing card (cap at 10)
+          const newStamps = Math.min((existingCard.stamps || 0) + 1, 10);
+          const { data: updatedCard, error: updateError } = await supabase
+            .from("loyalty_cards")
+            .update({ 
+              stamps: newStamps,
+              last_stamp_at: new Date().toISOString()
+            })
+            .eq("id", existingLoyaltyCardId)
+            .select("id, stamps")
+            .single();
+            
+          cardData = updatedCard;
+          cardError = updateError;
+        } else {
+          // Cooldown active: don't add stamp, just return existing data
+          cardData = existingCard;
+        }
+      }
+    }
+
+    // We no longer automatically create a NEW card here. 
+    // They must explicitly claim it and provide Name, Email, Phone.
+    // However, if they already have an existing card, we process the cooldown logic above.
+    if (!cardData && existingLoyaltyCardId) {
+      // If we got here, they had an existing ID but it wasn't found or valid. 
+      // We still don't auto-create. They must claim it.
+    }
 
     if (!cardError && cardData) {
       loyaltyCardId = cardData.id;
+      loyaltyStamps = cardData.stamps;
+      if (restaurant) {
+        loyaltyConfig = {
+          name: restaurant.name,
+          logo_url: restaurant.logo_url,
+          primary_color: restaurant.primary_color,
+          loyalty_card_layout: restaurant.loyalty_card_layout,
+          loyalty_stamp_color: restaurant.loyalty_stamp_color,
+          loyalty_stamp_icon: restaurant.loyalty_stamp_icon,
+          loyalty_reward_text: restaurant.loyalty_reward_text
+        };
+      }
     } else {
       console.error("Error generating loyalty card:", cardError);
     }
@@ -55,23 +127,18 @@ export async function submitFeedback(
   let recoveryOfferText = '15% off your next visit with code MAKEITRIGHT15';
   let recoveryMessage = 'Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally.';
   
-  if (rating <= 3) {
-    const { data: restaurant } = await supabase
-      .from("restaurants")
-      .select("recovery_offer_text, recovery_message")
-      .eq("id", restaurantId)
-      .single();
-      
-    if (restaurant) {
-      if (restaurant.recovery_offer_text) recoveryOfferText = restaurant.recovery_offer_text;
-      if (restaurant.recovery_message) recoveryMessage = restaurant.recovery_message;
-    }
+  if (rating <= 3 && restaurant) {
+    if (restaurant.recovery_offer_text) recoveryOfferText = restaurant.recovery_offer_text;
+    if (restaurant.recovery_message) recoveryMessage = restaurant.recovery_message;
   }
 
   return { 
     success: true, 
-    loyaltyCardId, 
-    feedbackId: feedbackData.id,
+    loyaltyCardId,
+    loyaltyConfig,
+    loyaltyStamps,
+    feedbackId: finalFeedbackId,
+    isLoyaltyEligible,
     recoveryOfferText,
     recoveryMessage
   };
@@ -85,6 +152,75 @@ export async function updateFeedbackContact(feedbackId: string, contactInfo: str
   
   await supabase.from("customer_feedback").update({ contact_info: contactInfo }).eq("id", feedbackId);
   return { success: true };
+}
+
+export async function claimLoyaltyCard(data: {
+  feedbackId: string;
+  restaurantId: string;
+  name: string;
+  email: string;
+  phone: string;
+}) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+
+  // 1. Update the feedback record with their mandatory contact info
+  const { error: updateError } = await supabase
+    .from("customer_feedback")
+    .update({ 
+      customer_name: data.name,
+      customer_email: data.email,
+      customer_phone: data.phone,
+      contact_info: `${data.email} | ${data.phone}` // Fallback for backwards compatibility
+    })
+    .eq("id", data.feedbackId);
+
+  if (updateError) {
+    console.error("Failed to save customer details:", updateError);
+    return { error: "Failed to save customer details." };
+  }
+
+  // 2. Create the loyalty card
+  const { data: newCard, error: insertError } = await supabase.from("loyalty_cards").insert({
+    restaurant_id: data.restaurantId,
+    feedback_id: data.feedbackId,
+    stamps: 1, // Start them with 1 stamp as a reward
+    last_stamp_at: new Date().toISOString()
+  }).select("id, stamps").single();
+
+  if (insertError) {
+    console.error("Error generating loyalty card:", insertError);
+    return { error: "Failed to generate card." };
+  }
+
+  // 3. Get restaurant config to return
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("name, logo_url, primary_color, loyalty_card_layout, loyalty_stamp_color, loyalty_stamp_icon, loyalty_reward_text")
+    .eq("id", data.restaurantId)
+    .single();
+
+  let loyaltyConfig = null;
+  if (restaurant) {
+    loyaltyConfig = {
+      name: restaurant.name,
+      logo_url: restaurant.logo_url,
+      primary_color: restaurant.primary_color,
+      loyalty_card_layout: restaurant.loyalty_card_layout,
+      loyalty_stamp_color: restaurant.loyalty_stamp_color,
+      loyalty_stamp_icon: restaurant.loyalty_stamp_icon,
+      loyalty_reward_text: restaurant.loyalty_reward_text
+    };
+  }
+
+  return {
+    success: true,
+    loyaltyCardId: newCard.id,
+    loyaltyStamps: newCard.stamps,
+    loyaltyConfig
+  };
 }
 
 export async function getReceipts(orderIds: string[]) {

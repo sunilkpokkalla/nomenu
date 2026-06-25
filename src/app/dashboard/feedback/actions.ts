@@ -29,14 +29,12 @@ export async function updateFeedbackStrategy(formData: FormData) {
     redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
   }
 
-  const loyaltyPin = field(formData, "loyaltyPin") || "1234";
   const recoveryOfferText = field(formData, "recoveryOfferText");
   const recoveryMessage = field(formData, "recoveryMessage");
 
   const { error } = await supabase
     .from("restaurants")
     .update({
-      loyalty_pin: loyaltyPin,
       recovery_offer_text: recoveryOfferText,
       recovery_message: recoveryMessage,
     })
@@ -69,4 +67,76 @@ export async function generateRecoveryStrategy() {
   if (!result) return { error: "Failed to generate strategy" };
   
   return { success: true, ...result };
+}
+
+export async function generateLoyaltyToken(restaurantId: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+
+  // Verify owner
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("id")
+    .eq("id", restaurantId)
+    .eq("owner_id", user.id)
+    .single();
+
+  if (!restaurant) return { error: "Unauthorized" };
+
+  const expiresAt = new Date(Date.now() + 3 * 60 * 1000).toISOString(); // 3 minutes
+
+  const { data: token, error } = await supabase
+    .from("loyalty_scan_tokens")
+    .insert({
+      restaurant_id: restaurantId,
+      expires_at: expiresAt,
+      is_used: false
+    })
+    .select("id")
+    .single();
+
+  if (error || !token) {
+    console.error("Failed to generate token", error);
+    return { error: "Failed to generate token" };
+  }
+
+  return { success: true, tokenId: token.id };
+}
+
+export async function updateLoyaltyDesign(
+  restaurantId: string, 
+  color: string, 
+  icon: string, 
+  layout: string, 
+  rewardText: string
+) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  // Update design
+  const { error } = await supabase
+    .from("restaurants")
+    .update({ 
+      loyalty_stamp_color: color,
+      loyalty_stamp_icon: icon,
+      loyalty_card_layout: layout,
+      loyalty_reward_text: rewardText
+    })
+    .eq("id", restaurantId)
+    .eq("owner_id", user.id);
+
+  if (error) {
+    console.error("Error updating loyalty design:", error);
+    throw new Error("Failed to update loyalty design");
+  }
+
+  revalidatePath("/dashboard/feedback");
+  return { success: true };
 }

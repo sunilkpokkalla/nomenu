@@ -1,8 +1,12 @@
 "use client";
-
+// Force re-render for Next.js Fast Refresh
 import { useState } from "react";
-import { Star, Lock, Gift, CheckCircle2, X } from "lucide-react";
-import { addStamp } from "./actions";
+import { 
+  Star, Heart, Coffee, Pizza, Gift, Check, PartyPopper, Lock, CheckCircle2,
+  Croissant, Utensils, IceCream, Wine, Cake, CupSoda,
+  Soup, BadgePercent, ChefHat, Sandwich
+} from "lucide-react";
+import * as Layouts from "./layouts";
 
 interface LoyaltyCardUIProps {
   cardId: string;
@@ -11,39 +15,95 @@ interface LoyaltyCardUIProps {
   restaurantName: string;
   restaurantLogo?: string | null;
   primaryColor: string;
+  stampColor?: string;
+  stampIcon?: string;
+  layout?: string;
+  rewardText?: string | null;
+  isPreviewMode?: boolean;
 }
 
-export function LoyaltyCardUI({ cardId, restaurantId, stamps: initialStamps, restaurantName, primaryColor }: LoyaltyCardUIProps) {
+export function LoyaltyCardUI({ 
+  cardId, restaurantId, stamps: initialStamps, restaurantName, primaryColor, restaurantLogo, 
+  stampColor = "amber", stampIcon = "star", layout = "classic", rewardText = "10 Stamps = 1 Free Item", isPreviewMode = false 
+}: LoyaltyCardUIProps) {
   const [stamps, setStamps] = useState(initialStamps);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [pin, setPin] = useState("");
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isFull = stamps >= 10;
 
-  const handleStamp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pin.length !== 4) {
-      setError("PIN must be 4 digits");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setError("");
-
-    const result = await addStamp(cardId, restaurantId, pin);
-
-    setIsSubmitting(false);
-
-    if (result.error) {
-      setError(result.error);
-    } else if (result.success) {
-      setStamps(result.newStamps || stamps + 1);
-      setIsModalOpen(false);
-      setPin("");
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ICONS: Record<string, any> = {
+    star: Star,
+    heart: Heart,
+    coffee: Coffee,
+    pizza: Pizza,
+    gift: Gift,
+    check: Check,
+    croissant: Croissant,
+    utensils: Utensils,
+    icecream: IceCream,
+    wine: Wine,
+    cake: Cake,
+    soda: CupSoda,
+    bowl: Soup,
+    discount: BadgePercent,
+    chef: ChefHat,
+    sandwich: Sandwich
   };
+
+  const COLORS: Record<string, { bg: string, text: string }> = {
+    amber: { bg: "bg-amber-100", text: "text-amber-500 fill-amber-500" },
+    rose: { bg: "bg-rose-100", text: "text-rose-400 fill-rose-400" },
+    emerald: { bg: "bg-emerald-100", text: "text-emerald-500 fill-emerald-500" },
+    sky: { bg: "bg-sky-100", text: "text-sky-500 fill-sky-500" },
+    indigo: { bg: "bg-indigo-100", text: "text-indigo-500 fill-indigo-500" },
+    slate: { bg: "bg-slate-200", text: "text-slate-800 fill-slate-800" },
+    orange: { bg: "bg-orange-100", text: "text-orange-500 fill-orange-500" },
+    pink: { bg: "bg-pink-100", text: "text-pink-500 fill-pink-500" },
+    violet: { bg: "bg-violet-100", text: "text-violet-500 fill-violet-500" },
+    teal: { bg: "bg-teal-100", text: "text-teal-400 fill-teal-400" },
+    red: { bg: "bg-red-100", text: "text-red-500 fill-red-500" },
+    yellow: { bg: "bg-yellow-100", text: "text-yellow-400 fill-yellow-400" },
+    blue: { bg: "bg-blue-100", text: "text-blue-600 fill-blue-600" },
+    stone: { bg: "bg-stone-200", text: "text-stone-700 fill-stone-700" },
+    neutral: { bg: "bg-neutral-100", text: "text-neutral-400 fill-neutral-400" }
+  };
+
+  const StampIcon = ICONS[stampIcon] || Star;
+  const stampTheme = COLORS[stampColor] || COLORS.amber;
+
+  const commonProps = {
+    stamps,
+    restaurantName,
+    primaryColor,
+    stampColor,
+    StampIcon,
+    stampTheme,
+    rewardText
+  };
+
+  if (isPreviewMode) {
+    return (
+      <div className="w-full">
+        {layout === "classic" && <Layouts.ClassicLayout {...commonProps} />}
+        {layout === "digital" && <Layouts.DigitalLayout {...commonProps} />}
+        {layout === "minimalist" && <Layouts.MinimalistLayout {...commonProps} />}
+        {layout === "argentine" && <Layouts.ArgentineLayout {...commonProps} />}
+        {layout === "coffee" && <Layouts.CoffeeLayout {...commonProps} />}
+        {layout === "luxury" && <Layouts.LuxuryLayout {...commonProps} />}
+        {layout === "arcade" && <Layouts.ArcadeLayout {...commonProps} />}
+        {layout === "gradient" && <Layouts.GradientLayout {...commonProps} />}
+        {layout === "corporate" && <Layouts.CorporateLayout {...commonProps} />}
+        {layout === "birthday" && <Layouts.BirthdayLayout {...commonProps} />}
+        {layout === "finedining" && <Layouts.FineDiningLayout {...commonProps} />}
+        {layout === "botanical" && <Layouts.BotanicalLayout {...commonProps} />}
+        {layout === "holographic" && <Layouts.HolographicLayout {...commonProps} />}
+        {layout === "chalkboard" && <Layouts.ChalkboardLayout {...commonProps} />}
+        {layout === "lumia" && <Layouts.LumiaLayout {...commonProps} />}
+        {layout === "modernminimal" && <Layouts.ModernMinimalLayout {...commonProps} />}
+        {layout === "vibrantcafe" && <Layouts.VibrantCafeLayout {...commonProps} />}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-md mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
@@ -54,51 +114,24 @@ export function LoyaltyCardUI({ cardId, restaurantId, stamps: initialStamps, res
         <p className="text-slate-500">Show this card to your server to earn stamps.</p>
       </div>
 
-      {/* The Credit Card */}
-      <div 
-        className="relative w-full aspect-[1.586/1] rounded-2xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500"
-        style={{ background: `linear-gradient(135deg, ${primaryColor} 0%, #000 100%)` }}
-      >
-        {/* Shine effect */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 transform -skew-x-12 translate-x-[-100%] hover:translate-x-[200%] transition-transform duration-1000" />
-        
-        <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between z-10">
-          <div className="flex justify-between items-start">
-            <div className="text-white font-bold text-xl tracking-tight drop-shadow-md">
-              {restaurantName}
-            </div>
-            <div className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 text-white/90 text-xs font-semibold tracking-wider">
-              VIP MEMBER
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="text-white/80 text-xs font-medium uppercase tracking-widest">
-              10 Stamps = 1 Free Item
-            </div>
-            
-            {/* Stamp Grid */}
-            <div className="grid grid-cols-5 gap-3 sm:gap-4">
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div 
-                  key={i} 
-                  className={`relative w-full aspect-square rounded-full border-2 flex items-center justify-center transition-all duration-500 ${
-                    i < stamps 
-                      ? "border-amber-400 bg-amber-400/20 shadow-[0_0_15px_rgba(251,191,36,0.4)]" 
-                      : "border-white/20 bg-white/5"
-                  }`}
-                >
-                  {i < stamps ? (
-                    <Star className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 fill-amber-400 animate-in zoom-in duration-300" />
-                  ) : i === 9 ? (
-                    <Gift className="w-4 h-4 sm:w-5 sm:h-5 text-white/40" />
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Card Layouts */}
+      {layout === "classic" && <Layouts.ClassicLayout {...commonProps} />}
+      {layout === "digital" && <Layouts.DigitalLayout {...commonProps} />}
+      {layout === "minimalist" && <Layouts.MinimalistLayout {...commonProps} />}
+      {layout === "argentine" && <Layouts.ArgentineLayout {...commonProps} />}
+      {layout === "coffee" && <Layouts.CoffeeLayout {...commonProps} />}
+      {layout === "luxury" && <Layouts.LuxuryLayout {...commonProps} />}
+      {layout === "arcade" && <Layouts.ArcadeLayout {...commonProps} />}
+      {layout === "gradient" && <Layouts.GradientLayout {...commonProps} />}
+      {layout === "corporate" && <Layouts.CorporateLayout {...commonProps} />}
+      {layout === "birthday" && <Layouts.BirthdayLayout {...commonProps} />}
+      {layout === "finedining" && <Layouts.FineDiningLayout {...commonProps} />}
+      {layout === "botanical" && <Layouts.BotanicalLayout {...commonProps} />}
+      {layout === "holographic" && <Layouts.HolographicLayout {...commonProps} />}
+      {layout === "chalkboard" && <Layouts.ChalkboardLayout {...commonProps} />}
+      {layout === "lumia" && <Layouts.LumiaLayout {...commonProps} />}
+      {layout === "modernminimal" && <Layouts.ModernMinimalLayout {...commonProps} />}
+      {layout === "vibrantcafe" && <Layouts.VibrantCafeLayout {...commonProps} />}
 
       {/* Action Area */}
       {isFull ? (
@@ -112,13 +145,17 @@ export function LoyaltyCardUI({ cardId, restaurantId, stamps: initialStamps, res
           </p>
         </div>
       ) : (
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-        >
-          <Lock className="w-4 h-4 text-slate-400" />
-          Staff: Add Stamp
-        </button>
+        <div className="bg-white border-2 border-indigo-100 rounded-2xl p-6 text-center shadow-sm">
+          <div className="flex justify-center mb-4">
+            <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center">
+              <Lock className="w-6 h-6" />
+            </div>
+          </div>
+          <h3 className="font-bold text-lg text-slate-900 mb-2">How to earn stamps</h3>
+          <p className="text-slate-500 text-sm">
+            Ask your server to show you their secure <strong>Loyalty QR Code</strong>. Scan it with your phone's camera to instantly add a stamp to this card!
+          </p>
+        </div>
       )}
 
       {/* Add to Home Screen Hint */}
@@ -128,64 +165,6 @@ export function LoyaltyCardUI({ cardId, restaurantId, stamps: initialStamps, res
           Tap the <strong>Share</strong> icon at the bottom of your screen and select <strong>"Add to Home Screen"</strong> to save this card as an app!
         </p>
       </div>
-
-      {/* PIN Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl animate-in slide-in-from-bottom-10 sm:zoom-in-95 duration-300">
-            <div className="flex items-center justify-between p-4 border-b">
-              <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
-                <Lock className="w-4 h-4 text-slate-500" /> Staff Verification
-              </h3>
-              <button
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setPin("");
-                  setError("");
-                }}
-                className="p-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-500 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6">
-              <form onSubmit={handleStamp} className="space-y-6">
-                <div className="space-y-2 text-center">
-                  <p className="text-sm text-slate-500 mb-4">
-                    Please enter the restaurant's 4-digit Loyalty PIN to add a stamp.
-                  </p>
-                  <input
-                    type="password"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={4}
-                    value={pin}
-                    onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
-                    className="w-full text-center text-3xl tracking-[1em] rounded-xl border-slate-200 bg-slate-50 p-4 text-slate-900 focus:border-primary focus:ring-primary transition-colors"
-                    placeholder="••••"
-                    autoFocus
-                  />
-                </div>
-
-                {error && (
-                  <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 text-center">
-                    {error}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting || pin.length !== 4}
-                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? "Verifying..." : "Add Stamp"}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

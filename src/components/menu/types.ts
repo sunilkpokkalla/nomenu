@@ -10,6 +10,7 @@ export interface Restaurant {
   theme_style: string | null;
   currency: string | null;
   plan?: string | null;
+  loyalty_pin_code?: string | null;
   opening_time?: string | null;
   closing_time?: string | null;
 }

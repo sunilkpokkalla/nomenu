@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MessageSquare, Star, X, CheckCircle2 } from "lucide-react";
 import { submitFeedback } from "@/app/menu/[id]/actions";
+import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
 
 interface FeedbackFABProps {
   restaurantId: string;
@@ -16,14 +17,19 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [comment, setComment] = useState("");
   const [customerName, setCustomerName] = useState("");
-  const [contactInfo, setContactInfo] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [loyaltyCardId, setLoyaltyCardId] = useState<string | null>(null);
+  const [loyaltyStamps, setLoyaltyStamps] = useState<number>(0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [loyaltyConfig, setLoyaltyConfig] = useState<any>(null);
   const [feedbackId, setFeedbackId] = useState<string | null>(null);
   const [recoveryOffer, setRecoveryOffer] = useState<string>("");
   const [recoveryMessage, setRecoveryMessage] = useState<string>("");
+  const [isLoyaltyEligible, setIsLoyaltyEligible] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +41,17 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
     setIsSubmitting(true);
     setError("");
 
-    const result = await submitFeedback(restaurantId, rating, comment, customerName, contactInfo, tableNumber, qrCodeId);
+    let existingLoyaltyCardId = undefined;
+    try {
+      const storedCards = JSON.parse(localStorage.getItem('nomenu_loyalty_cards') || '{}');
+      if (storedCards[restaurantId]) {
+        existingLoyaltyCardId = storedCards[restaurantId];
+      }
+    } catch (e) {
+      console.error("Failed to read loyalty cards from local storage", e);
+    }
+
+    const result = await submitFeedback(restaurantId, rating, comment, customerName, `${customerEmail} | ${customerPhone}`, tableNumber, qrCodeId, existingLoyaltyCardId);
 
     setIsSubmitting(false);
 
@@ -46,21 +62,41 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       if (result.feedbackId) {
         setFeedbackId(result.feedbackId);
       }
-      if (result.recoveryOfferText) setRecoveryOffer(result.recoveryOfferText);
-      if (result.recoveryMessage) setRecoveryMessage(result.recoveryMessage);
-      
-      if (result.loyaltyCardId) {
-        setLoyaltyCardId(result.loyaltyCardId);
-        // Save to browser memory
-        try {
-          const storedCards = JSON.parse(localStorage.getItem('nomenu_loyalty_cards') || '{}');
-          storedCards[restaurantId] = result.loyaltyCardId;
-          localStorage.setItem('nomenu_loyalty_cards', JSON.stringify(storedCards));
-        } catch (e) {
-          console.error("Failed to save loyalty card to local storage", e);
+
+      if (result.isLoyaltyEligible) {
+        setIsLoyaltyEligible(true);
+        grantStamp(result);
+      } else {
+        setIsSuccess(true);
+      }
+
+      // If they get a recovery offer
+      if (result.recoveryOfferText) {
+        setRecoveryOffer(result.recoveryOfferText);
+        if (result.recoveryMessage) {
+          setRecoveryMessage(result.recoveryMessage);
         }
       }
     }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const grantStamp = (result: any) => {
+    if (result.loyaltyCardId) {
+      setLoyaltyCardId(result.loyaltyCardId);
+      try {
+        const storedCards = JSON.parse(localStorage.getItem('nomenu_loyalty_cards') || '{}');
+        storedCards[restaurantId] = result.loyaltyCardId;
+        localStorage.setItem('nomenu_loyalty_cards', JSON.stringify(storedCards));
+      } catch (e) {
+        console.error("Failed to save loyalty card to local storage", e);
+      }
+    }
+    setLoyaltyStamps(result.loyaltyStamps || 1);
+    if (result.loyaltyConfig) {
+      setLoyaltyConfig(result.loyaltyConfig);
+    }
+    setIsSuccess(true);
   };
 
   return (
@@ -76,21 +112,24 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
 
       {/* Feedback Modal */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in slide-in-from-bottom-10 sm:zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+            
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b">
-              <h3 className="font-bold text-lg text-slate-900">How was your experience?</h3>
-              <button
+            <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 flex-shrink-0">
+              <h3 className="font-semibold text-slate-800">
+                Feedback & Loyalty
+              </h3>
+              <button 
                 onClick={() => setIsOpen(false)}
-                className="p-2 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-500 transition-colors"
+                className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-500"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Content */}
-            <div className="p-6">
+            {/* Content Area - Scrollable */}
+            <div className="overflow-y-auto flex-grow p-6 overscroll-contain">
               {isSuccess ? (
                 <div className="flex flex-col items-center justify-center py-8 text-center animate-in fade-in zoom-in duration-300">
                   {rating >= 4 ? (
@@ -101,23 +140,101 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                       <h4 className="text-xl font-bold text-slate-900 mb-2">Thank you!</h4>
                       <p className="text-slate-500 mb-6">Your feedback helps us improve.</p>
                       
-                      {loyaltyCardId && (
+                      {loyaltyCardId && loyaltyConfig ? (
+                        <div className="w-full flex flex-col items-center animate-in zoom-in-95 duration-500 delay-150 fill-mode-both">
+                          <h5 className="font-bold text-slate-900 text-lg mb-1">
+                            {loyaltyStamps > 1 ? "You earned a stamp!" : "You unlocked a VIP Card!"}
+                          </h5>
+                          <p className="text-slate-500 text-xs mb-4">
+                            As a thank you for your {rating}-star review.
+                          </p>
+                          <div className="w-full max-w-[340px] origin-top scale-95">
+                             <LoyaltyCardUI 
+                               cardId={loyaltyCardId}
+                               restaurantId={restaurantId}
+                               stamps={loyaltyStamps}
+                               restaurantName={loyaltyConfig.name}
+                               restaurantLogo={loyaltyConfig.logo_url}
+                               primaryColor={loyaltyConfig.primary_color || "#000000"}
+                               stampColor={loyaltyConfig.loyalty_stamp_color || "amber"}
+                               stampIcon={loyaltyConfig.loyalty_stamp_icon || "star"}
+                               layout={loyaltyConfig.loyalty_card_layout || "classic"}
+                               rewardText={loyaltyConfig.loyalty_reward_text}
+                             />
+                          </div>
+                          <a 
+                            href={`/loyalty/${loyaltyCardId}`}
+                            className="block w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center mt-2"
+                          >
+                            Save to Wallet & View
+                          </a>
+                        </div>
+                      ) : isLoyaltyEligible && !loyaltyCardId ? (
                         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full animate-in zoom-in-95 duration-500 delay-150 fill-mode-both">
                           <div className="flex justify-center mb-3">
                             <Star className="w-8 h-8 text-amber-400 fill-amber-400 animate-pulse" />
                           </div>
-                          <h5 className="font-bold text-amber-900 text-lg mb-2">You unlocked a VIP Card!</h5>
-                          <p className="text-amber-700 text-sm mb-4">
-                            As a thank you for your {rating}-star review, click below to claim your digital loyalty card.
+                          <h5 className="font-bold text-amber-900 text-lg mb-2 text-center">You unlocked a VIP Card!</h5>
+                          <p className="text-amber-700 text-sm mb-4 text-center">
+                            As a thank you for your {rating}-star review, you've earned a loyalty stamp! Please provide your details to claim your card.
                           </p>
-                          <a 
-                            href={`/loyalty/${loyaltyCardId}`}
+                          <div className="space-y-3 mb-4">
+                            <input
+                              type="text"
+                              value={customerName}
+                              onChange={(e) => setCustomerName(e.target.value)}
+                              placeholder="Full Name"
+                              required
+                              className="w-full rounded-xl border-amber-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-400"
+                            />
+                            <input
+                              type="email"
+                              value={customerEmail}
+                              onChange={(e) => setCustomerEmail(e.target.value)}
+                              placeholder="Email Address"
+                              required
+                              className="w-full rounded-xl border-amber-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-400"
+                            />
+                            <input
+                              type="tel"
+                              value={customerPhone}
+                              onChange={(e) => setCustomerPhone(e.target.value)}
+                              placeholder="Phone Number"
+                              required
+                              className="w-full rounded-xl border-amber-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-400"
+                            />
+                          </div>
+                          <button 
+                            type="button"
+                            onClick={async () => {
+                              if (!customerName || !customerEmail || !customerPhone) {
+                                alert("Please fill out all fields to claim your card.");
+                                return;
+                              }
+                              if (feedbackId) {
+                                const { claimLoyaltyCard } = await import("@/app/menu/[id]/actions");
+                                const res = await claimLoyaltyCard({
+                                  feedbackId,
+                                  restaurantId,
+                                  name: customerName,
+                                  email: customerEmail,
+                                  phone: customerPhone
+                                });
+                                if (res.success) {
+                                  setLoyaltyCardId(res.loyaltyCardId || null);
+                                  setLoyaltyStamps(res.loyaltyStamps || 1);
+                                  if (res.loyaltyConfig) setLoyaltyConfig(res.loyaltyConfig);
+                                } else {
+                                  alert(res.error || "Failed to claim card.");
+                                }
+                              }
+                            }}
                             className="block w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center"
                           >
                             Claim My Card
-                          </a>
+                          </button>
                         </div>
-                      )}
+                      ) : null}
                     </>
                   ) : (
                     <div className="space-y-6 w-full animate-in zoom-in-95 duration-500">
@@ -136,23 +253,23 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                         </div>
                       )}
 
-                      {!contactInfo ? (
+                      {!customerPhone && !customerEmail ? (
                         <div className="pt-4 border-t border-slate-100 space-y-3">
                           <p className="text-sm font-semibold text-slate-900">Want the manager to reach out?</p>
                           <p className="text-xs text-slate-500">Leave your phone number or email and we will contact you personally.</p>
                           <div className="flex gap-2">
                             <input
                               type="text"
-                              value={contactInfo}
-                              onChange={(e) => setContactInfo(e.target.value)}
+                              value={customerPhone || customerEmail}
+                              onChange={(e) => setCustomerPhone(e.target.value)} // Fallback to just storing it in phone for this specific form
                               placeholder="Email or Phone"
                               className="flex-1 rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
                             />
                             <button
                               type="button"
                               onClick={async () => {
-                                if (contactInfo && feedbackId) {
-                                  await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackContact(feedbackId, contactInfo));
+                                if ((customerPhone || customerEmail) && feedbackId) {
+                                  await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackContact(feedbackId, customerPhone || customerEmail));
                                   alert("Thank you. A manager will reach out soon.");
                                   setIsOpen(false);
                                 }
@@ -166,7 +283,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                       ) : (
                         <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                           <p className="text-sm text-slate-600">
-                            <strong>Thank you.</strong> {recoveryMessage.replace('{contact}', contactInfo)}
+                            <strong>Thank you.</strong> {recoveryMessage.replace('{contact}', customerEmail || customerPhone)}
                           </p>
                         </div>
                       )}
@@ -235,10 +352,17 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                         className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
                       />
                       <input
-                        type="text"
-                        value={contactInfo}
-                        onChange={(e) => setContactInfo(e.target.value)}
-                        placeholder="Email or Phone Number"
+                        type="email"
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        placeholder="Email Address"
+                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
+                      />
+                      <input
+                        type="tel"
+                        value={customerPhone}
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                        placeholder="Phone Number"
                         className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
                       />
                     </div>

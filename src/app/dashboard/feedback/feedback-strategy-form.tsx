@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { updateFeedbackStrategy, generateRecoveryStrategy } from "./actions";
 
 interface FeedbackStrategyFormProps {
-  initialLoyaltyPin: string;
   initialRecoveryOffer: string;
   initialRecoveryMessage: string;
 }
@@ -36,7 +35,6 @@ const MESSAGE_PRESETS = [
 ];
 
 export function FeedbackStrategyForm({
-  initialLoyaltyPin,
   initialRecoveryOffer,
   initialRecoveryMessage,
 }: FeedbackStrategyFormProps) {
@@ -64,34 +62,14 @@ export function FeedbackStrategyForm({
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-slate-900">Strategy Settings</h2>
+        <h2 className="text-xl font-bold text-slate-900">Service Recovery Settings</h2>
         <p className="text-sm text-slate-500 mt-1">
           Configure your feedback strategies to convert angry customers into regulars, and turn regulars into promoters.
         </p>
       </div>
 
       <form action={updateFeedbackStrategy} className="space-y-6">
-        <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-            <Globe className="w-4 h-4 text-primary" /> Loyalty Program (4-5 Stars)
-          </h3>
-          <div className="space-y-2">
-            <Label htmlFor="loyaltyPin">Staff Stamp PIN (4 Digits)</Label>
-            <Input 
-              id="loyaltyPin" 
-              name="loyaltyPin" 
-              type="text" 
-              maxLength={4}
-              pattern="\d{4}"
-              defaultValue={initialLoyaltyPin || "1234"} 
-              placeholder="e.g. 1234" 
-              className="max-w-xs"
-            />
-            <p className="text-[10px] text-muted-foreground">Used by staff to stamp a customer's digital 5-star loyalty card.</p>
-          </div>
-        </div>
-
-        <div className="pt-4 border-t border-slate-100 space-y-4">
+        <div className="pt-4 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
               <Globe className="w-4 h-4 text-primary" /> Service Recovery (1-3 Stars)

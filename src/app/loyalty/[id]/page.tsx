@@ -12,11 +12,11 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
 
   const { data: card, error } = await supabase
     .from("loyalty_cards")
-    .select("*, restaurants (name, logo_url, primary_color)")
+    .select("*, restaurants (name, logo_url, primary_color, loyalty_stamp_color, loyalty_stamp_icon, loyalty_card_layout)")
     .eq("id", cardId)
     .maybeSingle();
 
-  if (error || !card) {
+  if (error || !card || !card.restaurants) {
     notFound();
   }
 
@@ -29,9 +29,13 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
         cardId={card.id} 
         restaurantId={card.restaurant_id}
         stamps={card.stamps} 
-        restaurantName={restaurant?.name || "Restaurant"} 
-        restaurantLogo={restaurant?.logo_url}
-        primaryColor={restaurant?.primary_color || "#2563EB"}
+        restaurantName={restaurant.name}
+        restaurantLogo={restaurant.logo_url}
+        primaryColor={restaurant.primary_color || "#000000"}
+        stampColor={restaurant.loyalty_stamp_color || "amber"}
+        stampIcon={restaurant.loyalty_stamp_icon || "star"}
+        layout={restaurant.loyalty_card_layout || "classic"}
+        rewardText={restaurant.loyalty_reward_text}
       />
     </div>
   );

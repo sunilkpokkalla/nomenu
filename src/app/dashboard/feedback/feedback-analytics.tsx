@@ -24,11 +24,18 @@ export interface FeedbackData {
   comment?: string | null;
   customer_name?: string | null;
   contact_info?: string | null;
+  customer_email?: string | null;
+  customer_phone?: string | null;
   table_number?: string | null;
   created_at: string;
   is_public?: boolean;
   status?: string;
   qr_codes?: { label: string | null; location_zone?: string | null } | null;
+  loyalty_cards?: {
+    id: string;
+    stamps: number;
+    last_stamp_at: string;
+  }[] | null;
 }
 
 export function FeedbackAnalytics({
@@ -272,7 +279,7 @@ export function FeedbackAnalytics({
             <p className="text-xs text-slate-500 font-medium">Hourly feedback count and average rating.</p>
           </div>
           <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <ComposedChart data={dailyChartData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis dataKey="hour" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#94a3b8" }} interval={3} />
@@ -296,7 +303,7 @@ export function FeedbackAnalytics({
             <p className="text-xs text-slate-500 font-medium">Positive vs Negative feedback per day.</p>
           </div>
           <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               <ComposedChart data={weeklyChartData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis dataKey="dayStr" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
@@ -333,7 +340,7 @@ export function FeedbackAnalytics({
           </select>
         </div>
         <div className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
             <ComposedChart data={historyChartData}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
               <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />

@@ -43,9 +43,13 @@ export interface Database {
           opening_time: string | null;
           closing_time: string | null;
           magic_credits: number | null;
-          loyalty_pin: string | null;
           recovery_offer_text: string | null;
           recovery_message: string | null;
+          loyalty_stamp_color: string | null;
+          loyalty_stamp_icon: string | null;
+          loyalty_card_layout: string | null;
+          loyalty_reward_text: string | null;
+          loyalty_pin_code: string | null;
         };
         Insert: {
           id?: string;
@@ -80,9 +84,13 @@ export interface Database {
           opening_time?: string | null;
           closing_time?: string | null;
           magic_credits?: number | null;
-          loyalty_pin?: string | null;
           recovery_offer_text?: string | null;
           recovery_message?: string | null;
+          loyalty_stamp_color?: string | null;
+          loyalty_stamp_icon?: string | null;
+          loyalty_card_layout?: string | null;
+          loyalty_reward_text?: string | null;
+          loyalty_pin_code?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];
@@ -116,6 +124,31 @@ export interface Database {
             foreignKeyName: "loyalty_cards_feedback_id_fkey";
             columns: ["feedback_id"];
             referencedRelation: "customer_feedback";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      loyalty_scan_tokens: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          created_at: string;
+          expires_at: string;
+          is_used: boolean;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          created_at?: string;
+          expires_at: string;
+          is_used?: boolean;
+        };
+        Update: Partial<Database["public"]["Tables"]["loyalty_scan_tokens"]["Insert"]>;
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_scan_tokens_restaurant_id_fkey";
+            columns: ["restaurant_id"];
+            referencedRelation: "restaurants";
             referencedColumns: ["id"];
           }
         ];
