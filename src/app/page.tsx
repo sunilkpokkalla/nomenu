@@ -574,14 +574,14 @@ export default function LandingPage() {
       {/* LOYALTY & RETENTION SECTION */}
       <section id="loyalty" className="py-24 bg-white relative overflow-hidden">
         {/* Subtle background glow */}
-        <div className="absolute top-1/2 -right-48 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none -z-10 -translate-y-1/2" />
+        <div className="absolute top-1/2 -right-48 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none -z-10 -translate-y-1/2" />
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
             
             {/* Left: Interactive Visual Mockup */}
             <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-              <div className="relative rounded-[2.5rem] bg-gradient-to-tr from-amber-100 to-amber-50 p-3 shadow-2xl shadow-amber-500/10 border border-amber-200/50">
+              <div className="relative rounded-[2.5rem] bg-gradient-to-tr from-indigo-100 to-indigo-50 p-3 shadow-2xl shadow-indigo-500/10 border border-indigo-200/50">
                 
                 {/* Mobile Phone Mockup (The Customer View) */}
                 <div className="bg-white rounded-[2rem] overflow-hidden border border-slate-200/50 shadow-inner flex flex-col relative aspect-[9/16] max-h-[600px]">
@@ -600,14 +600,14 @@ export default function LandingPage() {
                     <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 mb-6">
                       <div className="flex items-center justify-between mb-4">
                         <span className="font-bold text-slate-800 text-sm">Your Rewards</span>
-                        <span className="font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full text-xs">4/8 Stamps</span>
+                        <span className="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full text-xs">4/8 Stamps</span>
                       </div>
                       
                       <div className="grid grid-cols-4 gap-3">
                         {[1, 2, 3, 4].map(i => (
-                          <div key={i} className="aspect-square rounded-full bg-amber-50 border-2 border-amber-500 flex items-center justify-center relative">
-                            <Heart className="w-5 h-5 text-amber-500 fill-amber-500 animate-pulse" />
-                            <div className="absolute inset-0 border-2 border-amber-400 rounded-full animate-ping opacity-20"></div>
+                          <div key={i} className="aspect-square rounded-full bg-indigo-50 border-2 border-indigo-500 flex items-center justify-center relative">
+                            <Heart className="w-5 h-5 text-indigo-500 fill-indigo-500 animate-pulse" />
+                            <div className="absolute inset-0 border-2 border-indigo-400 rounded-full animate-ping opacity-20"></div>
                           </div>
                         ))}
                         {[5, 6, 7].map(i => (
@@ -615,16 +615,16 @@ export default function LandingPage() {
                             <div className="w-2 h-2 rounded-full bg-slate-200"></div>
                           </div>
                         ))}
-                        <div className="aspect-square rounded-full bg-indigo-50 border-2 border-indigo-200 border-dashed flex items-center justify-center relative overflow-hidden">
+                        <div className="aspect-square rounded-full bg-amber-50 border-2 border-amber-200 border-dashed flex items-center justify-center relative overflow-hidden">
                           <span className="text-xl">🎁</span>
                         </div>
                       </div>
-                      <p className="text-xs text-center text-slate-500 font-medium mt-4">4 more visits to unlock: <strong className="text-indigo-600">Free Dessert!</strong></p>
+                      <p className="text-xs text-center text-slate-500 font-medium mt-4">4 more visits to unlock: <strong className="text-amber-600">Free Dessert!</strong></p>
                     </div>
 
-                    <div className="bg-amber-50 border border-amber-200/50 rounded-2xl p-4 text-center mt-auto">
-                      <QrCode className="w-20 h-20 mx-auto text-amber-700 mb-2" />
-                      <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Show to claim stamp</p>
+                    <div className="bg-indigo-50 border border-indigo-200/50 rounded-2xl p-4 text-center mt-auto">
+                      <QrCode className="w-20 h-20 mx-auto text-indigo-700 mb-2" />
+                      <p className="text-[10px] font-bold text-indigo-700 uppercase tracking-wider">Show to claim stamp</p>
                     </div>
                   </div>
                 </div>
@@ -632,7 +632,7 @@ export default function LandingPage() {
                 {/* Overlapping Staff Scanner Tablet Mockup */}
                 <div className="absolute -bottom-8 -right-8 w-64 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 transform rotate-[-2deg] animate-float-slow hidden md:block">
                   <div className="flex items-center gap-3 mb-3 pb-3 border-b border-slate-100">
-                    <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
                       <QrCode className="w-4 h-4" />
                     </div>
                     <div>
@@ -653,11 +653,11 @@ export default function LandingPage() {
 
             {/* Right: Copy & Content */}
             <div className="lg:col-span-1 space-y-6">
-              <span className="text-xs uppercase font-extrabold tracking-[0.2em] text-amber-600 flex items-center gap-2">
+              <span className="text-xs uppercase font-extrabold tracking-[0.2em] text-indigo-600 flex items-center gap-2">
                 <Heart className="h-3.5 w-3.5" /> Retention & Marketing
               </span>
               <h3 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl leading-tight">
-                Turn casual visitors into <span className="text-amber-500">VIP regulars.</span>
+                Turn casual visitors into <span className="text-indigo-600">VIP regulars.</span>
               </h3>
               <p className="text-slate-500 font-medium leading-relaxed text-lg">
                 Ditch the flimsy paper punch cards. Launch a beautiful digital loyalty program that lives right in your customers' phone browsers—no app downloads required.
@@ -665,8 +665,8 @@ export default function LandingPage() {
 
               <div className="space-y-5 pt-4">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
-                    <Smartphone className="w-5 h-5 text-amber-600" />
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                    <Smartphone className="w-5 h-5 text-indigo-600" />
                   </div>
                   <div>
                     <h4 className="font-extrabold text-slate-900">Zero-Friction Signups</h4>
@@ -675,8 +675,8 @@ export default function LandingPage() {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <QrCode className="w-5 h-5 text-indigo-600" />
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center">
+                    <QrCode className="w-5 h-5 text-violet-600" />
                   </div>
                   <div>
                     <h4 className="font-extrabold text-slate-900">1-Tap Staff Scanner</h4>
@@ -696,7 +696,7 @@ export default function LandingPage() {
               </div>
 
               <div className="pt-6">
-                <Button asChild size="lg" className="rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm px-6 shadow-lg shadow-amber-500/20 active:scale-[0.98] transition-all">
+                <Button asChild size="lg" className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-6 shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all">
                   <Link href="/signup">Start your Loyalty Program</Link>
                 </Button>
               </div>
