@@ -47,11 +47,20 @@ export const metadata: Metadata = {
     siteName: "NoMenu",
     title: "NoMenu | Digital QR Menus for Restaurants",
     description: "Create and manage beautiful digital QR code menus for your restaurant in minutes. Fast, contactless, and easy to update.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "NoMenu - Digital QR Menus for Restaurants",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "NoMenu | Digital QR Menus for Restaurants",
     description: "Create and manage beautiful digital QR code menus for your restaurant in minutes. Fast, contactless, and easy to update.",
+    images: ["/og-image.png"],
   },
 };
 
