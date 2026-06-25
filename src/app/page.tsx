@@ -298,7 +298,7 @@ export default function LandingPage() {
                 {/* Bypassing Badge */}
                 <div className="relative z-20 bg-white border border-rose-200/50 rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm">
                   <X className="w-3.5 h-3.5 text-rose-500" strokeWidth={3} />
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Bypassing Servers</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Bypassing Waitstaff</span>
                 </div>
               </div>
 
