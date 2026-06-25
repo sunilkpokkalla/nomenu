@@ -8,8 +8,8 @@ import { getSupabaseEnv } from "@/lib/env";
 import { FeedbackAnalytics, FeedbackData } from "./feedback-analytics";
 import { FeedbackList } from "./feedback-list";
 import { FeedbackStrategyForm } from "./feedback-strategy-form";
-import { LoyaltyQrGenerator } from "./loyalty-qr-generator";
-import { LoyaltyDesignEditor } from "./loyalty-design-editor";
+import { LoyaltyQrGenerator } from "@/app/dashboard/feedback/loyalty-qr-generator";
+import { LoyaltyDesignEditor } from "@/app/dashboard/feedback/loyalty-design-editor";
 import { CustomerDirectory } from "./customer-directory";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

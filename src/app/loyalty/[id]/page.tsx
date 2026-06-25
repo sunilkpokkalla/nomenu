@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { LoyaltyCardUI } from "./loyalty-card-ui";
+import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
 
 export const dynamic = 'force-dynamic';
 
