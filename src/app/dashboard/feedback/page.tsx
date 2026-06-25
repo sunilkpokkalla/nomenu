@@ -111,15 +111,15 @@ export default async function FeedbackPage({
         </div>
       ) : (
         <Tabs defaultValue={tab} className="w-full">
-          <TabsList className="mb-8 p-1 h-auto bg-slate-100/80 rounded-xl overflow-x-auto justify-start flex-nowrap hide-scrollbar flex w-full md:w-auto md:inline-flex border border-slate-200">
+          <TabsList className="mb-8 p-1 h-auto bg-slate-100/80 rounded-xl overflow-x-auto justify-start flex-nowrap hide-scrollbar flex w-full border border-slate-200">
             <TabsTrigger value="reviews" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Customer Reviews</TabsTrigger>
             <TabsTrigger value="strategy" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Service Recovery</TabsTrigger>
             
-            <div className="w-px h-6 bg-slate-300 mx-3 self-center shrink-0"></div>
+            <div className="w-px h-6 bg-slate-300 mx-3 self-center shrink-0 hidden md:block"></div>
             
             <TabsTrigger value="directory" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Members</TabsTrigger>
             <TabsTrigger value="design" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Card Design</TabsTrigger>
-            <TabsTrigger value="scanner" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-bold text-amber-700 data-[state=active]:text-amber-900 data-[state=active]:bg-amber-100 transition-all">Staff Scanner (QR)</TabsTrigger>
+            <TabsTrigger value="scanner" className="ml-auto rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-bold text-amber-700 data-[state=active]:text-amber-900 data-[state=active]:bg-amber-100 transition-all border border-amber-200/50 bg-amber-50/50">Staff Scanner (QR)</TabsTrigger>
           </TabsList>
           
           <TabsContent value="reviews" className="space-y-8 mt-0 focus-visible:outline-none focus-visible:ring-0">
