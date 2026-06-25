@@ -101,14 +101,27 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
 
   return (
     <>
-      {/* Floating Action Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 bg-slate-900 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-500"
-        aria-label="Leave Feedback"
-      >
-        <MessageSquare className="w-6 h-6" />
-      </button>
+      {/* Floating Action Buttons Stack */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
+        {loyaltyCardId && (
+          <a
+            href={`/loyalty/${loyaltyCardId}`}
+            className="bg-amber-500 text-white px-5 py-3.5 rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:bg-amber-400 transition-all flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-500 gap-2 font-bold ring-4 ring-amber-500/20"
+            aria-label="View VIP Card"
+          >
+            <Star className="w-5 h-5 fill-white" />
+            VIP Card
+          </a>
+        )}
+        
+        <button
+          onClick={() => setIsOpen(true)}
+          className="bg-slate-900 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-500"
+          aria-label="Leave Feedback"
+        >
+          <MessageSquare className="w-6 h-6" />
+        </button>
+      </div>
 
       {/* Feedback Modal */}
       {isOpen && (
@@ -166,7 +179,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                             href={`/loyalty/${loyaltyCardId}`}
                             className="block w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center mt-2"
                           >
-                            Save to Wallet & View
+                            View Digital VIP Card
                           </a>
                         </div>
                       ) : isLoyaltyEligible && !loyaltyCardId ? (
