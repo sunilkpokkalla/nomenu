@@ -108,21 +108,10 @@ export function QrCodesClient({
                   {qrs.map((qr: QrCode) => {
                     const targetMenu = menusList.find((m: Menu) => m.id === qr.menu_id);
                     
-                    const plan = restaurant.plan?.toLowerCase() || 'free';
-                    const domainPrefix = ['elite', 'enterprise'].includes(plan) ? 'order' : 'menu';
-                    
                     let publicUrl = `${baseUrl}/menu/${qr.menu_id}?qr=${qr.id}`;
                     const modeParam = qr.mode && qr.mode !== 'dine_in' ? `&mode=${qr.mode}` : '';
                     if (restaurant.slug && targetMenu?.slug) {
-                      const isIpAddress = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(rootDomain);
-                      const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1') || isIpAddress;
-                      const isVercel = rootDomain.includes('vercel.app');
-                      const isCloudflare = rootDomain.includes('pages.dev');
-                      if (isLocalhost || isVercel || isCloudflare) {
-                        publicUrl = `${baseUrl}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}${modeParam}`;
-                      } else {
-                        publicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}${modeParam}`;
-                      }
+                      publicUrl = `${baseUrl}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}${modeParam}`;
                     } else {
                       publicUrl += modeParam;
                     }
