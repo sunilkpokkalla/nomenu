@@ -101,9 +101,18 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
 
   const plan = restaurant.plan?.toLowerCase() || 'free';
   const domainPrefix = ['elite', 'enterprise'].includes(plan) ? 'order' : 'menu';
+  
   let previewPublicUrl = `${baseUrl}/menu/${previewQr.menu_id}?qr=${previewQr.id}`;
-  if (restaurant.slug) { // Mock the URL since we don't have menu slug easily here, or just use the generic one for the QR image
-    previewPublicUrl = `${baseUrl}/menu/${previewQr.menu_id}?qr=${previewQr.id}`;
+  if (restaurant.slug) {
+    const isIpAddress = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(rootDomain);
+    const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1') || isIpAddress;
+    const isVercel = rootDomain.includes('vercel.app');
+    
+    if (isLocalhost || isVercel) {
+      previewPublicUrl = `${baseUrl}/${restaurant.slug}/menu?qr=${previewQr.id}`;
+    } else {
+      previewPublicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/menu?qr=${previewQr.id}`;
+    }
   }
   const previewQrImageApiUrl = `/api/qr?data=${encodeURIComponent(previewPublicUrl)}&color=${encodeURIComponent(qrColor)}`;
 

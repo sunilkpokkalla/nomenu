@@ -116,7 +116,8 @@ export function QrCodesClient({
                     if (restaurant.slug && targetMenu?.slug) {
                       const isIpAddress = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(rootDomain);
                       const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1') || isIpAddress;
-                      if (isLocalhost) {
+                      const isVercel = rootDomain.includes('vercel.app');
+                      if (isLocalhost || isVercel) {
                         publicUrl = `${baseUrl}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}${modeParam}`;
                       } else {
                         publicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/${targetMenu.slug}?qr=${qr.id}${modeParam}`;
