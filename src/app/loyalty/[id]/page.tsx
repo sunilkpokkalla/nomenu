@@ -24,7 +24,7 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
   const restaurant = card.restaurants as any;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div className="min-h-[100dvh] bg-slate-50 py-12 px-4 md:py-20 overflow-x-hidden">
       <LoyaltyCardUI 
         cardId={card.id} 
         restaurantId={card.restaurant_id}
