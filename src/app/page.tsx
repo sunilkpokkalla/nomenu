@@ -720,19 +720,22 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menus & Items
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 10 Magic AI Credits
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> VIP Digital Loyalty Cards & Rewards
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI Image Generation & Menu Writer
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI-Driven Marketing Win-Backs
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Square POS Integration
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 10 Magic AI Credits (Image Gen)
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Private Customer Feedback System
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Detailed Scan Analytics & Timezones
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Square POS Integration
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Detailed Scan Analytics
                     </li>
                   </ul>
                 </div>

@@ -15,9 +15,10 @@ const getPlans = (isAnnual: boolean) => [
     features: [
       "Unlimited Menus & Items",
       "10 Magic AI Credits",
-      "AI Image Generation & Menu Writer",
-      "Square POS Integration",
+      "VIP Digital Loyalty Cards & Rewards",
+      "AI-Driven Marketing Win-Backs",
       "Private Customer Feedback System",
+      "Square POS Integration",
       "Detailed Scan Analytics & Timezones",
     ],
   },
