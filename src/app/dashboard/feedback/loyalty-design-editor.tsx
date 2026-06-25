@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { updateLoyaltyDesign } from "./actions";
 import { 
-  Loader2, Palette, Save,
+  Loader2, Palette, Save, Sparkles,
   Star, Heart, Coffee, Pizza, Gift, Check, 
   Croissant, Utensils, IceCream, Wine, Cake, CupSoda,
   Soup, BadgePercent, ChefHat, Sandwich
@@ -88,6 +88,19 @@ export function LoyaltyDesignEditor({
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
 
+  const handleAIWriter = () => {
+    const aiIdeas = [
+      "10 Stamps = 1 VIP Mystery Gift",
+      "Unlock a Secret Menu Item!",
+      "10 Stamps = Free Lunch On Us",
+      "Get 10, Claim Your Free Drink",
+      "Earn 10 Stamps for 20% Off",
+      "10 Stamps = Elite Status Perks"
+    ];
+    const random = aiIdeas[Math.floor(Math.random() * aiIdeas.length)];
+    setRewardText(random);
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     setMessage(null);
@@ -134,13 +147,23 @@ export function LoyaltyDesignEditor({
                     placeholder="e.g. 10 Stamps = 1 Free Item"
                   />
                   <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={handleAIWriter}
+                      className="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors flex items-center gap-1.5 shadow-sm"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      AI Writer
+                    </button>
                     {[
                       "10 Stamps = 1 Free Coffee",
                       "Buy 9, Get 10th Free!",
                       "10 Stamps = 15% Off Your Bill",
                       "10 Stamps = Free Appetizer",
                       "10 Stamps = Free Dessert",
-                      "Earn 10 Stamps for a Reward!"
+                      "Earn 10 Stamps for a Reward!",
+                      "10 Stamps = Free Cocktail",
+                      "10 Stamps = Free Lunch"
                     ].map((suggestion) => (
                       <button
                         key={suggestion}
