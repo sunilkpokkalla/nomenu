@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, use, useRef } from "react";
 import { claimLoyaltyStamp } from "./actions";
 import { useRouter } from "next/navigation";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
@@ -16,6 +16,7 @@ export default function LoyaltyScanPage({
   
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState<string>("Processing your stamp...");
+  const hasRun = useRef(false);
 
   useEffect(() => {
     if (!token) {
@@ -23,6 +24,9 @@ export default function LoyaltyScanPage({
       setMessage("No QR code token found.");
       return;
     }
+
+    if (hasRun.current) return;
+    hasRun.current = true;
 
     const processStamp = async () => {
       try {
