@@ -107,8 +107,9 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
     const isIpAddress = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(rootDomain);
     const isLocalhost = rootDomain.includes('localhost') || rootDomain.includes('127.0.0.1') || isIpAddress;
     const isVercel = rootDomain.includes('vercel.app');
+    const isCloudflare = rootDomain.includes('pages.dev');
     
-    if (isLocalhost || isVercel) {
+    if (isLocalhost || isVercel || isCloudflare) {
       previewPublicUrl = `${baseUrl}/${restaurant.slug}/menu?qr=${previewQr.id}`;
     } else {
       previewPublicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/menu?qr=${previewQr.id}`;
