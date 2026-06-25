@@ -23,7 +23,10 @@ import {
   LayoutDashboard,
   MessageSquare,
   Heart,
-  ShieldAlert
+  ShieldAlert,
+  ChefHat,
+  Timer,
+  CircleDollarSign
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DualDeviceMockup } from "@/components/marketing/dual-device-mockup";
@@ -245,6 +248,101 @@ export default function LandingPage() {
       </section>
 
       <SocialProofMarquee />
+
+      {/* DIRECT-TO-KITCHEN FLOWCHART SECTION */}
+      <section className="py-24 bg-slate-50 border-y border-slate-200/40 relative overflow-hidden">
+        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none -z-10" />
+        
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <h2 className="text-xs uppercase font-extrabold tracking-[0.2em] text-emerald-600 flex items-center justify-center gap-2">
+              <Zap className="h-4 w-4 fill-emerald-500/10" strokeWidth={1.5} /> Serverless Efficiency
+            </h2>
+            <h3 className="text-3xl font-extrabold tracking-tight sm:text-5xl text-slate-950 leading-tight">
+              Direct to Kitchen. <span className="text-emerald-500">Zero Bottlenecks.</span>
+            </h3>
+            <p className="text-slate-500 font-medium text-lg max-w-2xl mx-auto">
+              Eliminate the middleman. Your guests order from their phone, and the ticket instantly appears on your Kitchen Display System.
+            </p>
+          </div>
+
+          {/* Flowchart Visual */}
+          <div className="relative max-w-4xl mx-auto bg-white rounded-[2.5rem] border border-slate-200/60 p-8 md:p-12 shadow-xl shadow-slate-900/5 mb-16 overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
+            
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
+              
+              {/* Node 1: Customer */}
+              <div className="flex flex-col items-center text-center w-48 relative z-20">
+                <div className="w-20 h-20 rounded-2xl bg-indigo-50 border border-indigo-200 shadow-sm flex items-center justify-center mb-4 relative z-10">
+                  <Smartphone className="w-8 h-8 text-indigo-600" />
+                </div>
+                <h4 className="font-extrabold text-slate-900">1. Customer Scans</h4>
+                <p className="text-xs text-slate-500 mt-1 font-medium">No waiting for a server to take the order.</p>
+              </div>
+
+              {/* Connecting Pipeline */}
+              <div className="flex-1 flex items-center justify-center relative min-h-[40px] md:min-h-0 w-full md:w-auto">
+                <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-slate-100 rounded-full -translate-y-1/2" />
+                
+                {/* Mobile vertical line */}
+                <div className="md:hidden absolute top-0 bottom-0 left-1/2 w-1 bg-slate-100 rounded-full -translate-x-1/2" />
+                
+                {/* Animated beam */}
+                <div className="hidden md:block absolute top-1/2 left-0 h-1 w-24 bg-gradient-to-r from-transparent via-emerald-400 to-emerald-500 rounded-full -translate-y-1/2 shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-scan-horizontal" />
+                
+                {/* Mobile animated beam */}
+                <div className="md:hidden absolute top-0 left-1/2 w-1 h-24 bg-gradient-to-b from-transparent via-emerald-400 to-emerald-500 rounded-full -translate-x-1/2 shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-scan-vertical" />
+
+                {/* Bypassing Badge */}
+                <div className="relative z-20 bg-white border border-rose-200/50 rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm">
+                  <X className="w-3.5 h-3.5 text-rose-500" strokeWidth={3} />
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Bypassing Servers</span>
+                </div>
+              </div>
+
+              {/* Node 2: Kitchen */}
+              <div className="flex flex-col items-center text-center w-48 relative z-20">
+                <div className="w-20 h-20 rounded-2xl bg-amber-50 border border-amber-200 shadow-sm flex items-center justify-center mb-4 relative z-10">
+                  <ChefHat className="w-8 h-8 text-amber-600" />
+                </div>
+                <h4 className="font-extrabold text-slate-900">2. Kitchen Display</h4>
+                <p className="text-xs text-slate-500 mt-1 font-medium">Ticket appears instantly, perfectly formatted.</p>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Key Benefits Grid */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm text-center md:text-left flex flex-col items-center md:items-start">
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
+                <CircleDollarSign className="w-6 h-6 text-emerald-600" />
+              </div>
+              <h4 className="font-extrabold text-slate-900 text-lg mb-2">Slash Labor Costs</h4>
+              <p className="text-sm text-slate-500 font-medium">Run your dining room with fewer servers while maintaining incredibly fast and accurate service.</p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm text-center md:text-left flex flex-col items-center md:items-start">
+              <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
+                <CheckCircle2 className="w-6 h-6 text-indigo-600" />
+              </div>
+              <h4 className="font-extrabold text-slate-900 text-lg mb-2">Zero Order Errors</h4>
+              <p className="text-sm text-slate-500 font-medium">Guests input their own modifiers and allergies. No more miscommunications or lost paper tickets.</p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm text-center md:text-left flex flex-col items-center md:items-start">
+              <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
+                <Timer className="w-6 h-6 text-amber-600" />
+              </div>
+              <h4 className="font-extrabold text-slate-900 text-lg mb-2">Faster Table Turns</h4>
+              <p className="text-sm text-slate-500 font-medium">Guests don't wait to order and don't wait to pay. Turn tables up to 20% faster during peak rush hours.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* ASYMMETRIC BENTO GRID FEATURES SECTION */}
       <section id="features" className="py-24 bg-slate-900 text-white relative overflow-hidden">

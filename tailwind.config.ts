@@ -91,12 +91,26 @@ const config: Config = {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" },
         },
+        "scan-horizontal": {
+          "0%": { left: "0%", opacity: "0" },
+          "10%": { opacity: "1" },
+          "90%": { opacity: "1" },
+          "100%": { left: "100%", opacity: "0" },
+        },
+        "scan-vertical": {
+          "0%": { top: "0%", opacity: "0" },
+          "10%": { opacity: "1" },
+          "90%": { opacity: "1" },
+          "100%": { top: "100%", opacity: "0" },
+        },
       },
       animation: {
         'float-slow': 'float 8s ease-in-out infinite',
         'float-medium': 'float 6s ease-in-out infinite',
         'float-fast': 'float 5s ease-in-out infinite',
         "infinite-scroll": "infinite-scroll 40s linear infinite",
+        "scan-horizontal": "scan-horizontal 2s linear infinite",
+        "scan-vertical": "scan-vertical 2s linear infinite",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "sans-serif"],
