@@ -65,6 +65,7 @@ export const metadata: Metadata = {
 };
 
 import { SupabaseHashListener } from "@/components/supabase-hash-listener";
+import { CSPostHogProvider } from "@/components/providers/posthog-provider";
 
 export default function RootLayout({
   children,
@@ -87,7 +88,9 @@ export default function RootLayout({
           shadow="0 0 10px #2563EB,0 0 5px #2563EB"
         />
         <ClientErrorLogger />
-        {children}
+        <CSPostHogProvider>
+          {children}
+        </CSPostHogProvider>
       </body>
     </html>
   );
