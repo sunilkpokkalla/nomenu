@@ -120,6 +120,7 @@ export default function LandingPage() {
             </Link>
             <nav className="hidden md:flex items-center gap-7 text-xs font-bold uppercase tracking-wider text-slate-500">
               <a href="#features" className="hover:text-slate-900 transition-colors duration-200">Features</a>
+              <a href="#loyalty" className="hover:text-amber-500 text-amber-600 transition-colors duration-200">Loyalty</a>
               <a href="#themes" className="hover:text-slate-900 transition-colors duration-200">QR Templates</a>
               <a href="#pricing" className="hover:text-slate-900 transition-colors duration-200">Pricing</a>
               <a href="#how-it-works" className="hover:text-slate-900 transition-colors duration-200">How it Works</a>
@@ -151,6 +152,7 @@ export default function LandingPage() {
           <div className="absolute top-16 left-0 right-0 border border-slate-200 bg-white/95 backdrop-blur-lg rounded-3xl p-6 space-y-4 shadow-xl animate-in fade-in slide-in-from-top duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]">
             <nav className="flex flex-col gap-3 text-sm font-bold text-slate-650">
               <a href="#features" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">Features</a>
+              <a href="#loyalty" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl text-amber-600 bg-amber-50 hover:bg-amber-100 transition-colors">Loyalty</a>
               <a href="#themes" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">QR Templates</a>
               <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">Pricing</a>
               <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">How it Works</a>
@@ -562,6 +564,141 @@ export default function LandingPage() {
                   ))}
                 </div>
 
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* LOYALTY & RETENTION SECTION */}
+      <section id="loyalty" className="py-24 bg-white relative overflow-hidden">
+        {/* Subtle background glow */}
+        <div className="absolute top-1/2 -right-48 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none -z-10 -translate-y-1/2" />
+        
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+            
+            {/* Left: Interactive Visual Mockup */}
+            <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+              <div className="relative rounded-[2.5rem] bg-gradient-to-tr from-amber-100 to-amber-50 p-3 shadow-2xl shadow-amber-500/10 border border-amber-200/50">
+                
+                {/* Mobile Phone Mockup (The Customer View) */}
+                <div className="bg-white rounded-[2rem] overflow-hidden border border-slate-200/50 shadow-inner flex flex-col relative aspect-[9/16] max-h-[600px]">
+                  
+                  {/* Phone Header */}
+                  <div className="bg-slate-900 text-white p-6 pb-8 text-center rounded-b-3xl shadow-sm z-10 relative">
+                    <div className="w-12 h-12 bg-white/10 rounded-full mx-auto flex items-center justify-center mb-3">
+                      <span className="font-serif italic text-xl font-bold">LB</span>
+                    </div>
+                    <h4 className="text-xl font-bold font-serif italic mb-1">Lumina Bistro</h4>
+                    <span className="text-xs font-semibold text-slate-300 uppercase tracking-widest">VIP Member</span>
+                  </div>
+
+                  {/* Loyalty Card UI */}
+                  <div className="flex-1 p-6 flex flex-col pt-8 bg-slate-50 relative -mt-4 z-0">
+                    <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 mb-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="font-bold text-slate-800 text-sm">Your Rewards</span>
+                        <span className="font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full text-xs">4/8 Stamps</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-4 gap-3">
+                        {[1, 2, 3, 4].map(i => (
+                          <div key={i} className="aspect-square rounded-full bg-amber-50 border-2 border-amber-500 flex items-center justify-center relative">
+                            <Heart className="w-5 h-5 text-amber-500 fill-amber-500 animate-pulse" />
+                            <div className="absolute inset-0 border-2 border-amber-400 rounded-full animate-ping opacity-20"></div>
+                          </div>
+                        ))}
+                        {[5, 6, 7].map(i => (
+                          <div key={i} className="aspect-square rounded-full bg-slate-50 border-2 border-slate-200 border-dashed flex items-center justify-center">
+                            <div className="w-2 h-2 rounded-full bg-slate-200"></div>
+                          </div>
+                        ))}
+                        <div className="aspect-square rounded-full bg-indigo-50 border-2 border-indigo-200 border-dashed flex items-center justify-center relative overflow-hidden">
+                          <span className="text-xl">🎁</span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-center text-slate-500 font-medium mt-4">4 more visits to unlock: <strong className="text-indigo-600">Free Dessert!</strong></p>
+                    </div>
+
+                    <div className="bg-amber-50 border border-amber-200/50 rounded-2xl p-4 text-center mt-auto">
+                      <QrCode className="w-20 h-20 mx-auto text-amber-700 mb-2" />
+                      <p className="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Show to claim stamp</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Overlapping Staff Scanner Tablet Mockup */}
+                <div className="absolute -bottom-8 -right-8 w-64 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 transform rotate-[-2deg] animate-float-slow hidden md:block">
+                  <div className="flex items-center gap-3 mb-3 pb-3 border-b border-slate-100">
+                    <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+                      <QrCode className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Staff Terminal</p>
+                      <p className="text-xs font-bold text-slate-800">Scanner Ready</p>
+                    </div>
+                  </div>
+                  <div className="aspect-video bg-slate-900 rounded-lg relative overflow-hidden flex items-center justify-center">
+                    {/* Scanner laser effect */}
+                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-green-500 shadow-[0_0_10px_2px_rgba(34,197,94,0.6)] animate-[scan_2s_ease-in-out_infinite]" />
+                    <span className="text-[10px] text-slate-500 font-mono">Camera Active...</span>
+                  </div>
+                  <Button size="sm" className="w-full mt-3 bg-slate-900 text-white text-xs h-8">Award 1 Stamp</Button>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Right: Copy & Content */}
+            <div className="lg:col-span-1 space-y-6">
+              <span className="text-xs uppercase font-extrabold tracking-[0.2em] text-amber-600 flex items-center gap-2">
+                <Heart className="h-3.5 w-3.5" /> Retention & Marketing
+              </span>
+              <h3 className="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl leading-tight">
+                Turn casual visitors into <span className="text-amber-500">VIP regulars.</span>
+              </h3>
+              <p className="text-slate-500 font-medium leading-relaxed text-lg">
+                Ditch the flimsy paper punch cards. Launch a beautiful digital loyalty program that lives right in your customers' phone browsers—no app downloads required.
+              </p>
+
+              <div className="space-y-5 pt-4">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+                    <Smartphone className="w-5 h-5 text-amber-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-slate-900">Zero-Friction Signups</h4>
+                    <p className="text-sm text-slate-500 mt-1 font-medium">Guests scan a table QR code and instantly see their digital loyalty card. They never have to download a bulky app or remember a password.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                    <QrCode className="w-5 h-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-slate-900">1-Tap Staff Scanner</h4>
+                    <p className="text-sm text-slate-500 mt-1 font-medium">Your staff uses our secure built-in QR scanner to instantly issue stamps. Fraud-proof and incredibly fast at the checkout counter.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <ShieldAlert className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-slate-900">AI Win-Back System</h4>
+                    <p className="text-sm text-slate-500 mt-1 font-medium">Privately catch negative reviews before they go public. Automatically offer custom discounts to unhappy guests to win them back.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6">
+                <Button asChild size="lg" className="rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm px-6 shadow-lg shadow-amber-500/20 active:scale-[0.98] transition-all">
+                  <Link href="/signup">Start your Loyalty Program</Link>
+                </Button>
               </div>
             </div>
 
