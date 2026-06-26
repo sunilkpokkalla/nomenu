@@ -164,6 +164,39 @@ export default async function PartnerDashboardPage() {
           )}
         </div>
 
+        {/* How It Works Section */}
+        <div className="bg-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-xl relative overflow-hidden mt-8">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+          
+          <h2 className="text-2xl font-extrabold tracking-tight mb-8">How the Partner Program Works</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8 relative z-10">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-amber-400 border border-slate-700">1</div>
+              <h3 className="font-bold text-lg text-slate-100">Share Your Link</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Send your custom tracking link to restaurant owners, or post it on your social media. Anyone who clicks it is permanently linked to your account.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-amber-400 border border-slate-700">2</div>
+              <h3 className="font-bold text-lg text-slate-100">They Upgrade</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                When a referred restaurant creates an account and upgrades to any paid plan, our system automatically calculates your commission.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-amber-400 border border-slate-700">3</div>
+              <h3 className="font-bold text-lg text-slate-100">You Get Paid</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                At the end of the month, we send your earnings directly to your Payout Email. You can redeem it for a Visa card, Amazon gift card, or Bank Transfer.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </main>
     </div>
   );
