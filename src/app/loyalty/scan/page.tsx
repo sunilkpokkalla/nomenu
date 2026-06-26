@@ -55,6 +55,7 @@ export default function LoyaltyScanPage({
     };
 
     processStamp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const submitClaim = async (cardId?: string, phone?: string) => {

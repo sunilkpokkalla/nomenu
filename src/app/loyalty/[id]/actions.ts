@@ -19,6 +19,10 @@ export async function linkPhoneNumber(cardId: string, phoneNumber: string) {
     return { error: "This card is already linked to a phone number." };
   }
 
+  if (!card.restaurant_id) {
+    return { error: "Loyalty card is missing a restaurant." };
+  }
+
   // Check if another card already has this phone number for this restaurant
   const { data: existingPhoneCard } = await supabase
     .from("loyalty_cards")

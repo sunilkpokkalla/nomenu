@@ -20,14 +20,23 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
     notFound();
   }
 
+  if (!card.restaurant_id) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+        <h1 className="text-2xl font-bold text-slate-900 mb-2">Invalid Card</h1>
+        <p className="text-slate-500 mb-6">This loyalty card is missing a restaurant.</p>
+      </div>
+    );
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const restaurant = card.restaurants as any;
 
   return (
-    <div className="min-h-[100dvh] bg-slate-50 py-12 px-4 md:py-20 overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 py-12 px-4">
       <LoyaltyCardUI 
         cardId={card.id} 
-        restaurantId={card.restaurant_id}
+        restaurantId={card.restaurant_id as string}
         stamps={card.stamps} 
         restaurantName={restaurant.name}
         restaurantLogo={restaurant.logo_url}

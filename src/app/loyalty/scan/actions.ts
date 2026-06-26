@@ -117,7 +117,8 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
   }
 
   // 5. Add stamp to card
-  const { error: stampError } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error: stampError } = await (supabase as any)
     .rpc('increment_loyalty_stamps', { target_card_id: targetCardId });
     
   if (stampError) {
