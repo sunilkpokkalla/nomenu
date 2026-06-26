@@ -67,6 +67,16 @@ export default async function DashboardPage(
       redirect("/admin");
     }
 
+    const { data: affiliate } = await supabase
+      .from("affiliates")
+      .select("id")
+      .eq("auth_id", user.id)
+      .maybeSingle();
+
+    if (affiliate) {
+      redirect("/partners/dashboard");
+    }
+
     return (
       <div className="mx-auto min-h-[100dvh] grid lg:grid-cols-[1.2fr_1fr] bg-slate-50 font-sans-vibrant">
         {/* Left Column - Editorial onboarding */}
