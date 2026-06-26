@@ -41,7 +41,6 @@ export async function signup(formData: FormData) {
   const supabase = await createClient();
   const email = getString(formData, "email");
   const password = getString(formData, "password");
-  const restaurantName = getString(formData, "restaurantName");
 
   const headersList = await headers();
   const origin = headersList.get("origin");
@@ -62,9 +61,6 @@ export async function signup(formData: FormData) {
     email,
     password,
     options: {
-      data: {
-        restaurant_name: restaurantName,
-      },
       emailRedirectTo: `${cleanAppUrl}/auth/callback`,
     },
   });
@@ -78,16 +74,6 @@ export async function signup(formData: FormData) {
   }
 
   if (data.user && data.session) {
-    if (restaurantName) {
-      const cookieStore = await cookies();
-      const refCode = cookieStore.get("nomenu_ref_code")?.value || null;
-      
-      await supabase.from("restaurants").insert({
-        owner_id: data.user.id,
-        name: restaurantName,
-        referred_by_code: refCode,
-      });
-    }
     revalidatePath("/", "layout");
     redirect("/dashboard");
   } else {

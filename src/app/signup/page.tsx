@@ -98,17 +98,6 @@ export default async function SignupPage(
             <form action={signup} className="space-y-5">
               
               <div className="space-y-2">
-                <Label htmlFor="restaurantName" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Restaurant Name</Label>
-                <Input
-                  id="restaurantName"
-                  name="restaurantName"
-                  placeholder="My Awesome Restaurant"
-                  className="h-14 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:ring-slate-950 focus-visible:border-slate-950 rounded-xl px-4 text-base shadow-sm"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
                 <Label htmlFor="email" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Email</Label>
                 <Input
                   id="email"
