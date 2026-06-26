@@ -147,7 +147,7 @@ export default async function BillingPage(
           </div>
 
           <div className="shrink-0 flex items-center w-full md:w-auto">
-             {currentPlan !== "free" ? (
+             {currentPlan !== "free" && restaurant.stripe_customer_id ? (
                <PortalButton />
              ) : (
                <div className="text-sm font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-lg w-full text-center">
@@ -260,7 +260,7 @@ export default async function BillingPage(
                     <button disabled className="w-full py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all bg-slate-50 text-slate-400 border border-slate-200 cursor-not-allowed">
                       Active Plan
                     </button>
-                  ) : currentTier > 0 ? (
+                  ) : currentTier > 0 && restaurant.stripe_customer_id ? (
                     <PortalButton 
                       text={isDowngrade ? `Downgrade to ${plan.name}` : `Upgrade to ${plan.name}`}
                       variant="card"

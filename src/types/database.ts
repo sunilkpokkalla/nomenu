@@ -194,21 +194,31 @@ export interface Database {
       loyalty_cards: {
         Row: {
           id: string;
-          restaurant_id: string;
+          restaurant_id: string | null;
           feedback_id: string | null;
           stamps: number;
           last_stamp_at: string | null;
           created_at: string | null;
+          phone_number: string | null;
         };
         Insert: {
           id?: string;
-          restaurant_id: string;
+          restaurant_id?: string | null;
           feedback_id?: string | null;
           stamps?: number;
           last_stamp_at?: string | null;
           created_at?: string | null;
+          phone_number?: string | null;
         };
-        Update: Partial<Database["public"]["Tables"]["loyalty_cards"]["Insert"]>;
+        Update: {
+          id?: string;
+          restaurant_id?: string | null;
+          feedback_id?: string | null;
+          stamps?: number;
+          last_stamp_at?: string | null;
+          created_at?: string | null;
+          phone_number?: string | null;
+        };
         Relationships: [
           {
             foreignKeyName: "loyalty_cards_restaurant_id_fkey";

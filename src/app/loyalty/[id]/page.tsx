@@ -36,6 +36,7 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
         stampIcon={restaurant.loyalty_stamp_icon || "star"}
         layout={restaurant.loyalty_card_layout || "classic"}
         rewardText={restaurant.loyalty_reward_text}
+        hasPhoneNumber={!!card.phone_number}
       />
     </div>
   );

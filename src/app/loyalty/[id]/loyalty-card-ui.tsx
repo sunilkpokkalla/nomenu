@@ -20,13 +20,19 @@ interface LoyaltyCardUIProps {
   layout?: string;
   rewardText?: string | null;
   isPreviewMode?: boolean;
+  hasPhoneNumber?: boolean;
 }
 
 export function LoyaltyCardUI({ 
   cardId, restaurantId, stamps: initialStamps, restaurantName, primaryColor, restaurantLogo, 
-  stampColor = "amber", stampIcon = "star", layout = "classic", rewardText = "10 Stamps = 1 Free Item", isPreviewMode = false 
+  stampColor = "amber", stampIcon = "star", layout = "classic", rewardText = "10 Stamps = 1 Free Item", isPreviewMode = false,
+  hasPhoneNumber = true
 }: LoyaltyCardUIProps) {
   const [stamps, setStamps] = useState(initialStamps);
+  const [isLinked, setIsLinked] = useState(hasPhoneNumber);
+  const [isLinking, setIsLinking] = useState(false);
+  const [phoneToLink, setPhoneToLink] = useState("");
+  const [linkError, setLinkError] = useState("");
 
   const isFull = stamps >= 10;
 
@@ -79,6 +85,26 @@ export function LoyaltyCardUI({
     StampIcon,
     stampTheme,
     rewardText
+  };
+
+  const handleLinkPhone = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!phoneToLink.trim()) return;
+    setIsLinking(true);
+    setLinkError("");
+    try {
+      const { linkPhoneNumber } = await import("./actions");
+      const result = await linkPhoneNumber(cardId, phoneToLink.trim());
+      if (result.error) {
+        setLinkError(result.error);
+      } else {
+        setIsLinked(true);
+      }
+    } catch (err) {
+      setLinkError("An unexpected error occurred.");
+    } finally {
+      setIsLinking(false);
+    }
   };
 
   if (isPreviewMode) {
@@ -155,6 +181,35 @@ export function LoyaltyCardUI({
           <p className="text-slate-500 text-sm">
             Ask your server to show you their secure <strong>Loyalty QR Code</strong>. Scan it with your phone's camera to instantly add a stamp to this card!
           </p>
+        </div>
+      )}
+
+      {/* Phone Link Area */}
+      {!isLinked && !isPreviewMode && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-amber-200 rounded-full blur-3xl opacity-50 -mr-10 -mt-10"></div>
+          <h3 className="font-bold text-lg text-amber-900 mb-2 relative z-10">Secure Your Stamps!</h3>
+          <p className="text-amber-700 text-sm mb-4 relative z-10">
+            Link your phone number so you never lose your VIP card if you switch phones or browsers.
+          </p>
+          <form onSubmit={handleLinkPhone} className="flex flex-col gap-3 relative z-10">
+            <input
+              type="tel"
+              placeholder="Your Phone Number"
+              className="w-full px-4 py-2 rounded-xl border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              value={phoneToLink}
+              onChange={(e) => setPhoneToLink(e.target.value)}
+              required
+            />
+            {linkError && <p className="text-red-500 text-xs text-left">{linkError}</p>}
+            <button
+              type="submit"
+              disabled={isLinking}
+              className="w-full bg-amber-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-amber-600 transition-colors disabled:opacity-50"
+            >
+              {isLinking ? "Linking..." : "Link Phone Number"}
+            </button>
+          </form>
         </div>
       )}
 

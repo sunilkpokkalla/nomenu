@@ -88,13 +88,23 @@ export async function POST(req: Request) {
     if (isAnnual) {
       if (!restaurant.referred_by_code) {
         // No Referral -> 10% Discount
-        if (process.env.STRIPE_ANNUAL_DISCOUNT_COUPON_ID) {
-          discounts.push({ coupon: process.env.STRIPE_ANNUAL_DISCOUNT_COUPON_ID });
+        const discountId = process.env.STRIPE_ANNUAL_DISCOUNT_COUPON_ID;
+        if (discountId) {
+          if (discountId.startsWith('promo_')) {
+            discounts.push({ promotion_code: discountId });
+          } else {
+            discounts.push({ coupon: discountId });
+          }
         }
       } else {
         // Referred -> 15% Discount
-        if (process.env.STRIPE_REFERRAL_COUPON_ID) {
-          discounts.push({ coupon: process.env.STRIPE_REFERRAL_COUPON_ID });
+        const referralId = process.env.STRIPE_REFERRAL_COUPON_ID;
+        if (referralId) {
+          if (referralId.startsWith('promo_')) {
+            discounts.push({ promotion_code: referralId });
+          } else {
+            discounts.push({ coupon: referralId });
+          }
         }
       }
     }
