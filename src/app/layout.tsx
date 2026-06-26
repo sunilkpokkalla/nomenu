@@ -66,6 +66,7 @@ export const metadata: Metadata = {
 
 import { SupabaseHashListener } from "@/components/supabase-hash-listener";
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
+import { ReferralTracker } from "@/components/referral-tracker";
 
 export default function RootLayout({
   children,
@@ -76,6 +77,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${lora.variable} ${montserrat.variable} ${cormorant.variable} ${poppins.variable} ${outfit.variable} ${spaceMono.variable} font-sans antialiased`} suppressHydrationWarning>
         <SupabaseHashListener />
+        <ReferralTracker />
         <NextTopLoader
           color="#2563EB"
           initialPosition={0.08}

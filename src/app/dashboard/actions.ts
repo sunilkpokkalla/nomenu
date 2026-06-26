@@ -59,7 +59,7 @@ export async function createRestaurant(formData: FormData) {
   }
 
   const cookieStore = await cookies();
-  const refCode = cookieStore.get("nomenu_ref_code")?.value || null;
+  const refCode = cookieStore.get("nomenu_ref_code")?.value?.toLowerCase() || null;
 
   const { error } = await supabase.from("restaurants").insert({
     owner_id: user.id,
