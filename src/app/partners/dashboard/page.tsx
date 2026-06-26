@@ -122,7 +122,7 @@ export default async function PartnerDashboardPage() {
               </div>
               <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Payout Status</p>
             </div>
-            <p className="text-lg font-bold text-slate-900 mb-1">Via PayPal</p>
+            <p className="text-lg font-bold text-slate-900 mb-1">Payout Email</p>
             <p className="text-sm font-medium text-slate-500 truncate">{affiliate.paypal_email || "Not set"}</p>
           </div>
         </div>

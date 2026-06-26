@@ -75,12 +75,12 @@ export default async function PartnersSignupPage(
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="paypalEmail" className="text-slate-700 font-bold text-xs uppercase tracking-wider">PayPal Email (For Payouts)</Label>
+              <Label htmlFor="paypalEmail" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Payout Email (For Rewards)</Label>
               <Input
                 id="paypalEmail"
                 name="paypalEmail"
                 type="email"
-                placeholder="jane@paypal.com"
+                placeholder="jane@email.com"
                 className="h-12 bg-slate-50 border-slate-200 text-slate-900 rounded-xl px-4 shadow-sm"
                 required
               />

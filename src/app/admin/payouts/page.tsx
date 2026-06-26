@@ -97,7 +97,7 @@ export default async function AdminPayoutsPage() {
               <tr>
                 <th className="px-6 py-4 font-bold text-slate-700">Affiliate</th>
                 <th className="px-6 py-4 font-bold text-slate-700">Referrals</th>
-                <th className="px-6 py-4 font-bold text-slate-700">PayPal Email</th>
+                <th className="px-6 py-4 font-bold text-slate-700">Payout Email</th>
                 <th className="px-6 py-4 font-bold text-slate-700 text-right">Pending Amount</th>
                 <th className="px-6 py-4 font-bold text-slate-700 text-right">Action</th>
               </tr>

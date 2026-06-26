@@ -118,14 +118,15 @@ export default async function ReferralsPage() {
             <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">How to redeem</p>
           </div>
           <p className="text-sm font-medium text-slate-500 leading-relaxed mt-2">
-            Credits automatically apply to your next renewal. Or, cash out via PayPal after 3 months!
+            Credits automatically apply to your next renewal. Or, cash out via Tremendous (Gift Cards, Visa, ACH) after 3 months!
           </p>
           <form action={updatePaypalEmail} className="mt-4">
-            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">PayPal Email</p>
+            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Payout Email</p>
             <div className="flex gap-2">
               <Input 
+                type="email" 
                 name="paypalEmail" 
-                placeholder="you@paypal.com" 
+                placeholder="you@email.com" 
                 defaultValue={restaurant.paypal_email || ""}
                 className="h-9 bg-slate-50 text-sm"
               />
