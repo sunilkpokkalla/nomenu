@@ -132,19 +132,28 @@ export default async function PartnerDashboardPage() {
           
           {restaurants.length > 0 ? (
             <div className="divide-y divide-slate-100">
-              {restaurants.map((rest) => (
-                <div key={rest.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between">
-                  <div>
-                    <p className="font-bold text-slate-900">{rest.name}</p>
-                    <p className="text-sm text-slate-500 font-medium">Joined {rest.created_at ? new Date(rest.created_at).toLocaleDateString() : 'Unknown'}</p>
+              {restaurants.map((rest) => {
+                const payout = getAffiliatePayout(rest.plan, rest.billing_cycle);
+                return (
+                  <div key={rest.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between">
+                    <div>
+                      <p className="font-bold text-slate-900">{rest.name}</p>
+                      <p className="text-sm text-slate-500 font-medium">Joined {rest.created_at ? new Date(rest.created_at).toLocaleDateString() : 'Unknown'}</p>
+                    </div>
+                    <div className="text-right flex flex-col items-end">
+                      {payout > 0 ? (
+                        <span className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                          +${payout} Earned
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-xs font-bold text-slate-500 capitalize">
+                          {rest.plan && rest.plan !== 'free' ? `${rest.plan} (Monthly)` : 'Free Plan'}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
-                      +${getAffiliatePayout(rest.plan, rest.billing_cycle)} Earned
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-10">
