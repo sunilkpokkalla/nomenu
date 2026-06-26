@@ -5,6 +5,7 @@ import { Copy, DollarSign, Users, ExternalLink, Activity, LogOut } from "lucide-
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { getAffiliatePayout } from "@/lib/affiliate";
+import { ClientCopyButton } from "./client-copy-button";
 
 export const dynamic = "force-dynamic";
 
@@ -86,11 +87,8 @@ export default async function PartnerDashboardPage() {
               <p className="text-xl sm:text-2xl font-bold font-mono tracking-tight">{referralLink}</p>
             </div>
             
-            {/* We'd normally use a client component for copying to clipboard, but for simplicity here we just show it */}
-            <Button className="shrink-0 bg-white text-amber-600 hover:bg-amber-50 font-bold border-none shadow-md">
-              <Copy className="h-4 w-4 mr-2" />
-              Copy Link
-            </Button>
+            {/* The tracking link uses a client component to handle clipboard interaction */}
+            <ClientCopyButton text={referralLink} />
           </div>
         </div>
 

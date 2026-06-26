@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getAffiliatePayout } from "@/lib/affiliate";
 import { updatePaypalEmail } from "./actions";
+import { ClientCopyButton } from "./client-copy-button";
 
 export const dynamic = "force-dynamic";
 
@@ -82,10 +83,7 @@ export default async function ReferralsPage() {
               <p className="text-xl sm:text-2xl font-bold font-mono tracking-tight text-primary-foreground select-all">{referralLink}</p>
             </div>
             
-            <Button className="shrink-0 bg-white text-slate-900 hover:bg-slate-100 font-bold border-none shadow-md">
-              <Copy className="h-4 w-4 mr-2" />
-              Copy Link
-            </Button>
+            <ClientCopyButton text={referralLink} />
           </div>
         </div>
       )}
