@@ -61,6 +61,11 @@ export async function signupAffiliate(formData: FormData) {
     });
 
     if (insertError) {
+      // Supabase signUp returns a fake user ID if the email already exists (when secure email enumeration is enabled).
+      // This causes a foreign key constraint error (23503) when trying to insert into affiliates with the fake auth_id.
+      if (insertError.code === "23503") {
+        redirect("/partners/signup?message=An%20account%20with%20this%20email%20already%20exists.%20Please%20log%20in%20or%20use%20a%20different%20email.");
+      }
       redirect(`/partners/signup?message=${encodeURIComponent(insertError.message)}`);
     }
 
