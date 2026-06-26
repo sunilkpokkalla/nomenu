@@ -36,7 +36,7 @@ export default async function PartnerDashboardPage() {
   const { data: referredRestaurants } = await supabase
     .from("restaurants")
     .select("id, name, created_at, plan, billing_cycle")
-    .eq("referred_by_code", affiliate.referral_code);
+    .ilike("referred_by_code", affiliate.referral_code);
 
   const restaurants = referredRestaurants || [];
   const totalReferred = restaurants.length;
