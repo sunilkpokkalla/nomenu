@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Copy, DollarSign, Users, ExternalLink, Activity, LogOut } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
+import { logout } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 import { getAffiliatePayout } from "@/lib/affiliate";
 import { ClientCopyButton } from "./client-copy-button";
@@ -53,9 +54,9 @@ export default async function PartnerDashboardPage() {
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm font-medium text-slate-300 hidden sm:inline-block">
-            {affiliate.name}
+            {affiliate.name || user.email}
           </span>
-          <form action="/auth/signout" method="post">
+          <form action={logout}>
             <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10 p-2 h-auto" type="submit">
               <LogOut className="h-4 w-4" />
               <span className="sr-only">Sign out</span>
@@ -69,7 +70,7 @@ export default async function PartnerDashboardPage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              Welcome back, {affiliate.name.split(" ")[0]}!
+              Welcome back{affiliate.name ? `, ${affiliate.name.split(" ")[0]}` : ''}!
             </h1>
             <p className="text-slate-500 mt-2 font-medium max-w-xl leading-relaxed">
               Share your custom link with restaurant owners. When they create an annual account, you earn cash rewards up to $100 per restaurant.
