@@ -70,7 +70,12 @@ export async function signupAffiliate(formData: FormData) {
     }
 
     revalidatePath("/partners/dashboard");
-    redirect("/partners/dashboard");
+    
+    if (authData.session) {
+      redirect("/partners/dashboard");
+    } else {
+      redirect("/partners/login?message=Account%20created!%20Please%20check%20your%20email%20to%20confirm%20and%20activate%20your%20account.");
+    }
   } else {
     redirect("/partners/signup?message=Failed%20to%20create%20account");
   }

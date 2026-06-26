@@ -16,7 +16,7 @@ export default async function PartnerDashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login?next=/partners/dashboard");
+    redirect("/partners/login?next=/partners/dashboard");
   }
 
   // Verify they are an affiliate
