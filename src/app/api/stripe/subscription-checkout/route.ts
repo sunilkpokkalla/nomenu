@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     // Get the restaurant for this user
     const { data: _restaurantData, error: fetchError } = await supabase
       .from("restaurants")
-      .select("id, stripe_customer_id, plan")
+      .select("id, stripe_customer_id, plan, referred_by_code")
       .eq("owner_id", user.id)
       .order("created_at", { ascending: true })
       .limit(1)
@@ -83,6 +83,22 @@ export async function POST(req: Request) {
         .eq("id", restaurant.id);
     }
 
+    const discounts = [];
+
+    if (isAnnual) {
+      if (!restaurant.referred_by_code) {
+        // No Referral -> 10% Discount
+        if (process.env.STRIPE_ANNUAL_DISCOUNT_COUPON_ID) {
+          discounts.push({ coupon: process.env.STRIPE_ANNUAL_DISCOUNT_COUPON_ID });
+        }
+      } else {
+        // Referred -> 15% Discount
+        if (process.env.STRIPE_REFERRAL_COUPON_ID) {
+          discounts.push({ coupon: process.env.STRIPE_REFERRAL_COUPON_ID });
+        }
+      }
+    }
+
     const subscription = await fetchStripe("/subscriptions", {
       method: "POST",
       body: {
@@ -92,12 +108,14 @@ export async function POST(req: Request) {
             price: priceId,
           },
         ],
+        ...(discounts.length > 0 ? { discounts } : {}),
         payment_behavior: "default_incomplete",
         payment_settings: { save_default_payment_method: "on_subscription" },
         expand: ["latest_invoice.payment_intent"],
         metadata: {
           restaurant_id: restaurant.id,
           plan_id: planId,
+          billing_cycle: billingCycle,
         },
       }
     });

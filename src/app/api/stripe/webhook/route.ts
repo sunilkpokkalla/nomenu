@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 
 import { createClient } from "@supabase/supabase-js";
 import { verifyStripeWebhook } from "@/lib/stripe-fetch";
+import { getAffiliatePayout } from "@/lib/affiliate";
 
 export async function POST(req: Request) {
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
         // Fetch current plan to see if it's an upgrade
         const { data: restaurant } = await supabase
           .from("restaurants")
-          .select("plan, magic_credits")
+          .select("plan, magic_credits, referred_by_code")
           .eq("id", restaurantId)
           .single();
 
@@ -66,6 +67,29 @@ export async function POST(req: Request) {
             console.error("Failed to upgrade SaaS plan:", updateError);
           } else {
             console.log(`Restaurant ${restaurantId} upgraded to ${planId}. Added ${bonus} magic credits.`);
+            
+            // Calculate and log affiliate payout
+            if (restaurant.referred_by_code) {
+              const billingCycle = session.metadata?.billing_cycle || "monthly";
+              const payoutAmount = getAffiliatePayout(planId, billingCycle);
+              
+              if (payoutAmount > 0) {
+                const { error: payoutError } = await supabase
+                  .from("affiliate_payouts")
+                  .insert({
+                    referrer_code: restaurant.referred_by_code,
+                    referred_restaurant_id: restaurantId,
+                    amount: payoutAmount,
+                    status: "pending"
+                  });
+                  
+                if (payoutError) {
+                  console.error("Failed to record affiliate payout:", payoutError);
+                } else {
+                  console.log(`Recorded $${payoutAmount} payout for code ${restaurant.referred_by_code}`);
+                }
+              }
+            }
           }
         }
       }
@@ -143,8 +167,21 @@ export async function POST(req: Request) {
         console.log(`Downgraded subscription ${subscription.id} to free`);
       }
     } else if (subscription.status === "active") {
-      const planId = subscription.metadata?.plan_id;
+      let planId = subscription.metadata?.plan_id;
       const restaurantId = subscription.metadata?.restaurant_id;
+      
+      // CRITICAL FIX: The Stripe Customer Portal changes the Price ID, but DOES NOT update metadata.
+      // We must resolve the actual plan from the current Price ID to handle upgrades/downgrades properly.
+      const currentPriceId = subscription.items?.data?.[0]?.price?.id;
+      if (currentPriceId) {
+        if (currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO || currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL) {
+          planId = "pro";
+        } else if (currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE || currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE_ANNUAL) {
+          planId = "elite";
+        } else if (currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE || currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_ANNUAL) {
+          planId = "enterprise";
+        }
+      }
       
       if (restaurantId && planId) {
         const { data: restaurant } = await supabase

@@ -18,6 +18,7 @@ import {
   LifeBuoy,
   BookOpen,
   Plug,
+  Gift,
 } from "lucide-react";
 
 import { logout } from "@/app/auth/actions";
@@ -44,6 +45,7 @@ export const navItems = [
   
   // Account
   { href: "/dashboard/integrations", label: "Integrations", icon: Plug, badge: "PRO" },
+  { href: "/dashboard/referrals", label: "Refer & Earn", icon: Gift },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];

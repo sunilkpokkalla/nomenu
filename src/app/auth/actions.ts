@@ -79,9 +79,13 @@ export async function signup(formData: FormData) {
 
   if (data.user && data.session) {
     if (restaurantName) {
+      const cookieStore = await cookies();
+      const refCode = cookieStore.get("nomenu_ref_code")?.value || null;
+      
       await supabase.from("restaurants").insert({
         owner_id: data.user.id,
         name: restaurantName,
+        referred_by_code: refCode,
       });
     }
     revalidatePath("/", "layout");

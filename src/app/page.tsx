@@ -127,6 +127,7 @@ export default function LandingPage() {
               <a href="#themes" className="hover:text-slate-900 transition-colors duration-200">QR Templates</a>
               <a href="#pricing" className="hover:text-slate-900 transition-colors duration-200">Pricing</a>
               <a href="#how-it-works" className="hover:text-slate-900 transition-colors duration-200">How it Works</a>
+              <Link href="/partners" className="hover:text-indigo-600 transition-colors duration-200 text-indigo-500">Partners</Link>
             </nav>
           </div>
 
@@ -159,6 +160,7 @@ export default function LandingPage() {
               <a href="#themes" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">QR Templates</a>
               <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">Pricing</a>
               <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">How it Works</a>
+              <Link href="/partners" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors">Partners</Link>
             </nav>
             <hr className="border-slate-100" />
             <div className="flex flex-col gap-2.5">

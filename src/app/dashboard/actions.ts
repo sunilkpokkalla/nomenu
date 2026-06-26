@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 import { createClient } from "@/lib/supabase/server";
 import { slugify } from "@/lib/utils/slugify";
@@ -57,6 +58,9 @@ export async function createRestaurant(formData: FormData) {
     counter++;
   }
 
+  const cookieStore = await cookies();
+  const refCode = cookieStore.get("nomenu_ref_code")?.value || null;
+
   const { error } = await supabase.from("restaurants").insert({
     owner_id: user.id,
     name,
@@ -69,6 +73,7 @@ export async function createRestaurant(formData: FormData) {
     primary_color: "#2563EB",
     accent_color: field(formData, "accentColor") ?? "#F59E0B",
     theme_style: "minimalist",
+    referred_by_code: refCode,
   });
 
   if (error) {

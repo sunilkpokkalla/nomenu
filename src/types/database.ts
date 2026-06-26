@@ -9,6 +9,93 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      affiliates: {
+        Row: {
+          id: string;
+          auth_id: string | null;
+          name: string;
+          email: string;
+          paypal_email: string | null;
+          referral_code: string;
+          total_clicks: number | null;
+          total_paid_amount: number | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          auth_id?: string | null;
+          name: string;
+          email: string;
+          paypal_email?: string | null;
+          referral_code: string;
+          total_clicks?: number | null;
+          total_paid_amount?: number | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          auth_id?: string | null;
+          name?: string;
+          email?: string;
+          paypal_email?: string | null;
+          referral_code?: string;
+          total_clicks?: number | null;
+          total_paid_amount?: number | null;
+          created_at?: string;
+        };
+      };
+      affiliate_payouts: {
+        Row: {
+          id: string;
+          referrer_code: string;
+          referred_restaurant_id: string | null;
+          amount: number;
+          status: "pending" | "paid" | "credited";
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          referrer_code: string;
+          referred_restaurant_id?: string | null;
+          amount: number;
+          status?: "pending" | "paid" | "credited";
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          referrer_code?: string;
+          referred_restaurant_id?: string | null;
+          amount?: number;
+          status?: "pending" | "paid" | "credited";
+          created_at?: string;
+        };
+      };
+      ai_image_jobs: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          status: "pending" | "processing" | "completed" | "failed" | "paid";
+          prompt: string | null;
+          result_url: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          status?: "pending" | "processing" | "completed" | "failed" | "paid";
+          prompt?: string | null;
+          result_url?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          restaurant_id?: string;
+          status?: "pending" | "processing" | "completed" | "failed" | "paid";
+          prompt?: string | null;
+          result_url?: string | null;
+          created_at?: string;
+        };
+      };
       restaurants: {
         Row: {
           id: string;
@@ -25,7 +112,10 @@ export interface Database {
           accent_color: string | null;
           theme_style: string | null;
           plan: string | null;
+          billing_cycle: string | null;
           subscription_status: string | null;
+          referred_by_code: string | null;
+          paypal_email: string | null;
           stripe_customer_id: string | null;
           stripe_subscription_id: string | null;
           stripe_account_id: string | null;
@@ -66,7 +156,10 @@ export interface Database {
           accent_color?: string | null;
           theme_style?: string | null;
           plan?: string | null;
+          billing_cycle?: string | null;
           subscription_status?: string | null;
+          referred_by_code?: string | null;
+          paypal_email?: string | null;
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
           stripe_account_id?: string | null;
