@@ -35,7 +35,7 @@ export default async function ReferralsPage() {
   const { data: referredRestaurants } = await supabase
     .from("restaurants")
     .select("id, name, created_at, plan, billing_cycle")
-    .eq("referred_by_code", restaurant.slug);
+    .eq("referred_by_code", restaurant.slug || "");
 
   const restaurants = referredRestaurants || [];
   const totalReferred = restaurants.length;
@@ -147,7 +147,7 @@ export default async function ReferralsPage() {
               <div key={rest.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between">
                 <div>
                   <p className="font-bold text-slate-900">{rest.name}</p>
-                  <p className="text-sm text-slate-500 font-medium">Joined {new Date(rest.created_at).toLocaleDateString()}</p>
+                  <p className="text-sm text-slate-500 font-medium">Joined {rest.created_at ? new Date(rest.created_at).toLocaleDateString() : 'Unknown'}</p>
                 </div>
                 <div className="text-right">
                   <span className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">

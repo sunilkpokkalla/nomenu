@@ -43,6 +43,7 @@ export interface Database {
           total_paid_amount?: number | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       affiliate_payouts: {
         Row: {
@@ -69,6 +70,7 @@ export interface Database {
           status?: "pending" | "paid" | "credited";
           created_at?: string;
         };
+        Relationships: [];
       };
       ai_image_jobs: {
         Row: {
@@ -95,6 +97,7 @@ export interface Database {
           result_url?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       restaurants: {
         Row: {
