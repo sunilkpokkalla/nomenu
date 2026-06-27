@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Receipt, X, ChefHat, CheckCircle2, Clock, Download, Loader2 } from "lucide-react";
 import { toPng } from "html-to-image";
-import { getReceipts } from "@/app/menu/[id]/actions";
+import { getReceipts, cancelOrder } from "@/app/menu/[id]/actions";
 
 interface OrderItem {
   id: string;
@@ -42,6 +42,30 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isDownloadingId, setIsDownloadingId] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
+
+  const handleCancelOrder = async (orderId: string) => {
+    if (!confirm("Are you sure you want to cancel this order?")) return;
+    setCancellingId(orderId);
+    try {
+      const res = await cancelOrder(orderId);
+      if (res.success) {
+        if (res.type === "instant") {
+          alert("Your order has been cancelled and refunded.");
+        } else {
+          alert("Cancellation requested. The restaurant will review your request.");
+        }
+        fetchOrders(orderIds, false);
+      } else {
+        alert(res.error || "Failed to cancel order.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to cancel order.");
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   const handleDownloadPng = async (orderId: string, orderNumber: number) => {
     const el = document.getElementById(`receipt-${orderId}`);
@@ -324,6 +348,40 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
                     <div className="text-center text-xs font-bold tracking-widest">
                       THANK YOU!
                     </div>
+
+                    {/* Cancellation UI */}
+                    {(o.status === "pending" || o.status === "preparing") && (
+                      <div className="mt-6 pt-4 border-t border-slate-200">
+                        {(() => {
+                          const orderTime = new Date(o.created_at).getTime();
+                          const diffMinutes = (new Date().getTime() - orderTime) / 60000;
+                          
+                          if (diffMinutes < 2 && o.status === "pending") {
+                            return (
+                              <button
+                                onClick={() => handleCancelOrder(o.id)}
+                                disabled={cancellingId === o.id}
+                                className="w-full py-2 bg-red-50 text-red-600 border border-red-200 font-bold rounded-lg hover:bg-red-100 transition-colors flex items-center justify-center gap-2"
+                              >
+                                {cancellingId === o.id ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                                Cancel Order
+                              </button>
+                            );
+                          } else {
+                            return (
+                              <button
+                                onClick={() => handleCancelOrder(o.id)}
+                                disabled={cancellingId === o.id}
+                                className="w-full py-2 bg-slate-50 text-slate-600 border border-slate-200 font-bold rounded-lg hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 text-sm"
+                              >
+                                {cancellingId === o.id ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                                Request Cancellation
+                              </button>
+                            );
+                          }
+                        })()}
+                      </div>
+                    )}
                   </div>
                   
                   <div className="w-full h-3 bg-repeat-x rotate-180" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left bottom", marginBottom: "-3px" }} />

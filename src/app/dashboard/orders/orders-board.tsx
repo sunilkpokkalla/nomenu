@@ -291,12 +291,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     if (destination.droppableId === source.droppableId) return;
     await handleStatusChange(draggableId, destination.droppableId);
   };
-
   const columns = [
-    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending", "awaiting_payment"] },
+    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending", "awaiting_payment", "cancel_requested"] },
     { id: "preparing", title: "Preparing", icon: ChefHat, matchStatus: ["preparing"] },
     { id: "completed", title: "Ready / Done", icon: CheckCircle2, matchStatus: ["completed"] },
-    { id: "cancelled", title: "Cancelled", icon: XCircle, matchStatus: ["cancelled"] }
+    { id: "cancelled", title: "Cancelled", icon: XCircle, matchStatus: ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"] }
   ];
 
   const getUrgency = (createdAt: string, status: string) => {
@@ -663,39 +662,58 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                     {/* Right Side: Quick Action Button (Light mode only to keep KDS clean, or maybe keep everywhere) */}
                                     {!selectedDateStr && (
                                       <div className="flex items-center gap-2 ml-auto">
-                                        {col.id === "pending" && order.status === "awaiting_payment" && (
-                                          <button 
-                                            onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "cancelled"); }} 
-                                            className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border border-rose-500/20 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
-                                          >
-                                            Dismiss
-                                          </button>
-                                        )}
-                                        {col.id === "pending" && order.status !== "awaiting_payment" && (
-                                          <button 
-                                            onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "preparing"); }} 
-                                            className="bg-amber-500 text-amber-950 hover:bg-amber-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
-                                          >
-                                            Start
-                                          </button>
-                                        )}
-                                      {col.id === "preparing" && (
-                                        <button 
-                                          onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "completed"); }} 
-                                          className="bg-emerald-500 text-emerald-950 hover:bg-emerald-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
-                                        >
-                                          Done
-                                        </button>
-                                      )}
-                                      {col.id === "completed" && (
-                                        <button 
-                                          onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "cancelled"); }} 
-                                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors active:scale-95 ${
-                                            isKdsMode ? "bg-slate-800 text-slate-400 hover:bg-slate-700" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
-                                          }`}
-                                        >
-                                          Cancel
-                                        </button>
+                                        {order.status === "cancel_requested" ? (
+                                          <div className="flex items-center gap-2">
+                                            <button 
+                                              onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "cancelled", true); }} 
+                                              className="bg-rose-500 text-white hover:bg-rose-600 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95 shadow-sm shadow-rose-500/20"
+                                            >
+                                              Approve Cancel
+                                            </button>
+                                            <button 
+                                              onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "preparing"); }} 
+                                              className="bg-slate-200 text-slate-800 hover:bg-slate-300 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95 shadow-sm"
+                                            >
+                                              Deny (Keep)
+                                            </button>
+                                          </div>
+                                        ) : (
+                                          <>
+                                            {col.id === "pending" && order.status === "awaiting_payment" && (
+                                              <button 
+                                                onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "cancelled"); }} 
+                                                className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border border-rose-500/20 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
+                                              >
+                                                Dismiss
+                                              </button>
+                                            )}
+                                            {col.id === "pending" && order.status !== "awaiting_payment" && (
+                                              <button 
+                                                onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "preparing"); }} 
+                                                className="bg-amber-500 text-amber-950 hover:bg-amber-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
+                                              >
+                                                Start
+                                              </button>
+                                            )}
+                                            {col.id === "preparing" && (
+                                              <button 
+                                                onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "completed"); }} 
+                                                className="bg-emerald-500 text-emerald-950 hover:bg-emerald-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
+                                              >
+                                                Done
+                                              </button>
+                                            )}
+                                            {col.id === "completed" && (
+                                              <button 
+                                                onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "cancelled"); }} 
+                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors active:scale-95 ${
+                                                  isKdsMode ? "bg-slate-800 text-slate-400 hover:bg-slate-700" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                                                }`}
+                                              >
+                                                Cancel
+                                              </button>
+                                            )}
+                                          </>
                                         )}
                                       </div>
                                     )}

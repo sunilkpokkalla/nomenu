@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Copy, DollarSign, Users, ExternalLink, Activity, LogOut, CheckCircle2 } from "lucide-react";
+import { Copy, DollarSign, Users, ExternalLink, Activity, LogOut, CheckCircle2, Sparkles } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/auth/actions";
@@ -139,9 +139,16 @@ export default async function PartnerDashboardPage() {
         
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              Welcome back{affiliate.name ? `, ${affiliate.name.split(" ")[0]}` : ''}!
-            </h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+                Welcome back{affiliate.name ? `, ${affiliate.name.split(" ")[0]}` : ''}!
+              </h1>
+              {((affiliate as typeof affiliate & { tier?: string }).tier === 'founding') && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 border border-amber-200 px-3 py-1 text-sm font-bold text-amber-700 shadow-sm mt-1">
+                  <Sparkles className="h-4 w-4" /> Founding Partner
+                </span>
+              )}
+            </div>
             <p className="text-slate-500 mt-2 font-medium max-w-xl leading-relaxed">
               Share your custom link with restaurant owners. When they create an annual account, you earn cash rewards up to $100 per restaurant.
             </p>

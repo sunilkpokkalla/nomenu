@@ -57,6 +57,14 @@ export async function signupAffiliate(formData: FormData) {
   // 3. Insert into affiliates table using admin client to bypass RLS
   if (authData.user) {
     const supabaseAdmin = createAdminClient(url, serviceRoleKey!);
+    
+    // Count existing affiliates to determine tier
+    const { count } = await supabaseAdmin
+      .from("affiliates")
+      .select("*", { count: "exact", head: true });
+      
+    const tier = (count || 0) < 1000 ? "founding" : "standard";
+
     const { error: insertError } = await supabaseAdmin.from("affiliates").insert({
       auth_id: authData.user.id,
       name,
@@ -67,7 +75,8 @@ export async function signupAffiliate(formData: FormData) {
       social_media_details: socialMediaDetails,
       location,
       purpose,
-      status: "pending"
+      status: "pending",
+      tier
     });
 
     if (insertError) {

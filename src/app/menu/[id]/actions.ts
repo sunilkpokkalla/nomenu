@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@supabase/supabase-js";
+import { fetchStripe } from "@/lib/stripe-fetch";
 
 export async function submitFeedback(
   restaurantId: string, 
@@ -481,4 +482,82 @@ export async function getSlotAvailability(restaurantId: string) {
   }
 
   return slotCounts;
+}
+
+export async function cancelOrder(orderId: string) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+
+  try {
+    const { data: order, error: orderError } = await supabase
+      .from("orders")
+      .select("status, created_at, is_paid, payment_intent_id, restaurant_id")
+      .eq("id", orderId)
+      .single();
+
+    if (orderError || !order) {
+      return { success: false, error: "Order not found." };
+    }
+
+    if (order.status === "completed" || order.status === "cancelled" || order.status === "cancelled_by_customer" || order.status === "cancelled_by_restaurant") {
+      return { success: false, error: "Order cannot be cancelled in its current state." };
+    }
+
+    const createdTime = new Date(order.created_at).getTime();
+    const now = new Date().getTime();
+    const diffMinutes = (now - createdTime) / 60000;
+
+    // Grace period check
+    if (diffMinutes < 2 && order.status === "pending") {
+      // Instant Cancel
+      const { error: updateError } = await supabase
+        .from("orders")
+        .update({ status: "cancelled_by_customer" })
+        .eq("id", orderId);
+
+      if (updateError) throw updateError;
+
+      if (order.is_paid && order.payment_intent_id) {
+        // Stripe Refund logic
+        const { data: restData } = await supabase
+          .from("restaurants")
+          .select("stripe_account_id")
+          .eq("id", order.restaurant_id)
+          .single();
+          
+        if (restData?.stripe_account_id) {
+          try {
+            await fetchStripe("/refunds", {
+              method: "POST",
+              headers: { "Stripe-Account": restData.stripe_account_id },
+              body: { payment_intent: order.payment_intent_id }
+            });
+          } catch (e: unknown) {
+            console.error("Instant refund failed", e);
+            const err = e as Error;
+            if (!err.message?.includes("has already been refunded")) {
+              throw new Error("Failed to process refund automatically: " + err.message);
+            }
+          }
+        }
+      }
+
+      return { success: true, type: "instant" };
+    } else {
+      // Request Cancel
+      const { error: updateError } = await supabase
+        .from("orders")
+        .update({ status: "cancel_requested" })
+        .eq("id", orderId);
+
+      if (updateError) throw updateError;
+      return { success: true, type: "requested" };
+    }
+  } catch (err: unknown) {
+    console.error("Error cancelling order:", err);
+    const error = err as Error;
+    return { success: false, error: error.message || "Failed to cancel order." };
+  }
 }

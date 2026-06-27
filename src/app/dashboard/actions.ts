@@ -1319,3 +1319,31 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
   revalidatePath("/dashboard/menus");
   revalidatePath(`/dashboard/menus/${menuId}/customize`);
 }
+
+export async function updateRestaurantWaitTime(restaurantId: string, status: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  // Verify ownership
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const { error } = await supabase
+    .from("restaurants")
+    .update({ wait_time_status: status })
+    .eq("id", restaurantId);
+
+  if (error) {
+    console.error("Failed to update wait time status:", error);
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath("/dashboard");
+  return { success: true };
+}

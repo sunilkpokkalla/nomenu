@@ -13,6 +13,7 @@ export interface Restaurant {
   loyalty_pin_code?: string | null;
   opening_time?: string | null;
   closing_time?: string | null;
+  wait_time_status?: string | null;
 }
 
 export interface Category {

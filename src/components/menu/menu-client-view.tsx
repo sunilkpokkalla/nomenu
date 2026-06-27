@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Star } from "lucide-react";
+import { Star, Clock } from "lucide-react";
 import { NoirTheme } from "./themes/NoirTheme";
 import { BrasserieTheme } from "./themes/BrasserieTheme";
 import { BentoTheme } from "./themes/BentoTheme";
@@ -65,8 +65,23 @@ export function MenuClientView(props: MenuClientViewProps) {
 
   return (
     <>
+      {restaurant.wait_time_status === "busy" && (
+        <div className="bg-amber-500 text-white px-4 py-2 text-center text-sm font-semibold flex items-center justify-center gap-2 sticky top-0 z-[100]">
+          <Clock className="w-4 h-4" />
+          <span>Estimated Wait Time: 25-35 minutes</span>
+        </div>
+      )}
+      {restaurant.wait_time_status === "slammed" && (
+        <div className="bg-rose-600 text-white px-4 py-2 text-center text-sm font-semibold flex items-center justify-center gap-2 sticky top-0 z-[100]">
+          <Clock className="w-4 h-4" />
+          <span>Kitchen is very busy. Expect delays (45+ mins).</span>
+        </div>
+      )}
+
       {savedLoyaltyCardId && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-top-10 duration-500 fade-in">
+        <div className={`fixed left-1/2 -translate-x-1/2 z-[110] animate-in slide-in-from-top-10 duration-500 fade-in ${
+          restaurant.wait_time_status && restaurant.wait_time_status !== "normal" ? "top-[60px]" : "top-4"
+        }`}>
           <a
             href={`/loyalty/${savedLoyaltyCardId}`}
             className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-2.5 rounded-full shadow-2xl border border-amber-300 hover:scale-105 transition-transform"

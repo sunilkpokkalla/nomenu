@@ -89,6 +89,15 @@ export default function PartnersLandingPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-extrabold text-slate-950 sm:text-4xl">Lucrative Payout Tiers</h2>
             <p className="mt-4 text-slate-500 font-medium">Earn bounties based on the annual plan your referred restaurant chooses.</p>
+            
+            <div className="mt-8 max-w-2xl mx-auto bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 text-left">
+              <h3 className="text-amber-600 font-black text-xl mb-2 flex items-center gap-2">
+                <Sparkles className="h-5 w-5" /> The "Golden 1,000" Founding Tier
+              </h3>
+              <p className="text-slate-700 font-medium leading-relaxed">
+                The first 1,000 approved partners receive <strong className="text-amber-600 font-bold">Lifetime Recurring Revenue</strong> (paid annually) for every restaurant they refer. Partners #1,001 and beyond receive a standard one-time upfront bounty. Apply now to secure your lifetime spot.
+              </p>
+            </div>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-6">

@@ -234,11 +234,27 @@ export async function POST(req: Request) {
           // Look up affiliate
           const { data: affiliate } = await supabase
             .from("affiliates")
-            .select("stripe_account_id, total_paid_amount")
+            .select("stripe_account_id, total_paid_amount, tier")
             .eq("referral_code", restaurant.referred_by_code)
             .single();
             
           if (affiliate && affiliate.stripe_account_id) {
+            // Tier-based payout limit: Standard gets one-time bounty, Founding gets lifetime recurring
+            if (affiliate.tier === "standard") {
+              const { count } = await supabase
+                .from("affiliate_payouts")
+                .select("*", { count: "exact", head: true })
+                .eq("referrer_code", restaurant.referred_by_code)
+                .eq("referred_restaurant_id", restaurant.id)
+                .eq("status", "paid");
+                
+              if (count && count > 0) {
+                console.log(`Standard partner ${restaurant.referred_by_code} already received one-time bounty for restaurant ${restaurant.id}. Skipping payout.`);
+                // Return successfully since we properly processed this event by skipping it
+                return NextResponse.json({ received: true });
+              }
+            }
+            
             try {
               // Execute Stripe Transfer from the charge
               await fetchStripe("/transfers", {
@@ -259,6 +275,14 @@ export async function POST(req: Request) {
                 .from("affiliates")
                 .update({ total_paid_amount: newTotalPaid })
                 .eq("referral_code", restaurant.referred_by_code);
+                
+              // Log the payout to enforce standard tier limit
+              await supabase.from("affiliate_payouts").insert({
+                referrer_code: restaurant.referred_by_code,
+                referred_restaurant_id: restaurant.id,
+                amount: payoutAmount,
+                status: "paid"
+              });
                 
             } catch (transferError) {
               console.error("Failed to execute Stripe Transfer:", transferError);

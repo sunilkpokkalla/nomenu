@@ -164,6 +164,7 @@ export interface Database {
           loyalty_card_layout: string | null;
           loyalty_reward_text: string | null;
           loyalty_pin_code: string | null;
+          wait_time_status: string | null;
         };
         Insert: {
           id?: string;
@@ -208,6 +209,7 @@ export interface Database {
           loyalty_card_layout?: string | null;
           loyalty_reward_text?: string | null;
           loyalty_pin_code?: string | null;
+          wait_time_status?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];

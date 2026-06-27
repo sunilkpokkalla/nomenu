@@ -143,7 +143,8 @@ export default async function PublicMenuPage(
           currency: restaurant.currency,
           plan: restaurant.plan,
           opening_time: restaurant.opening_time,
-          closing_time: restaurant.closing_time
+          closing_time: restaurant.closing_time,
+          wait_time_status: restaurant.wait_time_status
         }}
         categories={categoriesList}
         items={itemsList}

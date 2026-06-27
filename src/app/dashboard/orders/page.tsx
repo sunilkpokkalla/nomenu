@@ -5,6 +5,7 @@ import { getSupabaseEnv } from "@/lib/env";
 import { OrdersBoard } from "./orders-board";
 import { ClipboardList } from "lucide-react";
 import { getActiveRestaurant } from "@/lib/rbac";
+import { WaitTimeToggle } from "@/components/dashboard/wait-time-toggle";
 
 export const metadata = {
   title: "Orders | NoMenu Dashboard",
@@ -96,9 +97,12 @@ export default async function OrdersPage() {
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Orders Dashboard</h1>
-        <p className="text-slate-500 mt-2">Manage incoming orders from your customers in real-time.</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Orders Dashboard</h1>
+          <p className="text-slate-500 mt-2">Manage incoming orders from your customers in real-time.</p>
+        </div>
+        <WaitTimeToggle restaurantId={restaurant.id} initialStatus={restaurant.wait_time_status || "normal"} />
       </div>
 
       <div className="relative flex-1">
