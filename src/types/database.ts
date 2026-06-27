@@ -17,6 +17,7 @@ export interface Database {
           email: string;
           paypal_email: string | null;
           referral_code: string;
+          stripe_account_id: string | null;
           total_clicks: number | null;
           total_paid_amount: number | null;
           created_at: string;
@@ -28,6 +29,7 @@ export interface Database {
           email: string;
           paypal_email?: string | null;
           referral_code: string;
+          stripe_account_id?: string | null;
           total_clicks?: number | null;
           total_paid_amount?: number | null;
           created_at?: string;
@@ -39,6 +41,7 @@ export interface Database {
           email?: string;
           paypal_email?: string | null;
           referral_code?: string;
+          stripe_account_id?: string | null;
           total_clicks?: number | null;
           total_paid_amount?: number | null;
           created_at?: string;

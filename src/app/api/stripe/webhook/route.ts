@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 import { createClient } from "@supabase/supabase-js";
-import { verifyStripeWebhook } from "@/lib/stripe-fetch";
+import { verifyStripeWebhook, fetchStripe } from "@/lib/stripe-fetch";
 import { getAffiliatePayout } from "@/lib/affiliate";
 
 export async function POST(req: Request) {
@@ -54,7 +54,6 @@ export async function POST(req: Request) {
 
           const newCredits = (restaurant.magic_credits || 0) + bonus;
 
-          // Update restaurant plan to active subscription and grant credits
           const { error: updateError } = await supabase
             .from("restaurants")
             .update({
@@ -68,7 +67,7 @@ export async function POST(req: Request) {
           } else {
             console.log(`Restaurant ${restaurantId} upgraded to ${planId}. Added ${bonus} magic credits.`);
             
-            // Calculate and log affiliate payout
+            // Calculate and log affiliate payout (Legacy - actual payout happens in invoice.payment_succeeded)
             if (restaurant.referred_by_code) {
               const billingCycle = session.metadata?.billing_cycle || "monthly";
               const payoutAmount = getAffiliatePayout(planId, billingCycle);
@@ -209,6 +208,61 @@ export async function POST(req: Request) {
             
           if (!updateError) {
             console.log(`Upgraded restaurant ${restaurantId} to ${planId}. Added ${bonus} magic credits.`);
+          }
+        }
+      }
+    }
+  } else if (event.type === "invoice.payment_succeeded") {
+    const invoice = event.data.object;
+    
+    // Only process for subscription invoices
+    if (invoice.subscription && invoice.charge) {
+      const subscriptionId = invoice.subscription;
+      
+      // We need to fetch the subscription to get metadata
+      const { data: restaurant } = await supabase
+        .from("restaurants")
+        .select("id, plan, billing_cycle, referred_by_code")
+        .eq("stripe_subscription_id", subscriptionId)
+        .single();
+        
+      if (restaurant && restaurant.referred_by_code) {
+        // Calculate payout
+        const payoutAmount = getAffiliatePayout(restaurant.plan, restaurant.billing_cycle);
+        
+        if (payoutAmount > 0) {
+          // Look up affiliate
+          const { data: affiliate } = await supabase
+            .from("affiliates")
+            .select("stripe_account_id, total_paid_amount")
+            .eq("referral_code", restaurant.referred_by_code)
+            .single();
+            
+          if (affiliate && affiliate.stripe_account_id) {
+            try {
+              // Execute Stripe Transfer from the charge
+              await fetchStripe("/transfers", {
+                method: "POST",
+                body: {
+                  amount: payoutAmount * 100, // Convert to cents
+                  currency: "usd",
+                  destination: affiliate.stripe_account_id,
+                  source_transaction: invoice.charge as string,
+                  description: `Commission for referring restaurant ${restaurant.id}`,
+                }
+              });
+              console.log(`Successfully transferred $${payoutAmount} to ${affiliate.stripe_account_id}`);
+              
+              // Mark as paid in our database
+              const newTotalPaid = (affiliate.total_paid_amount || 0) + payoutAmount;
+              await supabase
+                .from("affiliates")
+                .update({ total_paid_amount: newTotalPaid })
+                .eq("referral_code", restaurant.referred_by_code);
+                
+            } catch (transferError) {
+              console.error("Failed to execute Stripe Transfer:", transferError);
+            }
           }
         }
       }

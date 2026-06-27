@@ -20,7 +20,6 @@ export async function signupAffiliate(formData: FormData) {
 
   const name = getString(formData, "name");
   const email = getString(formData, "email");
-  const paypalEmail = getString(formData, "paypalEmail");
   const referralCode = getString(formData, "referralCode").replace(/[^a-zA-Z0-9_-]/g, "").toUpperCase();
   const password = getString(formData, "password");
 
@@ -56,7 +55,6 @@ export async function signupAffiliate(formData: FormData) {
       auth_id: authData.user.id,
       name,
       email,
-      paypal_email: paypalEmail || null,
       referral_code: referralCode,
     });
 

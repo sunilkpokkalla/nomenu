@@ -74,18 +74,6 @@ export default async function PartnersSignupPage(
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="paypalEmail" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Payout Email (For Rewards)</Label>
-              <Input
-                id="paypalEmail"
-                name="paypalEmail"
-                type="email"
-                placeholder="jane@email.com"
-                className="h-12 bg-slate-50 border-slate-200 text-slate-900 rounded-xl px-4 shadow-sm"
-                required
-              />
-            </div>
-
             <div className="space-y-2 pt-2 border-t border-slate-100">
               <Label htmlFor="referralCode" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Create Custom Promo Code</Label>
               <p className="text-[11px] text-slate-500 mb-2">This is the code you will share (e.g. FOODIE50).</p>

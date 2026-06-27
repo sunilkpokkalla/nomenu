@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Copy, DollarSign, Users, ExternalLink, Activity, LogOut } from "lucide-react";
+import { Copy, DollarSign, Users, ExternalLink, Activity, LogOut, CheckCircle2 } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 import { getAffiliatePayout } from "@/lib/affiliate";
 import { ClientCopyButton } from "./client-copy-button";
+import { fetchStripe } from "@/lib/stripe-fetch";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,16 @@ export default async function PartnerDashboardPage() {
   const pendingEarnings = restaurants.reduce((sum, rest) => sum + getAffiliatePayout(rest.plan, rest.billing_cycle), 0);
 
   const referralLink = `https://nomenu.us?ref=${affiliate.referral_code}`;
+
+  let isStripeConnected = false;
+  if (affiliate.stripe_account_id) {
+    try {
+      const account = await fetchStripe(`/accounts/${affiliate.stripe_account_id}`);
+      isStripeConnected = account.details_submitted;
+    } catch (e) {
+      console.error("Failed to fetch Stripe account", e);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans-vibrant flex flex-col">
@@ -122,8 +133,21 @@ export default async function PartnerDashboardPage() {
               </div>
               <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Payout Status</p>
             </div>
-            <p className="text-lg font-bold text-slate-900 mb-1">Payout Email</p>
-            <p className="text-sm font-medium text-slate-500 truncate">{affiliate.paypal_email || "Not set"}</p>
+            {isStripeConnected ? (
+              <>
+                <p className="text-lg font-bold text-emerald-600 mb-1 flex items-center gap-1.5"><CheckCircle2 className="w-5 h-5" /> Connected</p>
+                <form action="/api/stripe/partner-connect" method="POST">
+                  <Button variant="outline" size="sm" className="h-8 mt-1 text-xs">View Dashboard</Button>
+                </form>
+              </>
+            ) : (
+              <>
+                <p className="text-lg font-bold text-slate-900 mb-1">Not Connected</p>
+                <form action="/api/stripe/partner-connect" method="POST">
+                  <Button size="sm" className="bg-amber-500 hover:bg-amber-600 text-white font-bold h-8 mt-1 text-xs shadow-sm">Connect Bank</Button>
+                </form>
+              </>
+            )}
           </div>
         </div>
 
@@ -191,7 +215,7 @@ export default async function PartnerDashboardPage() {
               <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-amber-400 border border-slate-700">3</div>
               <h3 className="font-bold text-lg text-slate-100">You Get Paid</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                At the end of the month, we send your earnings directly to your Payout Email. You can redeem it for a Visa card, Amazon gift card, or Bank Transfer.
+                When a restaurant pays, your commission is instantly deposited into your connected Stripe bank account. No manual withdrawals needed!
               </p>
             </div>
           </div>
