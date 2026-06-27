@@ -36,6 +36,7 @@ export async function POST(req: Request) {
           email: user.email,
           capabilities: {
             transfers: { requested: true },
+            card_payments: { requested: true },
           },
         }
       });
