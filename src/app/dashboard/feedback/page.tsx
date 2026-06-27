@@ -12,6 +12,7 @@ import { LoyaltyQrGenerator } from "@/app/dashboard/feedback/loyalty-qr-generato
 import { LoyaltyDesignEditor } from "@/app/dashboard/feedback/loyalty-design-editor";
 import { CustomerDirectory } from "./customer-directory";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export const metadata = {
   title: "Customer Feedback | NoMenu Dashboard",
@@ -36,13 +37,7 @@ export default async function FeedbackPage({
   }
 
   // Get user's restaurant
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("id, timezone, plan, recovery_offer_text, recovery_message, primary_color, loyalty_stamp_color, loyalty_stamp_icon, loyalty_card_layout, loyalty_reward_text, name, logo_url")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   if (!restaurant) {
     return (

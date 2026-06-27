@@ -28,6 +28,8 @@ import { WelcomeChecklist } from "@/components/dashboard/welcome-checklist";
 import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
 import { OnboardingForm } from "@/components/dashboard/onboarding-form";
 
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
+
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage(
@@ -49,16 +51,12 @@ export default async function DashboardPage(
     redirect("/login");
   }
 
-  const { data: restaurant, error: restaurantError } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const role: UserRole = (restaurant as any)?._staffRole || "owner";
 
-  if (restaurantError) {
-    console.error("Dashboard page: Error fetching restaurant:", restaurantError);
+  if (role === "kitchen" || role === "waitstaff") {
+    redirect("/dashboard/orders");
   }
 
   if (!restaurant) {

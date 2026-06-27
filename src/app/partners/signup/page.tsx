@@ -50,18 +50,78 @@ export default async function PartnersSignupPage(
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Account Email</Label>
+              <Label htmlFor="email" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Email</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                placeholder="jane@example.com"
+                placeholder="jane@email.com"
                 className="h-12 bg-slate-50 border-slate-200 text-slate-900 rounded-xl px-4 shadow-sm"
                 required
               />
             </div>
-
+            
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <Label htmlFor="expertise" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Your Expertise</Label>
+              <Input
+                id="expertise"
+                name="expertise"
+                type="text"
+                placeholder="e.g. POS Sales, Food Influencer, Agency"
+                className="h-12 bg-slate-50 border-slate-200 text-slate-900 rounded-xl px-4 shadow-sm"
+                required
+              />
+            </div>
+            
             <div className="space-y-2">
+              <Label htmlFor="socialInfluence" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Audience / Influence Size</Label>
+              <Input
+                id="socialInfluence"
+                name="socialInfluence"
+                type="text"
+                placeholder="e.g. 10k Followers, 50 Restaurant Clients"
+                className="h-12 bg-slate-50 border-slate-200 text-slate-900 rounded-xl px-4 shadow-sm"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="socialMediaDetails" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Links (Socials / Website)</Label>
+              <Input
+                id="socialMediaDetails"
+                name="socialMediaDetails"
+                type="text"
+                placeholder="e.g. instagram.com/janedoe"
+                className="h-12 bg-slate-50 border-slate-200 text-slate-900 rounded-xl px-4 shadow-sm"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="location" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Your Location</Label>
+              <Input
+                id="location"
+                name="location"
+                type="text"
+                placeholder="e.g. Austin, TX"
+                className="h-12 bg-slate-50 border-slate-200 text-slate-900 rounded-xl px-4 shadow-sm"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="purpose" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Why do you want to join?</Label>
+              <textarea
+                id="purpose"
+                name="purpose"
+                rows={3}
+                placeholder="How do you plan to promote Nomenu?"
+                className="w-full flex min-h-[80px] bg-slate-50 border border-slate-200 text-slate-900 rounded-xl px-4 py-3 shadow-sm text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 disabled:cursor-not-allowed disabled:opacity-50"
+                required
+              />
+            </div>
+
+            <div className="space-y-2 pt-2 border-t border-slate-100">
               <Label htmlFor="password" className="text-slate-700 font-bold text-xs uppercase tracking-wider">Password</Label>
               <Input
                 id="password"
@@ -86,8 +146,8 @@ export default async function PartnersSignupPage(
               />
             </div>
 
-            <Button type="submit" className="w-full h-14 bg-slate-950 hover:bg-slate-900 text-white font-bold text-base mt-4 rounded-xl transition-all shadow-md">
-              Create Partner Account
+            <Button type="submit" className="w-full h-14 text-base font-bold bg-amber-500 hover:bg-amber-600 text-white rounded-xl mt-4 shadow-sm hover:shadow-md transition-all">
+              Submit Application
             </Button>
           </form>
 

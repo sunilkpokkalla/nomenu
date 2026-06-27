@@ -20,6 +20,12 @@ export interface Database {
           stripe_account_id: string | null;
           total_clicks: number | null;
           total_paid_amount: number | null;
+          expertise: string | null;
+          social_influence: string | null;
+          social_media_details: string | null;
+          location: string | null;
+          purpose: string | null;
+          status: string | null;
           created_at: string;
         };
         Insert: {
@@ -32,6 +38,12 @@ export interface Database {
           stripe_account_id?: string | null;
           total_clicks?: number | null;
           total_paid_amount?: number | null;
+          expertise?: string | null;
+          social_influence?: string | null;
+          social_media_details?: string | null;
+          location?: string | null;
+          purpose?: string | null;
+          status?: string | null;
           created_at?: string;
         };
         Update: {
@@ -44,6 +56,12 @@ export interface Database {
           stripe_account_id?: string | null;
           total_clicks?: number | null;
           total_paid_amount?: number | null;
+          expertise?: string | null;
+          social_influence?: string | null;
+          social_media_details?: string | null;
+          location?: string | null;
+          purpose?: string | null;
+          status?: string | null;
           created_at?: string;
         };
         Relationships: [];
@@ -193,6 +211,43 @@ export interface Database {
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];
+      };
+      restaurant_staff: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          auth_id: string | null;
+          email: string;
+          role: "manager" | "kitchen" | "waitstaff";
+          status: "invited" | "active";
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          auth_id?: string | null;
+          email: string;
+          role: "manager" | "kitchen" | "waitstaff";
+          status?: "invited" | "active";
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          restaurant_id?: string;
+          auth_id?: string | null;
+          email?: string;
+          role?: "manager" | "kitchen" | "waitstaff";
+          status?: "invited" | "active";
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_staff_restaurant_id_fkey";
+            columns: ["restaurant_id"];
+            referencedRelation: "restaurants";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       loyalty_cards: {
         Row: {

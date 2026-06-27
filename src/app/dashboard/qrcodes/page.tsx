@@ -35,6 +35,7 @@ const getGridClass = (count: number) => {
 };
 
 import { QrCodesClient } from "@/components/dashboard/qr-codes-client";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export default async function QrCodesPage(
   props: {
@@ -53,13 +54,7 @@ export default async function QrCodesPage(
     redirect("/login");
   }
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   if (!restaurant) {
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");

@@ -5,6 +5,7 @@ import { ArrowLeft, Crown } from "lucide-react";
 import { updateMenuBranding } from "@/app/dashboard/actions";
 import { BrandingForm } from "@/components/dashboard/branding-form";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export default async function MenuCustomizePage(
   props: {
@@ -22,13 +23,7 @@ export default async function MenuCustomizePage(
   }
 
   // Get restaurant to check plan
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("id, plan")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   if (!restaurant) redirect("/dashboard");
 

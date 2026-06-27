@@ -62,8 +62,8 @@ export default function PartnersLandingPage() {
               <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-6 border border-indigo-100">
                 <LinkIcon className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">1. Get your code</h3>
-              <p className="text-slate-500 font-medium">Sign up for free and create your custom tracking code (e.g., FOODIE50). You'll get a unique link instantly.</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">1. Apply & Get Approved</h3>
+              <p className="text-slate-500 font-medium">Apply to join the program and create your custom tracking code (e.g., FOODIE50). Our team will review your application within 24-48 hours.</p>
             </div>
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 border border-emerald-100">
@@ -161,9 +161,9 @@ export default function PartnersLandingPage() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-8">Ready to start earning?</h2>
           <Button asChild size="lg" className="rounded-full bg-slate-950 hover:bg-slate-900 text-white font-bold px-10 py-8 text-lg shadow-xl shadow-slate-950/20 hover:scale-105 transition-transform duration-300">
-            <Link href="/partners/signup">Create Partner Account</Link>
+            <Link href="/partners/signup">Apply to Partner Program</Link>
           </Button>
-          <p className="mt-6 text-amber-900/60 font-semibold">Takes 30 seconds. No approval required.</p>
+          <p className="mt-6 text-amber-900/60 font-semibold">Takes 2 minutes to apply.</p>
         </div>
       </section>
 

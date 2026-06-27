@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
 import { TakeawayBoard } from "./takeaway-board";
 import { ClipboardList } from "lucide-react";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export const metadata = {
   title: "Takeaway & Priority | NoMenu Dashboard",
@@ -23,13 +24,7 @@ export default async function TakeawayPage() {
   }
 
   // Get restaurant
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   if (!restaurant) {
     redirect("/dashboard/settings");

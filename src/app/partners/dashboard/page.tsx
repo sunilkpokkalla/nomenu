@@ -46,6 +46,65 @@ export default async function PartnerDashboardPage() {
 
   const referralLink = `https://nomenu.us?ref=${affiliate.referral_code}`;
 
+  if (affiliate.status === "rejected") {
+    return (
+      <div className="min-h-screen bg-slate-50 font-sans-vibrant flex flex-col">
+        <header className="bg-slate-950 text-white py-4 px-6 sm:px-10 flex items-center justify-between shadow-md relative z-10">
+          <div className="flex items-center gap-2">
+            <span className="font-bold tracking-tight text-xl">NoMenu <span className="text-amber-500">Partners</span></span>
+          </div>
+          <div className="flex items-center gap-4">
+            <form action={logout}>
+              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10 p-2 h-auto" type="submit">
+                <LogOut className="h-4 w-4" />
+                <span className="sr-only">Sign out</span>
+              </Button>
+            </form>
+          </div>
+        </header>
+        <main className="flex-1 flex items-center justify-center p-6 text-center">
+          <div className="max-w-md space-y-6">
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Application Declined</h1>
+            <p className="text-slate-500 font-medium leading-relaxed">
+              Unfortunately, your application to the NoMenu Partner Program has not been approved at this time. Thank you for your interest.
+            </p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (affiliate.status === "pending") {
+    return (
+      <div className="min-h-screen bg-slate-50 font-sans-vibrant flex flex-col">
+        <header className="bg-slate-950 text-white py-4 px-6 sm:px-10 flex items-center justify-between shadow-md relative z-10">
+          <div className="flex items-center gap-2">
+            <span className="font-bold tracking-tight text-xl">NoMenu <span className="text-amber-500">Partners</span></span>
+          </div>
+          <div className="flex items-center gap-4">
+            <form action={logout}>
+              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10 p-2 h-auto" type="submit">
+                <LogOut className="h-4 w-4" />
+                <span className="sr-only">Sign out</span>
+              </Button>
+            </form>
+          </div>
+        </header>
+        <main className="flex-1 flex items-center justify-center p-6 text-center">
+          <div className="max-w-md space-y-6">
+            <div className="w-20 h-20 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-amber-200">
+              <Activity className="w-10 h-10" />
+            </div>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Application Under Review</h1>
+            <p className="text-slate-500 font-medium leading-relaxed">
+              Thanks for applying to the NoMenu Partner Program! Our team is currently reviewing your application. You will receive an email as soon as your account is approved.
+            </p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   let isStripeConnected = false;
   if (affiliate.stripe_account_id) {
     try {

@@ -13,6 +13,7 @@ import { createClient } from "@/lib/supabase/server";
 
 
 import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export default async function SettingsPage(
   props: {
@@ -29,13 +30,7 @@ export default async function SettingsPage(
     redirect("/login");
   }
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   if (!restaurant) {
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
@@ -44,15 +39,7 @@ export default async function SettingsPage(
   const hasCustomLegacyCurrency = restaurant.currency && !CURRENCY_OPTIONS.some((c) => c.code === restaurant.currency);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 lg:px-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-950">Settings</h1>
-        <p className="mt-1 text-slate-600">
-          Manage your restaurant profile, address details, and regional currency settings.
-        </p>
-      </div>
-
+    <>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -217,6 +204,6 @@ export default async function SettingsPage(
           </form>
         </CardContent>
       </Card>
-    </div>
+    </>
   );
 }

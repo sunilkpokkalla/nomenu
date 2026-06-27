@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { CreditCard, ArrowRight, Building2, ShieldCheck, Banknote } from "lucide-react";
 import Link from "next/link";
 import { ConnectBankButton } from "./connect-bank-button";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export default async function PayoutsPage(
   props: {
@@ -19,13 +20,7 @@ export default async function PayoutsPage(
     redirect("/login");
   }
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   if (!restaurant) {
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");

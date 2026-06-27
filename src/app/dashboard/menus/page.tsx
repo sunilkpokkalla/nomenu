@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { CreateMenuSheet } from "@/components/dashboard/create-menu-sheet";
 import { MenuShareModal } from "@/components/dashboard/menu-share-modal";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import {
   GLOBAL_MENU_TYPES,
   REGIONAL_MENU_TYPES,
@@ -55,13 +56,7 @@ export default async function MenusPage(
     redirect("/login");
   }
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   if (!restaurant) {
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
+import nodemailer from "nodemailer";
 
 function getString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -21,9 +22,14 @@ export async function signupAffiliate(formData: FormData) {
   const name = getString(formData, "name");
   const email = getString(formData, "email");
   const referralCode = getString(formData, "referralCode").replace(/[^a-zA-Z0-9_-]/g, "").toUpperCase();
+  const expertise = getString(formData, "expertise");
+  const socialInfluence = getString(formData, "socialInfluence");
+  const socialMediaDetails = getString(formData, "socialMediaDetails");
+  const location = getString(formData, "location");
+  const purpose = getString(formData, "purpose");
   const password = getString(formData, "password");
 
-  if (!name || !email || !referralCode || !password) {
+  if (!name || !email || !referralCode || !password || !expertise || !socialInfluence || !socialMediaDetails || !location || !purpose) {
     redirect("/partners/signup?message=Please%20fill%20in%20all%20required%20fields");
   }
 
@@ -56,6 +62,12 @@ export async function signupAffiliate(formData: FormData) {
       name,
       email,
       referral_code: referralCode,
+      expertise,
+      social_influence: socialInfluence,
+      social_media_details: socialMediaDetails,
+      location,
+      purpose,
+      status: "pending"
     });
 
     if (insertError) {
@@ -65,6 +77,62 @@ export async function signupAffiliate(formData: FormData) {
         redirect("/partners/signup?message=An%20account%20with%20this%20email%20already%20exists.%20Please%20log%20in%20or%20use%20a%20different%20email.");
       }
       redirect(`/partners/signup?message=${encodeURIComponent(insertError.message)}`);
+    }
+
+    // Send Emails
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST || "smtp.zoho.com",
+        port: Number(process.env.SMTP_PORT) || 465,
+        secure: true,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD,
+        },
+      });
+
+      const adminEmail = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(",")[0] : "admin@nomenu.us";
+
+      // Email to Admin
+      await transporter.sendMail({
+        from: `"NoMenu Partners" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+        to: adminEmail,
+        subject: "New Partner Application Received",
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2>New Partner Application</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Expertise:</strong> ${expertise}</p>
+            <p><strong>Influence Size:</strong> ${socialInfluence}</p>
+            <p><strong>Links:</strong> ${socialMediaDetails}</p>
+            <p><strong>Location:</strong> ${location}</p>
+            <p><strong>Purpose:</strong> ${purpose}</p>
+            <p><strong>Requested Code:</strong> ${referralCode}</p>
+            <br/>
+            <p><a href="${url}/admin/partners">Review Application in Admin Dashboard</a></p>
+          </div>
+        `,
+      });
+
+      // Email to User
+      await transporter.sendMail({
+        from: `"NoMenu Partners" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+        to: email,
+        subject: "Your NoMenu Partner Application is Under Review",
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2>Application Received!</h2>
+            <p>Hi ${name},</p>
+            <p>Thank you for applying to the NoMenu Partner Program. We have received your application and our team is currently reviewing it.</p>
+            <p>We typically review applications within 24-48 hours. You will receive an email from us as soon as your account is approved.</p>
+            <br/>
+            <p>Best,<br/>The NoMenu Team</p>
+          </div>
+        `,
+      });
+    } catch (emailErr) {
+      console.error("Failed to send partner application emails:", emailErr);
     }
 
     revalidatePath("/partners/dashboard");

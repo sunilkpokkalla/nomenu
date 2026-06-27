@@ -4,13 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, QrCode, HelpCircle } from "lucide-react";
-import { navItems } from "@/components/dashboard/sidebar";
+import { getNavItems } from "@/components/dashboard/sidebar";
 import { logout } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
+import { UserRole } from "@/lib/rbac";
 
-export function MobileNav({ plan = "Free" }: { plan?: string }) {
+export function MobileNav({ plan = "Free", role = "owner" }: { plan?: string, role?: UserRole }) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  
+  const allowedNavItems = getNavItems(role);
   
   const planLevels: Record<string, number> = {
     free: 0,
@@ -71,7 +74,7 @@ export function MobileNav({ plan = "Free" }: { plan?: string }) {
                 <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Main Menu</p>
               </div>
               
-              {navItems.map((item) => {
+              {allowedNavItems.map((item) => {
                 const Icon = item.icon;
                 const requiredLevel = item.badge === "ENT." ? 3 : item.badge === "ELITE" ? 2 : item.badge === "PRO" ? 1 : 0;
                 const isLocked = userLevel < requiredLevel;

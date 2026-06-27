@@ -23,34 +23,39 @@ import {
 
 import { logout } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
+import { UserRole } from "@/lib/rbac";
 
-export const navItems = [
-  // Overview
-  { href: "/dashboard", label: "Dashboard", icon: Home },
-  
-  // Menu Content
-  { href: "/dashboard/menus", label: "My Menus", icon: Menu },
-  { href: "/dashboard/items", label: "Menu Items", icon: Utensils },
-  { href: "/dashboard/customize", label: "Customize", icon: Palette, badge: "PRO" },
-  
-  // Distribution
-  { href: "/dashboard/qrcodes", label: "QR Codes", icon: QrCode },
-  
-  // Operations & Insights
-  { href: "/dashboard/orders", label: "Dine-In Orders", icon: ShoppingBag, badge: "ELITE" },
-  { href: "/dashboard/takeaway", label: "Pickup & Reserve", icon: Clock, badge: "ENT." },
-  { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT." },
-  { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO" },
-  { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO" },
-  
-  // Account
-  { href: "/dashboard/integrations", label: "Integrations", icon: Plug, badge: "PRO" },
-  { href: "/dashboard/referrals", label: "Refer & Earn", icon: Gift },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
-  { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
-];
+export const getNavItems = (role: UserRole) => {
+  const items = [
+    // Overview
+    { href: "/dashboard", label: "Dashboard", icon: Home, roles: ["owner", "manager"] as UserRole[] },
+    
+    // Menu Content
+    { href: "/dashboard/menus", label: "My Menus", icon: Menu, roles: ["owner", "manager"] as UserRole[] },
+    { href: "/dashboard/items", label: "Menu Items", icon: Utensils, roles: ["owner", "manager"] as UserRole[] },
+    { href: "/dashboard/customize", label: "Customize", icon: Palette, badge: "PRO", roles: ["owner", "manager"] as UserRole[] },
+    
+    // Distribution
+    { href: "/dashboard/qrcodes", label: "QR Codes", icon: QrCode, roles: ["owner", "manager"] as UserRole[] },
+    
+    // Operations & Insights
+    { href: "/dashboard/orders", label: "Dine-In Orders", icon: ShoppingBag, badge: "ELITE", roles: ["owner", "manager", "kitchen", "waitstaff"] as UserRole[] },
+    { href: "/dashboard/takeaway", label: "Pickup & Reserve", icon: Clock, badge: "ENT.", roles: ["owner", "manager", "waitstaff"] as UserRole[] },
+    { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT.", roles: ["owner"] as UserRole[] },
+    { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO", roles: ["owner", "manager"] as UserRole[] },
+    { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO", roles: ["owner", "manager"] as UserRole[] },
+    
+    // Account
+    { href: "/dashboard/integrations", label: "Integrations", icon: Plug, badge: "PRO", roles: ["owner"] as UserRole[] },
+    { href: "/dashboard/referrals", label: "Refer & Earn", icon: Gift, roles: ["owner"] as UserRole[] },
+    { href: "/dashboard/settings", label: "Settings", icon: Settings, roles: ["owner"] as UserRole[] },
+    { href: "/dashboard/billing", label: "Billing", icon: CreditCard, roles: ["owner"] as UserRole[] },
+  ];
 
-export function Sidebar({ plan = "Free" }: { plan?: string }) {
+  return items.filter(item => item.roles.includes(role));
+};
+
+export function Sidebar({ plan = "Free", role = "owner" }: { plan?: string, role?: UserRole }) {
   const pathname = usePathname();
   
   const planLevels: Record<string, number> = {
@@ -60,6 +65,8 @@ export function Sidebar({ plan = "Free" }: { plan?: string }) {
     enterprise: 3,
   };
   const userLevel = planLevels[plan.toLowerCase()] ?? 0;
+
+  const allowedNavItems = getNavItems(role);
 
   return (
     <aside className="hidden min-h-screen w-72 border-r bg-white px-4 py-5 lg:flex lg:flex-col">
@@ -77,7 +84,7 @@ export function Sidebar({ plan = "Free" }: { plan?: string }) {
         <div className="px-3 mb-2">
           <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Main Menu</p>
         </div>
-        {navItems.map((item) => {
+        {allowedNavItems.map((item) => {
           const Icon = item.icon;
           const requiredLevel = (item.badge === "ENT." || item.badge === "ENTERPRISE") ? 3 : item.badge === "ELITE" ? 2 : item.badge === "PRO" ? 1 : 0;
           const isLocked = userLevel < requiredLevel;
@@ -111,7 +118,6 @@ export function Sidebar({ plan = "Free" }: { plan?: string }) {
           );
         })}
       </nav>
-
     </aside>
   );
 }

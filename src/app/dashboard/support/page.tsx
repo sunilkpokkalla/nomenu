@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { LifeBuoy } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { SupportForm } from "./support-form";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export const metadata = {
   title: "Support | NoMenu Dashboard",
@@ -20,13 +21,7 @@ export default async function SupportPage() {
   }
 
   // Get user's restaurant
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("name, id")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">

@@ -5,6 +5,7 @@ import { MobileNav } from "@/components/dashboard/mobile-nav";
 import { TopHeader } from "@/components/dashboard/top-header";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export const dynamic = 'force-dynamic';
 
@@ -28,22 +29,19 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("id, plan")
-    .eq("owner_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-
+  const restaurant = await getActiveRestaurant(supabase, user.id);
   const hasRestaurant = !!restaurant;
+  
+  // Default to owner if not explicitly a staff role
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const role: UserRole = (restaurant as any)?._staffRole || "owner";
 
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex">
-        {hasRestaurant && <Sidebar plan={restaurant.plan || "Free"} />}
+        {hasRestaurant && <Sidebar plan={restaurant.plan || "Free"} role={role} />}
         <main className="min-h-screen flex-1 flex flex-col">
-          {hasRestaurant && <MobileNav plan={restaurant.plan || "Free"} />}
+          {hasRestaurant && <MobileNav plan={restaurant.plan || "Free"} role={role} />}
           {hasRestaurant && <TopHeader />}
           <div className="flex-1">
             {children}
