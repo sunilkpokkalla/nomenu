@@ -18,6 +18,14 @@ NoMenu is a next-generation SaaS platform designed for restaurants to modernize 
 - **Staff Stamp PIN:** Digitize the classic punch-card. Staff use a secret 4-digit PIN to securely stamp a customer's device.
 - **Automated Retention Ideas:** The dashboard provides AI-driven suggestions to convert happy 4-5 star reviewers into raving regulars.
 
+### 👥 Team & Staff Management (RBAC)
+- **Role-Based Access Control:** Restaurant owners can invite staff with specific roles (Admin, Manager, Staff).
+- **Secure Onboarding:** Employees receive a secure email invitation to join the team and create their own password-protected accounts.
+
+### 🤝 Partner Affiliate Program
+- **Partner Dashboard:** Agencies and food influencers can sign up to become partners.
+- **Affiliate Tracking:** Partners generate custom promo codes to track referrals and earn recurring revenue.
+
 ## Tech Stack
 - **Frontend:** Next.js 15 (App Router), React, Tailwind CSS, shadcn/ui
 - **Backend/Database:** Supabase (PostgreSQL), Next.js Server Actions
