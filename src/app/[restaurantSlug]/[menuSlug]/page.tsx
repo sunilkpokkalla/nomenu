@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { getCachedMenuData } from "@/lib/cache/menu-cache";
 import { MenuClientView } from "@/components/menu/menu-client-view";
 import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
@@ -15,23 +16,11 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const params = await props.params;
-  const supabase = await createClient();
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("id, name, cuisine_type")
-    .eq("slug", params.restaurantSlug)
-    .maybeSingle();
+  const { restaurant, menu } = await getCachedMenuData(params.restaurantSlug, params.menuSlug);
 
   if (!restaurant) {
     return { title: "Menu Not Found | NoMenu" };
   }
-
-  const { data: menu } = await supabase
-    .from("menus")
-    .select("name, description")
-    .eq("restaurant_id", restaurant.id)
-    .eq("slug", params.menuSlug)
-    .maybeSingle();
 
   if (!menu) {
     return { title: `${restaurant.name} | NoMenu` };
@@ -71,17 +60,9 @@ export default async function StorefrontMenuPage(
 
   const supabase = await createClient();
 
-  // 1. Fetch restaurant details by slug
-  const { data: _restaurantData } = await supabase
-    .from("restaurants")
-    .select("*, stripe_account_id, loyalty_pin_code")
-    .eq("slug", restaurantSlug)
-    .maybeSingle();
+  const { restaurant, menu, categoriesList, itemsList } = await getCachedMenuData(restaurantSlug, menuSlug);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const restaurant = _restaurantData as any;
-
-  if (!restaurant) {
+  if (!restaurant || !menu) {
     notFound();
   }
 
@@ -107,35 +88,7 @@ export default async function StorefrontMenuPage(
     redirect(`${protocol}://menu.${rootDomain}/${restaurantSlug}/${menuSlug}${qrParam}${tableParam}`);
   }
 
-  // 2. Fetch menu details by slug
-  const { data: menu } = await supabase
-    .from("menus")
-    .select("*")
-    .eq("restaurant_id", restaurant.id)
-    .eq("slug", menuSlug)
-    .maybeSingle();
 
-  if (!menu) {
-    notFound();
-  }
-
-  // 3. Fetch categories
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("*")
-    .eq("menu_id", menu.id)
-    .order("sort_order", { ascending: true });
-
-  const categoriesList = categories || [];
-
-  // 4. Fetch menu items
-  const { data: menuItems } = await supabase
-    .from("menu_items")
-    .select("*")
-    .eq("restaurant_id", restaurant.id)
-    .eq("is_available", true);
-
-  const itemsList = menuItems || [];
 
   // 5. Track scan analytics if accessed via QR code
   let locationZone: string | null = null;
