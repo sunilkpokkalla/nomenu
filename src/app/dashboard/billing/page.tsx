@@ -15,6 +15,7 @@ const getPlans = (isAnnual: boolean) => [
     description: "Unlimited flexibility for high-volume venues.",
     features: [
       "Unlimited Menus & Items",
+      "Team & Staff Management (RBAC)",
       "10 Magic AI Credits",
       "VIP Digital Loyalty Cards & Rewards",
       "AI-Driven Marketing Win-Backs",
@@ -31,6 +32,7 @@ const getPlans = (isAnnual: boolean) => [
     description: "Real-time ordering for premium venues and groups.",
     features: [
       "Everything in Pro",
+      "Advanced Staff Permissions",
       "25 Magic AI Credits",
       "Interactive Digital Shopping Cart",
       "Real-Time Live Orders Dashboard (KDS)",
@@ -48,6 +50,7 @@ const getPlans = (isAnnual: boolean) => [
     description: "Full commerce suite with direct payouts.",
     features: [
       "Everything in Elite",
+      "Partner Agency Integrations",
       "50 Magic AI Credits",
       "Dine-in, Takeaway & Priority Reserve",
       "Multiple Kitchen Displays (KDS)",

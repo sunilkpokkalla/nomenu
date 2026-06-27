@@ -957,6 +957,9 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menus & Items
                     </li>
                     <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Team & Staff Management (RBAC)
+                    </li>
+                    <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> VIP Digital Loyalty Cards & Rewards
                     </li>
                     <li className="flex items-start gap-2.5">
@@ -1008,6 +1011,9 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Everything in Pro</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Advanced Staff Permissions</strong>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>25 Magic AI Credits</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
@@ -1056,6 +1062,9 @@ export default function LandingPage() {
                   <ul className="space-y-3 text-xs text-slate-300 font-medium">
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Everything in Elite</strong>
+                    </li>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Partner Agency Integrations</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>50 Magic AI Credits</strong>
