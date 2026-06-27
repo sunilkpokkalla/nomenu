@@ -20,8 +20,8 @@ export default async function PartnerLoginPage(
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image 
-            src="/auth-bg-login.png" 
-            alt="High end restaurant table setting" 
+            src="/partner-login-bg.png" 
+            alt="High end business office" 
             fill 
             className="object-cover opacity-30 mix-blend-luminosity"
             priority
