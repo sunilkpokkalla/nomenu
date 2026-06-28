@@ -338,6 +338,7 @@ export interface Database {
           fulfillment_type: string | null;
           created_at: string | null;
           slug: string | null;
+          allow_manual_payments: boolean | null;
         };
         Insert: {
           id?: string;
@@ -357,6 +358,7 @@ export interface Database {
           fulfillment_type?: string | null;
           created_at?: string | null;
           slug?: string | null;
+          allow_manual_payments?: boolean | null;
         };
         Update: Partial<Database["public"]["Tables"]["menus"]["Insert"]>;
         Relationships: [

@@ -29,6 +29,30 @@ export async function bulkInsertMenuData(
   if (!menu || menu.restaurant_id !== restaurantId) {
     throw new Error("Unauthorized to modify this menu");
   }
+
+  // 0. Check Limits Before Anything Else
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("plan")
+    .eq("id", restaurantId)
+    .single();
+    
+  const currentPlan = restaurant?.plan || "free";
+  if (currentPlan === "free" || currentPlan === "starter") {
+    const { count: itemCount } = await supabase
+      .from("menu_items")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurantId);
+      
+    const limit = currentPlan === "free" ? 30 : 50;
+    
+    let itemsToImport = 0;
+    data.categories.forEach(c => { itemsToImport += (c.items?.length || 0) });
+
+    if (itemCount !== null && (itemCount + itemsToImport) > limit) {
+      throw new Error(`Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This AI import has ${itemsToImport} items and would exceed your limit. Please upgrade.`);
+    }
+  }
   
   // Insert data
   let categorySortOrder = 0;

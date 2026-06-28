@@ -92,7 +92,7 @@ export default async function MenusPage(
           </p>
         </div>
         <div className="shrink-0">
-          <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} />
+          <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} plan={plan} />
         </div>
       </div>
 
@@ -154,6 +154,7 @@ export default async function MenusPage(
                                 menu={menu} 
                                 cuisineType={restaurant.cuisine_type} 
                                 editAction={editMenu} 
+                                plan={plan}
                               />
                             </div>
                             <div className="hidden sm:block h-5 w-px bg-slate-200 shrink-0" />
@@ -244,7 +245,7 @@ export default async function MenusPage(
               Get started by creating your first digital menu.
             </p>
             <div className="mt-6">
-              <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} />
+              <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} plan={plan} />
             </div>
           </div>
         )}

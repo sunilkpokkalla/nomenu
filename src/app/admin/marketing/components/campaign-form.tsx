@@ -151,56 +151,56 @@ export function CampaignForm() {
       {/* 1. Audience Selection */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Users className="w-5 h-5 text-indigo-400" />
-          <h2 className="text-lg font-medium text-white">1. Select Audience</h2>
+          <Users className="w-5 h-5 text-indigo-600" />
+          <h2 className="text-lg font-bold text-slate-900">1. Select Audience</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'free_users' ? 'border-indigo-500 bg-indigo-500/10' : 'border-neutral-800 bg-black/20 hover:border-neutral-700')}>
+          <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'free_users' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:border-slate-300')}>
             <input type="radio" name="audience" value="free_users" checked={audience === 'free_users'} onChange={() => setAudience('free_users')} className="sr-only" />
-            <span className="font-medium text-white">Existing Free Users</span>
-            <span className="text-xs text-neutral-400">Blast users who haven't upgraded yet.</span>
+            <span className="font-bold text-slate-900">Existing Free Users</span>
+            <span className="text-xs text-slate-500">Blast users who haven't upgraded yet.</span>
           </label>
-          <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'pro_users' ? 'border-indigo-500 bg-indigo-500/10' : 'border-neutral-800 bg-black/20 hover:border-neutral-700')}>
+          <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'pro_users' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:border-slate-300')}>
             <input type="radio" name="audience" value="pro_users" checked={audience === 'pro_users'} onChange={() => setAudience('pro_users')} className="sr-only" />
-            <span className="font-medium text-white">Active Pro Users</span>
-            <span className="text-xs text-neutral-400">Announce new features to paid users.</span>
+            <span className="font-bold text-slate-900">Active Pro Users</span>
+            <span className="text-xs text-slate-500">Announce new features to paid users.</span>
           </label>
-          <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'custom' ? 'border-indigo-500 bg-indigo-500/10' : 'border-neutral-800 bg-black/20 hover:border-neutral-700')}>
+          <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'custom' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:border-slate-300')}>
             <input type="radio" name="audience" value="custom" checked={audience === 'custom'} onChange={() => setAudience('custom')} className="sr-only" />
-            <span className="font-medium text-white">Custom List</span>
-            <span className="text-xs text-neutral-400">Paste an external list of leads.</span>
+            <span className="font-bold text-slate-900">Custom List</span>
+            <span className="text-xs text-slate-500">Paste an external list of leads.</span>
           </label>
         </div>
 
         {audience === 'custom' && (
           <div className="mt-4">
-            <label className="block text-sm font-medium text-neutral-300 mb-2">Paste Emails (Comma or newline separated)</label>
+            <label className="block text-sm font-bold text-slate-700 mb-2">Paste Emails (Comma or newline separated)</label>
             <textarea 
               name="customEmails"
               rows={4}
               placeholder="john@restaurant.com, jane@cafe.com"
-              className="w-full bg-black/50 border border-neutral-800 rounded-lg p-3 text-sm text-white placeholder:text-neutral-600 focus:outline-none focus:border-indigo-500"
+              className="w-full bg-white border border-slate-200 rounded-lg p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500 shadow-sm"
             />
           </div>
         )}
       </div>
 
-      <hr className="border-neutral-800" />
+      <hr className="border-slate-200" />
 
       {/* 2. Template Selection */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-indigo-400" />
-            <h2 className="text-lg font-medium text-white">2. Message Template</h2>
+            <Sparkles className="w-5 h-5 text-indigo-600" />
+            <h2 className="text-lg font-bold text-slate-900">2. Message Template</h2>
           </div>
           
           <select 
             name="template"
             value={template}
             onChange={(e) => handleTemplateChange(e.target.value as keyof typeof TEMPLATES)}
-            className="bg-black/50 border border-neutral-800 text-sm rounded-lg px-3 py-2 text-white focus:outline-none focus:border-indigo-500"
+            className="bg-white border border-slate-200 shadow-sm text-sm rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"
           >
             {Object.entries(TEMPLATES).map(([key, t]) => (
               <option key={key} value={key}>{t.name}</option>
@@ -210,20 +210,20 @@ export function CampaignForm() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-neutral-300 mb-2">Subject Line</label>
+            <label className="block text-sm font-bold text-slate-700 mb-2">Subject Line</label>
             <input 
               name="subject"
               required
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="w-full bg-black/50 border border-neutral-800 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-indigo-500"
+              className="w-full bg-white border border-slate-200 shadow-sm rounded-lg p-3 text-sm text-slate-900 focus:outline-none focus:border-indigo-500 font-medium"
               placeholder="Enter email subject"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-300 mb-2 flex justify-between items-center">
+            <label className="block text-sm font-bold text-slate-700 mb-2 flex justify-between items-center">
               <span>HTML Message Body</span>
-              <span className="text-xs text-neutral-500 font-normal flex items-center gap-1"><FileText className="w-3 h-3"/> Accepts HTML</span>
+              <span className="text-xs text-slate-500 font-medium flex items-center gap-1"><FileText className="w-3 h-3"/> Accepts HTML</span>
             </label>
             <textarea 
               name="message"
@@ -231,7 +231,7 @@ export function CampaignForm() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={12}
-              className="w-full bg-black/50 border border-neutral-800 rounded-lg p-3 text-sm text-white font-mono focus:outline-none focus:border-indigo-500"
+              className="w-full bg-slate-50 border border-slate-200 shadow-sm rounded-lg p-3 text-sm text-slate-900 font-mono focus:outline-none focus:border-indigo-500"
               placeholder="<h1>Hello!</h1>"
             />
           </div>

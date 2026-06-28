@@ -105,13 +105,9 @@ export function Sidebar({ plan = "Free", role = "owner" }: { plan?: string, role
                 <Icon className="h-4 w-4" />
                 {item.label}
               </div>
-              {item.badge && (
-                <span className={`rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border ${
-                  isLocked 
-                    ? "bg-slate-100 text-slate-400 border-slate-200" 
-                    : "bg-indigo-50 text-indigo-600 border-indigo-100/50"
-                }`}>
-                  {isLocked ? "🔒 " : ""}{item.badge}
+              {isLocked && item.badge && (
+                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-slate-100 text-slate-400 border-slate-200">
+                  🔒 {item.badge}
                 </span>
               )}
             </Link>

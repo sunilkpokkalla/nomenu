@@ -6,7 +6,7 @@ import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt } from "lucide-react";
 import { submitOrder, getOrderReceipt, getSlotAvailability } from "@/app/menu/[id]/actions";
 
-export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel, fulfillmentType, prepTimeMinutes, maxTakeawayPerSlot = 5, maxReservePerSlot = 5, openingTime = "09:00:00", closingTime = "23:00:00", plan }: {
+export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel, fulfillmentType, prepTimeMinutes, maxTakeawayPerSlot = 5, maxReservePerSlot = 5, openingTime = "09:00:00", closingTime = "23:00:00", plan, allowManualPayments = false }: {
   restaurantId: string;
   menuId: string;
   tableNumber?: string;
@@ -25,6 +25,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   openingTime?: string;
   closingTime?: string;
   plan?: string;
+  allowManualPayments?: boolean;
 }) {
   const searchParams = useSearchParams();
   const urlMode = searchParams?.get('mode');
@@ -165,8 +166,8 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
 
   if (totalItems === 0 && !successOrder) return null;
 
-  const handleCheckout = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCheckout = async (e: React.FormEvent | React.MouseEvent, skipStripe = false) => {
+    if (e.preventDefault) e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
@@ -185,8 +186,8 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
     const finalTotal = subtotal + taxAmount + serviceFeeAmount + (tipAmount || 0);
 
     try {
-      // If Stripe is connected, route to Stripe Checkout
-      if (stripeAccountId) {
+      // If Stripe is connected and we are not explicitly skipping it
+      if (stripeAccountId && !skipStripe) {
         // Generate an order ID so we can track the receipt when they return
         const tempOrderId = crypto.randomUUID();
         localStorage.setItem('nomenu_last_order', tempOrderId);
@@ -619,6 +620,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
 
                 </div>
 
+                {/* Main Checkout Button */}
                 <button
                   type="submit"
                   disabled={isSubmitting || isClosed || (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0)}
@@ -638,6 +640,18 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                     </>
                   )}
                 </button>
+
+                {/* Optional Manual Payment Button (Enterprise Only) */}
+                {allowManualPayments && stripeAccountId && plan === 'enterprise' && (
+                  <button
+                    type="button"
+                    onClick={(e) => handleCheckout(e, true)}
+                    disabled={isSubmitting || isClosed || (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0)}
+                    className="w-full py-3 mt-2 rounded-xl font-semibold flex justify-center items-center gap-2 bg-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-all disabled:opacity-50 text-sm"
+                  >
+                    Pay at Counter (Cash / POS)
+                  </button>
+                )}
               </form>
             </div>
           </div>

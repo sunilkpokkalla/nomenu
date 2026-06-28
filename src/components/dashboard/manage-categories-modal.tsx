@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Settings2, Trash2, Edit2, Check, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,7 @@ interface ManageCategoriesModalProps {
 export function ManageCategoriesModal({ categories, targetMenuId }: ManageCategoriesModalProps) {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const menuCategories = categories.filter(c => c.menu_id === targetMenuId);
 
@@ -63,8 +64,10 @@ export function ManageCategoriesModal({ categories, targetMenuId }: ManageCatego
                   {editingId === cat.id ? (
                     <form 
                       action={(formData) => {
-                        updateCategory(formData);
-                        setEditingId(null);
+                        startTransition(async () => {
+                          await updateCategory(formData);
+                          setEditingId(null);
+                        });
                       }} 
                       className="flex items-center gap-2 w-full"
                     >
@@ -75,7 +78,7 @@ export function ManageCategoriesModal({ categories, targetMenuId }: ManageCatego
                         className="h-8 text-sm"
                         autoFocus
                       />
-                      <Button type="submit" size="sm" variant="ghost" className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50">
+                      <Button type="submit" size="sm" variant="ghost" disabled={isPending} className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50">
                         <Check className="h-4 w-4" />
                       </Button>
                       <Button type="button" onClick={() => setEditingId(null)} size="sm" variant="ghost" className="h-8 w-8 p-0 text-slate-400">

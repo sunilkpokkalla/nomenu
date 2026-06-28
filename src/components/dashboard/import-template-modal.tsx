@@ -40,6 +40,8 @@ export function ImportTemplateModal({
         setSelectedTemplateId(null);
       } catch (error) {
         console.error(error);
+        const errorMessage = error instanceof Error ? error.message : "Failed to apply template";
+        alert(errorMessage);
       }
     });
   };

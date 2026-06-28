@@ -380,7 +380,8 @@ export async function submitOrder(data: {
       party_size: safePartySize,
       total_amount: secureTotalAmount,
       tip_amount: safeTipAmount,
-      status: "pending"
+      status: "pending",
+      is_paid: false
     })
     .select("id, daily_order_number")
     .single();

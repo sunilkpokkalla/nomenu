@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 
 export default async function PartnerLoginPage(
   props: {
-    searchParams: Promise<{ message?: string; next?: string }>;
+    searchParams: Promise<{ message?: string; success?: string; next?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
@@ -73,6 +73,12 @@ export default async function PartnerLoginPage(
               Enter your credentials to access your partner dashboard.
             </p>
           </div>
+
+          {searchParams.success && (
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 text-left">
+              {searchParams.success}
+            </div>
+          )}
 
           {searchParams.message && (
             <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600 text-left">

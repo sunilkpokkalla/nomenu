@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export async function generateImpersonationOtp(userId: string) {
+  console.log("--> generateImpersonationOtp CALLED for userId:", userId);
   try {
     // 1. Verify caller is an Admin
     const supabase = await createClient();
@@ -11,8 +12,8 @@ export async function generateImpersonationOtp(userId: string) {
     if (!user || !user.email) return { success: false, error: "Not logged in" };
     
     const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
-    if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
-      return { success: false, error: "Unauthorized: Your email is not in the ADMIN_EMAILS list." };
+    if (!adminEmails.includes(user.email)) {
+      return { success: false, error: "Unauthorized: Not an admin" };
     }
 
     // 2. Initialize Service Role Client
@@ -42,7 +43,7 @@ export async function generateImpersonationOtp(userId: string) {
 
     return { success: true, email: targetUser.user.email, otp: linkData.properties.hashed_token };
   } catch (err: unknown) {
-    console.error("generateImpersonationOtp error:", err);
+    console.error("--> generateImpersonationOtp error:", err);
     return { success: false, error: err instanceof Error ? err.message : "Unknown server error occurred" };
   }
 }

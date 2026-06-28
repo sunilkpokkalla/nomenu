@@ -149,7 +149,7 @@ export async function signupAffiliate(formData: FormData) {
     if (authData.session) {
       redirect("/partners/dashboard");
     } else {
-      redirect("/partners/login?message=Account%20created!%20Please%20check%20your%20email%20to%20confirm%20and%20activate%20your%20account.");
+      redirect("/partners/login?success=Account created! Please check your email to confirm your account and wait for admin approval.");
     }
   } else {
     redirect("/partners/signup?message=Failed%20to%20create%20account");

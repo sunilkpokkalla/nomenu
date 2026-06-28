@@ -12,7 +12,7 @@ export async function sendMarketingEmailAction() {
   if (!user || !user.email) throw new Error("Not logged in");
   
   const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
-  if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
+  if (!adminEmails.includes(user.email)) {
     throw new Error("Unauthorized");
   }
 

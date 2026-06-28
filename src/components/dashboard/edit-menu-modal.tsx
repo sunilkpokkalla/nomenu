@@ -51,12 +51,14 @@ interface EditMenuProps {
     service_charge: number | null;
     service_charge_type: string | null;
     location_label: string | null;
+    allow_manual_payments: boolean | null;
   };
   cuisineType?: string | null;
   editAction: (formData: FormData) => Promise<void>;
+  plan: string;
 }
 
-export function EditMenuModal({ menu, cuisineType, editAction }: EditMenuProps) {
+export function EditMenuModal({ menu, cuisineType, editAction, plan }: EditMenuProps) {
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState(menu.description || "");
   const [isGeneratingDesc, setIsGeneratingDesc] = useState(false);
@@ -97,7 +99,7 @@ export function EditMenuModal({ menu, cuisineType, editAction }: EditMenuProps) 
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 shadow-2xl rounded-2xl top-[5vh] translate-y-0 mb-[5vh]">
-        <DialogHeader className="p-6 pb-4 border-b border-slate-100 bg-slate-50/50 sticky top-0 z-10">
+        <DialogHeader className="p-6 pb-4 border-b border-slate-100 bg-white sticky top-0 z-10">
           <DialogTitle className="text-xl font-bold flex items-center justify-between gap-2 w-full">
             <div className="flex items-center gap-2">
               <Settings2 className="h-5 w-5 text-indigo-500" />
@@ -281,25 +283,51 @@ export function EditMenuModal({ menu, cuisineType, editAction }: EditMenuProps) 
             </div>
           </div>
 
-          {/* Status Section */}
-          <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
-            <div className="mt-0.5">
-              <input 
-                type="checkbox" 
-                id="isActive"
-                name="isActive" 
-                value="true" 
-                defaultChecked={menu.is_active} 
-                className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-600 h-5 w-5 cursor-pointer bg-white" 
-              />
+          {/* Toggles Section */}
+          <div className="space-y-3">
+            {/* Status Section */}
+            <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
+              <div className="mt-0.5">
+                <input 
+                  type="checkbox" 
+                  id={`isActive-${menu.id}`}
+                  name="isActive" 
+                  value="true" 
+                  defaultChecked={menu.is_active} 
+                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-600 h-5 w-5 cursor-pointer bg-white" 
+                />
+              </div>
+              <div className="flex-1 space-y-1">
+                <Label htmlFor={`isActive-${menu.id}`} className="text-sm font-semibold text-slate-900 cursor-pointer">Menu is Active & Visible</Label>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  When unchecked, this menu is hidden from your public page and guests cannot place orders.
+                </p>
+              </div>
             </div>
-            <div className="flex-1 space-y-1">
-              <Label htmlFor="isActive" className="text-sm font-semibold text-slate-900 cursor-pointer">Menu is Active & Visible</Label>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                When unchecked, this menu is hidden from your public page and guests cannot place orders.
-              </p>
-            </div>
-            <Eye className={`h-5 w-5 ${menu.is_active ? 'text-indigo-500' : 'text-slate-400'}`} />
+
+            {/* Enterprise Settings Section */}
+            {plan === 'enterprise' && (
+              <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
+                <div className="mt-0.5">
+                  <input 
+                    type="checkbox" 
+                    id={`allowManualPayments-${menu.id}`} 
+                    name="allowManualPayments" 
+                    defaultChecked={menu.allow_manual_payments || false}
+                    className="peer sr-only"
+                  />
+                  <div className="h-5 w-9 rounded-full bg-slate-200 transition-colors peer-checked:bg-indigo-600 peer-focus:ring-2 peer-focus:ring-indigo-600 peer-focus:ring-offset-2 relative after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-4"></div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <Label htmlFor={`allowManualPayments-${menu.id}`} className="text-sm font-semibold text-slate-900 cursor-pointer">
+                    Enable Manual Payments
+                  </Label>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Allow customers to order without Stripe and pay later at the counter (e.g., Cash or POS).
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="pt-2">

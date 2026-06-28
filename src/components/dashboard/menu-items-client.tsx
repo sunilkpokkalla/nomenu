@@ -42,6 +42,18 @@ export function MenuItemsClient({
   const [selectedCategoryId, setSelectedCategoryId] = useState(initialCategoryId);
   const [isCreateSheetOpen, setIsCreateSheetOpen] = useState(false);
 
+  useEffect(() => {
+    if (selectedMenuId !== "all" && !menus.find(m => m.id === selectedMenuId)) {
+      setSelectedMenuId("all");
+    }
+  }, [menus, selectedMenuId]);
+
+  useEffect(() => {
+    if (selectedCategoryId !== "all" && !categories.find(c => c.id === selectedCategoryId)) {
+      setSelectedCategoryId("all");
+    }
+  }, [categories, selectedCategoryId]);
+
   const menuIds = menus.map((m) => m.id);
   const restaurantCategories = categories.filter((cat) => menuIds.includes(cat.menu_id));
 
@@ -97,8 +109,8 @@ export function MenuItemsClient({
     });
   }
 
-  const selectedMenuName = selectedMenuId === "all" ? "All Menus" : menus.find(m => m.id === selectedMenuId)?.name;
-  const selectedCategoryName = selectedCategoryId === "all" ? "All Categories" : restaurantCategories.find(c => c.id === selectedCategoryId)?.name;
+  const selectedMenuName = selectedMenuId === "all" ? "All Menus" : menus.find(m => m.id === selectedMenuId)?.name || "Deleted Menu";
+  const selectedCategoryName = selectedCategoryId === "all" ? "All Categories" : restaurantCategories.find(c => c.id === selectedCategoryId)?.name || "Deleted Category";
 
   // Group menus by location
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -441,16 +453,16 @@ function OptimisticItemToggle({ item }: { item: any }) {
   };
 
   return (
-    <div className="flex items-center gap-2" title={optimisticAvailable ? "In Stock" : "Sold Out"}>
-      <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+    <label className="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-1.5 -m-1.5 rounded-lg transition-colors" title={optimisticAvailable ? "In Stock" : "Sold Out"}>
+      <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 select-none">
         {optimisticAvailable ? "In Stock" : "Sold Out"}
       </span>
       <Switch 
         checked={optimisticAvailable} 
         onCheckedChange={handleToggle}
         disabled={isPending}
-        className="scale-75 origin-right"
+        className="scale-90 origin-right"
       />
-    </div>
+    </label>
   );
 }

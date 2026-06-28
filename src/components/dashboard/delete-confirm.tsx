@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,6 +22,14 @@ interface DeleteConfirmProps {
 
 export function DeleteConfirmForm({ action, confirmMessage, name, value, children }: DeleteConfirmProps) {
   const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  const handleSubmit = (formData: FormData) => {
+    startTransition(async () => {
+      await action(formData);
+      setOpen(false);
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -39,10 +47,10 @@ export function DeleteConfirmForm({ action, confirmMessage, name, value, childre
           <Button type="button" variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <form action={action} onSubmit={() => setOpen(false)}>
+          <form action={handleSubmit}>
             <input type="hidden" name={name} value={value} />
-            <Button type="submit" variant="destructive">
-              Delete
+            <Button type="submit" variant="destructive" disabled={isPending}>
+              {isPending ? "Deleting..." : "Delete"}
             </Button>
           </form>
         </DialogFooter>

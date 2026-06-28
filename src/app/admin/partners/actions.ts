@@ -11,7 +11,7 @@ export async function approvePartnerAction(affiliateId: string, email: string, f
   if (!user || !user.email) throw new Error("Not logged in");
 
   const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
-  if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
+  if (!adminEmails.includes(user.email)) {
     throw new Error("Unauthorized");
   }
 
@@ -67,13 +67,13 @@ export async function approvePartnerAction(affiliateId: string, email: string, f
   revalidatePath("/admin/partners");
 }
 
-export async function rejectPartnerAction(affiliateId: string, formData?: FormData) {
+export async function rejectPartnerAction(affiliateId: string, email: string, formData: FormData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !user.email) throw new Error("Not logged in");
 
   const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
-  if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
+  if (!adminEmails.includes(user.email)) {
     throw new Error("Unauthorized");
   }
 
@@ -89,6 +89,43 @@ export async function rejectPartnerAction(affiliateId: string, formData?: FormDa
 
   if (error) {
     throw new Error("Failed to reject partner: " + error.message);
+  }
+
+  const reason = formData?.get("reason")?.toString();
+
+  // Send Rejection/Revoke Email
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST || "smtp.zoho.com",
+      port: Number(process.env.SMTP_PORT) || 465,
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    const reasonHtml = reason && reason.trim().length > 0 
+      ? `<div style="background-color: #f1f5f9; padding: 16px; border-left: 4px solid #ef4444; margin: 24px 0;"><strong>Feedback from Admin:</strong><br/>${reason}</div>`
+      : "";
+
+    await transporter.sendMail({
+      from: `"NoMenu Partners" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+      to: email,
+      subject: "Update on your Partner Application",
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2>Application Update</h2>
+          <p>Thank you for your interest in the NoMenu Partner Program.</p>
+          <p>After careful review, we are unfortunately unable to approve or continue your partnership at this time.</p>
+          ${reasonHtml}
+          <p>We appreciate your interest and wish you the best.</p>
+          <p>Best,<br/>The NoMenu Team</p>
+        </div>
+      `,
+    });
+  } catch (err) {
+    console.error("Failed to send rejection email:", err);
   }
 
   revalidatePath("/admin/partners");

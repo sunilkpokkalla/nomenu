@@ -112,8 +112,8 @@ export async function createMenu(formData: FormData) {
   const serviceCharge = parseFloat(field(formData, "serviceCharge") || "0") || 0;
   const serviceChargeType = field(formData, "serviceChargeType") || "percentage";
   const locationLabel = field(formData, "locationLabel") || "Table";
-
-  const currentPlan = restaurant.plan || "free";
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const allowManualPayments = currentPlan === "enterprise" ? formData.get("allowManualPayments") === "true" : false;
   if (currentPlan === "free" || currentPlan === "starter") {
     const { count: menuCount } = await supabase
       .from("menus")
@@ -169,6 +169,7 @@ export async function createMenu(formData: FormData) {
     service_charge: serviceCharge,
     service_charge_type: serviceChargeType,
     location_label: locationLabel,
+    allow_manual_payments: allowManualPayments,
   });
 
   if (error) {
@@ -211,6 +212,8 @@ export async function editMenu(formData: FormData) {
   const serviceCharge = parseFloat(field(formData, "serviceCharge") || "0") || 0;
   const serviceChargeType = field(formData, "serviceChargeType") || "percentage";
   const locationLabel = field(formData, "locationLabel") || "Table";
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const allowManualPayments = currentPlan === "enterprise" ? formData.get("allowManualPayments") === "true" : false;
 
   // First, verify the menu belongs to this restaurant
   const { data: existingMenu } = await supabase
@@ -270,6 +273,7 @@ export async function editMenu(formData: FormData) {
       service_charge: serviceCharge,
       service_charge_type: serviceChargeType,
       location_label: locationLabel,
+      allow_manual_payments: allowManualPayments,
     })
     .eq("id", menuId);
 
@@ -543,23 +547,12 @@ export async function editMenuItem(formData: FormData) {
   const isVegan = formData.get("isVegan") === "true";
   const isGlutenFree = formData.get("isGlutenFree") === "true";
   const isSpicy = formData.get("isSpicy") === "true";
-  let imageUrl = field(formData, "imageUrl");
-
-  // 🤖 Auto-generate description if empty (works for all plans)
-  let description = rawDescription;
-  if (!description && name) {
-    description = await generateAiDescription(name, 'item');
-  }
-
-  // 🖼️ Auto-fetch free stock image if no image provided (all plans — no cost)
-  if (!imageUrl && name) {
-    imageUrl = await searchFreeFoodImage(name);
-  }
+  const imageUrl = field(formData, "imageUrl");
 
   const updatePayload: Database["public"]["Tables"]["menu_items"]["Update"] = {
     category_id: categoryId,
     name,
-    description,
+    description: rawDescription || null,
     price,
     is_available: isAvailable,
     is_popular: isPopular,
@@ -938,6 +931,27 @@ export async function importCategoriesAndItems(
     throw new Error("No categories selected for import");
   }
 
+  // 0. Check Limits Before Anything Else
+  const currentPlan = restaurant.plan || "free";
+  if (currentPlan === "free" || currentPlan === "starter") {
+    const { count: itemCount } = await supabase
+      .from("menu_items")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+      
+    const limit = currentPlan === "free" ? 30 : 50;
+    
+    // Count how many items are in the categories being imported
+    const { count: itemsToImportCount } = await supabase
+      .from("menu_items")
+      .select("id", { count: "exact", head: true })
+      .in("category_id", categoryIdsToImport);
+
+    if (itemCount !== null && itemsToImportCount !== null && (itemCount + itemsToImportCount) > limit) {
+      throw new Error(`Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This import has ${itemsToImportCount} items and would exceed your limit. Please upgrade.`);
+    }
+  }
+
   for (const oldCatId of categoryIdsToImport) {
     // 1. Fetch old category
     const { data: oldCat } = await supabase
@@ -1063,6 +1077,27 @@ export async function importSpecificItems(
 
   if (!itemIdsToImport || itemIdsToImport.length === 0) {
     throw new Error("No items selected for import");
+  }
+
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    throw new Error("Restaurant not found");
+  }
+
+  // 0. Check Limits Before Anything Else
+  const currentPlan = restaurant.plan || "free";
+  if (currentPlan === "free" || currentPlan === "starter") {
+    const { count: itemCount } = await supabase
+      .from("menu_items")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+      
+    const limit = currentPlan === "free" ? 30 : 50;
+    const itemsToImportCount = itemIdsToImport.length;
+
+    if (itemCount !== null && (itemCount + itemsToImportCount) > limit) {
+      throw new Error(`Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This import has ${itemsToImportCount} items and would exceed your limit. Please upgrade.`);
+    }
   }
 
   // Fetch all selected items
@@ -1248,7 +1283,7 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
   // Double check ownership
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id")
+    .select("id, plan")
     .eq("id", restaurantId)
     .eq("owner_id", user.id)
     .single();
@@ -1257,7 +1292,26 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
     throw new Error("Unauthorized or restaurant not found");
   }
 
-  // 0. Fetch high-quality images from the global chef library
+  // 0. Check Limits Before Anything Else
+  const currentPlan = restaurant.plan || "free";
+  if (currentPlan === "free" || currentPlan === "starter") {
+    const { count: itemCount } = await supabase
+      .from("menu_items")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+      
+    const limit = currentPlan === "free" ? 30 : 50;
+    
+    // Count how many items the template has
+    let itemsInTemplate = 0;
+    template.categories.forEach(c => { itemsInTemplate += c.items.length });
+
+    if (itemCount !== null && (itemCount + itemsInTemplate) > limit) {
+      throw new Error(`Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This template has ${itemsInTemplate} items and would exceed your limit. Please upgrade.`);
+    }
+  }
+
+  // 1. Fetch high-quality images from the global chef library
   // Fetch ALL global matches to allow for fuzzy searching
   const { data: globalMatches } = await supabase
     .from('global_chef_library')

@@ -11,7 +11,10 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
@@ -56,7 +59,10 @@
   "devDependencies": {
     "@emnapi/core": "^1.10.0",
     "@emnapi/runtime": "^1.10.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/file-saver": "^2.0.7",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/nodemailer": "^8.0.0",
     "@types/qrcode": "^1.5.6",
@@ -65,11 +71,16 @@
     "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "^15.5.18",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "postcss": "^8",
+    "prettier": "^3.9.1",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "puppeteer": "^25.1.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.1",
     "ts-morph": "^28.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5",
     "wrangler": "^4.103.0"
   }

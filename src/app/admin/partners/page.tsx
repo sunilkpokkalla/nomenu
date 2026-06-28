@@ -5,7 +5,8 @@ import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Check, X, MapPin, Link as LinkIcon, Target } from "lucide-react";
-import { approvePartnerAction, rejectPartnerAction } from "./actions";
+import { approvePartnerAction } from "./actions";
+import { RejectPartnerForm } from "./RejectPartnerForm";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ export default async function AdminPartnersPage() {
   }
 
   const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
-  if (process.env.NODE_ENV !== 'development' && !adminEmails.includes(user.email)) {
+  if (!adminEmails.includes(user.email)) {
     redirect("/dashboard");
   }
 
@@ -59,63 +60,57 @@ export default async function AdminPartnersPage() {
           {pending.length === 0 ? (
             <p className="text-slate-500 font-medium py-8 text-center bg-white rounded-2xl border border-slate-100 shadow-sm">No pending applications right now.</p>
           ) : (
-            <div className="grid gap-6">
-              {pending.map((p) => (
-                <div key={p.id} className="bg-white border border-amber-200 rounded-3xl p-6 shadow-sm flex flex-col md:flex-row gap-6 justify-between items-start">
-                  
-                  <div className="space-y-4 flex-1">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                      <h3 className="text-xl font-bold text-slate-900">{p.name}</h3>
-                      <a href={`mailto:${p.email}`} className="text-blue-600 font-medium text-sm hover:underline">{p.email}</a>
-                    </div>
-                    
-                    <div className="grid sm:grid-cols-2 gap-4 text-sm bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                      <div>
-                        <span className="text-slate-500 font-bold uppercase tracking-wider text-xs block mb-1">Expertise</span>
-                        <span className="text-slate-900 font-medium">{p.expertise || "N/A"}</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 font-bold uppercase tracking-wider text-xs block mb-1">Influence Size</span>
-                        <span className="text-slate-900 font-medium">{p.social_influence || "N/A"}</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 font-bold uppercase tracking-wider text-xs block mb-1 flex items-center gap-1"><MapPin className="w-3 h-3" /> Location</span>
-                        <span className="text-slate-900 font-medium">{p.location || "N/A"}</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 font-bold uppercase tracking-wider text-xs block mb-1 flex items-center gap-1"><LinkIcon className="w-3 h-3" /> Links</span>
-                        <span className="text-slate-900 font-medium">{p.social_media_details || "N/A"}</span>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <span className="text-slate-500 font-bold uppercase tracking-wider text-xs block mb-1 flex items-center gap-1"><Target className="w-3 h-3" /> Purpose / Strategy</span>
-                      <p className="text-slate-700 italic bg-white p-3 rounded-xl border border-slate-200 text-sm">"{p.purpose || "N/A"}"</p>
-                    </div>
-
-                    <div>
-                      <span className="text-slate-500 font-bold uppercase tracking-wider text-xs block mb-1">Requested Promo Code</span>
-                      <span className="font-mono font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-lg text-sm">{p.referral_code}</span>
-                    </div>
-                    
-                    <p className="text-xs text-slate-400 font-medium">Applied {p.created_at ? formatDistanceToNow(new Date(p.created_at), { addSuffix: true }) : 'unknown time ago'}</p>
-                  </div>
-
-                  <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto">
-                    <form action={approvePartnerAction.bind(null, p.id, p.email)} className="flex-1 md:w-full">
-                      <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-12 md:w-40 rounded-xl" type="submit">
-                        <Check className="w-5 h-5 mr-2" /> Approve
-                      </Button>
-                    </form>
-                    <form action={rejectPartnerAction.bind(null, p.id)} className="flex-1 md:w-full">
-                      <Button variant="outline" className="w-full text-rose-600 hover:text-rose-700 hover:bg-rose-50 font-bold h-12 md:w-40 rounded-xl border-rose-200" type="submit">
-                        <X className="w-5 h-5 mr-2" /> Reject
-                      </Button>
-                    </form>
-                  </div>
-
-                </div>
-              ))}
+            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-xs border-b border-slate-100">
+                    <tr>
+                      <th className="px-6 py-4">Partner</th>
+                      <th className="px-6 py-4">Details</th>
+                      <th className="px-6 py-4">Strategy</th>
+                      <th className="px-6 py-4">Code</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {pending.map((p) => (
+                      <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-6 py-4 align-top">
+                          <p className="font-bold text-slate-900">{p.name}</p>
+                          <a href={`mailto:${p.email}`} className="text-blue-600 text-xs hover:underline block mt-0.5">{p.email}</a>
+                          <div className="mt-3 text-[11px] text-slate-400 font-medium">
+                            Applied {p.created_at ? formatDistanceToNow(new Date(p.created_at), { addSuffix: true }) : 'N/A'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 align-top text-xs space-y-2">
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Exp:</span> <span className="font-medium text-slate-700">{p.expertise || "N/A"}</span></p>
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Size:</span> <span className="font-medium text-slate-700">{p.social_influence || "N/A"}</span></p>
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Loc:</span> <span className="font-medium text-slate-700">{p.location || "N/A"}</span></p>
+                          <p className="truncate max-w-[150px]" title={p.social_media_details || ""}><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Link:</span> <span className="font-medium text-slate-700">{p.social_media_details || "N/A"}</span></p>
+                        </td>
+                        <td className="px-6 py-4 align-top">
+                          <p className="text-slate-600 italic text-xs max-w-[250px] line-clamp-4 leading-relaxed bg-slate-50 p-2 rounded-lg border border-slate-100" title={p.purpose || "N/A"}>
+                            "{p.purpose || "N/A"}"
+                          </p>
+                        </td>
+                        <td className="px-6 py-4 align-top">
+                          <span className="font-mono font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-md text-xs">{p.referral_code}</span>
+                        </td>
+                        <td className="px-6 py-4 align-top text-right">
+                          <div className="flex flex-col items-end gap-2">
+                            <form action={approvePartnerAction.bind(null, p.id, p.email)}>
+                              <Button size="sm" className="w-28 bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-8 rounded-lg" type="submit">
+                                <Check className="w-4 h-4 mr-1" /> Approve
+                              </Button>
+                            </form>
+                            <RejectPartnerForm id={p.id} email={p.email} label="Reject" />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
@@ -156,11 +151,7 @@ export default async function AdminPartnersPage() {
                         )}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <form action={rejectPartnerAction.bind(null, p.id)}>
-                          <Button variant="ghost" size="sm" className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 font-bold" type="submit">
-                            Revoke
-                          </Button>
-                        </form>
+                        <RejectPartnerForm id={p.id} email={p.email} label="Revoke" />
                       </td>
                     </tr>
                   ))}

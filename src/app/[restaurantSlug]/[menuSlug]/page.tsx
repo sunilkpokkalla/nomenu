@@ -98,7 +98,9 @@ export default async function StorefrontMenuPage(
       (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
     );
 
-    const userAgent = (await headers()).get("user-agent") || "";
+    const headersList = await headers();
+    const userAgent = headersList.get("user-agent") || "";
+    const country = headersList.get("x-vercel-ip-country") || "US";
     let deviceType = "Desktop";
     if (/android/i.test(userAgent)) {
       deviceType = "Android";
@@ -106,27 +108,38 @@ export default async function StorefrontMenuPage(
       deviceType = "iOS";
     }
 
-    // Insert scan log securely bypassing RLS
-    await supabaseAdmin.from("menu_scans").insert({
-      qr_code_id: qrCodeId,
-      restaurant_id: restaurant.id,
-      device_type: deviceType,
-      country: (await headers()).get("x-vercel-ip-country") || "US",
-    });
+    // Fetch location zone (we need this for rendering) and trigger insert in parallel
+    const [qrRecordRes] = await Promise.all([
+      supabaseAdmin
+        .from("qr_codes")
+        .select("scan_count, location_zone")
+        .eq("id", qrCodeId)
+        .maybeSingle(),
+      // Insert scan log securely bypassing RLS (Fire and forget from the user's perspective, but we await it in Promise.all so Next.js doesn't kill it early)
+      supabaseAdmin.from("menu_scans").insert({
+        qr_code_id: qrCodeId,
+        restaurant_id: restaurant.id,
+        device_type: deviceType,
+        country: country,
+      })
+    ]);
 
-    // Increment scan count on QR code record securely
-    const { data: qrRecord } = await supabaseAdmin
-      .from("qr_codes")
-      .select("scan_count, location_zone")
-      .eq("id", qrCodeId)
-      .maybeSingle();
-
+    const qrRecord = qrRecordRes.data;
     if (qrRecord) {
       locationZone = qrRecord.location_zone || null;
-      await supabaseAdmin
-        .from("qr_codes")
-        .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
-        .eq("id", qrCodeId);
+      
+      // Increment scan count securely (fire-and-forget)
+      const triggerUpdate = async () => {
+        try {
+          await supabaseAdmin
+            .from("qr_codes")
+            .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
+            .eq("id", qrCodeId);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      triggerUpdate();
     }
   }
 
@@ -184,6 +197,7 @@ export default async function StorefrontMenuPage(
           fulfillmentType={menu.fulfillment_type || "dine_in"}
           prepTimeMinutes={restaurant.prep_time_minutes ?? 20}
           plan={plan}
+          allowManualPayments={menu.allow_manual_payments || false}
         />
       )}
       <ReceiptTracker 

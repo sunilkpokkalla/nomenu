@@ -25,9 +25,10 @@ import {
 interface CreateMenuSheetProps {
   createAction: (formData: FormData) => Promise<void>;
   chefRecommendations: { value: string; label: string }[];
+  plan: string;
 }
 
-export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMenuSheetProps) {
+export function CreateMenuSheet({ createAction, chefRecommendations, plan }: CreateMenuSheetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -193,6 +194,25 @@ export function CreateMenuSheet({ createAction, chefRecommendations }: CreateMen
             </div>
             <Eye className="h-5 w-5 text-indigo-500" />
           </div>
+
+          {/* Enterprise Settings */}
+          {plan === 'enterprise' && (
+            <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
+              <div className="mt-0.5 flex items-center h-5">
+                <Switch 
+                  id="allowManualPayments" 
+                  name="allowManualPayments" 
+                  defaultChecked={false}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="allowManualPayments" className="text-sm font-semibold text-slate-900 cursor-pointer">Enable Manual Payments</Label>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Allow customers to order without Stripe and pay later at the counter (e.g., Cash or POS). 
+                </p>
+              </div>
+            </div>
+          )}
 
           </div>
           <div className="p-4 border-t border-slate-100 bg-white mt-auto shrink-0 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)]">
