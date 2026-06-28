@@ -17,10 +17,12 @@ import {
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 import { useCart } from "../cart-context";
+import { FeedbackFAB } from "../feedback-fab";
 
 export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
+  const canFeedback = currentPlan !== "free";
   const { addToCart } = useCart();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -300,6 +302,8 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
             </div>
           )}
         </div>
+
+        {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
 
       </div>
 

@@ -30,6 +30,8 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [recoveryOffer, setRecoveryOffer] = useState<string>("");
   const [recoveryMessage, setRecoveryMessage] = useState<string>("");
   const [isLoyaltyEligible, setIsLoyaltyEligible] = useState<boolean>(false);
+  const [hasSubmittedContact, setHasSubmittedContact] = useState<boolean>(false);
+  const [managerSummoned, setManagerSummoned] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -266,25 +268,51 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                         </div>
                       )}
 
-                      {!customerPhone && !customerEmail ? (
-                        <div className="pt-4 border-t border-slate-100 space-y-3">
-                          <p className="text-sm font-semibold text-slate-900">Want the manager to reach out?</p>
-                          <p className="text-xs text-slate-500">Leave your phone number or email and we will contact you personally.</p>
+                      {!hasSubmittedContact ? (
+                        <div className="pt-4 border-t border-slate-100 space-y-4">
+                          {tableNumber && (
+                            <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center">
+                              {!managerSummoned ? (
+                                <>
+                                  <p className="text-sm font-bold text-red-900 mb-2">Want us to fix this right now?</p>
+                                  <button
+                                    type="button"
+                                    onClick={async () => {
+                                      if (feedbackId) {
+                                        await import("@/app/menu/[id]/actions").then(m => m.summonManager(feedbackId, tableNumber));
+                                        setManagerSummoned(true);
+                                      }
+                                    }}
+                                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
+                                  >
+                                    Summon Manager to Table {tableNumber}
+                                  </button>
+                                </>
+                              ) : (
+                                <p className="text-sm font-bold text-red-800">
+                                  Manager is on their way to Table {tableNumber}.
+                                </p>
+                              )}
+                            </div>
+                          )}
+
+                          <div>
+                            <p className="text-sm font-semibold text-slate-900">Want the manager to reach out later?</p>
+                            <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
                           <div className="flex gap-2">
                             <input
                               type="text"
-                              value={customerPhone || customerEmail}
-                              onChange={(e) => setCustomerPhone(e.target.value)} // Fallback to just storing it in phone for this specific form
+                              value={customerPhone}
+                              onChange={(e) => setCustomerPhone(e.target.value)} 
                               placeholder="Email or Phone"
                               className="flex-1 rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
                             />
                             <button
                               type="button"
                               onClick={async () => {
-                                if ((customerPhone || customerEmail) && feedbackId) {
-                                  await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackContact(feedbackId, customerPhone || customerEmail));
-                                  alert("Thank you. A manager will reach out soon.");
-                                  setIsOpen(false);
+                                if (customerPhone && feedbackId) {
+                                  await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackContact(feedbackId, customerPhone));
+                                  setHasSubmittedContact(true);
                                 }
                               }}
                               className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
@@ -293,10 +321,11 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                             </button>
                           </div>
                         </div>
+                        </div>
                       ) : (
                         <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                           <p className="text-sm text-slate-600">
-                            <strong>Thank you.</strong> {recoveryMessage.replace('{contact}', customerEmail || customerPhone)}
+                            <strong>Thank you.</strong> {recoveryMessage ? recoveryMessage.replace('{contact}', customerPhone) : `Our manager has been notified and will reach out to you at ${customerPhone} to apologize personally.`}
                           </p>
                         </div>
                       )}
@@ -339,48 +368,69 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                   {/* Comment */}
                   <div className="space-y-2">
                     <label htmlFor="comment" className="block text-sm font-medium text-slate-700">
-                      Additional feedback (optional)
+                      {rating > 0 && rating <= 3 
+                        ? "What went wrong?" 
+                        : "Additional feedback (optional)"}
                     </label>
                     <textarea
                       id="comment"
                       rows={3}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
-                      placeholder="Tell us what you liked or what we can improve..."
+                      placeholder={
+                        rating > 0 && rating <= 3 
+                          ? "Please describe the issue clearly. We will do our best to make it right."
+                          : "Tell us what you liked or what we can improve..."
+                      }
                       className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors resize-none"
                     />
                   </div>
 
-                  {/* Optional Contact Info */}
-                  <div className="space-y-3 pt-2 border-t border-slate-100">
-                    <p className="text-xs text-slate-500 font-medium">
-                      Want us to follow up? Leave your details below (Optional).
-                    </p>
+                  {/* Contact Info */}
+                  <div className="space-y-3">
                     <div className="space-y-2">
+                      <label htmlFor="customerName" className="block text-sm font-medium text-slate-700">
+                        Name (optional)
+                      </label>
                       <input
                         type="text"
+                        id="customerName"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
-                        placeholder="Your Name"
-                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
-                      />
-                      <input
-                        type="email"
-                        value={customerEmail}
-                        onChange={(e) => setCustomerEmail(e.target.value)}
-                        placeholder="Email Address"
-                        className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
-                      />
-                      <input
-                        type="tel"
-                        value={customerPhone}
-                        onChange={(e) => setCustomerPhone(e.target.value)}
-                        placeholder="Phone Number"
+                        placeholder="John Doe"
                         className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
                       />
                     </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <label htmlFor="customerEmail" className="block text-sm font-medium text-slate-700">
+                          Email (optional)
+                        </label>
+                        <input
+                          type="email"
+                          id="customerEmail"
+                          value={customerEmail}
+                          onChange={(e) => setCustomerEmail(e.target.value)}
+                          placeholder="john@example.com"
+                          className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="customerPhone" className="block text-sm font-medium text-slate-700">
+                          Phone (optional)
+                        </label>
+                        <input
+                          type="tel"
+                          id="customerPhone"
+                          value={customerPhone}
+                          onChange={(e) => setCustomerPhone(e.target.value)}
+                          placeholder="Phone Number"
+                          className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
+                        />
+                      </div>
+                    </div>
                   </div>
-
+                  
                   {error && (
                     <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
                       {error}

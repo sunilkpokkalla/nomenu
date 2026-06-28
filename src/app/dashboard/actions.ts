@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
@@ -59,7 +59,20 @@ export async function createRestaurant(formData: FormData) {
   }
 
   const cookieStore = await cookies();
-  const refCode = cookieStore.get("nomenu_ref_code")?.value?.toUpperCase() || null;
+  let validRefCode = cookieStore.get("nomenu_ref_code")?.value || null;
+  
+  if (validRefCode) {
+    // Check if the referrer is the same user (self-referral fraud prevention)
+    const { data: referrer } = await supabase
+      .from("restaurants")
+      .select("owner_id")
+      .ilike("slug", validRefCode)
+      .maybeSingle();
+
+    if (referrer && referrer.owner_id === user.id) {
+      validRefCode = null; // Silently ignore self-referral
+    }
+  }
 
   const { error } = await supabase.from("restaurants").insert({
     owner_id: user.id,
@@ -73,7 +86,7 @@ export async function createRestaurant(formData: FormData) {
     primary_color: "#2563EB",
     accent_color: field(formData, "accentColor") ?? "#F59E0B",
     theme_style: "minimalist",
-    referred_by_code: refCode,
+    referred_by_code: validRefCode,
   });
 
   if (error) {
@@ -329,11 +342,10 @@ export async function deleteMenu(formData: FormData) {
   const { error } = await supabase.from("menus").delete().eq("id", menuId);
 
   if (error) {
-    redirect(`/dashboard/menus?message=${encodeURIComponent(error.message)}`);
+    throw new Error(error.message);
   }
 
-  revalidatePath("/dashboard/menus");
-  redirect("/dashboard/menus");
+  revalidatePath("/dashboard", "layout");
 }
 
 // MENU ITEM ACTIONS
@@ -839,6 +851,7 @@ export async function updateRestaurantBranding(formData: FormData) {
 
   revalidatePath("/dashboard/customize");
   revalidatePath("/dashboard");
+  revalidateTag("menu-data");
   redirect("/dashboard/customize?success=Branding%20updated%20successfully");
 }
 
@@ -906,6 +919,7 @@ export async function updateMenuBranding(menuId: string, formData: FormData, red
     redirect(`${targetPath}${paramChar}message=${encodeURIComponent(error.message)}`);
   }
 
+  revalidateTag("menu-data");
   revalidatePath(targetPath.split('?')[0]);
   redirect(`${targetPath}${paramChar}success=Menu%20design%20updated%20successfully`);
 }
@@ -1399,5 +1413,6 @@ export async function updateRestaurantWaitTime(restaurantId: string, status: str
   }
 
   revalidatePath("/dashboard");
+  revalidateTag("menu-data");
   return { success: true };
 }

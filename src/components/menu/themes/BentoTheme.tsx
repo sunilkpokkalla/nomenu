@@ -14,6 +14,7 @@ import {
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 import { useCart } from "../cart-context";
+import { FeedbackFAB } from "../feedback-fab";
 
 export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,6 +34,7 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
   const currencySymbol = restaurant.currency || "USD";
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
+  const canFeedback = currentPlan !== "free";
   const { addToCart } = useCart();
 
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
@@ -341,6 +343,8 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
           </div>
         </div>
       )}
+      
+      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
     </div>
   );
 }

@@ -47,7 +47,7 @@ export const getNavItems = (role: UserRole) => {
     
     // Account
     { href: "/dashboard/integrations", label: "Integrations", icon: Plug, badge: "PRO", roles: ["owner"] as UserRole[] },
-    { href: "/dashboard/referrals", label: "Refer & Earn", icon: Gift, roles: ["owner"] as UserRole[] },
+    { href: "/dashboard/referrals", label: "Refer & Earn", icon: Gift, badge: "PRO", roles: ["owner"] as UserRole[] },
     { href: "/dashboard/settings", label: "Settings", icon: Settings, roles: ["owner"] as UserRole[] },
     { href: "/dashboard/billing", label: "Billing", icon: CreditCard, roles: ["owner"] as UserRole[] },
   ];

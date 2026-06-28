@@ -3,7 +3,7 @@
 import { useState, useTransition, useEffect } from "react";
 import { Flame, Leaf, Award, ShieldAlert, Sparkles, Trash2, Plus, Clock, MoreHorizontal, Edit2, ChevronRight, Folder, UtensilsCrossed } from "lucide-react";
 import Link from "next/link";
-import { deleteMenuItem, toggleMenuItemStatus, createMenuItem } from "@/app/dashboard/actions";
+import { deleteMenuItem, toggleMenuItemStatus, createMenuItem, deleteMenu } from "@/app/dashboard/actions";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -206,10 +206,40 @@ export function MenuItemsClient({
             
             <div className="flex flex-wrap items-center justify-end gap-2">
               {selectedMenuId !== "all" && (
-                <ManageCategoriesModal
-                  categories={restaurantCategories.filter((c) => c.menu_id === selectedMenuId)}
-                  targetMenuId={selectedMenuId}
-                />
+                <>
+                  <ManageCategoriesModal
+                    categories={restaurantCategories.filter((c) => c.menu_id === selectedMenuId)}
+                    targetMenuId={selectedMenuId}
+                  />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="icon" className="h-9 w-9 border-slate-200">
+                        <MoreHorizontal className="h-4 w-4 text-slate-500" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56 rounded-xl border border-slate-100 shadow-xl p-2 z-50 bg-white">
+                      <DropdownMenuLabel className="px-2 py-1.5 text-xs font-semibold text-slate-500">Menu Actions</DropdownMenuLabel>
+                      <DropdownMenuSeparator className="bg-slate-100 mb-1" />
+                      <div className="px-1 space-y-1">
+                        <Button variant="ghost" className="w-full justify-start text-sm h-8 px-2 font-medium" asChild>
+                          <Link href="/dashboard/menus">
+                            <Edit2 className="h-3.5 w-3.5 mr-2 text-slate-400" /> Edit Menu Settings
+                          </Link>
+                        </Button>
+                        <DeleteConfirmForm
+                          action={deleteMenu}
+                          name="menuId"
+                          value={selectedMenuId}
+                          confirmMessage={`Are you sure you want to delete "${selectedMenuName}"? This will permanently delete this menu and ALL items and categories inside it.`}
+                        >
+                          <Button variant="ghost" className="w-full justify-start text-sm h-8 px-2 text-red-600 hover:text-red-700 hover:bg-red-50 font-medium">
+                            <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete Entire Menu
+                          </Button>
+                        </DeleteConfirmForm>
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
               )}
               <Sheet open={isCreateSheetOpen} onOpenChange={setIsCreateSheetOpen}>
                 <SheetTrigger asChild>

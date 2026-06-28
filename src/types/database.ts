@@ -74,6 +74,7 @@ export interface Database {
           amount: number;
           status: "pending" | "paid" | "credited";
           created_at: string;
+          clears_at: string | null;
         };
         Insert: {
           id?: string;
@@ -82,6 +83,7 @@ export interface Database {
           amount: number;
           status?: "pending" | "paid" | "credited";
           created_at?: string;
+          clears_at?: string | null;
         };
         Update: {
           id?: string;
@@ -90,6 +92,7 @@ export interface Database {
           amount?: number;
           status?: "pending" | "paid" | "credited";
           created_at?: string;
+          clears_at?: string | null;
         };
         Relationships: [];
       };
@@ -146,6 +149,7 @@ export interface Database {
           square_access_token: string | null;
           square_refresh_token: string | null;
           square_merchant_id: string | null;
+
           timezone: string | null;
           created_at: string | null;
           slug: string | null;
@@ -159,6 +163,10 @@ export interface Database {
           magic_credits: number | null;
           recovery_offer_text: string | null;
           recovery_message: string | null;
+          service_recovery_enabled: boolean | null;
+          service_recovery_message: string | null;
+          offer_manager_visit: boolean | null;
+          offer_compensation: boolean | null;
           loyalty_stamp_color: string | null;
           loyalty_stamp_icon: string | null;
           loyalty_card_layout: string | null;
@@ -191,6 +199,7 @@ export interface Database {
           square_access_token?: string | null;
           square_refresh_token?: string | null;
           square_merchant_id?: string | null;
+
           timezone?: string | null;
           created_at?: string | null;
           slug?: string | null;
@@ -204,6 +213,10 @@ export interface Database {
           magic_credits?: number | null;
           recovery_offer_text?: string | null;
           recovery_message?: string | null;
+          service_recovery_enabled?: boolean | null;
+          service_recovery_message?: string | null;
+          offer_manager_visit?: boolean | null;
+          offer_compensation?: boolean | null;
           loyalty_stamp_color?: string | null;
           loyalty_stamp_icon?: string | null;
           loyalty_card_layout?: string | null;

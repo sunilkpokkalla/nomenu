@@ -24,8 +24,9 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
   const [orderNotes, setOrderNotes] = useState("");
   
   const { addToCart } = useCart();
-  const canOrder = true;
-  const canFeedback = true;
+  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
+  const canFeedback = currentPlan === "pro" || currentPlan === "growth" || canOrder;
 
   const handleAddToCart = () => {
     if (!selectedItem) return;

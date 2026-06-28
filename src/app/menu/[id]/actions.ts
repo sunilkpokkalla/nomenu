@@ -125,11 +125,13 @@ export async function submitFeedback(
   }
 
   // Fetch recovery settings for 1-3 star reviews
-  let recoveryOfferText = '15% off your next visit with code MAKEITRIGHT15';
+  let recoveryOfferText = '';
   let recoveryMessage = 'Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally.';
   
   if (rating <= 3 && restaurant) {
-    if (restaurant.recovery_offer_text) recoveryOfferText = restaurant.recovery_offer_text;
+    if (restaurant.recovery_offer_text !== null && restaurant.recovery_offer_text !== undefined) {
+      recoveryOfferText = restaurant.recovery_offer_text;
+    }
     if (restaurant.recovery_message) recoveryMessage = restaurant.recovery_message;
   }
 
@@ -560,5 +562,26 @@ export async function cancelOrder(orderId: string) {
     console.error("Error cancelling order:", err);
     const error = err as Error;
     return { success: false, error: error.message || "Failed to cancel order." };
+  }
+}
+
+export async function summonManager(feedbackId: string, tableNumber: string) {
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+    );
+    const { error } = await supabase
+      .from('feedback')
+      .update({
+        customer_contact_info: `URGENT: Manager requested at table ${tableNumber}`
+      })
+      .eq('id', feedbackId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("Error summoning manager:", err);
+    return { success: false, error: "Failed to summon manager" };
   }
 }

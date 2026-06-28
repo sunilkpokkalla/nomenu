@@ -130,7 +130,7 @@ export default async function FeedbackPage({
           
           <TabsContent value="strategy" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
             <FeedbackStrategyForm 
-              initialRecoveryOffer={restaurant.recovery_offer_text || "15% off your next visit with code MAKEITRIGHT15"}
+              initialRecoveryOffer={restaurant.recovery_offer_text || ""}
               initialRecoveryMessage={restaurant.recovery_message || "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."}
             />
           </TabsContent>

@@ -24,6 +24,7 @@ import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatTimezone } from "@/lib/date-utils";
 import { WelcomeChecklist } from "@/components/dashboard/welcome-checklist";
+import { WaitTimeToggle } from "@/components/dashboard/wait-time-toggle";
 
 import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
 import { OnboardingForm } from "@/components/dashboard/onboarding-form";
@@ -306,15 +307,18 @@ export default async function DashboardPage(
           </p>
         </div>
 
-        <Button 
-          asChild 
-          className="rounded-xl bg-slate-950 hover:bg-slate-900 text-white h-11 text-sm font-semibold tracking-wide shadow-sm transition-all duration-300 hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98]"
-        >
-          <Link href="/dashboard/menus">
-            <Plus className="mr-2 h-4.5 w-4.5" strokeWidth={1.5} />
-            Add Menu
-          </Link>
-        </Button>
+        <div className="flex items-center gap-4">
+          <WaitTimeToggle restaurantId={restaurant.id} initialStatus={restaurant.wait_time_status || "normal"} />
+          <Button 
+            asChild 
+            className="rounded-xl bg-slate-950 hover:bg-slate-900 text-white h-11 text-sm font-semibold tracking-wide shadow-sm transition-all duration-300 hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98]"
+          >
+            <Link href="/dashboard/menus">
+              <Plus className="mr-2 h-4.5 w-4.5" strokeWidth={1.5} />
+              Add Menu
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Asymmetric Bento Grid Section */}

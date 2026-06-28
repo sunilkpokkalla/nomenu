@@ -66,29 +66,6 @@ export async function POST(req: Request) {
             console.error("Failed to upgrade SaaS plan:", updateError);
           } else {
             console.log(`Restaurant ${restaurantId} upgraded to ${planId}. Added ${bonus} magic credits.`);
-            
-            // Calculate and log affiliate payout (Legacy - actual payout happens in invoice.payment_succeeded)
-            if (restaurant.referred_by_code) {
-              const billingCycle = session.metadata?.billing_cycle || "monthly";
-              const payoutAmount = getAffiliatePayout(planId, billingCycle);
-              
-              if (payoutAmount > 0) {
-                const { error: payoutError } = await supabase
-                  .from("affiliate_payouts")
-                  .insert({
-                    referrer_code: restaurant.referred_by_code,
-                    referred_restaurant_id: restaurantId,
-                    amount: payoutAmount,
-                    status: "pending"
-                  });
-                  
-                if (payoutError) {
-                  console.error("Failed to record affiliate payout:", payoutError);
-                } else {
-                  console.log(`Recorded $${payoutAmount} payout for code ${restaurant.referred_by_code}`);
-                }
-              }
-            }
           }
         }
       }
@@ -222,72 +199,67 @@ export async function POST(req: Request) {
       // We need to fetch the subscription to get metadata
       const { data: restaurant } = await supabase
         .from("restaurants")
-        .select("id, plan, billing_cycle, referred_by_code")
+        .select("id, owner_id, plan, billing_cycle, referred_by_code")
         .eq("stripe_subscription_id", subscriptionId)
         .single();
         
       if (restaurant && restaurant.referred_by_code) {
+        // Prevent self-referrals and free-plan referrers
+        const { data: referrerRestaurant } = await supabase
+          .from("restaurants")
+          .select("owner_id, plan")
+          .eq("slug", restaurant.referred_by_code)
+          .maybeSingle();
+          
+        if (referrerRestaurant) {
+          if (referrerRestaurant.owner_id === restaurant.owner_id) {
+            console.log(`Self-referral blocked for restaurant ${restaurant.id}.`);
+            return NextResponse.json({ received: true });
+          }
+          
+          // Must have a paid plan to earn referral payouts
+          if (referrerRestaurant.plan === "free") {
+            console.log(`Referrer ${restaurant.referred_by_code} is on a free plan. Payout blocked.`);
+            return NextResponse.json({ received: true });
+          }
+        }
+
         // Calculate payout
         const payoutAmount = getAffiliatePayout(restaurant.plan, restaurant.billing_cycle);
         
         if (payoutAmount > 0) {
-          // Look up affiliate
+          // Check if this is a standard affiliate (one-time bounty limit)
           const { data: affiliate } = await supabase
             .from("affiliates")
-            .select("stripe_account_id, total_paid_amount, tier")
+            .select("tier")
             .eq("referral_code", restaurant.referred_by_code)
-            .single();
-            
-          if (affiliate && affiliate.stripe_account_id) {
-            // Tier-based payout limit: Standard gets one-time bounty, Founding gets lifetime recurring
-            if (affiliate.tier === "standard") {
-              const { count } = await supabase
-                .from("affiliate_payouts")
-                .select("*", { count: "exact", head: true })
-                .eq("referrer_code", restaurant.referred_by_code)
-                .eq("referred_restaurant_id", restaurant.id)
-                .eq("status", "paid");
-                
-              if (count && count > 0) {
-                console.log(`Standard partner ${restaurant.referred_by_code} already received one-time bounty for restaurant ${restaurant.id}. Skipping payout.`);
-                // Return successfully since we properly processed this event by skipping it
-                return NextResponse.json({ received: true });
-              }
-            }
-            
-            try {
-              // Execute Stripe Transfer from the charge
-              await fetchStripe("/transfers", {
-                method: "POST",
-                body: {
-                  amount: payoutAmount * 100, // Convert to cents
-                  currency: "usd",
-                  destination: affiliate.stripe_account_id,
-                  source_transaction: invoice.charge as string,
-                  description: `Commission for referring restaurant ${restaurant.id}`,
-                }
-              });
-              console.log(`Successfully transferred $${payoutAmount} to ${affiliate.stripe_account_id}`);
+            .maybeSingle();
+
+          if (affiliate && affiliate.tier === "standard") {
+            const { count } = await supabase
+              .from("affiliate_payouts")
+              .select("*", { count: "exact", head: true })
+              .eq("referrer_code", restaurant.referred_by_code)
+              .eq("referred_restaurant_id", restaurant.id);
               
-              // Mark as paid in our database
-              const newTotalPaid = (affiliate.total_paid_amount || 0) + payoutAmount;
-              await supabase
-                .from("affiliates")
-                .update({ total_paid_amount: newTotalPaid })
-                .eq("referral_code", restaurant.referred_by_code);
-                
-              // Log the payout to enforce standard tier limit
-              await supabase.from("affiliate_payouts").insert({
-                referrer_code: restaurant.referred_by_code,
-                referred_restaurant_id: restaurant.id,
-                amount: payoutAmount,
-                status: "paid"
-              });
-                
-            } catch (transferError) {
-              console.error("Failed to execute Stripe Transfer:", transferError);
+            if (count && count > 0) {
+              console.log(`Standard partner ${restaurant.referred_by_code} already received bounty for ${restaurant.id}. Skipping.`);
+              return NextResponse.json({ received: true });
             }
           }
+
+          // Create pending payout with 60-day hold
+          const clearsAt = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString();
+          
+          await supabase.from("affiliate_payouts").insert({
+            referrer_code: restaurant.referred_by_code,
+            referred_restaurant_id: restaurant.id,
+            amount: payoutAmount,
+            status: "pending",
+            clears_at: clearsAt
+          });
+          
+          console.log(`Recorded pending $${payoutAmount} payout for code ${restaurant.referred_by_code} with 60-day hold.`);
         }
       }
     }

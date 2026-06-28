@@ -1,12 +1,9 @@
 import { redirect } from "next/navigation";
-import { Copy, Gift, Users, Activity, Sparkles } from "lucide-react";
+import { Copy, Gift, Users, Activity, Sparkles, CheckCircle2, Clock } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { getAffiliatePayout } from "@/lib/affiliate";
-import { updatePaypalEmail } from "./actions";
 import { ClientCopyButton } from "./client-copy-button";
+import { ConnectBankButton } from "../payouts/connect-bank-button";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +19,7 @@ export default async function ReferralsPage() {
 
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("id, name, slug, subscription_status, paypal_email")
+    .select("id, name, slug, plan, subscription_status, stripe_account_id")
     .eq("owner_id", user.id)
     .single();
 
@@ -30,9 +27,10 @@ export default async function ReferralsPage() {
     redirect("/dashboard");
   }
 
-  const isActive = restaurant.subscription_status === "active";
+  const isActive = restaurant.plan !== "free";
+  const hasStripeConnect = !!restaurant.stripe_account_id;
 
-  // Get referred restaurants
+  // Get referred restaurants (for the signups count)
   const { data: referredRestaurants } = await supabase
     .from("restaurants")
     .select("id, name, created_at, plan, billing_cycle")
@@ -40,7 +38,36 @@ export default async function ReferralsPage() {
 
   const restaurants = referredRestaurants || [];
   const totalReferred = restaurants.length;
-  const pendingEarnings = restaurants.reduce((sum, rest) => sum + getAffiliatePayout(rest.plan, rest.billing_cycle), 0);
+
+  // Get ACTUAL payouts from the database
+  const { data: payouts } = await supabase
+    .from("affiliate_payouts")
+    .select("*, restaurants:referred_restaurant_id(name)")
+    .eq("referrer_code", restaurant.slug || "")
+    .order("created_at", { ascending: false });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const allPayouts: any[] = payouts || [];
+  
+  // Calculate earnings
+  const now = new Date();
+  
+  let pendingHold = 0;
+  let availableToWithdraw = 0;
+  let totalWithdrawn = 0;
+
+  allPayouts.forEach(payout => {
+    if (payout.status === "paid" || payout.status === "credited") {
+      totalWithdrawn += payout.amount;
+    } else if (payout.status === "pending") {
+      const clearsAt = payout.clears_at ? new Date(payout.clears_at) : null;
+      if (clearsAt && clearsAt <= now) {
+        availableToWithdraw += payout.amount;
+      } else {
+        pendingHold += payout.amount;
+      }
+    }
+  });
 
   const referralLink = `https://nomenu.us?ref=${restaurant.slug}`;
 
@@ -57,7 +84,7 @@ export default async function ReferralsPage() {
             Refer & Earn
           </h1>
           <p className="mt-2 text-slate-500 font-medium max-w-xl leading-relaxed">
-            Invite other restaurant owners to NoMenu using your unique link. You'll earn up to $100 in account credit for every restaurant that activates an annual account.
+            Invite other restaurant owners to NoMenu using your unique link. You'll earn up to $100 for every restaurant that activates an annual account.
           </p>
         </div>
       </div>
@@ -89,7 +116,7 @@ export default async function ReferralsPage() {
       )}
 
       {/* Stats Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
@@ -103,61 +130,75 @@ export default async function ReferralsPage() {
         <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-              <Gift className="h-5 w-5" />
+              <CheckCircle2 className="h-5 w-5" />
             </div>
-            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Credits Earned</p>
+            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Available Balance</p>
           </div>
-          <p className="text-4xl font-black text-slate-900">${pendingEarnings}</p>
+          <p className="text-4xl font-black text-slate-900">${availableToWithdraw}</p>
+        </div>
+        
+        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+              <Clock className="h-5 w-5" />
+            </div>
+            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Pending (60-day hold)</p>
+          </div>
+          <p className="text-4xl font-black text-slate-900">${pendingHold}</p>
         </div>
 
-        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+        <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm flex flex-col justify-center">
           <div className="flex items-center gap-4 mb-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-600">
               <Activity className="h-5 w-5" />
             </div>
-            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">How to redeem</p>
+            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Payout Account</p>
           </div>
-          <p className="text-sm font-medium text-slate-500 leading-relaxed mt-2">
-            Credits automatically apply to your next renewal. Or, cash out via Tremendous (Gift Cards, Visa, ACH) after 3 months!
-          </p>
-          <form action={updatePaypalEmail} className="mt-4">
-            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Payout Email</p>
-            <div className="flex gap-2">
-              <Input 
-                type="email" 
-                name="paypalEmail" 
-                placeholder="you@email.com" 
-                defaultValue={restaurant.paypal_email || ""}
-                className="h-9 bg-slate-50 text-sm"
-              />
-              <Button type="submit" size="sm" className="h-9">Save</Button>
+          {hasStripeConnect ? (
+            <div className="flex items-center gap-2 text-emerald-600 font-bold bg-emerald-50 px-4 py-2 rounded-xl w-fit">
+              <CheckCircle2 className="w-5 h-5" /> Stripe Connected
             </div>
-          </form>
+          ) : (
+            <>
+              <p className="text-sm text-slate-500 mb-3 font-medium leading-relaxed">Connect your bank securely via Stripe to receive payouts.</p>
+              <ConnectBankButton isAlreadyConnected={false} />
+            </>
+          )}
         </div>
       </div>
 
-      {/* Recent Referrals List */}
+      {/* Recent Payouts List */}
       <div className="bg-white rounded-3xl border border-slate-100 p-6 sm:p-8 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900 mb-6">Recent Referrals</h2>
+        <h2 className="text-lg font-bold text-slate-900 mb-6">Earnings History</h2>
         
-        {restaurants.length > 0 ? (
+        {allPayouts.length > 0 ? (
           <div className="divide-y divide-slate-100">
-            {restaurants.map((rest) => {
-              const payout = getAffiliatePayout(rest.plan, rest.billing_cycle);
+            {allPayouts.map((payout) => {
+              const clearsAt = payout.clears_at ? new Date(payout.clears_at) : null;
+              const isCleared = clearsAt ? clearsAt <= now : false;
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const restName = (payout.restaurants as any)?.name || "Unknown Restaurant";
+              
               return (
-                <div key={rest.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between">
+                <div key={payout.id} className="py-4 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <p className="font-bold text-slate-900">{rest.name}</p>
-                    <p className="text-sm text-slate-500 font-medium">Joined {rest.created_at ? new Date(rest.created_at).toLocaleDateString() : 'Unknown'}</p>
+                    <p className="font-bold text-slate-900">{restName} Conversion</p>
+                    <p className="text-sm text-slate-500 font-medium">Earned {new Date(payout.created_at).toLocaleDateString()}</p>
                   </div>
-                  <div className="text-right flex flex-col items-end">
-                    {payout > 0 ? (
+                  <div className="text-left sm:text-right flex flex-col items-start sm:items-end gap-1">
+                    <span className="font-black text-slate-900">${payout.amount}</span>
+                    
+                    {payout.status === "paid" || payout.status === "credited" ? (
+                      <span className="inline-flex items-center rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-xs font-bold text-slate-600">
+                        Paid out
+                      </span>
+                    ) : isCleared ? (
                       <span className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
-                        +${payout} Credit
+                        Available to withdraw
                       </span>
                     ) : (
-                      <span className="inline-flex items-center rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-xs font-bold text-slate-500 capitalize">
-                        {rest.plan && rest.plan !== 'free' ? `${rest.plan} (Monthly)` : 'Free Plan'}
+                      <span className="inline-flex items-center rounded-full bg-amber-50 border border-amber-100 px-2.5 py-0.5 text-xs font-bold text-amber-700">
+                        Pending (clears {clearsAt ? clearsAt.toLocaleDateString() : 'Unknown'})
                       </span>
                     )}
                   </div>
@@ -168,11 +209,11 @@ export default async function ReferralsPage() {
         ) : (
           <div className="flex flex-col items-center justify-center py-12 rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 text-center px-4">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
-              <Users className="h-5 w-5" />
+              <Gift className="h-5 w-5" />
             </div>
-            <p className="text-sm font-bold text-slate-800">No referrals yet</p>
+            <p className="text-sm font-bold text-slate-800">No earnings yet</p>
             <p className="text-xs text-slate-400 mt-1 max-w-[34ch] leading-relaxed">
-              Share your link with colleagues in the industry to earn your first account credit.
+              When a restaurant signs up with your link and activates a paid plan, your earnings will appear here.
             </p>
           </div>
         )}

@@ -37,7 +37,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  const [template, setTemplate] = useState<TemplateKey>("classic");
+  const [template, setTemplate] = useState<TemplateKey>("instagram-square");
   
   // Custom brand settings
   const [brandName, setBrandName] = useState(restaurant.name);
