@@ -1,8 +1,8 @@
 import { unstable_cache } from "next/cache";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
-// Stateless client for caching public data without hitting Next.js headers/cookies
-const supabase = createSupabaseClient(
+// Helper to lazily create the client so it doesn't crash during build-time module resolution
+const getSupabase = () => createSupabaseClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
@@ -10,6 +10,7 @@ const supabase = createSupabaseClient(
 export const getCachedMenuData = unstable_cache(
   async (restaurantSlug: string, menuSlug: string) => {
     // 1. Fetch restaurant
+    const supabase = getSupabase();
     const { data: restaurant } = await supabase
       .from("restaurants")
       .select("*, stripe_account_id, loyalty_pin_code")
