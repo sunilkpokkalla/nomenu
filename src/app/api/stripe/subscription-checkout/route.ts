@@ -112,7 +112,7 @@ export async function POST(req: Request) {
     const protocol = req.headers.get("x-forwarded-proto") || "http";
     const host = req.headers.get("host") || "localhost:3000";
     const origin = `${protocol}://${host}`;
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sessionBody: any = {
       customer: customerId,
       mode: "subscription",
