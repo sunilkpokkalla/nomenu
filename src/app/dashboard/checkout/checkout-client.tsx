@@ -87,6 +87,12 @@ export function CheckoutClient({ planId, planName, isAnnual }: { planId: string,
         });
         const data = await res.json();
         
+        if (data.isPaid) {
+          // 100% discount or free trial applied, no payment needed
+          window.location.href = `/dashboard/checkout/success?session_id=${data.subscriptionId}`;
+          return;
+        }
+
         if (data.clientSecret) {
           setClientSecret(data.clientSecret);
         } else {

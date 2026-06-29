@@ -136,6 +136,15 @@ export async function POST(req: Request) {
     }
 
     const invoice = subscription.latest_invoice;
+    
+    if (invoice.status === "paid" || invoice.amount_due === 0) {
+      // The subscription is fully paid or 100% discounted (e.g. referral)
+      return NextResponse.json({ 
+        subscriptionId: subscription.id,
+        isPaid: true
+      });
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const paymentIntent = (invoice as any)?.payment_intent;
 
