@@ -1,7 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "@/types/database";
 
-export type UserRole = "owner" | "manager" | "kitchen" | "waitstaff";
+export type UserRole = "owner" | "manager" | "kitchen" | "waitstaff" | "kitchen_waitstaff";
 
 export async function getUserRole(
   supabase: SupabaseClient<Database>,

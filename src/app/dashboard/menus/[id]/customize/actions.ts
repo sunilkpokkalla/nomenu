@@ -122,13 +122,40 @@ export async function createPremiumMagicImportJob(
     if (cat.items) totalItems += cat.items.length;
   }
 
-  // Calculate amount ($0.25 per item)
-  let amountCents = totalItems * 25;
+  // Fetch restaurant magic credits securely
+  const { data: restData } = await supabase
+    .from("restaurants")
+    .select("magic_credits")
+    .eq("id", restaurantId)
+    .single();
+    
+  const magicCredits = restData?.magic_credits || 0;
+  
+  // Calculate how many items actually need to be paid for
+  const payableItems = Math.max(0, totalItems - magicCredits);
+  
+  // Deduct credits used
+  const creditsUsed = Math.min(totalItems, magicCredits);
+  if (creditsUsed > 0) {
+    const { error: deductError } = await supabase
+      .from("restaurants")
+      .update({ magic_credits: magicCredits - creditsUsed })
+      .eq("id", restaurantId);
+      
+    if (deductError) {
+      console.error("Failed to deduct magic credits", deductError);
+    }
+  }
+
+  // Calculate amount ($0.25 per payable item)
+  let amountCents = payableItems * 25;
   
   // Stripe enforces a strict minimum charge of $0.50 USD
   if (amountCents > 0 && amountCents < 50) {
     amountCents = 50;
   }
+  
+  const status = amountCents === 0 ? "paid" : "pending_payment";
 
   const adminSupabase = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -142,7 +169,7 @@ export async function createPremiumMagicImportJob(
     .insert({
       restaurant_id: restaurantId,
       menu_id: menuId,
-      status: "pending_payment",
+      status: status,
       total_items: totalItems,
       amount_cents: amountCents
     })
@@ -189,5 +216,5 @@ export async function createPremiumMagicImportJob(
     }
   }
   
-  return { success: true, jobId: job.id };
+  return { success: true, jobId: job.id, checkoutBypassed: status === "paid" };
 }

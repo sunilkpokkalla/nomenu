@@ -97,6 +97,9 @@ export function LoyaltyCardUI({
       const result = await linkPhoneNumber(cardId, phoneToLink.trim());
       if (result.error) {
         setLinkError(result.error);
+      } else if (result.alreadyLinked && result.existingCardId) {
+        // Redirect to their existing card seamlessly
+        window.location.href = `/loyalty/${result.existingCardId}`;
       } else {
         setIsLinked(true);
       }

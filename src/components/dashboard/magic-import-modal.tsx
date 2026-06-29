@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Sparkles, Loader2, UploadCloud, CheckCircle2, AlertCircle } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Sparkles, Loader2, UploadCloud, CheckCircle2, AlertCircle, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -27,8 +27,22 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [previewData, setPreviewData] = useState<any | null>(null);
   const [imageOption, setImageOption] = useState<"free" | "premium">("free");
+  const [magicCredits, setMagicCredits] = useState<number | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open && magicCredits === null) {
+      fetch("/api/restaurant/credits")
+        .then(res => res.json())
+        .then(data => {
+          if (data.magic_credits !== undefined) {
+            setMagicCredits(data.magic_credits);
+          }
+        })
+        .catch(err => console.error("Failed to fetch credits", err));
+    }
+  }, [open, magicCredits]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -81,6 +95,14 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
         // Premium Option
         const res = await createPremiumMagicImportJob(menuId, restaurantId, previewData);
         if (res.jobId) {
+          if (res.checkoutBypassed) {
+            // Paid for entirely with credits! Start processing immediately.
+            setOpen(false);
+            setFile(null);
+            setPreviewData(null);
+            return;
+          }
+          
           const checkoutRes = await fetch("/api/stripe/checkout-ai-images", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -133,6 +155,12 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
               <Sparkles className="h-5 w-5 text-purple-500" />
               AI Magic Menu Import
             </div>
+            {magicCredits !== null && magicCredits > 0 && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-100/50 text-amber-700 rounded-full text-xs font-bold border border-amber-200 shadow-sm">
+                <Wand2 className="h-3.5 w-3.5" />
+                {magicCredits} Credits
+              </div>
+            )}
           </DialogTitle>
           <DialogDescription className="text-slate-500 text-sm mt-1.5">
             Upload a picture or PDF of your physical menu, and Gemini AI will automatically digitize all categories, items, descriptions, and prices.
@@ -144,6 +172,16 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
             <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm flex items-start gap-3 overflow-hidden">
               <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
               <p className="break-words break-all whitespace-pre-wrap">{error}</p>
+            </div>
+          )}
+
+          {magicCredits !== null && magicCredits > 0 && (
+            <div className="p-4 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/60 flex items-start gap-3">
+              <Wand2 className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-amber-900 text-sm">You have {magicCredits} Magic Credits available!</p>
+                <p className="text-amber-700/80 text-xs mt-0.5">They will automatically apply to reduce your Premium AI Photos cost.</p>
+              </div>
             </div>
           )}
 
@@ -246,9 +284,16 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
                   >
                     <div className="flex justify-between items-center mb-1">
                       <p className="font-bold text-slate-900 flex items-center gap-1">👑 Premium AI Photos</p>
-                      <p className="font-bold text-purple-700">${Math.max(0.50, (getTotalItems() * 25) / 100).toFixed(2)}</p>
+                      <div className="flex items-center gap-2">
+                        {magicCredits !== null && magicCredits > 0 && (
+                          <span className="text-slate-400 line-through text-xs">${((getTotalItems() * 25) / 100).toFixed(2)}</span>
+                        )}
+                        <p className="font-bold text-purple-700">
+                          ${Math.max(0, magicCredits && magicCredits >= getTotalItems() ? 0 : Math.max(0.50, ((getTotalItems() - (magicCredits || 0)) * 25) / 100)).toFixed(2)}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-xs text-slate-500">Generate a unique, hyper-realistic HD photo for every single item using Google Imagen AI ($0.25 per item, $0.50 minimum).</p>
+                    <p className="text-xs text-slate-500">Generate a unique, hyper-realistic HD photo for every single item using Google Imagen AI ($0.25 per item, $0.50 minimum). {magicCredits && magicCredits > 0 ? <span className="text-amber-600 font-semibold">({Math.min(getTotalItems(), magicCredits)} credits applied)</span> : ""}</p>
                   </div>
                 </div>
               </div>
@@ -259,7 +304,12 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
                 </Button>
                 <Button onClick={handleConfirmAndSave} disabled={isSaving} className={`flex-1 h-11 text-white rounded-xl ${imageOption === 'premium' ? 'bg-purple-600 hover:bg-purple-500' : 'bg-indigo-600 hover:bg-indigo-500'}`}>
                   {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                  {isSaving ? "Processing..." : imageOption === "premium" ? `Pay $${Math.max(0.50, (getTotalItems() * 25) / 100).toFixed(2)} & Import` : "Confirm & Import All"}
+                  {isSaving ? "Processing..." : imageOption === "premium" ? (
+                    (() => {
+                      const finalPrice = Math.max(0, magicCredits && magicCredits >= getTotalItems() ? 0 : Math.max(0.50, ((getTotalItems() - (magicCredits || 0)) * 25) / 100));
+                      return finalPrice === 0 ? "Generate Free & Import" : `Pay $${finalPrice.toFixed(2)} & Import`;
+                    })()
+                  ) : "Confirm & Import All"}
                 </Button>
               </div>
             </div>

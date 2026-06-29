@@ -47,6 +47,7 @@ export function InviteStaffForm({ restaurantId }: { restaurantId: string }) {
             <option value="manager">Manager (Full Dashboard Access)</option>
             <option value="kitchen">Kitchen (KDS Only)</option>
             <option value="waitstaff">Waitstaff (Orders Only)</option>
+            <option value="kitchen_waitstaff">Kitchen & Waitstaff (Both)</option>
           </select>
         </div>
       </div>

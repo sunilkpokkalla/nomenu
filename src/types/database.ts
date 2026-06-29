@@ -235,7 +235,7 @@ export interface Database {
           restaurant_id: string;
           auth_id: string | null;
           email: string;
-          role: "manager" | "kitchen" | "waitstaff";
+          role: "manager" | "kitchen" | "waitstaff" | "kitchen_waitstaff";
           status: "invited" | "active";
           created_at: string;
         };
@@ -244,7 +244,7 @@ export interface Database {
           restaurant_id: string;
           auth_id?: string | null;
           email: string;
-          role: "manager" | "kitchen" | "waitstaff";
+          role: "manager" | "kitchen" | "waitstaff" | "kitchen_waitstaff";
           status?: "invited" | "active";
           created_at?: string;
         };
@@ -253,7 +253,7 @@ export interface Database {
           restaurant_id?: string;
           auth_id?: string | null;
           email?: string;
-          role?: "manager" | "kitchen" | "waitstaff";
+          role?: "manager" | "kitchen" | "waitstaff" | "kitchen_waitstaff";
           status?: "invited" | "active";
           created_at?: string;
         };

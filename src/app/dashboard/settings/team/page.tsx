@@ -1,10 +1,11 @@
-import { Users, UserPlus, Mail, Shield, ShieldAlert, Trash2 } from "lucide-react";
+import { Users, UserPlus, Mail, Shield, Trash2, Check, Copy } from "lucide-react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { InviteStaffForm } from "./invite-staff-form";
+import { CopyInviteLink } from "./copy-invite-link";
 
 export const dynamic = 'force-dynamic';
 
@@ -38,6 +39,7 @@ export default async function TeamSettingsPage(
     manager: "Manager (Full Access)",
     kitchen: "Kitchen Staff (KDS Only)",
     waitstaff: "Waitstaff (Orders Only)",
+    kitchen_waitstaff: "Kitchen & Waitstaff (Both)",
   };
 
   return (
@@ -132,7 +134,10 @@ export default async function TeamSettingsPage(
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right flex items-center justify-end">
+                      {staff.status === "invited" && (
+                        <CopyInviteLink inviteLink={`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/team/join?token=${staff.id}`} />
+                      )}
                       <form action={async () => {
                         "use server";
                         const supabase = await createClient();

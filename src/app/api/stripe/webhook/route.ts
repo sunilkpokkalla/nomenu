@@ -48,9 +48,9 @@ export async function POST(req: Request) {
 
         if (restaurant && restaurant.plan !== planId) {
           let bonus = 0;
-          if (planId === "pro") bonus = 10;
-          else if (planId === "elite") bonus = 25;
-          else if (planId === "enterprise") bonus = 50;
+          if (planId === "pro") bonus = 25;
+          else if (planId === "elite") bonus = 50;
+          else if (planId === "enterprise") bonus = 75;
 
           const newCredits = (restaurant.magic_credits || 0) + bonus;
 
@@ -168,9 +168,9 @@ export async function POST(req: Request) {
           
         if (restaurant && restaurant.plan !== planId) {
           let bonus = 0;
-          if (planId === "pro") bonus = 5;
-          else if (planId === "elite") bonus = 10;
-          else if (planId === "enterprise") bonus = 25;
+          if (planId === "pro") bonus = 25;
+          else if (planId === "elite") bonus = 50;
+          else if (planId === "enterprise") bonus = 75;
           
           const newCredits = (restaurant.magic_credits || 0) + bonus;
           

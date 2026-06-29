@@ -56,7 +56,9 @@ export default async function DashboardPage(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const role: UserRole = (restaurant as any)?._staffRole || "owner";
 
-  if (role === "kitchen" || role === "waitstaff") {
+  if (role === "kitchen") {
+    redirect("/kds");
+  } else if (role === "waitstaff" || role === "kitchen_waitstaff") {
     redirect("/dashboard/orders");
   }
 

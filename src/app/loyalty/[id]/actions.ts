@@ -32,7 +32,7 @@ export async function linkPhoneNumber(cardId: string, phoneNumber: string) {
     .maybeSingle();
 
   if (existingPhoneCard) {
-    return { error: "This phone number is already linked to another VIP card at this restaurant." };
+    return { success: true, alreadyLinked: true, existingCardId: existingPhoneCard.id };
   }
 
   const { error: updateError } = await supabase

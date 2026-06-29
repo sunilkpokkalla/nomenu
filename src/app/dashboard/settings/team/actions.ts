@@ -8,7 +8,7 @@ import { createAdminClient } from "@/lib/supabase/server-admin";
 
 export async function inviteStaff(formData: FormData, restaurantId: string) {
   const email = formData.get("email") as string;
-  const role = formData.get("role") as "manager" | "kitchen" | "waitstaff";
+  const role = formData.get("role") as "manager" | "kitchen" | "waitstaff" | "kitchen_waitstaff";
 
   if (!email || !role || !restaurantId) {
     redirect("/dashboard/settings/team?message=Missing%20required%20fields");
@@ -67,18 +67,18 @@ export async function inviteStaff(formData: FormData, restaurantId: string) {
   const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/team/join?token=${newStaff.id}`;
 
   const transporter = nodemailer.createTransport({
-    host: "smtp.zoho.com",
-    port: 465,
+    host: process.env.SMTP_HOST || "smtp.zoho.com",
+    port: Number(process.env.SMTP_PORT) || 465,
     secure: true,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
 
   try {
     await transporter.sendMail({
-      from: `"NoMenu" <${process.env.EMAIL_USER}>`,
+      from: `"NoMenu" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
       to: email,
       subject: `You've been invited to join ${restaurant.name} on NoMenu`,
       html: `
