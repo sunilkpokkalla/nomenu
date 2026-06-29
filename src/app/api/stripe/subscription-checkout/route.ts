@@ -150,11 +150,16 @@ export async function POST(req: Request) {
       });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const paymentIntent = (invoice as any)?.payment_intent;
+    let paymentIntent = (invoice as any)?.payment_intent;
+
+    if (typeof paymentIntent === 'string') {
+      paymentIntent = await fetchStripe(`/payment_intents/${paymentIntent}`);
+    }
 
     if (!paymentIntent || !paymentIntent.client_secret) {
       console.error("Stripe Subscription created but missing payment intent:", subscription);
+      console.error("Invoice:", invoice);
+      console.error("Payment Intent:", paymentIntent);
       throw new Error("Failed to create payment intent. Please try again.");
     }
 
