@@ -6,11 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { updateFeedbackStrategy, generateRecoveryStrategy } from "./actions";
 
 interface FeedbackStrategyFormProps {
   initialRecoveryOffer: string;
   initialRecoveryMessage: string;
+  initialServiceRecoveryEnabled: boolean;
+  initialOfferManagerVisit: boolean;
+  initialOfferCompensation: boolean;
 }
 
 import {
@@ -39,10 +43,18 @@ const MESSAGE_PRESETS = [
 export function FeedbackStrategyForm({
   initialRecoveryOffer,
   initialRecoveryMessage,
+  initialServiceRecoveryEnabled,
+  initialOfferManagerVisit,
+  initialOfferCompensation,
 }: FeedbackStrategyFormProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [recoveryOffer, setRecoveryOffer] = useState(initialRecoveryOffer);
   const [recoveryMessage, setRecoveryMessage] = useState(initialRecoveryMessage);
+  
+  // Toggles state (used just for optimistic UI, but form submittals use hidden inputs or Switch names)
+  const [serviceRecoveryEnabled, setServiceRecoveryEnabled] = useState(initialServiceRecoveryEnabled);
+  const [offerManagerVisit, setOfferManagerVisit] = useState(initialOfferManagerVisit);
+  const [offerCompensation, setOfferCompensation] = useState(initialOfferCompensation);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -70,11 +82,54 @@ export function FeedbackStrategyForm({
         </p>
       </div>
 
-      <form action={updateFeedbackStrategy} className="space-y-6">
+      <form action={updateFeedbackStrategy} className="space-y-8">
+        
+        <div className="bg-slate-50 border border-slate-100 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <Label className="text-base font-semibold text-slate-900">Enable Service Recovery Flow</Label>
+              <p className="text-sm text-slate-500">Automatically offer unhappy customers options to resolve the issue before they leave.</p>
+            </div>
+            <Switch 
+              name="serviceRecoveryEnabled"
+              checked={serviceRecoveryEnabled}
+              onCheckedChange={setServiceRecoveryEnabled}
+            />
+          </div>
+          
+          <div className="space-y-4 pt-4 border-t border-slate-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+               <div>
+                  <Label className="text-sm font-semibold text-slate-900">Offer "Speak to Manager"</Label>
+                  <p className="text-xs text-slate-500 mt-0.5">Allow the customer to instantly alert a manager to their table.</p>
+               </div>
+               <Switch 
+                  name="offerManagerVisit"
+                  checked={offerManagerVisit}
+                  onCheckedChange={setOfferManagerVisit}
+                  disabled={!serviceRecoveryEnabled}
+                />
+            </div>
+            
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+               <div>
+                  <Label className="text-sm font-semibold text-slate-900">Offer "Compensation"</Label>
+                  <p className="text-xs text-slate-500 mt-0.5">Let customers request a free item or service (instead of a refund).</p>
+               </div>
+               <Switch 
+                  name="offerCompensation"
+                  checked={offerCompensation}
+                  onCheckedChange={setOfferCompensation}
+                  disabled={!serviceRecoveryEnabled}
+                />
+            </div>
+          </div>
+        </div>
+
         <div className="pt-4 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-              <Globe className="w-4 h-4 text-primary" /> Service Recovery (1-3 Stars)
+              <Globe className="w-4 h-4 text-primary" /> Service Recovery Messaging (1-3 Stars)
             </h3>
             <Button 
               type="button" 
@@ -137,7 +192,7 @@ export function FeedbackStrategyForm({
                 name="recoveryMessage" 
                 value={recoveryMessage}
                 onChange={(e) => setRecoveryMessage(e.target.value)}
-                placeholder="Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."
+                placeholder="We are so sorry your experience wasn't perfect. Our manager has been alerted and is looking into this immediately. In case we miss you before you leave, please let us know how we can make this right:"
                 rows={4}
                 className="resize-none"
               />

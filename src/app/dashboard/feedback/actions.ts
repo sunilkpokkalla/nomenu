@@ -31,12 +31,18 @@ export async function updateFeedbackStrategy(formData: FormData) {
 
   const recoveryOfferText = field(formData, "recoveryOfferText");
   const recoveryMessage = field(formData, "recoveryMessage");
+  const serviceRecoveryEnabled = formData.get("serviceRecoveryEnabled") === "on";
+  const offerManagerVisit = formData.get("offerManagerVisit") === "on";
+  const offerCompensation = formData.get("offerCompensation") === "on";
 
   const { error } = await supabase
     .from("restaurants")
     .update({
       recovery_offer_text: recoveryOfferText,
       recovery_message: recoveryMessage,
+      service_recovery_enabled: serviceRecoveryEnabled,
+      offer_manager_visit: offerManagerVisit,
+      offer_compensation: offerCompensation,
     })
     .eq("id", restaurant.id);
 

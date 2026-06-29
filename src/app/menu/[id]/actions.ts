@@ -25,7 +25,7 @@ export async function submitFeedback(
   // Fetch restaurant details for both loyalty config (4-5 stars) and recovery config (1-3 stars)
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("name, logo_url, primary_color, loyalty_card_layout, loyalty_stamp_color, loyalty_stamp_icon, loyalty_reward_text, recovery_offer_text, recovery_message, loyalty_pin_code")
+    .select("name, logo_url, primary_color, loyalty_card_layout, loyalty_stamp_color, loyalty_stamp_icon, loyalty_reward_text, recovery_offer_text, recovery_message, loyalty_pin_code, service_recovery_enabled, service_recovery_message, offer_manager_visit, offer_compensation")
     .eq("id", restaurantId)
     .single();
 
@@ -143,7 +143,11 @@ export async function submitFeedback(
     feedbackId: finalFeedbackId,
     isLoyaltyEligible,
     recoveryOfferText,
-    recoveryMessage
+    recoveryMessage,
+    serviceRecoveryEnabled: restaurant?.service_recovery_enabled ?? false,
+    serviceRecoveryMessage: restaurant?.service_recovery_message ?? null,
+    offerManagerVisit: restaurant?.offer_manager_visit ?? true,
+    offerCompensation: restaurant?.offer_compensation ?? false
   };
 }
 
@@ -572,9 +576,10 @@ export async function summonManager(feedbackId: string, tableNumber: string) {
       (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
     );
     const { error } = await supabase
-      .from('feedback')
+      .from('customer_feedback')
       .update({
-        customer_contact_info: `URGENT: Manager requested at table ${tableNumber}`
+        contact_info: `URGENT: Manager requested at table ${tableNumber}`,
+        recovery_request: 'manager_visit'
       })
       .eq('id', feedbackId);
 
@@ -583,5 +588,26 @@ export async function summonManager(feedbackId: string, tableNumber: string) {
   } catch (err: unknown) {
     console.error("Error summoning manager:", err);
     return { success: false, error: "Failed to summon manager" };
+  }
+}
+
+export async function submitRecoveryRequest(feedbackId: string, type: 'compensation' | 'contact_later') {
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+    );
+    const { error } = await supabase
+      .from('customer_feedback')
+      .update({
+        recovery_request: type
+      })
+      .eq('id', feedbackId);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("Error submitting recovery request:", err);
+    return { success: false, error: "Failed to submit request" };
   }
 }

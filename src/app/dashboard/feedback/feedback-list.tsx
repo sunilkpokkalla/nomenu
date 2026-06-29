@@ -23,6 +23,7 @@ interface FeedbackData {
   created_at: string;
   is_public?: boolean;
   status?: string;
+  recovery_request?: string | null;
   qr_codes?: { label: string | null; location_zone?: string | null } | null;
 }
 
@@ -123,6 +124,44 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     }
   };
 
+  const playUrgentSound = () => {
+    try {
+      if (!audioCtx) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContextClass) return;
+        audioCtx = new AudioContextClass();
+      }
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      // Urgent siren-like two-tone sound
+      osc.type = 'square';
+      
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.2);
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.4);
+      osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.6);
+      
+      gain.gain.setValueAtTime(0, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.05);
+      gain.gain.setValueAtTime(0.4, audioCtx.currentTime + 0.75);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + 0.8);
+    } catch(e) {
+      console.error("Urgent audio playback failed", e);
+    }
+  };
+
   // Real-time subscription
   useEffect(() => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
@@ -130,17 +169,50 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     const channel = supabase.channel(`feedbacks-${restaurantId}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "customer_feedback" },
+        { event: "*", schema: "public", table: "customer_feedback" },
         async (payload) => {
           console.log("Realtime payload received!", payload);
+          
+          const recordId = payload.eventType === "DELETE" ? payload.old.id : payload.new.id;
+          
+          if (payload.eventType === "DELETE") {
+            setLiveFeedbacks(prev => prev.filter(fb => fb.id !== recordId));
+            return;
+          }
+
           const { data: fullFeedback } = await supabase
             .from("customer_feedback")
             .select("*, qr_codes(label, location_zone)")
-            .eq("id", payload.new.id)
+            .eq("id", recordId)
             .single();
+            
           if (fullFeedback) {
-            setLiveFeedbacks(prev => [fullFeedback as FeedbackData, ...prev]);
-            playFeedbackSound();
+            setLiveFeedbacks(prev => {
+              const existingIndex = prev.findIndex(fb => fb.id === fullFeedback.id);
+              if (existingIndex >= 0) {
+                const updated = [...prev];
+                updated[existingIndex] = fullFeedback as FeedbackData;
+                return updated;
+              } else {
+                return [fullFeedback as FeedbackData, ...prev];
+              }
+            });
+
+            // Play appropriate sound based on event and contents
+            if (payload.eventType === "INSERT") {
+              playFeedbackSound();
+            } else if (payload.eventType === "UPDATE") {
+              const oldReq = payload.old.recovery_request;
+              const newReq = payload.new.recovery_request;
+              const oldContact = payload.old.contact_info;
+              const newContact = payload.new.contact_info;
+              
+              if (newReq === "manager_visit" && oldReq !== "manager_visit") {
+                playUrgentSound();
+              } else if (newContact?.includes("URGENT") && !oldContact?.includes("URGENT")) {
+                playUrgentSound();
+              }
+            }
           }
         }
       )
@@ -431,9 +503,27 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                             )}
                           </div>
                           {fb.contact_info && (
-                            <div className="flex items-center gap-1 text-xs text-slate-500 pl-7">
-                              <Mail className="w-3 h-3" />
-                              {fb.contact_info}
+                            <div className="flex items-center gap-1 text-xs pl-7 mt-1 font-medium">
+                              {fb.contact_info.includes('URGENT') ? (
+                                <span className="text-red-600 bg-red-50 px-2 py-0.5 rounded-md border border-red-100 flex items-center gap-1">
+                                  <ArrowDownRight className="w-3 h-3" />
+                                  {fb.contact_info}
+                                </span>
+                              ) : (
+                                <span className="text-slate-500 flex items-center gap-1">
+                                  <Mail className="w-3 h-3" />
+                                  {fb.contact_info}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          
+                          {fb.recovery_request === 'compensation' && (
+                            <div className="flex items-center gap-1 text-xs pl-7 mt-1 font-medium">
+                              <span className="text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 flex items-center gap-1">
+                                <Sparkles className="w-3 h-3 text-amber-500" />
+                                Requested Compensation
+                              </span>
                             </div>
                           )}
                         </div>

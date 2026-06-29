@@ -131,7 +131,10 @@ export default async function FeedbackPage({
           <TabsContent value="strategy" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
             <FeedbackStrategyForm 
               initialRecoveryOffer={restaurant.recovery_offer_text || ""}
-              initialRecoveryMessage={restaurant.recovery_message || "Thank you. Our manager has been notified and will reach out to you at {contact} to apologize personally."}
+              initialRecoveryMessage={restaurant.recovery_message || "We are so sorry your experience wasn't perfect. Our manager has been alerted and is looking into this immediately. In case we miss you before you leave, please let us know how we can make this right:"}
+              initialServiceRecoveryEnabled={restaurant.service_recovery_enabled ?? false}
+              initialOfferManagerVisit={restaurant.offer_manager_visit ?? true}
+              initialOfferCompensation={restaurant.offer_compensation ?? false}
             />
           </TabsContent>
 
