@@ -130,11 +130,17 @@ export async function POST(req: Request) {
       }
     });
 
+    if (subscription.error) {
+      console.error("Stripe API Error:", subscription.error);
+      throw new Error(subscription.error.message || "Failed to create subscription with Stripe.");
+    }
+
     const invoice = subscription.latest_invoice;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const paymentIntent = (invoice as any).payment_intent;
+    const paymentIntent = (invoice as any)?.payment_intent;
 
     if (!paymentIntent || !paymentIntent.client_secret) {
+      console.error("Stripe Subscription created but missing payment intent:", subscription);
       throw new Error("Failed to create payment intent. Please try again.");
     }
 
