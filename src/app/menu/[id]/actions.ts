@@ -195,7 +195,8 @@ export async function claimLoyaltyCard(data: {
     restaurant_id: data.restaurantId,
     feedback_id: data.feedbackId,
     stamps: 1, // Start them with 1 stamp as a reward
-    last_stamp_at: new Date().toISOString()
+    last_stamp_at: new Date().toISOString(),
+    phone_number: data.phone
   }).select("id, stamps").single();
 
   if (insertError) {
