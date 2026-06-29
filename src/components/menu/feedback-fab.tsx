@@ -60,7 +60,8 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       console.error("Failed to read loyalty cards from local storage", e);
     }
 
-    const result = await submitFeedback(restaurantId, rating, comment, customerName, `${customerEmail} | ${customerPhone}`, tableNumber, qrCodeId, existingLoyaltyCardId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await submitFeedback(restaurantId, rating, comment, customerName, `${customerEmail} | ${customerPhone}`, tableNumber, qrCodeId, existingLoyaltyCardId) as any;
 
     setIsSubmitting(false);
 
