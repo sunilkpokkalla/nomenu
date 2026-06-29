@@ -135,8 +135,13 @@ export async function POST(req: Request) {
       throw new Error(subscription.error.message || "Failed to create subscription with Stripe.");
     }
 
-    const invoice = subscription.latest_invoice;
+    let invoice = subscription.latest_invoice;
     
+    // If Stripe didn't expand the invoice, fetch it manually
+    if (typeof invoice === 'string') {
+      invoice = await fetchStripe(`/invoices/${invoice}?expand[]=payment_intent`);
+    }
+
     if (invoice.status === "paid" || invoice.amount_due === 0) {
       // The subscription is fully paid or 100% discounted (e.g. referral)
       return NextResponse.json({ 
