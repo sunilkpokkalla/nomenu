@@ -78,7 +78,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = await submitFeedback(restaurantId, rating, comment, customerName, `${customerEmail} | ${customerPhone}`, tableNumber, qrCodeId, existingLoyaltyCardId) as any;
+    const result = await submitFeedback(restaurantId, rating, comment, customerName, `${customerEmail} | ${customerPhone}`, tableNumber, qrCodeId, existingLoyaltyCardId || undefined, feedbackId || undefined) as any;
 
     setIsSubmitting(false);
 
@@ -481,7 +481,20 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                           type="button"
                           onMouseEnter={() => setHoverRating(star)}
                           onMouseLeave={() => setHoverRating(0)}
-                          onClick={() => setRating(star)}
+                          onClick={async () => {
+                            setRating(star);
+                            if (!feedbackId) {
+                              try {
+                                const { initFeedback } = await import("@/app/menu/[id]/actions");
+                                const res = await initFeedback(restaurantId, star, tableNumber || undefined, qrCodeId || undefined);
+                                if (res.feedbackId) {
+                                  setFeedbackId(res.feedbackId);
+                                }
+                              } catch (e) {
+                                console.error("Failed to init feedback early", e);
+                              }
+                            }
+                          }}
                           className="p-1 focus:outline-none transition-transform hover:scale-110"
                         >
                           <Star

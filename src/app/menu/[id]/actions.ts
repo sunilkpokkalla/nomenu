@@ -3,6 +3,31 @@
 import { createClient } from "@supabase/supabase-js";
 import { fetchStripe } from "@/lib/stripe-fetch";
 
+export async function initFeedback(
+  restaurantId: string, 
+  rating: number,
+  tableNumber?: string,
+  qrCodeId?: string
+) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+  
+  const { data, error } = await supabase.from("customer_feedback").insert({
+    restaurant_id: restaurantId,
+    rating,
+    table_number: tableNumber?.trim() || null,
+    qr_code_id: qrCodeId?.trim() || null,
+  }).select("id").single();
+  
+  if (error) {
+    console.error("Error init feedback:", error);
+    return { error: "Failed to initialize feedback" };
+  }
+  return { feedbackId: data.id };
+}
+
 export async function submitFeedback(
   restaurantId: string, 
   rating: number, 
@@ -11,7 +36,8 @@ export async function submitFeedback(
   contactInfo?: string,
   tableNumber?: string,
   qrCodeId?: string,
-  existingLoyaltyCardId?: string
+  existingLoyaltyCardId?: string,
+  existingFeedbackId?: string
 ) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -36,22 +62,37 @@ export async function submitFeedback(
   
   const isLoyaltyEligible = rating >= 4;
 
-  // We need to save the feedback if we haven't already.
-  const { data: feedbackData, error: feedbackError } = await supabase.from("customer_feedback").insert({
-    restaurant_id: restaurantId,
-    rating,
-    comment: comment?.trim() || null,
-    customer_name: customerName?.trim() || null,
-    contact_info: contactInfo?.trim() || null,
-    table_number: tableNumber?.trim() || null,
-    qr_code_id: qrCodeId?.trim() || null,
-  }).select("id").single();
+  let finalFeedbackId = existingFeedbackId;
 
-  if (feedbackError) {
-    console.error("Error submitting feedback:", feedbackError);
-    return { error: "Failed to submit feedback. Please try again." };
+  if (existingFeedbackId) {
+    const { error: feedbackError } = await supabase.from("customer_feedback").update({
+      rating,
+      comment: comment?.trim() || null,
+      customer_name: customerName?.trim() || null,
+      contact_info: contactInfo?.trim() || null,
+    }).eq("id", existingFeedbackId);
+    
+    if (feedbackError) {
+      console.error("Error updating feedback:", feedbackError);
+      return { error: "Failed to update feedback. Please try again." };
+    }
+  } else {
+    const { data: feedbackData, error: feedbackError } = await supabase.from("customer_feedback").insert({
+      restaurant_id: restaurantId,
+      rating,
+      comment: comment?.trim() || null,
+      customer_name: customerName?.trim() || null,
+      contact_info: contactInfo?.trim() || null,
+      table_number: tableNumber?.trim() || null,
+      qr_code_id: qrCodeId?.trim() || null,
+    }).select("id").single();
+
+    if (feedbackError) {
+      console.error("Error submitting feedback:", feedbackError);
+      return { error: "Failed to submit feedback. Please try again." };
+    }
+    finalFeedbackId = feedbackData.id;
   }
-  const finalFeedbackId = feedbackData.id;
 
   if (isLoyaltyEligible) {
     let cardData = null;

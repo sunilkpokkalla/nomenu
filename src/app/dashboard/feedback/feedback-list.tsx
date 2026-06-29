@@ -749,13 +749,31 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                           onClick={() => {
                                             const isEmail = fb.contact_info?.includes('@');
                                             const message = retentionOffers[fb.id].text;
+                                            const managerRequested = fb.recovery_request === 'manager_visit' || fb.contact_info?.includes('URGENT: Manager requested');
                                             
                                             if (isEmail) {
                                               const subject = encodeURIComponent("So sorry about your experience - let us make it right");
-                                              const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant, and I saw your recent feedback. I am so sorry we missed the mark. \n\n${message}\n\nPlease let me know when you plan to come back so I can ensure you have a perfect experience.\n\nBest,\nManager`);
+                                              
+                                              let emailText = `Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant, and I saw your recent feedback. I am so sorry we missed the mark.`;
+                                              
+                                              if (managerRequested) {
+                                                emailText += `\n\nI am also incredibly sorry that we missed communicating with you while you were here. We were unable to look into your issue immediately due to being unusually busy.`;
+                                              }
+                                              
+                                              emailText += `\n\n${message}\n\nPlease let me know when you plan to come back so I can ensure you have a perfect experience.\n\nBest,\nManager`;
+                                              
+                                              const body = encodeURIComponent(emailText);
                                               window.open(`mailto:${fb.contact_info}?subject=${subject}&body=${body}`, '_blank');
                                             } else {
-                                              const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'}, this is the manager. I saw your feedback & am so sorry. ${message}. Show this text on your next visit!`);
+                                              let smsText = `Hi ${fb.customer_name || 'there'}, this is the manager. I saw your feedback & am so sorry.`;
+                                              
+                                              if (managerRequested) {
+                                                smsText += ` We missed communicating with you due to being busy, and I apologize for that.`;
+                                              }
+                                              
+                                              smsText += ` ${message}. Show this text on your next visit!`;
+                                              
+                                              const body = encodeURIComponent(smsText);
                                               window.open(`sms:${fb.contact_info}?body=${body}`, '_blank');
                                             }
                                           }}
