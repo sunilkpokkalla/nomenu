@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { MessageSquare, Star, X, CheckCircle2 } from "lucide-react";
+import { MessageSquare, Star, X, CheckCircle2, Search } from "lucide-react";
 import { submitFeedback } from "@/app/menu/[id]/actions";
 import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
+import Link from "next/link";
 
 interface FeedbackFABProps {
   restaurantId: string;
@@ -32,6 +33,12 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [isLoyaltyEligible, setIsLoyaltyEligible] = useState<boolean>(false);
   const [hasSubmittedContact, setHasSubmittedContact] = useState<boolean>(false);
   const [managerSummoned, setManagerSummoned] = useState<boolean>(false);
+
+  // New Service Recovery state
+  const [serviceRecoveryEnabled, setServiceRecoveryEnabled] = useState<boolean>(false);
+  const [serviceRecoveryMessage, setServiceRecoveryMessage] = useState<string | null>(null);
+  const [offerManagerVisit, setOfferManagerVisit] = useState<boolean>(true);
+  const [offerCompensation, setOfferCompensation] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +86,14 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
           setRecoveryMessage(result.recoveryMessage);
         }
       }
+      
+      // Update new service recovery options
+      if (result.serviceRecoveryEnabled) {
+        setServiceRecoveryEnabled(true);
+        if (result.serviceRecoveryMessage) setServiceRecoveryMessage(result.serviceRecoveryMessage);
+        if (result.offerManagerVisit !== undefined) setOfferManagerVisit(result.offerManagerVisit);
+        if (result.offerCompensation !== undefined) setOfferCompensation(result.offerCompensation);
+      }
     }
   };
 
@@ -105,15 +120,24 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
     <>
       {/* Floating Action Buttons Stack */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
-        {loyaltyCardId && (
-          <a
+        {loyaltyCardId ? (
+          <Link
             href={`/loyalty/${loyaltyCardId}`}
             className="bg-amber-500 text-white px-5 py-3.5 rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:bg-amber-400 transition-all flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-500 gap-2 font-bold ring-4 ring-amber-500/20"
             aria-label="View VIP Card"
           >
             <Star className="w-5 h-5 fill-white" />
             VIP Card
-          </a>
+          </Link>
+        ) : (
+          <Link
+            href="/loyalty/find"
+            className="bg-white text-slate-700 px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 hover:bg-slate-50 transition-all flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-500 gap-1.5 text-sm font-semibold border border-slate-200"
+            aria-label="Find VIP Card"
+          >
+            <Search className="w-4 h-4 text-slate-400" />
+            Find VIP Card
+          </Link>
         )}
         
         <button
@@ -177,12 +201,12 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                rewardText={loyaltyConfig.loyalty_reward_text}
                              />
                           </div>
-                          <a 
+                          <Link 
                             href={`/loyalty/${loyaltyCardId}`}
                             className="block w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center mt-2"
                           >
                             View Digital VIP Card
-                          </a>
+                          </Link>
                         </div>
                       ) : isLoyaltyEligible && !loyaltyCardId ? (
                         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full animate-in zoom-in-95 duration-500 delay-150 fill-mode-both">
@@ -258,7 +282,9 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                       </div>
                       <h4 className="text-xl font-bold text-slate-900 mb-2">We're so sorry.</h4>
                       <p className="text-slate-600 text-sm">
-                        We clearly missed the mark today, and we want to make it right. Please give us a second chance on your next visit with this offer:
+                        {serviceRecoveryEnabled && serviceRecoveryMessage ? serviceRecoveryMessage : (
+                          "We clearly missed the mark today, and we want to make it right. Please let us know how we can fix this:"
+                        )}
                       </p>
                       
                       {recoveryOffer && (
@@ -270,62 +296,112 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
 
                       {!hasSubmittedContact ? (
                         <div className="pt-4 border-t border-slate-100 space-y-4">
-                          {tableNumber && (
-                            <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center">
-                              {!managerSummoned ? (
-                                <>
-                                  <p className="text-sm font-bold text-red-900 mb-2">Want us to fix this right now?</p>
+                          {serviceRecoveryEnabled ? (
+                            <>
+                              {offerManagerVisit && tableNumber && (
+                                <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center">
+                                  {!managerSummoned ? (
+                                    <>
+                                      <p className="text-sm font-bold text-red-900 mb-2">Speak to a manager now?</p>
+                                      <button
+                                        type="button"
+                                        onClick={async () => {
+                                          if (feedbackId) {
+                                            await import("@/app/menu/[id]/actions").then(m => m.summonManager(feedbackId, tableNumber));
+                                            setManagerSummoned(true);
+                                          }
+                                        }}
+                                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
+                                      >
+                                        Summon Manager to Table {tableNumber}
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <p className="text-sm font-bold text-red-800">
+                                      Manager is on their way to Table {tableNumber}.
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                              
+                              {offerCompensation && (
+                                <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-center">
+                                  <p className="text-sm font-bold text-amber-900 mb-2">Claim Free Item/Service</p>
                                   <button
                                     type="button"
                                     onClick={async () => {
                                       if (feedbackId) {
-                                        await import("@/app/menu/[id]/actions").then(m => m.summonManager(feedbackId, tableNumber));
-                                        setManagerSummoned(true);
+                                        await import("@/app/menu/[id]/actions").then(m => m.submitRecoveryRequest(feedbackId, 'compensation'));
+                                        setHasSubmittedContact(true);
                                       }
                                     }}
-                                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
+                                    className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
                                   >
-                                    Summon Manager to Table {tableNumber}
+                                    Claim Compensation
                                   </button>
-                                </>
-                              ) : (
-                                <p className="text-sm font-bold text-red-800">
-                                  Manager is on their way to Table {tableNumber}.
-                                </p>
+                                </div>
                               )}
+
+                              <div>
+                                <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
+                                <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
+                                <div className="flex gap-2">
+                                  <input
+                                    type="text"
+                                    value={customerPhone}
+                                    onChange={(e) => setCustomerPhone(e.target.value)} 
+                                    placeholder="Email or Phone"
+                                    className="flex-1 rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={async () => {
+                                      if (customerPhone && feedbackId) {
+                                        await import("@/app/menu/[id]/actions").then(m => {
+                                          m.updateFeedbackContact(feedbackId, customerPhone);
+                                          m.submitRecoveryRequest(feedbackId, 'contact_later');
+                                        });
+                                        setHasSubmittedContact(true);
+                                      }
+                                    }}
+                                    className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
+                                  >
+                                    Send
+                                  </button>
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <div>
+                                <p className="text-sm font-semibold text-slate-900">Please provide your contact info</p>
+                                <div className="flex gap-2 mt-2">
+                                  <input
+                                    type="text"
+                                    value={customerPhone}
+                                    onChange={(e) => setCustomerPhone(e.target.value)} 
+                                    placeholder="Email or Phone"
+                                    className="flex-1 rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={async () => {
+                                      if (customerPhone && feedbackId) {
+                                        await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackContact(feedbackId, customerPhone));
+                                        setHasSubmittedContact(true);
+                                      }
+                                    }}
+                                    className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
+                                  >
+                                    Send
+                                  </button>
+                                </div>
                             </div>
                           )}
-
-                          <div>
-                            <p className="text-sm font-semibold text-slate-900">Want the manager to reach out later?</p>
-                            <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
-                          <div className="flex gap-2">
-                            <input
-                              type="text"
-                              value={customerPhone}
-                              onChange={(e) => setCustomerPhone(e.target.value)} 
-                              placeholder="Email or Phone"
-                              className="flex-1 rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
-                            />
-                            <button
-                              type="button"
-                              onClick={async () => {
-                                if (customerPhone && feedbackId) {
-                                  await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackContact(feedbackId, customerPhone));
-                                  setHasSubmittedContact(true);
-                                }
-                              }}
-                              className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
-                            >
-                              Send
-                            </button>
-                          </div>
-                        </div>
                         </div>
                       ) : (
                         <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                           <p className="text-sm text-slate-600">
-                            <strong>Thank you.</strong> {recoveryMessage ? recoveryMessage.replace('{contact}', customerPhone) : `Our manager has been notified and will reach out to you at ${customerPhone} to apologize personally.`}
+                            <strong>Thank you.</strong> We will be in touch shortly.
                           </p>
                         </div>
                       )}
