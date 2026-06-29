@@ -121,6 +121,57 @@ export default function PartnersLandingPage() {
         </div>
       </section>
 
+      {/* GLOBAL REACH */}
+      <section className="py-24 bg-white relative">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-extrabold text-slate-950 sm:text-4xl mb-4">Global Reach</h2>
+            <p className="text-slate-500 text-lg max-w-2xl mx-auto font-medium">
+              You can refer restaurants in 46 supported countries. Their customers can be located anywhere in the world and pay in 135+ currencies.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+              <h3 className="font-bold text-slate-900 mb-4 border-b border-slate-200 pb-2">North America</h3>
+              <ul className="space-y-2 text-slate-600 font-medium">
+                <li>United States</li>
+                <li>Canada</li>
+                <li>Mexico</li>
+              </ul>
+            </div>
+            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+              <h3 className="font-bold text-slate-900 mb-4 border-b border-slate-200 pb-2">Europe (EU & UK)</h3>
+              <ul className="space-y-2 text-slate-600 font-medium">
+                <li>United Kingdom</li>
+                <li>France, Germany, Italy</li>
+                <li>Spain, Portugal</li>
+                <li>Netherlands, Belgium</li>
+                <li>Most EU Countries</li>
+              </ul>
+            </div>
+            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+              <h3 className="font-bold text-slate-900 mb-4 border-b border-slate-200 pb-2">Asia-Pacific</h3>
+              <ul className="space-y-2 text-slate-600 font-medium">
+                <li>Australia</li>
+                <li>New Zealand</li>
+                <li>Singapore</li>
+                <li>Japan & Hong Kong</li>
+                <li>India (Preview)</li>
+              </ul>
+            </div>
+            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+              <h3 className="font-bold text-slate-900 mb-4 border-b border-slate-200 pb-2">Other Regions</h3>
+              <ul className="space-y-2 text-slate-600 font-medium">
+                <li>Brazil</li>
+                <li>United Arab Emirates</li>
+                <li>Stripe Atlas Users (Global)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* DASHBOARD PREVIEW */}
       <section className="py-24 bg-slate-950 text-white overflow-hidden relative">
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
