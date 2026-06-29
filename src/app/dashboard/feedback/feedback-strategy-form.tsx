@@ -84,8 +84,8 @@ export function FeedbackStrategyForm({
 
       <form action={updateFeedbackStrategy} className="space-y-8">
         
-        <div className="bg-slate-50 border border-slate-100 rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="p-5 flex items-center justify-between bg-slate-50 border-b border-slate-100">
             <div>
               <Label className="text-base font-semibold text-slate-900">Enable Service Recovery Flow</Label>
               <p className="text-sm text-slate-500">Automatically offer unhappy customers options to resolve the issue before they leave.</p>
@@ -97,52 +97,53 @@ export function FeedbackStrategyForm({
             />
           </div>
           
-          <div className="space-y-4 pt-4 border-t border-slate-200">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-               <div>
-                  <Label className="text-sm font-semibold text-slate-900">Offer "Speak to Manager"</Label>
-                  <p className="text-xs text-slate-500 mt-0.5">Allow the customer to instantly alert a manager to their table.</p>
-               </div>
-               <Switch 
-                  name="offerManagerVisit"
-                  checked={offerManagerVisit}
-                  onCheckedChange={setOfferManagerVisit}
-                  disabled={!serviceRecoveryEnabled}
-                />
-            </div>
+          <div className={`transition-all duration-300 ease-in-out ${serviceRecoveryEnabled ? "opacity-100 max-h-[1000px] p-5" : "opacity-50 max-h-0 overflow-hidden p-0 m-0 border-0"}`}>
             
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
-               <div>
-                  <Label className="text-sm font-semibold text-slate-900">Offer "Compensation"</Label>
-                  <p className="text-xs text-slate-500 mt-0.5">Let customers request a free item or service (instead of a refund).</p>
-               </div>
-               <Switch 
-                  name="offerCompensation"
-                  checked={offerCompensation}
-                  onCheckedChange={setOfferCompensation}
-                  disabled={!serviceRecoveryEnabled}
-                />
+            <div className="space-y-4 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                 <div>
+                    <Label className="text-sm font-semibold text-slate-900">Offer "Speak to Manager"</Label>
+                    <p className="text-xs text-slate-500 mt-0.5">Allow the customer to instantly alert a manager to their table.</p>
+                 </div>
+                 <Switch 
+                    name="offerManagerVisit"
+                    checked={offerManagerVisit}
+                    onCheckedChange={setOfferManagerVisit}
+                    disabled={!serviceRecoveryEnabled}
+                  />
+              </div>
+              
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
+                 <div>
+                    <Label className="text-sm font-semibold text-slate-900">Offer "Compensation"</Label>
+                    <p className="text-xs text-slate-500 mt-0.5">Let customers request a free item or service (instead of a refund).</p>
+                 </div>
+                 <Switch 
+                    name="offerCompensation"
+                    checked={offerCompensation}
+                    onCheckedChange={setOfferCompensation}
+                    disabled={!serviceRecoveryEnabled}
+                  />
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="pt-4 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-              <Globe className="w-4 h-4 text-primary" /> Service Recovery Messaging (1-3 Stars)
-            </h3>
-            <Button 
-              type="button" 
-              variant="outline" 
-              size="sm" 
-              className="h-8 text-xs gap-1.5 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border-indigo-200 shrink-0"
-              onClick={handleGenerate}
-              disabled={isGenerating}
-            >
-              {isGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
-              Generate with AI
-            </Button>
-          </div>
+            <div className="pt-6 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-primary" /> Service Recovery Messaging
+                </h3>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-8 text-xs gap-1.5 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border-indigo-200 shrink-0"
+                  onClick={handleGenerate}
+                  disabled={isGenerating || !serviceRecoveryEnabled}
+                >
+                  {isGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                  Generate with AI
+                </Button>
+              </div>
           
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="space-y-2 flex flex-col">
@@ -199,6 +200,8 @@ export function FeedbackStrategyForm({
               <p className="text-[10px] text-muted-foreground mt-auto pt-1">Use {'{contact}'} as a placeholder for their email/phone.</p>
             </div>
           </div>
+          </div>
+        </div>
         </div>
 
         <div className="pt-6 border-t border-slate-100">
