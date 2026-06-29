@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { MessageSquare, Star, X, CheckCircle2, Search } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MessageSquare, Star, X, CheckCircle2, Search, Clock } from "lucide-react";
 import { submitFeedback } from "@/app/menu/[id]/actions";
 import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
 import Link from "next/link";
@@ -11,6 +11,8 @@ interface FeedbackFABProps {
   tableNumber?: string;
   qrCodeId?: string;
 }
+
+type EscalationState = 'INITIAL' | 'ASK_MANAGER' | 'TIMER_RUNNING' | 'MANAGER_CHECK' | 'RESOLVED_SUCCESS' | 'RESOLVED_COMPENSATION';
 
 export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFABProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,13 +34,28 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [recoveryMessage, setRecoveryMessage] = useState<string>("");
   const [isLoyaltyEligible, setIsLoyaltyEligible] = useState<boolean>(false);
   const [hasSubmittedContact, setHasSubmittedContact] = useState<boolean>(false);
-  const [managerSummoned, setManagerSummoned] = useState<boolean>(false);
+  
+  // Real-time Service Recovery Flow
+  const [escalationState, setEscalationState] = useState<EscalationState>('INITIAL');
+  const [timerLeft, setTimerLeft] = useState(300);
 
   // New Service Recovery state
   const [serviceRecoveryEnabled, setServiceRecoveryEnabled] = useState<boolean>(false);
   const [serviceRecoveryMessage, setServiceRecoveryMessage] = useState<string | null>(null);
   const [offerManagerVisit, setOfferManagerVisit] = useState<boolean>(true);
   const [offerCompensation, setOfferCompensation] = useState<boolean>(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (escalationState === 'TIMER_RUNNING' && timerLeft > 0) {
+      interval = setInterval(() => {
+        setTimerLeft((prev) => prev - 1);
+      }, 1000);
+    } else if (escalationState === 'TIMER_RUNNING' && timerLeft <= 0) {
+      setEscalationState('MANAGER_CHECK');
+    }
+    return () => clearInterval(interval);
+  }, [escalationState, timerLeft]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,11 +107,22 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       }
       
       // Update new service recovery options
-      if (result.serviceRecoveryEnabled) {
+      if (result.serviceRecoveryEnabled && rating <= 3) {
         setServiceRecoveryEnabled(true);
         if (result.serviceRecoveryMessage) setServiceRecoveryMessage(result.serviceRecoveryMessage);
         if (result.offerManagerVisit !== undefined) setOfferManagerVisit(result.offerManagerVisit);
         if (result.offerCompensation !== undefined) setOfferCompensation(result.offerCompensation);
+        if (result.managerVisitTimerMinutes !== undefined) setTimerLeft(result.managerVisitTimerMinutes * 60);
+        
+        if (result.offerManagerVisit) {
+          setEscalationState('ASK_MANAGER');
+        } else if (result.offerCompensation) {
+          setEscalationState('RESOLVED_COMPENSATION');
+        } else {
+          setEscalationState('RESOLVED_SUCCESS');
+        }
+      } else {
+        setEscalationState('RESOLVED_SUCCESS');
       }
     }
   };
@@ -282,69 +310,118 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                       <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 mx-auto">
                         <MessageSquare className="w-8 h-8 text-slate-400" />
                       </div>
-                      <h4 className="text-xl font-bold text-slate-900 mb-2">We're so sorry.</h4>
-                      <p className="text-slate-600 text-sm">
-                        {serviceRecoveryEnabled && serviceRecoveryMessage ? serviceRecoveryMessage : (
-                          "We clearly missed the mark today, and we want to make it right. Please let us know how we can fix this:"
-                        )}
-                      </p>
                       
-                      {recoveryOffer && (
-                        <div className="bg-slate-100 border border-slate-200 border-dashed rounded-xl p-4 text-center">
-                          <span className="font-mono text-base font-bold tracking-widest text-slate-800 uppercase">{recoveryOffer}</span>
-                          <p className="text-xs text-slate-500 mt-2">Show this to your server</p>
-                        </div>
-                      )}
-
                       {!hasSubmittedContact ? (
-                        <div className="pt-4 border-t border-slate-100 space-y-4">
-                          {serviceRecoveryEnabled ? (
-                            <>
-                              {offerManagerVisit && (
-                                <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center">
-                                  {!managerSummoned ? (
-                                    <>
-                                      <p className="text-sm font-bold text-red-900 mb-2">Speak to a manager now?</p>
-                                      <button
-                                        type="button"
-                                        onClick={async () => {
-                                          if (feedbackId) {
-                                            await import("@/app/menu/[id]/actions").then(m => m.summonManager(feedbackId, tableNumber || ""));
-                                            setManagerSummoned(true);
-                                          }
-                                        }}
-                                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
-                                      >
-                                        {tableNumber ? `Summon Manager to Table ${tableNumber}` : "Summon Manager"}
-                                      </button>
-                                    </>
-                                  ) : (
-                                    <p className="text-sm font-bold text-red-800">
-                                      {tableNumber ? `Manager is on their way to Table ${tableNumber}.` : "Manager is on their way."}
-                                    </p>
-                                  )}
-                                </div>
+                        <>
+                          <div className="text-center">
+                            <h4 className="text-xl font-bold text-slate-900 mb-2">We're so sorry.</h4>
+                            <p className="text-slate-600 text-sm">
+                              {serviceRecoveryEnabled && serviceRecoveryMessage ? serviceRecoveryMessage : (
+                                "We clearly missed the mark today, and we want to make it right. Please let us know how we can fix this:"
                               )}
-                              
-                              {offerCompensation && (
-                                <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-center">
-                                  <p className="text-sm font-bold text-amber-900 mb-2">Claim Free Item/Service</p>
-                                  <button
-                                    type="button"
-                                    onClick={async () => {
-                                      if (feedbackId) {
-                                        await import("@/app/menu/[id]/actions").then(m => m.submitRecoveryRequest(feedbackId, 'compensation'));
-                                        setHasSubmittedContact(true);
-                                      }
-                                    }}
-                                    className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
-                                  >
-                                    Claim Compensation
-                                  </button>
-                                </div>
-                              )}
+                            </p>
+                          </div>
+                          
+                          <div className="pt-4 border-t border-slate-100 space-y-4">
+                            {escalationState === 'ASK_MANAGER' && (
+                              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                              <p className="text-sm font-bold text-slate-900 mb-2">Speak to a manager now?</p>
+                              <div className="flex gap-2">
+                                <button
+                                  type="button"
+                                  onClick={async () => {
+                                    if (feedbackId) {
+                                      await import("@/app/menu/[id]/actions").then(m => m.summonManager(feedbackId, tableNumber || ""));
+                                    }
+                                    setEscalationState('TIMER_RUNNING');
+                                  }}
+                                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
+                                >
+                                  Yes, please
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (offerCompensation) {
+                                      setEscalationState('RESOLVED_COMPENSATION');
+                                    } else {
+                                      setEscalationState('RESOLVED_SUCCESS');
+                                    }
+                                  }}
+                                  className="flex-1 bg-white hover:bg-slate-100 text-slate-700 font-bold py-2.5 rounded-xl border border-slate-200 transition-colors text-sm"
+                                >
+                                  No thanks
+                                </button>
+                              </div>
+                            </div>
+                          )}
 
+                          {escalationState === 'TIMER_RUNNING' && (
+                            <div className="bg-red-50 p-6 rounded-xl border border-red-100 text-center space-y-4">
+                              <Clock className="w-12 h-12 text-red-400 mx-auto animate-pulse" />
                               <div>
+                                <p className="text-sm font-bold text-red-900">A manager is on their way to {tableNumber ? `Table ${tableNumber}` : 'your table'}.</p>
+                                <p className="text-3xl font-mono font-black text-red-600 mt-2">
+                                  {Math.floor(timerLeft / 60).toString().padStart(2, '0')}:
+                                  {(timerLeft % 60).toString().padStart(2, '0')}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {escalationState === 'MANAGER_CHECK' && (
+                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                              <p className="text-sm font-bold text-slate-900 mb-2">Did a manager make it to your table?</p>
+                              <div className="flex gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => setEscalationState('RESOLVED_SUCCESS')}
+                                  className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
+                                >
+                                  Yes, they did
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (offerCompensation) {
+                                      setEscalationState('RESOLVED_COMPENSATION');
+                                    } else {
+                                      setEscalationState('RESOLVED_SUCCESS');
+                                    }
+                                  }}
+                                  className="flex-1 bg-white hover:bg-slate-100 text-slate-700 font-bold py-2.5 rounded-xl border border-slate-200 transition-colors text-sm"
+                                >
+                                  No, they didn't
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
+                          {escalationState === 'RESOLVED_COMPENSATION' && (
+                            <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-center space-y-4">
+                              <p className="text-sm font-bold text-amber-900">We're sorry we couldn't make it to your table. Please accept this:</p>
+                              {recoveryOffer && (
+                                <div className="bg-white border border-amber-200 border-dashed rounded-xl p-3">
+                                  <span className="font-mono text-sm font-bold tracking-widest text-amber-800 uppercase">{recoveryOffer}</span>
+                                </div>
+                              )}
+                              <button
+                                type="button"
+                                onClick={async () => {
+                                  if (feedbackId) {
+                                    await import("@/app/menu/[id]/actions").then(m => m.submitRecoveryRequest(feedbackId, 'compensation', recoveryOffer));
+                                    setHasSubmittedContact(true);
+                                  }
+                                }}
+                                className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
+                              >
+                                Claim Compensation
+                              </button>
+                            </div>
+                          )}
+
+                          {(escalationState === 'RESOLVED_SUCCESS' || escalationState === 'RESOLVED_COMPENSATION' || escalationState === 'INITIAL') && (
+                            <div>
                                 <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
                                 <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
                                 <div className="flex gap-2">
@@ -371,40 +448,23 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                     Send
                                   </button>
                                 </div>
-                              </div>
-                            </>
-                          ) : (
-                            <div>
-                                <p className="text-sm font-semibold text-slate-900">Please provide your contact info</p>
-                                <div className="flex gap-2 mt-2">
-                                  <input
-                                    type="text"
-                                    value={customerPhone}
-                                    onChange={(e) => setCustomerPhone(e.target.value)} 
-                                    placeholder="Email or Phone"
-                                    className="flex-1 rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={async () => {
-                                      if (customerPhone && feedbackId) {
-                                        await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackContact(feedbackId, customerPhone));
-                                        setHasSubmittedContact(true);
-                                      }
-                                    }}
-                                    className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
-                                  >
-                                    Send
-                                  </button>
-                                </div>
                             </div>
                           )}
                         </div>
+                        </>
                       ) : (
-                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                          <p className="text-sm text-slate-600">
-                            <strong>Thank you.</strong> {recoveryMessage ? recoveryMessage.replace('{contact}', customerPhone || customerEmail) : "We will be in touch shortly."}
-                          </p>
+                        <div className="space-y-4">
+                          {escalationState === 'RESOLVED_COMPENSATION' && recoveryOffer && (
+                            <div className="bg-slate-100 border border-slate-200 border-dashed rounded-xl p-4 text-center">
+                              <span className="font-mono text-base font-bold tracking-widest text-slate-800 uppercase">{recoveryOffer}</span>
+                              <p className="text-xs text-slate-500 mt-2">Show this to your server</p>
+                            </div>
+                          )}
+                          <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <p className="text-sm text-slate-600">
+                              <strong>Thank you.</strong> {recoveryMessage ? recoveryMessage.replace('{contact}', customerPhone || customerEmail) : "We will be in touch shortly."}
+                            </p>
+                          </div>
                         </div>
                       )}
                     </div>

@@ -25,7 +25,7 @@ export async function submitFeedback(
   // Fetch restaurant details for both loyalty config (4-5 stars) and recovery config (1-3 stars)
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("name, logo_url, primary_color, loyalty_card_layout, loyalty_stamp_color, loyalty_stamp_icon, loyalty_reward_text, recovery_offer_text, recovery_message, loyalty_pin_code, service_recovery_enabled, service_recovery_message, offer_manager_visit, offer_compensation")
+    .select("name, logo_url, primary_color, loyalty_card_layout, loyalty_stamp_color, loyalty_stamp_icon, loyalty_reward_text, recovery_offer_text, recovery_message, loyalty_pin_code, service_recovery_enabled, service_recovery_message, offer_manager_visit, offer_compensation, manager_visit_timer_minutes")
     .eq("id", restaurantId)
     .single();
 
@@ -34,7 +34,7 @@ export async function submitFeedback(
   let loyaltyConfig = null;
   let loyaltyStamps = 0;
   
-  const isLoyaltyEligible = rating >= 4 && !existingLoyaltyCardId;
+  const isLoyaltyEligible = rating >= 4;
 
   // We need to save the feedback if we haven't already.
   const { data: feedbackData, error: feedbackError } = await supabase.from("customer_feedback").insert({
@@ -147,7 +147,8 @@ export async function submitFeedback(
     serviceRecoveryEnabled: restaurant?.service_recovery_enabled ?? false,
     serviceRecoveryMessage: restaurant?.service_recovery_message ?? null,
     offerManagerVisit: restaurant?.offer_manager_visit ?? true,
-    offerCompensation: restaurant?.offer_compensation ?? false
+    offerCompensation: restaurant?.offer_compensation ?? false,
+    managerVisitTimerMinutes: restaurant?.manager_visit_timer_minutes ?? 5
   };
 }
 
@@ -591,7 +592,7 @@ export async function summonManager(feedbackId: string, tableNumber: string) {
   }
 }
 
-export async function submitRecoveryRequest(feedbackId: string, type: 'compensation' | 'contact_later') {
+export async function submitRecoveryRequest(feedbackId: string, type: 'compensation' | 'contact_later', offerGiven?: string) {
   try {
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -600,7 +601,8 @@ export async function submitRecoveryRequest(feedbackId: string, type: 'compensat
     const { error } = await supabase
       .from('customer_feedback')
       .update({
-        recovery_request: type
+        recovery_request: type,
+        recovery_offer_given: offerGiven || null
       })
       .eq('id', feedbackId);
 

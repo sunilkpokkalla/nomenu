@@ -35,6 +35,7 @@ export async function updateFeedbackStrategy(formData: FormData) {
   const serviceRecoveryEnabled = formData.get("serviceRecoveryEnabled") === "on";
   const offerManagerVisit = formData.get("offerManagerVisit") === "on";
   const offerCompensation = formData.get("offerCompensation") === "on";
+  const managerVisitTimerMinutes = parseInt(formData.get("managerVisitTimerMinutes") as string) || 5;
 
   const { error } = await supabase
     .from("restaurants")
@@ -45,6 +46,7 @@ export async function updateFeedbackStrategy(formData: FormData) {
       service_recovery_enabled: serviceRecoveryEnabled,
       offer_manager_visit: offerManagerVisit,
       offer_compensation: offerCompensation,
+      manager_visit_timer_minutes: managerVisitTimerMinutes,
     })
     .eq("id", restaurant.id);
 

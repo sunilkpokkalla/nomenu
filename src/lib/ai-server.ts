@@ -31,14 +31,14 @@ export async function generateAiDescription(name: string, type: 'menu' | 'item' 
   }
 }
 
-export async function generateAiRecoveryStrategy(restaurantName: string, cuisine: string = "Restaurant"): Promise<{ offer: string, message: string } | null> {
+export async function generateAiRecoveryStrategy(restaurantName: string, cuisine: string = "Restaurant"): Promise<{ initialMessage: string, offer: string, resolutionMessage: string } | null> {
   if (!process.env.GEMINI_API_KEY) {
     console.warn("GEMINI_API_KEY is not configured.");
     return null;
   }
 
   const prompt = `You are a hospitality expert writing a service recovery strategy for a ${cuisine} named "${restaurantName}". 
-Write a short "Apology Offer" (e.g. 'A complimentary dessert on your next visit') and a short "Follow-up Message" that will be shown to customers who leave a 1 to 3 star review. The message MUST include the exact placeholder {contact} where we will insert their phone/email. Keep it empathetic, highly professional, and brief. Return ONLY valid JSON in this format: { "offer": "...", "message": "..." }`;
+Write a short "Initial Apology Message" (e.g. 'We are so sorry your experience wasn't perfect. Our manager has been alerted and is looking into this immediately.'), a short "Apology Offer" (e.g. 'A complimentary dessert on your next visit'), and a short "Resolution Follow-up Message" that will be shown to customers who leave a 1 to 3 star review. The resolution message MUST include the exact placeholder {contact} where we will insert the customer's phone/email to tell them the restaurant will reach out to them. (e.g. 'Our manager will contact you shortly at {contact} to personally apologize and make this right.'). Keep it empathetic, highly professional, and brief. Return ONLY valid JSON in this format: { "initialMessage": "...", "offer": "...", "resolutionMessage": "..." }`;
 
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {

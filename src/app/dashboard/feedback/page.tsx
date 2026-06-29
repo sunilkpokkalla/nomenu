@@ -11,7 +11,8 @@ import { FeedbackStrategyForm } from "./feedback-strategy-form";
 import { LoyaltyQrGenerator } from "@/app/dashboard/feedback/loyalty-qr-generator";
 import { LoyaltyDesignEditor } from "@/app/dashboard/feedback/loyalty-design-editor";
 import { CustomerDirectory } from "./customer-directory";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsSync } from "@/components/ui/tabs-sync";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 
 export const metadata = {
@@ -26,7 +27,9 @@ export default async function FeedbackPage({
 }) {
   const supabase = await createClient();
   const params = await searchParams;
-  const tab = params.tab === "strategy" ? "strategy" : "reviews";
+  const validTabs = ["reviews", "strategy", "directory", "design", "scanner"];
+  const tabParam = typeof params.tab === "string" ? params.tab : "";
+  const tab = validTabs.includes(tabParam) ? tabParam : "reviews";
 
   const {
     data: { user },
@@ -105,7 +108,7 @@ export default async function FeedbackPage({
           </Link>
         </div>
       ) : (
-        <Tabs defaultValue={tab} className="w-full">
+        <TabsSync defaultValue={tab} className="w-full">
           <TabsList className="mb-8 p-1 h-auto bg-slate-100/80 rounded-xl overflow-x-auto justify-start flex-nowrap hide-scrollbar flex w-full border border-slate-200">
             <TabsTrigger value="reviews" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Customer Reviews</TabsTrigger>
             <TabsTrigger value="strategy" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Service Recovery</TabsTrigger>
@@ -119,7 +122,14 @@ export default async function FeedbackPage({
           
           <TabsContent value="reviews" className="space-y-8 mt-0 focus-visible:outline-none focus-visible:ring-0">
             <div className="mb-8">
-              <FeedbackList feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} restaurantId={restaurant.id} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} />
+              <FeedbackList 
+                feedbacks={allFeedbacks} 
+                timezone={restaurant.timezone || "UTC"} 
+                restaurantId={restaurant.id} 
+                supabaseUrl={getSupabaseEnv().url} 
+                supabaseAnonKey={getSupabaseEnv().anonKey} 
+                recoveryOfferText={restaurant.recovery_offer_text || undefined}
+              />
             </div>
             <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
           </TabsContent>
@@ -136,6 +146,7 @@ export default async function FeedbackPage({
               initialServiceRecoveryEnabled={restaurant.service_recovery_enabled ?? false}
               initialOfferManagerVisit={restaurant.offer_manager_visit ?? true}
               initialOfferCompensation={restaurant.offer_compensation ?? false}
+              initialManagerVisitTimerMinutes={restaurant.manager_visit_timer_minutes ?? 5}
             />
           </TabsContent>
 
@@ -153,9 +164,11 @@ export default async function FeedbackPage({
           </TabsContent>
 
           <TabsContent value="scanner" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-            <LoyaltyQrGenerator restaurantId={restaurant.id} />
+            <LoyaltyQrGenerator 
+              restaurantId={restaurant.id}
+            />
           </TabsContent>
-        </Tabs>
+        </TabsSync>
       )}
     </div>
   );

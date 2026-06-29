@@ -167,6 +167,7 @@ export interface Database {
           service_recovery_message: string | null;
           offer_manager_visit: boolean | null;
           offer_compensation: boolean | null;
+          manager_visit_timer_minutes: number | null;
           loyalty_stamp_color: string | null;
           loyalty_stamp_icon: string | null;
           loyalty_card_layout: string | null;
@@ -217,6 +218,7 @@ export interface Database {
           service_recovery_message?: string | null;
           offer_manager_visit?: boolean | null;
           offer_compensation?: boolean | null;
+          manager_visit_timer_minutes?: number | null;
           loyalty_stamp_color?: string | null;
           loyalty_stamp_icon?: string | null;
           loyalty_card_layout?: string | null;
@@ -541,6 +543,12 @@ export interface Database {
           restaurant_id: string;
           rating: number;
           comment: string | null;
+          customer_name: string | null;
+          contact_info: string | null;
+          table_number: string | null;
+          qr_code_id: string | null;
+          recovery_request: string | null;
+          recovery_offer_given: string | null;
           created_at: string | null;
         };
         Insert: {
@@ -548,6 +556,12 @@ export interface Database {
           restaurant_id: string;
           rating: number;
           comment?: string | null;
+          customer_name?: string | null;
+          contact_info?: string | null;
+          table_number?: string | null;
+          qr_code_id?: string | null;
+          recovery_request?: string | null;
+          recovery_offer_given?: string | null;
           created_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["customer_feedback"]["Insert"]>;

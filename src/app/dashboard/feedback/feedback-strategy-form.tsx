@@ -16,6 +16,7 @@ interface FeedbackStrategyFormProps {
   initialServiceRecoveryEnabled: boolean;
   initialOfferManagerVisit: boolean;
   initialOfferCompensation: boolean;
+  initialManagerVisitTimerMinutes: number;
 }
 
 import {
@@ -48,6 +49,7 @@ export function FeedbackStrategyForm({
   initialServiceRecoveryEnabled,
   initialOfferManagerVisit,
   initialOfferCompensation,
+  initialManagerVisitTimerMinutes,
 }: FeedbackStrategyFormProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [recoveryOffer, setRecoveryOffer] = useState(initialRecoveryOffer);
@@ -58,14 +60,16 @@ export function FeedbackStrategyForm({
   const [serviceRecoveryEnabled, setServiceRecoveryEnabled] = useState(initialServiceRecoveryEnabled);
   const [offerManagerVisit, setOfferManagerVisit] = useState(initialOfferManagerVisit);
   const [offerCompensation, setOfferCompensation] = useState(initialOfferCompensation);
+  const [managerVisitTimerMinutes, setManagerVisitTimerMinutes] = useState(initialManagerVisitTimerMinutes);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
       const result = await generateRecoveryStrategy();
-      if ("success" in result && result.success && result.offer && result.message) {
+      if ("success" in result && result.success && result.offer && result.resolutionMessage && result.initialMessage) {
+        setServiceRecoveryMessage(result.initialMessage);
         setRecoveryOffer(result.offer);
-        setRecoveryMessage(result.message);
+        setRecoveryMessage(result.resolutionMessage);
       } else {
         alert(result.error || "Failed to generate strategy");
       }
@@ -102,125 +106,125 @@ export function FeedbackStrategyForm({
           
           <div className={`transition-all duration-300 ease-in-out ${serviceRecoveryEnabled ? "opacity-100 max-h-[1000px] p-5" : "opacity-50 max-h-0 overflow-hidden p-0 m-0 border-0"}`}>
             
-            <div className="space-y-4 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                 <div>
-                    <Label className="text-sm font-semibold text-slate-900">Offer "Speak to Manager"</Label>
-                    <p className="text-xs text-slate-500 mt-0.5">Allow the customer to instantly alert a manager to their table.</p>
-                 </div>
-                 <Switch 
+          <div className="pt-6 space-y-8 p-5">
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleGenerate}
+                disabled={isGenerating}
+                className="h-8 text-xs font-medium shadow-sm border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 hover:text-amber-800"
+              >
+                {isGenerating ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 mr-1.5" />}
+                ✨ Generate AI Strategy
+              </Button>
+            </div>
+            <div className="space-y-6">
+              <div className="flex flex-col gap-4 rounded-xl border border-slate-200 p-4 bg-slate-50">
+                <div className="flex flex-row items-center justify-between">
+                  <div className="space-y-1">
+                    <h3 className="font-semibold text-slate-900 text-sm">Offer Immediate Manager Visit</h3>
+                    <p className="text-sm text-slate-500">
+                      Ask the customer if they want a manager at their table. If yes, starts a real-time countdown.
+                    </p>
+                  </div>
+                  <Switch 
+                    id="offerManagerVisit" 
                     name="offerManagerVisit"
                     checked={offerManagerVisit}
                     onCheckedChange={setOfferManagerVisit}
-                    disabled={!serviceRecoveryEnabled}
                   />
+                </div>
+                
+                {offerManagerVisit && (
+                  <div className="flex items-center gap-3 pt-3 border-t border-slate-200">
+                    <Label htmlFor="managerVisitTimerMinutes" className="text-sm font-medium text-slate-700 whitespace-nowrap">
+                      Timer Duration (Minutes):
+                    </Label>
+                    <Input
+                      id="managerVisitTimerMinutes"
+                      name="managerVisitTimerMinutes"
+                      type="number"
+                      min={1}
+                      max={60}
+                      value={managerVisitTimerMinutes}
+                      onChange={(e) => setManagerVisitTimerMinutes(parseInt(e.target.value) || 5)}
+                      className="w-24 h-9 bg-white"
+                    />
+                  </div>
+                )}
               </div>
-              
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
-                 <div>
-                    <Label className="text-sm font-semibold text-slate-900">Offer "Compensation"</Label>
-                    <p className="text-xs text-slate-500 mt-0.5">Let customers request a free item or service (instead of a refund).</p>
-                 </div>
-                 <Switch 
-                    name="offerCompensation"
-                    checked={offerCompensation}
-                    onCheckedChange={setOfferCompensation}
-                    disabled={!serviceRecoveryEnabled}
-                  />
+
+              <div className="flex flex-row items-center justify-between rounded-xl border border-slate-200 p-4 bg-slate-50">
+                <div className="space-y-1">
+                  <h3 className="font-semibold text-slate-900 text-sm">Fallback Compensation</h3>
+                  <p className="text-sm text-slate-500">
+                    Automatically offer an apology discount if the manager fails to arrive before the 5-minute timer ends.
+                  </p>
+                </div>
+                <Switch 
+                  id="offerCompensation" 
+                  name="offerCompensation"
+                  checked={offerCompensation}
+                  onCheckedChange={setOfferCompensation}
+                />
               </div>
             </div>
 
-            <div className="pt-6 space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-primary" /> Service Recovery Messaging
-                </h3>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-8 text-xs gap-1.5 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 border-indigo-200 shrink-0"
-                  onClick={handleGenerate}
-                  disabled={isGenerating || !serviceRecoveryEnabled}
-                >
-                  {isGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
-                  Generate with AI
-                </Button>
+            <div className="grid gap-6">
+              <div className="space-y-2 flex flex-col">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="serviceRecoveryMessage">Initial Prompt</Label>
+                </div>
+                <Textarea 
+                  id="serviceRecoveryMessage" 
+                  name="serviceRecoveryMessage" 
+                  value={serviceRecoveryMessage}
+                  onChange={(e) => setServiceRecoveryMessage(e.target.value)}
+                  placeholder="We clearly missed the mark today. Would you like a manager to come to your table right now to fix this?"
+                  rows={2}
+                  className="resize-none"
+                />
+                <p className="text-[10px] text-muted-foreground mt-auto pt-1">Shown immediately on a 1-3 star review.</p>
               </div>
-          
-          <div className="grid gap-6">
-            <div className="space-y-2 flex flex-col">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="serviceRecoveryMessage">Initial Apology Message</Label>
-              </div>
-              <Textarea 
-                id="serviceRecoveryMessage" 
-                name="serviceRecoveryMessage" 
-                value={serviceRecoveryMessage}
-                onChange={(e) => setServiceRecoveryMessage(e.target.value)}
-                placeholder="We are so sorry your experience wasn't perfect. Our manager has been alerted and is looking into this immediately. In case we miss you before you leave, please let us know how we can make this right:"
-                rows={3}
-                className="resize-none"
-              />
-              <p className="text-[10px] text-muted-foreground mt-auto pt-1">Shown immediately when a customer leaves a 1-3 star review.</p>
-            </div>
 
-            <div className="space-y-2 flex flex-col">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="recoveryOfferText">Apology Offer (Optional)</Label>
-                <Select onValueChange={(val) => setRecoveryOffer(val === "none" ? "" : val)}>
-                  <SelectTrigger className="h-6 w-[160px] text-[10px] px-2 py-0 border-slate-200">
-                    <SelectValue placeholder="Use preset..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white z-50 border-slate-200 shadow-md">
-                    {OFFER_PRESETS.map((preset, idx) => (
-                      <SelectItem key={idx} value={preset.value || "none"} className="text-[11px]">
-                        {preset.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              {offerCompensation && (
+                <div className="space-y-2 flex flex-col animate-in fade-in zoom-in-95">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="recoveryOfferText">Fallback Compensation Offer</Label>
+                  </div>
+                  <Textarea 
+                    id="recoveryOfferText" 
+                    name="recoveryOfferText" 
+                    value={recoveryOffer}
+                    onChange={(e) => setRecoveryOffer(e.target.value)}
+                    placeholder="e.g. 15% off your next visit with code MAKEITRIGHT15"
+                    rows={2}
+                    className="resize-none"
+                  />
+                  <p className="text-[10px] text-muted-foreground mt-auto pt-1">Shown if the customer says the manager did not arrive.</p>
+                </div>
+              )}
+
+              <div className="space-y-2 flex flex-col">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="recoveryMessage">Resolution / Closing Message</Label>
+                </div>
+                <Textarea 
+                  id="recoveryMessage" 
+                  name="recoveryMessage" 
+                  value={recoveryMessage}
+                  onChange={(e) => setRecoveryMessage(e.target.value)}
+                  placeholder="Thank you for your time. We will try our best to ensure you never regret coming back."
+                  rows={2}
+                  className="resize-none"
+                />
+                <p className="text-[10px] text-muted-foreground mt-auto pt-1">Shown when the issue is resolved (e.g. manager arrived, or they declined a visit).</p>
               </div>
-              <Textarea 
-                id="recoveryOfferText" 
-                name="recoveryOfferText" 
-                value={recoveryOffer}
-                onChange={(e) => setRecoveryOffer(e.target.value)}
-                placeholder="e.g. 15% off your next visit with code MAKEITRIGHT15"
-                rows={2}
-                className="resize-none"
-              />
-            </div>
-            <div className="space-y-2 flex flex-col">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="recoveryMessage">Follow-up Message</Label>
-                <Select onValueChange={(val) => setRecoveryMessage(val)}>
-                  <SelectTrigger className="h-6 w-[160px] text-[10px] px-2 py-0 border-slate-200">
-                    <SelectValue placeholder="Use preset..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white z-50 border-slate-200 shadow-md">
-                    {MESSAGE_PRESETS.map((preset, idx) => (
-                      <SelectItem key={idx} value={preset.value} className="text-[11px]">
-                        {preset.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Textarea 
-                id="recoveryMessage" 
-                name="recoveryMessage" 
-                value={recoveryMessage}
-                onChange={(e) => setRecoveryMessage(e.target.value)}
-                placeholder="Thank you for sharing. We will follow up with you at {contact}."
-                rows={3}
-                className="resize-none"
-              />
-              <p className="text-[10px] text-muted-foreground mt-auto pt-1">Shown after they submit their email/phone. Use {'{contact}'} as a placeholder.</p>
             </div>
           </div>
           </div>
-        </div>
         </div>
 
         <div className="pt-6 border-t border-slate-100">

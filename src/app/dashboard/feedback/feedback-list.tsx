@@ -6,12 +6,13 @@ import { toZonedTime } from "date-fns-tz";
 import { 
   MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, 
   Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send,
-  ChevronLeft, ChevronRight, Download
+  ChevronLeft, ChevronRight, Download, Phone, AlertCircle
 } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
-import { getRandomOfferForDay } from "@/lib/retention-offers";
+import { getRandomOfferForDay, DayCategory } from "@/lib/retention-offers";
 import { getRandomLoyaltyIdeaForDay } from "@/lib/loyalty-offers";
+import { fetchFeedbackOrderDetails } from "./fetch-order-action";
 
 interface FeedbackData {
   id: string;
@@ -24,8 +25,13 @@ interface FeedbackData {
   is_public?: boolean;
   status?: string;
   recovery_request?: string | null;
+  recovery_offer_given?: string | null;
   qr_codes?: { label: string | null; location_zone?: string | null } | null;
 }
+
+// Any because we just need basic fields
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OrderDetailsType = any;
 
 type SortColumn = "date" | "rating";
 type SortDirection = "asc" | "desc";
@@ -34,7 +40,7 @@ type RatingFilter = "all" | "positive" | "neutral" | "attention";
 // Global AudioContext to prevent recreating it
 let audioCtx: AudioContext | null = null;
 
-export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string }) {
+export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey, recoveryOfferText }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string, recoveryOfferText?: string }) {
   const [liveFeedbacks, setLiveFeedbacks] = useState<FeedbackData[]>(feedbacks);
   const [mounted, setMounted] = useState(false);
   
@@ -43,6 +49,8 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const [ratingFilter, setRatingFilter] = useState<RatingFilter>("all");
   const [sortColumn, setSortColumn] = useState<SortColumn>("date");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,6 +60,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [retentionOffers, setRetentionOffers] = useState<Record<string, ReturnType<typeof getRandomOfferForDay>>>({});
   const [loyaltyIdeas, setLoyaltyIdeas] = useState<Record<string, ReturnType<typeof getRandomLoyaltyIdeaForDay>>>({});
+  const [orderDetailsMap, setOrderDetailsMap] = useState<Record<string, OrderDetailsType>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -226,6 +235,25 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const processedFeedbacks = useMemo(() => {
     let result = [...liveFeedbacks];
 
+    // Filter by Date Range
+    if (dateFrom || dateTo) {
+      result = result.filter(fb => {
+        const fbDate = new Date(fb.created_at);
+        // Start of day for dateFrom, End of day for dateTo for inclusive range
+        if (dateFrom) {
+          const from = new Date(dateFrom);
+          from.setHours(0, 0, 0, 0);
+          if (fbDate < from) return false;
+        }
+        if (dateTo) {
+          const to = new Date(dateTo);
+          to.setHours(23, 59, 59, 999);
+          if (fbDate > to) return false;
+        }
+        return true;
+      });
+    }
+
     // Filter by Rating
     if (ratingFilter !== "all") {
       result = result.filter(fb => {
@@ -260,7 +288,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     });
 
     return result;
-  }, [liveFeedbacks, ratingFilter, searchQuery, sortColumn, sortDirection]);
+  }, [liveFeedbacks, ratingFilter, searchQuery, sortColumn, sortDirection, dateFrom, dateTo]);
 
   // Pagination logic
   const totalPages = Math.ceil(processedFeedbacks.length / itemsPerPage);
@@ -314,7 +342,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     }
   };
 
-  const toggleRow = (fb: FeedbackData) => {
+  const toggleRow = async (fb: FeedbackData) => {
     const id = fb.id;
     setExpandedRows(prev => {
       const next = new Set(prev);
@@ -326,7 +354,9 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
         if (fb.rating <= 3 && !retentionOffers[id]) {
           setRetentionOffers(currentOffers => ({
             ...currentOffers,
-            [id]: getRandomOfferForDay(fb.created_at)
+            [id]: recoveryOfferText 
+              ? { id: 'custom', text: recoveryOfferText, category: 'monday' as DayCategory }
+              : getRandomOfferForDay(fb.created_at)
           }));
         }
         // Generate a loyalty idea if it's a great rating and we don't have one yet
@@ -335,6 +365,17 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
             ...currentIdeas,
             [id]: getRandomLoyaltyIdeaForDay(fb.created_at)
           }));
+        }
+        
+        // Fetch order details if table number exists and we haven't fetched yet
+        if (fb.table_number && !orderDetailsMap[id]) {
+          fetchFeedbackOrderDetails(restaurantId, fb.table_number, fb.created_at).then((order) => {
+            if (order) {
+              setOrderDetailsMap(current => ({ ...current, [id]: order }));
+            } else {
+              setOrderDetailsMap(current => ({ ...current, [id]: { not_found: true } }));
+            }
+          });
         }
       }
       return next;
@@ -348,15 +389,15 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
       {/* Table Controls Header */}
-      <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50/50 flex flex-col md:flex-row gap-4 items-center justify-between">
-        <h2 className="font-bold text-slate-900 text-lg flex items-center gap-2">
+      <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50/50 flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
+        <h2 className="font-bold text-slate-900 text-lg flex items-center gap-2 whitespace-nowrap">
           <MessageSquare className="w-5 h-5 text-indigo-500" />
           Feedback Submissions
         </h2>
         
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
           {/* Search */}
-          <div className="relative">
+          <div className="relative flex-grow sm:flex-grow-0">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input 
               type="text" 
@@ -364,6 +405,22 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-64"
+            />
+          </div>
+          {/* Date Filter */}
+          <div className="flex items-center gap-2">
+            <input 
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-auto"
+            />
+            <span className="text-slate-400 text-sm">to</span>
+            <input 
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-auto"
             />
           </div>
           
@@ -599,12 +656,75 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                     </div>
                                   </div>
                                 )}
+                                
+                                {orderDetailsMap[fb.id] && !orderDetailsMap[fb.id].not_found && (
+                                  <div className="mt-2">
+                                    <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Order Details</h4>
+                                    <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-sm text-sm text-slate-700">
+                                      <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
+                                        <span className="font-semibold">Order #{orderDetailsMap[fb.id].daily_order_number || orderDetailsMap[fb.id].id.slice(0,6).toUpperCase()}</span>
+                                        <span className="text-xs text-slate-500">{format(new Date(orderDetailsMap[fb.id].created_at), "h:mm a")}</span>
+                                      </div>
+                                      <ul className="space-y-1.5">
+                                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                                        {orderDetailsMap[fb.id].order_items?.map((item: any, i: number) => (
+                                          <li key={i} className="flex justify-between">
+                                            <span>{item.quantity}x {item.menu_items?.name || 'Unknown Item'}</span>
+                                            <span className="text-slate-500">${(item.price_at_time_of_order * item.quantity).toFixed(2)}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                      <div className="flex justify-between items-center mt-3 pt-2 border-t border-slate-100 font-bold text-slate-900">
+                                        <span>Total</span>
+                                        <span>${orderDetailsMap[fb.id].total_amount?.toFixed(2)}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
 
                               {/* Right Side: Strategy Engine (Retention OR Loyalty) */}
                               
                               {/* Negative Feedback: Retention Strategy */}
-                              {fb.rating <= 3 && retentionOffers[fb.id] && (
+                              {fb.recovery_request === 'compensation' ? (
+                                <div className="flex-1 max-w-lg">
+                                  <div className="bg-emerald-50 border-2 border-emerald-100 rounded-xl overflow-hidden shadow-sm relative">
+                                    <div className="bg-emerald-100/50 px-4 py-2.5 border-b border-emerald-100 flex items-center justify-between">
+                                      <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs uppercase tracking-wider">
+                                        <Sparkles className="w-4 h-4" />
+                                        Service Recovery Successful
+                                      </div>
+                                      <span className="text-[10px] font-bold bg-white text-emerald-600 px-2 py-0.5 rounded-full border border-emerald-100">
+                                        OFFER CLAIMED
+                                      </span>
+                                    </div>
+                                    <div className="p-4 flex flex-col gap-3">
+                                      <p className="text-sm text-emerald-800 font-medium">
+                                        The customer accepted the following automated compensation offer on {format(new Date(fb.created_at), "MMM d, yyyy")}:
+                                      </p>
+                                      <div className="bg-white border border-emerald-200 p-3 rounded-lg text-emerald-900 text-sm italic font-medium leading-relaxed">
+                                        "{fb.recovery_offer_given || "15% off next visit"}"
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : fb.recovery_request === 'contact_later' ? (
+                                <div className="flex-1 max-w-lg">
+                                  <div className="bg-blue-50 border-2 border-blue-100 rounded-xl overflow-hidden shadow-sm relative">
+                                    <div className="bg-blue-100/50 px-4 py-2.5 border-b border-blue-100 flex items-center justify-between">
+                                      <div className="flex items-center gap-1.5 text-blue-700 font-bold text-xs uppercase tracking-wider">
+                                        <Phone className="w-4 h-4" />
+                                        Contact Requested
+                                      </div>
+                                    </div>
+                                    <div className="p-4 flex flex-col gap-3">
+                                      <p className="text-sm text-blue-800 font-medium">
+                                        The customer requested a follow-up. Please reach out to them at your earliest convenience to resolve their concerns.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : fb.rating <= 3 && retentionOffers[fb.id] && (
                                 <div className="flex-1 max-w-lg">
                                   <div className="bg-white border-2 border-rose-100 rounded-xl overflow-hidden shadow-sm relative">
                                     <div className="bg-rose-50 px-4 py-2.5 border-b border-rose-100 flex items-center justify-between">
@@ -639,14 +759,15 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                               window.open(`sms:${fb.contact_info}?body=${body}`, '_blank');
                                             }
                                           }}
-                                          className="w-full mt-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                          className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
                                         >
                                           <Send className="w-4 h-4" />
                                           Send Offer to Customer
                                         </button>
                                       ) : (
-                                        <div className="mt-1 text-center py-2 text-xs text-rose-500 font-medium bg-rose-50 rounded-lg">
-                                          No contact info provided to send offer.
+                                        <div className="mt-1 p-2.5 bg-amber-50 border border-amber-100 rounded-lg text-amber-800 text-xs flex items-start gap-2">
+                                          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                                          <p>No contact info provided. If they are still in the restaurant, approach their table manually to offer this.</p>
                                         </div>
                                       )}
                                     </div>

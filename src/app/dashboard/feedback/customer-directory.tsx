@@ -21,6 +21,8 @@ interface CustomerProfile {
   latestFeedbackDate: string;
   loyaltyStamps: number;
   latestComment: string;
+  recoveryOfferGiven?: string | null;
+  recoveryOfferDate?: string | null;
 }
 
 export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProps) {

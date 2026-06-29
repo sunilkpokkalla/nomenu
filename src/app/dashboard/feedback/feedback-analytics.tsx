@@ -30,6 +30,8 @@ export interface FeedbackData {
   created_at: string;
   is_public?: boolean;
   status?: string;
+  recovery_request?: string | null;
+  recovery_offer_given?: string | null;
   qr_codes?: { label: string | null; location_zone?: string | null } | null;
   loyalty_cards?: {
     id: string;
