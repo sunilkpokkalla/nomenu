@@ -63,7 +63,7 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
         .select("id")
         .single();
       
-      if (newCardError || !newCard) return { error: "Failed to create loyalty card." };
+      if (newCardError || !newCard) return { error: `Failed to create loyalty card: ${newCardError?.message || "Unknown error"}` };
       targetCardId = newCard.id;
       isNewCard = true;
     }
@@ -78,7 +78,7 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
       .select("id")
       .single();
       
-    if (newCardError || !newCard) return { error: "Failed to create loyalty card." };
+    if (newCardError || !newCard) return { error: `Failed to create loyalty card: ${newCardError?.message || "Unknown error"}` };
     targetCardId = newCard.id;
     isNewCard = true;
   }
@@ -124,13 +124,20 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
   if (stampError) {
     // Fallback if RPC doesn't exist
     const { data: currentCard } = await supabase.from("loyalty_cards").select("stamps").eq("id", targetCardId).single();
-    await supabase
+    const { error: fallbackUpdateError, data: updatedCard } = await supabase
       .from("loyalty_cards")
       .update({ 
         stamps: (currentCard?.stamps || 0) + 1,
         last_stamp_at: new Date().toISOString()
       })
-      .eq("id", targetCardId);
+      .eq("id", targetCardId)
+      .select()
+      .single();
+      
+    if (fallbackUpdateError) {
+      console.error("Update error:", fallbackUpdateError);
+      return { error: `Failed to update stamps: ${fallbackUpdateError.message}` };
+    }
   }
 
   return { success: true, cardId: targetCardId, restaurantId: token.restaurant_id, isNew: isNewCard };
