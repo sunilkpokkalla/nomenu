@@ -12,6 +12,7 @@ import { updateFeedbackStrategy, generateRecoveryStrategy } from "./actions";
 interface FeedbackStrategyFormProps {
   initialRecoveryOffer: string;
   initialRecoveryMessage: string;
+  initialServiceRecoveryMessage: string;
   initialServiceRecoveryEnabled: boolean;
   initialOfferManagerVisit: boolean;
   initialOfferCompensation: boolean;
@@ -43,6 +44,7 @@ const MESSAGE_PRESETS = [
 export function FeedbackStrategyForm({
   initialRecoveryOffer,
   initialRecoveryMessage,
+  initialServiceRecoveryMessage,
   initialServiceRecoveryEnabled,
   initialOfferManagerVisit,
   initialOfferCompensation,
@@ -50,6 +52,7 @@ export function FeedbackStrategyForm({
   const [isGenerating, setIsGenerating] = useState(false);
   const [recoveryOffer, setRecoveryOffer] = useState(initialRecoveryOffer);
   const [recoveryMessage, setRecoveryMessage] = useState(initialRecoveryMessage);
+  const [serviceRecoveryMessage, setServiceRecoveryMessage] = useState(initialServiceRecoveryMessage);
   
   // Toggles state (used just for optimistic UI, but form submittals use hidden inputs or Switch names)
   const [serviceRecoveryEnabled, setServiceRecoveryEnabled] = useState(initialServiceRecoveryEnabled);
@@ -145,7 +148,23 @@ export function FeedbackStrategyForm({
                 </Button>
               </div>
           
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid gap-6">
+            <div className="space-y-2 flex flex-col">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="serviceRecoveryMessage">Initial Apology Message</Label>
+              </div>
+              <Textarea 
+                id="serviceRecoveryMessage" 
+                name="serviceRecoveryMessage" 
+                value={serviceRecoveryMessage}
+                onChange={(e) => setServiceRecoveryMessage(e.target.value)}
+                placeholder="We are so sorry your experience wasn't perfect. Our manager has been alerted and is looking into this immediately. In case we miss you before you leave, please let us know how we can make this right:"
+                rows={3}
+                className="resize-none"
+              />
+              <p className="text-[10px] text-muted-foreground mt-auto pt-1">Shown immediately when a customer leaves a 1-3 star review.</p>
+            </div>
+
             <div className="space-y-2 flex flex-col">
               <div className="flex items-center justify-between">
                 <Label htmlFor="recoveryOfferText">Apology Offer (Optional)</Label>
@@ -168,7 +187,7 @@ export function FeedbackStrategyForm({
                 value={recoveryOffer}
                 onChange={(e) => setRecoveryOffer(e.target.value)}
                 placeholder="e.g. 15% off your next visit with code MAKEITRIGHT15"
-                rows={4}
+                rows={2}
                 className="resize-none"
               />
             </div>
@@ -193,11 +212,11 @@ export function FeedbackStrategyForm({
                 name="recoveryMessage" 
                 value={recoveryMessage}
                 onChange={(e) => setRecoveryMessage(e.target.value)}
-                placeholder="We are so sorry your experience wasn't perfect. Our manager has been alerted and is looking into this immediately. In case we miss you before you leave, please let us know how we can make this right:"
-                rows={4}
+                placeholder="Thank you for sharing. We will follow up with you at {contact}."
+                rows={3}
                 className="resize-none"
               />
-              <p className="text-[10px] text-muted-foreground mt-auto pt-1">Use {'{contact}'} as a placeholder for their email/phone.</p>
+              <p className="text-[10px] text-muted-foreground mt-auto pt-1">Shown after they submit their email/phone. Use {'{contact}'} as a placeholder.</p>
             </div>
           </div>
           </div>

@@ -31,6 +31,7 @@ export async function updateFeedbackStrategy(formData: FormData) {
 
   const recoveryOfferText = field(formData, "recoveryOfferText");
   const recoveryMessage = field(formData, "recoveryMessage");
+  const serviceRecoveryMessage = field(formData, "serviceRecoveryMessage");
   const serviceRecoveryEnabled = formData.get("serviceRecoveryEnabled") === "on";
   const offerManagerVisit = formData.get("offerManagerVisit") === "on";
   const offerCompensation = formData.get("offerCompensation") === "on";
@@ -40,6 +41,7 @@ export async function updateFeedbackStrategy(formData: FormData) {
     .update({
       recovery_offer_text: recoveryOfferText,
       recovery_message: recoveryMessage,
+      service_recovery_message: serviceRecoveryMessage,
       service_recovery_enabled: serviceRecoveryEnabled,
       offer_manager_visit: offerManagerVisit,
       offer_compensation: offerCompensation,

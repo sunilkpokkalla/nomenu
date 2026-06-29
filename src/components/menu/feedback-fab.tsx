@@ -83,9 +83,10 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       // If they get a recovery offer
       if (result.recoveryOfferText) {
         setRecoveryOffer(result.recoveryOfferText);
-        if (result.recoveryMessage) {
-          setRecoveryMessage(result.recoveryMessage);
-        }
+      }
+      
+      if (result.recoveryMessage) {
+        setRecoveryMessage(result.recoveryMessage);
       }
       
       // Update new service recovery options
@@ -299,7 +300,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                         <div className="pt-4 border-t border-slate-100 space-y-4">
                           {serviceRecoveryEnabled ? (
                             <>
-                              {offerManagerVisit && tableNumber && (
+                              {offerManagerVisit && (
                                 <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center">
                                   {!managerSummoned ? (
                                     <>
@@ -308,18 +309,18 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                         type="button"
                                         onClick={async () => {
                                           if (feedbackId) {
-                                            await import("@/app/menu/[id]/actions").then(m => m.summonManager(feedbackId, tableNumber));
+                                            await import("@/app/menu/[id]/actions").then(m => m.summonManager(feedbackId, tableNumber || ""));
                                             setManagerSummoned(true);
                                           }
                                         }}
                                         className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
                                       >
-                                        Summon Manager to Table {tableNumber}
+                                        {tableNumber ? `Summon Manager to Table ${tableNumber}` : "Summon Manager"}
                                       </button>
                                     </>
                                   ) : (
                                     <p className="text-sm font-bold text-red-800">
-                                      Manager is on their way to Table {tableNumber}.
+                                      {tableNumber ? `Manager is on their way to Table ${tableNumber}.` : "Manager is on their way."}
                                     </p>
                                   )}
                                 </div>
@@ -402,7 +403,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                       ) : (
                         <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                           <p className="text-sm text-slate-600">
-                            <strong>Thank you.</strong> We will be in touch shortly.
+                            <strong>Thank you.</strong> {recoveryMessage ? recoveryMessage.replace('{contact}', customerPhone || customerEmail) : "We will be in touch shortly."}
                           </p>
                         </div>
                       )}
