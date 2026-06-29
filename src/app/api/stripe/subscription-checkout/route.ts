@@ -109,63 +109,46 @@ export async function POST(req: Request) {
       }
     }
 
-    const subscription = await fetchStripe("/subscriptions", {
-      method: "POST",
-      body: {
-        customer: customerId,
-        items: [
-          {
-            price: priceId,
-          },
-        ],
-        ...(discounts.length > 0 ? { discounts } : {}),
-        payment_behavior: "default_incomplete",
-        payment_settings: { save_default_payment_method: "on_subscription" },
-        expand: ["latest_invoice.payment_intent"],
+    const protocol = req.headers.get("x-forwarded-proto") || "http";
+    const host = req.headers.get("host") || "localhost:3000";
+    const origin = `${protocol}://${host}`;
+
+    const sessionBody: any = {
+      customer: customerId,
+      mode: "subscription",
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      success_url: `${origin}/dashboard/billing?success=Subscription%20updated%20successfully!`,
+      cancel_url: `${origin}/dashboard/billing?canceled=true`,
+      subscription_data: {
         metadata: {
           restaurant_id: restaurant.id,
           plan_id: planId,
           billing_cycle: billingCycle,
         },
-      }
+      },
+    };
+
+    if (discounts.length > 0) {
+      sessionBody.discounts = discounts;
+    }
+
+    const session = await fetchStripe("/checkout/sessions", {
+      method: "POST",
+      body: sessionBody
     });
 
-    if (subscription.error) {
-      console.error("Stripe API Error:", subscription.error);
-      throw new Error(subscription.error.message || "Failed to create subscription with Stripe.");
-    }
-
-    let invoice = subscription.latest_invoice;
-    
-    // If Stripe didn't expand the invoice, fetch it manually
-    if (typeof invoice === 'string') {
-      invoice = await fetchStripe(`/invoices/${invoice}?expand[]=payment_intent`);
-    }
-
-    if (invoice.status === "paid" || invoice.amount_due === 0) {
-      // The subscription is fully paid or 100% discounted (e.g. referral)
-      return NextResponse.json({ 
-        subscriptionId: subscription.id,
-        isPaid: true
-      });
-    }
-
-    let paymentIntent = (invoice as any)?.payment_intent;
-
-    if (typeof paymentIntent === 'string') {
-      paymentIntent = await fetchStripe(`/payment_intents/${paymentIntent}`);
-    }
-
-    if (!paymentIntent || !paymentIntent.client_secret) {
-      console.error("Stripe Subscription created but missing payment intent:", subscription);
-      console.error("Invoice:", invoice);
-      console.error("Payment Intent:", paymentIntent);
-      throw new Error("Failed to create payment intent. Please try again.");
+    if (session.error) {
+      console.error("Stripe API Error:", session.error);
+      throw new Error(session.error.message || "Failed to create checkout session with Stripe.");
     }
 
     return NextResponse.json({ 
-      subscriptionId: subscription.id,
-      clientSecret: paymentIntent.client_secret 
+      url: session.url
     });
   } catch (error: unknown) {
     console.error("Stripe Subscription Checkout Error:", error);

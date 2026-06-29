@@ -18,10 +18,29 @@ export function SubscriptionButton({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const handleCheckout = () => {
-    setLoading(true);
-    // Redirect to the dedicated checkout page with the selected plan details
-    router.push(`/dashboard/checkout?planId=${planId}&planName=${encodeURIComponent(planName)}&annual=${isAnnual}`);
+  const handleCheckout = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/stripe/subscription-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          planId,
+          isAnnual
+        })
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || "Failed to initialize checkout.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error instanceof Error ? error.message : "Failed to checkout. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
