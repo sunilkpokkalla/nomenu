@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CopyButton, DownloadButton } from "@/components/dashboard/qr-actions";
 import { QrDesignerModal } from "@/components/dashboard/qr-designer-modal";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
@@ -63,6 +63,30 @@ export function QrCodesClient({
     setSelectedQrIds(newSet);
   };
 
+  const [savedColor, setSavedColor] = useState<string>("");
+
+  const loadSavedColor = useCallback(() => {
+    if (typeof window !== "undefined" && restaurant?.name) {
+      try {
+        const savedStr = localStorage.getItem(`qr_design_${restaurant.name}`);
+        if (savedStr) {
+          const parsed = JSON.parse(savedStr);
+          if (parsed.qrColor) {
+            setSavedColor(parsed.qrColor);
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+  }, [restaurant?.name]);
+
+  useEffect(() => {
+    loadSavedColor();
+    window.addEventListener('qr_design_saved', loadSavedColor);
+    return () => window.removeEventListener('qr_design_saved', loadSavedColor);
+  }, [loadSavedColor]);
+
   const groupedQrs = qrCodesList.reduce((acc: Record<string, QrCode[]>, qr: QrCode) => {
     let locationType = qr.location_zone || "Main Dining";
     if (qr.mode === "pickup") locationType = "Takeaway";
@@ -116,7 +140,10 @@ export function QrCodesClient({
                       publicUrl += modeParam;
                     }
                     
-                    const qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
+                    let qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
+                    if (savedColor) {
+                      qrImageApiUrl += `&color=${encodeURIComponent(savedColor)}`;
+                    }
                     const isSelected = selectedQrIds.has(qr.id);
                     
                     return (

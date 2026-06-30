@@ -71,6 +71,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
   const handleSaveDesign = () => {
     const design = { template, brandName, headline, customLogoUrl, qrColor, showWifi };
     localStorage.setItem(`qr_design_${restaurant.name}`, JSON.stringify(design));
+    window.dispatchEvent(new Event('qr_design_saved'));
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   };
