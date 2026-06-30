@@ -34,7 +34,7 @@ export function ImpersonateButton({ userId, restaurantName }: { userId: string, 
       <button
         onClick={() => setShowModal(true)}
         disabled={isLoading}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-neutral-300 hover:text-white rounded-md transition-colors disabled:opacity-50"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-slate-900 rounded-md transition-colors shadow-sm disabled:opacity-50"
       >
         {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <UserCircle className="w-3.5 h-3.5" />}
         Impersonate
