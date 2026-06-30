@@ -195,8 +195,8 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
       </Button>
 
       {isOpen && mounted && createPortal(
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-[2rem] shadow-2xl shadow-indigo-900/20 max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setIsOpen(false)}>
+          <div className="bg-white rounded-[2rem] shadow-2xl shadow-indigo-900/20 max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
             
             {/* LEFT SIDE: PREVIEW CONTAINER */}
             <div className="flex-1 bg-gradient-to-br from-slate-100 via-indigo-50/60 to-purple-50/40 p-6 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-200/50 overflow-y-auto min-h-[460px] md:min-h-0 relative">
@@ -230,21 +230,23 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
             </div>
 
             {/* RIGHT SIDE: CUSTOMIZER PANEL */}
-            <div className="w-full md:w-[450px] p-6 lg:p-8 flex flex-col justify-between overflow-y-auto max-h-[50vh] md:max-h-none bg-white">
-              <div className="space-y-7">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-black text-slate-950 flex items-center gap-2 tracking-tight">
-                    <Palette className="h-5 w-5 text-indigo-600" />
-                    Customize QR Card
-                  </h2>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors" onClick={() => setIsOpen(false)}>
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
+            <div className="w-full md:w-[450px] flex flex-col overflow-hidden max-h-[50vh] md:max-h-none bg-white">
+              
+              {/* STICKY HEADER */}
+              <div className="flex items-center justify-between p-6 lg:p-8 pb-4 border-b border-slate-100 bg-white shrink-0 relative z-10">
+                <h2 className="text-xl font-black text-slate-950 flex items-center gap-2 tracking-tight">
+                  <Palette className="h-5 w-5 text-indigo-600" />
+                  Customize QR Card
+                </h2>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors" onClick={() => setIsOpen(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
 
-                <hr className="border-slate-100" />
-
-                {/* TEMPLATE PICKER */}
+              {/* SCROLLABLE CONTENT */}
+              <div className="p-6 lg:p-8 pt-5 flex-1 overflow-y-auto flex flex-col justify-between">
+                <div className="space-y-7">
+                  {/* TEMPLATE PICKER */}
                 <div className="space-y-1.5">
                   <Label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.15em]">Card Template Style</Label>
                   <div className="relative">
@@ -376,9 +378,10 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* ACTION BUTTONS */}
-              <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-100 shrink-0">
+            {/* ACTION BUTTONS */}
+              <div className="flex flex-col gap-2 p-6 lg:p-8 pt-4 border-t border-slate-100 shrink-0 bg-white shadow-[0_-4px_10px_-5px_rgba(0,0,0,0.05)] z-10 relative">
                 <Button variant="outline" className={`h-11 font-extrabold text-xs tracking-wide rounded-xl border-slate-200 transition-all ${isSaved ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100" : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"}`} onClick={handleSaveDesign}>
                   <Save className="mr-2 h-4 w-4" strokeWidth={2.5} />
                   {isSaved ? "Saved as Default!" : "Save Design as Default"}
