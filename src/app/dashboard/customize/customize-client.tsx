@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { BrandingForm } from "@/components/dashboard/branding-form";
+import { Crown } from "lucide-react";
+import Link from "next/link";
 import { updateRestaurantBranding, updateMenuBranding } from "@/app/dashboard/actions";
 import { Label } from "@/components/ui/label";
 
@@ -66,6 +68,9 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
     return updateMenuBranding(selectedMenu!.id, formData, `/dashboard/customize?scope=${selectedMenu!.id}`);
   };
 
+  const plan = restaurant.plan?.toLowerCase() || "basic";
+  const isPremiumThemeEnabled = plan === "enterprise" || plan === "elite" || plan === "pro";
+
   return (
     <div className="space-y-6">
       {/* Scope Selector */}
@@ -92,12 +97,30 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
 
       {/* The actual Branding Form */}
       <div>
+        {isMenuScope && !isPremiumThemeEnabled ? (
+          <div className="mt-8 rounded-xl border bg-white p-12 text-center shadow-sm flex flex-col items-center max-w-2xl mx-auto">
+            <div className="bg-amber-100 p-4 rounded-full mb-6">
+              <Crown className="w-12 h-12 text-amber-600" />
+            </div>
+            <h3 className="text-2xl font-bold tracking-tight mb-3">Premium Feature Locked</h3>
+            <p className="text-slate-500 text-lg mb-8 max-w-md mx-auto">
+              Custom per-menu designs are exclusively available on Pro and Elite plans. Upgrade today to unlock infinite branding possibilities.
+            </p>
+            <Link 
+              href="/dashboard/billing" 
+              className="bg-indigo-600 text-white hover:bg-indigo-700 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8"
+            >
+              Upgrade Plan
+            </Link>
+          </div>
+        ) : (
           <BrandingForm 
             key={selectedScope} 
             type={isMenuScope ? "menu" : "restaurant"}
             entity={entity}
             action={isMenuScope ? menuActionWrapper : updateRestaurantBranding}
           />
+        )}
       </div>
     </div>
   );
