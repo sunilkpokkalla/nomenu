@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Printer, Download, Sparkles, Palette, Wifi, Image as ImageIcon, ChevronDown } from "lucide-react";
+import { X, Printer, Download, Sparkles, Palette, Wifi, Image as ImageIcon, ChevronDown, Save } from "lucide-react";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
@@ -46,6 +46,34 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
   const [showWifi, setShowWifi] = useState(!!restaurant.wifi_password);
   const [customLogoUrl, setCustomLogoUrl] = useState<string>(restaurant.logo_url || "");
   const [qrColor, setQrColor] = useState<string>("#0F172A");
+  const [isSaved, setIsSaved] = useState(false);
+
+  // Load saved preferences on mount
+  useEffect(() => {
+    if (isOpen) {
+      try {
+        const savedStr = localStorage.getItem(`qr_design_${restaurant.name}`);
+        if (savedStr) {
+          const parsed = JSON.parse(savedStr);
+          if (parsed.template) setTemplate(parsed.template);
+          if (parsed.brandName) setBrandName(parsed.brandName);
+          if (parsed.headline) setHeadline(parsed.headline);
+          if (parsed.customLogoUrl !== undefined) setCustomLogoUrl(parsed.customLogoUrl);
+          if (parsed.qrColor) setQrColor(parsed.qrColor);
+          if (typeof parsed.showWifi === 'boolean') setShowWifi(parsed.showWifi);
+        }
+      } catch (err) {
+        console.error("Failed to load saved QR design", err);
+      }
+    }
+  }, [isOpen, restaurant.name]);
+
+  const handleSaveDesign = () => {
+    const design = { template, brandName, headline, customLogoUrl, qrColor, showWifi };
+    localStorage.setItem(`qr_design_${restaurant.name}`, JSON.stringify(design));
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 2000);
+  };
 
   const printRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -348,15 +376,21 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
               </div>
 
               {/* ACTION BUTTONS */}
-              <div className="grid grid-cols-2 gap-3 mt-8 pt-6 border-t border-slate-100 shrink-0">
-                <Button variant="outline" className="h-11 font-extrabold text-xs tracking-wide rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all" onClick={handlePrint} disabled={isDownloading}>
-                  <Printer className="mr-2 h-4 w-4" strokeWidth={2.5} />
-                  Print Card
+              <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-slate-100 shrink-0">
+                <Button variant="outline" className={`h-11 font-extrabold text-xs tracking-wide rounded-xl border-slate-200 transition-all ${isSaved ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100" : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"}`} onClick={handleSaveDesign}>
+                  <Save className="mr-2 h-4 w-4" strokeWidth={2.5} />
+                  {isSaved ? "Saved as Default!" : "Save Design as Default"}
                 </Button>
-                <Button className="h-11 font-extrabold text-xs tracking-wide rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all" onClick={handleDownloadPng} disabled={isDownloading}>
-                  <Download className="mr-2 h-4 w-4" strokeWidth={2.5} />
-                  {isDownloading ? "Generating..." : "Download PNG"}
-                </Button>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button variant="outline" className="h-11 font-extrabold text-xs tracking-wide rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all" onClick={handlePrint} disabled={isDownloading}>
+                    <Printer className="mr-2 h-4 w-4" strokeWidth={2.5} />
+                    Print Card
+                  </Button>
+                  <Button className="h-11 font-extrabold text-xs tracking-wide rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all" onClick={handleDownloadPng} disabled={isDownloading}>
+                    <Download className="mr-2 h-4 w-4" strokeWidth={2.5} />
+                    {isDownloading ? "Generating..." : "Download PNG"}
+                  </Button>
+                </div>
               </div>
             </div>
 
