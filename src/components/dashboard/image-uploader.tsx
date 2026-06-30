@@ -167,7 +167,7 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
       <input type="hidden" name="imageUrl" value={value} />
 
       {/* Tabs */}
-      {!hideLibrary && (
+      {!preview && !hideLibrary && (
         <div className="flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
           <button
             type="button"
@@ -204,7 +204,7 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
       )}
 
       {/* Inputs */}
-      {mode === "file" && (
+      {!preview && mode === "file" && (
         <div className="space-y-2">
           <div className="flex items-center justify-center w-full relative">
             {isUploading && (
@@ -241,7 +241,7 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
       )}
 
 
-      {mode === "stock" && (
+      {!preview && mode === "stock" && (
         <div className="space-y-3">
           <div className="flex gap-2">
             <Input 
