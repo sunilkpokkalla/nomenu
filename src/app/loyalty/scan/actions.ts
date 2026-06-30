@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server-admin";
 
 export async function resolveLoyaltyToken(tokenId: string) {
   const supabase = await createClient();
@@ -104,7 +105,8 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
   }
 
   // 4. Mark token as used ATOMICALLY to prevent race conditions
-  const { data: updatedToken, error: updateError } = await supabase
+  const adminClient = createAdminClient();
+  const { data: updatedToken, error: updateError } = await adminClient
     .from("loyalty_scan_tokens")
     .update({ is_used: true })
     .eq("id", tokenId)
@@ -118,13 +120,13 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
 
   // 5. Add stamp to card
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error: stampError } = await (supabase as any)
+  const { error: stampError } = await (adminClient as any)
     .rpc('increment_loyalty_stamps', { target_card_id: targetCardId });
     
   if (stampError) {
     // Fallback if RPC doesn't exist
-    const { data: currentCard } = await supabase.from("loyalty_cards").select("stamps").eq("id", targetCardId).single();
-    const { error: fallbackUpdateError, data: updatedCard } = await supabase
+    const { data: currentCard } = await adminClient.from("loyalty_cards").select("stamps").eq("id", targetCardId).single();
+    const { error: fallbackUpdateError, data: updatedCard } = await adminClient
       .from("loyalty_cards")
       .update({ 
         stamps: (currentCard?.stamps || 0) + 1,
