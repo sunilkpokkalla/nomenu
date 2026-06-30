@@ -146,10 +146,12 @@ export default async function BillingPage(
           </div>
 
           <div className="shrink-0 flex flex-col w-full md:w-72 mt-4 md:mt-0">
-             {currentPlan !== "free" && restaurant.stripe_customer_id ? (
-               <div className="self-end">
-                 <PortalButton />
-               </div>
+             {currentPlan !== "free" ? (
+               restaurant.stripe_customer_id && (
+                 <div className="self-end">
+                   <PortalButton />
+                 </div>
+               )
              ) : (
                <div className="w-full flex flex-col gap-3">
                  <div>
