@@ -8,7 +8,7 @@ export function BillingToggle() {
 
   return (
     <div className="flex items-center justify-center gap-4 mb-12">
-      <span className={`text-sm font-bold ${!isAnnual ? 'text-slate-900' : 'text-slate-500'}`}>Monthly</span>
+      <span className={`text-sm transition-colors ${!isAnnual ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-medium'}`}>Monthly</span>
       <Link 
         href={`?billing=${isAnnual ? 'monthly' : 'annual'}`}
         className="relative inline-flex h-8 w-14 items-center rounded-full bg-slate-900 transition-colors focus:outline-none"
@@ -19,7 +19,7 @@ export function BillingToggle() {
         />
       </Link>
       <div className="flex items-center gap-2">
-        <span className={`text-sm font-bold ${isAnnual ? 'text-slate-900' : 'text-slate-500'}`}>Annual</span>
+        <span className={`text-sm transition-colors ${isAnnual ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-medium'}`}>Annual</span>
         <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800 uppercase tracking-wider">
           Save 10%
         </span>

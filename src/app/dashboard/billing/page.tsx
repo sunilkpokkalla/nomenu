@@ -196,6 +196,13 @@ export default async function BillingPage(
                 ${isActive && !isElite ? "ring-1 ring-slate-900" : ""}
               `}
             >
+              {isElite && !isActive && (
+                <div className="absolute -top-3.5 left-0 right-0 flex justify-center">
+                  <span className="flex items-center gap-1.5 bg-slate-950 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm">
+                    <Sparkles className="w-3 h-3" /> Recommended
+                  </span>
+                </div>
+              )}
               <div className="flex flex-col h-full p-8">
                 
                 {/* Badges */}
@@ -209,11 +216,6 @@ export default async function BillingPage(
                     </p>
                   </div>
                   
-                  {isElite && !isActive && (
-                    <span className="shrink-0 flex items-center gap-1.5 bg-slate-950 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-md shadow-sm">
-                      <Sparkles className="w-3 h-3" /> Recommended
-                    </span>
-                  )}
                   {isActive && (
                     <span className="shrink-0 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
                       Current
