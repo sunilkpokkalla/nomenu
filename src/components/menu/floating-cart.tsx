@@ -274,7 +274,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   };
 
   const formatPrice = (p: number) => {
-    return `${currencySign}${p.toFixed(2)}`;
+    return `${currencySymbol}${p.toFixed(2)}`;
   };
 
   const btnColor = themeStyle === "luxury" ? "#F59E0B" : themeStyle === "bistro" ? "#5C4033" : themeStyle === "vibrant" ? "#FF5A5F" : primaryColor;
