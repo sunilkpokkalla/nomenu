@@ -51,7 +51,7 @@ export async function submitFeedback(
   // Fetch restaurant details for both loyalty config (4-5 stars) and recovery config (1-3 stars)
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("name, logo_url, primary_color, loyalty_card_layout, loyalty_stamp_color, loyalty_stamp_icon, loyalty_reward_text, recovery_offer_text, recovery_message, loyalty_pin_code, service_recovery_enabled, service_recovery_message, offer_manager_visit, offer_compensation, manager_visit_timer_minutes")
+    .select("name, logo_url, primary_color, loyalty_card_layout, loyalty_stamp_color, loyalty_stamp_icon, loyalty_reward_text, recovery_offer_text, recovery_message, service_recovery_enabled, service_recovery_message, offer_manager_visit, offer_compensation, manager_visit_timer_minutes")
     .eq("id", restaurantId)
     .single();
 

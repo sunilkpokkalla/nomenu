@@ -13,7 +13,7 @@ export const getCachedMenuData = unstable_cache(
     const supabase = getSupabase();
     const { data: restaurant } = await supabase
       .from("restaurants")
-      .select("*, stripe_account_id, loyalty_pin_code")
+      .select("*, stripe_account_id")
       .eq("slug", restaurantSlug)
       .maybeSingle();
 

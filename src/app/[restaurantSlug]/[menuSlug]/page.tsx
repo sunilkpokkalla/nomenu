@@ -172,7 +172,7 @@ export default async function StorefrontMenuPage(
           theme_style: activeThemeStyle,
           currency: restaurant.currency,
           plan: restaurant.plan,
-          loyalty_pin_code: restaurant.loyalty_pin_code,
+
           wait_time_status: restaurant.wait_time_status
         }}
         categories={categoriesList}
