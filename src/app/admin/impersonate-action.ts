@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export async function generateImpersonationOtp(userId: string) {
-  console.log("--> generateImpersonationOtp CALLED for userId:", userId);
   try {
     // 1. Verify caller is an Admin
     const supabase = await createClient();
