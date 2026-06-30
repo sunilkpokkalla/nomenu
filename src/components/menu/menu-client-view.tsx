@@ -25,7 +25,7 @@ export function MenuClientView(props: MenuClientViewProps) {
   
   let themeStyle = restaurant.theme_style || "bistro";
   // Downgrade theme if on Free plan and trying to use a Premium theme
-  if (isFreePlan && themeStyle !== "minimalist") {
+  if (isFreePlan && themeStyle !== "minimalist" && themeStyle !== "botanical") {
     themeStyle = "minimalist";
   }
 
