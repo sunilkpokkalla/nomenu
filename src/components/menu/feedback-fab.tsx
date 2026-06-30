@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { MessageSquare, Star, X, CheckCircle2, Search, Clock } from "lucide-react";
 import { submitFeedback } from "@/app/menu/[id]/actions";
+import { PhoneInputField } from "@/components/ui/phone-input";
 import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
 import Link from "next/link";
 
@@ -264,13 +265,12 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                               required
                               className="w-full rounded-xl border-amber-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-400"
                             />
-                            <input
-                              type="tel"
+                            <PhoneInputField
                               value={customerPhone}
-                              onChange={(e) => setCustomerPhone(e.target.value)}
+                              onChange={(val) => setCustomerPhone(val || "")}
                               placeholder="Phone Number"
                               required
-                              className="w-full rounded-xl border-amber-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-400"
+                              className="w-full rounded-xl border border-amber-200 bg-white p-2.5 text-sm text-slate-900 focus-within:border-amber-400 focus-within:ring-1 focus-within:ring-amber-400"
                             />
                           </div>
                           <button 
@@ -425,12 +425,11 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                 <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
                                 <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
                                 <div className="flex gap-2">
-                                  <input
-                                    type="text"
+                                  <PhoneInputField
                                     value={customerPhone}
-                                    onChange={(e) => setCustomerPhone(e.target.value)} 
-                                    placeholder="Email or Phone"
-                                    className="flex-1 rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400"
+                                    onChange={(val) => setCustomerPhone(val || "")}
+                                    placeholder="Phone Number"
+                                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-sm focus-within:border-indigo-400 focus-within:ring-1 focus-within:ring-indigo-400"
                                   />
                                   <button
                                     type="button"
@@ -570,13 +569,12 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                         <label htmlFor="customerPhone" className="block text-sm font-medium text-slate-700">
                           Phone (optional)
                         </label>
-                        <input
-                          type="tel"
+                        <PhoneInputField
                           id="customerPhone"
                           value={customerPhone}
-                          onChange={(e) => setCustomerPhone(e.target.value)}
+                          onChange={(val) => setCustomerPhone(val || "")}
                           placeholder="Phone Number"
-                          className="w-full rounded-xl border-slate-200 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:ring-slate-400 transition-colors"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-sm focus-within:border-indigo-400 focus-within:ring-1 focus-within:ring-indigo-400"
                         />
                       </div>
                     </div>

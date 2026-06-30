@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
+import { PhoneInputField } from "@/components/ui/phone-input";
 
 
 import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
@@ -83,7 +84,7 @@ export default async function SettingsPage(
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" name="phone" type="tel" defaultValue={restaurant.phone || ""} placeholder="e.g. +33 1 45 55 12 34" />
+                <PhoneInputField id="phone" name="phone" defaultValue={restaurant.phone || ""} placeholder="e.g. +33 1 45 55 12 34" />
               </div>
             </div>
 

@@ -52,6 +52,7 @@
     "qrcode.react": "^4.2.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "react-phone-number-input": "^3.4.17",
     "recharts": "^3.8.1",
     "tailwind-merge": "^3.6.0",
     "uuid": "^14.0.0"
