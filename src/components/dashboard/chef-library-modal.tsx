@@ -241,7 +241,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
       if (selectedCuisine === "spanish") return dish.cuisines.includes("spanish") || dish.cuisines.includes("tapas");
       if (selectedCuisine === "breakfast") return dish.cuisines.includes("cafe") || dish.cuisines.includes("coffee") || dish.cuisines.includes("bakery") || dish.cuisines.includes("breakfast");
       if (selectedCuisine === "drinks") return dish.cuisines.includes("bar") || dish.cuisines.includes("cocktail") || dish.cuisines.includes("drinks") || dish.cuisines.includes("beverages") || dish.category === "Beverages" || dish.category === "Cocktails" || dish.category === "Drinks";
-      if (selectedCuisine === "kids") return dish.cuisines.includes("kids menu");
+      if (selectedCuisine === "kids") return dish.cuisines.includes("kids") || dish.cuisines.includes("kids menu") || dish.category === "Kids";
 
       return true;
     });
