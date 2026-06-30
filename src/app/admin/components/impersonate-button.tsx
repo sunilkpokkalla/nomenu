@@ -16,22 +16,12 @@ export function ImpersonateButton({ userId, restaurantName }: { userId: string, 
     try {
       const res = await generateImpersonationOtp(userId);
       
-      if (!res.success || !res.email || !res.otp) {
+      if (!res.success || !res.email || !res.action_link) {
         throw new Error(res.error || "Failed to generate link");
       }
 
-      const { email, otp } = res;
-
-      const supabase = createClient();
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        token_hash: otp,
-        type: 'magiclink'
-      });
-
-      if (verifyError) throw verifyError;
-
-      // Successfully logged in locally, redirect to dashboard
-      window.location.href = '/dashboard';
+      // Successfully generated link, redirect directly to the Supabase auth URL
+      window.location.href = res.action_link;
     } catch (e: unknown) {
       setError((e as Error).message || "Failed to generate link");
       setIsLoading(false);

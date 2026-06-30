@@ -59,6 +59,16 @@ export function LoyaltyQrGenerator({ restaurantId }: { restaurantId: string }) {
           <p className="text-slate-500 text-lg mb-6 leading-relaxed">
             Generate a secure, single-use QR code. Ask the customer to scan it with their phone's camera to instantly receive 1 loyalty stamp on their digital card.
           </p>
+
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+            <h4 className="font-bold text-amber-900 mb-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              Important Security Rule
+            </h4>
+            <p className="text-amber-700 text-sm">
+              You <strong>must</strong> generate a brand new QR code for <strong>every single customer</strong>. The code will automatically self-destruct after it is scanned once!
+            </p>
+          </div>
           <ul className="space-y-3 text-sm text-slate-600">
             <li className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>

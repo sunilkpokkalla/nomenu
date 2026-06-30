@@ -1,5 +1,6 @@
-import { Users, UserPlus, Mail, Shield, Trash2, Check, Copy } from "lucide-react";
+import { Users, UserPlus, Mail, Shield, Trash2, Check, Copy, Lock } from "lucide-react";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { Button } from "@/components/ui/button";
@@ -168,19 +169,41 @@ export default async function TeamSettingsPage(
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <UserPlus className="h-5 w-5 text-primary" /> Invite Team Member
-          </CardTitle>
-          <CardDescription>
-            Send an email invitation to a staff member. They will be prompted to create an account.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <InviteStaffForm restaurantId={restaurant!.id} />
-        </CardContent>
-      </Card>
+      {/* Conditionally render invite form or upsell based on plan */}
+      {!restaurant?.plan || restaurant?.plan === "free" || restaurant?.plan === "pro" ? (
+        <Card className="border-indigo-100 bg-indigo-50/50 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/50 rounded-full blur-3xl -mr-10 -mt-10"></div>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-indigo-900">
+              <Lock className="h-5 w-5 text-indigo-600" /> Upgrade to Elite to build your team
+            </CardTitle>
+            <CardDescription className="text-indigo-700/80 max-w-2xl">
+              Unlock Kitchen Display Systems (KDS), Live Dine-In Orders, and advanced Staff Permissions by upgrading to Elite. Manage your entire restaurant operation from one dashboard.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/dashboard/billing">
+              <Button className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl">
+                View Plans & Upgrade
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <UserPlus className="h-5 w-5 text-primary" /> Invite Team Member
+            </CardTitle>
+            <CardDescription>
+              Send an email invitation to a staff member. They will be prompted to create an account.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <InviteStaffForm restaurantId={restaurant!.id} />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

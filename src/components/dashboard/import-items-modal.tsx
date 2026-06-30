@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { CopyPlus, Loader2, ChevronDown, ChevronRight } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CopyPlus, Loader2, ChevronDown, ChevronRight, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,7 @@ export function ImportItemsModal({ menus, categories, items, targetMenuId }: Imp
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   // Filter out the target menu so you can't import from yourself
@@ -99,15 +101,20 @@ export function ImportItemsModal({ menus, categories, items, targetMenuId }: Imp
     if (!sourceMenuId || selectedItemIds.length === 0) return;
     
     setIsLoading(true);
+    setError(null);
     try {
-      await importSpecificItems(targetMenuId, selectedItemIds);
-      setOpen(false);
-      setSourceMenuId("");
-      setSelectedItemIds([]);
-      router.refresh();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to import items");
+      const result = await importSpecificItems(targetMenuId, selectedItemIds);
+      if (result && !result.success) {
+        setError(result.error || "Failed to import items");
+      } else {
+        setOpen(false);
+        setSourceMenuId("");
+        setSelectedItemIds([]);
+        router.refresh();
+      }
+    } catch (err) {
+      console.error(err);
+      setError("An unexpected error occurred while importing items.");
     } finally {
       setIsLoading(false);
     }
@@ -241,6 +248,13 @@ export function ImportItemsModal({ menus, categories, items, targetMenuId }: Imp
             </div>
           )}
         </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-100 rounded-md px-4 py-3 flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+            <p className="text-sm text-red-700 font-medium">{error}</p>
+          </div>
+        )}
 
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>

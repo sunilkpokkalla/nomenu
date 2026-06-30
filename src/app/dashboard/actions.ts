@@ -962,7 +962,7 @@ export async function importCategoriesAndItems(
       .in("category_id", categoryIdsToImport);
 
     if (itemCount !== null && itemsToImportCount !== null && (itemCount + itemsToImportCount) > limit) {
-      throw new Error(`Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This import has ${itemsToImportCount} items and would exceed your limit. Please upgrade.`);
+      return { success: false, error: `Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This import has ${itemsToImportCount} items and would exceed your limit. Please upgrade.` };
     }
   }
 
@@ -1110,7 +1110,7 @@ export async function importSpecificItems(
     const itemsToImportCount = itemIdsToImport.length;
 
     if (itemCount !== null && (itemCount + itemsToImportCount) > limit) {
-      throw new Error(`Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This import has ${itemsToImportCount} items and would exceed your limit. Please upgrade.`);
+      return { success: false, error: `Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This import has ${itemsToImportCount} items and would exceed your limit. Please upgrade.` };
     }
   }
 
@@ -1303,7 +1303,7 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
     .single();
 
   if (!restaurant) {
-    throw new Error("Unauthorized or restaurant not found");
+    return { success: false, error: "Unauthorized or restaurant not found" };
   }
 
   // 0. Check Limits Before Anything Else
@@ -1321,7 +1321,7 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
     template.categories.forEach(c => { itemsInTemplate += c.items.length });
 
     if (itemCount !== null && (itemCount + itemsInTemplate) > limit) {
-      throw new Error(`Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This template has ${itemsInTemplate} items and would exceed your limit. Please upgrade.`);
+      return { success: false, error: `Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This template has ${itemsInTemplate} items and would exceed your limit. Please upgrade.` };
     }
   }
 
@@ -1386,6 +1386,7 @@ export async function applyMenuTemplate(menuId: string, restaurantId: string, te
   revalidatePath("/dashboard/items");
   revalidatePath("/dashboard/menus");
   revalidatePath(`/dashboard/menus/${menuId}/customize`);
+  return { success: true };
 }
 
 export async function updateRestaurantWaitTime(restaurantId: string, status: string) {

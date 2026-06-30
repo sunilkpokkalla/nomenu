@@ -21,15 +21,19 @@ export async function inviteStaff(formData: FormData, restaurantId: string) {
     redirect("/login");
   }
 
-  // Check if owner
+  // Check if owner and check subscription plan
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("owner_id, name")
+    .select("owner_id, name, plan")
     .eq("id", restaurantId)
     .single();
 
   if (!restaurant || restaurant.owner_id !== user.id) {
     redirect("/dashboard");
+  }
+
+  if (!restaurant.plan || restaurant.plan === "free" || restaurant.plan === "pro") {
+    redirect("/dashboard/settings/team?message=Please%20upgrade%20to%20Elite%20to%20invite%20staff");
   }
 
   // Check if email already exists in staff

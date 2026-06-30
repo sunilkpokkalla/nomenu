@@ -146,7 +146,7 @@ export function CampaignForm() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-8 bg-neutral-900 border border-neutral-800 rounded-xl p-6">
+    <form onSubmit={onSubmit} className="space-y-8 bg-white border border-slate-200 shadow-sm rounded-xl p-6">
       
       {/* 1. Audience Selection */}
       <div className="space-y-4">

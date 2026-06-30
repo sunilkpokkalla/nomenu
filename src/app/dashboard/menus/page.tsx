@@ -92,7 +92,9 @@ export default async function MenusPage(
           </p>
         </div>
         <div className="shrink-0">
-          <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} plan={plan} />
+          {menusList.length > 0 && (
+            <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} plan={plan} />
+          )}
         </div>
       </div>
 
@@ -238,7 +240,7 @@ export default async function MenusPage(
         ) : (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 p-16 text-center">
             <div className="bg-white p-4 rounded-full shadow-sm border border-slate-100 mb-4">
-              <MenuIcon className="h-8 w-8 text-slate-400" />
+              <Utensils className="h-8 w-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-medium tracking-tight text-slate-900">No menus created yet</h3>
             <p className="mt-2 text-sm text-slate-500 max-w-[260px]">

@@ -87,14 +87,25 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
 
     try {
       if (imageOption === "free") {
-        await bulkInsertMenuData(menuId, restaurantId, previewData);
+        const result = await bulkInsertMenuData(menuId, restaurantId, previewData);
+        if (result && !result.success) {
+          setError(result.error || "Failed to save menu data");
+          setIsSaving(false);
+          return;
+        }
         setOpen(false); // Close modal on success
         setFile(null);
         setPreviewData(null);
       } else {
         // Premium Option
         const res = await createPremiumMagicImportJob(menuId, restaurantId, previewData);
-        if (res.jobId) {
+        if (res && !res.success) {
+          setError((res as { error?: string }).error || "Failed to create premium job");
+          setIsSaving(false);
+          return;
+        }
+        
+        if ('jobId' in res && res.jobId) {
           if (res.checkoutBypassed) {
             // Paid for entirely with credits! Start processing immediately.
             setOpen(false);

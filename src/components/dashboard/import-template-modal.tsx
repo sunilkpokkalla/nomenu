@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { 
   Coffee, UtensilsCrossed, Pizza, Fish, Loader2, 
   Flame, Wine, Leaf, Beer, Soup, Salad, Croissant, Beef, 
-  Wand2, Search, CheckCircle2
+  Wand2, Search, CheckCircle2, AlertCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,7 @@ export function ImportTemplateModal({
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   
   const [isPending, startTransition] = useTransition();
 
@@ -35,13 +36,18 @@ export function ImportTemplateModal({
     
     startTransition(async () => {
       try {
-        await applyMenuTemplate(menuId, restaurantId, selectedTemplateId);
-        setOpen(false);
-        setSelectedTemplateId(null);
-      } catch (error) {
-        console.error(error);
-        const errorMessage = error instanceof Error ? error.message : "Failed to apply template";
-        alert(errorMessage);
+        setError(null);
+        const result = await applyMenuTemplate(menuId, restaurantId, selectedTemplateId);
+        if (result && !result.success) {
+          setError(result.error || "Failed to apply template");
+        } else {
+          setOpen(false);
+          setSelectedTemplateId(null);
+        }
+      } catch (err) {
+        console.error(err);
+        const errorMessage = err instanceof Error ? err.message : "Failed to apply template";
+        setError(errorMessage);
       }
     });
   };
@@ -76,7 +82,10 @@ export function ImportTemplateModal({
   const selectedTemplate = MENU_TEMPLATES.find(t => t.id === selectedTemplateId);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      setOpen(isOpen);
+      if (!isOpen) setError(null);
+    }}>
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <Wand2 className="h-4 w-4 text-indigo-500" />
@@ -111,7 +120,10 @@ export function ImportTemplateModal({
                 filteredTemplates.map((template) => (
                   <button
                     key={template.id}
-                    onClick={() => setSelectedTemplateId(template.id)}
+                    onClick={() => {
+                      setSelectedTemplateId(template.id);
+                      setError(null);
+                    }}
                     className={cn(
                       "w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all duration-200",
                       selectedTemplateId === template.id 
@@ -202,12 +214,19 @@ export function ImportTemplateModal({
             )}
             
             {/* Bottom Action Bar */}
-            <div className="mt-auto p-4 border-t border-slate-100 bg-white flex items-center justify-between shrink-0 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.05)] relative z-10">
-              <p className="text-xs font-medium text-slate-400 max-w-[300px] hidden sm:block">
-                Importing will cleanly generate these items in your menu. You can customize them anytime.
-              </p>
-              <div className="flex justify-end gap-3 w-full sm:w-auto">
-                <Button variant="ghost" onClick={() => setOpen(false)} disabled={isPending} className="hover:bg-slate-100 font-medium">
+            <div className="mt-auto flex flex-col border-t border-slate-100 bg-white shrink-0 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.05)] relative z-10">
+              {error && (
+                <div className="bg-red-50/80 border-b border-red-100 px-6 py-4 flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-700 font-medium leading-relaxed">{error}</p>
+                </div>
+              )}
+              <div className="p-4 flex items-center justify-between">
+                <p className="text-xs font-medium text-slate-400 max-w-[300px] hidden sm:block">
+                  Importing will cleanly generate these items in your menu. You can customize them anytime.
+                </p>
+                <div className="flex justify-end gap-3 w-full sm:w-auto">
+                  <Button variant="ghost" onClick={() => setOpen(false)} disabled={isPending} className="hover:bg-slate-100 font-medium">
                   Cancel
                 </Button>
                 <Button 
@@ -227,7 +246,7 @@ export function ImportTemplateModal({
               </div>
             </div>
           </div>
-
+          </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -50,7 +50,7 @@ export async function bulkInsertMenuData(
     data.categories.forEach(c => { itemsToImport += (c.items?.length || 0) });
 
     if (itemCount !== null && (itemCount + itemsToImport) > limit) {
-      throw new Error(`Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This AI import has ${itemsToImport} items and would exceed your limit. Please upgrade.`);
+      return { success: false, error: `Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This AI import has ${itemsToImport} items and would exceed your limit. Please upgrade.` };
     }
   }
   
