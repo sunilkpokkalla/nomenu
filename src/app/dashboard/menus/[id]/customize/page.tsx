@@ -43,6 +43,21 @@ export default async function MenuCustomizePage(
   // Create curried action
   const updateMenuBrandingAction = updateMenuBranding.bind(null, menu.id);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parsedDesignConfig = (menu.design_config as any) || null;
+  
+  const menuEntity = {
+    ...menu,
+    use_custom_design: !!menu.design_config,
+    primary_color: parsedDesignConfig?.primary_color || restaurant.primary_color,
+    accent_color: parsedDesignConfig?.accent_color || restaurant.accent_color,
+    theme_style: parsedDesignConfig?.theme_style || restaurant.theme_style,
+    plan: restaurant.plan, // To pass plan to branding form
+    address: restaurant.address,
+    phone: restaurant.phone,
+    wifi_password: restaurant.wifi_password,
+  };
+
   return (
     <div className="flex-1 space-y-6 p-8 pt-6">
       <div className="flex items-center justify-between">
@@ -72,7 +87,7 @@ export default async function MenuCustomizePage(
         </div>
       ) : (
         <BrandingForm 
-          entity={menu}
+          entity={menuEntity}
           type="menu"
           action={updateMenuBrandingAction} 
           successMessage={searchParams.success}
