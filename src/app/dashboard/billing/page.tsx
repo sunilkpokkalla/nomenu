@@ -144,34 +144,33 @@ export default async function BillingPage(
             </div>
           </div>
 
-          <div className="shrink-0 flex items-center w-full md:w-auto">
+          <div className="shrink-0 flex flex-col w-full md:w-72 mt-4 md:mt-0">
              {currentPlan !== "free" && restaurant.stripe_customer_id ? (
-               <PortalButton />
+               <div className="self-end">
+                 <PortalButton />
+               </div>
              ) : (
-               <div className="text-sm font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-lg w-full text-center">
-                 Free tier limits applied
+               <div className="w-full flex flex-col gap-3">
+                 <div>
+                   <div className="flex justify-between items-center mb-1.5">
+                     <span className="text-sm font-bold text-slate-900">Menus Created</span>
+                     <span className="text-xs font-bold text-slate-500">{menuCount} / 1</span>
+                   </div>
+                   <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                     <div 
+                       className={`h-full ${menuCount >= 1 ? 'bg-rose-500' : 'bg-slate-900'}`} 
+                       style={{ width: `${Math.min((menuCount / 1) * 100, 100)}%` }} 
+                     />
+                   </div>
+                 </div>
+                 <div className="text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg text-center">
+                   Free tier limits applied
+                 </div>
                </div>
              )}
           </div>
         </div>
 
-        {/* Free Plan Usage Tracker */}
-        {currentPlan === "free" && (
-          <div className="mt-4">
-            <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm max-w-sm">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-bold text-slate-900">Menus Created</span>
-                <span className="text-sm font-bold text-slate-500">{menuCount} / 1</span>
-              </div>
-              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full ${menuCount >= 1 ? 'bg-rose-500' : 'bg-slate-900'}`} 
-                  style={{ width: `${Math.min((menuCount / 1) * 100, 100)}%` }} 
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Monthly/Annual Toggle */}
