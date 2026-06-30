@@ -15,6 +15,13 @@ export interface PhoneInputProps {
   required?: boolean;
 }
 
+function sanitizeToE164(val: string | undefined): string {
+  if (!val) return "";
+  const cleaned = val.replace(/[^\d+]/g, '');
+  if (!cleaned) return "";
+  return cleaned.startsWith('+') ? cleaned : `+${cleaned}`;
+}
+
 export function PhoneInputField({
   value: controlledValue,
   defaultValue,
@@ -25,10 +32,10 @@ export function PhoneInputField({
   id,
   required,
 }: PhoneInputProps) {
-  const [internalValue, setInternalValue] = React.useState(defaultValue || "");
+  const [internalValue, setInternalValue] = React.useState(sanitizeToE164(defaultValue));
 
   const isControlled = controlledValue !== undefined;
-  const value = isControlled ? controlledValue : internalValue;
+  const value = isControlled ? sanitizeToE164(controlledValue) : internalValue;
 
   const handleChange = (val: string | undefined) => {
     if (!isControlled) {
