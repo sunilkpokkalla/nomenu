@@ -220,7 +220,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
       return true;
     });
 
-    return deduped.filter(dish => {
+    const filtered = deduped.filter(dish => {
       // 1. Search Query Match
       if (searchQuery) {
         const matchesSearch = 
@@ -244,6 +244,23 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
       if (selectedCuisine === "kids") return dish.cuisines.includes("kids menu");
 
       return true;
+    });
+
+    // Sort the filtered items by Category, then by Name
+    return filtered.sort((a, b) => {
+      // First sort by Category alphabetically
+      const catA = a.category || "Uncategorized";
+      const catB = b.category || "Uncategorized";
+      if (catA < catB) return -1;
+      if (catA > catB) return 1;
+      
+      // If categories are the same, sort by Name alphabetically
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+      if (nameA < nameB) return -1;
+      if (nameA > nameB) return 1;
+      
+      return 0;
     });
   }, [searchQuery, selectedCuisine, restaurantLibrary, searchResults]);
 
