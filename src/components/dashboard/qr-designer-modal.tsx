@@ -245,7 +245,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                 <hr className="border-slate-100" />
 
                 {/* TEMPLATE PICKER */}
-                <div className="space-y-2.5">
+                <div className="space-y-1.5">
                   <Label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.15em]">Card Template Style</Label>
                   <div className="relative">
                     <select
@@ -298,9 +298,9 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
 
 
                 {/* TEXT FIELDS */}
-                <div className="space-y-3.5">
+                <div className="space-y-2.5">
                   <Label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.15em]">Card Typography</Label>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div className="space-y-1.5">
                       <Label htmlFor="brandName" className="text-[10px] font-bold text-slate-500">Brand / Restaurant Name</Label>
                       <Input id="brandName" size={32} value={brandName} onChange={(e) => setBrandName(e.target.value)} className="h-10 text-xs font-bold rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm" />
@@ -317,7 +317,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                 </div>
 
                 {/* TOGGLES */}
-                <div className="space-y-3 pt-3 border-t border-slate-100">
+                <div className="space-y-2 pt-2 border-t border-slate-100">
                   <Label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.15em]">Visibility & Branding</Label>
                   
                   {restaurant.wifi_password && (
@@ -335,48 +335,50 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                     </div>
                   )}
 
-                  <div className="space-y-2 pt-2">
-                    <Label className="font-bold text-slate-700 flex items-center gap-2 px-1">
-                      <ImageIcon className="h-4 w-4 text-indigo-500" /> Card Logo
-                    </Label>
-                    <div className="bg-slate-50 p-2 rounded-xl border border-slate-200">
-                      <ImageUploader folder="logo" hideLibrary={true}
-                        value={customLogoUrl} 
-                        onChange={setCustomLogoUrl} 
-                      />
+                  <div className="flex flex-row items-start gap-3">
+                    <div className="flex-1 space-y-1.5 pt-1">
+                      <Label className="font-bold text-slate-700 flex items-center gap-2 px-1 text-xs">
+                        <ImageIcon className="h-4 w-4 text-indigo-500" /> Card Logo
+                      </Label>
+                      <div className="bg-slate-50 p-1.5 rounded-xl border border-slate-200">
+                        <ImageUploader folder="logo" hideLibrary={true}
+                          value={customLogoUrl} 
+                          onChange={setCustomLogoUrl} 
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="space-y-2 pt-2">
-                    <Label htmlFor="qrColor" className="font-bold text-slate-700 flex items-center gap-2 px-1">
-                      <Palette className="h-4 w-4 text-indigo-500" /> QR Code Color
-                    </Label>
-                    <div className="flex gap-3 bg-slate-50 p-2 rounded-xl border border-slate-200">
-                      <Input 
-                        id="qrColor" 
-                        type="color" 
-                        value={qrColor} 
-                        onChange={(e) => setQrColor(e.target.value)} 
-                        className="h-10 w-16 p-1 cursor-pointer bg-white border-slate-300 rounded-lg"
-                      />
-                      <Input 
-                        value={qrColor} 
-                        onChange={(e) => {
-                          let val = e.target.value;
-                          if (val && !val.startsWith('#')) val = '#' + val;
-                          setQrColor(val);
-                        }} 
-                        className="h-10 flex-1 text-xs font-bold font-mono text-slate-700 bg-white border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 uppercase"
-                        placeholder="#0F172A"
-                        maxLength={7}
-                      />
+                    <div className="flex-1 space-y-1.5 pt-1">
+                      <Label htmlFor="qrColor" className="font-bold text-slate-700 flex items-center gap-2 px-1 text-xs">
+                        <Palette className="h-4 w-4 text-indigo-500" /> QR Color
+                      </Label>
+                      <div className="flex flex-col gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
+                        <Input 
+                          id="qrColor" 
+                          type="color" 
+                          value={qrColor} 
+                          onChange={(e) => setQrColor(e.target.value)} 
+                          className="h-10 w-full p-1 cursor-pointer bg-white border-slate-300 rounded-lg"
+                        />
+                        <Input 
+                          value={qrColor} 
+                          onChange={(e) => {
+                            let val = e.target.value;
+                            if (val && !val.startsWith('#')) val = '#' + val;
+                            setQrColor(val);
+                          }} 
+                          className="h-9 w-full text-xs font-bold font-mono text-slate-700 bg-white border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 uppercase text-center"
+                          placeholder="#0F172A"
+                          maxLength={7}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* ACTION BUTTONS */}
-              <div className="flex flex-col gap-3 mt-8 pt-6 border-t border-slate-100 shrink-0">
+              <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-100 shrink-0">
                 <Button variant="outline" className={`h-11 font-extrabold text-xs tracking-wide rounded-xl border-slate-200 transition-all ${isSaved ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100" : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"}`} onClick={handleSaveDesign}>
                   <Save className="mr-2 h-4 w-4" strokeWidth={2.5} />
                   {isSaved ? "Saved as Default!" : "Save Design as Default"}

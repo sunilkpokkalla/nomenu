@@ -167,24 +167,24 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
       <input type="hidden" name="imageUrl" value={value} />
 
       {/* Tabs */}
-      <div className="flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
-        <button
-          type="button"
-          onClick={() => {
-            setMode("file");
-            handleRemove();
-          }}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${
-            mode === "file"
-              ? "bg-white text-slate-900 shadow-sm"
-              : "text-slate-500 hover:text-slate-800"
-          }`}
-        >
-          <Upload className="h-3.5 w-3.5" />
-          Upload File
-        </button>
+      {!hideLibrary && (
+        <div className="flex rounded-lg bg-slate-100 p-0.5 border border-slate-200">
+          <button
+            type="button"
+            onClick={() => {
+              setMode("file");
+              handleRemove();
+            }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${
+              mode === "file"
+                ? "bg-white text-slate-900 shadow-sm"
+                : "text-slate-500 hover:text-slate-800"
+            }`}
+          >
+            <Upload className="h-3.5 w-3.5" />
+            Upload File
+          </button>
 
-        {!hideLibrary && (
           <button
             type="button"
             onClick={() => {
@@ -200,8 +200,8 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
             <ImageIcon className="h-3.5 w-3.5" />
             Dish Library
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Inputs */}
       {mode === "file" && (
@@ -213,11 +213,11 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
                 <p className="text-xs font-medium text-slate-700">Uploading to storage...</p>
               </div>
             )}
-            <label className={`flex flex-col items-center justify-center cursor-pointer bg-white hover:bg-slate-50 transition-colors border-2 border-dashed ${folder === 'logo' ? 'w-32 h-32 rounded-full mx-auto border-slate-300 shadow-sm' : 'w-full h-24 rounded-lg border-slate-200'}`}>
+            <label className={`flex flex-col items-center justify-center cursor-pointer bg-white hover:bg-slate-50 transition-colors border-2 border-dashed ${folder === 'logo' ? 'w-24 h-24 rounded-full mx-auto border-slate-300 shadow-sm' : 'w-full h-24 rounded-lg border-slate-200'}`}>
               <div className="flex flex-col items-center justify-center p-4 text-center">
                 <Upload className={`${folder === 'logo' ? 'w-5 h-5 mb-2' : 'w-6 h-6 mb-1'} text-slate-400`} />
                 {folder === 'logo' ? (
-                  <p className="text-[10px] text-slate-500 font-semibold leading-tight">Upload Logo</p>
+                  <p className="text-[9px] text-slate-500 font-semibold leading-tight">Upload Logo</p>
                 ) : (
                   <>
                     <p className="text-xs text-slate-500">
@@ -291,8 +291,8 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
 
       {/* Preview box */}
       {preview && (
-        <div className={`relative bg-white flex items-center ${folder === 'logo' ? 'flex-col gap-3 justify-center text-center p-4 rounded-xl border border-slate-100 shadow-sm' : 'flex-row gap-3 p-2 rounded-xl border border-slate-200'}`}>
-          <div className={`${folder === 'logo' ? 'h-24 w-24 rounded-full shadow-md ring-4 ring-slate-50' : 'h-12 w-12 rounded-lg'} overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center`}>
+        <div className={`relative bg-white flex items-center ${folder === 'logo' ? 'flex-col gap-2 justify-center text-center p-2 rounded-xl shadow-sm' : 'flex-row gap-3 p-2 rounded-xl border border-slate-200'}`}>
+          <div className={`${folder === 'logo' ? 'h-16 w-16 rounded-full shadow-md ring-2 ring-slate-50' : 'h-12 w-12 rounded-lg'} overflow-hidden border border-slate-100 shrink-0 bg-slate-50 relative flex items-center justify-center`}>
             <img
               src={preview}
               alt="Preview"
@@ -300,9 +300,10 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
               onError={() => setError("Unable to load preview. Please verify URL.")}
             />
           </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">{folder === 'logo' ? 'Brand Logo Active' : 'Image Loaded'}</p>
-            {folder !== 'logo' && <p className="text-[9px] text-slate-400 truncate max-w-[200px]">{value}</p>}
+          <div className={`flex-1 flex flex-col justify-center min-w-0 ${folder === 'logo' ? 'items-center' : ''}`}>
+            <p className="text-[10px] font-bold text-slate-800 uppercase tracking-wider truncate mb-1">
+              {folder === 'logo' ? 'Brand Logo Active' : 'Image Uploaded'}
+            </p>{folder !== 'logo' && <p className="text-[9px] text-slate-400 truncate max-w-[200px]">{value}</p>}
           </div>
           <Button
             type="button"
