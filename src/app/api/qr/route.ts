@@ -18,8 +18,9 @@ export async function GET(req: NextRequest) {
       ? colorParam 
       : "#0F172A";
 
-    // Generate QR code as a buffer
-    const buffer = await QRCode.toBuffer(data, {
+    // Generate QR code as an SVG string (Zero native dependencies, edge-safe)
+    const svgString = await QRCode.toString(data, {
+      type: "svg",
       errorCorrectionLevel: "H",
       margin: 1,
       width: 500,
@@ -29,9 +30,9 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    return new NextResponse(buffer as unknown as BodyInit, {
+    return new NextResponse(svgString, {
       headers: {
-        "Content-Type": "image/png",
+        "Content-Type": "image/svg+xml",
         "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
