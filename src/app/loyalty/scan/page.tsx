@@ -85,6 +85,7 @@ export default function LoyaltyScanPage({
 
   const handlePhoneSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (status === "loading") return;
     if (!phoneNumber.trim()) return;
     submitClaim(undefined, phoneNumber.trim());
   };
@@ -113,13 +114,13 @@ export default function LoyaltyScanPage({
               placeholder="e.g. 555-123-4567"
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={(e) => setPhoneNumber(e.target.value.replace(/[^0-9]/g, ''))}
               required
             />
             
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition-colors"
+              className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
             >
               Get My Stamp
             </button>
