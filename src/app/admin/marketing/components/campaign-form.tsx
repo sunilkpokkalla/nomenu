@@ -100,15 +100,71 @@ const TEMPLATES = {
     subject: "Increase check sizes by 20% effortlessly",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu Upselling" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu AI Photos" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
   <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">People eat with their eyes.</h2>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">When a guest sees a high-definition photo of a sizzling appetizer or a perfectly crafted cocktail, they are 20% more likely to order it compared to reading plain text on a piece of paper.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">With Nomenu, you can easily attach photos to your high-margin items. You essentially give your restaurant an automated, silent upseller that never forgets to recommend the specials.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Text-only menus are leaving money on the table. When guests see high-quality images of your dishes, they order more.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Nomenu includes built-in AI tools to automatically generate mouth-watering photos for your entire menu in seconds, no expensive food photographer required.</p>
+  <ul style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+    <li><strong>Visual Upselling:</strong> Studies show visual menus increase order sizes by 20-30%.</li>
+    <li><strong>AI Generation:</strong> Instantly create perfect images that match your brand.</li>
+    <li><strong>Highlight Specials:</strong> Make your high-margin items impossible to resist.</li>
+  </ul>
   <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
-    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Boost Your Revenue Today</a>
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Boost Your Revenue</a>
   </div>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>The Nomenu Team<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  b2b_labor_cost: {
+    name: "The 'Labor Cost' Pitch (B2B)",
+    subject: "Faster table turns & 0 bad Yelp reviews at [Restaurant Name]",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi [Owner Name],</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I know labor costs and front-of-house bottlenecks are the biggest headaches in hospitality right now.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We built Nomenu to fix that. Guests scan a custom QR code on your table, order directly to your Kitchen Display System, and pay on their phones.</p>
+  <ul style="color: #475569; font-size: 16px; line-height: 1.6;">
+    <li>Increase table turns by 20%</li>
+    <li>Syncs directly with your Square POS</li>
+    <li>AI intercepts 1-3 star reviews before they ever reach Yelp</li>
+  </ul>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Can I show you a 2-minute demo of how it would look for [Restaurant Name]?</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  tech_chef_influencer: {
+    name: "Tech Chef Influencer (Partnership)",
+    subject: "Love your content! Quick partnership idea for [Handle]",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hey [Name],</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I love the content you’re putting out for the restaurant industry—especially your recent video on [Topic].</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I'm the founder of Nomenu, a new restaurant OS that replaces waitstaff bottlenecks with a direct-to-KDS ordering system. We are launching an exclusive Partner Program and I think your audience of restaurant owners would love it.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We offer a 20% recurring revenue share for every restaurant you refer. Since it integrates natively with Square POS, it’s a very easy sell to any restaurant wanting to cut labor costs.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Would you be open to chatting about a potential partnership?</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  vp_sales: {
+    name: "VP of Sales / Executive Pitch",
+    subject: "Building a unicorn in hospitality tech",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi [Name],</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I’ve been following your success scaling SaaS revenue at [Previous Company]. I’m the founder of Nomenu—a restaurant OS that replaces waitstaff bottlenecks with a direct-to-KDS ordering system and AI-driven Yelp protection.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We have the product, the POS integrations (Square), and the AI infrastructure. I am looking for a killer VP of Sales/GTM leader to build the outbound machine and scale us from early traction to $1M ARR and beyond.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">If you're interested in building a unicorn in the hospitality tech space, let's grab coffee.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  investor_deck: {
+    name: "Seed Investor / VC Deck",
+    subject: "Nomenu: Re-inventing Restaurant Operations",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi [Name],</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">The biggest existential threat to restaurants right now is labor costs. Waitstaff overhead and slow table turns are crushing margins.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">At Nomenu, we’ve built an end-to-end OS that lets guests order and pay directly on their phones, injecting orders straight into a custom Kitchen Display System via Square POS.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We are raising our Seed round to aggressively scale our outbound sales and partner channels. I've attached our deck below.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I would love to walk you through our traction and our 12-month roadmap.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
   }
 };
@@ -220,20 +276,39 @@ export function CampaignForm() {
               placeholder="Enter email subject"
             />
           </div>
-          <div>
-            <label className="block text-sm font-bold text-slate-700 mb-2 flex justify-between items-center">
-              <span>HTML Message Body</span>
-              <span className="text-xs text-slate-500 font-medium flex items-center gap-1"><FileText className="w-3 h-3"/> Accepts HTML</span>
-            </label>
-            <textarea 
-              name="message"
-              required
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              rows={12}
-              className="w-full bg-slate-50 border border-slate-200 shadow-sm rounded-lg p-3 text-sm text-slate-900 font-mono focus:outline-none focus:border-indigo-500"
-              placeholder="<h1>Hello!</h1>"
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2 flex justify-between items-center">
+                <span>HTML Message Body</span>
+                <span className="text-xs text-slate-500 font-medium flex items-center gap-1"><FileText className="w-3 h-3"/> Accepts HTML</span>
+              </label>
+              <textarea 
+                name="message"
+                required
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows={16}
+                className="w-full bg-slate-50 border border-slate-200 shadow-sm rounded-lg p-3 text-sm text-slate-900 font-mono focus:outline-none focus:border-indigo-500"
+                placeholder="<h1>Hello!</h1>"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2">Live Preview</label>
+              <div className="w-full h-full min-h-[350px] bg-white border border-slate-200 shadow-sm rounded-lg p-0 overflow-hidden flex flex-col">
+                <div className="bg-slate-100 border-b border-slate-200 p-3 flex items-center gap-2">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                    <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+                    <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
+                  </div>
+                  <span className="text-xs text-slate-500 font-medium ml-2 font-mono truncate">Subject: {subject || "No subject"}</span>
+                </div>
+                <div 
+                  className="p-4 flex-1 overflow-y-auto bg-white"
+                  dangerouslySetInnerHTML={{ __html: message }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

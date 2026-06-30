@@ -65,12 +65,7 @@ export default async function AdminLayout({
             >
               Campaigns
             </Link>
-            <Link 
-              href="/admin/growth" 
-              className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"
-            >
-              Growth Hub
-            </Link>
+
             <Link 
               href="/admin/partners" 
               className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"

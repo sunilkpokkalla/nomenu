@@ -1,4 +1,5 @@
 import { CampaignForm } from "./components/campaign-form";
+import { EmailScraper } from "./components/email-scraper";
 import { MailOpen } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
@@ -19,6 +20,8 @@ export default async function MarketingCampaignsPage() {
         </div>
       </div>
 
+      <EmailScraper />
+      
       <CampaignForm />
       
     </div>
