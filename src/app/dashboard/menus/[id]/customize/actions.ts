@@ -54,35 +54,58 @@ export async function bulkInsertMenuData(
     }
   }
   
-  // Insert data
-  let categorySortOrder = 0;
+  // Get existing categories to prevent duplicates
+  const { data: existingCategories } = await supabase
+    .from("categories")
+    .select("id, name")
+    .eq("menu_id", menuId);
+
+  let categorySortOrder = existingCategories?.length || 0;
+  
   for (const cat of data.categories) {
-    const { data: category, error: catError } = await supabase
-      .from("categories")
-      .insert({
-        menu_id: menuId,
-        name: cat.name,
-        description: cat.description || null,
-        sort_order: categorySortOrder++
-      })
-      .select("id")
-      .single();
+    let categoryId = existingCategories?.find((c) => c.name.toLowerCase() === cat.name.toLowerCase())?.id;
+    
+    if (!categoryId) {
+      const { data: newCategory, error: catError } = await supabase
+        .from("categories")
+        .insert({
+          menu_id: menuId,
+          name: cat.name,
+          description: cat.description || null,
+          sort_order: categorySortOrder++
+        })
+        .select("id")
+        .single();
+        
+      if (catError || !newCategory) throw new Error(catError?.message || "Failed to create category");
+      categoryId = newCategory.id;
+    }
+    
+    // Fetch existing items in this category to prevent duplicate items
+    const { data: existingItems } = await supabase
+      .from("menu_items")
+      .select("name")
+      .eq("category_id", categoryId);
       
-    if (catError || !category) throw new Error(catError?.message || "Failed to create category");
+    const existingItemNames = new Set((existingItems || []).map((i) => i.name.toLowerCase()));
     
     if (cat.items && cat.items.length > 0) {
-       const itemsToInsert = cat.items.map((item, index) => ({
-         category_id: category.id,
-         restaurant_id: restaurantId,
-         name: item.name,
-         description: item.description || null,
-         price: item.price || 0,
-         image_url: item.imageUrl || null,
-         sort_order: index
-       }));
+       const itemsToInsert = cat.items
+         .filter((item) => !existingItemNames.has(item.name.toLowerCase()))
+         .map((item, index) => ({
+           category_id: categoryId as string,
+           restaurant_id: restaurantId,
+           name: item.name,
+           description: item.description || null,
+           price: item.price || 0,
+           image_url: item.imageUrl || null,
+           sort_order: (existingItems?.length || 0) + index
+         }));
        
-       const { error: itemsError } = await supabase.from("menu_items").insert(itemsToInsert);
-       if (itemsError) throw new Error(itemsError.message);
+       if (itemsToInsert.length > 0) {
+         const { error: itemsError } = await supabase.from("menu_items").insert(itemsToInsert);
+         if (itemsError) throw new Error(itemsError.message);
+       }
     }
   }
   
@@ -181,38 +204,61 @@ export async function createPremiumMagicImportJob(
     throw new Error("Failed to create AI image job: " + (jobError?.message || "Unknown error"));
   }
 
-  // Insert categories and items (with pending_ai_image = true)
-  let categorySortOrder = 0;
+  // Get existing categories to prevent duplicates
+  const { data: existingCategories } = await supabase
+    .from("categories")
+    .select("id, name")
+    .eq("menu_id", menuId);
+
+  let categorySortOrder = existingCategories?.length || 0;
+  
   for (const cat of data.categories) {
-    const { data: category, error: catError } = await supabase
-      .from("categories")
-      .insert({
-        menu_id: menuId,
-        name: cat.name,
-        description: cat.description || null,
-        sort_order: categorySortOrder++
-      })
-      .select("id")
-      .single();
+    let categoryId = existingCategories?.find((c) => c.name.toLowerCase() === cat.name.toLowerCase())?.id;
+    
+    if (!categoryId) {
+      const { data: newCategory, error: catError } = await supabase
+        .from("categories")
+        .insert({
+          menu_id: menuId,
+          name: cat.name,
+          description: cat.description || null,
+          sort_order: categorySortOrder++
+        })
+        .select("id")
+        .single();
+        
+      if (catError || !newCategory) throw new Error(catError?.message || "Failed to create category");
+      categoryId = newCategory.id;
+    }
+    
+    // Fetch existing items in this category to prevent duplicate items
+    const { data: existingItems } = await supabase
+      .from("menu_items")
+      .select("name")
+      .eq("category_id", categoryId);
       
-    if (catError || !category) throw new Error(catError?.message || "Failed to create category");
+    const existingItemNames = new Set((existingItems || []).map((i) => i.name.toLowerCase()));
     
     if (cat.items && cat.items.length > 0) {
-       const itemsToInsert = cat.items.map((item, index) => ({
-         category_id: category.id,
-         restaurant_id: restaurantId,
-         name: item.name,
-         description: item.description || null,
-         price: item.price || 0,
-         image_url: item.imageUrl || null,
-         sort_order: index,
-         pending_ai_image: true,
-         is_available: false // Hide until images are generated
-       }));
+       const itemsToInsert = cat.items
+         .filter((item) => !existingItemNames.has(item.name.toLowerCase()))
+         .map((item, index) => ({
+           category_id: categoryId as string,
+           restaurant_id: restaurantId,
+           name: item.name,
+           description: item.description || null,
+           price: item.price || 0,
+           image_url: item.imageUrl || null,
+           sort_order: (existingItems?.length || 0) + index,
+           pending_ai_image: true,
+           is_available: false // Hide until images are generated
+         }));
        
-       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-       const { error: itemsError } = await (supabase as any).from("menu_items").insert(itemsToInsert);
-       if (itemsError) throw new Error(itemsError.message);
+       if (itemsToInsert.length > 0) {
+         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         const { error: itemsError } = await (supabase as any).from("menu_items").insert(itemsToInsert);
+         if (itemsError) throw new Error(itemsError.message);
+       }
     }
   }
   
