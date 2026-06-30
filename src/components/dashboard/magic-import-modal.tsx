@@ -59,6 +59,7 @@ export function MagicImportModal({ menuId, restaurantId }: MagicImportProps) {
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("restaurantId", restaurantId);
 
       const res = await fetch("/api/menu/magic-import", {
         method: "POST",

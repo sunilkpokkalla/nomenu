@@ -18,9 +18,31 @@ export async function POST(req: Request) {
 
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
+    const restaurantId = formData.get("restaurantId") as string | null;
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
+
+    // Determine limits for free plan
+    let maxAllowedItems = Infinity;
+    if (restaurantId) {
+      const { data: restaurant } = await supabase
+        .from("restaurants")
+        .select("plan")
+        .eq("id", restaurantId)
+        .single();
+      
+      const plan = restaurant?.plan || "free";
+      if (plan === "free" || plan === "starter") {
+        const { count: itemCount } = await supabase
+          .from("menu_items")
+          .select("id", { count: "exact", head: true })
+          .eq("restaurant_id", restaurantId);
+        
+        const limit = plan === "free" ? 30 : 50;
+        maxAllowedItems = Math.max(0, limit - (itemCount || 0));
+      }
     }
 
     // Convert file to base64
@@ -28,7 +50,7 @@ export async function POST(req: Request) {
     const base64Data = Buffer.from(buffer).toString("base64");
     const mimeType = file.type;
 
-    const prompt = `
+    let prompt = `
       You are an expert menu digitizer and a world-class culinary copywriter.
       Extract all categories, items, descriptions, and prices from this menu image/PDF.
       
@@ -38,7 +60,13 @@ export async function POST(req: Request) {
       3. Do your best to categorize items logically if categories are not explicit.
       4. Ensure spelling and capitalization are correct.
       5. DESCRIPTIONS: If the physical menu provides a description, use it exactly as written. If the physical menu does NOT provide a description for an item, YOU MUST use your culinary knowledge to invent a highly appetizing, short 1-2 sentence description for it. NO item should ever have an empty description.
-      
+    `;
+    
+    if (maxAllowedItems !== Infinity) {
+      prompt += `\n      CRITICAL RULE: You are STRICTLY LIMITED to extracting a MAXIMUM of ${maxAllowedItems} items total across all categories. If the menu contains more than ${maxAllowedItems} items, only extract the first ${maxAllowedItems} items and completely ignore the rest. DO NOT exceed this limit.`;
+    }
+
+    prompt += `
       Output Schema Requirements:
       {
         "categories": [
@@ -91,9 +119,30 @@ export async function POST(req: Request) {
       throw new Error("AI returned an empty response.");
     }
 
-    // The AI might wrap the JSON in markdown code blocks despite the responseMimeType, so we strip it.
     const cleanJsonString = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
     const parsedJson = JSON.parse(cleanJsonString);
+
+    // Enforce limits by hard truncating
+    if (maxAllowedItems !== Infinity && parsedJson.categories) {
+      let currentTotal = 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      for (const cat of parsedJson.categories) {
+        if (cat.items) {
+          const remaining = maxAllowedItems - currentTotal;
+          if (remaining <= 0) {
+            cat.items = [];
+          } else if (cat.items.length > remaining) {
+            cat.items = cat.items.slice(0, remaining);
+            currentTotal += remaining;
+          } else {
+            currentTotal += cat.items.length;
+          }
+        }
+      }
+      // Remove any categories that ended up empty due to truncation
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      parsedJson.categories = parsedJson.categories.filter((cat: any) => cat.items && cat.items.length > 0);
+    }
 
     // Fetch potential matches from global crowdsourced library
     const allItemNames: string[] = [];
