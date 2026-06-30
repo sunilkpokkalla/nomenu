@@ -59,3 +59,9 @@ export const CURRENCY_OPTIONS: CurrencyOption[] = [
   ...c,
   name: `${c.code} - ${c.name} (${c.symbol})`
 }));
+
+export function getCurrencySymbol(code: string | null | undefined): string {
+  if (!code) return "$";
+  const option = CURRENCY_OPTIONS.find(c => c.code === code);
+  return option ? option.symbol : (code === "EUR" ? "€" : code === "GBP" ? "£" : "$");
+}

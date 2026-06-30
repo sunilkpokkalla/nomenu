@@ -15,6 +15,7 @@ import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 import { useCart } from "../cart-context";
 import { FeedbackFAB } from "../feedback-fab";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,8 +32,8 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
     setOrderNotes("");
   }, [selectedItem]);
 
-  const currencySymbol = restaurant.currency || "USD";
-  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const currencySign = getCurrencySymbol(restaurant.currency);
+  const currencySymbol = currencySign;const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
   const canFeedback = currentPlan !== "free";
   const { addToCart } = useCart();
@@ -190,7 +191,7 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
 
                   <div className="grid grid-cols-2 gap-4">
                     {categoryItems.map((item) => {
-                      const price = `${currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}${Number(item.price).toFixed(2)}`;
+                      const price = `${currencySign}${Number(item.price).toFixed(2)}`;
                       
                       return (
                         <div
@@ -276,7 +277,7 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
                   <div className="flex justify-between items-start gap-4 mb-2">
                     <h3 className="text-2xl font-black text-black uppercase leading-tight">{selectedItem.name}</h3>
                     <span className="text-xl font-black text-[#EF476F] shrink-0 border-2 border-black px-2 shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-white">
-                      {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price).toFixed(2)}
+                      {currencySign}{(selectedItem.price).toFixed(2)}
                     </span>
                   </div>
                   {selectedItem.description && (
@@ -335,7 +336,7 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
                 <span>{canOrder ? "Add To Order" : "Close"}</span>
                 {canOrder && (
                   <span>
-                    {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price * orderQuantity).toFixed(2)}
+                    {currencySign}{(selectedItem.price * orderQuantity).toFixed(2)}
                   </span>
                 )}
               </button>

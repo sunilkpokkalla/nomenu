@@ -12,6 +12,7 @@ import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 import { useCart } from "../cart-context";
 import { FeedbackFAB } from "../feedback-fab";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,9 +37,8 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
     setOrderNotes("");
   };
 
-  const currencySymbol = restaurant.currency || "USD";
-
-  const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
+  const currencySign = getCurrencySymbol(restaurant.currency);
+  const currencySymbol = currencySign;const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const categoryNavRef = useRef<HTMLDivElement>(null);
   const isScrolling = useRef(false);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -196,7 +196,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
 
                   <div className="grid gap-16">
                     {categoryItems.map((item, index) => {
-                      const price = `${currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}${Number(item.price).toFixed(2)}`;
+                      const price = `${currencySign}${Number(item.price).toFixed(2)}`;
                       const isEven = index % 2 === 0;
                       
                       return (
@@ -281,7 +281,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
               <div className="text-center mb-8">
                 <h2 className="text-xl tracking-[0.2em] font-light text-zinc-900 uppercase mb-4">{selectedItem.name}</h2>
                 <div className="text-zinc-500 font-medium tracking-widest text-sm">
-                  {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{Number(selectedItem.price).toFixed(2)}
+                  {currencySign}{Number(selectedItem.price).toFixed(2)}
                 </div>
               </div>
               
@@ -318,7 +318,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
                   onClick={() => canOrder ? handleAddToCart() : setSelectedItem(null)}
                   className="px-12 py-4 bg-zinc-900 text-white text-[10px] tracking-[0.3em] uppercase hover:bg-black transition-colors w-full sm:w-auto font-medium"
                 >
-                  {canOrder ? `Add to order — ${currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}${(selectedItem.price * orderQuantity).toFixed(2)}` : "Return"}
+                  {canOrder ? `Add to order — ${currencySign}${(selectedItem.price * orderQuantity).toFixed(2)}` : "Return"}
                 </button>
               </div>
             </div>

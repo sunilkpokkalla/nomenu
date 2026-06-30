@@ -22,6 +22,7 @@ import { useCart } from "../cart-context";
 
 import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps } from "../types";
 import Image from "next/image";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuClientViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,9 +56,8 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
 
   const primaryColor = restaurant.primary_color || "#2563EB";
   let themeStyle = restaurant.theme_style || "bistro";
-  const currencySymbol = restaurant.currency || "USD";
-
-  const currentPlan = restaurant.plan?.toLowerCase() || "free";
+  const currencySign = getCurrencySymbol(restaurant.currency);
+  const currencySymbol = currencySign;const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const isFreePlan = currentPlan === "free";
   const isStarterPlan = currentPlan === "starter";
   const hasWhiteLabeling = currentPlan === "elite" || currentPlan === "enterprise";
@@ -688,7 +688,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                   {layoutMode === "list" ? (
                     <div className="grid gap-3">
                       {categoryItems.map((item) => {
-                        const price = `${currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}${Number(item.price).toFixed(2)}`;
+                        const price = `${currencySign}${Number(item.price).toFixed(2)}`;
                         if (themeStyle === "bistro") {
                           return (
                             <div
@@ -986,7 +986,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                     // Grid Layout
                     <div className="grid grid-cols-2 gap-4">
                       {categoryItems.map((item) => {
-                        const price = `${currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}${Number(item.price).toFixed(2)}`;
+                        const price = `${currencySign}${Number(item.price).toFixed(2)}`;
 
                         if (themeStyle === "bistro") {
                           return (
@@ -1386,7 +1386,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                 </div>
 
                 <span className={`text-xl font-extrabold shrink-0 ${themeStyle === "luxury" ? "bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 text-transparent bg-clip-text font-serif" : themeStyle === "vibrant" ? "bg-rose-500 text-white border-2 border-black px-3 py-1 rounded-xl shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rotate-2" : themeStyle === "bistro" ? "text-amber-950 font-serif-bistro" : "text-slate-900"}`}>
-                  {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}
+                  {currencySign}
                   {Number(selectedItem.price).toFixed(2)}
                 </span>
               </div>
@@ -1485,7 +1485,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                       color: themeStyle === "luxury" ? "#000" : "#fff"
                     } : {}}
                   >
-                    Add {orderQuantity} to Order • {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price * orderQuantity).toFixed(2)}
+                    Add {orderQuantity} to Order • {currencySign}{(selectedItem.price * orderQuantity).toFixed(2)}
                   </button>
                   
                   <button

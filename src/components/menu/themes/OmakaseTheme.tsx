@@ -8,6 +8,7 @@ import { MenuThemeProps } from "../types";
 
 import { FeedbackFAB } from "../feedback-fab";
 import Image from "next/image";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export function OmakaseTheme(props: MenuThemeProps) {
   const { restaurant, categories, items, tableNumber, qrCodeId } = props;
@@ -25,8 +26,8 @@ export function OmakaseTheme(props: MenuThemeProps) {
   const { filteredItems } = computed;
   const { categoryRefs, categoryNavRef } = refs;
 
-  const currencySymbol = restaurant.currency || "USD";
-  const currencySign = currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$";
+  const currencySign = getCurrencySymbol(restaurant.currency);
+  const currencySymbol = currencySign;
 
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canFeedback = currentPlan !== "free";

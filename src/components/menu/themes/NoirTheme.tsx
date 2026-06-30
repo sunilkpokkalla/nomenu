@@ -18,6 +18,7 @@ import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 import { useCart } from "../cart-context";
 import { FeedbackFAB } from "../feedback-fab";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
@@ -45,9 +46,8 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
     setOrderNotes("");
   }, [selectedItem]);
 
-  const currencySymbol = restaurant.currency || "USD";
-
-  // References for scrolling
+  const currencySign = getCurrencySymbol(restaurant.currency);
+  const currencySymbol = currencySign;// References for scrolling
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const categoryNavRef = useRef<HTMLDivElement>(null);
   const isScrolling = useRef(false);
@@ -236,7 +236,7 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
 
                   <div className="grid gap-10">
                     {categoryItems.map((item) => {
-                      const price = `${currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}${Number(item.price).toFixed(2)}`;
+                      const price = `${currencySign}${Number(item.price).toFixed(2)}`;
                       
                       return (
                         <div
@@ -329,7 +329,7 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
                   <div className="flex justify-between items-start gap-4 mb-2">
                     <h3 className="text-2xl font-serif text-white tracking-wide">{selectedItem.name}</h3>
                     <span className="text-lg text-amber-500 font-medium shrink-0">
-                      {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price).toFixed(2)}
+                      {currencySign}{(selectedItem.price).toFixed(2)}
                     </span>
                   </div>
                   {selectedItem.description && (
@@ -388,7 +388,7 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
                 <span>{canOrder ? "Add to Order" : "Close"}</span>
                 {canOrder && (
                   <span>
-                    {currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}{(selectedItem.price * orderQuantity).toFixed(2)}
+                    {currencySign}{(selectedItem.price * orderQuantity).toFixed(2)}
                   </span>
                 )}
               </button>

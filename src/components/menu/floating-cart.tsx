@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt } from "lucide-react";
 import { submitOrder, getOrderReceipt, getSlotAvailability } from "@/app/menu/[id]/actions";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel, fulfillmentType, prepTimeMinutes, maxTakeawayPerSlot = 5, maxReservePerSlot = 5, openingTime = "09:00:00", closingTime = "23:00:00", plan, allowManualPayments = false }: {
   restaurantId: string;
@@ -273,7 +274,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   };
 
   const formatPrice = (p: number) => {
-    return `${currencySymbol === "EUR" ? "€" : currencySymbol === "GBP" ? "£" : "$"}${p.toFixed(2)}`;
+    return `${currencySign}${p.toFixed(2)}`;
   };
 
   const btnColor = themeStyle === "luxury" ? "#F59E0B" : themeStyle === "bistro" ? "#5C4033" : themeStyle === "vibrant" ? "#FF5A5F" : primaryColor;
