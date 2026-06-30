@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { MessageSquare, Star, X, CheckCircle2, Search, Clock } from "lucide-react";
 import { submitFeedback } from "@/app/menu/[id]/actions";
-import { PhoneInputField } from "@/components/ui/phone-input";
 import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
 import Link from "next/link";
 
@@ -151,7 +150,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
     <>
       {/* Floating Action Buttons Stack */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
-        {loyaltyCardId ? (
+        {loyaltyCardId && (
           <Link
             href={`/loyalty/${loyaltyCardId}`}
             className="bg-amber-500 text-white px-5 py-3.5 rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:bg-amber-400 transition-all flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-500 gap-2 font-bold ring-4 ring-amber-500/20"
@@ -160,17 +159,8 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
             <Star className="w-5 h-5 fill-white" />
             VIP Card
           </Link>
-        ) : (
-          <Link
-            href="/loyalty/find"
-            className="bg-white text-slate-700 px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 hover:bg-slate-50 transition-all flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-500 gap-1.5 text-sm font-semibold border border-slate-200"
-            aria-label="Find VIP Card"
-          >
-            <Search className="w-4 h-4 text-slate-400" />
-            Find VIP Card
-          </Link>
         )}
-        
+
         <button
           onClick={() => setIsOpen(true)}
           className="bg-slate-900 text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-500"
@@ -183,7 +173,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       {/* Feedback Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh] min-h-[350px] transition-all ease-in-out">
             
             {/* Header */}
             <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 flex-shrink-0">
@@ -265,12 +255,12 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                               required
                               className="w-full rounded-xl border-amber-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-400"
                             />
-                            <PhoneInputField
+                            <input
+                              type="tel"
                               value={customerPhone}
-                              onChange={(val) => setCustomerPhone(val || "")}
-                              placeholder="Phone Number"
-                              required
-                              className="w-full rounded-xl border border-amber-200 bg-white p-2.5 text-sm text-slate-900 focus-within:border-amber-400 focus-within:ring-1 focus-within:ring-amber-400"
+                              onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                              placeholder="Phone Number (e.g. 555-123-4567)"
+                              className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
                             />
                           </div>
                           <button 
@@ -302,6 +292,11 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                           >
                             Claim My Card
                           </button>
+                          <div className="mt-4 text-center">
+                            <Link href="/loyalty/find" className="text-amber-700 text-sm font-semibold hover:underline">
+                              Already a member? Find your card
+                            </Link>
+                          </div>
                         </div>
                       ) : null}
                     </>
@@ -425,11 +420,12 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                 <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
                                 <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
                                 <div className="flex gap-2">
-                                  <PhoneInputField
+                                  <input
+                                    type="tel"
                                     value={customerPhone}
-                                    onChange={(val) => setCustomerPhone(val || "")}
-                                    placeholder="Phone Number"
-                                    className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 text-sm focus-within:border-indigo-400 focus-within:ring-1 focus-within:ring-indigo-400"
+                                    onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                    placeholder="Phone Number (e.g. 555-123-4567)"
+                                    className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
                                   />
                                   <button
                                     type="button"
@@ -569,12 +565,13 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                         <label htmlFor="customerPhone" className="block text-sm font-medium text-slate-700">
                           Phone (optional)
                         </label>
-                        <PhoneInputField
+                        <input
+                          type="tel"
                           id="customerPhone"
                           value={customerPhone}
-                          onChange={(val) => setCustomerPhone(val || "")}
-                          placeholder="Phone Number"
-                          className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-sm focus-within:border-indigo-400 focus-within:ring-1 focus-within:ring-indigo-400"
+                          onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                          placeholder="Phone Number (e.g. 555-123-4567)"
+                          className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
                         />
                       </div>
                     </div>

@@ -77,7 +77,7 @@ export default function FindLoyaltyPage() {
                 placeholder="Phone Number (e.g. 555-123-4567)"
                 className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-slate-900 font-medium transition-shadow placeholder:font-normal"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e) => setPhoneNumber(e.target.value.replace(/[^0-9]/g, ''))}
                 required
               />
             </div>
