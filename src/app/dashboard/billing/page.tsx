@@ -122,7 +122,8 @@ export default async function BillingPage(
 
       {/* Active Plan Dashboard Widget - Minimalist */}
       <div className="mb-12">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <div className="p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-center gap-5 w-full md:w-auto">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-900 border border-slate-200">
               <Zap className="h-6 w-6" strokeWidth={1.5} />
@@ -169,8 +170,29 @@ export default async function BillingPage(
                </div>
              )}
           </div>
-        </div>
+          </div>
 
+          {currentPlan === "free" && (
+            <div className="bg-slate-50 border-t border-slate-200 p-6 sm:px-8 sm:py-6">
+              <h4 className="text-sm font-bold text-slate-900 mb-4 tracking-tight">Included in your Free Plan:</h4>
+              <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-6">
+                {[
+                  "1 Digital Menu",
+                  "Up to 30 Menu Items",
+                  "Standard QR Code Builder",
+                  "2 Essential Menu Themes",
+                  "Basic Scan Analytics",
+                  "Email Support",
+                ].map(feature => (
+                  <li key={feature} className="flex items-center gap-2.5 text-sm text-slate-600 font-medium">
+                    <Check className="h-4 w-4 text-emerald-500 shrink-0" strokeWidth={2.5} />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Monthly/Annual Toggle */}
