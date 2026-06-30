@@ -647,7 +647,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
                       {/* Pricing and Menu Assignment */}
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                          <Label htmlFor="modal-form-price" className="text-slate-900 font-semibold">Price (USD)</Label>
+                          <Label htmlFor="modal-form-price" className="text-slate-900 font-semibold">Price (USD) <span className="text-red-500 ml-1">*</span></Label>
                           <Input
                             id="modal-form-price"
                             name="price"

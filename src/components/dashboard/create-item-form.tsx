@@ -142,7 +142,7 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
         
         <div className="grid gap-4 grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="price">Price</Label>
+            <Label htmlFor="price">Price <span className="text-red-500 ml-1">*</span></Label>
             <Input
               id="price"
               name="price"
