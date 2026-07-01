@@ -193,13 +193,16 @@ export async function submitFeedback(
   };
 }
 
-export async function updateFeedbackContact(feedbackId: string, contactInfo: string) {
+export async function updateFeedbackContact(feedbackId: string, contactInfo: string, customerName?: string) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
   );
   
-  await supabase.from("customer_feedback").update({ contact_info: contactInfo }).eq("id", feedbackId);
+  await supabase.from("customer_feedback").update({ 
+    contact_info: contactInfo,
+    ...(customerName ? { customer_name: customerName } : {})
+  }).eq("id", feedbackId);
   return { success: true };
 }
 

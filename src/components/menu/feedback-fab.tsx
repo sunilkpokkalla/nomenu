@@ -419,29 +419,38 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                             <div>
                                 <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
                                 <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
-                                <div className="flex gap-2">
+                                <div className="flex flex-col gap-2">
                                   <input
-                                    type="tel"
-                                    value={customerPhone}
-                                    onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
-                                    placeholder="Phone Number (e.g. 555-123-4567)"
+                                    type="text"
+                                    value={customerName}
+                                    onChange={(e) => setCustomerName(e.target.value)}
+                                    placeholder="Your Name (optional but helpful)"
                                     className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
                                   />
-                                  <button
-                                    type="button"
-                                    onClick={async () => {
-                                      if (customerPhone && feedbackId) {
-                                        await import("@/app/menu/[id]/actions").then(m => {
-                                          m.updateFeedbackContact(feedbackId, customerPhone);
-                                          m.submitRecoveryRequest(feedbackId, 'contact_later');
-                                        });
-                                        setHasSubmittedContact(true);
-                                      }
-                                    }}
-                                    className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
-                                  >
-                                    Send
-                                  </button>
+                                  <div className="flex gap-2">
+                                    <input
+                                      type="tel"
+                                      value={customerPhone}
+                                      onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                      placeholder="Phone Number (e.g. 555-123-4567)"
+                                      className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={async () => {
+                                        if (customerPhone && feedbackId) {
+                                          await import("@/app/menu/[id]/actions").then(m => {
+                                            m.updateFeedbackContact(feedbackId, customerPhone, customerName);
+                                            m.submitRecoveryRequest(feedbackId, 'contact_later');
+                                          });
+                                          setHasSubmittedContact(true);
+                                        }
+                                      }}
+                                      className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
+                                    >
+                                      Send
+                                    </button>
+                                  </div>
                                 </div>
                             </div>
                           )}
