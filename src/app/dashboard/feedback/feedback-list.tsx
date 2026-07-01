@@ -58,8 +58,18 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   
   // Expanded Rows State
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [retentionOffers, setRetentionOffers] = useState<Record<string, ReturnType<typeof getRandomOfferForDay>>>({});
   const [loyaltyIdeas, setLoyaltyIdeas] = useState<Record<string, ReturnType<typeof getRandomLoyaltyIdeaForDay>>>({});
+  const [selectedTemplates, setSelectedTemplates] = useState<Record<string, string>>({});
+
+  const REWARD_TEMPLATES = [
+    { label: "Smart AI Idea (Recommended)", value: "ai" },
+    { label: "10% Off Next Visit", value: "we'll give you 10% off your entire bill" },
+    { label: "Free Dessert", value: "we'll treat you to a free dessert of your choice" },
+    { label: "Buy One Get One (BOGO)", value: "you can buy one entree and get the second one completely free" },
+    { label: "Free Appetizer", value: "your first appetizer is on the house" }
+  ];
   const [orderDetailsMap, setOrderDetailsMap] = useState<Record<string, OrderDetailsType>>({});
 
   useEffect(() => {
@@ -807,14 +817,26 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                         This customer loves you! Turn them into a raving regular by sending them this special surprise:
                                       </p>
                                       <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg text-slate-800 text-sm italic font-medium leading-relaxed">
-                                        "{loyaltyIdeas[fb.id].text}"
+                                        "{selectedTemplates[fb.id] && selectedTemplates[fb.id] !== 'ai' ? selectedTemplates[fb.id] : loyaltyIdeas[fb.id].text}"
                                       </div>
                                       
                                       {fb.contact_info ? (
-                                        <button 
-                                          onClick={() => {
-                                            const isEmail = fb.contact_info?.includes('@');
-                                            const message = loyaltyIdeas[fb.id].text;
+                                        <div className="flex flex-col gap-2 mt-1">
+                                          <select 
+                                            className="w-full text-sm border-slate-200 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-2"
+                                            value={selectedTemplates[fb.id] || "ai"}
+                                            onChange={(e) => setSelectedTemplates(prev => ({ ...prev, [fb.id]: e.target.value }))}
+                                          >
+                                            {REWARD_TEMPLATES.map(t => (
+                                              <option key={t.value} value={t.value}>{t.label}</option>
+                                            ))}
+                                          </select>
+                                          
+                                          <button 
+                                            onClick={() => {
+                                              const isEmail = fb.contact_info?.includes('@');
+                                              const selectedVal = selectedTemplates[fb.id];
+                                              const message = (selectedVal && selectedVal !== 'ai') ? selectedVal : loyaltyIdeas[fb.id].text;
                                             
                                             if (isEmail) {
                                               // Extract just the email address in case they typed extra text
@@ -837,6 +859,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                           <Send className="w-4 h-4" />
                                           Send Reward to Customer
                                         </button>
+                                      </div>
                                       ) : (
                                         <div className="mt-1 text-center py-2 text-xs text-emerald-600 font-medium bg-emerald-50 rounded-lg">
                                           No contact info provided to send reward.
