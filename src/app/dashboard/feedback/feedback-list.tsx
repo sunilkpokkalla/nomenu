@@ -40,7 +40,7 @@ type RatingFilter = "all" | "positive" | "neutral" | "attention";
 // Global AudioContext to prevent recreating it
 let audioCtx: AudioContext | null = null;
 
-export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey, recoveryOfferText, customRewardTemplates }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string, recoveryOfferText?: string, customRewardTemplates?: any }) {
+export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey, recoveryOfferText, customRewardTemplates }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string, recoveryOfferText?: string, customRewardTemplates?: {label: string, value: string}[] }) {
   const [liveFeedbacks, setLiveFeedbacks] = useState<FeedbackData[]>(feedbacks);
   const [mounted, setMounted] = useState(false);
   
@@ -297,7 +297,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     });
 
     return result;
-  }, [liveFeedbacks, ratingFilter, searchQuery, sortColumn, sortDirection, dateFrom, dateTo]);
+  }, [liveFeedbacks, ratingFilter, searchQuery, sortColumn, sortDirection, dateFrom, dateTo, timezone]);
 
   // Pagination logic
   const totalPages = Math.ceil(processedFeedbacks.length / itemsPerPage);

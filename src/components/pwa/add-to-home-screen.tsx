@@ -6,7 +6,7 @@ import { X, Share, PlusSquare } from "lucide-react";
 export function AddToHomeScreen() {
   const [isIOS, setIsIOS] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export function AddToHomeScreen() {
     // Check if app is already installed / running in standalone mode
     const isAlreadyStandalone = 
       window.matchMedia("(display-mode: standalone)").matches || 
-      (window.navigator as any).standalone === true;
+      (window.navigator as unknown as { standalone: boolean }).standalone === true;
       
     setIsStandalone(isAlreadyStandalone);
 

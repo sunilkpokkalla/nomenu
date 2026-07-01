@@ -45,7 +45,7 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
     primary_color: selectedMenu.design_config?.primary_color || restaurant.primary_color,
     accent_color: selectedMenu.design_config?.accent_color || restaurant.accent_color,
     theme_style: selectedMenu.design_config?.theme_style || restaurant.theme_style,
-    wifi_password: (selectedMenu.design_config as any)?.wifi_password !== undefined ? (selectedMenu.design_config as any)?.wifi_password : restaurant.wifi_password,
+    wifi_password: (selectedMenu.design_config as Record<string, unknown>)?.wifi_password !== undefined ? (selectedMenu.design_config as Record<string, unknown>)?.wifi_password as string : restaurant.wifi_password,
     plan: restaurant.plan, // Pass global plan for pro-gating
     address: restaurant.address,
     phone: restaurant.phone,
