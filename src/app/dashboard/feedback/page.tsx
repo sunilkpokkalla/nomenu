@@ -129,7 +129,7 @@ export default async function FeedbackPage({
                 supabaseUrl={getSupabaseEnv().url} 
                 supabaseAnonKey={getSupabaseEnv().anonKey} 
                 recoveryOfferText={restaurant.recovery_offer_text || undefined}
-                customRewardTemplates={restaurant.reward_templates || undefined}
+                customRewardTemplates={(restaurant.reward_templates as {label: string, value: string}[]) || undefined}
               />
             </div>
             <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
