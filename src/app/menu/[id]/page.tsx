@@ -193,7 +193,7 @@ export default async function PublicMenuPage(
           >
             <QrCode className="w-3 h-3 text-white/70 group-hover:text-white transition-colors" />
             <span className="text-white/90 group-hover:text-white text-[10px] font-bold tracking-widest uppercase transition-colors">
-              Powered by NoMenu
+              Powered By {restaurant.name}
             </span>
           </a>
         </div>
