@@ -251,15 +251,15 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     if (dateFrom || dateTo) {
       result = result.filter(fb => {
         const fbDate = new Date(fb.created_at);
-        // Start of day for dateFrom, End of day for dateTo for inclusive range
+        // Parse the dates correctly as local time to avoid timezone offset bugs
         if (dateFrom) {
-          const from = new Date(dateFrom);
-          from.setHours(0, 0, 0, 0);
+          const [year, month, day] = dateFrom.split('-').map(Number);
+          const from = new Date(year, month - 1, day, 0, 0, 0, 0);
           if (fbDate < from) return false;
         }
         if (dateTo) {
-          const to = new Date(dateTo);
-          to.setHours(23, 59, 59, 999);
+          const [year, month, day] = dateTo.split('-').map(Number);
+          const to = new Date(year, month - 1, day, 23, 59, 59, 999);
           if (fbDate > to) return false;
         }
         return true;
