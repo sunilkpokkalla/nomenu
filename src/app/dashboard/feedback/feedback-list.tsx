@@ -250,17 +250,14 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     // Filter by Date Range
     if (dateFrom || dateTo) {
       result = result.filter(fb => {
-        const fbDate = new Date(fb.created_at);
-        // Parse the dates correctly as local time to avoid timezone offset bugs
-        if (dateFrom) {
-          const [year, month, day] = dateFrom.split('-').map(Number);
-          const from = new Date(year, month - 1, day, 0, 0, 0, 0);
-          if (fbDate < from) return false;
+        const fbDate = toZonedTime(new Date(fb.created_at), timezone);
+        const fbDateString = format(fbDate, 'yyyy-MM-dd');
+        
+        if (dateFrom && fbDateString < dateFrom) {
+          return false;
         }
-        if (dateTo) {
-          const [year, month, day] = dateTo.split('-').map(Number);
-          const to = new Date(year, month - 1, day, 23, 59, 59, 999);
-          if (fbDate > to) return false;
+        if (dateTo && fbDateString > dateTo) {
+          return false;
         }
         return true;
       });
