@@ -16,7 +16,7 @@ const getPlans = (isAnnual: boolean) => [
     features: [
       "Unlimited Menus & Items",
       "Team & Staff Management (RBAC)",
-      "25 Magic AI Credits",
+      "25 Magic AI Credits / month",
       "VIP Digital Loyalty Cards & Rewards",
       "AI-Driven Marketing Win-Backs",
       "Private Customer Feedback System",
@@ -33,7 +33,7 @@ const getPlans = (isAnnual: boolean) => [
     features: [
       "Everything in Pro",
       "Advanced Staff Permissions",
-      "50 Magic AI Credits",
+      "50 Magic AI Credits / month",
       "Interactive Digital Shopping Cart",
       "Real-Time Live Orders Dashboard (KDS)",
       "Digital Receipts & Order Tracking",
@@ -51,7 +51,7 @@ const getPlans = (isAnnual: boolean) => [
     features: [
       "Everything in Elite",
       "Partner Agency Integrations",
-      "75 Magic AI Credits",
+      "75 Magic AI Credits / month",
       "Dine-in, Takeaway & Priority Reserve",
       "Multiple Kitchen Displays (KDS)",
       "Intelligent Order Capacity Pacing",
