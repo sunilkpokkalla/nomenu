@@ -15,15 +15,10 @@ function field(formData: FormData, key: string) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
+import { getActiveRestaurant } from "@/lib/rbac";
+
 async function getRestaurantForUser(supabase: Awaited<ReturnType<typeof createClient>>, userId: string) {
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("owner_id", userId)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-  return restaurant;
+  return await getActiveRestaurant(supabase, userId);
 }
 
 export async function createRestaurant(formData: FormData) {
