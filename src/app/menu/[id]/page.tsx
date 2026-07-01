@@ -122,6 +122,7 @@ export default async function PublicMenuPage(
   const activeThemeStyle = canUseCustomDesign && designConfig.theme_style ? designConfig.theme_style : restaurant.theme_style;
   const activePrimaryColor = canUseCustomDesign && designConfig.primary_color ? designConfig.primary_color : restaurant.primary_color;
   const activeAccentColor = canUseCustomDesign && designConfig.accent_color ? designConfig.accent_color : restaurant.accent_color;
+  const activeWifiPassword = canUseCustomDesign && designConfig.wifi_password !== undefined ? designConfig.wifi_password : restaurant.wifi_password;
 
   const effectiveTableNumber = locationZone && tableNumber 
     ? `${locationZone} - ${tableNumber}` 
@@ -136,7 +137,7 @@ export default async function PublicMenuPage(
           cuisine_type: restaurant.cuisine_type,
           address: restaurant.address,
           phone: restaurant.phone,
-          wifi_password: restaurant.wifi_password,
+          wifi_password: activeWifiPassword,
           primary_color: activePrimaryColor,
           accent_color: activeAccentColor,
           theme_style: activeThemeStyle,

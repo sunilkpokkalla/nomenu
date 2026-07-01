@@ -910,6 +910,7 @@ export async function updateMenuBranding(menuId: string, formData: FormData, red
       primary_color: formData.get("primaryColor") as string,
       accent_color: formData.get("accentColor") as string,
       theme_style: formData.get("themeStyle") as string,
+      wifi_password: formData.get("wifiPassword") as string,
     };
   }
 
