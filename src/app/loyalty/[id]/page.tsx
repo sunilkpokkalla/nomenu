@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
+import { AddToHomeScreen } from "@/components/pwa/add-to-home-screen";
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +48,7 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
         rewardText={restaurant.loyalty_reward_text}
         hasPhoneNumber={!!card.phone_number}
       />
+      <AddToHomeScreen />
     </div>
   );
 }
