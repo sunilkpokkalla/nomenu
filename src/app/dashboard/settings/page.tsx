@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
 import { PhoneInputField } from "@/components/ui/phone-input";
+import { RewardTemplatesEditor, RewardTemplate } from "@/components/dashboard/reward-templates-editor";
 
 
 import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
@@ -197,6 +198,16 @@ export default async function SettingsPage(
                 </select>
                 <p className="text-[10px] text-muted-foreground">Used for analytics and feedback timestamps.</p>
               </div>
+            </div>
+
+            <div className="pt-6 mt-6 border-t border-slate-100">
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Loyalty Reward Templates</h3>
+              <p className="text-sm text-slate-500 mb-6 max-w-3xl">
+                Create custom reward templates to send to your best customers when they leave 4-5 star reviews.
+              </p>
+              <RewardTemplatesEditor 
+                initialTemplates={restaurant.reward_templates as RewardTemplate[] | null} 
+              />
             </div>
 
             <Button type="submit" className="w-full sm:w-auto mt-6">

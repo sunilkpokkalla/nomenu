@@ -40,7 +40,7 @@ type RatingFilter = "all" | "positive" | "neutral" | "attention";
 // Global AudioContext to prevent recreating it
 let audioCtx: AudioContext | null = null;
 
-export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey, recoveryOfferText }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string, recoveryOfferText?: string }) {
+export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey, recoveryOfferText, customRewardTemplates }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string, recoveryOfferText?: string, customRewardTemplates?: any }) {
   const [liveFeedbacks, setLiveFeedbacks] = useState<FeedbackData[]>(feedbacks);
   const [mounted, setMounted] = useState(false);
   
@@ -70,6 +70,12 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
     { label: "Buy One Get One (BOGO)", value: "you can buy one entree and get the second one completely free" },
     { label: "Free Appetizer", value: "your first appetizer is on the house" }
   ];
+
+  const mergedRewardTemplates = [
+    ...REWARD_TEMPLATES,
+    ...(Array.isArray(customRewardTemplates) ? customRewardTemplates : [])
+  ];
+
   const [orderDetailsMap, setOrderDetailsMap] = useState<Record<string, OrderDetailsType>>({});
 
   useEffect(() => {
@@ -831,9 +837,12 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                             value={selectedTemplates[fb.id] || "ai"}
                                             onChange={(e) => setSelectedTemplates(prev => ({ ...prev, [fb.id]: e.target.value }))}
                                           >
-                                            {REWARD_TEMPLATES.map(t => (
-                                              <option key={t.value} value={t.value}>{t.label}</option>
-                                            ))}
+                                            {(() => {
+                                              const mergedRewardTemplates = [...REWARD_TEMPLATES, ...(customRewardTemplates || [])];
+                                              return mergedRewardTemplates.map(t => (
+                                                <option key={t.label + t.value} value={t.value}>{t.label}</option>
+                                              ));
+                                            })()}
                                           </select>
                                           
                                           <button 

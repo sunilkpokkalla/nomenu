@@ -777,6 +777,16 @@ export async function updateRestaurantSettings(formData: FormData) {
     redirect("/dashboard/settings?message=Restaurant%20URL%20slug%20is%20required");
   }
 
+  let rewardTemplates = null;
+  const rewardTemplatesRaw = formData.get("rewardTemplates");
+  if (typeof rewardTemplatesRaw === "string" && rewardTemplatesRaw) {
+    try {
+      rewardTemplates = JSON.parse(rewardTemplatesRaw);
+    } catch (e) {
+      console.error("Failed to parse reward templates", e);
+    }
+  }
+
   const { error } = await supabase
     .from("restaurants")
     .update({
@@ -792,6 +802,7 @@ export async function updateRestaurantSettings(formData: FormData) {
       max_reserve_per_slot: parseInt(field(formData, "maxReservePerSlot") || "2", 10),
       opening_time: (field(formData, "openingTime") || "09:00") + ":00",
       closing_time: (field(formData, "closingTime") || "23:00") + ":00",
+      reward_templates: rewardTemplates,
     })
     .eq("id", restaurant.id);
 

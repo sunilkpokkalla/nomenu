@@ -163,6 +163,7 @@ export interface Database {
           magic_credits: number | null;
           recovery_offer_text: string | null;
           recovery_message: string | null;
+          reward_templates: Json | null;
           service_recovery_enabled: boolean | null;
           service_recovery_message: string | null;
           offer_manager_visit: boolean | null;
@@ -214,6 +215,7 @@ export interface Database {
           magic_credits?: number | null;
           recovery_offer_text?: string | null;
           recovery_message?: string | null;
+          reward_templates?: Json | null;
           service_recovery_enabled?: boolean | null;
           service_recovery_message?: string | null;
           offer_manager_visit?: boolean | null;
