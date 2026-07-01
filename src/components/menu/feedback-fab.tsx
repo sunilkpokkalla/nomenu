@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MessageSquare, Star, X, CheckCircle2, Search, Clock } from "lucide-react";
 import { submitFeedback } from "@/app/menu/[id]/actions";
 import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
@@ -22,6 +22,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+  const isInitializing = useRef(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -487,7 +488,8 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                           onMouseLeave={() => setHoverRating(0)}
                           onClick={async () => {
                             setRating(star);
-                            if (!feedbackId) {
+                            if (!feedbackId && !isInitializing.current) {
+                              isInitializing.current = true;
                               try {
                                 const { initFeedback } = await import("@/app/menu/[id]/actions");
                                 const res = await initFeedback(restaurantId, star, tableNumber || undefined, qrCodeId || undefined);
@@ -496,6 +498,8 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                 }
                               } catch (e) {
                                 console.error("Failed to init feedback early", e);
+                              } finally {
+                                isInitializing.current = false;
                               }
                             }
                           }}
