@@ -395,48 +395,48 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
       {/* Table Controls Header */}
-      <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50/50 flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
+      <div className="p-4 sm:p-5 border-b border-slate-200 bg-white flex flex-col 2xl:flex-row gap-4 items-start 2xl:items-center justify-between">
         <h2 className="font-bold text-slate-900 text-lg flex items-center gap-2 whitespace-nowrap">
           <MessageSquare className="w-5 h-5 text-indigo-500" />
           Feedback Submissions
         </h2>
         
-        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+        <div className="flex flex-wrap lg:flex-nowrap items-center gap-3 w-full 2xl:w-auto">
           {/* Search */}
-          <div className="relative flex-grow sm:flex-grow-0">
+          <div className="relative flex-grow lg:flex-grow-0 lg:w-64">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input 
               type="text" 
               placeholder="Search comments, names, tables..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-64"
+              className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full"
             />
           </div>
           {/* Date Filter */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-grow lg:flex-grow-0">
             <input 
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-auto"
+              className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 focus:bg-white transition-colors focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-32"
             />
-            <span className="text-slate-400 text-sm">to</span>
+            <span className="text-slate-400 text-sm font-medium">to</span>
             <input 
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-auto"
+              className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 focus:bg-white transition-colors focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-32"
             />
           </div>
           
           {/* Rating Filter */}
-          <div className="relative">
+          <div className="relative flex-grow lg:flex-grow-0 lg:w-48">
             <Filter className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <select 
               value={ratingFilter}
               onChange={(e) => setRatingFilter(e.target.value as RatingFilter)}
-              className="pl-9 pr-8 py-2 text-sm border border-slate-200 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 cursor-pointer appearance-none w-full sm:w-auto"
+              className="pl-9 pr-8 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 cursor-pointer appearance-none w-full"
             >
               <option value="all">All Ratings</option>
               <option value="positive">Positive (4-5 Stars)</option>
@@ -450,7 +450,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
           <button
             onClick={handleDownloadCSV}
             disabled={processedFeedbacks.length === 0}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-shrink-0 flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             title="Download CSV"
           >
             <Download className="w-4 h-4 text-slate-500" />
@@ -551,13 +551,13 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                               <div className="flex gap-1.5 items-center">
                                 <span className="text-slate-300">•</span>
                                 {fb.table_number && (
-                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md uppercase">
-                                    <MapPin className="w-3 h-3" /> T-{fb.table_number}
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase">
+                                    <MapPin className="w-3 h-3 text-slate-400" /> Table {fb.table_number}
                                   </span>
                                 )}
                                 {fb.qr_codes?.label && (
-                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-fuchsia-700 bg-fuchsia-50 border border-fuchsia-100 px-1.5 py-0.5 rounded-md uppercase">
-                                    <QrCode className="w-3 h-3" /> 
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase">
+                                    <QrCode className="w-3 h-3 text-slate-400" /> 
                                     {fb.qr_codes.label} 
                                     {fb.qr_codes.location_zone && ` (${fb.qr_codes.location_zone})`}
                                   </span>
@@ -565,7 +565,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                               </div>
                             )}
                           </div>
-                          {fb.contact_info && (
+                          {fb.contact_info && fb.contact_info.trim().replace('|', '').length > 2 && (
                             <div className="flex items-center gap-1 text-xs pl-7 mt-1 font-medium">
                               {fb.contact_info.includes('URGENT') ? (
                                 <span className="text-red-600 bg-red-50 px-2 py-0.5 rounded-md border border-red-100 flex items-center gap-1">
@@ -575,7 +575,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                               ) : (
                                 <span className="text-slate-500 flex items-center gap-1">
                                   <Mail className="w-3 h-3" />
-                                  {fb.contact_info}
+                                  {fb.contact_info.replace(/\|\s*$/, '')}
                                 </span>
                               )}
                             </div>
@@ -637,37 +637,41 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                     {isExpanded && (
                       <tr>
                         <td colSpan={5} className="px-0 py-0 border-b-2 border-slate-100">
-                          <div className="bg-slate-50/50 px-6 py-5 border-t border-slate-100 whitespace-normal">
-                            <div className="flex flex-col md:flex-row gap-6 lg:gap-12 w-full">
+                          <div className="bg-slate-50/70 px-6 py-6 border-t border-slate-100 whitespace-normal shadow-inner">
+                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
                               
-                              {/* Left Side: Original Feedback */}
-                              <div className="flex flex-col gap-4 flex-1">
-                                <div>
-                                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Customer Comment</h4>
+                              {/* Left Side: Bento Card for Feedback Details */}
+                              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm h-full flex flex-col">
+                                <div className="mb-6 flex-grow">
+                                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                                    <MessageSquare className="w-3.5 h-3.5" /> Customer Comment
+                                  </h4>
                                   {fb.comment ? (
-                                    <p className="text-slate-700 text-[14px] leading-relaxed max-w-3xl border-l-2 border-indigo-200 pl-4 py-1">
+                                    <p className="text-slate-800 text-[15px] font-medium leading-relaxed bg-slate-50 border border-slate-100 rounded-lg p-4">
                                       "{fb.comment}"
                                     </p>
                                   ) : (
-                                    <p className="text-slate-400 italic text-sm">No written comment provided.</p>
+                                    <div className="bg-slate-50/50 border border-slate-100 rounded-lg p-4 flex items-center justify-center h-20">
+                                      <p className="text-slate-400 italic text-sm">No written comment provided.</p>
+                                    </div>
                                   )}
                                 </div>
                                 
-                                {fb.contact_info && (
-                                  <div>
-                                    <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Contact Info</h4>
-                                    <div className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-white border border-slate-200 px-3 py-2 rounded-lg w-fit shadow-sm">
+                                {fb.contact_info && fb.contact_info.trim().replace('|', '').length > 2 && (
+                                  <div className="mb-6">
+                                    <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Contact Info</h4>
+                                    <div className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-slate-50 border border-slate-100 px-3 py-2.5 rounded-lg w-fit">
                                       <Mail className="w-4 h-4 text-slate-400" />
-                                      {fb.contact_info}
+                                      {fb.contact_info.replace(/\|\s*$/, '')}
                                     </div>
                                   </div>
                                 )}
                                 
                                 {orderDetailsMap[fb.id] && !orderDetailsMap[fb.id].not_found && (
-                                  <div className="mt-2">
+                                  <div className="mt-auto">
                                     <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Order Details</h4>
-                                    <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-sm text-sm text-slate-700">
-                                      <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-100">
+                                    <div className="bg-slate-50 border border-slate-100 rounded-lg p-3 text-sm text-slate-700">
+                                      <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-200">
                                         <span className="font-semibold">Order #{orderDetailsMap[fb.id].daily_order_number || orderDetailsMap[fb.id].id.slice(0,6).toUpperCase()}</span>
                                         <span className="text-xs text-slate-500">{format(new Date(orderDetailsMap[fb.id].created_at), "h:mm a")}</span>
                                       </div>
@@ -680,7 +684,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                           </li>
                                         ))}
                                       </ul>
-                                      <div className="flex justify-between items-center mt-3 pt-2 border-t border-slate-100 font-bold text-slate-900">
+                                      <div className="flex justify-between items-center mt-3 pt-2 border-t border-slate-200 font-bold text-slate-900">
                                         <span>Total</span>
                                         <span>${orderDetailsMap[fb.id].total_amount?.toFixed(2)}</span>
                                       </div>
@@ -693,8 +697,8 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                               
                               {/* Negative Feedback: Retention Strategy */}
                               {fb.recovery_request === 'compensation' ? (
-                                <div className="flex-1 max-w-lg">
-                                  <div className="bg-emerald-50 border-2 border-emerald-100 rounded-xl overflow-hidden shadow-sm relative">
+                                <div className="h-full">
+                                  <div className="bg-emerald-50 border border-emerald-200 rounded-xl shadow-sm h-full flex flex-col relative overflow-hidden">
                                     <div className="bg-emerald-100/50 px-4 py-2.5 border-b border-emerald-100 flex items-center justify-between">
                                       <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs uppercase tracking-wider">
                                         <Sparkles className="w-4 h-4" />
@@ -715,8 +719,8 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                   </div>
                                 </div>
                               ) : fb.recovery_request === 'contact_later' ? (
-                                <div className="flex-1 max-w-lg">
-                                  <div className="bg-blue-50 border-2 border-blue-100 rounded-xl overflow-hidden shadow-sm relative">
+                                <div className="h-full">
+                                  <div className="bg-blue-50 border border-blue-200 rounded-xl shadow-sm h-full flex flex-col relative overflow-hidden">
                                     <div className="bg-blue-100/50 px-4 py-2.5 border-b border-blue-100 flex items-center justify-between">
                                       <div className="flex items-center gap-1.5 text-blue-700 font-bold text-xs uppercase tracking-wider">
                                         <Phone className="w-4 h-4" />
@@ -731,8 +735,8 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                   </div>
                                 </div>
                               ) : fb.rating <= 3 && retentionOffers[fb.id] && (
-                                <div className="flex-1 max-w-lg">
-                                  <div className="bg-white border-2 border-rose-100 rounded-xl overflow-hidden shadow-sm relative">
+                                <div className="h-full">
+                                  <div className="bg-white border border-rose-200 rounded-xl shadow-sm h-full flex flex-col relative overflow-hidden">
                                     <div className="bg-rose-50 px-4 py-2.5 border-b border-rose-100 flex items-center justify-between">
                                       <div className="flex items-center gap-1.5 text-rose-700 font-bold text-xs uppercase tracking-wider">
                                         <Sparkles className="w-4 h-4" />
@@ -801,8 +805,8 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
 
                               {/* Positive Feedback: Loyalty Strategy */}
                               {fb.rating >= 4 && loyaltyIdeas[fb.id] && (
-                                <div className="flex-1 max-w-lg">
-                                  <div className="bg-white border-2 border-emerald-100 rounded-xl overflow-hidden shadow-sm relative">
+                                <div className="h-full">
+                                  <div className="bg-white border border-emerald-200 rounded-xl shadow-sm h-full flex flex-col relative overflow-hidden">
                                     <div className="bg-emerald-50 px-4 py-2.5 border-b border-emerald-100 flex items-center justify-between">
                                       <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs uppercase tracking-wider">
                                         <Sparkles className="w-4 h-4" />
