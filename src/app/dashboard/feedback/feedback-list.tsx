@@ -817,12 +817,19 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                             const message = loyaltyIdeas[fb.id].text;
                                             
                                             if (isEmail) {
+                                              // Extract just the email address in case they typed extra text
+                                              const emailMatch = (fb.contact_info || '').match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
+                                              const targetEmail = emailMatch ? emailMatch[1] : fb.contact_info;
+                                              
                                               const subject = encodeURIComponent("Thank you for your amazing review!");
                                               const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant. We saw your recent glowing review and it made our whole team's day!\n\nAs a token of our appreciation, ${message}\n\nPlease let us know when you plan to come back!\n\nBest,\nManager`);
-                                              window.open(`mailto:${fb.contact_info}?subject=${subject}&body=${body}`, '_blank');
+                                              window.open(`mailto:${targetEmail}?subject=${subject}&body=${body}`, '_blank');
                                             } else {
+                                              // Strip all non-numeric characters (except +) for SMS
+                                              const targetPhone = (fb.contact_info || '').replace(/[^\d+]/g, '');
+                                              
                                               const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'}, manager here! Thanks for the amazing review! As a thank you, ${message}. Show this text on your next visit!`);
-                                              window.open(`sms:${fb.contact_info}?body=${body}`, '_blank');
+                                              window.open(`sms:${targetPhone}?body=${body}`, '_blank');
                                             }
                                           }}
                                           className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
