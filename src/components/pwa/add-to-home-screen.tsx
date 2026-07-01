@@ -83,9 +83,9 @@ export function AddToHomeScreen() {
             <PlusSquare className="w-6 h-6 text-slate-600" />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Install Loyalty Card</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Don't lose your card!</h3>
             <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5 leading-relaxed">
-              Install this app on your iPhone for quick access to your stamps.
+              Tap the share icon at the bottom of your screen and select "Add to Home Screen" to save this card as an app.
             </p>
           </div>
         </div>
