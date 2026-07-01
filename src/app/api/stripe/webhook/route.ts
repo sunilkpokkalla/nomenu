@@ -199,9 +199,33 @@ export async function POST(req: Request) {
       // We need to fetch the subscription to get metadata
       const { data: restaurant } = await supabase
         .from("restaurants")
-        .select("id, owner_id, plan, billing_cycle, referred_by_code")
+        .select("id, owner_id, plan, billing_cycle, referred_by_code, magic_credits")
         .eq("stripe_subscription_id", subscriptionId)
         .single();
+        
+      if (restaurant) {
+        // Grant Monthly Magic Credits on Subscription Renewals
+        if (invoice.billing_reason === "subscription_cycle" && restaurant.plan) {
+          let renewalBonus = 0;
+          if (restaurant.plan === "pro") renewalBonus = 25;
+          else if (restaurant.plan === "elite") renewalBonus = 50;
+          else if (restaurant.plan === "enterprise") renewalBonus = 75;
+
+          if (renewalBonus > 0) {
+            const newCredits = (restaurant.magic_credits || 0) + renewalBonus;
+            const { error: creditError } = await supabase
+              .from("restaurants")
+              .update({ magic_credits: newCredits })
+              .eq("id", restaurant.id);
+              
+            if (!creditError) {
+              console.log(`Monthly renewal: Added ${renewalBonus} magic credits to restaurant ${restaurant.id}.`);
+            } else {
+              console.error(`Failed to add monthly credits for ${restaurant.id}:`, creditError);
+            }
+          }
+        }
+      }
         
       if (restaurant && restaurant.referred_by_code) {
         // Prevent self-referrals and free-plan referrers
