@@ -106,6 +106,23 @@ export default async function AnalyticsPage(props: PageProps) {
   const aov = totalOrders > 0 ? totalRevenue / totalOrders : 0;
   const conversionRate = totalScans > 0 ? (totalOrders / totalScans) * 100 : 0;
 
+  // Fetch feedback
+  let feedbackQuery = supabase
+    .from("customer_feedback")
+    .select("rating, created_at")
+    .eq("restaurant_id", restaurant.id)
+    .gte("created_at", startDate.toISOString());
+    
+  if (endDate) {
+    feedbackQuery = feedbackQuery.lt("created_at", endDate.toISOString());
+  }
+  const { data: feedbacks } = await feedbackQuery;
+  
+  const totalFeedbacks = feedbacks?.length || 0;
+  const averageRating = totalFeedbacks > 0 
+    ? feedbacks!.reduce((acc, curr) => acc + curr.rating, 0) / totalFeedbacks 
+    : 0;
+
   let buckets: { date: Date; nextDate: Date; label: string }[] = [];
 
   if (startDateStr && endDateStr && endDate) {
@@ -358,6 +375,8 @@ export default async function AnalyticsPage(props: PageProps) {
         topTables={topTables}
         categoryData={categoryData}
         totalTips={totalTips}
+        totalFeedbacks={totalFeedbacks}
+        averageRating={averageRating}
       />
     </div>
   );
