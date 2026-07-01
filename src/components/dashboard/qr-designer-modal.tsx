@@ -221,7 +221,16 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                     subtext={subtext}
                     wifiPassword={showWifi ? restaurant.wifi_password : null}
                     logoUrl={customLogoUrl || null}
-                    qrImageUrl={`${qrImageApiUrl}${qrImageApiUrl.includes('?') ? '&' : '?'}color=${encodeURIComponent(qrColor)}`}
+                    qrImageUrl={((): string => {
+                      try {
+                        // Use a dummy base since qrImageApiUrl is likely a relative path (e.g. /api/qr?...)
+                        const url = new URL(qrImageApiUrl, "http://localhost");
+                        url.searchParams.set("color", qrColor);
+                        return url.pathname + url.search;
+                      } catch {
+                        return `${qrImageApiUrl}${qrImageApiUrl.includes('?') ? '&' : '?'}color=${encodeURIComponent(qrColor)}`;
+                      }
+                    })()}
                     qrDataUrl={fullMenuUrl}
                     colorStart={colorStart}
                     colorEnd={colorEnd}
