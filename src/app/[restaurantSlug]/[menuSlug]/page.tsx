@@ -10,6 +10,7 @@ import { MenuClientView } from "@/components/menu/menu-client-view";
 import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
 import { ReceiptTracker } from "@/components/menu/receipt-tracker";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export async function generateMetadata(
   props: { params: Promise<{ restaurantSlug: string, menuSlug: string }> },
@@ -207,6 +208,7 @@ export default async function StorefrontMenuPage(
         taxRate={menu.tax_rate || 0}
         serviceCharge={menu.service_charge || 0}
         serviceChargeType={menu.service_charge_type || "percentage"}
+        currencySymbol={getCurrencySymbol(restaurant.currency)}
       />
       
       {/* Viral Marketing Badge - Only for Free Plan */}

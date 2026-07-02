@@ -294,6 +294,8 @@ export async function getReceipts(orderIds: string[]) {
       table_number,
       customer_name,
       created_at,
+      payment_intent_id,
+      is_paid,
       order_items (
         id,
         quantity,
@@ -477,6 +479,7 @@ export async function getOrderReceipt(orderId: string) {
       total_amount,
       status,
       payment_intent_id,
+      is_paid,
       created_at,
       order_items (
         quantity,

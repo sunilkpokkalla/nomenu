@@ -6,6 +6,7 @@ import { OrdersBoard } from "./orders-board";
 import { ClipboardList } from "lucide-react";
 import { getActiveRestaurant } from "@/lib/rbac";
 import { WaitTimeToggle } from "@/components/dashboard/wait-time-toggle";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export const metadata = {
   title: "Orders | NoMenu Dashboard",
@@ -106,7 +107,7 @@ export default async function OrdersPage() {
       </div>
 
       <div className="relative flex-1">
-        <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} locationLabel={locationLabel} />
+        <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} locationLabel={locationLabel} currencySymbol={getCurrencySymbol(restaurant.currency)} />
       </div>
     </div>
   );

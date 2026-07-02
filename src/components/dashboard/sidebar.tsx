@@ -19,6 +19,7 @@ import {
   BookOpen,
   Plug,
   Gift,
+  Wallet,
 } from "lucide-react";
 
 import { logout } from "@/app/auth/actions";
@@ -40,6 +41,7 @@ export const getNavItems = (role: UserRole) => {
     
     // Operations & Insights
     { href: "/dashboard/orders", label: "Dine-In Orders", icon: ShoppingBag, badge: "ELITE", roles: ["owner", "manager", "waitstaff", "kitchen_waitstaff"] as UserRole[] },
+    { href: "/dashboard/cashier", label: "Cashier Tabs", icon: Wallet, badge: "ELITE", roles: ["owner", "manager", "waitstaff"] as UserRole[] },
     { href: "/dashboard/takeaway", label: "Pickup & Reserve", icon: Clock, badge: "ENT.", roles: ["owner", "manager", "waitstaff"] as UserRole[] },
     { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT.", roles: ["owner"] as UserRole[] },
     { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO", roles: ["owner", "manager"] as UserRole[] },

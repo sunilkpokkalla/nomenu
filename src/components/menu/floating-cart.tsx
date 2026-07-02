@@ -309,27 +309,22 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
             <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-4">
               <div>
                 <div className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Order Number</div>
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl font-black text-amber-500">
-                    #{receipt ? String(receipt.daily_order_number).padStart(3, '0') : String(successOrder.dailyNumber).padStart(3, '0')}
-                  </div>
-                  <button 
-                    onClick={() => {
-                      setIsOpen(false);
-                      window.dispatchEvent(new Event('nomenu_open_receipts'));
-                    }}
-                    className="p-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 rounded-full transition-colors print:hidden"
-                    title="View Full Receipt"
-                  >
-                    <Receipt className="w-5 h-5" />
-                  </button>
+                <div className="text-3xl font-black text-amber-500">
+                  #{receipt ? String(receipt.daily_order_number).padStart(3, '0') : String(successOrder.dailyNumber).padStart(3, '0')}
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Status</div>
-                <div className="text-sm font-bold bg-black/5 dark:bg-white/10 px-2 py-1 rounded-md">
-                  {receipt?.status === 'pending' ? 'Pending' : receipt?.status || 'Processing...'}
-                </div>
+              <div className="flex items-center pb-1">
+                <button 
+                  onClick={() => {
+                    setIsOpen(false);
+                    window.dispatchEvent(new Event('nomenu_open_receipts'));
+                  }}
+                  className="p-3 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 rounded-xl flex items-center gap-2 font-bold text-sm transition-colors print:hidden"
+                  title="View Full Receipt"
+                >
+                  <Receipt className="w-5 h-5" />
+                  <span>View Receipt</span>
+                </button>
               </div>
             </div>
 
@@ -353,11 +348,20 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                   })}
                 </div>
                 
-                <div className="border-t border-black/10 dark:border-white/10 pt-3 flex justify-between items-center mt-2">
-                  <span className="font-bold">Total Paid</span>
-                  <span className="font-black text-lg text-emerald-600 dark:text-emerald-400">
-                    {formatPrice(receipt.total_amount)}
-                  </span>
+                <div className="border-t border-black/10 dark:border-white/10 pt-3 flex flex-col gap-1 mt-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold">
+                      {receipt.is_paid || receipt.payment_intent_id ? "Total Paid" : "To Be Paid"}
+                    </span>
+                    <span className={`font-black text-lg ${receipt.is_paid || receipt.payment_intent_id ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-500"}`}>
+                      {formatPrice(receipt.total_amount)}
+                    </span>
+                  </div>
+                  {!(receipt.is_paid || receipt.payment_intent_id) && (
+                    <div className="text-[11px] font-semibold text-center text-amber-700/70 mt-2 bg-amber-500/10 py-1.5 rounded-lg border border-amber-500/20">
+                      Please pay at the counter when you finish.
+                    </div>
+                  )}
                 </div>
                 
                 {receipt.payment_intent_id && (

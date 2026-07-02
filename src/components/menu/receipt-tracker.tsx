@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Receipt, X, ChefHat, CheckCircle2, Clock, Download, Loader2 } from "lucide-react";
+import { Receipt, X, ChefHat, CheckCircle2, Clock, Download, Loader2, CircleDollarSign } from "lucide-react";
 import { toPng } from "html-to-image";
 import { getReceipts, cancelOrder } from "@/app/menu/[id]/actions";
 
@@ -20,6 +20,8 @@ interface Order {
   status: string;
   total_amount: number;
   daily_order_number?: number;
+  payment_intent_id?: string | null;
+  is_paid?: boolean;
 
   table_number: string | null;
   customer_name: string | null;
@@ -34,9 +36,10 @@ interface ReceiptTrackerProps {
   serviceCharge?: number;
   serviceChargeType?: string;
   restaurantName?: string;
+  currencySymbol?: string;
 }
 
-export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", restaurantName }: ReceiptTrackerProps) {
+export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", restaurantName, currencySymbol = "$" }: ReceiptTrackerProps) {
   const [orderIds, setOrderIds] = useState<string[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -214,10 +217,20 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
         return <div className="flex items-center gap-2 text-orange-600"><ChefHat className="w-4 h-4 animate-bounce" /> PREPARING</div>;
       case "completed":
         return <div className="flex items-center gap-2 text-emerald-600"><CheckCircle2 className="w-4 h-4" /> READY</div>;
+      case "cancelled":
+      case "cancelled_by_customer":
+      case "cancelled_by_restaurant":
+        return <div className="flex items-center gap-2 text-rose-600"><X className="w-4 h-4" /> CANCELLED</div>;
+      case "cancel_requested":
+        return <div className="flex items-center gap-2 text-amber-600"><Clock className="w-4 h-4" /> CANCEL PENDING</div>;
       default:
         return <span className="uppercase text-slate-500">{status}</span>;
     }
   };
+
+  const unpaidTotal = orders
+    .filter(o => !o.is_paid && !o.payment_intent_id && o.status !== "cancelled")
+    .reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
 
   return (
     <>
@@ -266,8 +279,8 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
             <div className="overflow-y-auto overflow-x-hidden space-y-6 pt-2 pb-10 flex-1 hide-scrollbar">
               {orders.map((o) => (
                 <div key={o.id} className="relative w-full">
-                  <div id={`receipt-${o.id}`} className="relative w-full bg-[#f9f9f9] text-[#111] font-mono flex flex-col shadow-xl" style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px))" }}>
-                    <div className="w-full h-3 bg-repeat-x" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left top", marginTop: "-3px" }} />
+                  <div id={`receipt-${o.id}`} className={`relative w-full ${!o.is_paid && !o.payment_intent_id ? "bg-[#FEFCE8]" : "bg-[#f9f9f9]"} text-[#111] font-mono flex flex-col shadow-xl`} style={{ clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px))" }}>
+                    <div className="w-full h-3 bg-repeat-x" style={{ backgroundImage: `linear-gradient(-45deg, transparent 4px, ${!o.is_paid && !o.payment_intent_id ? "#FEFCE8" : "#f9f9f9"} 0), linear-gradient(45deg, transparent 4px, ${!o.is_paid && !o.payment_intent_id ? "#FEFCE8" : "#f9f9f9"} 0)`, backgroundSize: "8px 8px", backgroundPosition: "left top", marginTop: "-3px" }} />
                   
                   <div className="p-6 pt-4 pb-8">
                     {restaurantName && (
@@ -384,7 +397,7 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
                     )}
                   </div>
                   
-                  <div className="w-full h-3 bg-repeat-x rotate-180" style={{ backgroundImage: "linear-gradient(-45deg, transparent 4px, #f9f9f9 0), linear-gradient(45deg, transparent 4px, #f9f9f9 0)", backgroundSize: "8px 8px", backgroundPosition: "left bottom", marginBottom: "-3px" }} />
+                  <div className="w-full h-3 bg-repeat-x rotate-180" style={{ backgroundImage: `linear-gradient(-45deg, transparent 4px, ${!o.is_paid && !o.payment_intent_id ? "#FEFCE8" : "#f9f9f9"} 0), linear-gradient(45deg, transparent 4px, ${!o.is_paid && !o.payment_intent_id ? "#FEFCE8" : "#f9f9f9"} 0)`, backgroundSize: "8px 8px", backgroundPosition: "left bottom", marginBottom: "-3px" }} />
                   </div>
                   
                   {/* Download PNG Button */}
@@ -405,6 +418,19 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
                 </div>
               ))}
             </div>
+            
+            {/* Open Tab Sticky Footer */}
+            {unpaidTotal > 0 && (
+              <div className="sticky bottom-0 left-0 right-0 mt-4 p-4 bg-slate-900 text-white rounded-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.2)] border border-slate-700/50 flex justify-between items-center z-50">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Table Total</span>
+                  <span className="text-xl font-black">{currencySymbol}{unpaidTotal.toFixed(2)}</span>
+                </div>
+                <div className="text-sm font-semibold text-slate-900 bg-emerald-400 px-4 py-2 rounded-xl flex items-center gap-2">
+                  <CircleDollarSign className="w-4 h-4" /> Pay at Counter
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

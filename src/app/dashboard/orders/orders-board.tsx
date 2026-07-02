@@ -33,7 +33,7 @@ type Order = {
   order_items?: OrderItem[];
 };
 
-export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string }) {
+export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE", currencySymbol = "$" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string, currencySymbol?: string }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -429,7 +429,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
             <h3 className="text-2xl font-black text-slate-900 mb-2">Cancel Order #{String(cancelOrderPrompt.daily_order_number || 0).padStart(3, '0')}?</h3>
             {cancelOrderPrompt.payment_intent_id ? (
               <p className="text-slate-500 font-medium mb-8">
-                WARNING: This order was paid online. Canceling it will <strong className="text-rose-600 font-bold">permanently refund ${Number(cancelOrderPrompt.total_amount).toFixed(2)}</strong> to the customer via Stripe. This action cannot be undone.
+                WARNING: This order was paid online. Canceling it will <strong className="text-rose-600 font-bold">permanently refund {currencySymbol}{Number(cancelOrderPrompt.total_amount).toFixed(2)}</strong> to the customer via Stripe. This action cannot be undone.
               </p>
             ) : (
               <p className="text-slate-500 font-medium mb-8">
@@ -529,7 +529,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                   className={`
                                     relative flex flex-col ${!isExpanded && isInactiveStatus ? "p-3 gap-1" : "p-4 gap-4"} transition-all
                                     ${isInactiveStatus && isExpanded ? "col-span-2" : ""}
-                                    ${isKdsMode ? "bg-[#21252d] text-slate-200" : "bg-white text-slate-900"}
+                                    ${!order.is_paid && !order.payment_intent_id && !isKdsMode ? "bg-[#FEFCE8] text-slate-900 border-amber-200 shadow-amber-100" : isKdsMode ? "bg-[#21252d] text-slate-200" : "bg-white text-slate-900"}
                                     ${snapshot.isDragging ? "shadow-2xl ring-2 ring-indigo-500 rotate-2 scale-105 z-50" : "shadow-sm hover:shadow-md"}
                                     ${isKdsMode ? "rounded-2xl" : "rounded-2xl border border-slate-200/80"}
                                   `}
@@ -540,7 +540,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
                                   {/* Header: Order Number & Price */}
                                   <div 
-                                    className={`flex justify-between items-start ${shouldDefaultCollapse ? "cursor-pointer" : ""}`}
+                                    className={`flex justify-between items-start gap-1.5 ${shouldDefaultCollapse ? "cursor-pointer" : ""}`}
                                     onClick={() => {
                                       if (shouldDefaultCollapse) {
                                         setExpandedOrders(prev => {
@@ -552,7 +552,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                       }
                                     }}
                                   >
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                                       <span className={`${!isExpanded && isInactiveStatus ? "text-lg" : "text-2xl"} font-black tracking-tighter font-mono ${
                                         col.id === "cancelled" ? "text-rose-500" : 
                                         col.id === "completed" ? "text-emerald-500" :
@@ -563,22 +563,22 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                       
                                       {/* PAYMENT STATUS BADGE / TOGGLE */}
                                       {order.status === 'awaiting_payment' ? (
-                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20">Unpaid</span>
+                                        <span className="px-1.5 py-0.5 text-[10px] font-black tracking-wide uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20">Unpaid</span>
                                       ) : order.payment_intent_id ? (
-                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
+                                        <span className="px-1.5 py-0.5 text-[10px] font-black tracking-wide uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
                                           <CheckCircle2 className="w-3 h-3" /> Paid Online
                                         </span>
                                       ) : order.is_paid ? (
                                         <button 
                                           onClick={(e) => { e.stopPropagation(); setOrders(prev => prev.map(o => o.id === order.id ? { ...o, is_paid: false } : o)); toggleOrderPaymentStatus(order.id, false); }}
-                                          className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1 hover:bg-emerald-500/20 transition-colors"
+                                          className="px-1.5 py-0.5 text-[10px] font-black tracking-wide uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1 hover:bg-emerald-500/20 transition-colors"
                                         >
                                           <CheckCircle2 className="w-3 h-3" /> Paid
                                         </button>
                                       ) : (
                                         <button 
                                           onClick={(e) => { e.stopPropagation(); setOrders(prev => prev.map(o => o.id === order.id ? { ...o, is_paid: true } : o)); toggleOrderPaymentStatus(order.id, true); }}
-                                          className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center gap-1 hover:bg-rose-500/20 transition-colors"
+                                          className="px-1.5 py-0.5 text-[10px] font-black tracking-wide uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center gap-1 hover:bg-rose-500/20 transition-colors"
                                         >
                                           <div className="w-3 h-3 border border-current rounded-[3px]" /> Unpaid
                                         </button>
@@ -589,8 +589,8 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                       )}
                                     </div>
                                     {urgency !== "critical" && (
-                                      <span className={`${!isExpanded && isInactiveStatus ? "text-sm" : "text-base"} font-bold ${isKdsMode ? "text-slate-400" : "text-slate-400"}`}>
-                                        ${Number(order.total_amount).toFixed(2)}
+                                      <span className={`${!isExpanded && isInactiveStatus ? "text-sm" : "text-base"} font-bold shrink-0 whitespace-nowrap ml-1 ${isKdsMode ? "text-slate-400" : "text-slate-400"}`}>
+                                        {currencySymbol}{Number(order.total_amount).toFixed(2)}
                                       </span>
                                     )}
                                   </div>
