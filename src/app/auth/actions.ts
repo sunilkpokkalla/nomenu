@@ -69,6 +69,8 @@ export async function signup(formData: FormData) {
     let errorMessage = error.message;
     if (errorMessage.toLowerCase().includes("user already registered")) {
       errorMessage = "Account already exists! Please log in instead.";
+    } else if (errorMessage.toLowerCase().includes("security purpose") || errorMessage.toLowerCase().includes("rate limit") || errorMessage.toLowerCase().includes("seconds")) {
+      errorMessage = "Verification sent to email, please confirm.";
     }
     redirect(`/signup?message=${encodeURIComponent(errorMessage)}`);
   }
