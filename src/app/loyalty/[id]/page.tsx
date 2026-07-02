@@ -47,6 +47,7 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
         layout={restaurant.loyalty_card_layout || "classic"}
         rewardText={restaurant.loyalty_reward_text}
         hasPhoneNumber={!!card.phone_number}
+        activeReward={card.active_reward}
       />
       <AddToHomeScreen />
     </div>

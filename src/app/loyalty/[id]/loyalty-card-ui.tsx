@@ -21,18 +21,21 @@ interface LoyaltyCardUIProps {
   rewardText?: string | null;
   isPreviewMode?: boolean;
   hasPhoneNumber?: boolean;
+  activeReward?: string | null;
 }
 
 export function LoyaltyCardUI({ 
   cardId, restaurantId, stamps: initialStamps, restaurantName, primaryColor, restaurantLogo, 
   stampColor = "amber", stampIcon = "star", layout = "classic", rewardText = "10 Stamps = 1 Free Item", isPreviewMode = false,
-  hasPhoneNumber = true
+  hasPhoneNumber = true, activeReward = null
 }: LoyaltyCardUIProps) {
   const [stamps, setStamps] = useState(initialStamps);
   const [isLinked, setIsLinked] = useState(hasPhoneNumber);
   const [isLinking, setIsLinking] = useState(false);
   const [phoneToLink, setPhoneToLink] = useState("");
   const [linkError, setLinkError] = useState("");
+  const [currentActiveReward, setCurrentActiveReward] = useState(activeReward);
+  const [isClaimingReward, setIsClaimingReward] = useState(false);
 
   const isFull = stamps >= 10;
 
@@ -137,6 +140,49 @@ export function LoyaltyCardUI({
   return (
     <div className="w-full max-w-md mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
       
+      {/* Active Reward Banner */}
+      {currentActiveReward && !isPreviewMode && (
+        <div className="bg-emerald-500 text-white px-4 py-4 rounded-xl shadow-lg mb-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-2 opacity-20">
+            <Gift className="w-16 h-16" />
+          </div>
+          <div className="relative z-10 flex flex-col gap-3">
+            <div className="flex items-start gap-3">
+              <div className="bg-white/20 p-2 rounded-full shrink-0">
+                <Gift className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg leading-tight">A gift from the manager!</h3>
+                <p className="text-emerald-50 text-sm font-medium mt-1 pr-6">
+                  {currentActiveReward}
+                </p>
+              </div>
+            </div>
+            
+            <button 
+              onClick={async () => {
+                const confirmed = confirm("Are you sure you want to claim this reward? Only do this when showing it to your server.");
+                if (confirmed) {
+                  setIsClaimingReward(true);
+                  const { claimActiveReward } = await import("./actions");
+                  const res = await claimActiveReward(cardId);
+                  if (res.success) {
+                    setCurrentActiveReward(null);
+                  } else {
+                    alert("Failed to claim reward. Please try again.");
+                  }
+                  setIsClaimingReward(false);
+                }
+              }}
+              disabled={isClaimingReward}
+              className="w-full mt-1 bg-white text-emerald-600 hover:bg-emerald-50 font-bold py-2.5 rounded-lg text-sm transition-colors shadow-sm disabled:opacity-70 flex justify-center items-center"
+            >
+              {isClaimingReward ? "Claiming..." : "Claim Reward"}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-slate-900">VIP Loyalty Card</h1>

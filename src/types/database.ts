@@ -277,6 +277,7 @@ export interface Database {
           last_stamp_at: string | null;
           created_at: string | null;
           phone_number: string | null;
+          active_reward?: string | null;
         };
         Insert: {
           id?: string;
@@ -286,6 +287,7 @@ export interface Database {
           last_stamp_at?: string | null;
           created_at?: string | null;
           phone_number?: string | null;
+          active_reward?: string | null;
         };
         Update: {
           id?: string;
@@ -295,6 +297,7 @@ export interface Database {
           last_stamp_at?: string | null;
           created_at?: string | null;
           phone_number?: string | null;
+          active_reward?: string | null;
         };
         Relationships: [
           {
