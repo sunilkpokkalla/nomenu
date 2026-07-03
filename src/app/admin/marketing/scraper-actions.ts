@@ -16,7 +16,20 @@ export async function scrapeEmailAction(url: string): Promise<{ success: boolean
     });
 
     if (!response.ok) {
-      return { success: false, error: "Failed to fetch website. Status: " + response.status };
+      const statusMessages: Record<number, string> = {
+        403: "Access denied (403) — This website blocks automated scrapers.",
+        404: "Page not found (404) — The URL doesn't exist. Please double-check it.",
+        429: "Too many requests (429) — This website is rate-limiting access. Try again in a few minutes.",
+        500: "Server error (500) — This website is experiencing issues. Try again later.",
+        521: "Website offline (521) — The server is down or unreachable via Cloudflare.",
+        522: "Connection timed out (522) — The website took too long to respond.",
+        523: "Origin unreachable (523) — Cloudflare cannot connect to this website's server.",
+        524: "Connection timed out (524) — The website is too slow to respond.",
+        525: "SSL handshake failed (525) — This website has an SSL certificate issue.",
+        526: "Invalid SSL certificate (526) — This website's SSL certificate is expired or misconfigured. Try another URL.",
+      };
+      const friendly = statusMessages[response.status] ?? `Failed to fetch website. Status: ${response.status}`;
+      return { success: false, error: friendly };
     }
 
     const html = await response.text();

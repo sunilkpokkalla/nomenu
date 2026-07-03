@@ -14,6 +14,7 @@ import { CustomerDirectory } from "./customer-directory";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsSync } from "@/components/ui/tabs-sync";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
+import { RewardTemplatesEditor, RewardTemplate } from "@/components/dashboard/reward-templates-editor";
 
 export const metadata = {
   title: "Customer Feedback | NoMenu Dashboard",
@@ -27,7 +28,7 @@ export default async function FeedbackPage({
 }) {
   const supabase = await createClient();
   const params = await searchParams;
-  const validTabs = ["reviews", "strategy", "directory", "design", "scanner"];
+  const validTabs = ["reviews", "strategy", "directory", "design", "scanner", "rewards"];
   const tabParam = typeof params.tab === "string" ? params.tab : "";
   const tab = validTabs.includes(tabParam) ? tabParam : "reviews";
 
@@ -117,6 +118,7 @@ export default async function FeedbackPage({
             
             <TabsTrigger value="directory" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Members</TabsTrigger>
             <TabsTrigger value="design" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Card Design</TabsTrigger>
+            <TabsTrigger value="rewards" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Reward Templates</TabsTrigger>
             <TabsTrigger value="scanner" className="ml-auto rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-bold text-amber-700 data-[state=active]:text-amber-900 data-[state=active]:bg-amber-100 transition-all border border-amber-200/50 bg-amber-50/50">Staff Scanner (QR)</TabsTrigger>
           </TabsList>
           
@@ -168,6 +170,18 @@ export default async function FeedbackPage({
             <LoyaltyQrGenerator 
               restaurantId={restaurant.id}
             />
+          </TabsContent>
+
+          <TabsContent value="rewards" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Loyalty Reward Templates</h3>
+              <p className="text-sm text-slate-500 mb-6 max-w-3xl">
+                Create custom reward templates to send to your best customers when they leave 4-5 star reviews. These will appear as quick-select options in the Feedback dashboard.
+              </p>
+              <RewardTemplatesEditor
+                initialTemplates={restaurant.reward_templates as RewardTemplate[] | null}
+              />
+            </div>
           </TabsContent>
         </TabsSync>
       )}

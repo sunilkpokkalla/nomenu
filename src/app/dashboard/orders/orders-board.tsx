@@ -235,7 +235,12 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
             }, 1500);
           } else if (payload.eventType === "UPDATE") {
             if (payload.new.customer_phone !== null) return;
-            setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));
+            setOrders(prev => {
+              if (payload.new.status === 'completed' || payload.new.status === 'cancelled') {
+                return prev.filter(o => o.id !== payload.new.id);
+              }
+              return prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o);
+            });
           }
         }
       ).subscribe();

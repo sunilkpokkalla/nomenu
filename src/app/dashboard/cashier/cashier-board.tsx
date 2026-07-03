@@ -125,7 +125,9 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
 
   for (const [key, tableOrders] of Object.entries(ordersByGroup)) {
     const [table_number, customer_name] = key.split("::");
-    const total_amount = tableOrders.reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
+    const total_amount = tableOrders
+      .filter(o => o.status?.toLowerCase() !== 'cancelled')
+      .reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
     
     tableTabs.push({
       table_number,

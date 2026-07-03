@@ -110,7 +110,9 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
       
       const group = groups.get(key)!;
       group.orders.push(order);
-      group.total_amount += Number(order.total_amount);
+      if (order.status?.toLowerCase() !== 'cancelled') {
+        group.total_amount += Number(order.total_amount);
+      }
       group.order_count += 1;
       
       // Update last activity to the most recent timestamp

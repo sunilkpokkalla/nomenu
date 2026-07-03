@@ -54,7 +54,8 @@ export default async function KDSPage() {
       )
     `)
     .eq("restaurant_id", restaurant.id)
-    .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
+    .in("status", ["pending", "preparing"])
+    .gte("created_at", today.toISOString())
     .order("created_at", { ascending: false });
 
   // If not elite or enterprise plan, lock it
