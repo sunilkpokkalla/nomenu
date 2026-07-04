@@ -5,7 +5,7 @@ import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { differenceInMinutes } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
-import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings } from "lucide-react";
+import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings, Volume2, VolumeX } from "lucide-react";
 import { updateOrderStatus, toggleOrderPaymentStatus } from "../orders/actions";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 
@@ -46,8 +46,11 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
   const [autoArchiveMinutes, setAutoArchiveMinutes] = useState<number | null>(30);
   const [cancelOrderPrompt, setCancelOrderPrompt] = useState<Order | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [soundPreference, setSoundPreference] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
   const knownOrderIds = useRef<Set<string>>(new Set(initialOrders.map(o => o.id)));
   const completedTimes = useRef<Map<string, number>>(new Map());
 
@@ -84,15 +87,63 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
     }
   }, [orders, selectedDateStr, locationLabel]);
 
-  const playNotificationSound = () => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContext) return;
-      const ctx = new AudioContext();
-      if (ctx.state === 'suspended') {
-        ctx.resume();
+  useEffect(() => {
+    const pref = localStorage.getItem("nomenu_kds_takeaway_sound");
+    if (pref !== null) {
+      setSoundPreference(pref === "true");
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (AudioCtx && !audioContextRef.current) {
+      audioContextRef.current = new AudioCtx();
+    }
+
+    const unlockAudio = () => {
+      const isPreferred = localStorage.getItem("nomenu_kds_takeaway_sound") !== "false";
+      if (audioContextRef.current && isPreferred) {
+        if (audioContextRef.current.state === 'suspended') {
+          audioContextRef.current.resume().then(() => {
+            setSoundEnabled(true);
+          }).catch(e => console.error(e));
+        } else if (audioContextRef.current.state === 'running') {
+          setSoundEnabled(true);
+        }
       }
+    };
+
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
+    window.addEventListener('keydown', unlockAudio);
+
+    return () => {
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+    };
+  }, []);
+
+  const toggleSound = () => {
+    const newPref = !soundPreference;
+    setSoundPreference(newPref);
+    localStorage.setItem("nomenu_kds_takeaway_sound", String(newPref));
+    
+    if (newPref && audioContextRef.current) {
+      if (audioContextRef.current.state === 'suspended') {
+        audioContextRef.current.resume().then(() => setSoundEnabled(true));
+      } else {
+        setSoundEnabled(true);
+      }
+    } else {
+      setSoundEnabled(false);
+    }
+  };
+
+  const playNotificationSound = () => {
+    if (!soundPreference) return;
+    try {
+      const ctx = audioContextRef.current;
+      if (!ctx || ctx.state !== 'running') return;
       
       // First note
       const osc1 = ctx.createOscillator();
@@ -299,6 +350,17 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
         </h2>
         
         <div className="flex items-center gap-4">
+          <button 
+            onClick={toggleSound}
+            className={`flex items-center justify-center p-2 rounded-lg transition-colors ${!soundPreference ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-slate-100/10'}`}
+            title={soundPreference ? (soundEnabled ? "Sound On (Click to Mute)" : "Click to Enable Sound (Browser Blocked)") : "Sound Muted (Click to Unmute)"}
+          >
+            {soundPreference ? (
+              <Volume2 className={`w-5 h-5 ${isKdsMode ? "text-emerald-400" : "text-emerald-500"} ${!soundEnabled ? "opacity-50 animate-pulse" : ""}`} />
+            ) : (
+              <VolumeX className={`w-5 h-5 ${isKdsMode ? "text-red-400" : "text-red-500"}`} />
+            )}
+          </button>
           {!isKdsMode && (
             <div className="flex items-center gap-2">
               <div className="relative flex items-center">
