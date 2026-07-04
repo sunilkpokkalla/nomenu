@@ -86,15 +86,22 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey }: { 
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <Clock className="w-5 h-5 text-slate-400" /> Waitlist ({entries.length})
+      <div className="flex justify-between items-center bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm mb-2">
+        <h2 className="text-2xl font-black text-slate-900 flex items-center gap-3 tracking-tight">
+          <div className="p-2 bg-indigo-50 rounded-lg">
+            <Clock className="w-6 h-6 text-indigo-600" />
+          </div>
+          Waitlist <span className="bg-slate-100 text-slate-600 px-3 py-0.5 rounded-full text-sm font-bold ml-2">{entries.length}</span>
         </h2>
         <button 
           onClick={() => setShowAddForm(!showAddForm)}
-          className="bg-slate-900 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-slate-800 transition-colors flex items-center gap-2"
+          className={`px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2 hover:scale-[1.02] ${
+            showAddForm 
+              ? "bg-slate-100 text-slate-700 hover:bg-slate-200" 
+              : "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-600/20"
+          }`}
         >
-          {showAddForm ? "Cancel" : <><UserPlus className="w-4 h-4" /> Add Party</>}
+          {showAddForm ? "Cancel" : <><UserPlus className="w-5 h-5" /> Add Party</>}
         </button>
       </div>
 
@@ -157,12 +164,21 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey }: { 
       )}
 
       {entries.length === 0 ? (
-        <div className="flex flex-col items-center justify-center text-center py-24 bg-white border border-slate-200 rounded-2xl shadow-sm">
-          <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-            <Users className="w-8 h-8 text-slate-300" />
+        <div className="flex flex-col items-center justify-center text-center py-24 bg-white border border-slate-200/60 rounded-3xl shadow-sm relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-50/50 to-white/20" />
+          <div className="w-20 h-20 bg-slate-50 rounded-2xl flex items-center justify-center mb-6 relative z-10 shadow-sm border border-slate-100 rotate-3">
+            <Users className="w-10 h-10 text-slate-400" />
           </div>
-          <h3 className="text-xl font-bold text-slate-900">Waitlist is Empty</h3>
-          <p className="text-slate-500 mt-2 max-w-sm">No one is currently waiting for a table.</p>
+          <h3 className="text-2xl font-black text-slate-900 tracking-tight relative z-10">Waitlist is Empty</h3>
+          <p className="text-slate-500 mt-2 max-w-sm relative z-10 font-medium leading-relaxed">No one is currently waiting for a table. Add a party to get started.</p>
+          {!showAddForm && (
+            <button 
+              onClick={() => setShowAddForm(true)}
+              className="mt-8 bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition-all hover:scale-105 shadow-md flex items-center gap-2 relative z-10"
+            >
+              <UserPlus className="w-4 h-4" /> Add First Party
+            </button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
