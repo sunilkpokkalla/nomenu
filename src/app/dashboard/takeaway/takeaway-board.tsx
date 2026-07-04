@@ -378,6 +378,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
                   <option value="15">Auto-clear: 15 mins</option>
                   <option value="30">Auto-clear: 30 mins</option>
                   <option value="60">Auto-clear: 1 hr</option>
+                  <option value="120">Auto-clear: 2 hrs</option>
                   <option value="never">Auto-clear: Never</option>
                 </select>
                 <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 pointer-events-none" />
