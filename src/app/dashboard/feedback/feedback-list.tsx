@@ -62,6 +62,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const [retentionOffers, setRetentionOffers] = useState<Record<string, ReturnType<typeof getRandomOfferForDay>>>({});
   const [loyaltyIdeas, setLoyaltyIdeas] = useState<Record<string, ReturnType<typeof getRandomLoyaltyIdeaForDay>>>({});
   const [selectedTemplates, setSelectedTemplates] = useState<Record<string, string>>({});
+  const [sentRewards, setSentRewards] = useState<Record<string, boolean>>({});
 
   const REWARD_TEMPLATES = [
     { label: "Smart AI Idea (Recommended)", value: "ai" },
@@ -842,34 +843,45 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                             })()}
                                           </select>
                                           
-                                          <button 
-                                            onClick={async () => {
-                                              const isEmail = fb.contact_info?.includes('@');
-                                              const selectedVal = selectedTemplates[fb.id];
-                                              const message = (selectedVal && selectedVal !== 'ai') ? selectedVal : loyaltyIdeas[fb.id].text;
-                                              
-                                              // Call the new Server Action
-                                              const { sendLoyaltyReward } = await import("./reward-actions");
-                                              const result = await sendLoyaltyReward(fb.id, message, fb.contact_info || null, restaurantId, fb.customer_name || null);
-                                              
-                                              if (result.method === "loyalty_card") {
-                                                alert("Reward successfully sent to their VIP Loyalty Card!");
-                                              } else if (result.method === "email" && isEmail) {
-                                                // Fallback to mailto for emails
-                                                const emailMatch = (fb.contact_info || '').match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
-                                                const targetEmail = emailMatch ? emailMatch[1] : fb.contact_info;
-                                                const subject = encodeURIComponent("Thank you for your amazing review!");
-                                                const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant. We saw your recent glowing review and it made our whole team's day!\n\nAs a token of our appreciation, ${message}\n\nPlease let us know when you plan to come back!\n\nBest,\nManager`);
-                                                window.open(`mailto:${targetEmail}?subject=${subject}&body=${body}`, '_blank');
-                                              } else {
-                                                alert("Reward sent successfully!");
-                                              }
-                                            }}
-                                            className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
-                                          >
-                                            <Send className="w-4 h-4" />
-                                            {fb.contact_info?.includes('@') ? "Send via Email" : "Send to VIP Card"}
-                                          </button>
+                                          {sentRewards[fb.id] ? (
+                                            <button 
+                                              disabled
+                                              className="w-full mt-1 bg-slate-100 text-emerald-700 border border-emerald-200 font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-2 shadow-sm"
+                                            >
+                                              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                              Reward Sent!
+                                            </button>
+                                          ) : (
+                                            <button 
+                                              onClick={async () => {
+                                                const isEmail = fb.contact_info?.includes('@');
+                                                const selectedVal = selectedTemplates[fb.id];
+                                                const message = (selectedVal && selectedVal !== 'ai') ? selectedVal : loyaltyIdeas[fb.id].text;
+                                                
+                                                // Call the new Server Action
+                                                const { sendLoyaltyReward } = await import("./reward-actions");
+                                                const result = await sendLoyaltyReward(fb.id, message, fb.contact_info || null, restaurantId, fb.customer_name || null);
+                                                
+                                                if (result.method === "loyalty_card") {
+                                                  setSentRewards(prev => ({...prev, [fb.id]: true}));
+                                                } else if (result.method === "email" && isEmail) {
+                                                  // Fallback to mailto for emails
+                                                  const emailMatch = (fb.contact_info || '').match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
+                                                  const targetEmail = emailMatch ? emailMatch[1] : fb.contact_info;
+                                                  const subject = encodeURIComponent("Thank you for your amazing review!");
+                                                  const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant. We saw your recent glowing review and it made our whole team's day!\n\nAs a token of our appreciation, ${message}\n\nPlease let us know when you plan to come back!\n\nBest,\nManager`);
+                                                  window.open(`mailto:${targetEmail}?subject=${subject}&body=${body}`, '_blank');
+                                                  setSentRewards(prev => ({...prev, [fb.id]: true}));
+                                                } else {
+                                                  setSentRewards(prev => ({...prev, [fb.id]: true}));
+                                                }
+                                              }}
+                                              className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                            >
+                                              <Send className="w-4 h-4" />
+                                              {fb.contact_info?.includes('@') ? "Send via Email" : "Send to VIP Card"}
+                                            </button>
+                                          )}
                                         </div>
                                       ) : (
                                         <div className="mt-1 text-center py-2 text-xs text-emerald-600 font-medium bg-emerald-50 rounded-lg">
