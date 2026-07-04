@@ -44,6 +44,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const [autoArchiveMinutes, setAutoArchiveMinutes] = useState<number | null>(30);
   const [cancelOrderPrompt, setCancelOrderPrompt] = useState<Order | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [soundPreference, setSoundPreference] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -84,6 +85,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   }, [orders, selectedDateStr, locationLabel]);
 
   useEffect(() => {
+    const pref = localStorage.getItem("nomenu_kds_sound");
+    if (pref !== null) {
+      setSoundPreference(pref === "true");
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
     if (AudioCtx && !audioContextRef.current) {
@@ -91,7 +97,9 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     }
 
     const unlockAudio = () => {
-      if (audioContextRef.current) {
+      // We check local storage directly inside the event listener to get fresh state without re-binding
+      const isPreferred = localStorage.getItem("nomenu_kds_sound") !== "false";
+      if (audioContextRef.current && isPreferred) {
         if (audioContextRef.current.state === 'suspended') {
           audioContextRef.current.resume().then(() => {
             setSoundEnabled(true);
@@ -113,7 +121,24 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     };
   }, []);
 
+  const toggleSound = () => {
+    const newPref = !soundPreference;
+    setSoundPreference(newPref);
+    localStorage.setItem("nomenu_kds_sound", String(newPref));
+    
+    if (newPref && audioContextRef.current) {
+      if (audioContextRef.current.state === 'suspended') {
+        audioContextRef.current.resume().then(() => setSoundEnabled(true));
+      } else {
+        setSoundEnabled(true);
+      }
+    } else {
+      setSoundEnabled(false);
+    }
+  };
+
   const playNotificationSound = () => {
+    if (!soundPreference) return;
     try {
       const ctx = audioContextRef.current;
       if (!ctx || ctx.state !== 'running') return;
@@ -236,9 +261,6 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
           } else if (payload.eventType === "UPDATE") {
             if (payload.new.customer_phone !== null) return;
             setOrders(prev => {
-              if (payload.new.status === 'completed' || payload.new.status === 'cancelled') {
-                return prev.filter(o => o.id !== payload.new.id);
-              }
               return prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o);
             });
           }
@@ -327,13 +349,17 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
         </h2>
         
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 mr-2" title={soundEnabled ? "Order notification sounds enabled" : "Click anywhere to enable order sounds"}>
-            {soundEnabled ? (
-              <Volume2 className={`w-5 h-5 ${isKdsMode ? "text-emerald-400" : "text-emerald-500"}`} />
+          <button 
+            onClick={toggleSound}
+            className={`flex items-center justify-center p-2 rounded-lg transition-colors ${!soundPreference ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-slate-100/10'}`}
+            title={soundPreference ? (soundEnabled ? "Sound On (Click to Mute)" : "Click to Enable Sound (Browser Blocked)") : "Sound Muted (Click to Unmute)"}
+          >
+            {soundPreference ? (
+              <Volume2 className={`w-5 h-5 ${isKdsMode ? "text-emerald-400" : "text-emerald-500"} ${!soundEnabled ? "opacity-50 animate-pulse" : ""}`} />
             ) : (
-              <VolumeX className={`w-5 h-5 animate-pulse ${isKdsMode ? "text-red-400" : "text-red-500"}`} />
+              <VolumeX className={`w-5 h-5 ${isKdsMode ? "text-red-400" : "text-red-500"}`} />
             )}
-          </div>
+          </button>
           {!isKdsMode && (
             <div className="flex items-center gap-2">
               <div className="relative flex items-center">
