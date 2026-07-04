@@ -1274,7 +1274,7 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
             className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
           ></div>
           
-          <div className={`relative w-full max-w-md bg-white rounded-t-3xl overflow-hidden shadow-2xl z-10 max-h-[90vh] flex flex-col transition-transform duration-300 transform translate-y-0 ${
+          <div className={`relative w-full max-w-md rounded-t-3xl overflow-hidden shadow-2xl z-10 max-h-[90vh] flex flex-col transition-transform duration-300 transform translate-y-0 ${
             themeStyle === "luxury"
               ? "bg-[#0C0C0E] border-t border-zinc-850 text-zinc-100 font-serif-luxury" 
               : themeStyle === "vibrant"
@@ -1482,7 +1482,17 @@ export function ClassicTheme({ restaurant, categories, items, tableNumber, qrCod
                     }`}
                     style={themeStyle !== "vibrant" ? {
                       backgroundColor: themeStyle === "luxury" ? "#F59E0B" : themeStyle === "bistro" ? "#5C4033" : primaryColor,
-                      color: themeStyle === "luxury" ? "#000" : "#fff"
+                      color: themeStyle === "luxury" ? "#000" : (() => {
+                        const hexColor = primaryColor;
+                        if (!hexColor || !hexColor.startsWith("#")) return "#ffffff";
+                        const hex = hexColor.replace("#", "");
+                        if (hex.length !== 6 && hex.length !== 3) return "#ffffff";
+                        const r = parseInt(hex.length === 3 ? hex[0] + hex[0] : hex.slice(0, 2), 16);
+                        const g = parseInt(hex.length === 3 ? hex[1] + hex[1] : hex.slice(2, 4), 16);
+                        const b = parseInt(hex.length === 3 ? hex[2] + hex[2] : hex.slice(4, 6), 16);
+                        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                        return luminance > 0.5 ? "#000000" : "#ffffff";
+                      })()
                     } : {}}
                   >
                     Add {orderQuantity} to Order • {currencySign}{(selectedItem.price * orderQuantity).toFixed(2)}

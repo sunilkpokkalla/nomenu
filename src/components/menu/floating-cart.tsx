@@ -277,8 +277,19 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
     return `${currencySymbol}${p.toFixed(2)}`;
   };
 
+  const getContrastTextColor = (hexColor: string) => {
+    if (!hexColor || !hexColor.startsWith("#")) return "#ffffff";
+    const hex = hexColor.replace("#", "");
+    if (hex.length !== 6 && hex.length !== 3) return "#ffffff";
+    const r = parseInt(hex.length === 3 ? hex[0] + hex[0] : hex.slice(0, 2), 16);
+    const g = parseInt(hex.length === 3 ? hex[1] + hex[1] : hex.slice(2, 4), 16);
+    const b = parseInt(hex.length === 3 ? hex[2] + hex[2] : hex.slice(4, 6), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.5 ? "#000000" : "#ffffff";
+  };
+
   const btnColor = themeStyle === "luxury" ? "#F59E0B" : themeStyle === "bistro" ? "#5C4033" : themeStyle === "vibrant" ? "#FF5A5F" : primaryColor;
-  const textColor = (themeStyle === "luxury" || themeStyle === "vibrant") ? "#000" : "#fff";
+  const textColor = (themeStyle === "luxury" || themeStyle === "vibrant") ? "#000" : getContrastTextColor(primaryColor);
 
   // Calculate totals
   const subtotal = totalPrice;
@@ -502,7 +513,11 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                       value={customerName}
                       onChange={e => setCustomerName(e.target.value)}
                       placeholder="e.g. John" 
-                      className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
+                      className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ${
+                        themeStyle === "luxury"
+                          ? "bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white placeholder-zinc-500"
+                          : "bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900"
+                      }`}
                     />
                   </div>
                   
@@ -514,7 +529,11 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                         value={table}
                         onChange={e => setTable(e.target.value)}
                         placeholder={`e.g. ${locationLabel === 'Room' ? '204' : '12'}`} 
-                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
+                        className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ${
+                        themeStyle === "luxury"
+                          ? "bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white placeholder-zinc-500"
+                          : "bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900"
+                      }`}
                       />
                     </div>
                   )}
@@ -528,7 +547,11 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                         value={customerPhone}
                         onChange={e => setCustomerPhone(e.target.value)}
                         placeholder="e.g. 555-0198" 
-                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
+                        className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ${
+                        themeStyle === "luxury"
+                          ? "bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white placeholder-zinc-500"
+                          : "bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900"
+                      }`}
                       />
                     </div>
                   )}
@@ -540,7 +563,11 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                         required
                         value={pickupTime}
                         onChange={e => setPickupTime(e.target.value)}
-                        className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 appearance-none cursor-pointer"
+                        className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 appearance-none cursor-pointer ${
+                          themeStyle === "luxury"
+                            ? "bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white"
+                            : "bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900"
+                        }`}
                         disabled={timeSlots.length === 0}
                       >
                         {timeSlots.length === 0 && <option value="">Kitchen Closed</option>}
@@ -562,7 +589,11 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                           value={partySize}
                           onChange={e => setPartySize(e.target.value)}
                           placeholder="e.g. 2" 
-                          className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20"
+                          className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ${
+                        themeStyle === "luxury"
+                          ? "bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white placeholder-zinc-500"
+                          : "bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900"
+                      }`}
                         />
                       </div>
                       <div className="space-y-1.5 col-span-2 sm:col-span-1">
@@ -571,7 +602,11 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                           required
                           value={pickupTime}
                           onChange={e => setPickupTime(e.target.value)}
-                          className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 appearance-none cursor-pointer"
+                          className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 appearance-none cursor-pointer ${
+                          themeStyle === "luxury"
+                            ? "bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white"
+                            : "bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900"
+                        }`}
                           disabled={timeSlots.length === 0}
                         >
                           {timeSlots.length === 0 && <option value="">Kitchen Closed</option>}
