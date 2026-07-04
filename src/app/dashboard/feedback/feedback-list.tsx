@@ -6,7 +6,7 @@ import { toZonedTime } from "date-fns-tz";
 import { 
   MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, 
   Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send,
-  ChevronLeft, ChevronRight, Download, Phone, AlertCircle
+  ChevronLeft, ChevronRight, Download, Phone, AlertCircle, CheckCircle2
 } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
