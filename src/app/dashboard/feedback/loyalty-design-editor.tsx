@@ -60,6 +60,24 @@ const CARD_LAYOUTS = [
   { id: "vibrantcafe", name: "Vibrant Cafe", preview: "bg-orange-500 border-0 rounded-[1rem]" }
 ];
 
+const PREVIEW_COLORS: Record<string, string> = {
+  classic: "#f97316",
+  digital: "#8b4513",
+  minimalist: "#f97316",
+  coffee: "#8b7355",
+  luxury: "#d4af37",
+  gradient: "#f97316",
+  birthday: "#ec4899",
+  finedining: "#000000",
+  corporate: "#1e293b",
+  botanical: "#84cc16",
+  holographic: "#a855f7",
+  chalkboard: "#ffffff",
+  lumia: "#ffffff",
+  modernminimal: "#f97316",
+  vibrantcafe: "#ea580c"
+};
+
 interface Props {
   restaurantId: string;
   initialColor: string;
@@ -200,7 +218,7 @@ export function LoyaltyDesignEditor({
                             restaurantId="preview-mini"
                             stamps={3}
                             restaurantName={restaurantName}
-                            primaryColor={primaryColor}
+                            primaryColor={PREVIEW_COLORS[opt.id] || primaryColor}
                             stampColor={color}
                             stampIcon={icon}
                             layout={opt.id}
