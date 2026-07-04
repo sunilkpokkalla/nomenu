@@ -26,6 +26,7 @@ interface AnalyticsDashboardProps {
   planType?: string;
   totalFeedbacks?: number;
   averageRating?: number;
+  currency?: string;
 }
 
 const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
@@ -49,7 +50,8 @@ export function AnalyticsDashboard({
   totalTips,
   planType,
   totalFeedbacks,
-  averageRating
+  averageRating,
+  currency = "USD"
 }: AnalyticsDashboardProps) {
   const router = useRouter();
 
@@ -70,7 +72,7 @@ export function AnalyticsDashboard({
   const isLive = range === "today";
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
   };
 
   const isPro = planType?.toLowerCase() === "pro";

@@ -377,6 +377,7 @@ export default async function AnalyticsPage(props: PageProps) {
         totalTips={totalTips}
         totalFeedbacks={totalFeedbacks}
         averageRating={averageRating}
+        currency={restaurant.currency || "USD"}
       />
     </div>
   );
