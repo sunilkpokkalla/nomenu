@@ -260,7 +260,20 @@ export default async function AnalyticsPage(props: PageProps) {
   }
   const { data: orderItems } = await orderItemsQuery;
 
+  // Fetch ALL menu items to properly calculate Dead Stock (including 0 sales)
+  const { data: allMenuItems } = await supabase
+    .from("menu_items")
+    .select("id, name, image_url, category_id")
+    .eq("restaurant_id", restaurant.id);
+
   const itemStats: Record<string, { quantity: number; revenue: number }> = {};
+  
+  if (allMenuItems) {
+    allMenuItems.forEach(item => {
+      itemStats[item.id] = { quantity: 0, revenue: 0 };
+    });
+  }
+
   if (orderItems) {
     orderItems.forEach(item => {
       const id = item.menu_item_id;
@@ -270,15 +283,23 @@ export default async function AnalyticsPage(props: PageProps) {
     });
   }
 
-  // Get Top 5 item IDs
+  // Get Top 5 item IDs (must have > 0 revenue/quantity)
   const topItemIds = Object.entries(itemStats)
-    .sort((a, b) => b[1].revenue - a[1].revenue)
+    .filter(([, stats]) => stats.quantity > 0)
+    .sort((a, b) => {
+      if (b[1].revenue !== a[1].revenue) return b[1].revenue - a[1].revenue;
+      return b[1].quantity - a[1].quantity;
+    })
     .slice(0, 5)
     .map(([id]) => id);
 
-  // Get Bottom 5 item IDs (Dead Stock)
+  // Get Bottom 5 item IDs (Dead Stock) - prioritize items with 0 sales, exclude top items
   const bottomItemIds = Object.entries(itemStats)
-    .sort((a, b) => a[1].revenue - b[1].revenue)
+    .filter(([id]) => !topItemIds.includes(id))
+    .sort((a, b) => {
+      if (a[1].revenue !== b[1].revenue) return a[1].revenue - b[1].revenue;
+      return a[1].quantity - b[1].quantity;
+    })
     .slice(0, 5)
     .map(([id]) => id);
 
@@ -286,63 +307,50 @@ export default async function AnalyticsPage(props: PageProps) {
   let bottomItems = [] as { id: string; name: string; image_url: string; quantity: number; revenue: number }[];
   let categoryData: { name: string; value: number }[] = [];
 
-  // If we have items sold, we need to join with menu_items to get categories
-  if (Object.keys(itemStats).length > 0) {
-    // We fetch ALL menu items that have been ordered to build the category chart
-    const allOrderedItemIds = Object.keys(itemStats);
+  if (allMenuItems) {
+    topItems = topItemIds.map(id => {
+      const menuItem = allMenuItems.find(m => m.id === id);
+      return {
+        id,
+        name: menuItem?.name || "Unknown Item",
+        image_url: menuItem?.image_url || "",
+        quantity: itemStats[id].quantity,
+        revenue: itemStats[id].revenue
+      };
+    }).filter(Boolean);
+
+    bottomItems = bottomItemIds.map(id => {
+      const menuItem = allMenuItems.find(m => m.id === id);
+      return {
+        id,
+        name: menuItem?.name || "Unknown Item",
+        image_url: menuItem?.image_url || "",
+        quantity: itemStats[id].quantity,
+        revenue: itemStats[id].revenue
+      };
+    }).filter(Boolean);
     
-    const { data: menuItemsData } = await supabase
-      .from("menu_items")
-      .select("id, name, image_url, category_id")
-      .in("id", allOrderedItemIds);
+    // Fetch Categories
+    const categoryIds = [...new Set(allMenuItems.map(m => m.category_id).filter(Boolean))];
+    if (categoryIds.length > 0) {
+      const { data: categoriesData } = await supabase
+        .from("categories")
+        .select("id, name")
+        .in("id", categoryIds);
+      
+      if (categoriesData) {
+        const catRevenue: Record<string, number> = {};
+        allMenuItems.forEach(m => {
+          if (m.category_id && itemStats[m.id]?.revenue > 0) {
+            const catName = categoriesData.find(c => c.id === m.category_id)?.name || "Other";
+            if (!catRevenue[catName]) catRevenue[catName] = 0;
+            catRevenue[catName] += itemStats[m.id].revenue;
+          }
+        });
 
-    if (menuItemsData) {
-      // Build top items list
-      topItems = topItemIds.map(id => {
-        const menuItem = menuItemsData.find(m => m.id === id);
-        return {
-          id,
-          name: menuItem?.name || "Unknown Item",
-          image_url: menuItem?.image_url || "",
-          quantity: itemStats[id].quantity,
-          revenue: itemStats[id].revenue
-        };
-      }).filter(Boolean);
-
-      // Build bottom items list
-      bottomItems = bottomItemIds.map(id => {
-        const menuItem = menuItemsData.find(m => m.id === id);
-        return {
-          id,
-          name: menuItem?.name || "Unknown Item",
-          image_url: menuItem?.image_url || "",
-          quantity: itemStats[id].quantity,
-          revenue: itemStats[id].revenue
-        };
-      }).filter(Boolean);
-
-      // Fetch Categories
-      const categoryIds = [...new Set(menuItemsData.map(m => m.category_id).filter(Boolean))];
-      if (categoryIds.length > 0) {
-        const { data: categoriesData } = await supabase
-          .from("categories")
-          .select("id, name")
-          .in("id", categoryIds);
-        
-        if (categoriesData) {
-          const catRevenue: Record<string, number> = {};
-          menuItemsData.forEach(m => {
-            if (m.category_id) {
-              const catName = categoriesData.find(c => c.id === m.category_id)?.name || "Other";
-              if (!catRevenue[catName]) catRevenue[catName] = 0;
-              catRevenue[catName] += itemStats[m.id].revenue;
-            }
-          });
-
-          categoryData = Object.entries(catRevenue)
-            .map(([name, value]) => ({ name, value }))
-            .sort((a, b) => b.value - a.value);
-        }
+        categoryData = Object.entries(catRevenue)
+          .map(([name, value]) => ({ name, value }))
+          .sort((a, b) => b.value - a.value);
       }
     }
   }
