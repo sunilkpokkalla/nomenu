@@ -57,7 +57,7 @@ export async function sendCampaignAction(formData: FormData) {
       }
     } else if (audience === "custom" && customEmails) {
       // Split by comma or newline
-      emails = customEmails.split(/[,\\n]+/).map(e => e.trim()).filter(e => e.includes("@"));
+      emails = customEmails.split(/[,\n]+/).map(e => e.trim()).filter(e => e.includes("@"));
     }
 
     if (emails.length === 0) {
