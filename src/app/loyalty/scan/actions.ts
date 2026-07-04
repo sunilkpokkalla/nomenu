@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/server-admin";
+import { consolidateLoyaltyCards } from "../[id]/actions";
 
 export async function resolveLoyaltyToken(tokenId: string) {
   const supabase = await createClient();
@@ -42,16 +43,11 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
 
   // 2. Resolve target card
   if (!targetCardId && phoneNumber) {
-    // Look for existing card by phone number
-    const { data: existingPhoneCard } = await supabase
-      .from("loyalty_cards")
-      .select("id, last_stamp_at, stamps")
-      .eq("restaurant_id", token.restaurant_id)
-      .eq("phone_number", phoneNumber)
-      .maybeSingle();
+    // Consolidate existing cards or get the master card
+    const consolidatedId = await consolidateLoyaltyCards(token.restaurant_id, phoneNumber);
 
-    if (existingPhoneCard) {
-      targetCardId = existingPhoneCard.id;
+    if (consolidatedId) {
+      targetCardId = consolidatedId;
     } else {
       // Create new card with phone number
       const { data: newCard, error: newCardError } = await supabase

@@ -262,13 +262,7 @@ export function LoyaltyCardUI({
         </div>
       )}
 
-      {/* Add to Home Screen Hint */}
-      <div className="bg-slate-100 rounded-xl p-4 text-center space-y-1">
-        <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Don't lose your card!</p>
-        <p className="text-xs text-slate-500">
-          Tap the <strong>Share</strong> icon at the bottom of your screen and select <strong>"Add to Home Screen"</strong> to save this card as an app!
-        </p>
-      </div>
+
     </div>
   );
 }
