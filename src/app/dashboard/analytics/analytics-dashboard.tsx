@@ -1,7 +1,7 @@
 "use client";
 
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from "recharts";
-import { DollarSign, TrendingUp, ShoppingBag, Crown, QrCode, Sparkles, Receipt, Crosshair, MessageSquare, Star } from "lucide-react";
+import { Banknote, Coins, TrendingUp, ShoppingBag, Crown, QrCode, Sparkles, Receipt, Crosshair, MessageSquare, Star } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -188,7 +188,7 @@ export function AnalyticsDashboard({
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm col-span-2 md:col-span-1 flex flex-col justify-between">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2 text-indigo-600">
-                  <DollarSign className="h-4 w-4" />
+                  <Banknote className="h-4 w-4" />
                   <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Gross Rev</span>
                 </div>
               </div>
@@ -235,7 +235,7 @@ export function AnalyticsDashboard({
 
               <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
                 <div className="flex items-center gap-2 text-emerald-600 mb-1">
-                  <DollarSign className="h-4 w-4" />
+                  <Coins className="h-4 w-4" />
                   <span className="font-bold text-slate-500 text-[10px] uppercase tracking-wider">Collected Tips</span>
                 </div>
                 <div className="text-2xl font-black tracking-tighter text-slate-900 mt-1">{formatCurrency(displayTips)}</div>

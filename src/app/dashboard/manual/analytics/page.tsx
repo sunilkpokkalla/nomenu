@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, LineChart, TrendingUp, DollarSign, Calendar } from "lucide-react";
+import { ArrowLeft, LineChart, TrendingUp, Banknote, Calendar } from "lucide-react";
 
 export const metadata = {
   title: "Analytics - Manual | NoMenu",
@@ -48,7 +48,7 @@ export default function AnalyticsManualPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
             <div className="bg-white border border-slate-200 p-6 rounded-2xl flex items-start gap-4 shadow-sm">
-              <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl shrink-0"><DollarSign className="w-6 h-6"/></div>
+              <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl shrink-0"><Banknote className="w-6 h-6"/></div>
               <div>
                 <h4 className="font-bold text-slate-900 mb-1">Gross Revenue</h4>
                 <p className="text-slate-600 text-sm">Total sales across all completed orders in the selected time period.</p>
