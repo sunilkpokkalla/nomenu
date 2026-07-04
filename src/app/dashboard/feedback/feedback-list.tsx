@@ -63,6 +63,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const [loyaltyIdeas, setLoyaltyIdeas] = useState<Record<string, ReturnType<typeof getRandomLoyaltyIdeaForDay>>>({});
   const [selectedTemplates, setSelectedTemplates] = useState<Record<string, string>>({});
   const [sentRewards, setSentRewards] = useState<Record<string, boolean>>({});
+  const [sentRetention, setSentRetention] = useState<Record<string, boolean>>({});
 
   const REWARD_TEMPLATES = [
     { label: "Smart AI Idea (Recommended)", value: "ai" },
@@ -759,43 +760,64 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                       </div>
                                       
                                       {fb.contact_info && fb.contact_info.trim().replace('|', '').trim().length > 0 ? (
-                                        <button 
-                                          onClick={() => {
-                                            const isEmail = fb.contact_info?.includes('@');
-                                            const message = retentionOffers[fb.id].text;
-                                            const managerRequested = fb.recovery_request === 'manager_visit' || fb.contact_info?.includes('URGENT: Manager requested');
-                                            
-                                            if (isEmail) {
-                                              const subject = encodeURIComponent("So sorry about your experience - let us make it right");
+                                        sentRetention[fb.id] ? (
+                                          <button 
+                                            disabled
+                                            className="mt-1 w-full bg-slate-100 text-rose-700 border border-rose-200 font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm shadow-sm"
+                                          >
+                                            <CheckCircle2 className="w-4 h-4 text-rose-500" />
+                                            Offer Sent to VIP Card!
+                                          </button>
+                                        ) : (
+                                          <button 
+                                            onClick={async () => {
+                                              const isEmail = fb.contact_info?.includes('@');
+                                              const message = retentionOffers[fb.id].text;
+                                              const managerRequested = fb.recovery_request === 'manager_visit' || fb.contact_info?.includes('URGENT: Manager requested');
                                               
-                                              let emailText = `Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant, and I saw your recent feedback. I am so sorry we missed the mark.`;
+                                              // Call the Server Action to check if they have a VIP card
+                                              const { sendLoyaltyReward } = await import("./reward-actions");
+                                              const result = await sendLoyaltyReward(fb.id, message, fb.contact_info || null, restaurantId, fb.customer_name || null);
                                               
-                                              if (managerRequested) {
-                                                emailText += `\n\nI am also incredibly sorry that we missed communicating with you while you were here. We were unable to look into your issue immediately due to being unusually busy.`;
+                                              if (result.method === "loyalty_card") {
+                                                // Beamed straight to VIP card! No need for SMS/Email
+                                                setSentRetention(prev => ({...prev, [fb.id]: true}));
+                                                return;
                                               }
                                               
-                                              emailText += `\n\n${message}\n\nPlease let me know when you plan to come back so I can ensure you have a perfect experience.\n\nBest,\nManager`;
-                                              
-                                              const body = encodeURIComponent(emailText);
-                                              window.open(`mailto:${fb.contact_info}?subject=${subject}&body=${body}`, '_blank');
-                                            } else {
-                                              let smsText = `Hi ${fb.customer_name || 'there'}, this is the manager. I saw your feedback & am so sorry.`;
-                                              
-                                              if (managerRequested) {
-                                                smsText += ` We missed communicating with you due to being busy, and I apologize for that.`;
+                                              // Fallback: No VIP card found, use native email/sms
+                                              if (isEmail) {
+                                                const subject = encodeURIComponent("So sorry about your experience - let us make it right");
+                                                
+                                                let emailText = `Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant, and I saw your recent feedback. I am so sorry we missed the mark.`;
+                                                
+                                                if (managerRequested) {
+                                                  emailText += `\n\nI am also incredibly sorry that we missed communicating with you while you were here. We were unable to look into your issue immediately due to being unusually busy.`;
+                                                }
+                                                
+                                                emailText += `\n\n${message}\n\nPlease let me know when you plan to come back so I can ensure you have a perfect experience.\n\nBest,\nManager`;
+                                                
+                                                const body = encodeURIComponent(emailText);
+                                                window.open(`mailto:${fb.contact_info}?subject=${subject}&body=${body}`, '_blank');
+                                              } else {
+                                                let smsText = `Hi ${fb.customer_name || 'there'}, this is the manager. I saw your feedback & am so sorry.`;
+                                                
+                                                if (managerRequested) {
+                                                  smsText += ` We missed communicating with you due to being busy, and I apologize for that.`;
+                                                }
+                                                
+                                                smsText += ` ${message}. Show this text on your next visit!`;
+                                                
+                                                const body = encodeURIComponent(smsText);
+                                                window.open(`sms:${fb.contact_info}?body=${body}`, '_blank');
                                               }
-                                              
-                                              smsText += ` ${message}. Show this text on your next visit!`;
-                                              
-                                              const body = encodeURIComponent(smsText);
-                                              window.open(`sms:${fb.contact_info}?body=${body}`, '_blank');
-                                            }
-                                          }}
-                                          className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
-                                        >
-                                          <Send className="w-4 h-4" />
-                                          Send Offer to Customer
-                                        </button>
+                                            }}
+                                            className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
+                                          >
+                                            <Send className="w-4 h-4" />
+                                            Send Offer to Customer
+                                          </button>
+                                        )
                                       ) : (
                                         <div className="mt-1 p-2.5 bg-amber-50 border border-amber-100 rounded-lg text-amber-800 text-xs flex items-start gap-2">
                                           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
