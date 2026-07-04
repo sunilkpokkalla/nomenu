@@ -316,8 +316,10 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
             </p>
           </div>
           
-          <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-2xl p-5 flex flex-col gap-4 text-left border border-black/5 dark:border-white/5">
-            <div className="flex justify-between items-end border-b border-black/10 dark:border-white/10 pb-4">
+          <div className={`rounded-2xl p-5 flex flex-col gap-4 text-left border ${
+            themeStyle === "luxury" ? "bg-black/40 border-white/5" : "bg-slate-50 border-black/5 text-slate-900"
+          }`}>
+            <div className={`flex justify-between items-end border-b pb-4 ${themeStyle === "luxury" ? "border-white/10" : "border-black/10"}`}>
               <div>
                 <div className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Order Number</div>
                 <div className="text-3xl font-black text-amber-500">
@@ -330,7 +332,9 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                     setIsOpen(false);
                     window.dispatchEvent(new Event('nomenu_open_receipts'));
                   }}
-                  className="p-3 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 rounded-xl flex items-center gap-2 font-bold text-sm transition-colors print:hidden"
+                  className={`p-3 rounded-xl flex items-center gap-2 font-bold text-sm transition-colors print:hidden ${
+                    themeStyle === "luxury" ? "bg-white/10 hover:bg-white/20 text-white" : "bg-black/5 hover:bg-black/10 text-slate-900"
+                  }`}
                   title="View Full Receipt"
                 >
                   <Receipt className="w-5 h-5" />
@@ -359,12 +363,16 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                   })}
                 </div>
                 
-                <div className="border-t border-black/10 dark:border-white/10 pt-3 flex flex-col gap-1 mt-2">
+                <div className={`border-t pt-3 flex flex-col gap-1 mt-2 ${themeStyle === "luxury" ? "border-white/10" : "border-black/10"}`}>
                   <div className="flex justify-between items-center">
                     <span className="font-bold">
                       {receipt.is_paid || receipt.payment_intent_id ? "Total Paid" : "To Be Paid"}
                     </span>
-                    <span className={`font-black text-lg ${receipt.is_paid || receipt.payment_intent_id ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-500"}`}>
+                    <span className={`font-black text-lg ${
+                      receipt.is_paid || receipt.payment_intent_id 
+                        ? (themeStyle === "luxury" ? "text-emerald-400" : "text-emerald-600") 
+                        : (themeStyle === "luxury" ? "text-amber-500" : "text-amber-600")
+                    }`}>
                       {formatPrice(receipt.total_amount)}
                     </span>
                   </div>
