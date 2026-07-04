@@ -758,7 +758,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                         "{retentionOffers[fb.id].text}"
                                       </div>
                                       
-                                      {fb.contact_info ? (
+                                      {fb.contact_info && fb.contact_info.trim().replace('|', '').trim().length > 0 ? (
                                         <button 
                                           onClick={() => {
                                             const isEmail = fb.contact_info?.includes('@');
@@ -828,7 +828,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                         "{selectedTemplates[fb.id] && selectedTemplates[fb.id] !== 'ai' ? selectedTemplates[fb.id] : loyaltyIdeas[fb.id].text}"
                                       </div>
                                       
-                                      {fb.contact_info ? (
+                                      {fb.contact_info && fb.contact_info.trim().replace('|', '').trim().length > 0 ? (
                                         <div className="flex flex-col gap-2 mt-1">
                                           <select 
                                             className="w-full text-sm border-slate-200 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-2"
