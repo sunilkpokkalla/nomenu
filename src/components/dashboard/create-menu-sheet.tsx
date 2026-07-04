@@ -35,9 +35,9 @@ export function CreateMenuSheet({ createAction, chefRecommendations, plan }: Cre
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button className="font-semibold shadow-sm">
-          <Plus className="mr-2 h-4 w-4" />
-          Create Menu
+        <Button className="rounded-xl bg-slate-950 hover:bg-slate-900 text-white h-11 px-4 text-sm font-semibold tracking-wide shadow-sm transition-all duration-300 hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98]">
+          <Plus className="mr-2 h-4 w-4" strokeWidth={1.5} />
+          Add Menu
         </Button>
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
