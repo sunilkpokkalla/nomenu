@@ -65,7 +65,7 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
     }
   }
 
-  const isLocked = !restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase());
+  const isLocked = !restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.toLowerCase());
   
   if (isLocked) {
     return (
