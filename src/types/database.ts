@@ -9,6 +9,86 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      floor_plans: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          name: string;
+          width: number;
+          height: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          name: string;
+          width?: number;
+          height?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          restaurant_id?: string;
+          name?: string;
+          width?: number;
+          height?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "floor_plans_restaurant_id_fkey";
+            columns: ["restaurant_id"];
+            referencedRelation: "restaurants";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      restaurant_tables: {
+        Row: {
+          id: string;
+          floor_plan_id: string;
+          table_number: string;
+          capacity: number;
+          shape: string;
+          x: number;
+          y: number;
+          width: number;
+          height: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          floor_plan_id: string;
+          table_number: string;
+          capacity?: number;
+          shape?: string;
+          x?: number;
+          y?: number;
+          width?: number;
+          height?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          floor_plan_id?: string;
+          table_number?: string;
+          capacity?: number;
+          shape?: string;
+          x?: number;
+          y?: number;
+          width?: number;
+          height?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_tables_floor_plan_id_fkey";
+            columns: ["floor_plan_id"];
+            referencedRelation: "floor_plans";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       affiliates: {
         Row: {
           id: string;

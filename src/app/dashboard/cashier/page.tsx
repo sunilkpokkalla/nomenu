@@ -5,6 +5,8 @@ import { getSupabaseEnv } from "@/lib/env";
 import { CashierBoard } from "@/app/dashboard/cashier/cashier-board";
 import { WaitlistBoard } from "@/app/dashboard/cashier/waitlist-board";
 import { CompletedBoard } from "@/app/dashboard/cashier/completed-board";
+import { FloorPlanBoard } from "@/app/dashboard/cashier/floor-plan-board";
+import { getOrCreateFloorPlan } from "@/app/dashboard/cashier/floor-plan-actions";
 import { Wallet } from "lucide-react";
 import { getActiveRestaurant } from "@/lib/rbac";
 import { getCurrencySymbol } from "@/lib/currency-options";
@@ -54,6 +56,14 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
     .is("customer_phone", null) // Exclusively Dine-In orders
     .eq("is_paid", false)
     .order("created_at", { ascending: true });
+
+  let floorPlanData = null;
+  if (tab === "floor-plan") {
+    const res = await getOrCreateFloorPlan(restaurant.id);
+    if (res.success) {
+      floorPlanData = res.floorPlan;
+    }
+  }
 
   const isLocked = !restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase());
   
@@ -111,6 +121,12 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
           >
             Completed History
           </Link>
+          <Link 
+            href="/dashboard/cashier?tab=floor-plan"
+            className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${tab === "floor-plan" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+          >
+            Floor Plan
+          </Link>
         </div>
       </div>
 
@@ -139,6 +155,13 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
             supabaseUrl={getSupabaseEnv().url} 
             supabaseAnonKey={getSupabaseEnv().anonKey} 
             currencySymbol={getCurrencySymbol(restaurant.currency)} 
+          />
+        )}
+        {tab === "floor-plan" && floorPlanData && (
+          <FloorPlanBoard
+            restaurantId={restaurant.id}
+            initialFloorPlan={floorPlanData}
+            activeOrders={initialOrders || []}
           />
         )}
       </div>
