@@ -211,21 +211,25 @@ export function LoyaltyDesignEditor({
                           : "border-slate-200 bg-white hover:border-indigo-200 hover:bg-slate-50"
                       }`}
                     >
-                      <div className="w-full aspect-[1.586/1] rounded-md shadow-sm mb-2 relative overflow-hidden bg-slate-100 pointer-events-none flex items-center justify-center">
-                        <div className="w-[300px] origin-center" style={{ transform: 'scale(0.25)' }}>
-                          <LoyaltyCardUI
-                            cardId="preview-mini"
-                            restaurantId="preview-mini"
-                            stamps={3}
-                            restaurantName={restaurantName}
-                            primaryColor={PREVIEW_COLORS[opt.id] || primaryColor}
-                            stampColor={color}
-                            stampIcon={icon}
-                            layout={opt.id}
-                            rewardText={rewardText}
-                            isPreviewMode={true}
-                          />
-                        </div>
+                      <div className="w-full aspect-[1.586/1] rounded-md shadow-sm mb-2 relative overflow-hidden bg-slate-100 pointer-events-none">
+                        <svg viewBox="0 0 640 403" className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid meet">
+                          <foreignObject width="640" height="403">
+                            <div className="w-[640px] h-[403px] p-4 flex items-center justify-center">
+                              <LoyaltyCardUI
+                                cardId="preview-mini"
+                                restaurantId="preview-mini"
+                                stamps={3}
+                                restaurantName={restaurantName}
+                                primaryColor={PREVIEW_COLORS[opt.id] || primaryColor}
+                                stampColor={color}
+                                stampIcon={icon}
+                                layout={opt.id}
+                                rewardText={rewardText}
+                                isPreviewMode={true}
+                              />
+                            </div>
+                          </foreignObject>
+                        </svg>
                       </div>
                       <span className={`text-[10px] font-bold text-center leading-tight ${layout === opt.id ? "text-indigo-700" : "text-slate-500 group-hover:text-slate-800"}`}>
                         {opt.name}
