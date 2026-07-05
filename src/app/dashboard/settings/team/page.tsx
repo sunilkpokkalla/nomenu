@@ -39,8 +39,8 @@ export default async function TeamSettingsPage(
   const roleLabels: Record<string, string> = {
     manager: "Manager (Full Access)",
     kitchen: "Kitchen Staff (KDS Only)",
-    waitstaff: "Waitstaff (Orders Only)",
-    kitchen_waitstaff: "Kitchen & Waitstaff (Both)",
+    waitstaff: "Front of House (Host, Cashier, Server)",
+    kitchen_waitstaff: "Full Staff (Kitchen & FOH)",
   };
 
   return (

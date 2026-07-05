@@ -217,79 +217,121 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
     );
   }
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
-      {tableTabs.map(tab => (
-        <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
-          {/* Header */}
-          <div className="bg-slate-900 text-white p-5 flex items-start justify-between">
-            <div>
-              <div className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
-              <div className="text-3xl font-black">{tab.table_number}</div>
-            </div>
-            <div className="text-right">
-              <div className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Total Due</div>
-              <div className="text-2xl font-black text-emerald-400">{currencySymbol}{tab.total_amount.toFixed(2)}</div>
-            </div>
-          </div>
-          
-          {/* Customers Summary */}
-          <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 flex items-center gap-2 text-sm text-slate-600 font-medium overflow-hidden whitespace-nowrap text-ellipsis">
-            <Users className="w-4 h-4 shrink-0 text-slate-400" />
-            {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in Customer"}
-          </div>
+  const actionableTabs = tableTabs.filter(t => t.total_amount > 0);
+  const emptyTabs = tableTabs.filter(t => t.total_amount === 0);
 
-          {/* Receipt Body */}
-          <div className="p-5 flex-1 max-h-[300px] overflow-y-auto hide-scrollbar space-y-4">
-            {tab.orders.map(order => (
-              <div key={order.id} className="pb-4 border-b border-dashed border-slate-200 last:border-0 last:pb-0">
-                <div className="flex justify-between items-center mb-2">
-                  <div className="text-xs font-bold text-slate-400">Order #{String(order.daily_order_number).padStart(3, '0')}</div>
+  return (
+    <div className="flex flex-col gap-12">
+      {/* Actionable Tabs (Orders with Money) */}
+      {actionableTabs.length > 0 && (
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <Receipt className="w-5 h-5 text-indigo-500" /> Tabs to Settle
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
+            {actionableTabs.map(tab => (
+              <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+                {/* Header */}
+                <div className="bg-slate-900 text-white p-5 flex items-start justify-between">
+                  <div>
+                    <div className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
+                    <div className="text-3xl font-black">{tab.table_number}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Total Due</div>
+                    <div className="text-2xl font-black text-emerald-400">{currencySymbol}{tab.total_amount.toFixed(2)}</div>
+                  </div>
                 </div>
                 
-                <div className="space-y-2">
-                  {order.order_items?.map(item => (
-                    <div key={item.id} className="flex justify-between items-start text-sm">
-                      <div className="flex gap-2">
-                        <span className="font-semibold text-slate-900">{item.quantity}x</span>
-                        <span className="text-slate-600">{item.menu_items?.name}</span>
+                {/* Customers Summary */}
+                <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 flex items-center gap-2 text-sm text-slate-600 font-medium overflow-hidden whitespace-nowrap text-ellipsis">
+                  <Users className="w-4 h-4 shrink-0 text-slate-400" />
+                  {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in Customer"}
+                </div>
+
+                {/* Receipt Body */}
+                <div className="p-5 flex-1 max-h-[300px] overflow-y-auto hide-scrollbar space-y-4">
+                  {tab.orders.map(order => (
+                    <div key={order.id} className="pb-4 border-b border-dashed border-slate-200 last:border-0 last:pb-0">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="text-xs font-bold text-slate-400">Order #{String(order.daily_order_number).padStart(3, '0')}</div>
                       </div>
-                      <span className="font-semibold text-slate-900 tabular-nums">
-                        {currencySymbol}{((item.menu_items?.price || 0) * item.quantity).toFixed(2)}
-                      </span>
+                      
+                      <div className="space-y-2">
+                        {order.order_items?.map(item => (
+                          <div key={item.id} className="flex justify-between items-start text-sm">
+                            <div className="flex gap-2">
+                              <span className="font-semibold text-slate-900">{item.quantity}x</span>
+                              <span className="text-slate-600">{item.menu_items?.name}</span>
+                            </div>
+                            <span className="font-semibold text-slate-900 tabular-nums">
+                              {currencySymbol}{((item.menu_items?.price || 0) * item.quantity).toFixed(2)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Footer Actions */}
+                <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => handleSettleTab(tab.table_number, tab.customer_names[0])}
+                      disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
+                      className={`flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 text-white ${confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-orange-500 hover:bg-orange-600" : "bg-emerald-500 hover:bg-emerald-600"}`}
+                    >
+                      {confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                        <>Sure? Click to Settle</>
+                      ) : (
+                        <><CircleDollarSign className="w-5 h-5" /> Settle</>
+                      )}
+                    </button>
+                    <button 
+                      onClick={() => handleVoidTab(tab.table_number, tab.customer_names[0])}
+                      disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
+                      className={`px-4 rounded-xl font-bold flex items-center justify-center transition-colors disabled:opacity-50 border ${confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-red-600 text-white border-red-600" : "bg-white hover:bg-rose-50 text-rose-500 border-slate-200 hover:border-rose-200"}`}
+                      title="Void unpaid tab"
+                    >
+                      {confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "Sure? Click to Void" : <XCircle className="w-5 h-5" />}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      )}
 
-          {/* Footer Actions */}
-          <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-2">
-            <div className="flex gap-2">
-              <button 
-                onClick={() => handleSettleTab(tab.table_number, tab.customer_names[0])}
-                disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
-                className={`flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 text-white ${confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-orange-500 hover:bg-orange-600" : "bg-emerald-500 hover:bg-emerald-600"}`}
-              >
-                {confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
-                  <>Sure? Click to Settle</>
-                ) : (
-                  <><CircleDollarSign className="w-5 h-5" /> Settle</>
-                )}
-              </button>
-              <button 
-                onClick={() => handleVoidTab(tab.table_number, tab.customer_names[0])}
-                disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
-                className={`px-4 rounded-xl font-bold flex items-center justify-center transition-colors disabled:opacity-50 border ${confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-red-600 text-white border-red-600" : "bg-white hover:bg-rose-50 text-rose-500 border-slate-200 hover:border-rose-200"}`}
-                title="Void unpaid tab"
-              >
-                {confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "Sure? Click to Void" : <XCircle className="w-5 h-5" />}
-              </button>
-            </div>
+      {/* Empty / Just Seated Tabs */}
+      {emptyTabs.length > 0 && (
+        <div className={actionableTabs.length > 0 ? "pt-8 border-t border-slate-200" : ""}>
+          <h2 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+            <Users className="w-5 h-5 text-slate-400" /> Recently Seated (No Orders Yet)
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            {emptyTabs.map(tab => (
+              <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col justify-between hover:border-slate-300 transition-colors shadow-sm">
+                <div>
+                  <div className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
+                  <div className="text-xl font-black text-slate-800 mb-2">{tab.table_number}</div>
+                  <div className="text-sm font-medium text-slate-500 truncate" title={tab.customer_names[0]}>
+                    {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}
+                  </div>
+                </div>
+                <button 
+                  onClick={() => handleVoidTab(tab.table_number, tab.customer_names[0])}
+                  disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
+                  className="mt-4 w-full py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 text-sm font-semibold rounded-lg transition-colors border border-transparent hover:border-rose-200"
+                >
+                  {confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "Confirm Clear" : "Clear Table"}
+                </button>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
+      )}
     </div>
   );
 }

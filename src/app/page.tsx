@@ -957,22 +957,19 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Unlimited Menus & Items
                     </li>
                     <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Table Management & Floor Plan
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Digital Waitlist System
+                    </li>
+                    <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Team & Staff Management (RBAC)
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> VIP Digital Loyalty Cards & Rewards
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> AI-Driven Marketing Win-Backs
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 25 Magic AI Credits / month
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Private Customer Feedback System
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Square POS Integration
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Detailed Scan Analytics
@@ -1006,33 +1003,33 @@ export default function LandingPage() {
 
                   <hr className="border-slate-800" />
 
-                  <ul className="space-y-3 text-xs text-slate-300 font-medium">
+                  <ul className="space-y-3 text-xs text-slate-350 font-medium">
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Everything in Pro</strong>
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" strokeWidth={3} /> Everything in Pro
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Advanced Staff Permissions</strong>
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Fully Integrated POS & Ordering
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>50 Magic AI Credits / month</strong>
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Active Tabs & Tab Management
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Real-Time Live Ordering Dashboard</strong>
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Manual Payments & Tab Settling
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Interactive Digital Shopping Cart</strong>
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Real-Time Live Orders Dashboard
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Digital Receipts & Live Order Tracking</strong>
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Interactive Digital Shopping Cart
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> <strong>Keep 100% Revenue (0% Platform Fees)</strong>
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 50 Magic AI Credits / month
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> All 8+ Premium Elite Themes
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> All 8+ Premium Elite Themes
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-455 shrink-0" strokeWidth={3} /> White-labeled Branding
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> White-labeled Branding
                     </li>
                   </ul>
                 </div>

@@ -92,6 +92,10 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
     const groups = new Map<string, GroupedTab>();
 
     for (const order of filteredOrders) {
+      if (order.status === 'cancelled' && (!order.total_amount || order.total_amount === 0)) {
+        continue;
+      }
+
       const cName = order.customer_name || "Anonymous";
       const key = `${order.table_number}::${cName}`;
       

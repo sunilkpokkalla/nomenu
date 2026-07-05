@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { differenceInMinutes } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
@@ -63,6 +63,42 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
     });
   }, [orders]);
 
+  const playNotificationSound = useCallback(() => {
+    if (!soundPreference) return;
+    try {
+      const ctx = audioContextRef.current;
+      if (!ctx || ctx.state !== 'running') return;
+      
+      // First note
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(880, ctx.currentTime);
+      gain1.gain.setValueAtTime(0, ctx.currentTime);
+      gain1.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.05);
+      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(ctx.currentTime);
+      osc1.stop(ctx.currentTime + 0.5);
+      
+      // Second note
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(1108.73, ctx.currentTime + 0.1);
+      gain2.gain.setValueAtTime(0, ctx.currentTime + 0.1);
+      gain2.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.15);
+      gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(ctx.currentTime + 0.1);
+      osc2.stop(ctx.currentTime + 0.8);
+    } catch(e) {
+      console.error("Audio playback failed", e);
+    }
+  }, [soundPreference]);
+
   useEffect(() => {
     if (selectedDateStr) return; // Only notify on live "Today" view
     
@@ -85,7 +121,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
       // Add to known IDs
       newOrders.forEach(o => knownOrderIds.current.add(o.id));
     }
-  }, [orders, selectedDateStr, locationLabel]);
+  }, [orders, selectedDateStr, locationLabel, playNotificationSound]);
 
   useEffect(() => {
     const pref = localStorage.getItem("nomenu_kds_takeaway_sound");
@@ -136,42 +172,6 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
       }
     } else {
       setSoundEnabled(false);
-    }
-  };
-
-  const playNotificationSound = () => {
-    if (!soundPreference) return;
-    try {
-      const ctx = audioContextRef.current;
-      if (!ctx || ctx.state !== 'running') return;
-      
-      // First note
-      const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(880, ctx.currentTime);
-      gain1.gain.setValueAtTime(0, ctx.currentTime);
-      gain1.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.05);
-      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.start(ctx.currentTime);
-      osc1.stop(ctx.currentTime + 0.5);
-      
-      // Second note
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = 'sine';
-      osc2.frequency.setValueAtTime(1108.73, ctx.currentTime + 0.1);
-      gain2.gain.setValueAtTime(0, ctx.currentTime + 0.1);
-      gain2.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.15);
-      gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.start(ctx.currentTime + 0.1);
-      osc2.stop(ctx.currentTime + 0.8);
-    } catch(e) {
-      console.error("Audio playback failed", e);
     }
   };
 
