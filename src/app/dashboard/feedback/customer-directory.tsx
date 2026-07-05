@@ -30,12 +30,12 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
     const profileMap = new Map<string, CustomerProfile>();
     
     feedbacks.forEach(f => {
-      // Find the best identifier
-      let identifier = f.customer_email?.trim().toLowerCase();
-      if (!identifier) identifier = f.customer_phone?.trim().toLowerCase();
+      // Find the best identifier (Prioritize Phone Number for Loyalty Grouping)
+      let identifier = f.customer_phone?.trim().toLowerCase();
+      if (!identifier) identifier = f.customer_email?.trim().toLowerCase();
+      if (!identifier && f.loyalty_cards && f.loyalty_cards.length > 0) identifier = f.loyalty_cards[0].id;
       if (!identifier) identifier = f.contact_info?.trim().toLowerCase();
       if (!identifier) identifier = f.customer_name?.trim().toLowerCase();
-      if (!identifier && f.loyalty_cards && f.loyalty_cards.length > 0) identifier = f.loyalty_cards[0].id;
       
       if (!identifier) return; // Completely anonymous, skip
       
