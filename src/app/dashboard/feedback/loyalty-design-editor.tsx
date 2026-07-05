@@ -220,7 +220,7 @@ export function LoyaltyDesignEditor({
                                 restaurantId="preview-mini"
                                 stamps={3}
                                 restaurantName={restaurantName}
-                                primaryColor={PREVIEW_COLORS[opt.id] || primaryColor}
+                                primaryColor={primaryColor}
                                 stampColor={color}
                                 stampIcon={icon}
                                 layout={opt.id}
