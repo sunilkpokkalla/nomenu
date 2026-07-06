@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     // Get the restaurant's stripe_account_id
     const { data: _restaurantData, error: fetchError } = await supabase
       .from("restaurants")
-      .select("stripe_account_id, plan, prep_time_minutes, currency")
+      .select("stripe_account_id, plan, prep_time_minutes, currency, is_annual_plan, subscription_start_date")
       .eq("id", restaurantId)
       .single();
 
@@ -72,8 +72,19 @@ export async function POST(req: Request) {
       });
     }
 
-    // 2.5% Platform Fee
-    const applicationFeeAmountCents = Math.round(totalAmountCents * 0.025);
+    // 2.5% Platform Fee - WAIVED for first-year Enterprise Annual plans
+    let applicationFeeAmountCents = Math.round(totalAmountCents * 0.025);
+    
+    if (restaurant.plan === "enterprise" && restaurant.is_annual_plan && restaurant.subscription_start_date) {
+      const startDate = new Date(restaurant.subscription_start_date);
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - startDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays <= 365) {
+        applicationFeeAmountCents = 0;
+      }
+    }
 
     // Pre-insert the order into the database securely via Service Role
     // This avoids hitting the 500-character Stripe metadata limit with items_json

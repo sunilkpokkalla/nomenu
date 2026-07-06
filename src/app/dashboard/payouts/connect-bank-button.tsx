@@ -15,7 +15,8 @@ export function ConnectBankButton({ isAlreadyConnected }: { isAlreadyConnected?:
     const newWindow = window.open("about:blank", "_blank");
 
     try {
-      const res = await fetch("/api/stripe/connect", {
+      const returnPath = window.location.pathname;
+      const res = await fetch(`/api/stripe/connect?returnPath=${encodeURIComponent(returnPath)}`, {
         method: "POST",
       });
       const data = await res.json();

@@ -61,12 +61,15 @@ export async function POST(req: Request) {
       }
     }
 
+    const urlObj = new URL(req.url);
+    const returnPath = urlObj.searchParams.get("returnPath") || "/dashboard/payouts";
+
     const accountLink = await fetchStripe("/account_links", {
       method: "POST",
       body: {
         account: stripeAccountId,
-        refresh_url: `${origin}/dashboard/payouts`,
-        return_url: `${origin}/dashboard/payouts?success=true`,
+        refresh_url: `${origin}${returnPath}`,
+        return_url: `${origin}${returnPath}?success=true`,
         type: "account_onboarding",
       }
     });

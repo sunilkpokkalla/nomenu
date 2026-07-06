@@ -134,7 +134,11 @@ export async function POST(req: Request) {
     if (subscription.status === "canceled" || subscription.status === "unpaid") {
       const { error } = await supabase
         .from("restaurants")
-        .update({ plan: "free" })
+        .update({ 
+          plan: "free",
+          is_annual_plan: false,
+          subscription_start_date: null
+        })
         .eq("stripe_subscription_id", subscription.id);
       
       if (error) {
@@ -148,14 +152,18 @@ export async function POST(req: Request) {
       
       // CRITICAL FIX: The Stripe Customer Portal changes the Price ID, but DOES NOT update metadata.
       // We must resolve the actual plan from the current Price ID to handle upgrades/downgrades properly.
+      let isAnnual = false;
       const currentPriceId = subscription.items?.data?.[0]?.price?.id;
       if (currentPriceId) {
         if (currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO || currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL) {
           planId = "pro";
+          isAnnual = currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL;
         } else if (currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE || currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE_ANNUAL) {
           planId = "elite";
+          isAnnual = currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE_ANNUAL;
         } else if (currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE || currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_ANNUAL) {
           planId = "enterprise";
+          isAnnual = currentPriceId === process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_ANNUAL;
         }
       }
       
@@ -178,8 +186,10 @@ export async function POST(req: Request) {
             .from("restaurants")
             .update({
               plan: planId,
+              is_annual_plan: isAnnual,
+              subscription_start_date: new Date().toISOString(),
+              magic_credits: newCredits,
               stripe_subscription_id: subscription.id,
-              magic_credits: newCredits
             })
             .eq("id", restaurantId);
             

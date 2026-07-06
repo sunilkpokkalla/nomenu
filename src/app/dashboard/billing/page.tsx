@@ -56,6 +56,7 @@ const getPlans = (isAnnual: boolean) => [
       "Intelligent Order Capacity Pacing",
       "Order & Pay via Apple Pay / Card",
       "Direct Bank Payouts (Stripe Connect)",
+      isAnnual ? "0% Platform Fee (First Year)" : "2.5% Platform Transaction Fee",
       "Dedicated Account Manager",
     ],
   },

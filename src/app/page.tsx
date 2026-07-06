@@ -1082,7 +1082,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Direct Bank Payouts (Stripe Connect)</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 2.5% Platform Transaction Fee
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 0% Platform Fee (First Year on Annual Plan)
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Dedicated Account Manager
