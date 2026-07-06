@@ -162,6 +162,8 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
                         headline={headline}
                         subtext={previewQr.label || "Table"}
                         qrImageUrl={previewQrImageApiUrl}
+                        qrDataUrl={previewPublicUrl}
+                        qrColor={qrColor}
                         colorStart={colorStart}
                         colorEnd={colorEnd}
                         wifiPassword={showWifi ? (restaurant.wifi_password || "") : null}
@@ -356,6 +358,8 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
                   headline={headline}
                   subtext={qr.label || "Table"}
                   qrImageUrl={qrImageUrl}
+                  qrDataUrl={publicUrl}
+                  qrColor={qrColor}
                   colorStart={colorStart}
                   colorEnd={colorEnd}
                   wifiPassword={showWifi ? (restaurant.wifi_password || "") : null}

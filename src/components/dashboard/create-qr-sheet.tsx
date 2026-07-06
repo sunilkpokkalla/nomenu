@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Plus, ShieldAlert, ChevronDown, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ interface CreateQrSheetProps {
 
 export function CreateQrSheet({ createAction, locationZones, menusList, ManageLocationZonesModal, plan }: CreateQrSheetProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [mode, setMode] = useState("dine_in");
   const [isAddingNewZone, setIsAddingNewZone] = useState(false);
   const [selectedZone, setSelectedZone] = useState(locationZones[0] || "Main Dining");
@@ -76,9 +77,11 @@ export function CreateQrSheet({ createAction, locationZones, menusList, ManageLo
             </Button>
           </div>
         ) : (
-          <form action={async (formData) => {
-            await createAction(formData);
-            setIsOpen(false);
+          <form action={(formData) => {
+            startTransition(async () => {
+              await createAction(formData);
+              setIsOpen(false);
+            });
           }} className="space-y-6 mt-4">
             <div className="space-y-2.5">
               <Label htmlFor="mode" className="text-slate-700 font-medium">Order Mode</Label>
@@ -191,9 +194,13 @@ export function CreateQrSheet({ createAction, locationZones, menusList, ManageLo
               </select>
             </div>
             
-            <Button type="submit" className="w-full rounded-xl h-11 font-medium bg-slate-900 hover:bg-slate-800 text-white shadow-md hover:shadow-lg transition-all mt-6">
-              <Plus className="mr-2 h-4 w-4" />
-              Generate QR Code
+            <Button type="submit" disabled={isPending} className="w-full rounded-xl h-11 font-medium bg-slate-900 hover:bg-slate-800 text-white shadow-md hover:shadow-lg transition-all mt-6">
+              {isPending ? "Generating..." : (
+                <>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Generate QR Code
+                </>
+              )}
             </Button>
           </form>
         )}

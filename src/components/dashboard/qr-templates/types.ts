@@ -6,6 +6,7 @@ export interface QrTemplateProps {
   logoUrl?: string | null;
   qrImageUrl: string;
   qrDataUrl?: string;
+  qrColor?: string;
   colorStart: string;
   colorEnd: string;
   id?: string;

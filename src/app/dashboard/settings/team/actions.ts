@@ -32,8 +32,12 @@ export async function inviteStaff(formData: FormData, restaurantId: string) {
     redirect("/dashboard");
   }
 
-  if (!restaurant.plan || restaurant.plan === "free" || restaurant.plan === "pro") {
-    redirect("/dashboard/settings/team?message=Please%20upgrade%20to%20Elite%20to%20invite%20staff");
+  if (!restaurant.plan || restaurant.plan === "free") {
+    redirect("/dashboard/settings/team?message=Please%20upgrade%20to%20Pro%20or%20Elite%20to%20invite%20staff");
+  }
+
+  if (restaurant.plan === "pro" && (role === "kitchen" || role === "kitchen_waitstaff")) {
+    redirect("/dashboard/settings/team?message=Kitchen%20staff%20roles%20require%20the%20Elite%20plan");
   }
 
   // Check if email already exists in staff

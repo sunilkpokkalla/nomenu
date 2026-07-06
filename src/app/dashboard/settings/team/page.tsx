@@ -170,7 +170,7 @@ export default async function TeamSettingsPage(
       </Card>
 
       {/* Conditionally render invite form or upsell based on plan */}
-      {!restaurant?.plan || restaurant?.plan === "free" || restaurant?.plan === "pro" ? (
+      {!restaurant?.plan || restaurant?.plan === "free" ? (
         <Card className="border-indigo-100 bg-indigo-50/50 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/50 rounded-full blur-3xl -mr-10 -mt-10"></div>
           <CardHeader>
@@ -200,7 +200,7 @@ export default async function TeamSettingsPage(
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <InviteStaffForm restaurantId={restaurant!.id} />
+            <InviteStaffForm restaurantId={restaurant!.id} plan={restaurant?.plan || "free"} />
           </CardContent>
         </Card>
       )}

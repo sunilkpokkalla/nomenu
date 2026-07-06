@@ -230,6 +230,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
                       return `${base}&color=${encodeURIComponent(qrColor)}`;
                     })()}
                     qrDataUrl={fullMenuUrl}
+                    qrColor={qrColor}
                     colorStart={colorStart}
                     colorEnd={colorEnd}
                   />

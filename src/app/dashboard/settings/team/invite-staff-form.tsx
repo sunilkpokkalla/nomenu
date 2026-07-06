@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Send } from "lucide-react";
 
-export function InviteStaffForm({ restaurantId }: { restaurantId: string }) {
+export function InviteStaffForm({ restaurantId, plan }: { restaurantId: string; plan: string }) {
   const [isPending, startTransition] = useTransition();
+
+  const isEliteOrHigher = plan === "elite" || plan === "enterprise";
 
   return (
     <form
@@ -45,9 +47,13 @@ export function InviteStaffForm({ restaurantId }: { restaurantId: string }) {
             required
           >
             <option value="manager">Manager (Full Dashboard Access)</option>
-            <option value="kitchen">Kitchen (KDS Only)</option>
             <option value="waitstaff">Front of House (Host, Cashier, Server)</option>
-            <option value="kitchen_waitstaff">Full Staff (Kitchen & FOH)</option>
+            <option value="kitchen" disabled={!isEliteOrHigher}>
+              Kitchen (KDS Only) {!isEliteOrHigher && "🔒 Elite"}
+            </option>
+            <option value="kitchen_waitstaff" disabled={!isEliteOrHigher}>
+              Full Staff (Kitchen & FOH) {!isEliteOrHigher && "🔒 Elite"}
+            </option>
           </select>
         </div>
       </div>
