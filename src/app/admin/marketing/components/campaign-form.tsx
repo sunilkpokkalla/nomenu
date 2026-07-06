@@ -24,10 +24,10 @@ const TEMPLATES = {
     subject: "Getting you back to the kitchen",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu Digital Menus" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&h=300&fit=crop" alt="Restaurant Kitchen" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi there,</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I’m reaching out because I know you opened a restaurant because you love food and hospitality, not because you wanted to manage printers, apologize for outdated prices, or fight with clunky POS systems.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I’m reaching out because I know you got into the restaurant business because you love food and hospitality, not because you wanted to manage printers, apologize for outdated prices, or fight with clunky POS systems.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">We believe technology in a restaurant should be completely invisible—it should just work. We've built a system that lets you replace your paper menus with stunning digital QR menus that you can update instantly from your phone. Plus, it routes orders directly to a beautiful Kitchen Display System so you never lose a paper ticket again.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Stop wrestling with operations and get back to doing what you do best.</p>
   <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
@@ -42,7 +42,7 @@ const TEMPLATES = {
     subject: "Unlock Premium Themes & Custom Domains",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu Pro" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&h=300&fit=crop" alt="Premium Restaurant" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
   <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Take your brand to the next level.</h2>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">You have already set up your digital menu, but did you know you can completely transform how it looks to your guests?</p>
@@ -62,7 +62,7 @@ const TEMPLATES = {
     subject: "Run your dining room without waitstaff",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu Seamless Operations" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=600&h=300&fit=crop" alt="Seamless Ordering" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
   <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Eliminate front-of-house friction.</h2>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Are you struggling to hire and retain reliable servers? Or dealing with constant order mistakes being run back to the kitchen?</p>
@@ -84,7 +84,7 @@ const TEMPLATES = {
     subject: "Stop printing menus. Start shining.",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu Digital Menus" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?w=600&h=300&fit=crop" alt="Modern QR Menu" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
   <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Your food deserves better than a sticky, outdated paper menu.</h2>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Did you know the average restaurant spends over $1,200 a year just reprinting menus due to price changes and stains?</p>
@@ -100,7 +100,7 @@ const TEMPLATES = {
     subject: "Increase check sizes by 20% effortlessly",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://nomenu.us/hero-preview.png" alt="Nomenu AI Photos" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=600&h=300&fit=crop" alt="Food Imagery" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
   <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">People eat with their eyes.</h2>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Text-only menus are leaving money on the table. When guests see high-quality images of your dishes, they order more.</p>
@@ -118,28 +118,40 @@ const TEMPLATES = {
   },
   b2b_labor_cost: {
     name: "The 'Labor Cost' Pitch (B2B)",
-    subject: "Faster table turns & 0 bad Yelp reviews at [Restaurant Name]",
+    subject: "Faster table turns & 0 bad Yelp reviews",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi [Owner Name],</p>
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&h=300&fit=crop" alt="Restaurant Management" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi there,</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">I know labor costs and front-of-house bottlenecks are the biggest headaches in hospitality right now.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We built Nomenu to fix that. Guests scan a custom QR code on your table, order directly to your Kitchen Display System, and pay on their phones.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We built Nomenu to fix exactly that. Guests simply scan a custom QR code at their table, order directly to your Kitchen Display System, and pay on their phones. No waiting, no order mistakes, and no friction.</p>
   <ul style="color: #475569; font-size: 16px; line-height: 1.6;">
-    <li>Increase table turns by 20%</li>
-    <li>Syncs directly with your Square POS</li>
-    <li>AI intercepts 1-3 star reviews before they ever reach Yelp</li>
+    <li><strong>Increase table turns by 20%</strong> instantly</li>
+    <li><strong>Syncs directly</strong> with your Square POS</li>
+    <li><strong>AI intercepts 1-3 star reviews</strong> before they ever reach Yelp</li>
   </ul>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Can I show you a 2-minute demo of how it would look for [Restaurant Name]?</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">See How It Works</a>
+  </div>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Can I show you a quick 2-minute demo of how this would look for your restaurant?</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
   },
   tech_chef_influencer: {
     name: "Tech Chef Influencer (Partnership)",
-    subject: "Love your content! Quick partnership idea for [Handle]",
+    subject: "Love your content! Quick partnership idea",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hey [Name],</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I love the content you’re putting out for the restaurant industry—especially your recent video on [Topic].</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I'm the founder of Nomenu, a new restaurant OS that replaces waitstaff bottlenecks with a direct-to-KDS ordering system. We are launching an exclusive Partner Program and I think your audience of restaurant owners would love it.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We offer a 20% recurring revenue share for every restaurant you refer. Since it integrates natively with Square POS, it’s a very easy sell to any restaurant wanting to cut labor costs.</p>
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=600&h=300&fit=crop" alt="Chef Influencer" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hey!</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I absolutely love the content you’re putting out for the restaurant industry. Your insights are always spot on.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I'm the founder of Nomenu, a new restaurant OS that replaces waitstaff bottlenecks with a direct-to-KDS ordering system. We are launching an exclusive Partner Program, and I think your audience of restaurant owners would get massive value from it.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We offer a <strong>20% recurring revenue share</strong> for every restaurant you refer. Since it integrates natively with Square POS, it’s a very easy sell to any restaurant wanting to cut labor costs and boost margins.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us/partners" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">View Partner Program</a>
+  </div>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Would you be open to chatting about a potential partnership?</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
@@ -148,9 +160,15 @@ const TEMPLATES = {
     name: "VP of Sales / Executive Pitch",
     subject: "Building a unicorn in hospitality tech",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi [Name],</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I’ve been following your success scaling SaaS revenue at [Previous Company]. I’m the founder of Nomenu—a restaurant OS that replaces waitstaff bottlenecks with a direct-to-KDS ordering system and AI-driven Yelp protection.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We have the product, the POS integrations (Square), and the AI infrastructure. I am looking for a killer VP of Sales/GTM leader to build the outbound machine and scale us from early traction to $1M ARR and beyond.</p>
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?w=600&h=300&fit=crop" alt="Sales Pitch" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi there,</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I’ve been closely following your success scaling SaaS revenue. I’m the founder of Nomenu—a restaurant OS that replaces waitstaff bottlenecks with a direct-to-KDS ordering system and AI-driven Yelp protection.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We have the product, the POS integrations, and the AI infrastructure fully built. Now, I am looking for a killer VP of Sales/GTM leader to build the outbound machine and scale us from early traction to $1M ARR and beyond.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Explore Nomenu</a>
+  </div>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">If you're interested in building a unicorn in the hospitality tech space, let's grab coffee.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
@@ -159,10 +177,16 @@ const TEMPLATES = {
     name: "Seed Investor / VC Deck",
     subject: "Nomenu: Re-inventing Restaurant Operations",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi [Name],</p>
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=300&fit=crop" alt="Investment Deck" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi there,</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">The biggest existential threat to restaurants right now is labor costs. Waitstaff overhead and slow table turns are crushing margins.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">At Nomenu, we’ve built an end-to-end OS that lets guests order and pay directly on their phones, injecting orders straight into a custom Kitchen Display System via Square POS.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We are raising our Seed round to aggressively scale our outbound sales and partner channels. I've attached our deck below.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We are raising our Seed round to aggressively scale our outbound sales and partner channels.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">View Our Deck</a>
+  </div>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">I would love to walk you through our traction and our 12-month roadmap.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
