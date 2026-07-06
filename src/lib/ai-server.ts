@@ -1,12 +1,17 @@
-export async function generateAiDescription(name: string, type: 'menu' | 'item' = 'item'): Promise<string | null> {
+export async function generateAiDescription(name: string, type: 'menu' | 'item' | 'reward' = 'item'): Promise<string | null> {
   if (!process.env.GEMINI_API_KEY) {
     console.warn("GEMINI_API_KEY is not configured.");
     return null;
   }
 
-  const prompt = type === 'menu' 
-    ? `Write a very short, appetizing, 1 to 2 sentence description for a restaurant menu named "${name}" (e.g. Lunch Menu, Dinner Menu). Keep it professional, enticing, and do not use quotes.`
-    : `Write a very short, accurate, 1 to 2 sentence restaurant menu description for a dish named "${name}". Keep it professional and appetizing, but strictly respect the authentic culinary profile of the dish. Do not hallucinate flavors (e.g., do not call a plain steamed dish "spicy" or a savory dish "sweet"). Do not include the name of the dish in the description. Do not use quotes.`;
+  let prompt = "";
+  if (type === 'menu') {
+    prompt = `Write a very short, appetizing, 1 to 2 sentence description for a restaurant menu named "${name}" (e.g. Lunch Menu, Dinner Menu). Keep it professional, enticing, and do not use quotes.`;
+  } else if (type === 'reward') {
+    prompt = `Write an exciting, punchy 1 to 2 sentence loyalty program reward description for winning a "${name}". Congratulate the customer for earning 10 stamps, keep it enthusiastic and encouraging. Do not use quotes.`;
+  } else {
+    prompt = `Write a very short, accurate, 1 to 2 sentence restaurant menu description for a dish named "${name}". Keep it professional and appetizing, but strictly respect the authentic culinary profile of the dish. Do not hallucinate flavors (e.g., do not call a plain steamed dish "spicy" or a savory dish "sweet"). Do not include the name of the dish in the description. Do not use quotes.`;
+  }
 
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {

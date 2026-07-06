@@ -16,7 +16,8 @@ export async function settleTableTab(restaurantId: string, tableNumber: string, 
   }
 
   // Update all unpaid orders for this table + customer
-  let query = supabase
+  const adminSupabase = createAdminClient();
+  let query = adminSupabase
     .from("orders")
     // @ts-expect-error: paid_at is not in the generated types yet
     .update({ is_paid: true, paid_at: new Date().toISOString() })
@@ -52,7 +53,8 @@ export async function voidTableTab(restaurantId: string, tableNumber: string, cu
   }
 
   // Cancel all unpaid orders for this table + customer and track when it was cleared
-  let query = supabase
+  const adminSupabase = createAdminClient();
+  let query = adminSupabase
     .from("orders")
     // @ts-expect-error: paid_at is not in the generated types yet
     .update({ status: "cancelled", paid_at: new Date().toISOString() })
@@ -111,7 +113,13 @@ export async function removeTableFromTab(orderId: string, tableToRemove: string)
       // Let's just update the status to cancelled directly for this order ID
       '', '', '' 
     ).catch(async () => {
-      await supabase.from("orders").update({ status: "cancelled", table_number: null }).eq("id", orderId);
+      const adminSupabase = createAdminClient();
+      await adminSupabase.from("orders").update({ 
+        status: "cancelled", 
+        table_number: null,
+        // @ts-expect-error: paid_at is not in the generated types yet
+        paid_at: new Date().toISOString() 
+      }).eq("id", orderId);
     });
   }
 
@@ -165,7 +173,7 @@ export async function updateWaitlistStatus(waitlistId: string, status: 'waiting'
   // Fetch the entry first to get the restaurant_id and customer name
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: entry, error: fetchError } = await (supabase.from("waitlist") as any)
-    .select("restaurant_id, customer_name")
+    .select("restaurant_id, customer_name, party_size")
     .eq("id", waitlistId)
     .single();
 
@@ -192,6 +200,8 @@ export async function updateWaitlistStatus(waitlistId: string, status: 'waiting'
       restaurant_id: entry.restaurant_id,
       table_number: tableName,
       customer_name: entry.customer_name,
+      // @ts-expect-error: party_size is not in the generated types yet
+      party_size: entry.party_size,
       total_amount: 0,
       status: "pending",
       is_paid: false

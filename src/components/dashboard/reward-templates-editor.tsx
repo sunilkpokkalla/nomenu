@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, GripVertical } from "lucide-react";
+import { Plus, Trash2, GripVertical, Wand2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,6 +33,33 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
     const newTemplates = [...templates];
     newTemplates[index][field] = value;
     setTemplates(newTemplates);
+  };
+
+  const [generatingStates, setGeneratingStates] = useState<Record<number, boolean>>({});
+
+  const handleGenerate = async (index: number) => {
+    const label = templates[index].label;
+    if (!label.trim()) return;
+
+    setGeneratingStates(prev => ({ ...prev, [index]: true }));
+    try {
+      const res = await fetch("/api/menu/generate-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: label, type: "reward" }),
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.description) {
+          updateTemplate(index, "value", data.description);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to generate reward description:", error);
+    } finally {
+      setGeneratingStates(prev => ({ ...prev, [index]: false }));
+    }
   };
 
   return (
@@ -70,7 +97,24 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-slate-500 mb-1.5 block">Reward Message / Details</Label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <Label className="text-xs text-slate-500">Reward Message / Details</Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 px-2 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 bg-emerald-50/50 -mr-2"
+                      onClick={() => handleGenerate(index)}
+                      disabled={generatingStates[index] || !template.label.trim()}
+                    >
+                      {generatingStates[index] ? (
+                        <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
+                      ) : (
+                        <Wand2 className="w-3 h-3 mr-1.5" />
+                      )}
+                      AI Write
+                    </Button>
+                  </div>
                   <Textarea 
                     placeholder="Congratulations on hitting 10 stamps! Show this message to claim your free appetizer."
                     value={template.value}
