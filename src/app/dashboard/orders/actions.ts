@@ -58,9 +58,16 @@ export async function updateOrderStatus(orderId: string, status: string) {
   }
 
   // 4. Update the order status in Supabase
+  const updateData: { status: string; ended_at?: string | null } = { status };
+  if (["completed", "cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(status)) {
+    updateData.ended_at = new Date().toISOString();
+  } else {
+    updateData.ended_at = null;
+  }
+
   const { error } = await supabase
     .from("orders")
-    .update({ status })
+    .update(updateData)
     .eq("id", orderId);
 
   if (error) {

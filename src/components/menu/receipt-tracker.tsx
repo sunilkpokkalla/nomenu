@@ -48,23 +48,16 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const handleCancelOrder = async (orderId: string) => {
-    if (!confirm("Are you sure you want to cancel this order?")) return;
     setCancellingId(orderId);
     try {
       const res = await cancelOrder(orderId);
       if (res.success) {
-        if (res.type === "instant") {
-          alert("Your order has been cancelled and refunded.");
-        } else {
-          alert("Cancellation requested. The restaurant will review your request.");
-        }
         fetchOrders(orderIds, false);
       } else {
-        alert(res.error || "Failed to cancel order.");
+        console.error(res.error || "Failed to cancel order.");
       }
     } catch (err) {
-      console.error(err);
-      alert("Failed to cancel order.");
+      console.error("Failed to cancel order.", err);
     } finally {
       setCancellingId(null);
     }

@@ -27,7 +27,7 @@ type Order = {
   daily_order_number?: number | null;
   payment_intent_id?: string | null;
   is_paid?: boolean;
-  party_size?: number;
+  party_size?: number | null;
   order_items?: OrderItem[];
 };
 
@@ -67,7 +67,7 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
       .eq("restaurant_id", restaurantId)
       .is("customer_phone", null)
       .eq("is_paid", false)
-      .neq("status", "cancelled")
+      .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant")')
       .order("created_at", { ascending: true });
       
     if (activeData) setOrders(activeData as unknown as Order[]);
@@ -78,9 +78,8 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
       .is("customer_phone", null)
-      .not("paid_at", "is", null)
-      .gte("paid_at", today.toISOString())
-      .order("paid_at", { ascending: false });
+      .or(`paid_at.gte.${today.toISOString()},and(status.in.(cancelled,cancelled_by_customer,cancelled_by_restaurant),created_at.gte.${today.toISOString()})`)
+      .order("created_at", { ascending: false });
       
     if (historyData) setHistoryOrders(historyData as unknown as Order[]);
   };
@@ -122,8 +121,8 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
           } else if (payload.eventType === "UPDATE") {
             if (payload.new.customer_phone !== null) return;
             
-            if (payload.new.is_paid) {
-              // Remove it from the board if it gets paid
+            if (payload.new.is_paid || ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(payload.new.status)) {
+              // Remove it from the board if it gets paid or cancelled
               setOrders(prev => prev.filter(o => o.id !== payload.new.id));
             } else {
               setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));

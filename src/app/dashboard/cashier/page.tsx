@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
 import { CashierBoard } from "@/app/dashboard/cashier/cashier-board";
@@ -10,6 +11,7 @@ import { getOrCreateFloorPlans } from "@/app/dashboard/cashier/floor-plan-action
 import { Wallet } from "lucide-react";
 import { getActiveRestaurant } from "@/lib/rbac";
 import { getCurrencySymbol } from "@/lib/currency-options";
+import { TabSaver } from "./tab-saver";
 
 export const metadata = {
   title: "Cashier Tabs | NoMenu Dashboard",
@@ -18,7 +20,9 @@ export const metadata = {
 
 export default async function CashierPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const params = await searchParams;
-  let tab = params.tab || "floor-plan";
+  const cookieStore = await cookies();
+  const lastFohTab = cookieStore.get("last_foh_tab")?.value;
+  let tab = params.tab || lastFohTab || "active";
   const supabase = await createClient();
 
   // Get user session
@@ -102,6 +106,7 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <TabSaver tab={tab} />
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">Front of House</h1>

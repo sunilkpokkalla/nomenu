@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Plus, Save, Trash2, Edit2, CheckCircle2, User, Users, Coffee, Ban, X } from "lucide-react";
-import { saveTableLayout, addFloorPlanArea } from "./floor-plan-actions";
+import { saveTableLayout, addFloorPlanArea, deleteFloorPlanArea } from "./floor-plan-actions";
 import { useRouter } from "next/navigation";
 import { createWalkInTab, voidTableTab, removeTableFromTab } from "./actions";
 
@@ -40,6 +40,8 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
   const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isProcessingLiveAction, setIsProcessingLiveAction] = useState(false);
+  const [editPlanName, setEditPlanName] = useState(activePlan?.name || "");
+  const [zoom, setZoom] = useState(1);
   
   // New state for walk-in form
   const [walkInName, setWalkInName] = useState("");
@@ -47,6 +49,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
   
   const [isAddingArea, setIsAddingArea] = useState(false);
   const [newAreaName, setNewAreaName] = useState("");
+  const [newAreaTemplate, setNewAreaTemplate] = useState("blank");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   // Live Mode Selection State
@@ -67,6 +70,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
     if (activePlan) {
       setTables(activePlan.restaurant_tables || []);
       setSelectedTableId(null);
+      setEditPlanName(activePlan.name);
     }
   }, [activePlanId, activePlan]);
 
@@ -106,13 +110,31 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
       return rest;
     });
 
-    const res = await saveTableLayout(activePlanId, tablesToUpsert, deletedTableIds);
+    const res = await saveTableLayout(activePlanId, tablesToUpsert, deletedTableIds, editPlanName.trim());
     if (res.success) {
       setIsEditMode(false);
       setDeletedTableIds([]);
       router.refresh();
     } else {
       showError(`Failed to save layout: ${res.error || 'Unknown error'}`);
+    }
+    setIsSaving(false);
+  };
+
+  const handleDeleteArea = async () => {
+    if (!activePlanId) return;
+    
+    setIsSaving(true);
+    try {
+      const res = await deleteFloorPlanArea(activePlanId);
+      if (res.success) {
+        setIsEditMode(false);
+        router.refresh();
+      } else {
+        showError("Failed to delete floor plan.");
+      }
+    } catch (e) {
+      showError("Error deleting floor plan.");
     }
     setIsSaving(false);
   };
@@ -133,12 +155,13 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
     if (!newAreaName.trim()) return;
     setIsProcessingLiveAction(true);
     try {
-      const res = await addFloorPlanArea(restaurantId, newAreaName.trim());
+      const res = await addFloorPlanArea(restaurantId, newAreaName.trim(), newAreaTemplate);
       if (res.success) {
         setNewAreaName("");
+        setNewAreaTemplate("blank");
         setIsAddingArea(false);
         router.refresh();
-        if (res.area) {
+        if (res.area && typeof res.area.id === "string") {
           setActivePlanId(res.area.id);
         }
       } else {
@@ -201,8 +224,8 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const offsetX = e.clientX - rect.left - table.x;
-      const offsetY = e.clientY - rect.top - table.y;
+      const offsetX = (e.clientX - rect.left) / zoom - table.x;
+      const offsetY = (e.clientY - rect.top) / zoom - table.y;
       
       setDragOffset({ x: offsetX, y: offsetY });
       setIsDragging(true);
@@ -215,14 +238,14 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      let newX = e.clientX - rect.left - dragOffset.x;
-      let newY = e.clientY - rect.top - dragOffset.y;
+      let newX = (e.clientX - rect.left) / zoom - dragOffset.x;
+      let newY = (e.clientY - rect.top) / zoom - dragOffset.y;
 
       newX = Math.round(newX / 10) * 10;
       newY = Math.round(newY / 10) * 10;
 
-      newX = Math.max(0, Math.min(newX, rect.width - 50));
-      newY = Math.max(0, Math.min(newY, rect.height - 50));
+      newX = Math.max(0, Math.min(newX, (rect.width / zoom) - 50));
+      newY = Math.max(0, Math.min(newY, (rect.height / zoom) - 50));
 
       setTables(tables.map(t => t.id === selectedTableId ? { ...t, x: newX, y: newY } : t));
     }
@@ -270,6 +293,18 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                 className="px-3 py-1.5 text-sm border-none focus:outline-none focus:ring-0 w-32"
                 onKeyDown={e => e.key === 'Enter' && handleAddArea()}
               />
+              <select
+                value={newAreaTemplate}
+                onChange={e => setNewAreaTemplate(e.target.value)}
+                className="px-2 py-1.5 text-sm border-none bg-slate-50 rounded-lg text-slate-600 focus:outline-none cursor-pointer"
+              >
+                <option value="blank">Blank (Build from scratch)</option>
+                <option value="casual">Casual Dining / Bistro</option>
+                <option value="fine">Fine Dining / Formal Room</option>
+                <option value="sports">Sports Bar & Grill</option>
+                <option value="cafe">Cafe / Coffee Shop</option>
+                <option value="patio">Outdoor Patio / Beer Garden</option>
+              </select>
               <button 
                 onClick={handleAddArea}
                 disabled={isProcessingLiveAction || !newAreaName.trim()}
@@ -281,6 +316,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                 onClick={() => {
                   setIsAddingArea(false);
                   setNewAreaName("");
+                  setNewAreaTemplate("blank");
                 }}
                 className="px-3 py-1.5 text-slate-500 hover:text-slate-700 text-sm font-bold transition-colors"
               >
@@ -301,7 +337,17 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
       {/* Controls Bar */}
       <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">{activePlan?.name || "Floor Plan"}</h2>
+          {isEditMode ? (
+            <input 
+              type="text"
+              value={editPlanName}
+              onChange={e => setEditPlanName(e.target.value)}
+              className="text-xl font-bold text-slate-900 border-b-2 border-indigo-200 focus:border-indigo-500 focus:outline-none bg-transparent px-1 py-0.5 w-64 mb-1"
+              placeholder="Floor Plan Name"
+            />
+          ) : (
+            <h2 className="text-xl font-bold text-slate-900">{activePlan?.name || "Floor Plan"}</h2>
+          )}
           {errorMessage ? (
             <p className="text-sm font-bold text-rose-600 animate-in fade-in duration-300">
               {errorMessage}
@@ -316,6 +362,14 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
         <div className="flex items-center gap-3">
           {isEditMode ? (
             <>
+              <button 
+                onClick={handleDeleteArea}
+                disabled={isSaving || initialFloorPlans.length <= 1}
+                title={initialFloorPlans.length <= 1 ? "Cannot delete the only floor plan" : ""}
+                className="flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-700 font-medium rounded-lg hover:bg-rose-100 transition-colors disabled:opacity-50"
+              >
+                <Trash2 className="w-4 h-4" /> Delete Floor
+              </button>
               <button 
                 onClick={handleAddTable}
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 font-medium rounded-lg hover:bg-indigo-100 transition-colors"
@@ -341,14 +395,23 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
         </div>
       </div>
 
-      <div className="flex gap-4 flex-1 min-h-[600px]">
-        {/* Canvas */}
-        <div 
-          ref={containerRef}
-          className={`flex-1 bg-slate-50 rounded-xl border-2 overflow-hidden relative touch-none ${isEditMode ? "border-indigo-200 shadow-inner" : "border-slate-200"}`}
-          style={{ backgroundImage: isEditMode ? 'radial-gradient(#cbd5e1 1px, transparent 1px)' : 'none', backgroundSize: '20px 20px' }}
-        >
-          {tables.map(table => {
+      <div className="flex gap-4 flex-1 min-h-[700px] max-h-[80vh] overflow-hidden">
+        {/* Scrollable Wrapper */}
+        <div className="flex-1 overflow-auto rounded-xl border-2 border-slate-200 bg-slate-50 relative">
+          {/* Canvas */}
+          <div 
+            ref={containerRef}
+            className={`absolute top-0 left-0 touch-none ${isEditMode ? "shadow-inner" : ""}`}
+            style={{ 
+              minWidth: '1200px',
+              minHeight: '900px',
+              transform: `scale(${zoom})`,
+              transformOrigin: 'top left',
+              backgroundImage: isEditMode ? 'radial-gradient(#cbd5e1 1px, transparent 1px)' : 'none', 
+              backgroundSize: '20px 20px' 
+            }}
+          >
+            {tables.map(table => {
             const compositeName = `${activePlan?.name || "Main Floor"} - ${table.table_number}`;
             const activeOrder = !isEditMode ? activeOrders.find(o => 
               o.table_number && String(o.table_number).split(',').map(s=>s.trim()).includes(compositeName)
@@ -439,6 +502,32 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
               </div>
             );
           })}
+          </div>
+          
+          {/* Zoom Controls */}
+          <div className="sticky bottom-4 left-4 z-50 flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-lg shadow-md w-fit">
+            <button 
+              onClick={() => setZoom(Math.max(0.4, zoom - 0.1))}
+              className="p-1.5 text-slate-500 hover:bg-slate-100 rounded-md"
+              title="Zoom Out"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <button 
+              onClick={() => setZoom(1)}
+              className="px-2 text-xs font-bold text-slate-600 hover:text-slate-900"
+              title="Reset Zoom"
+            >
+              {Math.round(zoom * 100)}%
+            </button>
+            <button 
+              onClick={() => setZoom(Math.min(2, zoom + 0.1))}
+              className="p-1.5 text-slate-500 hover:bg-slate-100 rounded-md"
+              title="Zoom In"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Editor Sidebar */}
@@ -644,7 +733,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                           }
                           setIsProcessingLiveAction(false);
                         }}
-                        className="mt-auto flex items-center justify-center gap-2 w-full py-3.5 bg-white border-2 border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-colors disabled:opacity-50"
+                        className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 bg-white border-2 border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-colors disabled:opacity-50"
                       >
                         <Ban className="w-5 h-5" />
                         Clear Selected Table(s)
@@ -697,7 +786,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                           }
                           setIsProcessingLiveAction(false);
                         }}
-                        className="mt-auto flex items-center justify-center gap-2 w-full py-3.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors shadow-sm shadow-emerald-200 disabled:opacity-50"
+                        className="mt-2 flex items-center justify-center gap-2 w-full py-3.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-colors shadow-sm shadow-emerald-200 disabled:opacity-50"
                       >
                         <Plus className="w-5 h-5" />
                         Start Walk-in Tab

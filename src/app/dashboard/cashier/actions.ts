@@ -19,7 +19,6 @@ export async function settleTableTab(restaurantId: string, tableNumber: string, 
   const adminSupabase = createAdminClient();
   let query = adminSupabase
     .from("orders")
-    // @ts-expect-error: paid_at is not in the generated types yet
     .update({ is_paid: true, paid_at: new Date().toISOString() })
     .eq("restaurant_id", restaurantId)
     .eq("table_number", tableNumber)
@@ -56,7 +55,6 @@ export async function voidTableTab(restaurantId: string, tableNumber: string, cu
   const adminSupabase = createAdminClient();
   let query = adminSupabase
     .from("orders")
-    // @ts-expect-error: paid_at is not in the generated types yet
     .update({ status: "cancelled", paid_at: new Date().toISOString() })
     .eq("restaurant_id", restaurantId)
     .eq("table_number", tableNumber)
@@ -117,7 +115,6 @@ export async function removeTableFromTab(orderId: string, tableToRemove: string)
       await adminSupabase.from("orders").update({ 
         status: "cancelled", 
         table_number: null,
-        // @ts-expect-error: paid_at is not in the generated types yet
         paid_at: new Date().toISOString() 
       }).eq("id", orderId);
     });
@@ -200,7 +197,6 @@ export async function updateWaitlistStatus(waitlistId: string, status: 'waiting'
       restaurant_id: entry.restaurant_id,
       table_number: tableName,
       customer_name: entry.customer_name,
-      // @ts-expect-error: party_size is not in the generated types yet
       party_size: entry.party_size,
       total_amount: 0,
       status: "pending",
@@ -227,7 +223,6 @@ export async function createWalkInTab(restaurantId: string, tableNumber: string,
     restaurant_id: restaurantId,
     table_number: tableNumber,
     customer_name: customerName,
-    // @ts-expect-error: party_size is not in the generated types yet
     party_size: partySize,
     total_amount: 0,
     status: "pending",

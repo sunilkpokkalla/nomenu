@@ -673,6 +673,12 @@ export interface Database {
           created_at: string;
           payment_intent_id: string | null;
           is_paid: boolean;
+          customer_phone: string | null;
+          reservation_time: string | null;
+          party_size: number | null;
+          tip_amount: number | null;
+          paid_at: string | null;
+          ended_at: string | null;
         };
         Insert: {
           id?: string;
@@ -685,6 +691,12 @@ export interface Database {
           created_at?: string;
           payment_intent_id?: string | null;
           is_paid?: boolean;
+          customer_phone?: string | null;
+          reservation_time?: string | null;
+          party_size?: number | null;
+          tip_amount?: number | null;
+          paid_at?: string | null;
+          ended_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["orders"]["Insert"]>;
         Relationships: [

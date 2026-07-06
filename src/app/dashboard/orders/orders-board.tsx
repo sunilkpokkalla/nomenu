@@ -31,6 +31,7 @@ type Order = {
   payment_intent_id?: string | null;
   is_paid?: boolean;
   order_items?: OrderItem[];
+  ended_at?: string | null;
 };
 
 export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE", currencySymbol = "$" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string, currencySymbol?: string }) {
@@ -52,13 +53,46 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   const completedTimes = useRef<Map<string, number>>(new Map());
 
   useEffect(() => {
-    // track when orders enter completed/cancelled state
+    // Load from local storage initially
+    if (!mounted) {
+      try {
+        const saved = localStorage.getItem("nomenu_kds_completed_times");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          Object.entries(parsed).forEach(([id, time]) => {
+            completedTimes.current.set(id, time as number);
+          });
+        }
+      } catch (e) {}
+    }
+
+    let hasNewCompleted = false;
     orders.forEach(o => {
-      if ((o.status === "completed" || o.status === "cancelled") && !completedTimes.current.has(o.id)) {
-        completedTimes.current.set(o.id, Date.now());
+      if ((o.status === "completed" || o.status === "cancelled" || o.status === "cancelled_by_customer" || o.status === "cancelled_by_restaurant") && !completedTimes.current.has(o.id)) {
+        if (o.ended_at) {
+          completedTimes.current.set(o.id, new Date(o.ended_at).getTime());
+        } else {
+          // Fallback for older orders without ended_at
+          const createdTime = new Date(o.created_at).getTime();
+          const minsSinceCreated = (Date.now() - createdTime) / 60000;
+          // If it was created more than 15 mins ago and we don't have ended_at, backdate it to hide it immediately.
+          if (minsSinceCreated > 15) {
+            completedTimes.current.set(o.id, createdTime);
+          } else {
+            completedTimes.current.set(o.id, Date.now());
+          }
+        }
+        hasNewCompleted = true;
       }
     });
-  }, [orders]);
+
+    if (hasNewCompleted) {
+      try {
+        const obj = Object.fromEntries(completedTimes.current);
+        localStorage.setItem("nomenu_kds_completed_times", JSON.stringify(obj));
+      } catch (e) {}
+    }
+  }, [orders, mounted]);
 
   const playNotificationSound = useCallback(() => {
     if (!soundPreference) return;
@@ -298,15 +332,22 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     }
 
     // Optimistic update
-    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    const timestamp = Date.now();
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus, ended_at: new Date(timestamp).toISOString() } : o));
     
     // Auto-collapse if moved to an inactive status
-    if (newStatus === "completed" || newStatus === "cancelled") {
+    if (newStatus === "completed" || newStatus === "cancelled" || newStatus === "cancelled_by_customer" || newStatus === "cancelled_by_restaurant") {
       setExpandedOrders(prev => {
         const next = new Set(prev);
         next.delete(orderId);
         return next;
       });
+      // Force an immediate save to local storage for optimism
+      completedTimes.current.set(orderId, timestamp);
+      try {
+        const obj = Object.fromEntries(completedTimes.current);
+        localStorage.setItem("nomenu_kds_completed_times", JSON.stringify(obj));
+      } catch (e) {}
     }
 
     await updateOrderStatus(orderId, newStatus);
@@ -495,7 +536,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
           {columns.map(col => {
             const colOrders = orders.filter(o => col.matchStatus.includes(o.status)).filter(o => {
               if (!selectedDateStr && (col.id === "completed" || col.id === "cancelled") && autoArchiveMinutes !== null) {
-                const completedAt = completedTimes.current.get(o.id);
+                const completedAt = o.ended_at ? new Date(o.ended_at).getTime() : completedTimes.current.get(o.id);
                 if (completedAt) {
                   const minsPassed = (currentTime.getTime() - completedAt) / 60000;
                   return minsPassed <= autoArchiveMinutes;
@@ -614,6 +655,12 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                         >
                                           <div className="w-3 h-3 border border-current rounded-[3px]" /> Unpaid
                                         </button>
+                                      )}
+
+                                      {order.status === 'cancelled_by_customer' && (
+                                        <span className="px-1.5 py-0.5 text-[10px] font-black tracking-wide uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center gap-1">
+                                          <XCircle className="w-3 h-3" /> Cancelled by Customer
+                                        </span>
                                       )}
 
                                       {shouldDefaultCollapse && (
