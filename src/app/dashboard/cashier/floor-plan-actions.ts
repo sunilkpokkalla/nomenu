@@ -98,12 +98,13 @@ export async function saveTableLayout(
     const formattedTables = tablesToUpsert.map(t => {
       const { isNew, id, ...dbTable } = t;
       
-      // If the ID starts with 'temp-' or is marked as new, we let the DB generate a new UUID
+      // If the ID starts with 'temp-' or is marked as new, generate a real UUID
       const isTemporary = id && typeof id === 'string' && id.startsWith('temp-');
+      const finalId = isTemporary ? crypto.randomUUID() : id;
       
       return {
         ...dbTable,
-        ...(isTemporary ? {} : { id }),
+        id: finalId,
         floor_plan_id: floorPlanId
       };
     });

@@ -32,6 +32,7 @@ export interface FeedbackData {
   status?: string;
   recovery_request?: string | null;
   recovery_offer_given?: string | null;
+  resolution_notes?: string | null;
   qr_codes?: { label: string | null; location_zone?: string | null } | null;
   loyalty_cards?: {
     id: string;

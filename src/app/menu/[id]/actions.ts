@@ -206,6 +206,26 @@ export async function updateFeedbackContact(feedbackId: string, contactInfo: str
   return { success: true };
 }
 
+export async function updateFeedbackComment(feedbackId: string, additionalComment: string) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+  
+  // Get existing comment first
+  const { data: existing } = await supabase.from("customer_feedback").select("comment").eq("id", feedbackId).single();
+  const existingComment = existing?.comment || "";
+  
+  const newComment = existingComment 
+    ? `${existingComment}\n\n[Manager Request Context]: ${additionalComment}`
+    : `[Manager Request Context]: ${additionalComment}`;
+    
+  await supabase.from("customer_feedback").update({ 
+    comment: newComment
+  }).eq("id", feedbackId);
+  return { success: true };
+}
+
 export async function claimLoyaltyCard(data: {
   feedbackId: string;
   restaurantId: string;

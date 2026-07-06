@@ -753,11 +753,12 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                     </>
                                   )}
                                 </div>
-                              )}}
-                            </Draggable>
-                          );
-                        })
-                      )}
+                              );
+                            }}
+                          </Draggable>
+                        );
+                      })
+                    )}
                       {provided.placeholder}
                     </div>
                   )}

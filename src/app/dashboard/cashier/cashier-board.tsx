@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
-import { Users, Receipt, CircleDollarSign, XCircle, CreditCard } from "lucide-react";
+import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2 } from "lucide-react";
 import { settleTableTab, voidTableTab } from "@/app/dashboard/cashier/actions";
 
 type OrderItem = {
@@ -27,6 +27,7 @@ type Order = {
   daily_order_number?: number | null;
   payment_intent_id?: string | null;
   is_paid?: boolean;
+  party_size?: number;
   order_items?: OrderItem[];
 };
 
@@ -35,12 +36,20 @@ type TableTab = {
   orders: Order[];
   total_amount: number;
   customer_names: string[];
+  party_size: number;
+  created_at: string;
+  paid_at?: string | null;
 };
 
 export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, currencySymbol = "$" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, currencySymbol?: string }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const [historyOrders, setHistoryOrders] = useState<Order[]>([]);
   const [mounted, setMounted] = useState(false);
   const [isProcessing, setIsProcessing] = useState<string | null>(null); // table_number
+  
+  // Pagination state
+  const [activePage, setActivePage] = useState(1);
+  const [historyPage, setHistoryPage] = useState(1);
 
   useEffect(() => {
     setMounted(true);
@@ -48,15 +57,32 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
 
   const fetchLatestOrders = async () => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
-    const { data } = await supabase
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // Fetch active orders
+    const { data: activeData } = await supabase
       .from("orders")
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
-      .is("customer_phone", null) // Exclusively Dine-In orders
+      .is("customer_phone", null)
       .eq("is_paid", false)
+      .neq("status", "cancelled")
       .order("created_at", { ascending: true });
       
-    if (data) setOrders(data as unknown as Order[]);
+    if (activeData) setOrders(activeData as unknown as Order[]);
+    
+    // Fetch history (paid or cancelled today)
+    const { data: historyData } = await supabase
+      .from("orders")
+      .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
+      .eq("restaurant_id", restaurantId)
+      .is("customer_phone", null)
+      .not("paid_at", "is", null)
+      .gte("paid_at", today.toISOString())
+      .order("paid_at", { ascending: false });
+      
+    if (historyData) setHistoryOrders(historyData as unknown as Order[]);
   };
 
   // Polling Auto-Refresh Fallback (runs every 15 seconds)
@@ -109,44 +135,58 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
     return () => { supabase.removeChannel(channel); };
   }, [restaurantId, supabaseUrl, supabaseAnonKey]);
 
-  // Group orders into Table Tabs (Table + Customer Name)
-  const tableTabs: TableTab[] = [];
-  
-  // Group by table number + customer name
-  const ordersByGroup = orders.reduce((acc, order) => {
-    const table = order.table_number || "Unknown";
-    const customer = order.customer_name || "Anonymous";
-    const key = `${table}::${customer}`;
-    
-    if (!acc[key]) acc[key] = [];
-    acc[key].push(order);
-    return acc;
-  }, {} as Record<string, Order[]>);
+  // Helper to group orders into Table Tabs
+  const groupOrdersToTabs = (ordersToGroup: Order[]) => {
+    const tabs: TableTab[] = [];
+    const grouped = ordersToGroup.reduce((acc, order) => {
+      const table = order.table_number || "Unknown";
+      const customer = order.customer_name || "Anonymous";
+      const key = `${table}::${customer}`;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(order);
+      return acc;
+    }, {} as Record<string, Order[]>);
 
-  for (const [key, tableOrders] of Object.entries(ordersByGroup)) {
-    const [table_number, customer_name] = key.split("::");
-    const total_amount = tableOrders
-      .filter(o => o.status?.toLowerCase() !== 'cancelled')
-      .reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
-    
-    tableTabs.push({
-      table_number,
-      orders: tableOrders,
-      total_amount,
-      customer_names: [customer_name]
-    });
-  }
-
-  // Sort logically: first by table number, then by customer name
-  tableTabs.sort((a, b) => {
-    const aNum = parseInt(a.table_number);
-    const bNum = parseInt(b.table_number);
-    if (!isNaN(aNum) && !isNaN(bNum)) {
-      if (aNum !== bNum) return aNum - bNum;
-    } else if (a.table_number !== b.table_number) {
-      return a.table_number.localeCompare(b.table_number);
+    for (const [key, tableOrders] of Object.entries(grouped)) {
+      const [table_number, customer_name] = key.split("::");
+      const total_amount = tableOrders
+        .filter(o => o.status?.toLowerCase() !== 'cancelled')
+        .reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
+      const party_size = Math.max(...tableOrders.map(o => o.party_size || 0));
+      const created_at = tableOrders.reduce((oldest, o) => !oldest || new Date(o.created_at) < new Date(oldest) ? o.created_at : oldest, tableOrders[0]?.created_at || new Date().toISOString());
+      // For history tabs, we want the most recent paid_at
+      const paid_at = tableOrders.reduce((newest, o) => (o as Order & { paid_at?: string | null }).paid_at && (!newest || new Date((o as Order & { paid_at?: string | null }).paid_at!) > new Date(newest)) ? (o as Order & { paid_at?: string | null }).paid_at! : newest, null as string | null);
+      
+      tabs.push({
+        table_number,
+        orders: tableOrders,
+        total_amount,
+        customer_names: [customer_name],
+        party_size,
+        created_at,
+        paid_at: paid_at || undefined // Attach paid_at if it exists
+      } as TableTab & { paid_at?: string });
     }
-    return a.customer_names[0].localeCompare(b.customer_names[0]);
+
+    tabs.sort((a, b) => {
+      const aNum = parseInt(a.table_number);
+      const bNum = parseInt(b.table_number);
+      if (!isNaN(aNum) && !isNaN(bNum)) {
+        if (aNum !== bNum) return aNum - bNum;
+      } else if (a.table_number !== b.table_number) {
+        return a.table_number.localeCompare(b.table_number);
+      }
+      return a.customer_names[0].localeCompare(b.customer_names[0]);
+    });
+    
+    return tabs;
+  };
+
+  const tableTabs = groupOrdersToTabs(orders);
+  
+  // History tabs are sorted by paid_at descending
+  const historyTabs = groupOrdersToTabs(historyOrders).sort((a, b) => {
+    return new Date((b as TableTab & { paid_at?: string | null }).paid_at || b.created_at).getTime() - new Date((a as TableTab & { paid_at?: string | null }).paid_at || a.created_at).getTime();
   });
 
   const [confirmSettle, setConfirmSettle] = useState<string | null>(null);
@@ -168,8 +208,9 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
     
     try {
       await settleTableTab(restaurantId, table_number, customer_name);
-      // Optimistically remove them
+      const settled = orders.filter(o => o.table_number === table_number && (o.customer_name || "Anonymous") === customer_name);
       setOrders(prev => prev.filter(o => !(o.table_number === table_number && (o.customer_name || "Anonymous") === customer_name)));
+      setHistoryOrders(prev => [...settled.map(o => ({...o, is_paid: true, paid_at: new Date().toISOString()} as Order & { paid_at?: string | null })), ...prev]);
     } catch (e) {
       console.error(e);
       alert("Failed to settle tab");
@@ -194,7 +235,9 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
 
     try {
       await voidTableTab(restaurantId, table_number, customer_name);
+      const voided = orders.filter(o => o.table_number === table_number && (o.customer_name || "Anonymous") === customer_name);
       setOrders(prev => prev.filter(o => !(o.table_number === table_number && (o.customer_name || "Anonymous") === customer_name)));
+      setHistoryOrders(prev => [...voided.map(o => ({...o, status: "cancelled", paid_at: new Date().toISOString()} as Order & { paid_at?: string | null })), ...prev]);
     } catch (e) {
       console.error(e);
       alert("Failed to void tab");
@@ -304,31 +347,163 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
         </div>
       )}
 
-      {/* Empty / Just Seated Tabs */}
-      {emptyTabs.length > 0 && (
+      {/* Walk-in & History Split View */}
+      {(emptyTabs.length > 0 || historyTabs.length > 0) && (
         <div className={actionableTabs.length > 0 ? "pt-8 border-t border-slate-200" : ""}>
-          <h2 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-slate-400" /> Recently Seated (No Orders Yet)
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-            {emptyTabs.map(tab => (
-              <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col justify-between hover:border-slate-300 transition-colors shadow-sm">
-                <div>
-                  <div className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
-                  <div className="text-xl font-black text-slate-800 mb-2">{tab.table_number}</div>
-                  <div className="text-sm font-medium text-slate-500 truncate" title={tab.customer_names[0]}>
-                    {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            
+            {/* Left Column: Currently Seated */}
+            <div>
+              <h2 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-indigo-500" /> Currently Seated
+                <span className="ml-auto text-xs font-bold bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">{emptyTabs.length}</span>
+              </h2>
+              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col min-h-[400px]">
+                <div className="overflow-x-auto flex-1">
+                  <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-bold">
+                      <tr>
+                        <th className="px-6 py-4">Table</th>
+                        <th className="px-6 py-4">Name</th>
+                        <th className="px-6 py-4">Guests</th>
+                        <th className="px-6 py-4">Seated</th>
+                        <th className="px-6 py-4">Time</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {emptyTabs.slice((activePage - 1) * 15, activePage * 15).length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-12 text-center text-slate-400 italic">No tables currently seated.</td>
+                        </tr>
+                      ) : (
+                        emptyTabs.slice((activePage - 1) * 15, activePage * 15).map(tab => {
+                          const elapsedMins = Math.floor((new Date().getTime() - new Date(tab.created_at).getTime()) / 60000);
+                          return (
+                            <tr key={`${tab.table_number}-${tab.customer_names[0]}`} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-6 py-4 font-black text-slate-900">{tab.table_number}</td>
+                              <td className="px-6 py-4 font-medium text-slate-700 truncate max-w-[120px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
+                                {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}
+                              </td>
+                              <td className="px-6 py-4">
+                                {tab.party_size > 0 ? (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">{tab.party_size}</span>
+                                ) : (
+                                  <span className="text-slate-400">-</span>
+                                )}
+                              </td>
+                              <td className="px-6 py-4 text-slate-500 text-xs">
+                                {new Date(tab.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-indigo-50 text-indigo-700">{elapsedMins}m</span>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
                 </div>
-                <button 
-                  onClick={() => handleVoidTab(tab.table_number, tab.customer_names[0])}
-                  disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
-                  className="mt-4 w-full py-2 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 text-sm font-semibold rounded-lg transition-colors border border-transparent hover:border-rose-200"
-                >
-                  {confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "Confirm Clear" : "Clear Table"}
-                </button>
+                {/* Pagination Active */}
+                {emptyTabs.length > 15 && (
+                  <div className="bg-slate-50 border-t border-slate-200 p-3 flex justify-between items-center text-sm font-medium">
+                    <button 
+                      disabled={activePage === 1} 
+                      onClick={() => setActivePage(p => p - 1)}
+                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors"
+                    >
+                      Prev
+                    </button>
+                    <span className="text-slate-500">Page {activePage} of {Math.ceil(emptyTabs.length / 15)}</span>
+                    <button 
+                      disabled={activePage >= Math.ceil(emptyTabs.length / 15)} 
+                      onClick={() => setActivePage(p => p + 1)}
+                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
-            ))}
+            </div>
+
+            {/* Right Column: History (Cleared) */}
+            <div>
+              <h2 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-slate-400" /> Cleared Today
+                <span className="ml-auto text-xs font-bold bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">{historyTabs.length}</span>
+              </h2>
+              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col min-h-[400px] opacity-80 hover:opacity-100 transition-opacity">
+                <div className="overflow-x-auto flex-1">
+                  <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-bold">
+                      <tr>
+                        <th className="px-6 py-4">Table</th>
+                        <th className="px-6 py-4">Name</th>
+                        <th className="px-6 py-4">Guests</th>
+                        <th className="px-6 py-4">Seated</th>
+                        <th className="px-6 py-4">Time Left</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {historyTabs.slice((historyPage - 1) * 15, historyPage * 15).length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-12 text-center text-slate-400 italic">No cleared tables yet today.</td>
+                        </tr>
+                      ) : (
+                        historyTabs.slice((historyPage - 1) * 15, historyPage * 15).map(tab => {
+                          const endedAt = tab.paid_at ? new Date(tab.paid_at) : new Date();
+                          return (
+                            <tr key={`${tab.table_number}-${tab.customer_names[0]}-${tab.created_at}`} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-6 py-4 font-black text-slate-900">{tab.table_number}</td>
+                              <td className="px-6 py-4 font-medium text-slate-700 truncate max-w-[120px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
+                                {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}
+                              </td>
+                              <td className="px-6 py-4">
+                                {tab.party_size > 0 ? (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">{tab.party_size}</span>
+                                ) : (
+                                  <span className="text-slate-400">-</span>
+                                )}
+                              </td>
+                              <td className="px-6 py-4 text-slate-500 text-xs">
+                                {new Date(tab.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-600">
+                                  {endedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                {/* Pagination History */}
+                {historyTabs.length > 15 && (
+                  <div className="bg-slate-50 border-t border-slate-200 p-3 flex justify-between items-center text-sm font-medium">
+                    <button 
+                      disabled={historyPage === 1} 
+                      onClick={() => setHistoryPage(p => p - 1)}
+                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors"
+                    >
+                      Prev
+                    </button>
+                    <span className="text-slate-500">Page {historyPage} of {Math.ceil(historyTabs.length / 15)}</span>
+                    <button 
+                      disabled={historyPage >= Math.ceil(historyTabs.length / 15)} 
+                      onClick={() => setHistoryPage(p => p + 1)}
+                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
           </div>
         </div>
       )}

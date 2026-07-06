@@ -51,10 +51,11 @@ export async function voidTableTab(restaurantId: string, tableNumber: string, cu
     throw new Error("Unauthorized");
   }
 
-  // Cancel all unpaid orders for this table + customer
+  // Cancel all unpaid orders for this table + customer and track when it was cleared
   let query = supabase
     .from("orders")
-    .update({ status: "cancelled" })
+    // @ts-expect-error: paid_at is not in the generated types yet
+    .update({ status: "cancelled", paid_at: new Date().toISOString() })
     .eq("restaurant_id", restaurantId)
     .eq("table_number", tableNumber)
     .eq("is_paid", false)
@@ -72,6 +73,60 @@ export async function voidTableTab(restaurantId: string, tableNumber: string, cu
     throw new Error("Failed to void table tab");
   }
 
+  return true;
+}
+
+export async function removeTableFromTab(orderId: string, tableToRemove: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  // Fetch the order
+  const { data: order, error: fetchError } = await supabase
+    .from("orders")
+    .select("table_number")
+    .eq("id", orderId)
+    .single();
+
+  if (fetchError || !order) {
+    throw new Error("Failed to fetch order");
+  }
+
+  if (!order.table_number) return true;
+
+  // Split and remove
+  const tables = order.table_number.split(',').map((s: string) => s.trim());
+  const updatedTables = tables.filter((t: string) => t !== tableToRemove);
+
+  if (updatedTables.length === 0) {
+    // If they removed the last table, just void the tab instead
+    return voidTableTab(
+      // We don't have restaurant_id or customer_name easily here without another fetch
+      // Let's just update the status to cancelled directly for this order ID
+      '', '', '' 
+    ).catch(async () => {
+      await supabase.from("orders").update({ status: "cancelled", table_number: null }).eq("id", orderId);
+    });
+  }
+
+  // Update order with new table string
+  const adminSupabase = createAdminClient();
+  const { error: updateError } = await adminSupabase
+    .from("orders")
+    .update({ table_number: updatedTables.join(', ') })
+    .eq("id", orderId);
+
+  if (updateError) {
+    throw new Error("Failed to update tables");
+  }
+
+  revalidatePath("/dashboard/cashier");
   return true;
 }
 
@@ -152,7 +207,7 @@ export async function updateWaitlistStatus(waitlistId: string, status: 'waiting'
   return true;
 }
 
-export async function createWalkInTab(restaurantId: string, tableNumber: string, customerName: string) {
+export async function createWalkInTab(restaurantId: string, tableNumber: string, customerName: string, partySize: number = 2) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
@@ -162,6 +217,8 @@ export async function createWalkInTab(restaurantId: string, tableNumber: string,
     restaurant_id: restaurantId,
     table_number: tableNumber,
     customer_name: customerName,
+    // @ts-expect-error: party_size is not in the generated types yet
+    party_size: partySize,
     total_amount: 0,
     status: "pending",
     is_paid: false

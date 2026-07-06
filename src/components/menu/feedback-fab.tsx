@@ -38,7 +38,10 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   
   // Real-time Service Recovery Flow
   const [escalationState, setEscalationState] = useState<EscalationState>('INITIAL');
-  const [timerLeft, setTimerLeft] = useState(300);
+  const [timerLeft, setTimerLeft] = useState(300); // 5 minutes default
+  const [hasRequestedManager, setHasRequestedManager] = useState(false);
+  const [additionalComment, setAdditionalComment] = useState("");
+  const [hasSubmittedComment, setHasSubmittedComment] = useState(false);
 
   // New Service Recovery state
   const [serviceRecoveryEnabled, setServiceRecoveryEnabled] = useState<boolean>(false);
@@ -330,6 +333,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                       await import("@/app/menu/[id]/actions").then(m => m.summonManager(feedbackId, tableNumber || ""));
                                     }
                                     setEscalationState('TIMER_RUNNING');
+                                    setHasRequestedManager(true);
                                   }}
                                   className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
                                 >
@@ -362,6 +366,38 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                   {(timerLeft % 60).toString().padStart(2, '0')}
                                 </p>
                               </div>
+                              
+                              {!hasSubmittedComment && (
+                                <div className="mt-4 pt-4 border-t border-red-200">
+                                  <p className="text-sm font-semibold text-red-900 mb-2">While you wait, what went wrong?</p>
+                                  <textarea
+                                    value={additionalComment}
+                                    onChange={(e) => setAdditionalComment(e.target.value)}
+                                    placeholder="e.g. My food was cold..."
+                                    className="w-full rounded-xl border border-red-200 bg-white p-3 text-sm focus:outline-none focus:border-red-400 focus:ring-1 focus:ring-red-400 mb-2 resize-none"
+                                    rows={2}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={async () => {
+                                      if (feedbackId && additionalComment) {
+                                        await import("@/app/menu/[id]/actions").then(m => m.updateFeedbackComment(feedbackId, additionalComment));
+                                        setHasSubmittedComment(true);
+                                      }
+                                    }}
+                                    disabled={!additionalComment.trim()}
+                                    className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
+                                  >
+                                    Send to Manager
+                                  </button>
+                                </div>
+                              )}
+                              
+                              {hasSubmittedComment && (
+                                <div className="mt-4 pt-4 border-t border-red-200">
+                                  <p className="text-sm font-medium text-red-800">Note sent! The manager will review this on their way to your table.</p>
+                                </div>
+                              )}
                             </div>
                           )}
 
@@ -416,7 +452,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                             </div>
                           )}
 
-                          {(escalationState === 'RESOLVED_SUCCESS' || escalationState === 'RESOLVED_COMPENSATION' || escalationState === 'INITIAL') && (
+                          {(escalationState === 'RESOLVED_SUCCESS' || escalationState === 'RESOLVED_COMPENSATION' || escalationState === 'INITIAL') && !hasRequestedManager && (
                             <div>
                                 <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
                                 <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>

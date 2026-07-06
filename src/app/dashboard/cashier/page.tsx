@@ -96,7 +96,7 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
 
   const isPro = restaurant.plan?.toLowerCase() === "pro";
   
-  if (isPro && (tab === "active" || tab === "history")) {
+  if (isPro && (tab === "history")) {
     tab = "floor-plan";
   }
 
@@ -121,21 +121,19 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
           >
             Waitlist
           </Link>
+          <Link 
+            href="/dashboard/cashier?tab=active"
+            className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${tab === "active" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+          >
+            Active Tabs
+          </Link>
           {!isPro && (
-            <>
-              <Link 
-                href="/dashboard/cashier?tab=active"
-                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${tab === "active" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-              >
-                Active Tabs
-              </Link>
-              <Link 
-                href="/dashboard/cashier?tab=history"
-                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${tab === "history" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-              >
-                Completed History
-              </Link>
-            </>
+            <Link 
+              href="/dashboard/cashier?tab=history"
+              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${tab === "history" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+            >
+              Completed History
+            </Link>
           )}
         </div>
       </div>

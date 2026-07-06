@@ -634,6 +634,7 @@ export interface Database {
           qr_code_id: string | null;
           recovery_request: string | null;
           recovery_offer_given: string | null;
+          resolution_notes: string | null;
           created_at: string | null;
         };
         Insert: {
@@ -647,6 +648,7 @@ export interface Database {
           qr_code_id?: string | null;
           recovery_request?: string | null;
           recovery_offer_given?: string | null;
+          resolution_notes?: string | null;
           created_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["customer_feedback"]["Insert"]>;

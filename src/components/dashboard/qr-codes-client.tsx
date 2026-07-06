@@ -141,8 +141,12 @@ export function QrCodesClient({
                     }
                     
                     let qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
-                    if (savedColor) {
-                      qrImageApiUrl += `&color=${encodeURIComponent(savedColor)}`;
+                    
+                    const design = (qr.design_metadata as Record<string, unknown>) || {};
+                    const parsedColor = (design.qrColor as string) || savedColor;
+                    
+                    if (parsedColor && parsedColor !== "#0F172A") {
+                      qrImageApiUrl += `&color=${encodeURIComponent(parsedColor)}`;
                     }
                     const isSelected = selectedQrIds.has(qr.id);
                     

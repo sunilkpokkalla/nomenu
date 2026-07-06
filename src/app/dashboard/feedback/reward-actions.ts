@@ -53,3 +53,19 @@ export async function sendLoyaltyReward(feedbackId: string, rewardMessage: strin
     return { success: true, method: "none" };
   }
 }
+
+export async function resolveManagerRequest(feedbackId: string, notes: string) {
+  const adminClient = createAdminClient();
+  const { error } = await adminClient
+    .from("customer_feedback")
+    .update({ 
+      resolution_notes: notes
+    })
+    .eq("id", feedbackId);
+
+  if (error) {
+    console.error("resolveManagerRequest Error:", error);
+    return { error: "Failed to resolve request.", details: error };
+  }
+  return { success: true };
+}

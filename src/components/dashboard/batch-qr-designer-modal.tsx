@@ -115,14 +115,10 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
       previewPublicUrl = `${baseUrl.startsWith('https') ? 'https://' : 'http://'}${domainPrefix}.${rootDomain}/${restaurant.slug}/menu?qr=${previewQr.id}`;
     }
   }
-  const previewQrImageApiUrl = ((): string => {
-    try {
-      const url = new URL(`/api/qr?data=${encodeURIComponent(previewPublicUrl)}`, "http://localhost");
-      url.searchParams.set("color", qrColor);
-      return url.pathname + url.search;
-    } catch {
-      return `/api/qr?data=${encodeURIComponent(previewPublicUrl)}&color=${encodeURIComponent(qrColor)}`;
-    }
+  const previewQrImageApiUrl = (() => {
+    if (!previewPublicUrl) return "";
+    const base = `/api/qr?data=${encodeURIComponent(previewPublicUrl)}`;
+    return `${base}&color=${encodeURIComponent(qrColor)}`;
   })();
 
   return (

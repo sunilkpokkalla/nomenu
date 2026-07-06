@@ -83,7 +83,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
     if (timeFilter === "last_hour") {
       const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
       filteredOrders = filteredOrders.filter(o => {
-        const time = new Date(o.paid_at || o.created_at);
+        const time = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
         return time >= oneHourAgo;
       });
     }
@@ -105,7 +105,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
           table_number: order.table_number,
           customer_name: cName,
           total_amount: 0,
-          last_activity: order.paid_at || order.created_at,
+          last_activity: (order as CompletedOrder & { paid_at?: string | null }).paid_at || order.created_at,
           order_count: 0,
           status: order.is_paid ? 'Paid' : 'Cancelled',
           orders: []
@@ -120,10 +120,10 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
       group.order_count += 1;
       
       // Update last activity to the most recent timestamp
-      const orderTime = new Date(order.paid_at || order.created_at).getTime();
+      const orderTime = new Date((order as CompletedOrder & { paid_at?: string | null }).paid_at || order.created_at).getTime();
       const groupTime = new Date(group.last_activity).getTime();
       if (orderTime > groupTime) {
-        group.last_activity = order.paid_at || order.created_at;
+        group.last_activity = (order as CompletedOrder & { paid_at?: string | null }).paid_at || order.created_at;
       }
       
       // If any order in the group is paid, mark the whole group as paid

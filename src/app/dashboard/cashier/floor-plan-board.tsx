@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Plus, Save, Trash2, Edit2, CheckCircle2, User, Users, Coffee, Ban } from "lucide-react";
+import { Plus, Save, Trash2, Edit2, CheckCircle2, User, Users, Coffee, Ban, X } from "lucide-react";
 import { saveTableLayout, addFloorPlanArea } from "./floor-plan-actions";
 import { useRouter } from "next/navigation";
-import { createWalkInTab, voidTableTab } from "./actions";
+import { createWalkInTab, voidTableTab, removeTableFromTab } from "./actions";
 
-type TableShape = "rectangle" | "circle";
+type TableShape = "rectangle" | "circle" | "square";
 
 interface RestaurantTable {
   id: string;
@@ -40,6 +40,11 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
   const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isProcessingLiveAction, setIsProcessingLiveAction] = useState(false);
+  
+  // New state for walk-in form
+  const [walkInName, setWalkInName] = useState("");
+  const [walkInCount, setWalkInCount] = useState<number>(2);
+  
   const [isAddingArea, setIsAddingArea] = useState(false);
   const [newAreaName, setNewAreaName] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -66,14 +71,23 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
   }, [activePlanId, activePlan]);
 
   const handleAddTable = () => {
+    let newX = 50;
+    let newY = 50;
+    
+    if (tables.length > 0) {
+      const lastTable = tables[tables.length - 1];
+      newX = lastTable.x + 30;
+      newY = lastTable.y + 30;
+    }
+
     const newTable: RestaurantTable = {
       id: `temp-${Date.now()}`,
       floor_plan_id: activePlanId,
       table_number: `${tables.length + 1}`,
       capacity: 4,
       shape: "rectangle",
-      x: 50,
-      y: 50,
+      x: newX,
+      y: newY,
       width: 120,
       height: 80,
       isNew: true
@@ -85,9 +99,10 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
   const handleSave = async () => {
     if (!activePlanId) return;
     setIsSaving(true);
-    // Filter out 'isNew' flag for the backend
+    // Filter out UI-only flags for the backend
     const tablesToUpsert = tables.map(t => {
-      const { isNew, ...rest } = t;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { isNew, _planName, created_at, ...rest } = t as any;
       return rest;
     });
 
@@ -97,7 +112,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
       setDeletedTableIds([]);
       router.refresh();
     } else {
-      showError("Failed to save layout.");
+      showError(`Failed to save layout: ${res.error || 'Unknown error'}`);
     }
     setIsSaving(false);
   };
@@ -151,10 +166,13 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
           showError(`Table ${table.table_number} is already occupied!`);
           return;
         }
-        // If they click an occupied table in standard live mode, we select all tables in that active order
-        const occupiedTableNumbers = String(activeOrder.table_number).split(',').map(s=>s.trim());
-        const associatedTableIds = tables.filter(t => occupiedTableNumbers.includes(`${activePlan?.name || "Main Floor"} - ${t.table_number}`)).map(t => t.id);
-        setSelectedLiveTableIds(associatedTableIds);
+        // Just toggle the specific table they clicked!
+        setSelectedLiveTableIds(prev => {
+          if (prev.includes(id)) {
+            return prev.filter(tid => tid !== id);
+          }
+          return [...prev, id];
+        });
       } else {
         // Empty table - toggle selection
         setSelectedLiveTableIds(prev => {
@@ -397,15 +415,26 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                 })}
 
                 <span className="font-bold text-lg z-10">{table.table_number}</span>
-                {table.capacity > 0 && (
+                {/* Physical Table Capacity (when not occupied or in edit mode) */}
+                {table.capacity > 0 && (!isOccupied || isEditMode) && (
                   <div className="flex items-center gap-1 text-[10px] opacity-70 mt-1 z-10">
                     <Users className="w-3 h-3" /> {table.capacity}
                   </div>
                 )}
-                {!isEditMode && isOccupied && activeOrder?.total_amount && (
-                  <span className="text-xs font-medium mt-1 bg-white/90 px-2 py-0.5 rounded-full z-10 shadow-sm">
-                    ${(activeOrder.total_amount / 100).toFixed(2)}
-                  </span>
+                {/* Guest Count (when occupied) */}
+                {!isEditMode && isOccupied && (
+                  <div className="flex flex-col items-center mt-1 z-10">
+                    {activeOrder?.party_size && activeOrder.party_size > 0 && (
+                      <span className="text-[10px] font-bold bg-white/80 text-slate-700 px-1.5 py-0.5 rounded-full mb-1">
+                        {activeOrder.party_size} Guests
+                      </span>
+                    )}
+                    {activeOrder?.total_amount ? (
+                      <span className="text-xs font-medium bg-white/90 px-2 py-0.5 rounded-full shadow-sm text-slate-900">
+                        ${(activeOrder.total_amount / 100).toFixed(2)}
+                      </span>
+                    ) : null}
+                  </div>
                 )}
               </div>
             );
@@ -450,7 +479,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Shape</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <button 
                     onClick={() => updateSelectedTable({ shape: 'rectangle', width: 120, height: 80 })}
                     className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'rectangle' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
@@ -458,36 +487,17 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                     Rectangle
                   </button>
                   <button 
-                    onClick={() => updateSelectedTable({ shape: 'circle', width: 100, height: 100 })}
+                    onClick={() => updateSelectedTable({ shape: 'square', width: 80, height: 80 })}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'square' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
+                  >
+                    Square
+                  </button>
+                  <button 
+                    onClick={() => updateSelectedTable({ shape: 'circle', width: 80, height: 80 })}
                     className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'circle' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
                   >
                     Circle
                   </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Width (px)</label>
-                  <input 
-                    type="number" 
-                    min="50"
-                    step="10"
-                    value={selectedTableData.width}
-                    onChange={(e) => updateSelectedTable({ width: parseInt(e.target.value) || 50 })}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Height (px)</label>
-                  <input 
-                    type="number" 
-                    min="50"
-                    step="10"
-                    value={selectedTableData.height}
-                    onChange={(e) => updateSelectedTable({ height: parseInt(e.target.value) || 50 })}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
                 </div>
               </div>
             </div>
@@ -544,9 +554,11 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
               // Extract unique plan names for display
               const planNames = Array.from(new Set(selectedTables.map(t => t._planName || "Main Floor"))).join(' & ');
               
-              const activeOrder = activeOrders.find(o => 
-                o.table_number && String(o.table_number) === compositeTableString
-              );
+              const activeOrder = activeOrders.find(o => {
+                if (!o.table_number) return false;
+                const orderTables = String(o.table_number).split(',').map(s=>s.trim());
+                return selectedTables.some(t => orderTables.includes(`${t._planName || "Main Floor"} - ${t.table_number}`));
+              });
 
               return (
                 <>
@@ -573,28 +585,69 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                         </div>
                         <span className="font-bold text-red-900 text-lg">Occupied</span>
                         <span className="text-red-600 font-medium text-sm mt-1 text-center">{activeOrder.customer_name || 'Walk-in'}</span>
+                        {activeOrder.party_size && activeOrder.party_size > 0 && (
+                          <span className="mt-1 bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full font-bold">
+                            {activeOrder.party_size} Guests
+                          </span>
+                        )}
                         {activeOrder.total_amount > 0 && (
                           <span className="mt-3 font-black text-2xl text-red-950">${(activeOrder.total_amount / 100).toFixed(2)}</span>
                         )}
                       </div>
                       
+                      {selectedTables.length > 1 && (
+                        <div className="flex flex-col gap-2 mb-2">
+                          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Grouped Tables</h4>
+                          {selectedTables.map(t => {
+                            const cName = `${t._planName || "Main Floor"} - ${t.table_number}`;
+                            return (
+                              <div key={t.id} className="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm">
+                                <span className="font-bold text-sm text-slate-700">{t.table_number} <span className="text-[10px] text-slate-400 font-medium">({t._planName || "Main"})</span></span>
+                                <button
+                                  disabled={isProcessingLiveAction}
+                                  onClick={async () => {
+                                    setIsProcessingLiveAction(true);
+                                    try {
+                                      await removeTableFromTab(activeOrder.id, cName);
+                                      setSelectedLiveTableIds(prev => prev.filter(id => id !== t.id));
+                                      router.refresh();
+                                    } catch (e) {
+                                      showError("Failed to remove table.");
+                                    }
+                                    setIsProcessingLiveAction(false);
+                                  }}
+                                  className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1.5 rounded-md transition-colors"
+                                  title="Remove from group"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+
                       <button 
                         disabled={isProcessingLiveAction}
                         onClick={async () => {
                           setIsProcessingLiveAction(true);
                           try {
-                            await voidTableTab(restaurantId, compositeTableString, activeOrder.customer_name || 'Walk-in');
+                            // Remove specifically selected tables from the order
+                            for (const st of selectedTables) {
+                              const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
+                              await removeTableFromTab(activeOrder.id, cName);
+                            }
                             setSelectedLiveTableIds([]);
                             router.refresh();
                           } catch (error) {
-                            showError("Failed to clear table.");
+                            showError("Failed to clear table(s).");
                           }
                           setIsProcessingLiveAction(false);
                         }}
                         className="mt-auto flex items-center justify-center gap-2 w-full py-3.5 bg-white border-2 border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-colors disabled:opacity-50"
                       >
                         <Ban className="w-5 h-5" />
-                        Clear / Void Table
+                        Clear Selected Table(s)
                       </button>
                     </div>
                   ) : (
@@ -606,13 +659,38 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                         <span className="font-bold text-emerald-900 text-lg">Available</span>
                       </div>
                       
+                      <div className="flex flex-col gap-3 mb-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Customer Name (Optional)</label>
+                          <input 
+                            type="text"
+                            placeholder="e.g. John D."
+                            value={walkInName}
+                            onChange={e => setWalkInName(e.target.value)}
+                            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Party Size</label>
+                          <input 
+                            type="number"
+                            min="1"
+                            value={walkInCount}
+                            onChange={e => setWalkInCount(parseInt(e.target.value) || 1)}
+                            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          />
+                        </div>
+                      </div>
+
                       <button 
                         disabled={isProcessingLiveAction}
                         onClick={async () => {
                           setIsProcessingLiveAction(true);
                           try {
-                            await createWalkInTab(restaurantId, compositeTableString, "Walk-in");
+                            await createWalkInTab(restaurantId, compositeTableString, walkInName || "Walk-in", walkInCount);
                             setSelectedLiveTableIds([]);
+                            setWalkInName("");
+                            setWalkInCount(2);
                             router.refresh();
                           } catch (error) {
                             showError("Failed to start tab.");

@@ -13,6 +13,8 @@ export async function GET(req: NextRequest) {
       return new NextResponse("Missing data parameter", { status: 400 });
     }
 
+    console.log("QR API called with colorParam:", colorParam);
+
     // Default to slate-900 if no color is provided or if it's invalid
     const darkColor = colorParam && /^#([0-9A-F]{3}){1,2}$/i.test(colorParam) 
       ? colorParam 

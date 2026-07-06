@@ -6,8 +6,9 @@ import { toZonedTime } from "date-fns-tz";
 import { 
   MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, 
   Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send,
-  ChevronLeft, ChevronRight, Download, Phone, AlertCircle, CheckCircle2
+  ChevronLeft, ChevronRight, Download, Phone, AlertCircle, CheckCircle2, Check
 } from "lucide-react";
+import { resolveManagerRequest } from "./reward-actions";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
 import { getRandomOfferForDay, DayCategory } from "@/lib/retention-offers";
@@ -26,7 +27,13 @@ interface FeedbackData {
   status?: string;
   recovery_request?: string | null;
   recovery_offer_given?: string | null;
+  resolution_notes?: string | null;
   qr_codes?: { label: string | null; location_zone?: string | null } | null;
+  loyalty_cards?: {
+    id: string;
+    stamps: number;
+    last_stamp_at: string;
+  }[] | null;
 }
 
 // Any because we just need basic fields
@@ -40,9 +47,14 @@ type RatingFilter = "all" | "positive" | "neutral" | "attention";
 // Global AudioContext to prevent recreating it
 let audioCtx: AudioContext | null = null;
 
-export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey, recoveryOfferText, customRewardTemplates }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string, recoveryOfferText?: string, customRewardTemplates?: {label: string, value: string}[] }) {
+export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, supabaseAnonKey, recoveryOfferText }: { feedbacks: FeedbackData[], timezone: string, restaurantId: string, supabaseUrl: string, supabaseAnonKey: string, recoveryOfferText?: string }) {
   const [liveFeedbacks, setLiveFeedbacks] = useState<FeedbackData[]>(feedbacks);
   const [mounted, setMounted] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  
+  // State for Manager Request Resolution Notes
+  const [resolutionNotes, setResolutionNotes] = useState<Record<string, string>>({});
+  const [resolvedRequests, setResolvedRequests] = useState<Record<string, boolean>>({});
   
   // Table Controls State
   const [searchQuery, setSearchQuery] = useState("");
@@ -61,22 +73,9 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [retentionOffers, setRetentionOffers] = useState<Record<string, ReturnType<typeof getRandomOfferForDay>>>({});
   const [loyaltyIdeas, setLoyaltyIdeas] = useState<Record<string, ReturnType<typeof getRandomLoyaltyIdeaForDay>>>({});
-  const [selectedTemplates, setSelectedTemplates] = useState<Record<string, string>>({});
   const [sentRewards, setSentRewards] = useState<Record<string, boolean>>({});
   const [sentRetention, setSentRetention] = useState<Record<string, boolean>>({});
 
-  const REWARD_TEMPLATES = [
-    { label: "Smart AI Idea (Recommended)", value: "ai" },
-    { label: "10% Off Next Visit", value: "we'll give you 10% off your entire bill" },
-    { label: "Free Dessert", value: "we'll treat you to a free dessert of your choice" },
-    { label: "Buy One Get One (BOGO)", value: "you can buy one entree and get the second one completely free" },
-    { label: "Free Appetizer", value: "your first appetizer is on the house" }
-  ];
-
-  const mergedRewardTemplates = [
-    ...REWARD_TEMPLATES,
-    ...(Array.isArray(customRewardTemplates) ? customRewardTemplates : [])
-  ];
 
   const [orderDetailsMap, setOrderDetailsMap] = useState<Record<string, OrderDetailsType>>({});
 
@@ -662,7 +661,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                   )}
                                 </div>
                                 
-                                {fb.contact_info && fb.contact_info.trim().replace('|', '').length > 2 && (
+                                {fb.contact_info && fb.contact_info.trim().replace('|', '').length > 2 && !fb.contact_info.includes('URGENT: Manager requested') && (
                                   <div className="mb-6">
                                     <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Contact Info</h4>
                                     <div className="flex items-center gap-2 text-sm text-slate-700 font-medium bg-slate-50 border border-slate-100 px-3 py-2.5 rounded-lg w-fit">
@@ -739,6 +738,67 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                     </div>
                                   </div>
                                 </div>
+                              ) : (fb.recovery_request === 'manager_visit' || fb.contact_info?.includes('URGENT: Manager requested')) ? (
+                                <div className="h-full">
+                                  <div className="bg-rose-50 border border-rose-200 rounded-xl shadow-sm h-full flex flex-col relative overflow-hidden">
+                                    <div className="bg-rose-100/50 px-4 py-2.5 border-b border-rose-100 flex items-center justify-between">
+                                      <div className="flex items-center gap-1.5 text-rose-700 font-bold text-xs uppercase tracking-wider">
+                                        <AlertCircle className="w-4 h-4" />
+                                        In-Person Resolution
+                                      </div>
+                                    </div>
+                                    <div className="p-4 flex flex-col gap-3 flex-grow">
+                                      <p className="text-sm text-rose-800 font-medium mb-1">
+                                        Customer requested a manager at their table. Once resolved, please log the outcome below.
+                                      </p>
+                                      
+                                      {fb.resolution_notes || resolvedRequests[fb.id] ? (
+                                        <div className="mt-auto">
+                                          <div className="bg-white border border-rose-100 p-3 rounded-lg mb-2 text-rose-900 text-sm italic font-medium leading-relaxed">
+                                            "{fb.resolution_notes || resolutionNotes[fb.id]}"
+                                          </div>
+                                          <button disabled className="w-full bg-slate-100 text-rose-700 border border-rose-200 font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm shadow-sm">
+                                            <CheckCircle2 className="w-4 h-4 text-rose-500" />
+                                            Resolved In-Person
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <div className="mt-auto flex flex-col gap-2">
+                                          <textarea 
+                                            placeholder="e.g. Comped their appetizer, apologized for the delay."
+                                            value={resolutionNotes[fb.id] || ""}
+                                            onChange={(e) => setResolutionNotes(prev => ({...prev, [fb.id]: e.target.value}))}
+                                            className="w-full text-sm border-rose-200 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500 bg-white min-h-[60px] p-2"
+                                          />
+                                          <button 
+                                            onClick={async () => {
+                                              if (!resolutionNotes[fb.id]) return;
+                                              
+                                              try {
+                                                const { success, error, details } = await resolveManagerRequest(fb.id, resolutionNotes[fb.id]);
+                                                if (success) {
+                                                  setResolvedRequests(prev => ({...prev, [fb.id]: true}));
+                                                } else {
+                                                  alert("Failed to save: " + (error || "Unknown error"));
+                                                  console.error("Resolve error:", details);
+                                                }
+                                              } catch (err) {
+                                                const errorMessage = err instanceof Error ? err.message : String(err);
+                                                alert("Network error: " + errorMessage);
+                                                console.error(err);
+                                              }
+                                            }}
+                                            disabled={!resolutionNotes[fb.id]}
+                                            className="w-full bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
+                                          >
+                                            <Check className="w-4 h-4" />
+                                            Mark as Resolved
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
                               ) : fb.rating <= 3 && retentionOffers[fb.id] && (
                                 <div className="h-full">
                                   <div className="bg-white border border-rose-200 rounded-xl shadow-sm h-full flex flex-col relative overflow-hidden">
@@ -759,65 +819,42 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                         "{retentionOffers[fb.id].text}"
                                       </div>
                                       
-                                      {fb.contact_info && fb.contact_info.trim().replace('|', '').trim().length > 0 ? (
+                                      {fb.loyalty_cards && fb.loyalty_cards.length > 0 ? (
                                         sentRetention[fb.id] ? (
                                           <button 
                                             disabled
                                             className="mt-1 w-full bg-slate-100 text-rose-700 border border-rose-200 font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm shadow-sm"
                                           >
                                             <CheckCircle2 className="w-4 h-4 text-rose-500" />
-                                            Offer Sent to VIP Card!
+                                            Offer Beamed to VIP Card!
                                           </button>
                                         ) : (
                                           <button 
                                             onClick={async () => {
-                                              const isEmail = fb.contact_info?.includes('@');
                                               const message = retentionOffers[fb.id].text;
-                                              const managerRequested = fb.recovery_request === 'manager_visit' || fb.contact_info?.includes('URGENT: Manager requested');
-                                              
-                                              // Call the Server Action to check if they have a VIP card
                                               const { sendLoyaltyReward } = await import("./reward-actions");
-                                              const result = await sendLoyaltyReward(fb.id, message, fb.contact_info || null, restaurantId, fb.customer_name || null);
-                                              
-                                              if (result.method === "loyalty_card") {
-                                                // Beamed straight to VIP card! No need for SMS/Email
-                                                setSentRetention(prev => ({...prev, [fb.id]: true}));
-                                                return;
-                                              }
-                                              
-                                              // Fallback: No VIP card found, use native email/sms
-                                              if (isEmail) {
-                                                const subject = encodeURIComponent("So sorry about your experience - let us make it right");
-                                                
-                                                let emailText = `Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant, and I saw your recent feedback. I am so sorry we missed the mark.`;
-                                                
-                                                if (managerRequested) {
-                                                  emailText += `\n\nI am also incredibly sorry that we missed communicating with you while you were here. We were unable to look into your issue immediately due to being unusually busy.`;
-                                                }
-                                                
-                                                emailText += `\n\n${message}\n\nPlease let me know when you plan to come back so I can ensure you have a perfect experience.\n\nBest,\nManager`;
-                                                
-                                                const body = encodeURIComponent(emailText);
-                                                window.open(`mailto:${fb.contact_info}?subject=${subject}&body=${body}`, '_blank');
-                                              } else {
-                                                let smsText = `Hi ${fb.customer_name || 'there'}, this is the manager. I saw your feedback & am so sorry.`;
-                                                
-                                                if (managerRequested) {
-                                                  smsText += ` We missed communicating with you due to being busy, and I apologize for that.`;
-                                                }
-                                                
-                                                smsText += ` ${message}. Show this text on your next visit!`;
-                                                
-                                                const body = encodeURIComponent(smsText);
-                                                window.open(`sms:${fb.contact_info}?body=${body}`, '_blank');
-                                              }
+                                              await sendLoyaltyReward(fb.id, message, fb.contact_info || null, restaurantId, fb.customer_name || null);
+                                              setSentRetention(prev => ({...prev, [fb.id]: true}));
                                             }}
                                             className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
                                           >
                                             <Send className="w-4 h-4" />
-                                            Send Offer to Customer
+                                            Beam Offer to VIP Card
                                           </button>
                                         )
+                                      ) : fb.contact_info ? (
+                                        <div className="mt-1 p-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-sm flex flex-col gap-2">
+                                          <div className="flex items-start gap-2">
+                                            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-slate-400" />
+                                            <p>This customer provided contact info but hasn't claimed a Digital VIP Card, so we cannot beam offers directly to their phone.</p>
+                                          </div>
+                                          <div className="bg-white p-2 rounded border border-slate-100 mt-1">
+                                            <p className="font-semibold text-xs text-slate-900 mb-1">PRO TIP:</p>
+                                            <p className="text-xs text-slate-600 leading-relaxed">
+                                              Don't let them walk out unhappy next time. Enable <strong>Automated Fallback Compensation</strong> in your settings. If a manager can't reach their table in time, the system will automatically offer them compensation on the spot!
+                                            </p>
+                                          </div>
+                                        </div>
                                       ) : (
                                         <div className="mt-1 p-2.5 bg-amber-50 border border-amber-100 rounded-lg text-amber-800 text-xs flex items-start gap-2">
                                           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
@@ -847,67 +884,43 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                         This customer loves you! Turn them into a raving regular by sending them this special surprise:
                                       </p>
                                       <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg text-slate-800 text-sm italic font-medium leading-relaxed">
-                                        "{selectedTemplates[fb.id] && selectedTemplates[fb.id] !== 'ai' ? selectedTemplates[fb.id] : loyaltyIdeas[fb.id].text}"
+                                        "{loyaltyIdeas[fb.id].text}"
                                       </div>
                                       
-                                      {fb.contact_info && fb.contact_info.trim().replace('|', '').trim().length > 0 ? (
-                                        <div className="flex flex-col gap-2 mt-1">
-                                          <select 
-                                            className="w-full text-sm border-slate-200 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 py-2"
-                                            value={selectedTemplates[fb.id] || "ai"}
-                                            onChange={(e) => setSelectedTemplates(prev => ({ ...prev, [fb.id]: e.target.value }))}
+                                      {fb.loyalty_cards && fb.loyalty_cards.length > 0 ? (
+                                        sentRewards[fb.id] ? (
+                                          <button 
+                                            disabled
+                                            className="w-full mt-1 bg-slate-100 text-emerald-700 border border-emerald-200 font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-2 shadow-sm"
                                           >
-                                            {(() => {
-                                              const mergedRewardTemplates = [...REWARD_TEMPLATES, ...(customRewardTemplates || [])];
-                                              return mergedRewardTemplates.map(t => (
-                                                <option key={t.label + t.value} value={t.value}>{t.label}</option>
-                                              ));
-                                            })()}
-                                          </select>
-                                          
-                                          {sentRewards[fb.id] ? (
-                                            <button 
-                                              disabled
-                                              className="w-full mt-1 bg-slate-100 text-emerald-700 border border-emerald-200 font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-2 shadow-sm"
-                                            >
-                                              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                                              Reward Sent!
-                                            </button>
-                                          ) : (
-                                            <button 
-                                              onClick={async () => {
-                                                const isEmail = fb.contact_info?.includes('@');
-                                                const selectedVal = selectedTemplates[fb.id];
-                                                const message = (selectedVal && selectedVal !== 'ai') ? selectedVal : loyaltyIdeas[fb.id].text;
-                                                
-                                                // Call the new Server Action
-                                                const { sendLoyaltyReward } = await import("./reward-actions");
-                                                const result = await sendLoyaltyReward(fb.id, message, fb.contact_info || null, restaurantId, fb.customer_name || null);
-                                                
-                                                if (result.method === "loyalty_card") {
-                                                  setSentRewards(prev => ({...prev, [fb.id]: true}));
-                                                } else if (result.method === "email" && isEmail) {
-                                                  // Fallback to mailto for emails
-                                                  const emailMatch = (fb.contact_info || '').match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
-                                                  const targetEmail = emailMatch ? emailMatch[1] : fb.contact_info;
-                                                  const subject = encodeURIComponent("Thank you for your amazing review!");
-                                                  const body = encodeURIComponent(`Hi ${fb.customer_name || 'there'},\n\nI am the manager at our restaurant. We saw your recent glowing review and it made our whole team's day!\n\nAs a token of our appreciation, ${message}\n\nPlease let us know when you plan to come back!\n\nBest,\nManager`);
-                                                  window.open(`mailto:${targetEmail}?subject=${subject}&body=${body}`, '_blank');
-                                                  setSentRewards(prev => ({...prev, [fb.id]: true}));
-                                                } else {
-                                                  setSentRewards(prev => ({...prev, [fb.id]: true}));
-                                                }
-                                              }}
-                                              className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
-                                            >
-                                              <Send className="w-4 h-4" />
-                                              {fb.contact_info?.includes('@') ? "Send via Email" : "Send to VIP Card"}
-                                            </button>
-                                          )}
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                            Reward Beamed to VIP Card!
+                                          </button>
+                                        ) : (
+                                          <button 
+                                            onClick={async () => {
+                                              const message = loyaltyIdeas[fb.id].text;
+                                              const { sendLoyaltyReward } = await import("./reward-actions");
+                                              await sendLoyaltyReward(fb.id, message, fb.contact_info || null, restaurantId, fb.customer_name || null);
+                                              setSentRewards(prev => ({ ...prev, [fb.id]: true }));
+                                            }}
+                                            className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-2 transition-colors shadow-sm"
+                                          >
+                                            <Sparkles className="w-4 h-4" />
+                                            Beam Reward to VIP Card
+                                          </button>
+                                        )
+                                      ) : fb.contact_info ? (
+                                        <div className="mt-1 p-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-sm flex flex-col gap-2">
+                                          <div className="flex items-start gap-2">
+                                            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-slate-400" />
+                                            <p>This customer provided contact info but hasn't claimed a Digital VIP Card, so we cannot beam rewards directly to their phone.</p>
+                                          </div>
                                         </div>
                                       ) : (
-                                        <div className="mt-1 text-center py-2 text-xs text-emerald-600 font-medium bg-emerald-50 rounded-lg">
-                                          No details given. Meet them in person before they leave!
+                                        <div className="mt-1 p-2.5 bg-amber-50 border border-amber-100 rounded-lg text-amber-800 text-xs flex items-start gap-2">
+                                          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                                          <p>No contact info provided. If they are still in the restaurant, approach their table manually to offer this.</p>
                                         </div>
                                       )}
                                     </div>

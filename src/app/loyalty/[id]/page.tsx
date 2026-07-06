@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
 import { AddToHomeScreen } from "@/components/pwa/add-to-home-screen";
+import { AutoRefresh } from "@/components/ui/auto-refresh";
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +36,7 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
+      <AutoRefresh intervalMs={5000} />
       <LoyaltyCardUI 
         cardId={card.id} 
         restaurantId={card.restaurant_id as string}

@@ -46,10 +46,10 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
       {templates.length === 0 ? (
         <div className="text-center p-6 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50">
           <p className="text-slate-500 text-sm mb-4">
-            You don't have any custom reward templates yet. These will appear alongside the standard options in your Feedback dashboard.
+            You haven't defined a 10-stamp reward yet. Add one below to incentivize your customers!
           </p>
           <Button type="button" variant="outline" onClick={addTemplate} className="gap-2">
-            <Plus className="w-4 h-4" /> Add Your First Template
+            <Plus className="w-4 h-4" /> Set 10-Stamp Reward
           </Button>
         </div>
       ) : (
@@ -61,7 +61,7 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
               </div>
               <div className="flex-1 space-y-3">
                 <div>
-                  <Label className="text-xs text-slate-500 mb-1.5 block">Button Label (e.g., "15% Off")</Label>
+                  <Label className="text-xs text-slate-500 mb-1.5 block">Reward Title (e.g., "Free Appetizer")</Label>
                   <Input 
                     placeholder="Short label..." 
                     value={template.label}
@@ -70,9 +70,9 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-slate-500 mb-1.5 block">Message Text (Sent via SMS/Email)</Label>
+                  <Label className="text-xs text-slate-500 mb-1.5 block">Reward Message / Details</Label>
                   <Textarea 
-                    placeholder="Hi! Thanks for the great review. Show this message for 15% off your next meal with us!"
+                    placeholder="Congratulations on hitting 10 stamps! Show this message to claim your free appetizer."
                     value={template.value}
                     onChange={(e) => updateTemplate(index, "value", e.target.value)}
                     className="bg-white resize-none min-h-[80px]"
@@ -91,7 +91,7 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
             </div>
           ))}
           <Button type="button" variant="outline" onClick={addTemplate} className="w-full mt-2 border-dashed gap-2 text-slate-500 bg-transparent">
-            <Plus className="w-4 h-4" /> Add Another Template
+            <Plus className="w-4 h-4" /> Add Alternate 10-Stamp Reward Choice
           </Button>
         </div>
       )}

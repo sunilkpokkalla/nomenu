@@ -15,6 +15,7 @@ import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsSync } from "@/components/ui/tabs-sync";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { RewardTemplatesEditor, RewardTemplate } from "@/components/dashboard/reward-templates-editor";
+import { AutoRefresh } from "@/components/ui/auto-refresh";
 
 export const metadata = {
   title: "Customer Feedback | NoMenu Dashboard",
@@ -87,6 +88,7 @@ export default async function FeedbackPage({
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+      <AutoRefresh intervalMs={15000} />
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Feedback & Loyalty</h1>
         <p className="text-slate-500">Manage customer feedback, automated service recovery, and your digital loyalty program.</p>
@@ -118,7 +120,7 @@ export default async function FeedbackPage({
             
             <TabsTrigger value="directory" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Members</TabsTrigger>
             <TabsTrigger value="design" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Card Design</TabsTrigger>
-            <TabsTrigger value="rewards" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Reward Templates</TabsTrigger>
+            <TabsTrigger value="rewards" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">10-Stamp Loyalty Program</TabsTrigger>
             <TabsTrigger value="scanner" className="ml-auto rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-bold text-amber-700 data-[state=active]:text-amber-900 data-[state=active]:bg-amber-100 transition-all border border-amber-200/50 bg-amber-50/50">Staff Scanner (QR)</TabsTrigger>
           </TabsList>
           
@@ -131,7 +133,6 @@ export default async function FeedbackPage({
                 supabaseUrl={getSupabaseEnv().url} 
                 supabaseAnonKey={getSupabaseEnv().anonKey} 
                 recoveryOfferText={restaurant.recovery_offer_text || undefined}
-                customRewardTemplates={(restaurant.reward_templates as {label: string, value: string}[]) || undefined}
               />
             </div>
             <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
@@ -174,9 +175,9 @@ export default async function FeedbackPage({
 
           <TabsContent value="rewards" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Loyalty Reward Templates</h3>
-              <p className="text-sm text-slate-500 mb-6 max-w-3xl">
-                Create custom reward templates to send to your best customers when they leave 4-5 star reviews. These will appear as quick-select options in the Feedback dashboard.
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">10-Stamp Loyalty Program Setup</h3>
+              <p className="text-slate-600 mb-6">
+                Define the grand prize a customer automatically unlocks when they scan your QR codes and collect 10 loyalty stamps.
               </p>
               <RewardTemplatesEditor
                 initialTemplates={restaurant.reward_templates as RewardTemplate[] | null}
