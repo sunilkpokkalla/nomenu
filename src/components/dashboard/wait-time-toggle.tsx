@@ -30,10 +30,10 @@ export function WaitTimeToggle({ restaurantId, initialStatus = "normal" }: { res
         <button
           onClick={() => handleStatusChange("normal")}
           disabled={isPending}
-          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all active:scale-95 duration-200 ${
             status === "normal" 
-              ? "bg-white text-emerald-700 shadow-sm ring-1 ring-black/5" 
-              : "text-slate-600 hover:text-slate-900"
+              ? "bg-white text-emerald-600 shadow-md ring-1 ring-black/5" 
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
           }`}
         >
           Normal (10-15m)
@@ -41,10 +41,10 @@ export function WaitTimeToggle({ restaurantId, initialStatus = "normal" }: { res
         <button
           onClick={() => handleStatusChange("busy")}
           disabled={isPending}
-          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all active:scale-95 duration-200 ${
             status === "busy" 
-              ? "bg-white text-amber-600 shadow-sm ring-1 ring-black/5" 
-              : "text-slate-600 hover:text-slate-900"
+              ? "bg-white text-amber-600 shadow-md ring-1 ring-black/5" 
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
           }`}
         >
           Busy (25-35m)
@@ -52,10 +52,10 @@ export function WaitTimeToggle({ restaurantId, initialStatus = "normal" }: { res
         <button
           onClick={() => handleStatusChange("slammed")}
           disabled={isPending}
-          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all active:scale-95 duration-200 ${
             status === "slammed" 
-              ? "bg-white text-rose-600 shadow-sm ring-1 ring-black/5" 
-              : "text-slate-600 hover:text-slate-900"
+              ? "bg-white text-rose-600 shadow-md ring-1 ring-black/5" 
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
           }`}
         >
           Slammed (45m+)

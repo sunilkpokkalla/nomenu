@@ -364,8 +364,8 @@ export default async function DashboardPage(
               <svg viewBox="0 0 500 120" className="w-full h-full" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.18" />
-                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.00" />
+                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.40" />
+                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.02" />
                   </linearGradient>
                   <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
                     <stop offset="0%" stopColor="hsl(var(--primary))" />
@@ -473,8 +473,14 @@ export default async function DashboardPage(
         {/* Card 3 (Col span 2): Recent Activity Feed */}
         <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 p-6 lg:p-8 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)]">
           <div className="mb-6">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Real-time Stream</p>
-            <h2 className="text-lg font-bold text-slate-900 mt-0.5">Recent Scans</h2>
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mt-0.5">Real-time Stream</p>
+            </div>
+            <h2 className="text-lg font-bold text-slate-900">Recent Scans</h2>
           </div>
 
           {recentScans.length > 0 ? (
@@ -537,51 +543,51 @@ export default async function DashboardPage(
           <div className="grid gap-3.5 mt-6">
             <Link 
               href="/dashboard/qrcodes" 
-              className="flex items-center justify-between border border-slate-100 rounded-2xl p-4 bg-slate-50/30 hover:bg-slate-50 hover:border-slate-200/60 transition-all duration-300 hover:-translate-y-[2px] active:translate-y-0 active:scale-[0.98] group"
+              className="flex items-center justify-between border border-slate-100 rounded-2xl p-4 bg-slate-50/30 hover:bg-white hover:border-slate-200 hover:shadow-md transition-all duration-300 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] group"
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <QrCode className="h-4.5 w-4.5" strokeWidth={1.5} />
                 </div>
                 <div className="text-left">
-                  <p className="font-bold text-slate-800 text-sm">QR Code Brands</p>
+                  <p className="font-bold text-slate-800 text-sm group-hover:text-slate-900">QR Code Brands</p>
                   <p className="text-slate-400 text-[11px] font-medium leading-none mt-0.5">Manage & print templates</p>
                 </div>
               </div>
-              <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors" strokeWidth={1.5} />
+              <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" strokeWidth={1.5} />
             </Link>
 
             <Link 
               href={activeMenu ? `/menu/${activeMenu.id}` : "/dashboard/menus"} 
               target={activeMenu ? "_blank" : undefined}
-              className="flex items-center justify-between border border-slate-100 rounded-2xl p-4 bg-slate-50/30 hover:bg-slate-50 hover:border-slate-200/60 transition-all duration-300 hover:-translate-y-[2px] active:translate-y-0 active:scale-[0.98] group"
+              className="flex items-center justify-between border border-slate-100 rounded-2xl p-4 bg-slate-50/30 hover:bg-white hover:border-slate-200 hover:shadow-md transition-all duration-300 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] group"
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <ExternalLink className="h-4.5 w-4.5" strokeWidth={1.5} />
                 </div>
                 <div className="text-left">
-                  <p className="font-bold text-slate-800 text-sm">Preview Live Menu</p>
+                  <p className="font-bold text-slate-800 text-sm group-hover:text-slate-900">Preview Live Menu</p>
                   <p className="text-slate-400 text-[11px] font-medium leading-none mt-0.5">Inspect guest rendering</p>
                 </div>
               </div>
-              <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors" strokeWidth={1.5} />
+              <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" strokeWidth={1.5} />
             </Link>
 
             <Link 
               href="/dashboard/menus" 
-              className="flex items-center justify-between border border-slate-100 rounded-2xl p-4 bg-slate-50/30 hover:bg-slate-50 hover:border-slate-200/60 transition-all duration-300 hover:-translate-y-[2px] active:translate-y-0 active:scale-[0.98] group"
+              className="flex items-center justify-between border border-slate-100 rounded-2xl p-4 bg-slate-50/30 hover:bg-white hover:border-slate-200 hover:shadow-md transition-all duration-300 hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] group"
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Utensils className="h-4.5 w-4.5" strokeWidth={1.5} />
                 </div>
                 <div className="text-left">
-                  <p className="font-bold text-slate-800 text-sm">Manage Menus</p>
+                  <p className="font-bold text-slate-800 text-sm group-hover:text-slate-900">Manage Menus</p>
                   <p className="text-slate-400 text-[11px] font-medium leading-none mt-0.5">Edit layouts & structures</p>
                 </div>
               </div>
-              <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors" strokeWidth={1.5} />
+              <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" strokeWidth={1.5} />
             </Link>
           </div>
         </div>

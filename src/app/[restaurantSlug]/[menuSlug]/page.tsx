@@ -129,18 +129,14 @@ export default async function StorefrontMenuPage(
     if (qrRecord) {
       locationZone = qrRecord.location_zone || null;
       
-      // Increment scan count securely (fire-and-forget)
-      const triggerUpdate = async () => {
-        try {
-          await supabaseAdmin
-            .from("qr_codes")
-            .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
-            .eq("id", qrCodeId);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      triggerUpdate();
+      try {
+        await supabaseAdmin
+          .from("qr_codes")
+          .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
+          .eq("id", qrCodeId);
+      } catch (error) {
+        console.error("Failed to increment QR code scan count:", error);
+      }
     }
   }
 
