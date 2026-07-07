@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export function SquareConnectButton({ isConnected }: { isConnected: boolean }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [confirmDisconnect, setConfirmDisconnect] = useState(false);
 
   const handleConnect = async () => {
     setIsLoading(true);
@@ -14,11 +15,13 @@ export function SquareConnectButton({ isConnected }: { isConnected: boolean }) {
   };
 
   const handleDisconnect = async () => {
-    if (!confirm("Are you sure you want to disconnect Square? Your menus will stop syncing automatically.")) return;
-    
-    setIsLoading(true);
-    // Hit the disconnect API route which will clear the token and redirect back
-    window.location.href = "/api/integrations/square/disconnect";
+    if (confirmDisconnect) {
+      setIsLoading(true);
+      window.location.href = "/api/integrations/square/disconnect";
+    } else {
+      setConfirmDisconnect(true);
+      setTimeout(() => setConfirmDisconnect(false), 4000);
+    }
   };
 
   if (isConnected) {
@@ -27,10 +30,10 @@ export function SquareConnectButton({ isConnected }: { isConnected: boolean }) {
         variant="destructive" 
         onClick={handleDisconnect} 
         disabled={isLoading}
-        className="font-bold text-xs"
+        className={`font-bold text-xs ${confirmDisconnect ? 'bg-rose-700 hover:bg-rose-800' : ''}`}
       >
-        {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Unplug className="mr-2 h-4 w-4" />}
-        Disconnect Square
+        {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (!confirmDisconnect && <Unplug className="mr-2 h-4 w-4" />)}
+        {confirmDisconnect ? "Sure? This stops syncing menus." : "Disconnect Square"}
       </Button>
     );
   }

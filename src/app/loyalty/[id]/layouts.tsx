@@ -9,14 +9,15 @@ export interface LayoutProps {
   StampIcon: React.ElementType;
   stampTheme: { bg: string, text: string };
   rewardText?: string | null;
+  cardColor: string;
 }
 
 // 1. Classic Punch Card
-export function ClassicLayout({ stamps, restaurantName, primaryColor, StampIcon, stampTheme, rewardText }: LayoutProps) {
+export function ClassicLayout({ stamps, restaurantName, primaryColor, StampIcon, stampTheme, rewardText, cardColor }: LayoutProps) {
   return (
     <div 
       className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-[1.5rem] overflow-hidden shadow-xl transition-transform hover:scale-[1.02] duration-500 border border-black/5"
-      style={{ backgroundColor: primaryColor }}
+      style={{ backgroundColor: cardColor }}
     >
       <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]" />
       <div className="absolute inset-0 p-5 sm:p-6 flex flex-col justify-between z-10">
@@ -47,11 +48,11 @@ export function ClassicLayout({ stamps, restaurantName, primaryColor, StampIcon,
 }
 
 // 2. Digital VIP
-export function DigitalLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText }: LayoutProps) {
+export function DigitalLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
     <div 
       className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-[1.5rem] overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500"
-      style={{ background: `linear-gradient(135deg, ${primaryColor} 0%, #000 100%)` }}
+      style={{ background: `linear-gradient(135deg, ${cardColor} 0%, #000 100%)` }}
     >
       <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 transform -skew-x-12 translate-x-[-100%] hover:translate-x-[200%] transition-transform duration-1000" />
       <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between z-10">
@@ -81,11 +82,11 @@ export function DigitalLayout({ stamps, restaurantName, primaryColor, StampIcon,
 }
 
 // 3. Minimalist Grid
-export function MinimalistLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText }: LayoutProps) {
+export function MinimalistLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
     <div 
       className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-[1rem] overflow-hidden shadow-lg transition-transform hover:scale-[1.02] duration-500 bg-white border-2"
-      style={{ borderColor: primaryColor }}
+      style={{ borderColor: cardColor }}
     >
       <div className="absolute inset-0 p-5 sm:p-6 flex flex-col justify-center z-10">
         <div className="flex justify-between items-start border-b-2 pb-2 mb-3" style={{ borderColor: `${primaryColor}20` }}>
@@ -117,7 +118,7 @@ export function MinimalistLayout({ stamps, restaurantName, primaryColor, StampIc
 }
 
 // 4. Argentine Edge
-export function ArgentineLayout({ stamps, restaurantName, primaryColor, StampIcon, stampTheme, rewardText }: LayoutProps) {
+export function ArgentineLayout({ stamps, restaurantName, primaryColor, StampIcon, stampTheme, rewardText, cardColor }: LayoutProps) {
   return (
     <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-none overflow-hidden shadow-md transition-transform hover:scale-[1.02] duration-500 bg-white border-4" style={{ borderColor: primaryColor }}>
       {/* Torn Paper Header/Footer using SVG masks or simple jagged borders, approximated here with jagged background gradients */}
@@ -162,11 +163,11 @@ export function ArgentineLayout({ stamps, restaurantName, primaryColor, StampIco
 }
 
 // 5. Coffee House
-export function CoffeeLayout({ stamps, restaurantName, StampIcon, stampTheme, rewardText }: LayoutProps) {
+export function CoffeeLayout({ stamps, restaurantName, StampIcon, stampTheme, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-sm overflow-hidden shadow-lg transition-transform hover:scale-[1.02] duration-500 bg-[#e6d5c3] p-6 border-8 border-transparent" style={{ borderImage: "url('https://www.transparenttextures.com/patterns/cardboard-flat.png') 30 stretch" }}>
+    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-sm overflow-hidden shadow-lg transition-transform hover:scale-[1.02] duration-500 border-4 border-double" style={{ backgroundColor: cardColor, borderColor: '#8b7355' }}>
       <div className="absolute inset-0 opacity-40 mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/cardboard-flat.png')]" />
-      <div className="relative z-10 flex flex-col h-full justify-between">
+      <div className="relative z-10 flex flex-col h-full justify-between p-6">
         <div className="text-center">
           <div className="text-[#8b7355] text-[10px] font-bold uppercase tracking-widest mb-1">Loyalty Card</div>
           <h2 className="text-[#4a3b32] font-serif italic text-2xl sm:text-3xl truncate">{restaurantName}</h2>
@@ -192,9 +193,9 @@ export function CoffeeLayout({ stamps, restaurantName, StampIcon, stampTheme, re
 }
 
 // 6. Luxury Gold
-export function LuxuryLayout({ stamps, restaurantName, StampIcon, rewardText }: LayoutProps) {
+export function LuxuryLayout({ stamps, restaurantName, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 bg-[#0a0a0a] border border-[#d4af37]/30 p-1">
+    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 border border-[#d4af37]/30 p-1" style={{ backgroundColor: cardColor }}>
       <div className="w-full h-full border border-[#d4af37] rounded-lg p-5 flex flex-col justify-between">
         <div className="text-center">
           <div className="text-[#d4af37]/60 text-[10px] font-bold uppercase tracking-widest mb-2">Loyalty Card</div>
@@ -220,9 +221,9 @@ export function LuxuryLayout({ stamps, restaurantName, StampIcon, rewardText }: 
 }
 
 // 7. Retro Arcade
-export function ArcadeLayout({ stamps, restaurantName, StampIcon }: LayoutProps) {
+export function ArcadeLayout({ stamps, restaurantName, StampIcon, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-sm overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,1)] transition-transform hover:translate-y-1 hover:shadow-[4px_4px_0_rgba(0,0,0,1)] duration-200 bg-[#2b2b2b] border-4 border-black p-4">
+    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-sm overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,1)] transition-transform hover:translate-y-1 hover:shadow-[4px_4px_0_rgba(0,0,0,1)] duration-200 border-4 border-black p-4" style={{ backgroundColor: cardColor }}>
       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.1)_2px,transparent_2px),linear-gradient(90deg,rgba(0,0,0,0.1)_2px,transparent_2px)] bg-[size:10px_10px]" />
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div className="text-center border-b-4 border-black pb-2 bg-[#ff0055] -mx-4 -mt-4 pt-4 mb-2">
@@ -249,11 +250,11 @@ export function ArcadeLayout({ stamps, restaurantName, StampIcon }: LayoutProps)
 }
 
 // 8. Modern Gradient
-export function GradientLayout({ stamps, restaurantName, primaryColor, StampIcon, stampTheme, rewardText }: LayoutProps) {
+export function GradientLayout({ stamps, restaurantName, primaryColor, StampIcon, stampTheme, rewardText, cardColor }: LayoutProps) {
   return (
     <div 
       className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-[2rem] overflow-hidden shadow-xl transition-transform hover:scale-[1.02] duration-500"
-      style={{ background: `linear-gradient(120deg, ${primaryColor} 0%, #ffffff 150%)` }}
+      style={{ background: `linear-gradient(to right, ${cardColor}, ${primaryColor})` }}
     >
       <div className="absolute inset-0 backdrop-blur-3xl bg-white/30 p-8 flex flex-col justify-between z-10">
         <div className="flex justify-between items-center">
@@ -279,9 +280,9 @@ export function GradientLayout({ stamps, restaurantName, primaryColor, StampIcon
 }
 
 // 9. Glassmorphism
-export function BirthdayLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, stampTheme }: LayoutProps) {
+export function BirthdayLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, stampTheme, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-3xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 bg-slate-900 border border-white/10 p-5 sm:p-6 flex flex-col justify-center">
+    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-3xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 border border-white/10 p-5 sm:p-6 flex flex-col justify-center" style={{ backgroundColor: cardColor }}>
       <div className="absolute -top-32 -right-32 w-64 h-64 blur-[100px] rounded-full" style={{ backgroundColor: primaryColor, opacity: 0.5 }} />
       <div className="absolute -bottom-32 -left-32 w-64 h-64 blur-[100px] rounded-full" style={{ backgroundColor: primaryColor, opacity: 0.3 }} />
       <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-3xl" />
@@ -309,9 +310,12 @@ export function BirthdayLayout({ stamps, restaurantName, primaryColor, StampIcon
 }
 
 // 10. Fine Dining
-export function FineDiningLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText }: LayoutProps) {
+export function FineDiningLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-sm overflow-hidden shadow-md transition-transform hover:scale-[1.02] duration-500 bg-white border-[1px] border-black/20 p-8 flex flex-col justify-between">
+    <div 
+      className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-sm overflow-hidden shadow-md transition-transform hover:scale-[1.02] duration-500 border-[1px] border-black/20 p-8 flex flex-col justify-between"
+      style={{ backgroundColor: cardColor }}
+    >
       <div className="text-center">
         <div className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.3em] mb-2">Loyalty Card</div>
         <h2 className="text-slate-900 font-serif text-2xl tracking-[0.2em] uppercase">{restaurantName}</h2>
@@ -333,10 +337,13 @@ export function FineDiningLayout({ stamps, restaurantName, primaryColor, StampIc
   );
 }
 
-// 10. Corporate Sleek
-export function CorporateLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText }: LayoutProps) {
+// 11. Corporate Sleek
+export function CorporateLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-md overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 bg-slate-900 flex flex-col justify-between p-6 sm:p-8 border-l-4" style={{ borderLeftColor: primaryColor }}>
+    <div 
+      className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-md overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 border-l-8 flex flex-col justify-between p-6 sm:p-8" 
+      style={{ borderLeftColor: primaryColor, backgroundColor: cardColor }}
+    >
       <div className="text-left w-full flex flex-col items-start">
         <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Loyalty Card</div>
         <h2 className="text-white font-semibold text-2xl tracking-wide leading-tight">{restaurantName}</h2>
@@ -358,9 +365,9 @@ export function CorporateLayout({ stamps, restaurantName, primaryColor, StampIco
 
 
 // 13. Botanical Earth
-export function BotanicalLayout({ stamps, restaurantName, StampIcon, rewardText }: LayoutProps) {
+export function BotanicalLayout({ stamps, restaurantName, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-[2rem] overflow-hidden shadow-lg transition-transform hover:scale-[1.02] duration-500 bg-[#eef1e6] border border-[#cbd5c0] p-8 flex flex-col justify-between">
+    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-[2rem] overflow-hidden shadow-lg transition-transform hover:scale-[1.02] duration-500 border border-[#cbd5c0] p-8 flex flex-col justify-between" style={{ backgroundColor: cardColor }}>
       <div className="text-center">
         <div className="text-[#8fbc8f] text-[10px] font-bold uppercase tracking-widest mb-1">Loyalty Card</div>
         <h2 className="text-[#556b2f] font-serif text-3xl tracking-wide">{restaurantName}</h2>
@@ -378,9 +385,12 @@ export function BotanicalLayout({ stamps, restaurantName, StampIcon, rewardText 
 }
 
 // 14. Holographic Foil
-export function HolographicLayout({ stamps, restaurantName, StampIcon, rewardText }: LayoutProps) {
+export function HolographicLayout({ stamps, restaurantName, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.02] duration-500 bg-slate-100 p-6 flex flex-col justify-center" style={{ background: "linear-gradient(135deg, #ffcce6 0%, #ccddff 50%, #ccffcc 100%)" }}>
+    <div 
+      className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-[1.02] duration-500 p-6 flex flex-col justify-center border border-white/40" 
+      style={{ background: `linear-gradient(120deg, ${cardColor}, #bfdbfe, #bbf7d0)` }}
+    >
       <div className="absolute inset-0 bg-gradient-to-tr from-white/40 via-transparent to-white/40 mix-blend-overlay" />
       <div className="relative z-10 w-full">
         <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1 text-center">Loyalty Card</div>
@@ -399,9 +409,12 @@ export function HolographicLayout({ stamps, restaurantName, StampIcon, rewardTex
 }
 
 // 15. Chalkboard Menu
-export function ChalkboardLayout({ stamps, restaurantName, StampIcon, rewardText }: LayoutProps) {
+export function ChalkboardLayout({ stamps, restaurantName, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-md overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 bg-[#2b302c] border-[8px] border-[#4a3b32] p-5 flex flex-col justify-center">
+    <div 
+      className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-lg overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 border-[12px] border-[#4a3b32] p-5 flex flex-col justify-center"
+      style={{ backgroundColor: cardColor }}
+    >
       <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')]" />
       <div className="relative z-10 text-center border-b-2 border-white/20 pb-2 mb-3 border-dashed">
         <div className="text-white/50 text-[9px] font-mono uppercase tracking-widest mb-1">Loyalty Card</div>
@@ -420,9 +433,9 @@ export function ChalkboardLayout({ stamps, restaurantName, StampIcon, rewardText
 }
 
 // 16. Lumia Black
-export function LumiaLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText }: LayoutProps) {
+export function LumiaLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-2xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 bg-black p-8 flex flex-col justify-between">
+    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-2xl overflow-hidden shadow-2xl transition-transform hover:scale-[1.02] duration-500 p-8 flex flex-col justify-between" style={{ backgroundColor: cardColor }}>
       <div className="absolute -top-20 -right-20 w-40 h-40 blur-[80px] rounded-full" style={{ backgroundColor: primaryColor, opacity: 0.3 }} />
       <div className="absolute -bottom-20 -left-20 w-40 h-40 blur-[80px] rounded-full" style={{ backgroundColor: primaryColor, opacity: 0.2 }} />
       
@@ -444,9 +457,9 @@ export function LumiaLayout({ stamps, restaurantName, primaryColor, StampIcon, r
 }
 
 // 17. Modern Minimal
-export function ModernMinimalLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText }: LayoutProps) {
+export function ModernMinimalLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-3xl overflow-hidden shadow-sm transition-transform hover:scale-[1.02] duration-500 bg-[#f9fafb] p-8 flex flex-col justify-between border border-slate-100">
+    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-3xl overflow-hidden shadow-sm transition-transform hover:scale-[1.02] duration-500 p-8 flex flex-col justify-between border border-slate-100" style={{ backgroundColor: cardColor }}>
       <div className="flex justify-between items-start">
         <div className="flex-1 overflow-hidden pr-4">
           <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Loyalty Card</div>
@@ -478,24 +491,24 @@ export function ModernMinimalLayout({ stamps, restaurantName, primaryColor, Stam
 }
 
 // 18. Vibrant Cafe
-export function VibrantCafeLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, stampTheme }: LayoutProps) {
+export function VibrantCafeLayout({ stamps, restaurantName, primaryColor, StampIcon, rewardText, cardColor }: LayoutProps) {
   return (
-    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-[1.5rem] overflow-hidden shadow-lg transition-transform hover:scale-[1.02] duration-500 p-5 sm:p-6 flex flex-col justify-center border-[4px]" style={{ backgroundColor: primaryColor, borderColor: "rgba(255,255,255,0.2)" }}>
-      <div className="absolute inset-0 bg-black/10 mix-blend-overlay" />
+    <div className="relative w-full aspect-auto min-h-[240px] sm:aspect-[1.586/1] rounded-[2rem] overflow-hidden shadow-xl transition-transform hover:scale-[1.02] duration-500 p-5 flex flex-col justify-between border" style={{ backgroundColor: cardColor, borderColor: "rgba(255,255,255,0.2)" }}>
+      <div className="absolute inset-0 bg-black/10 mix-blend-overlay pointer-events-none" />
       <div className="relative z-10 flex flex-col items-center text-center">
-        <div className="w-full border-b border-white/30 pb-3 mb-3">
-          <div className="text-white/80 text-[9px] font-bold uppercase tracking-widest mb-1">Loyalty Card</div>
-          <h2 className="text-white font-black text-2xl tracking-tight truncate drop-shadow-sm leading-tight">{restaurantName}</h2>
-          <div className="inline-block bg-white/20 backdrop-blur-md rounded-full px-4 py-1 mt-1 shadow-sm border border-white/30">
-            <p className="text-white text-[9px] font-bold uppercase tracking-widest truncate">{rewardText || "Grab a reward"}</p>
+        <div className="w-full border-b border-white/30 pb-1.5 mb-1.5">
+          <div className="text-white/80 text-[9px] font-bold uppercase tracking-widest mb-0.5">Loyalty Card</div>
+          <h2 className="text-white font-black text-xl sm:text-2xl tracking-tight truncate drop-shadow-sm leading-tight">{restaurantName}</h2>
+          <div className="inline-block bg-white/20 backdrop-blur-md rounded-full px-3 py-0.5 mt-0.5 shadow-sm border border-white/30">
+            <p className="text-white text-[8px] font-bold uppercase tracking-widest truncate">{rewardText || "Grab a reward"}</p>
           </div>
         </div>
       </div>
       
-      <div className="relative z-10 grid grid-cols-5 gap-2 sm:gap-3">
+      <div className="relative z-10 grid grid-cols-5 gap-1.5 sm:gap-2 mt-auto">
         {Array.from({ length: 10 }).map((_, i) => (
           <div key={i} className="relative w-full aspect-square rounded-xl flex items-center justify-center transition-all bg-white/10 backdrop-blur-sm border border-white/30 shadow-inner">
-            {i < stamps ? <StampIcon className="w-6 h-6 text-white drop-shadow-md" /> : null}
+            {i < stamps ? <StampIcon className="w-5 h-5 text-white drop-shadow-md" /> : null}
           </div>
         ))}
       </div>

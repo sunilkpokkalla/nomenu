@@ -253,6 +253,7 @@ export interface Database {
           loyalty_stamp_icon: string | null;
           loyalty_card_layout: string | null;
           loyalty_reward_text: string | null;
+          loyalty_card_color: string | null;
 
           wait_time_status: string | null;
         };
@@ -305,6 +306,7 @@ export interface Database {
           loyalty_stamp_icon?: string | null;
           loyalty_card_layout?: string | null;
           loyalty_reward_text?: string | null;
+          loyalty_card_color?: string | null;
 
           wait_time_status?: string | null;
         };

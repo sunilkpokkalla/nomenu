@@ -161,6 +161,7 @@ export default async function FeedbackPage({
               initialIcon={restaurant.loyalty_stamp_icon || "star"}
               initialLayout={restaurant.loyalty_card_layout || "classic"}
               initialRewardText={restaurant.loyalty_reward_text}
+              initialCardColor={restaurant.loyalty_card_color}
               restaurantName={restaurant.name}
               primaryColor={restaurant.primary_color || "#000000"}
               restaurantLogo={restaurant.logo_url}

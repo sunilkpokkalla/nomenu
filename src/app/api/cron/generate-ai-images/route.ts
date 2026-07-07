@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-export const dynamic = 'force-dynamic';
-
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
+
+export const dynamic = 'force-dynamic';
 
 // Note: Use Vercel maxDuration if possible
 export const maxDuration = 60; // Up to 60s for Hobby/Pro Vercel
@@ -132,14 +132,13 @@ export async function GET(req: Request) {
         if (imageUrl) {
           const imageRes = await fetch(imageUrl);
           const arrayBuffer = await imageRes.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
           const fileName = `ai_generated/${job.restaurant_id}/${item.id}_${uuidv4()}.jpg`;
 
           // Upload to Supabase Storage
           const { error: uploadError } = await supabase
             .storage
             .from("item-images")
-            .upload(fileName, buffer, {
+            .upload(fileName, arrayBuffer, {
               contentType: "image/jpeg",
               upsert: true
             });

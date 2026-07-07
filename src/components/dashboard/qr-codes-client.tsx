@@ -7,7 +7,7 @@ import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Printer, Trash2 } from "lucide-react";
-import { deleteQrCode } from "@/app/dashboard/actions";
+import { deleteQrCode, bulkDeleteQrCodes } from "@/app/dashboard/actions";
 import { BatchQrDesignerModal } from "@/components/dashboard/batch-qr-designer-modal";
 
 const getGridClass = (count: number) => {
@@ -63,29 +63,33 @@ export function QrCodesClient({
     setSelectedQrIds(newSet);
   };
 
-  const [savedColor, setSavedColor] = useState<string>("");
+  const [savedColors, setSavedColors] = useState<Record<string, string>>({});
 
-  const loadSavedColor = useCallback(() => {
-    if (typeof window !== "undefined" && restaurant?.name) {
-      try {
-        const savedStr = localStorage.getItem(`qr_design_${restaurant.name}`);
-        if (savedStr) {
-          const parsed = JSON.parse(savedStr);
-          if (parsed.qrColor) {
-            setSavedColor(parsed.qrColor);
+  const loadSavedColors = useCallback(() => {
+    if (typeof window !== "undefined" && restaurant?.name && menusList) {
+      const newSavedColors: Record<string, string> = {};
+      menusList.forEach((menu: Menu) => {
+        try {
+          const savedStr = localStorage.getItem(`qr_design_${restaurant.name}_${menu.id}`);
+          if (savedStr) {
+            const parsed = JSON.parse(savedStr);
+            if (parsed.qrColor) {
+              newSavedColors[menu.id] = parsed.qrColor;
+            }
           }
+        } catch (e) {
+          // ignore
         }
-      } catch (e) {
-        // ignore
-      }
+      });
+      setSavedColors(newSavedColors);
     }
-  }, [restaurant?.name]);
+  }, [restaurant?.name, menusList]);
 
   useEffect(() => {
-    loadSavedColor();
-    window.addEventListener('qr_design_saved', loadSavedColor);
-    return () => window.removeEventListener('qr_design_saved', loadSavedColor);
-  }, [loadSavedColor]);
+    loadSavedColors();
+    window.addEventListener('qr_design_saved', loadSavedColors);
+    return () => window.removeEventListener('qr_design_saved', loadSavedColors);
+  }, [loadSavedColors]);
 
   const groupedQrs = qrCodesList.reduce((acc: Record<string, QrCode[]>, qr: QrCode) => {
     let locationType = qr.location_zone || "Main Dining";
@@ -128,7 +132,7 @@ export function QrCodesClient({
                   <div className="h-[1px] bg-gradient-to-r from-slate-200 to-transparent flex-1 mt-2" />
                 </div>
                 
-                <div className={`grid gap-6 sm:gap-8 ${getGridClass(qrs.length)}`}>
+                <div className={`grid gap-4 sm:gap-6 ${getGridClass(qrs.length)}`}>
                   {qrs.map((qr: QrCode) => {
                     const targetMenu = menusList.find((m: Menu) => m.id === qr.menu_id);
                     
@@ -143,7 +147,7 @@ export function QrCodesClient({
                     let qrImageApiUrl = `/api/qr?data=${encodeURIComponent(publicUrl)}`;
                     
                     const design = (qr.design_metadata as Record<string, unknown>) || {};
-                    const parsedColor = (design.qrColor as string) || savedColor;
+                    const parsedColor = (design.qrColor as string) || savedColors[qr.menu_id];
                     
                     if (parsedColor && parsedColor !== "#0F172A") {
                       qrImageApiUrl += `&color=${encodeURIComponent(parsedColor)}`;
@@ -163,8 +167,8 @@ export function QrCodesClient({
                           />
                         </div>
 
-                        <div className="flex flex-col items-center text-center pt-8 pb-4 px-6 relative z-10">
-                          <h3 className="text-2xl font-bold tracking-tight text-slate-900">{qr.label}</h3>
+                        <div className={`flex flex-col items-center text-center ${qrs.length >= 5 ? 'pt-6 pb-3 px-4' : 'pt-8 pb-4 px-6'} relative z-10`}>
+                          <h3 className={`${qrs.length >= 5 ? 'text-xl' : 'text-2xl'} font-bold tracking-tight text-slate-900`}>{qr.label}</h3>
                           <p className="text-sm text-slate-500 font-medium mt-1">
                             {targetMenu ? targetMenu.name : "Unknown Menu"}
                           </p>
@@ -183,7 +187,7 @@ export function QrCodesClient({
                             href={qrImageApiUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="block aspect-square w-full max-w-[11rem] mx-auto rounded-2xl bg-white p-3 shadow-sm border border-slate-100 hover:shadow-md transition-all cursor-pointer"
+                            className={`block aspect-square w-full ${qrs.length >= 5 ? 'max-w-[9rem]' : 'max-w-[11rem]'} mx-auto rounded-2xl bg-white p-3 shadow-sm border border-slate-100 hover:shadow-md transition-all cursor-pointer`}
                             title="Click to open full size QR image"
                           >
                             <img src={qrImageApiUrl} alt="QR Code" className="w-full h-full object-contain mix-blend-multiply" loading="lazy" />
@@ -257,6 +261,21 @@ export function QrCodesClient({
             baseUrl={baseUrl}
             rootDomain={rootDomain}
           />
+          <DeleteConfirmForm
+            action={bulkDeleteQrCodes}
+            confirmMessage={`Are you sure you want to delete ${selectedQrIds.size} QR codes? This action cannot be undone.`}
+            name="qrCodeIds"
+            value={JSON.stringify(Array.from(selectedQrIds))}
+          >
+            <Button
+              type="submit"
+              variant="destructive"
+              className="rounded-full bg-red-600 hover:bg-red-700 text-white font-medium shadow-sm"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete Selected
+            </Button>
+          </DeleteConfirmForm>
         </div>
       )}
     </>

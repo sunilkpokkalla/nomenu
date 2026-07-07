@@ -14,7 +14,7 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
 
   const { data: card, error } = await supabase
     .from("loyalty_cards")
-    .select("*, restaurants (name, logo_url, primary_color, loyalty_stamp_color, loyalty_stamp_icon, loyalty_card_layout)")
+    .select("*, restaurants (name, logo_url, primary_color, loyalty_stamp_color, loyalty_stamp_icon, loyalty_card_layout, loyalty_reward_text, loyalty_card_color)")
     .eq("id", cardId)
     .maybeSingle();
 
@@ -48,6 +48,7 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
         stampIcon={restaurant.loyalty_stamp_icon || "star"}
         layout={restaurant.loyalty_card_layout || "classic"}
         rewardText={restaurant.loyalty_reward_text}
+        cardColor={restaurant.loyalty_card_color}
         hasPhoneNumber={!!card.phone_number}
         activeReward={card.active_reward}
       />

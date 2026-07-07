@@ -119,7 +119,8 @@ export async function updateLoyaltyDesign(
   color: string, 
   icon: string, 
   layout: string, 
-  rewardText: string
+  rewardText: string,
+  cardColor: string | null
 ) {
   const supabase = await createClient();
   const {
@@ -137,7 +138,8 @@ export async function updateLoyaltyDesign(
       loyalty_stamp_color: color,
       loyalty_stamp_icon: icon,
       loyalty_card_layout: layout,
-      loyalty_reward_text: rewardText
+      loyalty_reward_text: rewardText,
+      loyalty_card_color: cardColor
     })
     .eq("id", restaurantId)
     .eq("owner_id", user.id);

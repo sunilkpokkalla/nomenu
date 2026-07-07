@@ -722,6 +722,93 @@ export async function createQrCode(formData: FormData) {
   redirect("/dashboard/qrcodes");
 }
 
+export async function bulkCreateQrCodes(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  const prefix = field(formData, "prefix");
+  const countStr = field(formData, "count");
+  const startStr = field(formData, "start");
+  const menuId = field(formData, "menuId");
+  const mode = field(formData, "mode") || "dine_in";
+  const locationZone = mode === "dine_in" ? (field(formData, "location_zone") || "Main Dining") : null;
+
+  if (!prefix || !countStr || !startStr || !menuId) {
+    redirect("/dashboard/qrcodes?message=Prefix,%20Count,%20Start,%20and%20Menu%20are%20required");
+  }
+
+  const count = parseInt(countStr, 10);
+  const start = parseInt(startStr, 10);
+
+  if (isNaN(count) || count <= 0 || count > 100) {
+    redirect("/dashboard/qrcodes?message=Count%20must%20be%20between%201%20and%20100");
+  }
+  if (isNaN(start) || start < 1) {
+    redirect("/dashboard/qrcodes?message=Start%20must%20be%201%20or%20greater");
+  }
+
+  const currentPlan = restaurant.plan || "free";
+  if (currentPlan === "free" || currentPlan === "starter") {
+    const { count: qrCount } = await supabase
+      .from("qr_codes")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+      
+    const limit = currentPlan === "free" ? 1 : 3;
+    if (qrCount !== null && qrCount + count > limit) {
+      redirect(`/dashboard/qrcodes?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20QR%20codes.%20Upgrade%20your%20plan%20to%20bulk%20create.`);
+    }
+  }
+
+  // Ensure location zone exists
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentZones = (restaurant as any).location_zones || [];
+  if (locationZone && !currentZones.includes(locationZone)) {
+    await supabase.from("restaurants").update({
+      location_zones: [...currentZones, locationZone]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any).eq("id", restaurant.id);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const newQrCodes: any[] = [];
+  for (let i = 0; i < count; i++) {
+    const num = start + i;
+    // Format the label, e.g. "Table 1" or "Table 01" depending on needs, 
+    // but just sticking to "Prefix Num" for simplicity.
+    const label = `${prefix} ${num}`;
+    newQrCodes.push({
+      restaurant_id: restaurant.id,
+      menu_id: menuId,
+      label,
+      location_zone: locationZone,
+      scan_count: 0,
+      mode,
+    });
+  }
+
+  const { error } = await supabase.from("qr_codes").insert(newQrCodes);
+
+  if (error) {
+    // Check if error is related to unique constraint
+    redirect(`/dashboard/qrcodes?message=${encodeURIComponent("Failed to generate some QR codes. Ensure labels are unique.")}`);
+  }
+
+  revalidatePath("/dashboard/qrcodes");
+  redirect("/dashboard/qrcodes");
+}
+
 export async function deleteQrCode(formData: FormData) {
   const supabase = await createClient();
   const {
@@ -738,6 +825,48 @@ export async function deleteQrCode(formData: FormData) {
   }
 
   const { error } = await supabase.from("qr_codes").delete().eq("id", qrCodeId);
+
+  if (error) {
+    redirect(`/dashboard/qrcodes?message=${encodeURIComponent(error.message)}`);
+  }
+
+  revalidatePath("/dashboard/qrcodes");
+  redirect("/dashboard/qrcodes");
+}
+
+export async function bulkDeleteQrCodes(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const qrCodeIdsStr = field(formData, "qrCodeIds");
+  if (!qrCodeIdsStr) {
+    redirect("/dashboard/qrcodes?message=QR%20Code%20IDs%20are%20required");
+  }
+
+  const qrCodeIds = JSON.parse(qrCodeIdsStr);
+  if (!Array.isArray(qrCodeIds) || qrCodeIds.length === 0) {
+    redirect("/dashboard/qrcodes?message=Invalid%20QR%20Code%20IDs");
+  }
+
+  // We should verify that the user owns the restaurant that owns these QRs
+  // The easiest way is to let RLS handle it, or fetch the user's restaurant first
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  // To be safe, we add restaurant_id check to the delete (though RLS handles it too)
+  const { error } = await supabase
+    .from("qr_codes")
+    .delete()
+    .eq("restaurant_id", restaurant.id)
+    .in("id", qrCodeIds);
 
   if (error) {
     redirect(`/dashboard/qrcodes?message=${encodeURIComponent(error.message)}`);

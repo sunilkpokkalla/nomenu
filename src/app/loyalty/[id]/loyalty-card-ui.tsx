@@ -22,12 +22,13 @@ interface LoyaltyCardUIProps {
   isPreviewMode?: boolean;
   hasPhoneNumber?: boolean;
   activeReward?: string | null;
+  cardColor?: string | null;
 }
 
 export function LoyaltyCardUI({ 
   cardId, restaurantId, stamps: initialStamps, restaurantName, primaryColor, restaurantLogo, 
   stampColor = "amber", stampIcon = "star", layout = "classic", rewardText = "10 Stamps = 1 Free Item", isPreviewMode = false,
-  hasPhoneNumber = true, activeReward = null
+  hasPhoneNumber = true, activeReward = null, cardColor
 }: LoyaltyCardUIProps) {
   const [stamps, setStamps] = useState(initialStamps);
   const [isLinked, setIsLinked] = useState(hasPhoneNumber);
@@ -36,6 +37,7 @@ export function LoyaltyCardUI({
   const [linkError, setLinkError] = useState("");
   const [currentActiveReward, setCurrentActiveReward] = useState(activeReward);
   const [isClaimingReward, setIsClaimingReward] = useState(false);
+  const [confirmClaim, setConfirmClaim] = useState(false);
 
   const isFull = stamps >= 10;
 
@@ -77,8 +79,17 @@ export function LoyaltyCardUI({
     neutral: { bg: "bg-neutral-100", text: "text-neutral-400 fill-neutral-400" }
   };
 
-  const StampIcon = ICONS[stampIcon] || Star;
-  const stampTheme = COLORS[stampColor] || COLORS.amber;
+  const BaseStampIcon = ICONS[stampIcon] || Star;
+  const isHexStampColor = stampColor?.startsWith('#');
+  const stampTheme = isHexStampColor ? { bg: "", text: "" } : (COLORS[stampColor] || COLORS.amber);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const StampIcon = (props: any) => {
+    const combinedStyle = isHexStampColor 
+      ? { color: stampColor, fill: stampColor, ...props.style } 
+      : props.style;
+    return <BaseStampIcon {...props} style={combinedStyle} />;
+  };
 
   const commonProps = {
     stamps,
@@ -87,7 +98,8 @@ export function LoyaltyCardUI({
     stampColor,
     StampIcon,
     stampTheme,
-    rewardText
+    rewardText,
+    cardColor: cardColor || primaryColor
   };
 
   const handleLinkPhone = async (e: React.FormEvent) => {
@@ -118,7 +130,6 @@ export function LoyaltyCardUI({
       <div className="w-full">
         {layout === "classic" && <Layouts.ClassicLayout {...commonProps} />}
         {layout === "digital" && <Layouts.DigitalLayout {...commonProps} />}
-        {layout === "minimalist" && <Layouts.MinimalistLayout {...commonProps} />}
         {layout === "argentine" && <Layouts.ArgentineLayout {...commonProps} />}
         {layout === "coffee" && <Layouts.CoffeeLayout {...commonProps} />}
         {layout === "luxury" && <Layouts.LuxuryLayout {...commonProps} />}
@@ -131,8 +142,6 @@ export function LoyaltyCardUI({
         {layout === "holographic" && <Layouts.HolographicLayout {...commonProps} />}
         {layout === "chalkboard" && <Layouts.ChalkboardLayout {...commonProps} />}
         {layout === "lumia" && <Layouts.LumiaLayout {...commonProps} />}
-        {layout === "modernminimal" && <Layouts.ModernMinimalLayout {...commonProps} />}
-        {layout === "vibrantcafe" && <Layouts.VibrantCafeLayout {...commonProps} />}
       </div>
     );
   }
@@ -161,9 +170,9 @@ export function LoyaltyCardUI({
             
             <button 
               onClick={async () => {
-                const confirmed = confirm("Are you sure you want to claim this reward? Only do this when showing it to your server.");
-                if (confirmed) {
+                if (confirmClaim) {
                   setIsClaimingReward(true);
+                  setConfirmClaim(false);
                   const { claimActiveReward } = await import("./actions");
                   const res = await claimActiveReward(cardId);
                   if (res.success) {
@@ -172,12 +181,19 @@ export function LoyaltyCardUI({
                     alert("Failed to claim reward. Please try again.");
                   }
                   setIsClaimingReward(false);
+                } else {
+                  setConfirmClaim(true);
+                  setTimeout(() => setConfirmClaim(false), 4000);
                 }
               }}
               disabled={isClaimingReward}
-              className="w-full mt-1 bg-white text-emerald-600 hover:bg-emerald-50 font-bold py-2.5 rounded-lg text-sm transition-colors shadow-sm disabled:opacity-70 flex justify-center items-center"
+              className={`w-full mt-1 font-bold py-2.5 rounded-lg text-sm transition-colors shadow-sm disabled:opacity-70 flex justify-center items-center ${
+                confirmClaim
+                  ? "bg-rose-500 text-white hover:bg-rose-600"
+                  : "bg-white text-emerald-600 hover:bg-emerald-50"
+              }`}
             >
-              {isClaimingReward ? "Claiming..." : "Claim Reward"}
+              {isClaimingReward ? "Claiming..." : confirmClaim ? "Show this to your server to confirm!" : "Claim Reward"}
             </button>
           </div>
         </div>
@@ -192,7 +208,6 @@ export function LoyaltyCardUI({
       {/* Card Layouts */}
       {layout === "classic" && <Layouts.ClassicLayout {...commonProps} />}
       {layout === "digital" && <Layouts.DigitalLayout {...commonProps} />}
-      {layout === "minimalist" && <Layouts.MinimalistLayout {...commonProps} />}
       {layout === "argentine" && <Layouts.ArgentineLayout {...commonProps} />}
       {layout === "coffee" && <Layouts.CoffeeLayout {...commonProps} />}
       {layout === "luxury" && <Layouts.LuxuryLayout {...commonProps} />}
@@ -205,8 +220,6 @@ export function LoyaltyCardUI({
       {layout === "holographic" && <Layouts.HolographicLayout {...commonProps} />}
       {layout === "chalkboard" && <Layouts.ChalkboardLayout {...commonProps} />}
       {layout === "lumia" && <Layouts.LumiaLayout {...commonProps} />}
-      {layout === "modernminimal" && <Layouts.ModernMinimalLayout {...commonProps} />}
-      {layout === "vibrantcafe" && <Layouts.VibrantCafeLayout {...commonProps} />}
 
       {/* Action Area */}
       {isFull ? (

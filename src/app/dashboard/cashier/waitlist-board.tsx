@@ -20,6 +20,7 @@ type WaitlistEntry = {
 export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floorPlans, activeOrders }: { restaurantId: string, supabaseUrl: string, supabaseAnonKey: string, floorPlans: Record<string, unknown>[], activeOrders: Record<string, unknown>[] }) {
   const [entries, setEntries] = useState<WaitlistEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [confirmLeft, setConfirmLeft] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({ customerName: "", partySize: 2, phoneNumber: "", quotedTime: 15 });
@@ -298,17 +299,29 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                   {/* Compact Actions */}
                   <div className="flex items-center gap-1 shrink-0 ml-4">
                     <button 
-                      onClick={() => handleUpdateStatus(entry.id, 'no_show')}
+                      onClick={() => {
+                        if (confirmLeft === entry.id) {
+                          handleUpdateStatus(entry.id, 'no_show');
+                          setConfirmLeft(null);
+                        } else {
+                          setConfirmLeft(entry.id);
+                          setTimeout(() => setConfirmLeft(null), 3000);
+                        }
+                      }}
                       disabled={isProcessing === entry.id}
-                      className="px-2 py-1.5 bg-transparent text-slate-600 rounded-md font-medium hover:bg-slate-100 transition-colors disabled:opacity-50 text-xs"
-                      title="No Show"
+                      className={`px-3 py-1.5 rounded-md font-bold transition-colors disabled:opacity-50 text-xs flex items-center justify-center min-w-[60px] ${
+                        confirmLeft === entry.id 
+                          ? "bg-rose-500 text-white hover:bg-rose-600 shadow-sm"
+                          : "bg-orange-50 text-orange-600 hover:bg-orange-100"
+                      }`}
+                      title="Mark as Left / Gave Up"
                     >
-                      No Show
+                      {confirmLeft === entry.id ? "Sure?" : "Left"}
                     </button>
                     <button 
                       onClick={() => handleUpdateStatus(entry.id, 'cancelled')}
                       disabled={isProcessing === entry.id}
-                      className="px-2 py-1.5 bg-transparent text-slate-600 rounded-md font-medium hover:bg-rose-50 hover:text-rose-600 transition-colors disabled:opacity-50 text-xs"
+                      className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-md font-bold hover:bg-rose-50 hover:text-rose-600 transition-colors disabled:opacity-50 text-xs min-w-[60px]"
                       title="Cancel"
                     >
                       Cancel
@@ -316,7 +329,7 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                     <button 
                       onClick={() => setSeatingEntryId(entry.id)}
                       disabled={isProcessing === entry.id}
-                      className="px-4 py-1.5 bg-emerald-500 text-white rounded-md font-bold flex items-center gap-1.5 hover:bg-emerald-600 transition-colors disabled:opacity-50 shadow-sm text-xs ml-1"
+                      className="px-3 py-1.5 bg-emerald-500 text-white rounded-md font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-600 transition-colors disabled:opacity-50 shadow-sm text-xs min-w-[80px]"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" /> Seat
                     </button>
@@ -367,17 +380,29 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                     {/* Compact Actions */}
                     <div className="flex items-center gap-1 shrink-0 ml-4">
                       <button 
-                        onClick={() => handleUpdateStatus(entry.id, 'no_show')}
+                        onClick={() => {
+                          if (confirmLeft === entry.id) {
+                            handleUpdateStatus(entry.id, 'no_show');
+                            setConfirmLeft(null);
+                          } else {
+                            setConfirmLeft(entry.id);
+                            setTimeout(() => setConfirmLeft(null), 3000);
+                          }
+                        }}
                         disabled={isProcessing === entry.id}
-                        className="px-2 py-1.5 bg-transparent text-slate-600 rounded-md font-medium hover:bg-slate-100 transition-colors disabled:opacity-50 text-xs"
-                        title="No Show"
+                        className={`px-3 py-1.5 rounded-md font-bold transition-colors disabled:opacity-50 text-xs flex items-center justify-center min-w-[60px] ${
+                          confirmLeft === entry.id 
+                            ? "bg-rose-500 text-white hover:bg-rose-600 shadow-sm"
+                            : "bg-orange-50 text-orange-600 hover:bg-orange-100"
+                        }`}
+                        title="Mark as Left / Gave Up"
                       >
-                        No Show
+                        {confirmLeft === entry.id ? "Sure?" : "Left"}
                       </button>
                       <button 
                         onClick={() => handleUpdateStatus(entry.id, 'cancelled')}
                         disabled={isProcessing === entry.id}
-                        className="px-2 py-1.5 bg-transparent text-slate-600 rounded-md font-medium hover:bg-rose-50 hover:text-rose-600 transition-colors disabled:opacity-50 text-xs"
+                        className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-md font-bold hover:bg-rose-50 hover:text-rose-600 transition-colors disabled:opacity-50 text-xs min-w-[60px]"
                         title="Cancel"
                       >
                         Cancel
@@ -385,7 +410,7 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                       <button 
                         onClick={() => setSeatingEntryId(entry.id)}
                         disabled={isProcessing === entry.id}
-                        className="px-4 py-1.5 bg-emerald-500 text-white rounded-md font-bold flex items-center gap-1.5 hover:bg-emerald-600 transition-colors disabled:opacity-50 shadow-sm text-xs ml-1"
+                        className="px-3 py-1.5 bg-emerald-500 text-white rounded-md font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-600 transition-colors disabled:opacity-50 shadow-sm text-xs min-w-[80px]"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" /> Seat
                       </button>

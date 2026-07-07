@@ -52,7 +52,7 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
   useEffect(() => {
     if (isOpen) {
       try {
-        const savedStr = localStorage.getItem(`qr_design_${restaurant.name}`);
+        const savedStr = localStorage.getItem(`qr_design_${restaurant.name}_${qr.menu_id}`);
         if (savedStr) {
           const parsed = JSON.parse(savedStr);
           if (parsed.template) setTemplate(parsed.template);
@@ -66,11 +66,11 @@ export function QrDesignerModal({ qr, restaurant, qrImageApiUrl, iconOnly = fals
         console.error("Failed to load saved QR design", err);
       }
     }
-  }, [isOpen, restaurant.name]);
+  }, [isOpen, restaurant.name, qr.menu_id]);
 
   const handleSaveDesign = () => {
     const design = { template, brandName, headline, customLogoUrl, qrColor, showWifi };
-    localStorage.setItem(`qr_design_${restaurant.name}`, JSON.stringify(design));
+    localStorage.setItem(`qr_design_${restaurant.name}_${qr.menu_id}`, JSON.stringify(design));
     window.dispatchEvent(new Event('qr_design_saved'));
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
