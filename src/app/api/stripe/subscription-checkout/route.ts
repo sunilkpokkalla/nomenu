@@ -125,6 +125,7 @@ export async function POST(req: Request) {
       success_url: `${origin}/dashboard/billing?success=Subscription%20updated%20successfully!`,
       cancel_url: `${origin}/dashboard/billing?canceled=true`,
       subscription_data: {
+        ...(planId === "elite" && isAnnual && { trial_period_days: 14 }),
         metadata: {
           restaurant_id: restaurant.id,
           plan_id: planId,

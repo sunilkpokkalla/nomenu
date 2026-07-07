@@ -237,6 +237,11 @@ export default async function BillingPage(
                     <p className="text-sm mt-2 text-slate-500 font-medium leading-relaxed">
                       {plan.description}
                     </p>
+                    {isElite && currentTier === 0 && isAnnual && (
+                      <div className="mt-2.5 inline-flex items-center gap-1.5 w-fit rounded-md bg-indigo-50 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-indigo-600 border border-indigo-200">
+                        <Sparkles className="h-3 w-3" /> 14-Day Free Trial
+                      </div>
+                    )}
                   </div>
                   
                   {isActive && (

@@ -56,7 +56,7 @@ export function SubscriptionButton({
       `}
     >
       {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-      {loading ? "Preparing Checkout..." : `Upgrade to ${planName}`}
+      {loading ? "Preparing Checkout..." : (isElite && isAnnual) ? "Start Elite 14-Day Trial" : `Upgrade to ${planName}`}
     </button>
   );
 }
