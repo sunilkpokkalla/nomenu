@@ -146,7 +146,7 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
     
     const checkActiveOrders = () => {
       // Only poll if we have orders that are not completed or cancelled
-      const hasActiveOrders = orders.some(o => o.status === "pending" || o.status === "preparing");
+      const hasActiveOrders = orders.some(o => !["completed", "cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(o.status));
       if (hasActiveOrders && orderIds.length > 0) {
         fetchOrders(orderIds, false);
       }
