@@ -224,17 +224,26 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
 
             // Play appropriate sound based on event and contents
             if (payload.eventType === "INSERT") {
-              playFeedbackSound();
+              const notifiedKey = `notified_feedback_${payload.new.id}`;
+              if (!localStorage.getItem(notifiedKey)) {
+                localStorage.setItem(notifiedKey, "true");
+                playFeedbackSound();
+              }
             } else if (payload.eventType === "UPDATE") {
               const oldReq = payload.old.recovery_request;
               const newReq = payload.new.recovery_request;
               const oldContact = payload.old.contact_info;
               const newContact = payload.new.contact_info;
               
-              if (newReq === "manager_visit" && oldReq !== "manager_visit") {
-                playUrgentSound();
-              } else if (newContact?.includes("URGENT") && !oldContact?.includes("URGENT")) {
-                playUrgentSound();
+              const isManagerVisit = newReq === "manager_visit" && oldReq !== "manager_visit";
+              const isUrgentContact = newContact?.includes("URGENT") && !oldContact?.includes("URGENT");
+              
+              if (isManagerVisit || isUrgentContact) {
+                const notifiedKey = `notified_urgent_${payload.new.id}`;
+                if (!localStorage.getItem(notifiedKey)) {
+                  localStorage.setItem(notifiedKey, "true");
+                  playUrgentSound();
+                }
               }
             }
           }

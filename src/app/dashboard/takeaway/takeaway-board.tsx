@@ -102,14 +102,21 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
   useEffect(() => {
     if (selectedDateStr) return; // Only notify on live "Today" view
     
-    const newOrders = orders.filter(o => !knownOrderIds.current.has(o.id));
+    const newOrders = orders.filter(o => 
+      !knownOrderIds.current.has(o.id) && 
+      (o.status === "pending" || o.status === "awaiting_payment" || o.status === "preparing")
+    );
     
     if (newOrders.length > 0) {
       const latestNew = newOrders[newOrders.length - 1];
       
-      // Don't play sound on initial mount if they were already there
-      // Wait, initialOrders are already in knownOrderIds, so this only triggers on NEW orders arriving after mount.
-      playNotificationSound();
+      // Cross-tab deduplication: Ensure only ONE tab plays the sound
+      const notifiedKey = `notified_order_${latestNew.id}`;
+      if (!localStorage.getItem(notifiedKey)) {
+        localStorage.setItem(notifiedKey, "true");
+        playNotificationSound();
+      }
+
       setNotification({
         id: latestNew.id,
         title: `New Order #${String(latestNew.daily_order_number || 0).padStart(3, '0')}`,

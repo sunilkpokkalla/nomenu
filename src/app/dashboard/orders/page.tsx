@@ -53,8 +53,7 @@ export default async function OrdersPage() {
     `)
     .eq("restaurant_id", restaurant.id)
     .is("customer_phone", null) // Exclusively Dine-In orders
-    .in("status", ["pending", "preparing"])
-    .gte("created_at", today.toISOString())
+    .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
     .order("created_at", { ascending: false });
 
   const isLocked = !restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase());

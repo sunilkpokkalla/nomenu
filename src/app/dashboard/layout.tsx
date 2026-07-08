@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
-import { Menu, QrCode } from "lucide-react";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { MobileNav } from "@/components/dashboard/mobile-nav";
 import { TopHeader } from "@/components/dashboard/top-header";
-import { hasSupabaseEnv } from "@/lib/env";
+import { hasSupabaseEnv, getSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
+import { GlobalOrderListener } from "@/components/dashboard/global-order-listener";
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +35,8 @@ export default async function DashboardLayout({
   // Default to owner if not explicitly a staff role
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const role: UserRole = (restaurant as any)?._staffRole || "owner";
+  
+  const env = getSupabaseEnv();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -48,6 +50,13 @@ export default async function DashboardLayout({
           </div>
         </main>
       </div>
+      {hasRestaurant && (
+        <GlobalOrderListener 
+          restaurantId={restaurant.id}
+          supabaseUrl={env.url}
+          supabaseAnonKey={env.anonKey}
+        />
+      )}
     </div>
   );
 }
