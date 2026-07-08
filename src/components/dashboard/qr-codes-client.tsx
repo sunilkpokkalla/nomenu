@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Printer, Trash2 } from "lucide-react";
 import { deleteQrCode, bulkDeleteQrCodes } from "@/app/dashboard/actions";
 import { BatchQrDesignerModal } from "@/components/dashboard/batch-qr-designer-modal";
+import { QRCodeSVG } from "qrcode.react";
 
 const getGridClass = (count: number) => {
   if (count <= 2) return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
@@ -190,7 +191,14 @@ export function QrCodesClient({
                             className={`block aspect-square w-full ${qrs.length >= 5 ? 'max-w-[9rem]' : 'max-w-[11rem]'} mx-auto rounded-2xl bg-white p-3 shadow-sm border border-slate-100 hover:shadow-md transition-all cursor-pointer`}
                             title="Click to open full size QR image"
                           >
-                            <img src={qrImageApiUrl} alt="QR Code" className="w-full h-full object-contain mix-blend-multiply" loading="lazy" />
+                            <QRCodeSVG 
+                              value={publicUrl} 
+                              size={256}
+                              level="H"
+                              marginSize={1}
+                              fgColor={parsedColor && parsedColor !== "#0F172A" ? parsedColor : "#0F172A"}
+                              className="w-full h-full object-contain mix-blend-multiply" 
+                            />
                           </a>
                         </div>
 
