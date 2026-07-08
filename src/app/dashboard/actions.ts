@@ -44,8 +44,9 @@ export async function createRestaurant(formData: FormData) {
   const baseSlug = slugify(name);
   let finalSlug = baseSlug;
   let counter = 2;
+  const MAX_SLUG_ATTEMPTS = 50;
   
-  while (true) {
+  while (counter <= MAX_SLUG_ATTEMPTS) {
     const { data: collision } = await supabase
       .from("restaurants")
       .select("id")
@@ -56,6 +57,10 @@ export async function createRestaurant(formData: FormData) {
     
     finalSlug = `${baseSlug}-${counter}`;
     counter++;
+  }
+
+  if (counter > MAX_SLUG_ATTEMPTS) {
+    finalSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 8)}`;
   }
 
   const cookieStore = await cookies();
@@ -156,8 +161,9 @@ export async function createMenu(formData: FormData) {
   const baseSlug = slugify(name);
   let finalSlug = baseSlug;
   let counter = 2;
+  const MAX_SLUG_ATTEMPTS = 50;
   
-  while (true) {
+  while (counter <= MAX_SLUG_ATTEMPTS) {
     const { data: collision } = await supabase
       .from("menus")
       .select("id")
@@ -169,6 +175,10 @@ export async function createMenu(formData: FormData) {
     
     finalSlug = `${baseSlug}-${counter}`;
     counter++;
+  }
+
+  if (counter > MAX_SLUG_ATTEMPTS) {
+    finalSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 8)}`;
   }
 
   const { error } = await supabase.from("menus").insert({
@@ -258,8 +268,9 @@ export async function editMenu(formData: FormData) {
   const baseSlug = slugify(name);
   let finalSlug = baseSlug;
   let counter = 2;
+  const MAX_SLUG_ATTEMPTS = 50;
   
-  while (true) {
+  while (counter <= MAX_SLUG_ATTEMPTS) {
     const { data: collision } = await supabase
       .from("menus")
       .select("id")
@@ -272,6 +283,10 @@ export async function editMenu(formData: FormData) {
     
     finalSlug = `${baseSlug}-${counter}`;
     counter++;
+  }
+
+  if (counter > MAX_SLUG_ATTEMPTS) {
+    finalSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 8)}`;
   }
 
   const { error } = await supabase
