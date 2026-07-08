@@ -82,7 +82,7 @@ export default function QRCodesManualPage() {
             </p>
             <ul className="list-disc pl-5 text-slate-600 space-y-1">
               <li><strong>Free Plan:</strong> Limited to 1 active QR Code.</li>
-              <li><strong>Pro & Enterprise Plans:</strong> Unlimited QR Codes.</li>
+              <li><strong>Pro, Elite & Enterprise Plans:</strong> Unlimited QR Codes.</li>
             </ul>
           </div>
         </section>
