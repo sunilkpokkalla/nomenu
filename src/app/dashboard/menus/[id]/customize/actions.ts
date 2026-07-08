@@ -38,19 +38,19 @@ export async function bulkInsertMenuData(
     .single();
     
   const currentPlan = restaurant?.plan || "free";
-  if (currentPlan === "free" || currentPlan === "starter") {
+  if (currentPlan === "free") {
     const { count: itemCount } = await supabase
       .from("menu_items")
       .select("id", { count: "exact", head: true })
       .eq("restaurant_id", restaurantId);
       
-    const limit = currentPlan === "free" ? 30 : 50;
+    const limit = 30;
     
     let itemsToImport = 0;
     data.categories.forEach(c => { itemsToImport += (c.items?.length || 0) });
 
     if (itemCount !== null && (itemCount + itemsToImport) > limit) {
-      return { success: false, error: `Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This AI import has ${itemsToImport} items and would exceed your limit. Please upgrade.` };
+      return { success: false, error: `Your Free plan is limited to ${limit} items. This AI import has ${itemsToImport} items and would exceed your limit. Please upgrade.` };
     }
   }
   

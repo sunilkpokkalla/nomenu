@@ -132,15 +132,15 @@ export async function createMenu(formData: FormData) {
   const locationLabel = field(formData, "locationLabel") || "Table";
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const allowManualPayments = currentPlan === "enterprise" ? formData.get("allowManualPayments") === "true" : false;
-  if (currentPlan === "free" || currentPlan === "starter") {
+  if (currentPlan === "free") {
     const { count: menuCount } = await supabase
       .from("menus")
       .select("id", { count: "exact", head: true })
       .eq("restaurant_id", restaurant.id);
       
-    const limit = currentPlan === "free" ? 1 : 3;
+    const limit = 1;
     if (menuCount !== null && menuCount >= limit) {
-      redirect(`/dashboard/menus?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20menu(s).%20Upgrade%20your%20plan%20to%20create%20more.`);
+      redirect(`/dashboard/menus?message=Free%20plan%20is%20limited%20to%20${limit}%20menu(s).%20Upgrade%20your%20plan%20to%20create%20more.`);
     }
   }
 
@@ -411,15 +411,15 @@ export async function createMenuItem(formData: FormData) {
   }
 
   const currentPlan = restaurant.plan || "free";
-  if (currentPlan === "free" || currentPlan === "starter") {
+  if (currentPlan === "free") {
     const { count: itemCount } = await supabase
       .from("menu_items")
       .select("id", { count: "exact", head: true })
       .eq("restaurant_id", restaurant.id);
       
-    const limit = currentPlan === "free" ? 30 : 50;
+    const limit = 30;
     if (itemCount !== null && itemCount >= limit) {
-      redirect(`/dashboard/items?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20items.%20Upgrade%20your%20plan%20to%20add%20more.`);
+      redirect(`/dashboard/items?message=Free%20plan%20is%20limited%20to%20${limit}%20items.%20Upgrade%20your%20plan%20to%20add%20more.`);
     }
   }
 
@@ -710,15 +710,15 @@ export async function createQrCode(formData: FormData) {
   }
 
   const currentPlan = restaurant.plan || "free";
-  if (currentPlan === "free" || currentPlan === "starter") {
+  if (currentPlan === "free") {
     const { count: qrCount } = await supabase
       .from("qr_codes")
       .select("id", { count: "exact", head: true })
       .eq("restaurant_id", restaurant.id);
       
-    const limit = currentPlan === "free" ? 1 : 3;
+    const limit = 1;
     if (qrCount !== null && qrCount >= limit) {
-      redirect(`/dashboard/qrcodes?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20QR%20codes.%20Upgrade%20your%20plan%20to%20create%20more.`);
+      redirect(`/dashboard/qrcodes?message=Free%20plan%20is%20limited%20to%20${limit}%20QR%20codes.%20Upgrade%20your%20plan%20to%20create%20more.`);
     }
   }
 
@@ -804,15 +804,15 @@ export async function bulkCreateQrCodes(formData: FormData) {
   }
 
   const currentPlan = restaurant.plan || "free";
-  if (currentPlan === "free" || currentPlan === "starter") {
+  if (currentPlan === "free") {
     const { count: qrCount } = await supabase
       .from("qr_codes")
       .select("id", { count: "exact", head: true })
       .eq("restaurant_id", restaurant.id);
       
-    const limit = currentPlan === "free" ? 1 : 3;
+    const limit = 1;
     if (qrCount !== null && qrCount + count > limit) {
-      redirect(`/dashboard/qrcodes?message=${currentPlan === "free" ? "Free" : "Starter"}%20plan%20is%20limited%20to%20${limit}%20QR%20codes.%20Upgrade%20your%20plan%20to%20bulk%20create.`);
+      redirect(`/dashboard/qrcodes?message=Free%20plan%20is%20limited%20to%20${limit}%20QR%20codes.%20Upgrade%20your%20plan%20to%20bulk%20create.`);
     }
   }
 
@@ -1133,13 +1133,13 @@ export async function importCategoriesAndItems(
 
   // 0. Check Limits Before Anything Else
   const currentPlan = restaurant.plan || "free";
-  if (currentPlan === "free" || currentPlan === "starter") {
+  if (currentPlan === "free") {
     const { count: itemCount } = await supabase
       .from("menu_items")
       .select("id", { count: "exact", head: true })
       .eq("restaurant_id", restaurant.id);
       
-    const limit = currentPlan === "free" ? 30 : 50;
+    const limit = 30;
     
     // Count how many items are in the categories being imported
     const { count: itemsToImportCount } = await supabase
@@ -1148,7 +1148,7 @@ export async function importCategoriesAndItems(
       .in("category_id", categoryIdsToImport);
 
     if (itemCount !== null && itemsToImportCount !== null && (itemCount + itemsToImportCount) > limit) {
-      return { success: false, error: `Your ${currentPlan === "free" ? "Free" : "Starter"} plan is limited to ${limit} items. This import has ${itemsToImportCount} items and would exceed your limit. Please upgrade.` };
+      return { success: false, error: `Your Free plan is limited to ${limit} items. This import has ${itemsToImportCount} items and would exceed your limit. Please upgrade.` };
     }
   }
 
