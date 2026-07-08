@@ -2,9 +2,17 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { getActiveRestaurant } from "@/lib/rbac";
 
 export async function getOrCreateFloorPlans(restaurantId: string) {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
+    return { success: false, error: "Unauthorized" };
+  }
 
   // 1. Fetch all floor plans for this restaurant
   const { data: existingPlans, error: planError } = await supabase
@@ -105,6 +113,14 @@ function generateTemplateTables(template: string, floorPlanId: string) {
 
 export async function addFloorPlanArea(restaurantId: string, name: string, template: string = "blank") {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
+    return { success: false, error: "Unauthorized" };
+  }
+
   const { data, error } = await supabase
     .from("floor_plans")
     .insert({
@@ -146,6 +162,18 @@ export async function addFloorPlanArea(restaurantId: string, name: string, templ
 
 export async function deleteFloorPlanArea(id: string) {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  // Get the plan first
+  const { data: plan } = await supabase.from("floor_plans").select("restaurant_id").eq("id", id).single();
+  if (!plan) return { success: false, error: "Plan not found" };
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== plan.restaurant_id) {
+    return { success: false, error: "Unauthorized" };
+  }
+
   const { error } = await supabase
     .from("floor_plans")
     .delete()
@@ -165,6 +193,17 @@ export async function saveTableLayout(
   planName?: string
 ) {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  // Get the plan first
+  const { data: plan } = await supabase.from("floor_plans").select("restaurant_id").eq("id", floorPlanId).single();
+  if (!plan) return { success: false, error: "Plan not found" };
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== plan.restaurant_id) {
+    return { success: false, error: "Unauthorized" };
+  }
 
   // 1. Delete removed tables
   if (tableIdsToDelete.length > 0) {

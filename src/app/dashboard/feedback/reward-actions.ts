@@ -1,8 +1,19 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/server-admin";
+import { createClient } from "@/lib/supabase/server";
+import { getActiveRestaurant } from "@/lib/rbac";
 
 export async function sendLoyaltyReward(feedbackId: string, rewardMessage: string, customerContact: string | null, restaurantId: string, customerName: string | null) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+  
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
+    return { error: "Unauthorized" };
+  }
+
   const adminClient = createAdminClient();
 
   // Try to find if they have a loyalty card linked to this contact info
@@ -55,6 +66,18 @@ export async function sendLoyaltyReward(feedbackId: string, rewardMessage: strin
 }
 
 export async function resolveManagerRequest(feedbackId: string, notes: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+
+  const { data: feedbackData } = await supabase.from("customer_feedback").select("restaurant_id").eq("id", feedbackId).single();
+  if (!feedbackData) return { error: "Feedback not found" };
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== feedbackData.restaurant_id) {
+    return { error: "Unauthorized" };
+  }
+
   const adminClient = createAdminClient();
   const { error } = await adminClient
     .from("customer_feedback")

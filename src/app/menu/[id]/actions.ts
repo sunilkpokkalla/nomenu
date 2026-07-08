@@ -296,7 +296,7 @@ export async function claimLoyaltyCard(data: {
   };
 }
 
-export async function getReceipts(orderIds: string[]) {
+export async function getReceipts(orderIds: string[], restaurantId?: string) {
   if (!orderIds || orderIds.length === 0) return { orders: [] };
   
   const supabase = createClient(
@@ -304,7 +304,7 @@ export async function getReceipts(orderIds: string[]) {
     (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
   );
 
-  const { data, error } = await supabase
+  let query = supabase
     .from("orders")
     .select(`
       id,
@@ -326,8 +326,13 @@ export async function getReceipts(orderIds: string[]) {
         )
       )
     `)
-    .in("id", orderIds)
-    .order("created_at", { ascending: false });
+    .in("id", orderIds);
+
+  if (restaurantId) {
+    query = query.eq("restaurant_id", restaurantId);
+  }
+
+  const { data, error } = await query.order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching receipts:", error);

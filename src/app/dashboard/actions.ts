@@ -9,6 +9,7 @@ import { slugify } from "@/lib/utils/slugify";
 import type { Database } from "@/types/database";
 import { generateAiDescription } from "@/lib/ai-server";
 import { searchFreeFoodImage } from "@/lib/image-search";
+import { isDemoUser } from "@/lib/demo";
 
 function field(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -29,6 +30,10 @@ export async function createRestaurant(formData: FormData) {
 
   if (!user) {
     redirect("/login");
+  }
+
+  if (isDemoUser(user)) {
+    redirect("/dashboard/settings?message=Settings%20cannot%20be%20saved%20in%20the%20read-only%20demo%20account");
   }
 
   const name = field(formData, "name");
@@ -283,7 +288,8 @@ export async function editMenu(formData: FormData) {
       location_label: locationLabel,
       allow_manual_payments: allowManualPayments,
     })
-    .eq("id", menuId);
+    .eq("id", menuId)
+    .eq("restaurant_id", restaurant.id);
 
   if (error) {
     redirect(`/dashboard/menus?message=${encodeURIComponent(error.message)}`);
@@ -306,10 +312,16 @@ export async function toggleMenuStatus(menuId: string, currentStatus: boolean) {
     redirect("/login");
   }
 
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    throw new Error("Restaurant not found");
+  }
+
   const { error } = await supabase
     .from("menus")
     .update({ is_active: !currentStatus })
-    .eq("id", menuId);
+    .eq("id", menuId)
+    .eq("restaurant_id", restaurant.id);
 
   if (error) {
     throw new Error(error.message);
@@ -329,12 +341,21 @@ export async function deleteMenu(formData: FormData) {
     redirect("/login");
   }
 
+  if (isDemoUser(user)) {
+    redirect("/dashboard/menus?message=Menus%20cannot%20be%20deleted%20in%20the%20read-only%20demo%20account");
+  }
+
   const menuId = field(formData, "menuId");
   if (!menuId) {
     redirect("/dashboard/menus?message=Menu%20ID%20is%20required");
   }
 
-  const { error } = await supabase.from("menus").delete().eq("id", menuId);
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  const { error } = await supabase.from("menus").delete().eq("id", menuId).eq("restaurant_id", restaurant.id);
 
   if (error) {
     throw new Error(error.message);
@@ -623,12 +644,21 @@ export async function deleteMenuItem(formData: FormData) {
     redirect("/login");
   }
 
+  if (isDemoUser(user)) {
+    redirect("/dashboard/items?message=Items%20cannot%20be%20deleted%20in%20the%20read-only%20demo%20account");
+  }
+
   const itemId = field(formData, "itemId");
   if (!itemId) {
     redirect("/dashboard/items?message=Item%20ID%20is%20required");
   }
 
-  const { error } = await supabase.from("menu_items").delete().eq("id", itemId);
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  const { error } = await supabase.from("menu_items").delete().eq("id", itemId).eq("restaurant_id", restaurant.id);
 
   const menuId = field(formData, "menuId");
 
@@ -824,7 +854,12 @@ export async function deleteQrCode(formData: FormData) {
     redirect("/dashboard/qrcodes?message=QR%20Code%20ID%20is%20required");
   }
 
-  const { error } = await supabase.from("qr_codes").delete().eq("id", qrCodeId);
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  const { error } = await supabase.from("qr_codes").delete().eq("id", qrCodeId).eq("restaurant_id", restaurant.id);
 
   if (error) {
     redirect(`/dashboard/qrcodes?message=${encodeURIComponent(error.message)}`);
@@ -1173,6 +1208,22 @@ export async function deleteCategory(formData: FormData) {
 
   if (!user) {
     redirect("/login");
+  }
+
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  const { data: category } = await supabase
+    .from("categories")
+    .select("menu_id, menus(restaurant_id)")
+    .eq("id", categoryId)
+    .single();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (!category || (category.menus as any)?.restaurant_id !== restaurant.id) {
+    redirect("/dashboard/items?message=Unauthorized");
   }
 
   const { error } = await supabase

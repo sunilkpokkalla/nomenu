@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Receipt, X, ChefHat, CheckCircle2, Clock, Download, Loader2, CircleDollarSign } from "lucide-react";
 import { toPng } from "html-to-image";
 import { getReceipts, cancelOrder } from "@/app/menu/[id]/actions";
@@ -93,14 +93,14 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
   useEffect(() => {
     let savedOrderIds: string[] = [];
     try {
-      const stored = localStorage.getItem("nomenu_orders");
+      const stored = localStorage.getItem(`nomenu_orders_${restaurantId}`);
       if (stored) savedOrderIds = JSON.parse(stored);
       
       // migrate legacy (do not remove it as floating-cart uses it for checkout success)
       const legacy = localStorage.getItem("nomenu_last_order");
       if (legacy && !savedOrderIds.includes(legacy)) {
         savedOrderIds.unshift(legacy);
-        localStorage.setItem("nomenu_orders", JSON.stringify(savedOrderIds));
+        localStorage.setItem(`nomenu_orders_${restaurantId}`, JSON.stringify(savedOrderIds));
       }
     } catch(e) {
       // Ignore localStorage errors (e.g., if cookies/storage are blocked)
@@ -118,7 +118,7 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
     const handleNewOrder = () => {
       let updatedOrderIds: string[] = [];
       try {
-        const stored = localStorage.getItem("nomenu_orders");
+        const stored = localStorage.getItem(`nomenu_orders_${restaurantId}`);
         if (stored) updatedOrderIds = JSON.parse(stored);
       } catch(e) {}
       
@@ -141,6 +141,43 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const fetchOrders = useCallback(async (ids: string[], showLoading = true) => {
+    if (!ids || ids.length === 0) {
+      setLoading(false);
+      return;
+    }
+    if (showLoading) setLoading(true);
+    
+    try {
+      const res = await getReceipts(ids, restaurantId);
+      
+      if (res.error) {
+        console.error("Failed to fetch orders:", res.error);
+      } else if (res.orders) {
+        const now = new Date().getTime();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const validOrders = res.orders.filter((o: any) => {
+          const orderTime = new Date(o.created_at).getTime();
+          return (now - orderTime) < 24 * 60 * 60 * 1000;
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const validIds = validOrders.map((o: any) => o.id);
+        
+        // Update local storage if any got filtered out
+        if (validIds.length !== ids.length) {
+           try {
+             localStorage.setItem(`nomenu_orders_${restaurantId}`, JSON.stringify(validIds));
+           } catch(e) {}
+           setOrderIds(validIds);
+        }
+        setOrders(validOrders as unknown as Order[]);
+      }
+    } catch (err) {
+      console.error("Error fetching receipts:", err);
+    }
+    setLoading(false);
+  }, [restaurantId]);
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
     
@@ -159,44 +196,9 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [orderIds, orders]);
+  }, [orderIds, orders, fetchOrders]);
 
-  const fetchOrders = async (ids: string[], showLoading = true) => {
-    if (!ids || ids.length === 0) {
-      setLoading(false);
-      return;
-    }
-    if (showLoading) setLoading(true);
-    
-    try {
-      const res = await getReceipts(ids);
-      
-      if (res.error) {
-        console.error("Failed to fetch orders:", res.error);
-      } else if (res.orders) {
-        const now = new Date().getTime();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const validOrders = res.orders.filter((o: any) => {
-          const orderTime = new Date(o.created_at).getTime();
-          return (now - orderTime) < 24 * 60 * 60 * 1000;
-        });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const validIds = validOrders.map((o: any) => o.id);
-        
-        // Update local storage if any got filtered out
-        if (validIds.length !== ids.length) {
-           try {
-             localStorage.setItem("nomenu_orders", JSON.stringify(validIds));
-           } catch(e) {}
-           setOrderIds(validIds);
-        }
-        setOrders(validOrders as unknown as Order[]);
-      }
-    } catch (err) {
-      console.error("Error fetching receipts:", err);
-    }
-    setLoading(false);
-  };
+
 
   if (orderIds.length === 0 || loading) return null;
   if (orders.length === 0) return null;

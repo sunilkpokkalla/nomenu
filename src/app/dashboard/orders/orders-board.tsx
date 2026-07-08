@@ -56,7 +56,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     // Load from local storage initially
     if (!mounted) {
       try {
-        const saved = localStorage.getItem("nomenu_kds_completed_times");
+        const saved = localStorage.getItem(`nomenu_kds_completed_times_${restaurantId}`);
         if (saved) {
           const parsed = JSON.parse(saved);
           Object.entries(parsed).forEach(([id, time]) => {
@@ -89,10 +89,10 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     if (hasNewCompleted) {
       try {
         const obj = Object.fromEntries(completedTimes.current);
-        localStorage.setItem("nomenu_kds_completed_times", JSON.stringify(obj));
+        localStorage.setItem(`nomenu_kds_completed_times_${restaurantId}`, JSON.stringify(obj));
       } catch (e) {}
     }
-  }, [orders, mounted]);
+  }, [orders, mounted, restaurantId]);
 
   const playNotificationSound = useCallback(() => {
     if (!soundPreference) return;
@@ -146,6 +146,8 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       if (!localStorage.getItem(notifiedKey)) {
         localStorage.setItem(notifiedKey, "true");
         playNotificationSound();
+        // Clean up the key after a few seconds to prevent memory leak
+        setTimeout(() => localStorage.removeItem(notifiedKey), 10000);
       }
 
       setNotification({
@@ -162,7 +164,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
   }, [orders, selectedDateStr, locationLabel, playNotificationSound]);
 
   useEffect(() => {
-    const pref = localStorage.getItem("nomenu_kds_sound");
+    const pref = localStorage.getItem(`nomenu_kds_sound_${restaurantId}`);
     if (pref !== null) {
       setSoundPreference(pref === "true");
     }
@@ -175,7 +177,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
     const unlockAudio = () => {
       // We check local storage directly inside the event listener to get fresh state without re-binding
-      const isPreferred = localStorage.getItem("nomenu_kds_sound") !== "false";
+      const isPreferred = localStorage.getItem(`nomenu_kds_sound_${restaurantId}`) !== "false";
       if (audioContextRef.current && isPreferred) {
         if (audioContextRef.current.state === 'suspended') {
           audioContextRef.current.resume().then(() => {
@@ -196,12 +198,12 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       window.removeEventListener('touchstart', unlockAudio);
       window.removeEventListener('keydown', unlockAudio);
     };
-  }, []);
+  }, [restaurantId]);
 
   const toggleSound = () => {
     const newPref = !soundPreference;
     setSoundPreference(newPref);
-    localStorage.setItem("nomenu_kds_sound", String(newPref));
+    localStorage.setItem(`nomenu_kds_sound_${restaurantId}`, String(newPref));
     
     if (newPref && audioContextRef.current) {
       if (audioContextRef.current.state === 'suspended') {
@@ -216,14 +218,14 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("nomenu_auto_archive_minutes");
+    const saved = localStorage.getItem(`nomenu_auto_archive_minutes_${restaurantId}`);
     if (saved !== null) {
       if (saved === "never") setAutoArchiveMinutes(null);
       else setAutoArchiveMinutes(Number(saved));
     }
     const interval = setInterval(() => setCurrentTime(new Date()), 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [restaurantId]);
 
   const fetchLatestOrders = async () => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
@@ -353,7 +355,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       completedTimes.current.set(orderId, timestamp);
       try {
         const obj = Object.fromEntries(completedTimes.current);
-        localStorage.setItem("nomenu_kds_completed_times", JSON.stringify(obj));
+        localStorage.setItem(`nomenu_kds_completed_times_${restaurantId}`, JSON.stringify(obj));
       } catch (e) {}
     }
 
@@ -416,7 +418,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                   value={autoArchiveMinutes === null ? "never" : autoArchiveMinutes}
                   onChange={(e) => {
                     const val = e.target.value;
-                    localStorage.setItem("nomenu_auto_archive_minutes", val);
+                    localStorage.setItem(`nomenu_auto_archive_minutes_${restaurantId}`, val);
                     setAutoArchiveMinutes(val === "never" ? null : Number(val));
                   }}
                   className="pl-9 pr-8 py-2 text-sm border-2 border-slate-200 rounded-lg bg-white shadow-sm focus:border-indigo-500 focus:outline-none font-medium text-slate-700 cursor-pointer appearance-none hover:border-slate-300 transition-colors"

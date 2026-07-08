@@ -48,7 +48,7 @@ export function GlobalOrderListener({
   }, []);
 
   const playNotificationSound = useCallback(() => {
-    const isPreferred = localStorage.getItem("nomenu_kds_sound") !== "false";
+    const isPreferred = localStorage.getItem(`nomenu_kds_sound_${restaurantId}`) !== "false";
     if (!isPreferred) return;
 
     try {
@@ -81,10 +81,10 @@ export function GlobalOrderListener({
     } catch (e) {
       console.error("Audio playback failed", e);
     }
-  }, []);
+  }, [restaurantId]);
 
   const playFeedbackSound = useCallback(() => {
-    const isPreferred = localStorage.getItem("nomenu_kds_sound") !== "false";
+    const isPreferred = localStorage.getItem(`nomenu_kds_sound_${restaurantId}`) !== "false";
     if (!isPreferred) return;
 
     try {
@@ -106,10 +106,10 @@ export function GlobalOrderListener({
     } catch(e) {
       console.error("Feedback audio playback failed", e);
     }
-  }, []);
+  }, [restaurantId]);
 
   const playUrgentSound = useCallback(() => {
-    const isPreferred = localStorage.getItem("nomenu_kds_sound") !== "false";
+    const isPreferred = localStorage.getItem(`nomenu_kds_sound_${restaurantId}`) !== "false";
     if (!isPreferred) return;
 
     try {
@@ -135,7 +135,7 @@ export function GlobalOrderListener({
     } catch(e) {
       console.error("Urgent audio playback failed", e);
     }
-  }, []);
+  }, [restaurantId]);
 
   useEffect(() => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
@@ -156,11 +156,12 @@ export function GlobalOrderListener({
             if (!isTakeaway && pathname?.startsWith("/dashboard/orders")) return;
             if (pathname?.startsWith("/dashboard/cashier")) return; // Cashier handles everything
             
-            // Cross-tab deduplication: Ensure only ONE tab plays the sound
             const notifiedKey = `notified_order_${payload.new.id}`;
             if (!localStorage.getItem(notifiedKey)) {
               localStorage.setItem(notifiedKey, "true");
               playNotificationSound();
+              // Clean up the key after a few seconds to prevent memory leak
+              setTimeout(() => localStorage.removeItem(notifiedKey), 10000);
             }
             
             setNotification({
@@ -191,6 +192,8 @@ export function GlobalOrderListener({
             if (!localStorage.getItem(notifiedKey)) {
               localStorage.setItem(notifiedKey, "true");
               playFeedbackSound();
+              // Clean up the key after a few seconds to prevent memory leak
+              setTimeout(() => localStorage.removeItem(notifiedKey), 10000);
               setNotification({
                 id: payload.new.id,
                 title: "New Customer Feedback",
@@ -213,6 +216,8 @@ export function GlobalOrderListener({
               if (!localStorage.getItem(notifiedKey)) {
                 localStorage.setItem(notifiedKey, "true");
                 playUrgentSound();
+                // Clean up the key after a few seconds to prevent memory leak
+                setTimeout(() => localStorage.removeItem(notifiedKey), 10000);
                 setNotification({
                   id: payload.new.id,
                   title: "🚨 URGENT: Manager Requested",

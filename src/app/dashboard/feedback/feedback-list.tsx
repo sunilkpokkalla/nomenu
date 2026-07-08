@@ -228,6 +228,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
               if (!localStorage.getItem(notifiedKey)) {
                 localStorage.setItem(notifiedKey, "true");
                 playFeedbackSound();
+                setTimeout(() => localStorage.removeItem(notifiedKey), 10000);
               }
             } else if (payload.eventType === "UPDATE") {
               const oldReq = payload.old.recovery_request;
@@ -243,6 +244,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                 if (!localStorage.getItem(notifiedKey)) {
                   localStorage.setItem(notifiedKey, "true");
                   playUrgentSound();
+                  setTimeout(() => localStorage.removeItem(notifiedKey), 10000);
                 }
               }
             }

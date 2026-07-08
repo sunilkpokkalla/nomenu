@@ -6,6 +6,8 @@ import { hasSupabaseEnv, getSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { GlobalOrderListener } from "@/components/dashboard/global-order-listener";
+import { DemoModeBanner } from "@/components/dashboard/demo-banner";
+import { isDemoUser } from "@/lib/demo";
 
 export const dynamic = 'force-dynamic';
 
@@ -40,6 +42,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {isDemoUser(user) && <DemoModeBanner />}
       <div className="flex">
         {hasRestaurant && <Sidebar plan={restaurant.plan || "Free"} role={role} />}
         <main className="min-h-screen flex-1 flex flex-col">

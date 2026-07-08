@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/server-admin";
 import { revalidatePath } from "next/cache";
+import { getActiveRestaurant } from "@/lib/rbac";
 
 export async function settleTableTab(restaurantId: string, tableNumber: string, customerName: string) {
   const supabase = await createClient();
@@ -12,6 +13,11 @@ export async function settleTableTab(restaurantId: string, tableNumber: string, 
   } = await supabase.auth.getUser();
 
   if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
     throw new Error("Unauthorized");
   }
 
@@ -48,6 +54,11 @@ export async function voidTableTab(restaurantId: string, tableNumber: string, cu
   } = await supabase.auth.getUser();
 
   if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
     throw new Error("Unauthorized");
   }
 
@@ -90,12 +101,17 @@ export async function removeTableFromTab(orderId: string, tableToRemove: string)
   // Fetch the order
   const { data: order, error: fetchError } = await supabase
     .from("orders")
-    .select("table_number")
+    .select("table_number, restaurant_id")
     .eq("id", orderId)
     .single();
 
   if (fetchError || !order) {
     throw new Error("Failed to fetch order");
+  }
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== order.restaurant_id) {
+    throw new Error("Unauthorized");
   }
 
   if (!order.table_number) return true;
@@ -144,6 +160,11 @@ export async function addWaitlistEntry(restaurantId: string, data: { customerNam
 
   if (!user) throw new Error("Unauthorized");
 
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
+    throw new Error("Unauthorized");
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from("waitlist") as any).insert({
     restaurant_id: restaurantId,
@@ -175,6 +196,11 @@ export async function updateWaitlistStatus(waitlistId: string, status: 'waiting'
     .single();
 
   if (fetchError || !entry) throw new Error("Waitlist entry not found");
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== entry.restaurant_id) {
+    throw new Error("Unauthorized");
+  }
 
   const adminSupabase = createAdminClient();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -218,6 +244,11 @@ export async function createWalkInTab(restaurantId: string, tableNumber: string,
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
 
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
+    throw new Error("Unauthorized");
+  }
+
   const adminSupabase = createAdminClient();
   const { error } = await adminSupabase.from("orders").insert({
     restaurant_id: restaurantId,
@@ -243,6 +274,11 @@ export async function getWaitlist(restaurantId: string) {
   } = await supabase.auth.getUser();
 
   if (!user) throw new Error("Unauthorized");
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
+    throw new Error("Unauthorized");
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase.from("waitlist") as any)

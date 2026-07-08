@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import nodemailer from "nodemailer";
 import { createAdminClient } from "@/lib/supabase/server-admin";
+import { isDemoUser } from "@/lib/demo";
 
 export async function inviteStaff(formData: FormData, restaurantId: string) {
   const email = formData.get("email") as string;
@@ -19,6 +20,10 @@ export async function inviteStaff(formData: FormData, restaurantId: string) {
 
   if (!user) {
     redirect("/login");
+  }
+
+  if (isDemoUser(user)) {
+    redirect("/dashboard/settings/team?message=Team%20invitations%20are%20disabled%20in%20the%20read-only%20demo%20account");
   }
 
   // Check if owner and check subscription plan

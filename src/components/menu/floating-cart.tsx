@@ -154,7 +154,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('success') === 'true') {
-        const lastOrderId = localStorage.getItem('nomenu_last_order');
+        const lastOrderId = localStorage.getItem(`nomenu_last_order_${restaurantId}`);
         setSuccessOrder({ id: lastOrderId || "Paid Online", dailyNumber: 0 });
         
         // Clean up URL so refresh doesn't trigger it again
@@ -163,7 +163,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
         window.history.replaceState({}, '', newUrl.toString());
       }
     }
-  }, []);
+  }, [restaurantId]);
 
   if (totalItems === 0 && !successOrder) return null;
 
@@ -191,16 +191,17 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
       if (stripeAccountId && !skipStripe) {
         // Generate an order ID so we can track the receipt when they return
         const tempOrderId = crypto.randomUUID();
-        localStorage.setItem('nomenu_last_order', tempOrderId);
+        localStorage.setItem(`nomenu_last_order_${restaurantId}`, tempOrderId);
         
         // Append to multi-order array tracker
+        const storageKey = `nomenu_orders_${restaurantId}`;
         try {
-          const existing = JSON.parse(localStorage.getItem('nomenu_orders') || '[]');
+          const existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
           if (!existing.includes(tempOrderId)) {
-            localStorage.setItem('nomenu_orders', JSON.stringify([...existing, tempOrderId]));
+            localStorage.setItem(storageKey, JSON.stringify([...existing, tempOrderId]));
           }
         } catch(e) {
-          localStorage.setItem('nomenu_orders', JSON.stringify([tempOrderId]));
+          localStorage.setItem(storageKey, JSON.stringify([tempOrderId]));
         }
 
         const res = await fetch("/api/stripe/checkout", {
@@ -248,16 +249,17 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
       });
 
       if (res.success && res.orderId) {
-        localStorage.setItem('nomenu_last_order', res.orderId);
+        localStorage.setItem(`nomenu_last_order_${restaurantId}`, res.orderId);
         
         // Append to multi-order array tracker
+        const storageKey = `nomenu_orders_${restaurantId}`;
         try {
-          const existing = JSON.parse(localStorage.getItem('nomenu_orders') || '[]');
+          const existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
           if (!existing.includes(res.orderId)) {
-            localStorage.setItem('nomenu_orders', JSON.stringify([...existing, res.orderId]));
+            localStorage.setItem(storageKey, JSON.stringify([...existing, res.orderId]));
           }
         } catch(e) {
-          localStorage.setItem('nomenu_orders', JSON.stringify([res.orderId]));
+          localStorage.setItem(storageKey, JSON.stringify([res.orderId]));
         }
 
         window.dispatchEvent(new CustomEvent('nomenu_order_placed', { detail: { orderId: res.orderId } }));
