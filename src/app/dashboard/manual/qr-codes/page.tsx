@@ -75,6 +75,15 @@ export default function QRCodesManualPage() {
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mt-4">
             <h4 className="font-bold text-slate-900 mb-2">How it works:</h4>
             <p className="text-slate-600 mb-4">Click "Create QR Code". Enter a label (like "Table 1" or "Bar Seat 4") and assign it to a zone. When a customer scans this specific QR code, their order will automatically be tagged with "Table 1 (Patio)" so your staff knows exactly where to bring the food.</p>
+            
+            <h4 className="font-bold text-slate-900 mt-6 mb-2">Bulk Generation & Plan Limits</h4>
+            <p className="text-slate-600 mb-2">
+              If you have a large restaurant, creating QR codes one-by-one is tedious. You can use the <strong>Bulk Create</strong> feature to generate up to 100 QR codes instantly. These are rendered directly in your browser for maximum speed and stability.
+            </p>
+            <ul className="list-disc pl-5 text-slate-600 space-y-1">
+              <li><strong>Free Plan:</strong> Limited to 1 active QR Code.</li>
+              <li><strong>Pro & Enterprise Plans:</strong> Unlimited QR Codes.</li>
+            </ul>
           </div>
         </section>
 

@@ -146,6 +146,24 @@ export default function ManualIndexPage() {
           </div>
         </Link>
 
+        <Link 
+          href="/dashboard/manual/security"
+          className="group bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-teal-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
+              <LifeBuoy className="w-7 h-7" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Security & Team</h2>
+            <p className="text-slate-500 leading-relaxed">
+              Learn how Role-Based Access Control isolates your restaurants and secures your data.
+            </p>
+          </div>
+          <div className="mt-8 flex items-center text-indigo-600 font-bold group-hover:translate-x-2 transition-transform duration-300">
+            Read Documentation <ArrowRight className="ml-2 w-5 h-5" />
+          </div>
+        </Link>
+
       </div>
 
       {/* Support Banner */}

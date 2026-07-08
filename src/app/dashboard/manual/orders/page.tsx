@@ -106,7 +106,7 @@ export default function OrdersManualPage() {
           <div className="bg-rose-50 border border-rose-200 p-6 rounded-2xl flex items-start gap-4">
             <AlertTriangle className="w-8 h-8 text-rose-600 shrink-0" />
             <div>
-              <h4 className="font-bold text-rose-900 text-lg mb-2">How to Cancel an Order</h4>
+              <h4 className="font-bold text-rose-900 text-lg mb-2">How to Cancel an Order (Restaurant Side)</h4>
               <p className="text-rose-800 mb-4 leading-relaxed">
                 If you run out of an ingredient or need to reject an order, drag the order card to the far-right <strong>"Cancelled"</strong> column.
               </p>
@@ -115,6 +115,16 @@ export default function OrdersManualPage() {
                 <li><strong>CRITICAL:</strong> If the customer paid online via credit card (Stripe), confirming the cancellation will <strong>automatically trigger a full refund</strong> to their card. You do not need to log into Stripe manually.</li>
                 <li>If the customer chose "Pay with Cash", it will just cancel the order without firing a refund.</li>
               </ul>
+            </div>
+          </div>
+
+          <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-2xl flex items-start gap-4 mt-6">
+            <div className="w-8 h-8 text-indigo-600 shrink-0 flex items-center justify-center font-bold bg-indigo-200 rounded-full">!</div>
+            <div>
+              <h4 className="font-bold text-indigo-900 text-lg mb-2">Customer-Initiated Cancellations</h4>
+              <p className="text-indigo-800 mb-4 leading-relaxed">
+                Customers can now cancel their own items smoothly without annoying popups blocking the interface. When a customer cancels an item from their device, it will automatically update on the Kitchen Display System in real time.
+              </p>
             </div>
           </div>
         </section>
