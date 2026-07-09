@@ -234,12 +234,18 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                           </Link>
                         </div>
                       ) : isLoyaltyEligible && !loyaltyCardId ? (
-                        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full animate-in zoom-in-95 duration-500 delay-150 fill-mode-both">
+                        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 w-full animate-in zoom-in-95 duration-500 delay-150 fill-mode-both"
+                             style={loyaltyConfig?.primary_color ? { backgroundColor: loyaltyConfig.primary_color + '1A', borderColor: loyaltyConfig.primary_color + '4D' } : {}}
+                        >
                           <div className="flex justify-center mb-3">
-                            <Star className="w-8 h-8 text-amber-400 fill-amber-400 animate-pulse" />
+                            <Star className="w-8 h-8 text-indigo-500 fill-indigo-500 animate-pulse" 
+                                  style={loyaltyConfig?.primary_color ? { color: loyaltyConfig.primary_color, fill: loyaltyConfig.primary_color } : {}}
+                            />
                           </div>
-                          <h5 className="font-bold text-amber-900 text-lg mb-2 text-center">You unlocked a VIP Card!</h5>
-                          <p className="text-amber-700 text-sm mb-4 text-center">
+                          <h5 className="font-bold text-slate-900 text-lg mb-2 text-center"
+                              style={loyaltyConfig?.primary_color ? { color: loyaltyConfig.primary_color } : {}}
+                          >You unlocked a VIP Card!</h5>
+                          <p className="text-slate-600 text-sm mb-4 text-center">
                             As a thank you for your {rating}-star review, you've earned a loyalty stamp! Please provide your details to claim your card.
                           </p>
                           <div className="space-y-3 mb-4">
@@ -249,7 +255,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                               onChange={(e) => setCustomerName(e.target.value)}
                               placeholder="Full Name"
                               required
-                              className="w-full rounded-xl border-amber-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-400"
+                              className="w-full rounded-xl border-slate-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-indigo-400"
                             />
                             <input
                               type="email"
@@ -257,14 +263,14 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                               onChange={(e) => setCustomerEmail(e.target.value)}
                               placeholder="Email Address"
                               required
-                              className="w-full rounded-xl border-amber-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-amber-400 focus:ring-amber-400"
+                              className="w-full rounded-xl border-slate-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-indigo-400"
                             />
                             <input
                               type="tel"
                               value={customerPhone}
                               onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
                               placeholder="Phone Number (e.g. 555-123-4567)"
-                              className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+                              className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
                             />
                           </div>
                           <button 
@@ -292,12 +298,13 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                 }
                               }
                             }}
-                            className="block w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center"
+                            className="block w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center"
+                            style={loyaltyConfig?.primary_color ? { backgroundColor: loyaltyConfig.primary_color } : {}}
                           >
                             Claim My Card
                           </button>
                           <div className="mt-4 text-center">
-                            <Link href="/loyalty/find" className="text-amber-700 text-sm font-semibold hover:underline">
+                            <Link href="/loyalty/find" className="text-indigo-600 text-sm font-semibold hover:underline">
                               Already a member? Find your card
                             </Link>
                           </div>

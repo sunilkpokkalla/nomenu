@@ -149,19 +149,21 @@ export async function submitFeedback(
     if (!cardError && cardData) {
       loyaltyCardId = cardData.id;
       loyaltyStamps = cardData.stamps;
-      if (restaurant) {
-        loyaltyConfig = {
-          name: restaurant.name,
-          logo_url: restaurant.logo_url,
-          primary_color: restaurant.primary_color,
-          loyalty_card_layout: restaurant.loyalty_card_layout,
-          loyalty_stamp_color: restaurant.loyalty_stamp_color,
-          loyalty_stamp_icon: restaurant.loyalty_stamp_icon,
-          loyalty_reward_text: restaurant.loyalty_reward_text
-        };
-      }
     } else {
-      console.error("Error generating loyalty card:", cardError);
+      if (cardError) console.error("Error generating loyalty card:", cardError);
+    }
+    
+    // Always return loyalty config so the frontend can style the claim form using the restaurant's primary color
+    if (restaurant) {
+      loyaltyConfig = {
+        name: restaurant.name,
+        logo_url: restaurant.logo_url,
+        primary_color: restaurant.primary_color,
+        loyalty_card_layout: restaurant.loyalty_card_layout,
+        loyalty_stamp_color: restaurant.loyalty_stamp_color,
+        loyalty_stamp_icon: restaurant.loyalty_stamp_icon,
+        loyalty_reward_text: restaurant.loyalty_reward_text
+      };
     }
   }
 
