@@ -103,7 +103,7 @@ export default async function PayoutsPage(
               <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
                 <h3 className="font-semibold text-slate-900 mb-2">Transaction Fees</h3>
                 <p className="text-sm text-slate-600">
-                  Nomenu charges a 2.5% platform fee per order. Standard Stripe processing fees (typically 2.9% + 30¢) also apply.
+                  Nomenu charges a 2.5% platform fee per order (Waived to 0% for your first year on an Annual Enterprise plan). Standard Stripe processing fees (typically 2.9% + 30¢) also apply.
                 </p>
               </div>
               <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">

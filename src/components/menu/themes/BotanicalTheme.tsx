@@ -150,8 +150,6 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
       </div>
 
       {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
-
-      {canFeedback && <FeedbackFAB restaurantId={restaurant.id} tableNumber={tableNumber} qrCodeId={qrCodeId} />}
     </div>
   );
 }

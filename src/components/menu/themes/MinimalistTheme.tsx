@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, Minus, Search, X } from "lucide-react";
+import { Plus, Minus, Search, X, Info } from "lucide-react";
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 import { useCart } from "../cart-context";
 import { FeedbackFAB } from "../feedback-fab";
 import { getCurrencySymbol } from "@/lib/currency-options";
 
-export function ClassicTheme({ restaurant, categories: rawCategories, items, tableNumber, qrCodeId }: MenuThemeProps) {
+export function MinimalistTheme({ restaurant, categories: rawCategories, items, tableNumber, qrCodeId }: MenuThemeProps) {
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
   const canFeedback = currentPlan !== "free";
@@ -32,19 +32,17 @@ export function ClassicTheme({ restaurant, categories: rawCategories, items, tab
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans pb-32">
+    <div className="min-h-screen bg-white text-black font-sans pb-32">
       {/* Header */}
-      <div className="bg-white py-12 px-6 shadow-sm border-b border-gray-200">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">
-            {restaurant.name}
-          </h1>
-        </div>
+      <div className="pt-24 pb-12 px-6 max-w-4xl mx-auto">
+        <h1 className="text-4xl md:text-6xl font-light tracking-tight text-black mb-4">
+          {restaurant.name}
+        </h1>
       </div>
 
       {/* Navigation */}
-      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-200 py-3 shadow-sm">
-        <div className="flex overflow-x-auto hide-scrollbar px-6 max-w-4xl mx-auto gap-4">
+      <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div className="flex overflow-x-auto hide-scrollbar px-6 py-4 max-w-4xl mx-auto gap-8">
           {categories.map((category) => (
             <button
               key={category.id}
@@ -52,10 +50,10 @@ export function ClassicTheme({ restaurant, categories: rawCategories, items, tab
                 setActiveCategory(category.name);
                 document.getElementById(`category-${category.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
-              className={`whitespace-nowrap px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+              className={`whitespace-nowrap pb-1 border-b-2 transition-all ${
                 activeCategory === category.name
-                  ? "bg-gray-900 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "border-black text-black font-medium"
+                  : "border-transparent text-gray-400 hover:text-black"
               }`}
             >
               {category.name}
@@ -65,54 +63,58 @@ export function ClassicTheme({ restaurant, categories: rawCategories, items, tab
       </div>
 
       {/* Menu Items */}
-      <main className="max-w-4xl mx-auto p-6 mt-8 space-y-12">
+      <main className="max-w-4xl mx-auto p-6 space-y-32 mt-12">
         {categories.map((category) => (
           <section key={category.id} id={`category-${category.id}`} className="scroll-mt-32">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900 border-b border-gray-200 pb-2">{category.name}</h2>
+            <h2 className="text-2xl font-medium tracking-tight mb-12">{category.name}</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-12">
               {category.items.map((item) => (
-                <div key={item.id} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+                <div key={item.id} className="group flex flex-col md:flex-row gap-8 items-start border-b border-gray-100 pb-12 last:border-0">
                   {item.image_url && (
-                    <div className="w-full aspect-video overflow-hidden bg-gray-100">
+                    <div className="w-full md:w-1/3 aspect-[4/3] overflow-hidden bg-gray-50">
                       <Image
                         src={item.image_url}
                         alt={item.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         width={400}
                         height={300}
                       />
                     </div>
                   )}
                   
-                  <div className="p-5 flex-grow flex flex-col">
-                    <div className="flex justify-between items-start mb-2 gap-4">
-                      <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
-                      <span className="font-semibold text-gray-900 bg-gray-100 px-2 py-1 rounded-md text-sm">
-                        {currencySign}{item.price.toFixed(2)}
-                      </span>
+                  <div className="flex-grow flex flex-col w-full">
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="text-xl font-medium text-black">{item.name}</h3>
+                      <span className="text-lg font-light">{currencySign}{item.price.toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {item.is_vegetarian && <span className="text-xs tracking-widest text-gray-500 uppercase">Veg</span>}
+                      {item.is_vegan && <span className="text-xs tracking-widest text-gray-500 uppercase">Vegan</span>}
+                      {item.is_gluten_free && <span className="text-xs tracking-widest text-gray-500 uppercase">GF</span>}
                     </div>
 
-                    <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-grow">{item.description}</p>
+                    <p className="text-gray-500 font-light leading-relaxed mb-8 max-w-xl">{item.description}</p>
                     
                     {canOrder && (
-                      <div className="mt-auto pt-4 border-t border-gray-100">
+                      <div className="mt-auto">
                         {cartItems.find((i) => i.menuItem.id === item.id) ? (
-                          <div className="flex items-center justify-between bg-gray-50 rounded-lg p-1">
-                            <button onClick={() => updateQuantity(item.id, cartItems.find((i) => i.menuItem.id === item.id)!.quantity - 1)} className="p-2 bg-white shadow-sm rounded-md hover:bg-gray-100 transition-colors">
+                          <div className="flex items-center gap-4 bg-gray-50 w-fit rounded-full p-1">
+                            <button onClick={() => updateQuantity(item.id, cartItems.find((i) => i.menuItem.id === item.id)!.quantity - 1)} className="p-2 hover:bg-white rounded-full transition-colors">
                               <Minus className="w-4 h-4" />
                             </button>
-                            <span className="w-10 text-center font-bold">
+                            <span className="w-4 text-center font-medium">
                               {cartItems.find((i) => i.menuItem.id === item.id)?.quantity}
                             </span>
-                            <button onClick={() => updateQuantity(item.id, cartItems.find((i) => i.menuItem.id === item.id)!.quantity + 1)} className="p-2 bg-white shadow-sm rounded-md hover:bg-gray-100 transition-colors">
+                            <button onClick={() => updateQuantity(item.id, cartItems.find((i) => i.menuItem.id === item.id)!.quantity + 1)} className="p-2 hover:bg-white rounded-full transition-colors">
                               <Plus className="w-4 h-4" />
                             </button>
                           </div>
                         ) : (
                           <button
                             onClick={() => handleAddToCart(item)}
-                            className="w-full py-2.5 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-800 transition-colors text-sm"
+                            className="px-8 py-3 bg-black text-white hover:bg-gray-800 transition-colors uppercase tracking-widest text-xs font-medium"
                           >
                             Add to order
                           </button>
@@ -127,7 +129,7 @@ export function ClassicTheme({ restaurant, categories: rawCategories, items, tab
         ))}
       </main>
 
-      <div className="text-center pb-8 pt-8 text-gray-400 text-sm mt-12">
+      <div className="text-center pb-8 opacity-30 font-sans text-xs tracking-widest uppercase mt-24">
         Powered by {hasWhiteLabeling ? restaurant.name : "Nomenu"}
       </div>
 

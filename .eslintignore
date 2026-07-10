@@ -1,0 +1,4 @@
+*.js
+scripts/
+scratch/
+next-env.d.ts

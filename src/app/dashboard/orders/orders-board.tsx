@@ -732,10 +732,16 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                       {(order.customer_name || order.table_number) && (
                                         <div className="flex items-center gap-2">
                                           {order.table_number && (
-                                            <span className={`text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center ${
-                                              isKdsMode ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"
-                                            }`}>
-                                              <MapPin className="w-3 h-3 mr-1" /> {locationLabel.toUpperCase()}: {order.table_number}
+                                            <span 
+                                              className={`text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center gap-1 max-w-[220px] ${
+                                                isKdsMode ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"
+                                              }`}
+                                              title={order.table_number}
+                                            >
+                                              <MapPin className="w-3 h-3 shrink-0" /> 
+                                              <span className="truncate">
+                                                {locationLabel.toUpperCase()}: {order.table_number}
+                                              </span>
                                             </span>
                                           )}
                                           {order.customer_name && (

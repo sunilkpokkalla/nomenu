@@ -26,178 +26,181 @@ export function PopDinerTheme(props: MenuThemeProps) {
   const { categoryRefs, categoryNavRef } = refs;
 
   const currencySign = getCurrencySymbol(restaurant.currency);
-  const currencySymbol = currencySign;
 
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const canFeedback = currentPlan !== "free";
   const canOrder = currentPlan === "elite" || currentPlan === "enterprise";
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-[#121212] font-sans pb-32">
-      {/* Luxury Editorial Header */}
-      <header className="relative w-full pt-20 pb-16 px-6 sm:px-12 flex flex-col items-center text-center bg-[#FAFAFA]">
-        <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
-          <div className="mb-8 flex items-center justify-center gap-4 text-[#8B1E28]">
-            <span className="h-[1px] w-12 bg-[#8B1E28]/30"></span>
-            <Sparkles size={16} strokeWidth={1.5} />
-            <span className="h-[1px] w-12 bg-[#8B1E28]/30"></span>
+    <div className="min-h-screen bg-sky-50 text-slate-900 font-sans pb-32 selection:bg-rose-500 selection:text-white">
+      {/* Diner Header */}
+      <header className="relative w-full pt-16 pb-12 px-6 border-b-[8px] border-slate-900 bg-amber-300">
+        <div className="w-full max-w-4xl mx-auto flex flex-col items-center relative z-10 bg-white p-8 rounded-3xl border-4 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
+          <div className="mb-4 inline-block bg-rose-500 text-white font-black uppercase tracking-widest text-xs px-4 py-1 rounded-full border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] -rotate-2">
+            Welcome To
           </div>
           
-          <h1 className="text-4xl sm:text-6xl font-light tracking-widest uppercase text-[#121212] mb-6" style={{ fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif' }}>
+          <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-rose-500 mb-4 uppercase drop-shadow-[4px_4px_0px_rgba(15,23,42,1)]" style={{ WebkitTextStroke: '2px #0f172a' }}>
             {restaurant.name}
           </h1>
 
-          <div className="text-[11px] sm:text-xs font-medium uppercase tracking-[0.3em] text-[#666666] mb-12">
-            {restaurant.cuisine_type || "Exquisite Dining"}
+          <div className="text-sm sm:text-base font-bold uppercase tracking-wider text-sky-600 mb-8 border-b-4 border-sky-200 pb-2">
+            {restaurant.cuisine_type || "Classic American Diner"}
           </div>
           
-          {/* Subtle Search */}
+          {/* Diner Search */}
           <div className="w-full max-w-md relative group">
-            <Search className="absolute left-0 top-3 h-4 w-4 text-[#999999] transition-colors group-focus-within:text-[#8B1E28]" />
+            <Search className="absolute left-4 top-4 h-5 w-5 text-slate-400 group-focus-within:text-rose-500" />
             <input 
               type="text" 
-              placeholder="Discover our menu..." 
+              placeholder="Search the menu..." 
               value={searchQuery}
               onChange={(e) => setters.setSearchQuery(e.target.value)}
-              className="w-full bg-transparent border-b border-[#E5E5E5] text-[#121212] pl-8 pr-4 py-3 text-sm focus:outline-none focus:border-[#8B1E28] transition-colors placeholder-[#999999]"
+              className="w-full bg-white border-4 border-slate-900 text-slate-900 pl-12 pr-4 py-3 font-bold rounded-full focus:outline-none focus:border-rose-500 focus:shadow-[4px_4px_0px_0px_rgba(225,29,72,1)] transition-all placeholder-slate-400"
             />
           </div>
         </div>
       </header>
 
-      <div className="relative z-10 border-t border-[#E5E5E5]">
-        {/* Elegant Sticky Navigation */}
-        <div className="sticky top-0 z-40 bg-[#FAFAFA]/95 backdrop-blur-md border-b border-[#E5E5E5] py-4">
-          <div className="max-w-5xl mx-auto px-6">
-            <div ref={categoryNavRef} className="flex overflow-x-auto scrollbar-none gap-8 sm:gap-12 pb-1 justify-start md:justify-center">
-              {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  id={`nav-pill-${cat.id}`}
-                  onClick={() => handlers.scrollToCategory(cat.id)}
-                  className={`shrink-0 whitespace-nowrap pb-2 text-xs sm:text-sm font-medium uppercase tracking-widest transition-all relative ${
-                    activeCategory === cat.id 
-                      ? "text-[#8B1E28]" 
-                      : "text-[#999999] hover:text-[#121212]"
-                  }`}
-                >
-                  {cat.name}
-                  {activeCategory === cat.id && (
-                    <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#8B1E28]"></span>
-                  )}
-                </button>
-              ))}
-            </div>
+      {/* Chunky Sticky Navigation */}
+      <div className="sticky top-0 z-40 bg-sky-400 border-b-4 border-slate-900 shadow-md">
+        <div className="max-w-5xl mx-auto px-4 py-3">
+          <div ref={categoryNavRef} className="flex overflow-x-auto hide-scrollbar gap-3 pb-1 justify-start md:justify-center">
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                id={`nav-pill-${cat.id}`}
+                onClick={() => handlers.scrollToCategory(cat.id)}
+                className={`shrink-0 whitespace-nowrap px-6 py-2 rounded-full font-black text-sm uppercase transition-all border-2 border-slate-900 ${
+                  activeCategory === cat.id 
+                    ? "bg-rose-500 text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] -translate-y-1" 
+                    : "bg-white text-slate-700 hover:bg-slate-100 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]"
+                }`}
+              >
+                {cat.name}
+              </button>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* Menu Content - Luxury Editorial Layout */}
-        <main className="max-w-5xl mx-auto px-6 py-16 sm:py-24 space-y-32">
-          {categories.map(cat => {
-            const catItems = filteredItems.filter(i => i.category_id === cat.id);
-            if (catItems.length === 0) return null;
+      {/* Menu Content - Diner Grid Layout */}
+      <main className="max-w-5xl mx-auto px-4 py-12 space-y-24">
+        {categories.map(cat => {
+          const catItems = filteredItems.filter(i => i.category_id === cat.id);
+          if (catItems.length === 0) return null;
 
-            return (
-              <section key={cat.id} id={`cat-${cat.id}`} ref={el => { categoryRefs.current[cat.id] = el; }} className="scroll-mt-32">
-                
-                <div className="text-center mb-16 sm:mb-20">
-                  <h2 className="text-2xl sm:text-3xl font-light italic text-[#121212] mb-4" style={{ fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif' }}>
-                    {cat.name}
-                  </h2>
-                  <div className="w-12 h-[1px] bg-[#8B1E28] mx-auto"></div>
-                </div>
+          return (
+            <section key={cat.id} id={`cat-${cat.id}`} ref={el => { categoryRefs.current[cat.id] = el; }} className="scroll-mt-32">
+              
+              <div className="flex items-center gap-4 mb-10">
+                <div className="h-2 flex-grow bg-slate-900 rounded-full"></div>
+                <h2 className="text-3xl sm:text-4xl font-black uppercase text-slate-900 bg-amber-300 px-6 py-2 rounded-2xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] rotate-1">
+                  {cat.name}
+                </h2>
+                <div className="h-2 flex-grow bg-slate-900 rounded-full"></div>
+              </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-                  {catItems.map((item, index) => (
-                    <div 
-                      key={item.id} 
-                      onClick={() => setters.setSelectedItem(item)}
-                      className="group cursor-pointer flex flex-col"
-                    >
-                      {item.image_url ? (
-                        <div className="w-full aspect-[4/3] mb-6 relative overflow-hidden bg-[#F5F5F5]">
-                          <Image 
-                            src={item.image_url} 
-                            alt={item.name} 
-                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
-                            fill 
-                          />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {catItems.map((item, index) => (
+                  <div 
+                    key={item.id} 
+                    onClick={() => setters.setSelectedItem(item)}
+                    className="group cursor-pointer bg-white rounded-3xl border-4 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] hover:shadow-[12px_12px_0px_0px_rgba(225,29,72,1)] hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col"
+                  >
+                    {item.image_url && (
+                      <div className="w-full aspect-video relative overflow-hidden border-b-4 border-slate-900 bg-sky-100">
+                        <Image 
+                          src={item.image_url} 
+                          alt={item.name} 
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                          fill 
+                        />
+                        <div className="absolute top-4 right-4 bg-amber-300 text-slate-900 font-black px-4 py-2 rounded-full border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] rotate-3">
+                          {currencySign}{item.price.toFixed(2)}
                         </div>
-                      ) : (
-                        <div className="w-full h-[1px] bg-[#E5E5E5] mb-6 hidden md:block"></div>
+                      </div>
+                    )}
+                    
+                    <div className="p-6 flex flex-col flex-grow relative">
+                      {!item.image_url && (
+                         <div className="absolute top-6 right-6 bg-amber-300 text-slate-900 font-black px-4 py-2 rounded-full border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] rotate-3">
+                           {currencySign}{item.price.toFixed(2)}
+                         </div>
                       )}
                       
-                      <div className="flex justify-between items-baseline mb-3 gap-4">
-                        <h3 className="font-medium text-lg sm:text-xl text-[#121212] leading-tight" style={{ fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif' }}>
-                          {item.name}
-                        </h3>
-                        <span className="font-light text-sm sm:text-base text-[#121212] shrink-0">
-                          {currencySign}{item.price.toFixed(2)}
-                        </span>
-                      </div>
+                      <h3 className={`font-black text-2xl text-slate-900 mb-2 pr-24 ${!item.image_url ? 'leading-tight' : ''}`}>
+                        {item.name}
+                      </h3>
                       
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {item.is_popular && <span className="text-[10px] uppercase tracking-wider bg-rose-500 text-white px-2 py-1 rounded-md font-bold border-2 border-slate-900">Popular</span>}
+                        {item.is_vegetarian && <span className="text-[10px] uppercase tracking-wider bg-emerald-400 text-slate-900 px-2 py-1 rounded-md font-bold border-2 border-slate-900">Veg</span>}
+                        {item.is_spicy && <span className="text-[10px] uppercase tracking-wider bg-orange-500 text-white px-2 py-1 rounded-md font-bold border-2 border-slate-900">Spicy</span>}
+                      </div>
+
                       {item.description && (
-                        <p className="text-[#666666] text-sm leading-relaxed mb-4 font-light">
+                        <p className="text-slate-600 font-medium leading-relaxed mb-6">
                           {item.description}
                         </p>
                       )}
                       
-                      <div className="mt-auto flex flex-wrap gap-3 pt-2">
-                        {item.is_popular && <span className="text-[9px] uppercase tracking-widest text-[#8B1E28] font-medium flex items-center gap-1"><Star size={10} /> Signature</span>}
-                        {item.is_vegetarian && <span className="text-[9px] uppercase tracking-widest text-[#666666] font-medium flex items-center gap-1"><Leaf size={10} /> Vegetarian</span>}
-                        {item.is_spicy && <span className="text-[9px] uppercase tracking-widest text-[#666666] font-medium flex items-center gap-1"><Flame size={10} /> Spicy</span>}
+                      <div className="mt-auto">
+                        <button className="w-full bg-sky-400 text-slate-900 font-black uppercase py-3 rounded-xl border-4 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] group-hover:bg-rose-500 group-hover:text-white transition-colors">
+                          View Details
+                        </button>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </section>
-            );
-          })}
-        </main>
-      </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        })}
+      </main>
 
-      {/* Luxury Item Modal */}
+      {/* Pop Diner Item Modal */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-white/90 backdrop-blur-md animate-in fade-in duration-500">
-          <div className="bg-[#FAFAFA] w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-2xl flex flex-col relative shadow-2xl sm:border border-[#E5E5E5]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white w-full max-w-2xl max-h-[90vh] rounded-3xl border-4 border-slate-900 shadow-[12px_12px_0px_0px_rgba(225,29,72,1)] flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200">
             
             <button 
               onClick={() => setters.setSelectedItem(null)} 
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-[#999999] hover:text-[#121212] p-2 transition-colors z-20 bg-white/50 backdrop-blur-sm rounded-full sm:bg-transparent"
+              className="absolute top-4 right-4 bg-white text-slate-900 border-4 border-slate-900 hover:bg-rose-500 hover:text-white p-2 rounded-full z-20 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition-colors"
             >
-              <X size={24} strokeWidth={1} />
+              <X size={24} strokeWidth={3} />
             </button>
             
             <div className="overflow-y-auto flex-grow flex flex-col">
               {selectedItem.image_url && (
-                <div className="w-full aspect-video sm:aspect-[16/9] relative bg-[#F5F5F5] shrink-0">
+                <div className="w-full aspect-video relative bg-sky-100 border-b-4 border-slate-900 shrink-0">
                   <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" fill />
                 </div>
               )}
 
-              <div className="p-8 sm:p-12 flex flex-col flex-grow">
-                <div className="mb-8 text-center">
-                  <h2 className="text-3xl sm:text-4xl font-light text-[#121212] mb-4" style={{ fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif' }}>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="mb-6">
+                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-2 uppercase">
                     {selectedItem.name}
                   </h2>
-                  <div className="text-xl font-light text-[#8B1E28]">
+                  <div className="text-3xl font-black text-rose-500 drop-shadow-[2px_2px_0px_rgba(15,23,42,1)]">
                     {currencySign}{selectedItem.price.toFixed(2)}
                   </div>
                 </div>
                 
                 {selectedItem.description && (
-                  <p className="text-[#666666] text-center text-sm sm:text-base leading-relaxed mb-12 font-light max-w-lg mx-auto">
+                  <p className="text-slate-600 text-lg font-medium leading-relaxed mb-8">
                     {selectedItem.description}
                   </p>
                 )}
 
                 {canOrder && (
-                  <div className="space-y-8 max-w-sm mx-auto w-full mt-auto">
+                  <div className="space-y-6 max-w-sm w-full mt-auto">
                     {/* Quantity Selector */}
-                    <div className="flex justify-center items-center gap-8">
-                      <button onClick={() => setters.setOrderQuantity(Math.max(1, orderQuantity - 1))} className="w-10 h-10 border border-[#E5E5E5] text-[#121212] hover:border-[#121212] transition-colors flex items-center justify-center font-light text-xl rounded-full">-</button>
-                      <span className="text-xl font-light text-[#121212] w-8 text-center">{orderQuantity}</span>
-                      <button onClick={() => setters.setOrderQuantity(orderQuantity + 1)} className="w-10 h-10 border border-[#E5E5E5] text-[#121212] hover:border-[#121212] transition-colors flex items-center justify-center font-light text-xl rounded-full">+</button>
+                    <div className="flex items-center gap-4">
+                      <button onClick={() => setters.setOrderQuantity(Math.max(1, orderQuantity - 1))} className="w-12 h-12 bg-sky-400 border-4 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:bg-sky-300 transition-colors flex items-center justify-center font-black text-2xl rounded-xl active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(15,23,42,1)]">-</button>
+                      <span className="text-3xl font-black text-slate-900 w-12 text-center">{orderQuantity}</span>
+                      <button onClick={() => setters.setOrderQuantity(orderQuantity + 1)} className="w-12 h-12 bg-rose-500 text-white border-4 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:bg-rose-400 transition-colors flex items-center justify-center font-black text-2xl rounded-xl active:translate-y-1 active:shadow-[0px_0px_0px_0px_rgba(15,23,42,1)]">+</button>
                     </div>
 
                     {/* Preferences */}
@@ -205,15 +208,15 @@ export function PopDinerTheme(props: MenuThemeProps) {
                       <textarea 
                         value={orderNotes}
                         onChange={(e) => setters.setOrderNotes(e.target.value)}
-                        placeholder="Dietary requirements or special requests..."
-                        className="w-full bg-transparent border-b border-[#E5E5E5] text-[#121212] p-3 text-sm font-light focus:outline-none focus:border-[#8B1E28] resize-none h-16 placeholder-[#999999] text-center"
+                        placeholder="Any special requests? Tell the chef!"
+                        className="w-full bg-slate-50 border-4 border-slate-900 text-slate-900 p-4 font-medium focus:outline-none focus:bg-white rounded-2xl resize-none h-24 placeholder-slate-400 shadow-[inset_4px_4px_0px_0px_rgba(0,0,0,0.05)]"
                       />
                     </div>
                   </div>
                 )}
               </div>
               
-              <div className="p-6 sm:p-8 bg-white border-t border-[#E5E5E5]">
+              <div className="p-6 bg-slate-100 border-t-4 border-slate-900">
                 <button 
                   onClick={() => {
                     if (canOrder) {
@@ -221,9 +224,9 @@ export function PopDinerTheme(props: MenuThemeProps) {
                     }
                     setters.setSelectedItem(null);
                   }}
-                  className="w-full py-4 bg-[#121212] text-white font-medium uppercase text-xs tracking-[0.2em] hover:bg-[#8B1E28] transition-colors"
+                  className="w-full py-4 bg-amber-300 text-slate-900 font-black uppercase text-lg border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] rounded-2xl hover:bg-amber-400 active:translate-y-1 active:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] transition-all"
                 >
-                  {canOrder ? `Add to order — ${currencySign}${(selectedItem.price * orderQuantity).toFixed(2)}` : "Return to menu"}
+                  {canOrder ? `Add to Order — ${currencySign}${(selectedItem.price * orderQuantity).toFixed(2)}` : "Back to menu"}
                 </button>
               </div>
             </div>

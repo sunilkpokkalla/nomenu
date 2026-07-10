@@ -15,6 +15,9 @@ import { PopDinerTheme } from "./themes/PopDinerTheme";
 import { EditorialTheme } from "./themes/EditorialTheme";
 import { BoutiqueTheme } from "./themes/BoutiqueTheme";
 import { BotanicalTheme } from "./themes/BotanicalTheme";
+import { MinimalistTheme } from "./themes/MinimalistTheme";
+import { LuxuryTheme } from "./themes/LuxuryTheme";
+import { VibrantTheme } from "./themes/VibrantTheme";
 
 import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps } from "./types";
 
@@ -56,9 +59,9 @@ export function MenuClientView(props: MenuClientViewProps) {
       case "editorial": return <EditorialTheme {...props} />;
       case "boutique": return <BoutiqueTheme {...props} />;
       case "botanical": return <BotanicalTheme {...props} />;
-      case "minimalist":
-      case "luxury":
-      case "vibrant":
+      case "minimalist": return <MinimalistTheme {...props} />;
+      case "luxury": return <LuxuryTheme {...props} />;
+      case "vibrant": return <VibrantTheme {...props} />;
       default: return <ClassicTheme {...props} />;
     }
   };

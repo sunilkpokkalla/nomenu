@@ -92,10 +92,10 @@ export default function PartnersLandingPage() {
             
             <div className="mt-8 max-w-2xl mx-auto bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 text-left">
               <h3 className="text-amber-600 font-black text-xl mb-2 flex items-center gap-2">
-                <Sparkles className="h-5 w-5" /> The "Golden 1,000" Founding Tier
+                <Sparkles className="h-5 w-5" /> The "Founding 100" Tier
               </h3>
               <p className="text-slate-700 font-medium leading-relaxed">
-                The first 1,000 approved partners receive <strong className="text-amber-600 font-bold">Lifetime Recurring Revenue</strong> (paid annually) for every restaurant they refer. Partners #1,001 and beyond receive a standard one-time upfront bounty. Apply now to secure your lifetime spot.
+                The first 100 approved partners become Founding Partners and earn <strong className="text-amber-600 font-bold">5 Years of Recurring Revenue</strong> for every restaurant they refer. Bring in 100+ active restaurants within your first 12 months? You'll be upgraded to <strong className="text-amber-600 font-bold">Lifetime Recurring Revenue</strong>. Partners #101 and beyond receive a standard one-time upfront bounty. Apply now before the 100 spots are gone.
               </p>
             </div>
           </div>
