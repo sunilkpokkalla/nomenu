@@ -62,6 +62,7 @@ export const CURRENCY_OPTIONS: CurrencyOption[] = [
 
 export function getCurrencySymbol(code: string | null | undefined): string {
   if (!code) return "$";
-  const option = CURRENCY_OPTIONS.find(c => c.code === code);
-  return option ? option.symbol : (code === "EUR" ? "€" : code === "GBP" ? "£" : "$");
+  const normalizedCode = code.toUpperCase().trim();
+  const option = CURRENCY_OPTIONS.find(c => c.code.toUpperCase() === normalizedCode);
+  return option ? option.symbol : (normalizedCode === "EUR" ? "€" : normalizedCode === "GBP" ? "£" : "$");
 }

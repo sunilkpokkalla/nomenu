@@ -316,7 +316,7 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
                         <div key={item.id} className="flex flex-col">
                           <div className="flex justify-between">
                             <span className="font-bold">{item.quantity}x {item.menu_items?.name || "Item"}</span>
-                            <span>${(item.price_at_time_of_order * item.quantity).toFixed(2)}</span>
+                            <span>{currencySymbol}{(item.price_at_time_of_order * item.quantity).toFixed(2)}</span>
                           </div>
                           {item.customer_notes && (
                             <span className="text-slate-500 text-xs mt-0.5 max-w-[80%] uppercase ml-5">
@@ -330,23 +330,23 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
                     <div className="border-t-2 border-dashed border-slate-300 pt-4 mb-6 space-y-1.5">
                       <div className="flex justify-between text-sm opacity-70">
                         <span>Subtotal</span>
-                        <span>${o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0).toFixed(2)}</span>
+                        <span>{currencySymbol}{o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0).toFixed(2)}</span>
                       </div>
                       {taxRate > 0 && (
                         <div className="flex justify-between text-sm opacity-70">
                           <span>Tax ({taxRate}%)</span>
-                          <span>${(o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0) * (taxRate / 100)).toFixed(2)}</span>
+                          <span>{currencySymbol}{(o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0) * (taxRate / 100)).toFixed(2)}</span>
                         </div>
                       )}
                       {serviceCharge > 0 && (
                         <div className="flex justify-between text-sm opacity-70">
                           <span>Service Fee {serviceChargeType === 'percentage' ? `(${serviceCharge}%)` : ''}</span>
-                          <span>${(serviceChargeType === "flat" ? serviceCharge : o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0) * (serviceCharge / 100)).toFixed(2)}</span>
+                          <span>{currencySymbol}{(serviceChargeType === "flat" ? serviceCharge : o.order_items.reduce((sum, item) => sum + (item.price_at_time_of_order * item.quantity), 0) * (serviceCharge / 100)).toFixed(2)}</span>
                         </div>
                       )}
                       <div className="flex justify-between text-xl font-black pt-2 border-t border-slate-200 mt-2">
                         <span>TOTAL</span>
-                        <span>${o.total_amount.toFixed(2)}</span>
+                        <span>{currencySymbol}{o.total_amount.toFixed(2)}</span>
                       </div>
                       <div className="text-xs text-center text-slate-400 mt-4 uppercase">
                         {new Date(o.created_at).toLocaleString()}

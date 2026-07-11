@@ -1,5 +1,6 @@
 import { MenuThemeProps, MenuItem } from "../types";
 import { Plus, Minus, ShoppingBag, Leaf, Info , Wifi } from "lucide-react";
+import { getCurrencySymbol } from "@/lib/currency-options";
 import { FeedbackFAB } from "../feedback-fab";
 import { useState } from "react";
 import Image from "next/image";
@@ -14,6 +15,8 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
     ...cat,
     items: items.filter(item => item.category_id === cat.id && item.is_available)
   })).filter(cat => cat.items.length > 0);
+
+  const currencySign = getCurrencySymbol(restaurant.currency);
 
   const { items: cartItems, addToCart, updateQuantity } = useCart();
   const [activeCategory, setActiveCategory] = useState<string>(
@@ -109,7 +112,7 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
                     <p className="text-sm text-[#556B50] italic leading-relaxed mb-6">{item.description}</p>
                     
                     <div className="mt-auto flex items-center justify-between border-t border-[#EAE3D2] pt-4">
-                      <span className="text-lg font-medium tracking-wide">${item.price.toFixed(2)}</span>
+                      <span className="text-lg font-medium tracking-wide">{currencySign}{item.price.toFixed(2)}</span>
                       
                       {canOrder && (
                         <div className="flex items-center gap-3">
