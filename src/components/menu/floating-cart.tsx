@@ -537,12 +537,15 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                       <input 
                         required={!tableNumber} // Only require if they didn't scan a table QR
                         value={table}
-                        onChange={e => setTable(e.target.value)}
+                        onChange={e => {
+                          if (!tableNumber) setTable(e.target.value);
+                        }}
+                        readOnly={!!tableNumber}
                         placeholder={`e.g. ${locationLabel === 'Room' ? '204' : '12'}`} 
                         className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ${
                         themeStyle === "luxury"
-                          ? "bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white placeholder-zinc-500"
-                          : "bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900"
+                          ? `bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white placeholder-zinc-500 ${tableNumber ? 'opacity-70 cursor-not-allowed' : ''}`
+                          : `bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900 ${tableNumber ? 'opacity-70 cursor-not-allowed' : ''}`
                       }`}
                       />
                     </div>
