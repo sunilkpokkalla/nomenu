@@ -43,6 +43,11 @@ export function VibrantTheme({ restaurant, categories: rawCategories, items, tab
           <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
             {restaurant.name}
           </h1>
+          {restaurant.wifi_password && (
+            <div className="flex items-center justify-center gap-2 text-white/80 font-medium text-sm mt-2">
+              <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+            </div>
+          )}
         </div>
       </div>
 

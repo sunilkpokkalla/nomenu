@@ -39,6 +39,11 @@ export function LuxuryTheme({ restaurant, categories: rawCategories, items, tabl
         <h1 className="text-4xl md:text-5xl font-normal tracking-widest uppercase text-white mb-6" style={{ color: accentColor }}>
           {restaurant.name}
         </h1>
+        {restaurant.wifi_password && (
+          <div className="flex items-center justify-center gap-2 text-white/50 text-sm tracking-widest">
+            <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+          </div>
+        )}
       </div>
 
       {/* Navigation */}

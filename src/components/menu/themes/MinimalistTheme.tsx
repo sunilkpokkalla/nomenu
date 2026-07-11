@@ -38,6 +38,11 @@ export function MinimalistTheme({ restaurant, categories: rawCategories, items, 
         <h1 className="text-4xl md:text-6xl font-light tracking-tight text-black mb-4">
           {restaurant.name}
         </h1>
+        {restaurant.wifi_password && (
+          <div className="flex items-center gap-2 text-gray-500 text-sm">
+            <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+          </div>
+        )}
       </div>
 
       {/* Navigation */}

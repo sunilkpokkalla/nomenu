@@ -183,6 +183,9 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
 
   const tableTabs = groupOrdersToTabs(orders);
   
+  // Helper to strip out zone like "Main Dining - Table 1" -> "Table 1"
+  const formatTable = (raw: string) => raw.includes(" - ") ? raw.split(" - ")[1] : raw;
+  
   // History tabs are sorted by paid_at descending
   const historyTabs = groupOrdersToTabs(historyOrders).sort((a, b) => {
     return new Date((b as TableTab & { paid_at?: string | null }).paid_at || b.created_at).getTime() - new Date((a as TableTab & { paid_at?: string | null }).paid_at || a.created_at).getTime();
@@ -263,48 +266,55 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
   const emptyTabs = tableTabs.filter(t => t.total_amount === 0);
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-16 pb-12">
       {/* Actionable Tabs (Orders with Money) */}
       {actionableTabs.length > 0 && (
         <div>
-          <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-indigo-500" /> Tabs to Settle
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center border border-indigo-100">
+              <Receipt className="w-5 h-5 text-indigo-600" />
+            </div>
+            <h2 className="text-2xl font-black tracking-tight text-slate-900">Tabs to Settle</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-start">
             {actionableTabs.map(tab => (
-              <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+              <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/40 overflow-hidden flex flex-col border border-slate-200/60 hover:-translate-y-1 transition-transform duration-300">
                 {/* Header */}
-                <div className="bg-slate-900 text-white p-5 flex items-start justify-between">
-                  <div>
-                    <div className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
-                    <div className="text-3xl font-black">{tab.table_number}</div>
+                <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6 flex items-start justify-between relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                  <div className="relative z-10">
+                    <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
+                    <div className="text-4xl font-black tracking-tight">{formatTable(tab.table_number)}</div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xs font-bold tracking-widest text-slate-400 uppercase mb-1">Total Due</div>
-                    <div className="text-2xl font-black text-emerald-400">{currencySymbol}{tab.total_amount.toFixed(2)}</div>
+                  <div className="text-right relative z-10">
+                    <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-1">Total Due</div>
+                    <div className="text-3xl font-black text-emerald-400 tracking-tight">{currencySymbol}{tab.total_amount.toFixed(2)}</div>
                   </div>
                 </div>
                 
                 {/* Customers Summary */}
-                <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 flex items-center gap-2 text-sm text-slate-600 font-medium overflow-hidden whitespace-nowrap text-ellipsis">
-                  <Users className="w-4 h-4 shrink-0 text-slate-400" />
+                <div className="px-6 py-4 bg-slate-50/80 border-b border-dashed border-slate-300 flex items-center gap-3 text-sm text-slate-700 font-bold overflow-hidden whitespace-nowrap text-ellipsis">
+                  <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                    <Users className="w-4 h-4" />
+                  </div>
                   {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in Customer"}
                 </div>
 
                 {/* Receipt Body */}
-                <div className="p-5 flex-1 max-h-[300px] overflow-y-auto hide-scrollbar space-y-4">
+                <div className="p-6 flex-1 max-h-[300px] overflow-y-auto hide-scrollbar space-y-5 bg-amber-50/30">
                   {tab.orders.map(order => (
-                    <div key={order.id} className="pb-4 border-b border-dashed border-slate-200 last:border-0 last:pb-0">
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="text-xs font-bold text-slate-400">Order #{String(order.daily_order_number).padStart(3, '0')}</div>
+                    <div key={order.id} className="pb-5 border-b border-dashed border-slate-200 last:border-0 last:pb-0">
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Order #{String(order.daily_order_number).padStart(3, '0')}</div>
                       </div>
                       
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         {order.order_items?.map(item => (
                           <div key={item.id} className="flex justify-between items-start text-sm">
-                            <div className="flex gap-2">
-                              <span className="font-semibold text-slate-900">{item.quantity}x</span>
-                              <span className="text-slate-600">{item.menu_items?.name}</span>
+                            <div className="flex gap-3">
+                              <span className="font-bold text-slate-400 w-4">{item.quantity}x</span>
+                              <span className="text-slate-700 font-medium">{item.menu_items?.name}</span>
                             </div>
                             <span className="font-semibold text-slate-900 tabular-nums">
                               {currencySymbol}{((item.menu_items?.price || 0) * item.quantity).toFixed(2)}
@@ -317,26 +327,26 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
                 </div>
 
                 {/* Footer Actions */}
-                <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-2">
-                  <div className="flex gap-2">
+                <div className="p-5 bg-white flex flex-col gap-3 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] relative z-10">
+                  <div className="flex gap-3">
                     <button 
                       onClick={() => handleSettleTab(tab.table_number, tab.customer_names[0])}
                       disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
-                      className={`flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 text-white ${confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-orange-500 hover:bg-orange-600" : "bg-emerald-500 hover:bg-emerald-600"}`}
+                      className={`flex-1 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 text-white shadow-lg ${confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-gradient-to-r from-orange-500 to-amber-500 hover:shadow-orange-500/25" : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-emerald-500/25 hover:scale-[1.02]"}`}
                     >
                       {confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
                         <>Sure? Click to Settle</>
                       ) : (
-                        <><CircleDollarSign className="w-5 h-5" /> Settle</>
+                        <><CircleDollarSign className="w-5 h-5" /> Settle Tab</>
                       )}
                     </button>
                     <button 
                       onClick={() => handleVoidTab(tab.table_number, tab.customer_names[0])}
                       disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
-                      className={`px-4 rounded-xl font-bold flex items-center justify-center transition-colors disabled:opacity-50 border ${confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-red-600 text-white border-red-600" : "bg-white hover:bg-rose-50 text-rose-500 border-slate-200 hover:border-rose-200"}`}
+                      className={`w-14 rounded-2xl font-bold flex items-center justify-center transition-all disabled:opacity-50 ${confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-red-500 text-white shadow-lg shadow-red-500/25" : "bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-500"}`}
                       title="Void unpaid tab"
                     >
-                      {confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "Sure? Click to Void" : <XCircle className="w-5 h-5" />}
+                      {confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? <XCircle className="w-6 h-6 animate-pulse" /> : <XCircle className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
@@ -348,53 +358,56 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
 
       {/* Walk-in & History Split View */}
       {(emptyTabs.length > 0 || historyTabs.length > 0) && (
-        <div className={actionableTabs.length > 0 ? "pt-8 border-t border-slate-200" : ""}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div className={actionableTabs.length > 0 ? "pt-12 border-t border-slate-200/60" : ""}>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 items-start">
             
             {/* Left Column: Currently Seated */}
             <div>
-              <h2 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <Users className="w-5 h-5 text-indigo-500" /> Currently Seated
-                <span className="ml-auto text-xs font-bold bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">{emptyTabs.length}</span>
-              </h2>
-              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col min-h-[400px]">
-                <div className="overflow-x-auto flex-1">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-200">
+                  <Users className="w-5 h-5 text-slate-600" />
+                </div>
+                <h2 className="text-xl font-black tracking-tight text-slate-900">Currently Seated</h2>
+                <span className="ml-auto text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-full shadow-sm">{emptyTabs.length}</span>
+              </div>
+              <div className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-xl shadow-slate-200/20 flex flex-col min-h-[400px]">
+                <div className="overflow-x-auto flex-1 p-2">
                   <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-bold">
+                    <thead className="text-slate-400 uppercase tracking-widest text-[10px] font-bold">
                       <tr>
                         <th className="px-6 py-4">Table</th>
                         <th className="px-6 py-4">Name</th>
                         <th className="px-6 py-4">Guests</th>
-                        <th className="px-6 py-4">Seated</th>
                         <th className="px-6 py-4">Time</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-50">
                       {emptyTabs.slice((activePage - 1) * 15, activePage * 15).length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="px-6 py-12 text-center text-slate-400 italic">No tables currently seated.</td>
+                          <td colSpan={4} className="px-6 py-16 text-center text-slate-400 font-medium">No tables currently seated.</td>
                         </tr>
                       ) : (
                         emptyTabs.slice((activePage - 1) * 15, activePage * 15).map(tab => {
                           const elapsedMins = Math.floor((new Date().getTime() - new Date(tab.created_at).getTime()) / 60000);
                           return (
-                            <tr key={`${tab.table_number}-${tab.customer_names[0]}`} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-6 py-4 font-black text-slate-900">{tab.table_number}</td>
-                              <td className="px-6 py-4 font-medium text-slate-700 truncate max-w-[120px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
+                            <tr key={`${tab.table_number}-${tab.customer_names[0]}`} className="hover:bg-slate-50/50 transition-colors group">
+                              <td className="px-6 py-4">
+                                <div className="font-black text-slate-900 text-lg">{formatTable(tab.table_number)}</div>
+                              </td>
+                              <td className="px-6 py-4 font-bold text-slate-600 truncate max-w-[120px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
                                 {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}
                               </td>
                               <td className="px-6 py-4">
                                 {tab.party_size > 0 ? (
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">{tab.party_size}</span>
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">{tab.party_size}</span>
                                 ) : (
-                                  <span className="text-slate-400">-</span>
+                                  <span className="text-slate-300">-</span>
                                 )}
                               </td>
-                              <td className="px-6 py-4 text-slate-500 text-xs">
-                                {new Date(tab.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                              </td>
                               <td className="px-6 py-4">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-indigo-50 text-indigo-700">{elapsedMins}m</span>
+                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${elapsedMins > 60 ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                                  {elapsedMins}m
+                                </span>
                               </td>
                             </tr>
                           );
@@ -405,19 +418,19 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
                 </div>
                 {/* Pagination Active */}
                 {emptyTabs.length > 15 && (
-                  <div className="bg-slate-50 border-t border-slate-200 p-3 flex justify-between items-center text-sm font-medium">
+                  <div className="bg-slate-50/50 border-t border-slate-100 p-4 flex justify-between items-center text-sm font-bold">
                     <button 
                       disabled={activePage === 1} 
                       onClick={() => setActivePage(p => p - 1)}
-                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors"
+                      className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-50 shadow-sm transition-all"
                     >
                       Prev
                     </button>
-                    <span className="text-slate-500">Page {activePage} of {Math.ceil(emptyTabs.length / 15)}</span>
+                    <span className="text-slate-400">Page {activePage} of {Math.ceil(emptyTabs.length / 15)}</span>
                     <button 
                       disabled={activePage >= Math.ceil(emptyTabs.length / 15)} 
                       onClick={() => setActivePage(p => p + 1)}
-                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors"
+                      className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-50 shadow-sm transition-all"
                     >
                       Next
                     </button>
@@ -428,50 +441,47 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
 
             {/* Right Column: History (Cleared) */}
             <div>
-              <h2 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-slate-400" /> Cleared Today
-                <span className="ml-auto text-xs font-bold bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">{historyTabs.length}</span>
-              </h2>
-              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col min-h-[400px] opacity-80 hover:opacity-100 transition-opacity">
-                <div className="overflow-x-auto flex-1">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                </div>
+                <h2 className="text-xl font-black tracking-tight text-slate-900">Cleared Today</h2>
+                <span className="ml-auto text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1.5 rounded-full">{historyTabs.length}</span>
+              </div>
+              <div className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-xl shadow-slate-200/10 flex flex-col min-h-[400px]">
+                <div className="overflow-x-auto flex-1 p-2">
                   <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider text-xs font-bold">
+                    <thead className="text-slate-400 uppercase tracking-widest text-[10px] font-bold">
                       <tr>
                         <th className="px-6 py-4">Table</th>
                         <th className="px-6 py-4">Name</th>
-                        <th className="px-6 py-4">Guests</th>
-                        <th className="px-6 py-4">Seated</th>
-                        <th className="px-6 py-4">Time Left</th>
+                        <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4">Amount</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-50">
                       {historyTabs.slice((historyPage - 1) * 15, historyPage * 15).length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="px-6 py-12 text-center text-slate-400 italic">No cleared tables yet today.</td>
+                          <td colSpan={4} className="px-6 py-16 text-center text-slate-400 font-medium">No cleared tables yet today.</td>
                         </tr>
                       ) : (
                         historyTabs.slice((historyPage - 1) * 15, historyPage * 15).map(tab => {
-                          const endedAt = tab.paid_at ? new Date(tab.paid_at) : new Date();
+                          const isCancelled = tab.orders.some(o => o.status === 'cancelled');
                           return (
-                            <tr key={`${tab.table_number}-${tab.customer_names[0]}-${tab.created_at}`} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-6 py-4 font-black text-slate-900">{tab.table_number}</td>
-                              <td className="px-6 py-4 font-medium text-slate-700 truncate max-w-[120px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
+                            <tr key={`${tab.table_number}-${tab.customer_names[0]}-${tab.created_at}`} className="hover:bg-slate-50/50 transition-colors group">
+                              <td className="px-6 py-4 font-black text-slate-900 text-lg">{formatTable(tab.table_number)}</td>
+                              <td className="px-6 py-4 font-bold text-slate-600 truncate max-w-[120px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
                                 {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}
                               </td>
                               <td className="px-6 py-4">
-                                {tab.party_size > 0 ? (
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">{tab.party_size}</span>
+                                {isCancelled ? (
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600">Voided</span>
                                 ) : (
-                                  <span className="text-slate-400">-</span>
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600">Paid</span>
                                 )}
                               </td>
-                              <td className="px-6 py-4 text-slate-500 text-xs">
-                                {new Date(tab.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                              </td>
-                              <td className="px-6 py-4">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-600">
-                                  {endedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </span>
+                              <td className="px-6 py-4 font-black text-slate-900">
+                                {currencySymbol}{tab.total_amount.toFixed(2)}
                               </td>
                             </tr>
                           );
@@ -482,19 +492,19 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
                 </div>
                 {/* Pagination History */}
                 {historyTabs.length > 15 && (
-                  <div className="bg-slate-50 border-t border-slate-200 p-3 flex justify-between items-center text-sm font-medium">
+                  <div className="bg-slate-50/50 border-t border-slate-100 p-4 flex justify-between items-center text-sm font-bold">
                     <button 
                       disabled={historyPage === 1} 
                       onClick={() => setHistoryPage(p => p - 1)}
-                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors"
+                      className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-50 shadow-sm transition-all"
                     >
                       Prev
                     </button>
-                    <span className="text-slate-500">Page {historyPage} of {Math.ceil(historyTabs.length / 15)}</span>
+                    <span className="text-slate-400">Page {historyPage} of {Math.ceil(historyTabs.length / 15)}</span>
                     <button 
                       disabled={historyPage >= Math.ceil(historyTabs.length / 15)} 
                       onClick={() => setHistoryPage(p => p + 1)}
-                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors"
+                      className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-50 shadow-sm transition-all"
                     >
                       Next
                     </button>

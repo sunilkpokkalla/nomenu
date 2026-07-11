@@ -53,6 +53,11 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
           <p className="mt-3 text-sm italic text-[#556B50] max-w-md mx-auto">
             {welcomeMessage}
           </p>
+          {restaurant.wifi_password && (
+            <div className="flex items-center justify-center gap-2 text-[#556B50] text-sm mt-3 font-medium">
+              <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+            </div>
+          )}
         </div>
       </div>
 

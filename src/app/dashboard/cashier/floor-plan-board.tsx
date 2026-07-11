@@ -27,10 +27,12 @@ interface FloorPlanBoardProps {
   initialFloorPlans: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   activeOrders: any[];
+  userRole?: string;
   onSelectTable?: (tables: RestaurantTable[], compositeTableString: string) => void;
 }
 
-export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, onSelectTable }: FloorPlanBoardProps) {
+export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, userRole = "waitstaff", onSelectTable }: FloorPlanBoardProps) {
+  const canEdit = userRole === "owner" || userRole === "manager";
   const [activePlanId, setActivePlanId] = useState<string>(initialFloorPlans[0]?.id || "");
   const activePlan = initialFloorPlans.find(p => p.id === activePlanId) || initialFloorPlans[0];
   
@@ -281,7 +283,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
           </div>
         )}
         
-        {!isEditMode && !onSelectTable && (
+        {canEdit && !isEditMode && !onSelectTable && (
           isAddingArea ? (
             <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl p-1 shadow-sm">
               <input 
@@ -385,12 +387,14 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
               </button>
             </>
           ) : (
-            <button 
-              onClick={() => setIsEditMode(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors"
-            >
-              <Edit2 className="w-4 h-4" /> Edit Layout
-            </button>
+            canEdit && (
+              <button 
+                onClick={() => setIsEditMode(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors"
+              >
+                <Edit2 className="w-4 h-4" /> Edit Layout
+              </button>
+            )
           )}
         </div>
       </div>

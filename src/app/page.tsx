@@ -1048,7 +1048,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Active Tabs & Tab Management
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Manual Payments & Tab Settling
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Pay at Counter & Tab Settling
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Real-Time Live Orders Dashboard

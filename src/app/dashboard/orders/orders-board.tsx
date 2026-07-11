@@ -153,7 +153,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       setNotification({
         id: latestNew.id,
         title: `New Order #${String(latestNew.daily_order_number || 0).padStart(3, '0')}`,
-        subtitle: latestNew.table_number ? `${locationLabel}: ${latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
+        subtitle: latestNew.table_number ? `${locationLabel}: ${latestNew.table_number.includes(" - ") ? latestNew.table_number.split(" - ")[1] : latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
       });
       
       setTimeout(() => setNotification(null), 6000);
@@ -736,11 +736,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                               className={`text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center gap-1 max-w-[220px] ${
                                                 isKdsMode ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"
                                               }`}
-                                              title={order.table_number}
+                                              title={order.table_number.includes(" - ") ? order.table_number.split(" - ")[1] : order.table_number}
                                             >
                                               <MapPin className="w-3 h-3 shrink-0" /> 
                                               <span className="truncate">
-                                                {locationLabel.toUpperCase()}: {order.table_number}
+                                                {locationLabel.toUpperCase()}: {order.table_number.includes(" - ") ? order.table_number.split(" - ")[1] : order.table_number}
                                               </span>
                                             </span>
                                           )}

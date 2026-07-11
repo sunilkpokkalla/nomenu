@@ -58,7 +58,9 @@ export default async function DashboardPage(
 
   if (role === "kitchen") {
     redirect("/kds");
-  } else if (role === "waitstaff" || role === "kitchen_waitstaff") {
+  } else if (role === "waitstaff") {
+    redirect("/foh");
+  } else if (role === "kitchen_waitstaff") {
     redirect("/dashboard/orders");
   }
 

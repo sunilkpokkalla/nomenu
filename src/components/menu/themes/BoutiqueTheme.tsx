@@ -46,6 +46,11 @@ export function BoutiqueTheme(props: MenuThemeProps) {
           <p className="text-[#835C7A] font-semibold tracking-widest uppercase text-[10px]">
             {restaurant.cuisine_type || "Café & Patisserie"}
           </p>
+          {restaurant.wifi_password && (
+            <div className="flex items-center justify-center gap-2 text-[#4A3B42]/70 text-xs mt-3 font-semibold bg-white/40 px-3 py-1 rounded-full w-fit mx-auto backdrop-blur-md">
+              <Wifi className="w-3 h-3" /> <span>{restaurant.wifi_password}</span>
+            </div>
+          )}
         </div>
       </div>
 

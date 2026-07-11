@@ -33,7 +33,7 @@ const getPlans = (isAnnual: boolean) => [
       "Everything in Pro",
       "Fully Integrated POS & Ordering",
       "Active Tabs & Tab Management",
-      "Manual Payments & Tab Settling",
+      "Pay at Counter & Tab Settling",
       "Real-Time Live Orders Dashboard (KDS)",
       "Interactive Digital Shopping Cart",
       "50 Magic AI Credits / month",

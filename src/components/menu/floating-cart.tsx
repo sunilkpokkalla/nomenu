@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "./cart-context";
-import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt } from "lucide-react";
+import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt, CheckCircle2 } from "lucide-react";
 import { submitOrder, getOrderReceipt, getSlotAvailability } from "@/app/menu/[id]/actions";
 import { getCurrencySymbol } from "@/lib/currency-options";
 
@@ -517,9 +517,8 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
               <form onSubmit={handleCheckout} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5 col-span-2 sm:col-span-1">
-                    <label className="text-xs font-bold uppercase opacity-60 tracking-wider">Your Name</label>
+                    <label className="text-xs font-bold uppercase opacity-60 tracking-wider">Your Name (Optional)</label>
                     <input 
-                      required
                       value={customerName}
                       onChange={e => setCustomerName(e.target.value)}
                       placeholder="e.g. John" 
@@ -534,20 +533,28 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                   {activeFulfillmentType === 'dine_in' && locationLabel !== 'None' && (
                     <div className="space-y-1.5 col-span-2 sm:col-span-1">
                       <label className="text-xs font-bold uppercase opacity-60 tracking-wider">{locationLabel || "Table"} #</label>
-                      <input 
-                        required={!tableNumber} // Only require if they didn't scan a table QR
-                        value={table}
-                        onChange={e => {
-                          if (!tableNumber) setTable(e.target.value);
-                        }}
-                        readOnly={!!tableNumber}
-                        placeholder={`e.g. ${locationLabel === 'Room' ? '204' : '12'}`} 
-                        className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ${
-                        themeStyle === "luxury"
-                          ? `bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white placeholder-zinc-500 ${tableNumber ? 'opacity-70 cursor-not-allowed' : ''}`
-                          : `bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900 ${tableNumber ? 'opacity-70 cursor-not-allowed' : ''}`
-                      }`}
-                      />
+                      {tableNumber ? (
+                        <div className={`w-full rounded-xl px-4 py-3 font-bold flex items-center gap-2 ${
+                          themeStyle === "luxury"
+                            ? "bg-zinc-900/50 border border-zinc-800 text-zinc-400"
+                            : "bg-slate-100 border border-slate-200 text-slate-500"
+                        }`}>
+                          <CheckCircle2 className="w-4 h-4 opacity-70" />
+                          {tableNumber}
+                        </div>
+                      ) : (
+                        <input 
+                          required
+                          value={table}
+                          onChange={e => setTable(e.target.value)}
+                          placeholder={`e.g. ${locationLabel === 'Room' ? '204' : '12'}`} 
+                          className={`w-full rounded-xl px-4 py-3 focus:outline-none focus:ring-2 ${
+                          themeStyle === "luxury"
+                            ? "bg-zinc-900 border border-zinc-800 focus:ring-zinc-700 text-white placeholder-zinc-500"
+                            : "bg-black/5 border border-black/10 focus:ring-black/20 text-slate-900"
+                          }`}
+                        />
+                      )}
                     </div>
                   )}
 

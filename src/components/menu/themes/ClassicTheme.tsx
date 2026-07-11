@@ -39,6 +39,11 @@ export function ClassicTheme({ restaurant, categories: rawCategories, items, tab
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">
             {restaurant.name}
           </h1>
+          {restaurant.wifi_password && (
+            <div className="flex items-center justify-center gap-2 text-gray-500 text-sm mt-3">
+              <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+            </div>
+          )}
         </div>
       </div>
 
