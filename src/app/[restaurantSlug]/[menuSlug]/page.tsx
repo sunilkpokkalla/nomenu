@@ -93,6 +93,8 @@ export default async function StorefrontMenuPage(
 
   // 5. Track scan analytics if accessed via QR code
   let locationZone: string | null = null;
+  let qrTableLabel: string | null = null;
+  
   if (qrCodeId) {
     const supabaseAdmin = createSupabaseClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -109,11 +111,11 @@ export default async function StorefrontMenuPage(
       deviceType = "iOS";
     }
 
-    // Fetch location zone (we need this for rendering) and trigger insert in parallel
+    // Fetch location zone and label (we need this for rendering) and trigger insert in parallel
     const [qrRecordRes] = await Promise.all([
       supabaseAdmin
         .from("qr_codes")
-        .select("scan_count, location_zone")
+        .select("scan_count, location_zone, label")
         .eq("id", qrCodeId)
         .maybeSingle(),
       // Insert scan log securely bypassing RLS (Fire and forget from the user's perspective, but we await it in Promise.all so Next.js doesn't kill it early)
@@ -128,6 +130,7 @@ export default async function StorefrontMenuPage(
     const qrRecord = qrRecordRes.data;
     if (qrRecord) {
       locationZone = qrRecord.location_zone || null;
+      qrTableLabel = qrRecord.label ? (locationZone ? `${locationZone} - ${qrRecord.label}` : qrRecord.label) : locationZone;
       
       try {
         await supabaseAdmin
@@ -152,7 +155,7 @@ export default async function StorefrontMenuPage(
 
   const effectiveTableNumber = locationZone && tableNumber 
     ? `${locationZone} - ${tableNumber}` 
-    : tableNumber || locationZone || undefined;
+    : tableNumber || qrTableLabel || undefined;
 
   return (
     <CartProvider>
