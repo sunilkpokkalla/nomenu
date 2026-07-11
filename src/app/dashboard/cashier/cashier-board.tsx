@@ -286,7 +286,9 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
                   <div className="relative z-10">
                     <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
-                    <div className="text-4xl font-black tracking-tight">{formatTable(tab.table_number)}</div>
+                    <div className={`font-black tracking-tight leading-[1.1] pr-2 ${formatTable(tab.table_number).length > 12 ? 'text-2xl mt-1' : 'text-4xl'}`}>
+                      {formatTable(tab.table_number)}
+                    </div>
                   </div>
                   <div className="text-right relative z-10">
                     <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-1">Total Due</div>
