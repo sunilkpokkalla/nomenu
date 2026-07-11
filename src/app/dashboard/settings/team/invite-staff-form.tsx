@@ -10,7 +10,8 @@ import { Mail, Send } from "lucide-react";
 export function InviteStaffForm({ restaurantId, plan }: { restaurantId: string; plan: string }) {
   const [isPending, startTransition] = useTransition();
 
-  const isEliteOrHigher = plan === "elite" || plan === "enterprise";
+  const normalizedPlan = plan?.toLowerCase() || "free";
+  const isEliteOrHigher = normalizedPlan === "elite" || normalizedPlan === "enterprise";
 
   return (
     <form
