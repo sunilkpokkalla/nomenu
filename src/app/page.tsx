@@ -736,26 +736,26 @@ export default function LandingPage() {
                     <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 mb-6">
                       <div className="flex items-center justify-between mb-4">
                         <span className="font-bold text-slate-800 text-sm">Your Rewards</span>
-                        <span className="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full text-xs">4/8 Stamps</span>
+                        <span className="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full text-xs">5/10 Stamps</span>
                       </div>
                       
-                      <div className="grid grid-cols-4 gap-3">
-                        {[1, 2, 3, 4].map(i => (
+                      <div className="grid grid-cols-5 gap-2">
+                        {[1, 2, 3, 4, 5].map(i => (
                           <div key={i} className="aspect-square rounded-full bg-indigo-50 border-2 border-indigo-500 flex items-center justify-center relative">
-                            <Heart className="w-5 h-5 text-indigo-500 fill-indigo-500 animate-pulse" />
+                            <Heart className="w-4 h-4 text-indigo-500 fill-indigo-500 animate-pulse" />
                             <div className="absolute inset-0 border-2 border-indigo-400 rounded-full animate-ping opacity-20"></div>
                           </div>
                         ))}
-                        {[5, 6, 7].map(i => (
+                        {[6, 7, 8, 9].map(i => (
                           <div key={i} className="aspect-square rounded-full bg-slate-50 border-2 border-slate-200 border-dashed flex items-center justify-center">
-                            <div className="w-2 h-2 rounded-full bg-slate-200"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-slate-200"></div>
                           </div>
                         ))}
                         <div className="aspect-square rounded-full bg-amber-50 border-2 border-amber-200 border-dashed flex items-center justify-center relative overflow-hidden">
-                          <span className="text-xl">🎁</span>
+                          <span className="text-lg">🎁</span>
                         </div>
                       </div>
-                      <p className="text-xs text-center text-slate-500 font-medium mt-4">4 more visits to unlock: <strong className="text-amber-600">Free Dessert!</strong></p>
+                      <p className="text-xs text-center text-slate-500 font-medium mt-4">5 more visits to unlock: <strong className="text-amber-600">Free Dessert!</strong></p>
                     </div>
 
                     <div className="bg-indigo-50 border border-indigo-200/50 rounded-2xl p-4 text-center mt-auto">
@@ -766,22 +766,34 @@ export default function LandingPage() {
                 </div>
 
                 {/* Overlapping Staff Scanner Tablet Mockup */}
-                <div className="absolute -bottom-8 -right-8 w-64 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 transform rotate-[-2deg] animate-float-slow hidden md:block">
-                  <div className="flex items-center gap-3 mb-3 pb-3 border-b border-slate-100">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                      <QrCode className="w-4 h-4" />
+                <div className="absolute -bottom-8 -right-8 w-[280px] bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 transform rotate-[-2deg] animate-float-slow hidden md:block">
+                  <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shadow-inner">
+                        <QrCode className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Staff Terminal</p>
+                        <p className="text-xs font-bold text-slate-800">Check-In</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Staff Terminal</p>
-                      <p className="text-xs font-bold text-slate-800">Scanner Ready</p>
+                    <div className="flex items-center gap-1.5 bg-green-50 border border-green-200/50 px-2 py-1 rounded-full">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                      <span className="text-[9px] font-bold text-green-700 uppercase tracking-wider">Ready</span>
                     </div>
                   </div>
-                  <div className="aspect-video bg-slate-900 rounded-lg relative overflow-hidden flex items-center justify-center">
+                  <div className="aspect-video bg-slate-950 rounded-xl relative overflow-hidden flex items-center justify-center shadow-inner border-[6px] border-slate-800">
+                    {/* Camera viewfinder frame */}
+                    <div className="absolute top-3 left-3 w-4 h-4 border-t-[3px] border-l-[3px] border-green-500 rounded-tl-sm opacity-80"></div>
+                    <div className="absolute top-3 right-3 w-4 h-4 border-t-[3px] border-r-[3px] border-green-500 rounded-tr-sm opacity-80"></div>
+                    <div className="absolute bottom-3 left-3 w-4 h-4 border-b-[3px] border-l-[3px] border-green-500 rounded-bl-sm opacity-80"></div>
+                    <div className="absolute bottom-3 right-3 w-4 h-4 border-b-[3px] border-r-[3px] border-green-500 rounded-br-sm opacity-80"></div>
+                    
                     {/* Scanner laser effect */}
-                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-green-500 shadow-[0_0_10px_2px_rgba(34,197,94,0.6)] animate-[scan_2s_ease-in-out_infinite]" />
-                    <span className="text-[10px] text-slate-500 font-mono">Camera Active...</span>
+                    <div className="absolute top-1/2 left-0 w-full h-[2px] bg-green-400 shadow-[0_0_15px_4px_rgba(74,222,128,0.7)] animate-[scan_2s_ease-in-out_infinite]" />
+                    <span className="text-[9px] text-slate-400 font-mono tracking-widest uppercase opacity-60">Align QR Code</span>
                   </div>
-                  <Button size="sm" className="w-full mt-3 bg-slate-900 text-white text-xs h-8">Award 1 Stamp</Button>
+                  <Button size="sm" className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs h-9 shadow-md shadow-indigo-600/20">Award 1 Stamp</Button>
                 </div>
 
               </div>

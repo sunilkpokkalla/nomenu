@@ -45,7 +45,7 @@ const COMPARISON_DATA = [
 
 export function CompetitiveComparison() {
   return (
-    <section id="compare" className="relative py-20 bg-white">
+    <section id="compare" className="relative py-20 bg-white scroll-mt-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         
         <div className="text-center max-w-2xl mx-auto mb-12">
