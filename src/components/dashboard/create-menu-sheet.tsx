@@ -206,7 +206,7 @@ export function CreateMenuSheet({ createAction, chefRecommendations, plan }: Cre
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <Label htmlFor="allowManualPayments" className="text-sm font-semibold text-slate-900 cursor-pointer">Enable Manual Payments</Label>
+                <Label htmlFor="allowManualPayments" className="text-sm font-semibold text-slate-900 cursor-pointer">Pay at Counter</Label>
                 <p className="text-xs text-slate-500 leading-relaxed">
                   Allow customers to order without Stripe and pay later at the counter (e.g., Cash or POS). 
                 </p>
