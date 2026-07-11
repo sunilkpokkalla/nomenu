@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Leaf, Flame, Sparkles, Info, X } from "lucide-react";
+import { Leaf, Flame, Sparkles, Info, X , Wifi } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
@@ -46,6 +46,12 @@ export function OmakaseTheme(props: MenuThemeProps) {
           <span className="w-1 h-1 rounded-full bg-[#333333]"></span>
           <span>{restaurant.address}</span>
         </div>
+      
+        {restaurant.wifi_password && (
+          <div className="mt-6 flex items-center justify-center gap-2 text-sm opacity-80 font-sans tracking-wide">
+            <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+          </div>
+        )}
       </header>
 
       {/* Navigation & Filters - Clean, Borderless */}

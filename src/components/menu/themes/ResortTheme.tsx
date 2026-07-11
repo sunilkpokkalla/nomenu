@@ -1,5 +1,5 @@
 import React from "react";
-import { X, Heart, Star, Flame, Waves } from "lucide-react";
+import { X, Heart, Star, Flame, Waves , Wifi } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
@@ -61,6 +61,12 @@ export function ResortTheme(props: MenuThemeProps) {
             {restaurant.cuisine_type || "Oasis Resort & Beach Club"}
           </p>
         </div>
+      
+        {restaurant.wifi_password && (
+          <div className="mt-6 flex items-center justify-center gap-2 text-sm opacity-80 font-sans tracking-wide">
+            <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+          </div>
+        )}
       </header>
 
       <div className="relative z-10">

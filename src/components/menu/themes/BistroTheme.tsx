@@ -1,5 +1,5 @@
 import React from "react";
-import { X, Star, UtensilsCrossed } from "lucide-react";
+import { X, Star, UtensilsCrossed , Wifi } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
@@ -58,6 +58,12 @@ export function BistroTheme(props: MenuThemeProps) {
         <p className="text-[#666666] font-sans tracking-[0.3em] uppercase text-[10px]">
           {restaurant.cuisine_type || "Classic Bistro & Dining"}
         </p>
+      
+        {restaurant.wifi_password && (
+          <div className="mt-6 flex items-center justify-center gap-2 text-sm opacity-80 font-sans tracking-wide">
+            <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+          </div>
+        )}
       </header>
 
       <div className="relative z-10">

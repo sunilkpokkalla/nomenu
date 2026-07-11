@@ -1,5 +1,5 @@
 import React from "react";
-import { X, GlassWater, Martini, Sparkles } from "lucide-react";
+import { X, GlassWater, Martini, Sparkles , Wifi } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";
@@ -65,7 +65,13 @@ export function LoungeTheme(props: MenuThemeProps) {
           <p className="text-[#D4AF37] font-medium tracking-[0.2em] uppercase text-xs mt-4 opacity-80">
             {restaurant.cuisine_type || "Premium Lounge & Bar"}
           </p>
-        </header>
+        
+        {restaurant.wifi_password && (
+          <div className="mt-6 flex items-center justify-center gap-2 text-sm opacity-80 font-sans tracking-wide">
+            <Wifi className="w-4 h-4" /> <span>{restaurant.wifi_password}</span>
+          </div>
+        )}
+      </header>
 
         {/* Floating Controls */}
         <div className="sticky top-4 z-40 px-4 mb-12">

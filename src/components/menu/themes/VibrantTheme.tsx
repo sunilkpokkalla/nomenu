@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, Minus, Search, X, Info } from "lucide-react";
+import { Plus, Minus, Search, X, Info , Wifi } from "lucide-react";
 import { MenuThemeProps, MenuItem } from "../types";
 import Image from "next/image";
 import { useCart } from "../cart-context";

@@ -1,5 +1,5 @@
 import React from "react";
-import { X, Heart, Star, Sparkles, ArrowRight } from "lucide-react";
+import { X, Heart, Star, Sparkles, ArrowRight , Wifi } from "lucide-react";
 import { useCart } from "../cart-context";
 import { useMenuLogic } from "../use-menu-logic";
 import { MenuThemeProps } from "../types";

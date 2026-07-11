@@ -1,5 +1,5 @@
 import { MenuThemeProps, MenuItem } from "../types";
-import { Plus, Minus, ShoppingBag, Leaf, Info } from "lucide-react";
+import { Plus, Minus, ShoppingBag, Leaf, Info , Wifi } from "lucide-react";
 import { FeedbackFAB } from "../feedback-fab";
 import { useState } from "react";
 import Image from "next/image";
