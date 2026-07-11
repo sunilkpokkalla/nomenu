@@ -18,6 +18,7 @@ import { SquareSyncButton } from "@/components/dashboard/square-sync-button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
+import { getCurrencySymbol } from "@/lib/currency-options";
 
 export function MenuItemsClient({ 
   menus, 
@@ -370,9 +371,9 @@ export function MenuItemsClient({
                                 </p>
                               </div>
                               <div className="text-left sm:text-right shrink-0 mt-2 sm:mt-0">
-                                <div className="text-lg font-bold text-slate-900">
-                                  {restaurant.currency || "USD"} {Number(item.price).toFixed(2)}
-                                </div>
+                                <div className="font-bold text-slate-900 text-lg sm:text-base whitespace-nowrap">
+                                {getCurrencySymbol(restaurant.currency)}{Number(item.price).toFixed(2)}
+                              </div>
                               </div>
                             </div>
 
