@@ -102,48 +102,46 @@ export default async function FOHPage({ searchParams }: { searchParams: Promise<
       <div className="flex flex-col gap-8 w-full max-w-[1600px] mx-auto py-8 px-4 sm:px-6 lg:px-8 pb-32">
         <TabSaver tab={tab} />
         
-        {/* Floating Pill Navigation */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60]">
-          <div className="flex items-center bg-white/80 backdrop-blur-xl border border-slate-200/60 p-1.5 rounded-full shadow-2xl shadow-slate-900/10 gap-1">
-            <Link 
-              href="/foh?tab=floor-plan"
-              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "floor-plan" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/80"}`}
-            >
-              Floor Plan
-            </Link>
-            <Link 
-              href="/foh?tab=waitlist"
-              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "waitlist" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/80"}`}
-            >
-              Waitlist
-            </Link>
-            <Link 
-              href="/foh?tab=active"
-              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "active" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/80"}`}
-            >
-              Active Tabs
-            </Link>
-            {!isPro && (
-              <Link 
-                href="/foh?tab=history"
-                className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "history" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/80"}`}
-              >
-                History
-              </Link>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h1 className="text-4xl font-black tracking-tight text-slate-900">Front of House</h1>
             <p className="text-slate-500 mt-2 font-medium text-lg">Manage open table tabs and waitlists.</p>
           </div>
-          <form action="/auth/signout" method="post">
-            <button type="submit" className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium">
-              <LogOut className="w-4 h-4" /> Sign Out
-            </button>
-          </form>
+          <div className="flex flex-col sm:flex-row items-end sm:items-center gap-4">
+            <div className="flex items-center bg-white border border-slate-200/60 p-1.5 rounded-full shadow-sm gap-1">
+              <Link 
+                href="/foh?tab=floor-plan"
+                className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "floor-plan" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"}`}
+              >
+                Floor Plan
+              </Link>
+              <Link 
+                href="/foh?tab=waitlist"
+                className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "waitlist" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"}`}
+              >
+                Waitlist
+              </Link>
+              <Link 
+                href="/foh?tab=active"
+                className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "active" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"}`}
+              >
+                Active Tabs
+              </Link>
+              {!isPro && (
+                <Link 
+                  href="/foh?tab=history"
+                  className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "history" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"}`}
+                >
+                  History
+                </Link>
+              )}
+            </div>
+            <form action="/auth/signout" method="post">
+              <button type="submit" className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-medium">
+                <LogOut className="w-4 h-4" /> Sign Out
+              </button>
+            </form>
+          </div>
         </div>
 
         <div className="relative flex-1 min-h-[500px]">
