@@ -45,6 +45,8 @@ export async function POST(req: Request) {
           .from("orders")
           .update({
             status: "pending",
+            is_paid: true,
+            paid_at: new Date().toISOString(),
             payment_intent_id: session.payment_intent as string,
           })
           .eq("id", orderId)

@@ -106,7 +106,7 @@ export function CreateQrSheet({ createAction, bulkCreateAction, locationZones, m
                 className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all shadow-sm"
                 required
               >
-                <option value="dine_in">Dine-In (Table / Room)</option>
+                <option value="dine_in">On-Premise (Table / Seat / Room)</option>
                 <option value="pickup" disabled={plan !== 'enterprise'}>Takeaway (Enterprise Only)</option>
                 <option value="reserve" disabled={plan !== 'enterprise'}>Priority Reserve (Enterprise Only)</option>
               </select>
@@ -176,12 +176,12 @@ export function CreateQrSheet({ createAction, bulkCreateAction, locationZones, m
             {activeTab === "single" ? (
               <div className="space-y-2.5">
                 <Label htmlFor="label" className="text-slate-700 font-medium">
-                  {mode === "dine_in" ? "Table Number / Label" : "Label (e.g. Front Window)"}
+                  {mode === "dine_in" ? "Specific Location / Label" : "Label (e.g. Front Window)"}
                 </Label>
                 <Input 
                   id="label" 
                   name="label" 
-                  placeholder="e.g. 12, 204, Booth 4" 
+                  placeholder="e.g. Table 12, Seat 4A, Cabana 3" 
                   required={activeTab === "single"}
                   className="rounded-xl px-3.5 py-2.5 shadow-sm border-slate-200 focus-visible:ring-indigo-500/50 focus-visible:border-indigo-500 h-auto"
                 />

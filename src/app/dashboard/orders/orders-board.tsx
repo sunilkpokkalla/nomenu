@@ -135,7 +135,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     
     const newOrders = orders.filter(o => 
       !knownOrderIds.current.has(o.id) && 
-      (o.status === "pending" || o.status === "awaiting_payment" || o.status === "preparing")
+      (o.status === "pending" || o.status === "preparing")
     );
     
     if (newOrders.length > 0) {
@@ -153,7 +153,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
       setNotification({
         id: latestNew.id,
         title: `New Order #${String(latestNew.daily_order_number || 0).padStart(3, '0')}`,
-        subtitle: latestNew.table_number ? `${locationLabel}: ${latestNew.table_number.includes(" - ") ? latestNew.table_number.split(" - ")[1] : latestNew.table_number}` : (latestNew.customer_name || 'Anonymous')
+        subtitle: latestNew.table_number ? latestNew.table_number : (latestNew.customer_name || 'Anonymous')
       });
       
       setTimeout(() => setNotification(null), 6000);
@@ -304,7 +304,28 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
           } else if (payload.eventType === "UPDATE") {
             if (payload.new.customer_phone !== null) return;
             setOrders(prev => {
-              return prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o);
+              const exists = prev.some(o => o.id === payload.new.id);
+              if (exists) {
+                return prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o);
+              } else {
+                // If the order wasn't in state (e.g. it was awaiting_payment on load) and became pending
+                if (payload.new.status === "pending" || payload.new.status === "preparing") {
+                  setTimeout(async () => {
+                    const { data: fullOrder } = await supabase
+                      .from("orders")
+                      .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
+                      .eq("id", payload.new.id)
+                      .single();
+                    if (fullOrder) {
+                      setOrders(current => {
+                        if (current.some(o => o.id === fullOrder.id)) return current;
+                        return [...current, fullOrder as Order];
+                      });
+                    }
+                  }, 500);
+                }
+                return prev;
+              }
             });
           }
         }
@@ -369,7 +390,7 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
     await handleStatusChange(draggableId, destination.droppableId);
   };
   const columns = [
-    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending", "awaiting_payment", "cancel_requested"] },
+    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending", "cancel_requested"] },
     { id: "preparing", title: "Preparing", icon: ChefHat, matchStatus: ["preparing"] },
     { id: "completed", title: "Ready / Done", icon: CheckCircle2, matchStatus: ["completed"] },
     { id: "cancelled", title: "Cancelled", icon: XCircle, matchStatus: ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"] }
@@ -736,11 +757,11 @@ export function OrdersBoard({ initialOrders, restaurantId, timezone, supabaseUrl
                                               className={`text-[10px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center gap-1 max-w-[220px] ${
                                                 isKdsMode ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"
                                               }`}
-                                              title={order.table_number.includes(" - ") ? order.table_number.split(" - ")[1] : order.table_number}
+                                              title={order.table_number}
                                             >
                                               <MapPin className="w-3 h-3 shrink-0" /> 
                                               <span className="truncate">
-                                                {locationLabel.toUpperCase()}: {order.table_number.includes(" - ") ? order.table_number.split(" - ")[1] : order.table_number}
+                                                {order.table_number}
                                               </span>
                                             </span>
                                           )}

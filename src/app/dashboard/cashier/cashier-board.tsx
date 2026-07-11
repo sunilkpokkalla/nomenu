@@ -67,7 +67,7 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
       .eq("restaurant_id", restaurantId)
       .is("customer_phone", null)
       .eq("is_paid", false)
-      .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant")')
+      .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment")')
       .order("created_at", { ascending: true });
       
     if (activeData) setOrders(activeData as unknown as Order[]);
@@ -102,6 +102,7 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
           if (payload.eventType === "INSERT") {
             if (payload.new.customer_phone !== null) return; // Only track Dine-In
             if (payload.new.is_paid) return; // Only care about unpaid
+            if (payload.new.status === 'awaiting_payment') return; // Hide unconfirmed checkouts
             
             // Give the backend 1.5s to finish inserting the order_items before we fetch the full order
             setTimeout(async () => {
@@ -121,8 +122,8 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
           } else if (payload.eventType === "UPDATE") {
             if (payload.new.customer_phone !== null) return;
             
-            if (payload.new.is_paid || ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(payload.new.status)) {
-              // Remove it from the board if it gets paid or cancelled
+            if (payload.new.is_paid || ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant", "awaiting_payment"].includes(payload.new.status)) {
+              // Remove it from the board if it gets paid, cancelled, or hasn't finished checking out
               setOrders(prev => prev.filter(o => o.id !== payload.new.id));
             } else {
               setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));
@@ -184,7 +185,7 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
   const tableTabs = groupOrdersToTabs(orders);
   
   // Helper to strip out zone like "Main Dining - Table 1" -> "Table 1"
-  const formatTable = (raw: string) => raw.includes(" - ") ? raw.split(" - ")[1] : raw;
+  const formatTable = (raw: string) => raw;
   
   // History tabs are sorted by paid_at descending
   const historyTabs = groupOrdersToTabs(historyOrders).sort((a, b) => {

@@ -130,7 +130,11 @@ export default async function StorefrontMenuPage(
     const qrRecord = qrRecordRes.data;
     if (qrRecord) {
       locationZone = qrRecord.location_zone || null;
-      qrTableLabel = qrRecord.label || locationZone;
+      if (qrRecord.label && locationZone) {
+        qrTableLabel = `${locationZone} - ${qrRecord.label}`;
+      } else {
+        qrTableLabel = qrRecord.label || locationZone;
+      }
       
       try {
         await supabaseAdmin
