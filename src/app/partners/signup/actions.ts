@@ -25,6 +25,7 @@ export async function signupAffiliate(formData: FormData) {
   const expertise = getString(formData, "expertise");
   const socialInfluence = getString(formData, "socialInfluence");
   const socialMediaDetails = getString(formData, "socialMediaDetails");
+  const sampleVideo = getString(formData, "sampleVideo");
   const location = getString(formData, "location");
   const purpose = getString(formData, "purpose");
   const password = getString(formData, "password");
@@ -72,7 +73,7 @@ export async function signupAffiliate(formData: FormData) {
       referral_code: referralCode,
       expertise,
       social_influence: socialInfluence,
-      social_media_details: socialMediaDetails,
+      social_media_details: sampleVideo ? `${socialMediaDetails}\n\nSample Video: ${sampleVideo}` : socialMediaDetails,
       location,
       purpose,
       status: "pending",
@@ -115,6 +116,7 @@ export async function signupAffiliate(formData: FormData) {
             <p><strong>Expertise:</strong> ${expertise}</p>
             <p><strong>Influence Size:</strong> ${socialInfluence}</p>
             <p><strong>Links:</strong> ${socialMediaDetails}</p>
+            ${sampleVideo ? `<p><strong>Sample Video:</strong> <a href="${sampleVideo}">${sampleVideo}</a></p>` : ""}
             <p><strong>Location:</strong> ${location}</p>
             <p><strong>Purpose:</strong> ${purpose}</p>
             <p><strong>Requested Code:</strong> ${referralCode}</p>
@@ -130,13 +132,17 @@ export async function signupAffiliate(formData: FormData) {
         to: email,
         subject: "Your NoMenu Partner Application is Under Review",
         html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2>Application Received!</h2>
+          <div style="font-family: 'Helvetica Neue', sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; color: #334155;">
+            <h2 style="color: #0f172a; margin-top: 0;">Application Received</h2>
             <p>Hi ${name},</p>
-            <p>Thank you for applying to the NoMenu Partner Program. We have received your application and our team is currently reviewing it.</p>
-            <p>We typically review applications within 24-48 hours. You will receive an email from us as soon as your account is approved.</p>
+            <p>Thank you for your interest in joining the elite <strong>NoMenu Partner Program</strong>.</p>
+            <p>Our team has successfully received your application. We are currently reviewing your submitted details, including your social influence and strategy, to ensure a strong fit for our network.</p>
+            <p><strong>What happens next?</strong><br/>
+            Due to the high volume of applications we receive, our partner success team thoroughly evaluates each applicant manually. You can expect to hear back from us with an approval decision within the next <strong>7 to 15 days</strong>.</p>
+            <p>If approved, you will receive immediate access to your Partner Dashboard where you can begin tracking your referrals, viewing your commission payouts, and downloading our high-end marketing assets.</p>
             <br/>
-            <p>Best,<br/>The NoMenu Team</p>
+            <p style="margin-bottom: 0;">Best regards,</p>
+            <p style="margin-top: 5px; font-weight: bold; color: #0f172a;">The NoMenu Partnerships Team</p>
           </div>
         `,
       });

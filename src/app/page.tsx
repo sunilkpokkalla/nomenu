@@ -1191,6 +1191,7 @@ export default function LandingPage() {
 
             {/* Terms Links */}
             <div className="flex gap-5 text-xs font-bold uppercase tracking-wider text-slate-500">
+              <Link href="/partners" className="hover:text-white transition-colors duration-200">Partners</Link>
               <Link href="/privacy" className="hover:text-white transition-colors duration-200">Privacy</Link>
               <Link href="/terms" className="hover:text-white transition-colors duration-200">Terms</Link>
               <a href="mailto:support@ambrighttech.com" className="hover:text-white transition-colors duration-200">Support</a>
