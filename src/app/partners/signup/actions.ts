@@ -52,7 +52,12 @@ export async function signupAffiliate(formData: FormData) {
   });
 
   if (authError) {
-    redirect(`/partners/signup?message=${encodeURIComponent(authError.message)}`);
+    let errMsg = authError.message || (authError as any).msg || "Authentication failed";
+    if (typeof errMsg === "object") {
+      try { errMsg = JSON.stringify(errMsg); } catch { errMsg = "Authentication error"; }
+    }
+    if (errMsg === "{}") errMsg = "Authentication failed (empty error)";
+    redirect(`/partners/signup?message=${encodeURIComponent(errMsg)}`);
   }
 
   // 3. Insert into affiliates table using admin client to bypass RLS
@@ -86,7 +91,14 @@ export async function signupAffiliate(formData: FormData) {
       if (insertError.code === "23503") {
         redirect("/partners/signup?message=An%20account%20with%20this%20email%20already%20exists.%20Please%20log%20in%20or%20use%20a%20different%20email.");
       }
-      redirect(`/partners/signup?message=${encodeURIComponent(insertError.message)}`);
+      
+      let errMsg = insertError.message || (insertError as any).msg || (insertError as any).details || "Database insertion failed";
+      if (typeof errMsg === "object") {
+        try { errMsg = JSON.stringify(errMsg); } catch { errMsg = "Database error"; }
+      }
+      if (errMsg === "{}") errMsg = "Database insertion failed (empty error)";
+      
+      redirect(`/partners/signup?message=${encodeURIComponent(errMsg)}`);
     }
 
     // Send Emails
