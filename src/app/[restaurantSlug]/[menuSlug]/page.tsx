@@ -130,7 +130,7 @@ export default async function StorefrontMenuPage(
     const qrRecord = qrRecordRes.data;
     if (qrRecord) {
       locationZone = qrRecord.location_zone || null;
-      qrTableLabel = qrRecord.label ? (locationZone ? `${locationZone} - ${qrRecord.label}` : qrRecord.label) : locationZone;
+      qrTableLabel = qrRecord.label || locationZone;
       
       try {
         await supabaseAdmin
@@ -153,9 +153,7 @@ export default async function StorefrontMenuPage(
   const activePrimaryColor = canUseCustomDesign && designConfig.primary_color ? designConfig.primary_color : restaurant.primary_color;
   const activeAccentColor = canUseCustomDesign && designConfig.accent_color ? designConfig.accent_color : restaurant.accent_color;
 
-  const effectiveTableNumber = locationZone && tableNumber 
-    ? `${locationZone} - ${tableNumber}` 
-    : tableNumber || qrTableLabel || undefined;
+  const effectiveTableNumber = tableNumber || qrTableLabel || undefined;
 
   return (
     <CartProvider>
