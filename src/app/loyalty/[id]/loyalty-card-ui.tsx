@@ -99,7 +99,7 @@ export function LoyaltyCardUI({
     StampIcon,
     stampTheme,
     rewardText,
-    cardColor: cardColor || primaryColor
+    cardColor: cardColor || primaryColor || "#000000"
   };
 
   const handleLinkPhone = async (e: React.FormEvent) => {
@@ -240,9 +240,13 @@ export function LoyaltyCardUI({
             </div>
           </div>
           <h3 className="font-bold text-lg text-slate-900 mb-2">How to earn stamps</h3>
-          <p className="text-slate-500 text-sm">
-            Ask your server to show you their secure <strong>Loyalty QR Code</strong>. Scan it with your phone's camera to instantly add a stamp to this card!
+          <p className="text-slate-500 text-sm mb-3">
+            On your next visit, ask your server to show you their secure <strong>Loyalty QR Code</strong>. Scan it with your phone's camera to instantly add a stamp to this card!
           </p>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">
+            <Check className="w-3.5 h-3.5" />
+            Limit 1 stamp per visit (every 12 hours)
+          </div>
         </div>
       )}
 

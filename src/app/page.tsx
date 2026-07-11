@@ -195,7 +195,7 @@ export default function LandingPage() {
           </h1>
 
           <p className="mx-auto mt-8 max-w-2xl text-base sm:text-lg text-slate-500 leading-relaxed font-medium">
-            Not just beautiful QR menus. We've built a full suite: a drag-and-drop Kitchen Display System, a real-time ordering engine, and an AI-powered Feedback System that actively wins back lost customers.
+            The powerful, all-in-one ordering system built for independent cafes, food trucks, and pop-ups. <strong className="text-slate-800">Zero proprietary hardware. No multi-year contracts.</strong> Bring your own iPad, print a QR code, and start taking orders in 10 minutes.
           </p>
 
           {/* CTAs */}
@@ -246,6 +246,37 @@ export default function LandingPage() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* BUILT FOR INDEPENDENTS BANNER */}
+      <section className="bg-white border-y border-slate-200/40 relative z-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
+              <div className="h-12 w-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-5">
+                <Smartphone className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-black text-slate-900 mb-2">Bring Your Own Device</h3>
+              <p className="text-sm text-slate-500 leading-relaxed font-medium">No expensive, clunky hardware required. Run your FOH Cashier and Kitchen Display System perfectly on any cheap iPad or Android tablet.</p>
+            </div>
+            
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
+              <div className="h-12 w-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 mb-5">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-black text-slate-900 mb-2">No Lock-In Contracts</h3>
+              <p className="text-sm text-slate-500 leading-relaxed font-medium">Stop signing 3-year agreements. We don't lock you in. Start for free, upgrade when you need to, and cancel anytime with no penalties.</p>
+            </div>
+            
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
+              <div className="h-12 w-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 mb-5">
+                <Palette className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-black text-slate-900 mb-2">Premium Aesthetics</h3>
+              <p className="text-sm text-slate-500 leading-relaxed font-medium">Your food looks beautiful, your menu should too. Ditch the generic, corporate spreadsheets and use our premium, high-converting digital themes.</p>
+            </div>
+          </div>
         </div>
       </section>
 

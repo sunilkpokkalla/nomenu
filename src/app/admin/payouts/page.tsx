@@ -146,8 +146,16 @@ export default async function AdminPayoutsPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
-                    No affiliates found.
+                  <td colSpan={5} className="p-0">
+                    <div className="py-16 flex flex-col items-center justify-center text-center">
+                      <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 border border-slate-100">
+                        <Users className="w-8 h-8 text-slate-300" />
+                      </div>
+                      <h3 className="text-lg font-bold text-slate-900">No affiliates found</h3>
+                      <p className="text-slate-500 text-sm mt-1 max-w-sm mx-auto">
+                        You don't have any active affiliates yet. Once partners are approved and start referring restaurants, they will appear here.
+                      </p>
+                    </div>
                   </td>
                 </tr>
               )}

@@ -51,13 +51,19 @@ export default async function AdminLayout({
 
       {/* Admin Sub-navigation */}
       <div className="border-b border-slate-200 bg-white">
-        <div className="container mx-auto px-4">
-          <nav className="flex items-center gap-8 text-sm font-bold h-12">
+        <div className="container mx-auto px-4 overflow-x-auto">
+          <nav className="flex items-center gap-6 text-sm font-bold h-12 whitespace-nowrap min-w-max">
             <Link 
               href="/admin" 
               className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"
             >
-              Fleet Overview
+              Dashboard
+            </Link>
+            <Link 
+              href="/admin/restaurants" 
+              className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"
+            >
+              Restaurants
             </Link>
             <Link 
               href="/admin/marketing" 
@@ -65,7 +71,6 @@ export default async function AdminLayout({
             >
               Campaigns
             </Link>
-
             <Link 
               href="/admin/partners" 
               className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"
@@ -77,6 +82,24 @@ export default async function AdminLayout({
               className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"
             >
               Payouts
+            </Link>
+            <Link 
+              href="/admin/support" 
+              className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"
+            >
+              Support
+            </Link>
+            <Link 
+              href="/admin/billing" 
+              className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"
+            >
+              Billing
+            </Link>
+            <Link 
+              href="/admin/settings" 
+              className="text-slate-500 hover:text-slate-900 transition-colors h-full flex items-center border-b-2 border-transparent hover:border-slate-300 data-[active=true]:border-indigo-600 data-[active=true]:text-indigo-600"
+            >
+              Settings
             </Link>
           </nav>
         </div>

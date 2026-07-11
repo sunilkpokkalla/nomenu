@@ -130,3 +130,42 @@ export async function rejectPartnerAction(affiliateId: string, email: string, fo
 
   revalidatePath("/admin/partners");
 }
+
+export async function manuallyCreatePartnerAction(formData: FormData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || !user.email) throw new Error("Not logged in");
+
+  const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
+  if (!adminEmails.includes(user.email)) {
+    throw new Error("Unauthorized");
+  }
+
+  const adminSupabase = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+
+  const name = formData.get("name")?.toString() || "";
+  const email = formData.get("email")?.toString() || "";
+  const referral_code = formData.get("referral_code")?.toString() || "";
+
+  if (!name || !email || !referral_code) {
+    throw new Error("Missing required fields");
+  }
+
+  const { error } = await adminSupabase
+    .from("affiliates")
+    .insert({
+      name,
+      email,
+      referral_code,
+      status: "approved"
+    });
+
+  if (error) {
+    throw new Error("Failed to create partner: " + error.message);
+  }
+
+  revalidatePath("/admin/partners");
+}

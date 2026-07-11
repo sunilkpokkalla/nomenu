@@ -185,7 +185,7 @@ export default async function StorefrontMenuPage(
           tableNumber={effectiveTableNumber}
           themeStyle={activeThemeStyle || "bistro"}
           primaryColor={activePrimaryColor || "#000"}
-          currencySymbol={restaurant.currency || "USD"}
+          currencySymbol={getCurrencySymbol(restaurant.currency)}
           taxRate={menu.tax_rate || 0}
           serviceCharge={menu.service_charge || 0}
           serviceChargeType={menu.service_charge_type || "percentage"}
