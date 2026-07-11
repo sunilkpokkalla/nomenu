@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { AnalyticsDashboard } from "./analytics-dashboard";
+import { AnalyticsDashboard } from "./analytics-dashboard-wrapper";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 

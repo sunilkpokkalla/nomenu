@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DualDeviceMockup } from "@/components/marketing/dual-device-mockup";
+import { CompetitiveComparison } from "@/components/marketing/competitive-comparison";
 
 const THEME_PREVIEWS = [
   {
@@ -123,10 +124,11 @@ export default function LandingPage() {
             </Link>
             <nav className="hidden md:flex items-center gap-7 text-xs font-bold uppercase tracking-wider text-slate-500">
               <a href="#features" className="hover:text-slate-900 transition-colors duration-200">Features</a>
-              <a href="#loyalty" className="hover:text-amber-500 text-amber-600 transition-colors duration-200">Loyalty</a>
               <a href="#themes" className="hover:text-slate-900 transition-colors duration-200">QR Templates</a>
-              <a href="#pricing" className="hover:text-slate-900 transition-colors duration-200">Pricing</a>
+              <a href="#loyalty" className="hover:text-amber-500 text-amber-600 transition-colors duration-200">Loyalty</a>
               <a href="#how-it-works" className="hover:text-slate-900 transition-colors duration-200">How it Works</a>
+              <a href="#compare" className="hover:text-slate-900 transition-colors duration-200">Compare</a>
+              <a href="#pricing" className="hover:text-slate-900 transition-colors duration-200">Pricing</a>
               <Link href="/partners" className="hover:text-indigo-600 transition-colors duration-200 text-indigo-500">Partners</Link>
             </nav>
           </div>
@@ -250,28 +252,31 @@ export default function LandingPage() {
       </section>
 
       {/* BUILT FOR INDEPENDENTS BANNER */}
-      <section className="bg-white border-y border-slate-200/40 relative z-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <section className="relative z-30 -mt-12 sm:-mt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="rounded-[2.5rem] bg-white/70 backdrop-blur-xl border border-white shadow-2xl shadow-indigo-500/5 p-8 md:p-12 relative overflow-hidden">
+          {/* Subtle gradient glow inside the card */}
+          <div className="absolute top-0 left-1/4 w-96 h-full bg-gradient-to-r from-indigo-500/10 to-transparent blur-3xl pointer-events-none -z-10" />
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
-            <div className="text-center md:text-left flex flex-col items-center md:items-start">
-              <div className="h-12 w-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-5">
-                <Smartphone className="h-6 w-6" />
+            <div className="text-center md:text-left flex flex-col items-center md:items-start group">
+              <div className="h-14 w-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-6 shadow-sm group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
+                <Smartphone className="h-7 w-7" />
               </div>
               <h3 className="text-lg font-black text-slate-900 mb-2">Bring Your Own Device</h3>
               <p className="text-sm text-slate-500 leading-relaxed font-medium">No expensive, clunky hardware required. Run your FOH Cashier and Kitchen Display System perfectly on any cheap iPad or Android tablet.</p>
             </div>
             
-            <div className="text-center md:text-left flex flex-col items-center md:items-start">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 mb-5">
-                <CheckCircle2 className="h-6 w-6" />
+            <div className="text-center md:text-left flex flex-col items-center md:items-start group">
+              <div className="h-14 w-14 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 mb-6 shadow-sm group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
+                <CheckCircle2 className="h-7 w-7" />
               </div>
               <h3 className="text-lg font-black text-slate-900 mb-2">No Lock-In Contracts</h3>
               <p className="text-sm text-slate-500 leading-relaxed font-medium">Stop signing 3-year agreements. We don't lock you in. Start for free, upgrade when you need to, and cancel anytime with no penalties.</p>
             </div>
             
-            <div className="text-center md:text-left flex flex-col items-center md:items-start">
-              <div className="h-12 w-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 mb-5">
-                <Palette className="h-6 w-6" />
+            <div className="text-center md:text-left flex flex-col items-center md:items-start group">
+              <div className="h-14 w-14 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 mb-6 shadow-sm group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300">
+                <Palette className="h-7 w-7" />
               </div>
               <h3 className="text-lg font-black text-slate-900 mb-2">Premium Aesthetics</h3>
               <p className="text-sm text-slate-500 leading-relaxed font-medium">Your food looks beautiful, your menu should too. Ditch the generic, corporate spreadsheets and use our premium, high-converting digital themes.</p>
@@ -534,7 +539,7 @@ export default function LandingPage() {
                   </div>
                   <h4 className="font-extrabold text-xl text-white">Square POS Sync</h4>
                   <p className="text-sm text-slate-400 leading-relaxed font-medium">
-                    Automatically sync your Nomenu items, prices, and stock status directly with your Square POS. Never update two systems again.
+                    Automatically sync your NoMenu items, prices, and stock status directly with your Square POS. Never update two systems again.
                   </p>
                 </div>
 
@@ -838,75 +843,90 @@ export default function LandingPage() {
       </section>
 
       {/* HOW IT WORKS SECTION */}
-      <section id="how-it-works" className="py-24 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+      <section id="how-it-works" className="py-24 bg-slate-50 border-y border-slate-200/40 relative overflow-hidden">
+        {/* Subtle background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center relative z-10">
           
           <div className="max-w-3xl mx-auto mb-20 space-y-4">
             <h2 className="text-xs uppercase font-extrabold tracking-[0.2em] text-indigo-600 flex items-center justify-center gap-2">
               <Layers className="h-4 w-4 text-indigo-500" strokeWidth={1.5} /> Structured Setup
             </h2>
-            <h3 className="text-3xl font-extrabold tracking-tight sm:text-5xl text-slate-950">
+            <h3 className="text-3xl font-extrabold tracking-tight sm:text-5xl text-slate-950 leading-tight">
               Get up and running in under 10 minutes.
             </h3>
-            <p className="text-slate-500 font-medium">
+            <p className="text-slate-500 font-medium text-lg">
               Create your profile, populate your dishes, select a design, and print cards directly from your console.
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
-            
-            {/* Step 1 */}
-            <div className="group rounded-[2.2rem] border border-slate-200/50 bg-slate-50 p-2 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50">
-              <div className="bg-white rounded-[calc(2.2rem-0.5rem)] p-8 relative flex flex-col justify-between h-full min-h-[240px] text-left border border-slate-200/20">
-                <span className="absolute top-4 right-6 text-6xl font-black text-slate-100 select-none leading-none">01</span>
-                <div>
-                  <div className="h-10 w-10 bg-indigo-500/10 text-indigo-650 border border-indigo-500/20 rounded-xl flex items-center justify-center font-bold mb-5">
-                    1
-                  </div>
-                  <h4 className="font-extrabold text-lg text-slate-950">Set Up Your Brand</h4>
-                  <p className="mt-3 text-sm text-slate-500 leading-relaxed font-medium">
+          <div className="relative max-w-5xl mx-auto">
+            {/* Connecting Timeline Line (Desktop only) */}
+            <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-1 bg-gradient-to-r from-indigo-100 via-indigo-500 to-indigo-100 rounded-full opacity-30 z-0" />
+            <div className="hidden md:block absolute top-12 left-[10%] right-[50%] h-1 bg-gradient-to-r from-indigo-400 to-indigo-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)] z-0 animate-pulse" />
+
+            <div className="grid gap-8 md:grid-cols-3 relative z-10">
+              
+              {/* Step 1 */}
+              <div className="group relative">
+                {/* Node */}
+                <div className="mx-auto w-24 h-24 rounded-[2rem] bg-white border border-indigo-100 shadow-xl shadow-indigo-500/5 flex items-center justify-center mb-8 relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2">
+                  <div className="absolute inset-0 bg-indigo-50 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <span className="text-4xl font-black text-indigo-600 relative z-20">1</span>
+                </div>
+                
+                {/* Card */}
+                <div className="bg-white rounded-[2rem] p-8 text-center border border-slate-200/60 shadow-sm transition-all duration-300 group-hover:shadow-xl group-hover:shadow-indigo-500/5 group-hover:border-indigo-100 h-auto md:h-[220px]">
+                  <h4 className="font-extrabold text-xl text-slate-950 mb-3 group-hover:text-indigo-600 transition-colors">Set Up Your Brand</h4>
+                  <p className="text-sm text-slate-500 leading-relaxed font-medium">
                     Configure restaurant properties, primary color layouts, currency variables, and guest WiFi options.
                   </p>
                 </div>
               </div>
-            </div>
 
-            {/* Step 2 */}
-            <div className="group rounded-[2.2rem] border border-slate-200/50 bg-slate-50 p-2 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50">
-              <div className="bg-white rounded-[calc(2.2rem-0.5rem)] p-8 relative flex flex-col justify-between h-full min-h-[240px] text-left border border-slate-200/20">
-                <span className="absolute top-4 right-6 text-6xl font-black text-slate-100 select-none leading-none">02</span>
-                <div>
-                  <div className="h-10 w-10 bg-indigo-500/10 text-indigo-650 border border-indigo-500/20 rounded-xl flex items-center justify-center font-bold mb-5">
-                    2
-                  </div>
-                  <h4 className="font-extrabold text-lg text-slate-950">Add Menu Items</h4>
-                  <p className="mt-3 text-sm text-slate-500 leading-relaxed font-medium">
+              {/* Step 2 */}
+              <div className="group relative md:mt-12">
+                {/* Node */}
+                <div className="mx-auto w-24 h-24 rounded-[2rem] bg-white border border-indigo-100 shadow-xl shadow-indigo-500/5 flex items-center justify-center mb-8 relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2">
+                  <div className="absolute inset-0 bg-indigo-50 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <span className="text-4xl font-black text-indigo-600 relative z-20">2</span>
+                </div>
+                
+                {/* Card */}
+                <div className="bg-white rounded-[2rem] p-8 text-center border border-slate-200/60 shadow-sm transition-all duration-300 group-hover:shadow-xl group-hover:shadow-indigo-500/5 group-hover:border-indigo-100 h-auto md:h-[220px]">
+                  <h4 className="font-extrabold text-xl text-slate-950 mb-3 group-hover:text-indigo-600 transition-colors">Add Menu Items</h4>
+                  <p className="text-sm text-slate-500 leading-relaxed font-medium">
                     Add menu sections (Starters, Mains, Mocktails) and upload items, pricing details, and visual descriptions.
                   </p>
                 </div>
               </div>
-            </div>
 
-            {/* Step 3 */}
-            <div className="group rounded-[2.2rem] border border-slate-200/50 bg-slate-50 p-2 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50">
-              <div className="bg-white rounded-[calc(2.2rem-0.5rem)] p-8 relative flex flex-col justify-between h-full min-h-[240px] text-left border border-slate-200/20">
-                <span className="absolute top-4 right-6 text-6xl font-black text-slate-100 select-none leading-none">03</span>
-                <div>
-                  <div className="h-10 w-10 bg-indigo-500/10 text-indigo-650 border border-indigo-500/20 rounded-xl flex items-center justify-center font-bold mb-5">
-                    3
-                  </div>
-                  <h4 className="font-extrabold text-lg text-slate-950">Download & Print</h4>
-                  <p className="mt-3 text-sm text-slate-500 leading-relaxed font-medium">
+              {/* Step 3 */}
+              <div className="group relative md:mt-24">
+                {/* Node */}
+                <div className="mx-auto w-24 h-24 rounded-[2rem] bg-white border border-indigo-100 shadow-xl shadow-indigo-500/5 flex items-center justify-center mb-8 relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:-translate-y-2">
+                  <div className="absolute inset-0 bg-indigo-50 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <span className="text-4xl font-black text-indigo-600 relative z-20">3</span>
+                </div>
+                
+                {/* Card */}
+                <div className="bg-white rounded-[2rem] p-8 text-center border border-slate-200/60 shadow-sm transition-all duration-300 group-hover:shadow-xl group-hover:shadow-indigo-500/5 group-hover:border-indigo-100 h-auto md:h-[220px]">
+                  <h4 className="font-extrabold text-xl text-slate-950 mb-3 group-hover:text-indigo-600 transition-colors">Download & Print</h4>
+                  <p className="text-sm text-slate-500 leading-relaxed font-medium">
                     Select a layout format, tweak parameters, and print immediately or download high-res vectors.
                   </p>
                 </div>
               </div>
+
             </div>
 
           </div>
 
         </div>
       </section>
+
+      <CompetitiveComparison />
 
       {/* PRICING SECTION */}
       <section id="pricing" className="py-24 bg-slate-900 text-white relative overflow-hidden">
