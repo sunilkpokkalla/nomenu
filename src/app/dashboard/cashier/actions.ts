@@ -225,7 +225,7 @@ export async function updateWaitlistStatus(waitlistId: string, status: 'waiting'
       customer_name: entry.customer_name,
       party_size: entry.party_size,
       total_amount: 0,
-      status: "pending",
+      status: "seated",
       is_paid: false
     });
     
@@ -256,7 +256,7 @@ export async function createWalkInTab(restaurantId: string, tableNumber: string,
     customer_name: customerName,
     party_size: partySize,
     total_amount: 0,
-    status: "pending",
+    status: "seated",
     is_paid: false
   });
 
