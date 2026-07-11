@@ -270,26 +270,26 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                   const isOverdue = entry.quoted_time_minutes ? waitTimeMin > entry.quoted_time_minutes : false;
 
                   return (
-                    <div key={entry.id} className="bg-white rounded-3xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg shadow-slate-200/30 hover:-translate-y-1 transition-all border border-slate-100">
+                    <div key={entry.id} className="bg-white rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm border border-slate-200">
                       
-                      <div className="flex items-center gap-5 flex-1">
+                      <div className="flex items-center gap-3 flex-1">
                         {/* Status / Wait Time Badge */}
-                        <div className={`w-16 h-16 rounded-2xl flex flex-col items-center justify-center shrink-0 border ${isOverdue ? 'bg-rose-50 border-rose-100 text-rose-600' : 'bg-emerald-50 border-emerald-100 text-emerald-600'}`}>
-                          <span className="text-xl font-black tracking-tighter">{waitTimeMin}</span>
-                          <span className="text-[10px] font-bold uppercase">Min</span>
+                        <div className={`w-12 h-12 rounded-lg flex flex-col items-center justify-center shrink-0 border ${isOverdue ? 'bg-rose-50 border-rose-100 text-rose-600' : 'bg-emerald-50 border-emerald-100 text-emerald-600'}`}>
+                          <span className="text-lg font-bold tracking-tighter">{waitTimeMin}</span>
+                          <span className="text-[9px] font-bold uppercase leading-none mt-0.5">Min</span>
                         </div>
                         
                         {/* Core Info */}
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-xl font-black text-slate-900 truncate mb-1">{entry.customer_name}</h4>
-                          <div className="flex items-center gap-4 text-sm font-bold text-slate-500">
-                            <span className="flex items-center gap-1.5"><Users className="w-4 h-4 text-slate-400" /> {entry.party_size} People</span>
+                          <h4 className="text-base font-bold text-slate-900 truncate mb-0.5">{entry.customer_name}</h4>
+                          <div className="flex items-center gap-3 text-xs font-medium text-slate-500">
+                            <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5 text-slate-400" /> {entry.party_size}</span>
                             {entry.phone_number && (
-                              <span className="flex items-center gap-1.5 truncate"><Phone className="w-4 h-4 text-slate-400" /> {entry.phone_number}</span>
+                              <span className="flex items-center gap-1 truncate"><Phone className="w-3.5 h-3.5 text-slate-400" /> {entry.phone_number}</span>
                             )}
                             {entry.quoted_time_minutes && (
-                              <span className="flex items-center gap-1.5 text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md hidden sm:flex">
-                                <Clock className="w-3.5 h-3.5" /> Quoted: {entry.quoted_time_minutes}m
+                              <span className="flex items-center gap-1 text-slate-400 hidden sm:flex">
+                                <Clock className="w-3 h-3" /> Quoted: {entry.quoted_time_minutes}m
                               </span>
                             )}
                           </div>
@@ -297,42 +297,26 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                       </div>
 
                       {/* Actions */}
-                      <div className="flex items-center gap-2 sm:ml-4 shrink-0 w-full sm:w-auto">
+                      <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
                         <button 
-                          onClick={() => {
-                            if (confirmLeft === entry.id) {
-                              handleUpdateStatus(entry.id, 'no_show');
-                              setConfirmLeft(null);
-                            } else {
-                              setConfirmLeft(entry.id);
-                              setTimeout(() => setConfirmLeft(null), 3000);
-                            }
-                          }}
-                          disabled={isProcessing === entry.id}
-                          className={`flex-1 sm:flex-none px-4 py-3 rounded-xl font-bold transition-all disabled:opacity-50 text-sm flex items-center justify-center ${
-                            confirmLeft === entry.id 
-                              ? "bg-rose-500 text-white shadow-lg shadow-rose-500/30"
-                              : "bg-orange-50 text-orange-600 hover:bg-orange-100"
-                          }`}
+                          onClick={() => handleUpdateStatus(entry.id, 'no_show')}
+                          className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-orange-50 text-orange-700 font-semibold hover:bg-orange-100 transition-colors text-xs border border-orange-100"
                         >
-                          {confirmLeft === entry.id ? "Confirm?" : "Left"}
+                          Left
                         </button>
                         <button 
                           onClick={() => handleUpdateStatus(entry.id, 'cancelled')}
-                          disabled={isProcessing === entry.id}
-                          className="flex-1 sm:flex-none px-4 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-all disabled:opacity-50 text-sm"
+                          className="flex-1 sm:flex-none px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition-colors text-xs border border-slate-200"
                         >
                           Cancel
                         </button>
                         <button 
                           onClick={() => setSeatingEntryId(entry.id)}
-                          disabled={isProcessing === entry.id}
-                          className="flex-[2] sm:flex-none px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50 text-sm"
+                          className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-all text-xs"
                         >
-                          <CheckCircle2 className="w-4 h-4" /> Seat
+                          <CheckCircle2 className="w-3.5 h-3.5" /> Seat
                         </button>
                       </div>
-                      
                     </div>
                   );
                 })}

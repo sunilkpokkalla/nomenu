@@ -51,7 +51,7 @@ export default async function SettingsPage(
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updateRestaurantSettings} className="space-y-6">
+          <form action={updateRestaurantSettings} className="space-y-4">
             {searchParams.success && (
               <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
                 {searchParams.success}
@@ -63,7 +63,7 @@ export default async function SettingsPage(
               </div>
             )}
 
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Restaurant Name</Label>
                 <Input id="name" name="name" defaultValue={restaurant.name} placeholder="Le Bistrot Parisien" required />
@@ -77,7 +77,7 @@ export default async function SettingsPage(
               </div>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="cuisineSelect">Cuisine / Service Style</Label>
                 <CuisineSelect defaultValue={restaurant.cuisine_type || ""} />
@@ -88,7 +88,7 @@ export default async function SettingsPage(
               </div>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="currency">Currency Code</Label>
                 <select
@@ -125,7 +125,7 @@ export default async function SettingsPage(
               </div>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-4">
               <div className="space-y-2">
                 <Label htmlFor="maxTakeawayPerSlot">Takeaway Capacity per 15-Min</Label>
                 <Input 

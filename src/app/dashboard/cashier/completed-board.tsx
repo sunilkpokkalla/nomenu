@@ -55,8 +55,9 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
 
   const fetchCompletedHistory = async () => {
     try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      sevenDaysAgo.setHours(0, 0, 0, 0);
 
       const { data, error } = await supabase
         .from("orders")
@@ -64,7 +65,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
         .eq("restaurant_id", restaurantId)
         .is("customer_phone", null) // Dine-in only
         .or('is_paid.eq.true,status.eq.cancelled')
-        .gte("created_at", today.toISOString()) // default fetch today to keep payload small
+        .gte("created_at", sevenDaysAgo.toISOString()) // fetch last 7 days by default
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -87,7 +88,25 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
         const time = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
         return time >= oneHourAgo;
       });
+    } else if (timeFilter === "today") {
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      filteredOrders = filteredOrders.filter(o => {
+        const time = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
+        return time >= startOfToday;
+      });
+    } else if (timeFilter === "yesterday") {
+      const startOfYesterday = new Date();
+      startOfYesterday.setDate(startOfYesterday.getDate() - 1);
+      startOfYesterday.setHours(0, 0, 0, 0);
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      filteredOrders = filteredOrders.filter(o => {
+        const time = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
+        return time >= startOfYesterday && time < startOfToday;
+      });
     }
+    // "last_7_days" includes all data since the fetch already limits to 7 days
 
     // 2. Group by table + customer
     const groups = new Map<string, GroupedTab>();
@@ -209,6 +228,18 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
             className={`px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all ${timeFilter === "today" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
           >
             Today
+          </button>
+          <button 
+            onClick={() => setTimeFilter("yesterday")}
+            className={`px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all ${timeFilter === "yesterday" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
+          >
+            Yesterday
+          </button>
+          <button 
+            onClick={() => setTimeFilter("last_7_days")}
+            className={`px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all ${timeFilter === "last_7_days" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
+          >
+            Last 7 Days
           </button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useTransition, useState } from "react";
 import { inviteStaff } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { Mail, Send } from "lucide-react";
 
 export function InviteStaffForm({ restaurantId, plan }: { restaurantId: string; plan: string }) {
   const [isPending, startTransition] = useTransition();
+  const [selectedRole, setSelectedRole] = useState("waitstaff");
 
   const normalizedPlan = plan?.toLowerCase() || "free";
   const isEliteOrHigher = normalizedPlan === "elite" || normalizedPlan === "enterprise";
@@ -22,7 +23,7 @@ export function InviteStaffForm({ restaurantId, plan }: { restaurantId: string; 
       }}
       className="space-y-4"
     >
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="email">Email Address</Label>
           <div className="relative">
@@ -43,7 +44,8 @@ export function InviteStaffForm({ restaurantId, plan }: { restaurantId: string; 
           <select
             id="role"
             name="role"
-            defaultValue="waitstaff"
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
             className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 h-10 cursor-pointer"
             required
           >
@@ -56,6 +58,12 @@ export function InviteStaffForm({ restaurantId, plan }: { restaurantId: string; 
               Full Staff (Kitchen & FOH) {!isEliteOrHigher && "🔒 Elite"}
             </option>
           </select>
+          <p className="text-[13px] text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-100 mt-2">
+            {selectedRole === "manager" && "Can manage menus, QR codes, operations, and analytics. Cannot access billing or settings."}
+            {selectedRole === "waitstaff" && "Can access Front of House (Floor Plan, Waitlist) and Kitchen Displays. Cannot view menus or analytics."}
+            {selectedRole === "kitchen" && "Strictly restricted to Kitchen Display Systems (Dine-In and Pickup). Cannot see Floor Plan."}
+            {selectedRole === "kitchen_waitstaff" && "Can access both Front of House (Floor Plan, Waitlist) and all Kitchen Display Systems."}
+          </p>
         </div>
       </div>
 
