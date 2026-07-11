@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AnalyticsDashboard } from "./analytics-dashboard";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
 
 type PageProps = {
   searchParams: Promise<{ range?: string; date?: string; startDate?: string; endDate?: string }>;
@@ -31,54 +32,60 @@ export default async function AnalyticsPage(props: PageProps) {
   const startDateStr = searchParams?.startDate;
   const endDateStr = searchParams?.endDate;
 
-  const now = new Date();
-  let startDate: Date;
-  let endDate: Date | undefined = undefined;
+  const tz = restaurant.timezone || "UTC";
+  const nowUtc = new Date();
+  const nowLocal = toZonedTime(nowUtc, tz);
+
+  let startLocal: Date;
+  let endLocal: Date | undefined = undefined;
   
   if (startDateStr && endDateStr) {
     const [sy, sm, sd] = startDateStr.split("-").map(Number);
-    startDate = new Date(sy, sm - 1, sd);
-    startDate.setHours(0, 0, 0, 0);
+    startLocal = new Date(sy, sm - 1, sd);
+    startLocal.setHours(0, 0, 0, 0);
 
     const [ey, em, ed] = endDateStr.split("-").map(Number);
-    endDate = new Date(ey, em - 1, ed);
-    endDate.setHours(23, 59, 59, 999);
+    endLocal = new Date(ey, em - 1, ed);
+    endLocal.setHours(23, 59, 59, 999);
   } else if (dateStr) {
     const [y, m, d] = dateStr.split("-").map(Number);
-    startDate = new Date(y, m - 1, d);
-    startDate.setHours(0, 0, 0, 0);
-    endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 1);
+    startLocal = new Date(y, m - 1, d);
+    startLocal.setHours(0, 0, 0, 0);
+    endLocal = new Date(startLocal);
+    endLocal.setDate(endLocal.getDate() + 1);
   } else {
-    startDate = new Date(now);
+    startLocal = new Date(nowLocal);
     if (range === "today") {
       // startDate is already today, just needs hours reset below
     } else if (range === "yesterday") {
-      startDate.setDate(now.getDate() - 1);
-      endDate = new Date(now);
-      endDate.setDate(now.getDate() - 1);
-      endDate.setHours(23, 59, 59, 999);
+      startLocal.setDate(nowLocal.getDate() - 1);
+      endLocal = new Date(nowLocal);
+      endLocal.setDate(nowLocal.getDate() - 1);
+      endLocal.setHours(23, 59, 59, 999);
     } else if (range === "7days") {
-      startDate.setDate(now.getDate() - 6);
+      startLocal.setDate(nowLocal.getDate() - 6);
     } else if (range === "month") {
-      startDate.setDate(now.getDate() - 29);
+      startLocal.setDate(nowLocal.getDate() - 29);
     } else if (range === "quarter") {
-      startDate.setMonth(now.getMonth() - 3);
+      startLocal.setMonth(nowLocal.getMonth() - 3);
     } else if (range === "year") {
-      startDate.setFullYear(now.getFullYear() - 1);
+      startLocal.setFullYear(nowLocal.getFullYear() - 1);
     }
-    startDate.setHours(0, 0, 0, 0);
+    startLocal.setHours(0, 0, 0, 0);
   }
+
+  const startDateUtc = fromZonedTime(startLocal, tz);
+  const endDateUtc = endLocal ? fromZonedTime(endLocal, tz) : undefined;
 
   // Fetch scans
   let scansQuery = supabase
     .from("menu_scans")
     .select("scanned_at")
     .eq("restaurant_id", restaurant.id)
-    .gte("scanned_at", startDate.toISOString());
+    .gte("scanned_at", startDateUtc.toISOString());
     
-  if (endDate) {
-    scansQuery = scansQuery.lt("scanned_at", endDate.toISOString());
+  if (endDateUtc) {
+    scansQuery = scansQuery.lt("scanned_at", endDateUtc.toISOString());
   }
   const { data: scans } = await scansQuery;
   
@@ -90,10 +97,10 @@ export default async function AnalyticsPage(props: PageProps) {
     .select("id, total_amount, tip_amount, table_number, created_at")
     .eq("restaurant_id", restaurant.id)
     .eq("status", "completed")
-    .gte("created_at", startDate.toISOString());
+    .gte("created_at", startDateUtc.toISOString());
     
-  if (endDate) {
-    ordersQuery = ordersQuery.lt("created_at", endDate.toISOString());
+  if (endDateUtc) {
+    ordersQuery = ordersQuery.lt("created_at", endDateUtc.toISOString());
   }
   const { data: orders } = await ordersQuery;
   
@@ -111,10 +118,10 @@ export default async function AnalyticsPage(props: PageProps) {
     .from("customer_feedback")
     .select("rating, created_at")
     .eq("restaurant_id", restaurant.id)
-    .gte("created_at", startDate.toISOString());
+    .gte("created_at", startDateUtc.toISOString());
     
-  if (endDate) {
-    feedbackQuery = feedbackQuery.lt("created_at", endDate.toISOString());
+  if (endDateUtc) {
+    feedbackQuery = feedbackQuery.lt("created_at", endDateUtc.toISOString());
   }
   const { data: feedbacks } = await feedbackQuery;
   
@@ -125,14 +132,14 @@ export default async function AnalyticsPage(props: PageProps) {
 
   let buckets: { date: Date; nextDate: Date; label: string }[] = [];
 
-  if (startDateStr && endDateStr && endDate) {
-    const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+  if (startDateStr && endDateStr && endLocal) {
+    const diffTime = Math.abs(endLocal.getTime() - startLocal.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     if (diffDays <= 2) {
       const hours = diffDays * 24;
       buckets = Array.from({ length: hours }, (_, i) => {
-        const d = new Date(startDate);
+        const d = new Date(startLocal);
         d.setHours(i);
         const nextD = new Date(d);
         nextD.setHours(i + 1);
@@ -144,7 +151,7 @@ export default async function AnalyticsPage(props: PageProps) {
       });
     } else {
       buckets = Array.from({ length: diffDays }, (_, i) => {
-        const d = new Date(startDate);
+        const d = new Date(startLocal);
         d.setDate(d.getDate() + i);
         d.setHours(0, 0, 0, 0);
         const nextD = new Date(d);
@@ -155,7 +162,7 @@ export default async function AnalyticsPage(props: PageProps) {
       });
     }
   } else if (dateStr || range === "today") {
-    const baseDate = dateStr ? new Date(startDate) : new Date(now);
+    const baseDate = dateStr ? new Date(startLocal) : new Date(nowLocal);
     buckets = Array.from({ length: 24 }, (_, i) => {
       const d = new Date(baseDate);
       d.setHours(0, 0, 0, 0);
@@ -170,7 +177,7 @@ export default async function AnalyticsPage(props: PageProps) {
   } else if (range === "7days" || range === "month") {
     const days = range === "7days" ? 7 : 30;
     buckets = Array.from({ length: days }, (_, i) => {
-      const d = new Date(now);
+      const d = new Date(nowLocal);
       d.setDate(d.getDate() - (days - 1 - i));
       d.setHours(0, 0, 0, 0);
       const nextD = new Date(d);
@@ -184,7 +191,7 @@ export default async function AnalyticsPage(props: PageProps) {
     });
   } else if (range === "quarter") {
     buckets = Array.from({ length: 12 }, (_, i) => {
-      const d = new Date(now);
+      const d = new Date(nowLocal);
       d.setDate(d.getDate() - (11 - i) * 7);
       d.setDate(d.getDate() - d.getDay()); // start of week
       d.setHours(0, 0, 0, 0);
@@ -194,7 +201,7 @@ export default async function AnalyticsPage(props: PageProps) {
     });
   } else if (range === "year") {
     buckets = Array.from({ length: 12 }, (_, i) => {
-      const d = new Date(now.getFullYear(), now.getMonth() - (11 - i), 1);
+      const d = new Date(nowLocal.getFullYear(), nowLocal.getMonth() - (11 - i), 1);
       const nextD = new Date(d.getFullYear(), d.getMonth() + 1, 1);
       const label = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()];
       return { date: d, nextDate: nextD, label };
@@ -203,13 +210,13 @@ export default async function AnalyticsPage(props: PageProps) {
 
   const revenueData = buckets.map((bucket) => {
     const dayOrders = ordersList.filter((o) => {
-      const d = new Date(o.created_at);
+      const d = toZonedTime(new Date(o.created_at), tz);
       return d >= bucket.date && d < bucket.nextDate;
     });
     
     const dayScans = scans?.filter(s => {
       if (!s.scanned_at) return false;
-      const d = new Date(s.scanned_at);
+      const d = toZonedTime(new Date(s.scanned_at), tz);
       return d >= bucket.date && d < bucket.nextDate;
     });
 
@@ -253,10 +260,10 @@ export default async function AnalyticsPage(props: PageProps) {
     `)
     .eq("orders.restaurant_id", restaurant.id)
     .eq("orders.status", "completed")
-    .gte("orders.created_at", startDate.toISOString());
+    .gte("orders.created_at", startDateUtc.toISOString());
     
-  if (endDate) {
-    orderItemsQuery = orderItemsQuery.lt("orders.created_at", endDate.toISOString());
+  if (endDateUtc) {
+    orderItemsQuery = orderItemsQuery.lt("orders.created_at", endDateUtc.toISOString());
   }
   const { data: orderItems } = await orderItemsQuery;
 
