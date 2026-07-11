@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     // Is this a SaaS subscription upgrade?
     if (session.mode === "subscription") {
       const restaurantId = session.metadata?.restaurant_id;
-      const planId = session.metadata?.plan_id;
+      const planId = session.metadata?.plan_id?.toLowerCase();
       if (restaurantId && planId) {
         // Fetch current plan to see if it's an upgrade
         const { data: restaurant } = await supabase
@@ -147,7 +147,7 @@ export async function POST(req: Request) {
         console.log(`Downgraded subscription ${subscription.id} to free`);
       }
     } else if (subscription.status === "active") {
-      let planId = subscription.metadata?.plan_id;
+      let planId = subscription.metadata?.plan_id?.toLowerCase();
       const restaurantId = subscription.metadata?.restaurant_id;
       
       // CRITICAL FIX: The Stripe Customer Portal changes the Price ID, but DOES NOT update metadata.
