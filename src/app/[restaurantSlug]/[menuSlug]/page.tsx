@@ -152,7 +152,7 @@ export default async function StorefrontMenuPage(
 
   const effectiveTableNumber = locationZone && tableNumber 
     ? `${locationZone} - ${tableNumber}` 
-    : tableNumber;
+    : tableNumber || locationZone || undefined;
 
   return (
     <CartProvider>
