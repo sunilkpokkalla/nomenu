@@ -186,6 +186,7 @@ export default async function StorefrontMenuPage(
       {['elite', 'enterprise'].includes(plan) && (
         <FloatingCart 
           restaurantId={restaurant.id}
+          restaurantCreatedAt={restaurant.created_at}
           menuId={menu.id}
           tableNumber={effectiveTableNumber}
           themeStyle={activeThemeStyle || "bistro"}
@@ -204,6 +205,7 @@ export default async function StorefrontMenuPage(
       )}
       <ReceiptTracker 
         restaurantId={restaurant.id} 
+        restaurantCreatedAt={restaurant.created_at}
         restaurantName={restaurant.name}
         restaurantAddress={restaurant.address}
         restaurantPhone={restaurant.phone}

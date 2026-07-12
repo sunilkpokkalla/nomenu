@@ -170,6 +170,7 @@ export default async function FeedbackPage({
                 restaurantId={restaurant.id} 
                 supabaseUrl={getSupabaseEnv().url} 
                 supabaseAnonKey={getSupabaseEnv().anonKey} 
+                restaurantCreatedAt={restaurant.created_at}
                 recoveryOfferText={restaurant.recovery_offer_text || undefined}
               />
             </div>
