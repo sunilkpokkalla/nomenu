@@ -42,7 +42,7 @@ type TableTab = {
   paid_at?: string | null;
 };
 
-export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, currencySymbol = "$" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, currencySymbol?: string }) {
+export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt, timezone, supabaseUrl, supabaseAnonKey, currencySymbol = "$" }: { initialOrders: Order[], restaurantId: string, restaurantCreatedAt?: string | null, timezone: string, supabaseUrl: string, supabaseAnonKey: string, currencySymbol?: string }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [historyOrders, setHistoryOrders] = useState<Order[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -252,6 +252,9 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
 
   if (!mounted) return <div className="animate-pulse flex gap-6"><div className="w-96 h-96 bg-slate-100 rounded-2xl" /></div>;
 
+  const actionableTabs = tableTabs.filter(t => t.total_amount > 0);
+  const emptyTabs = tableTabs.filter(t => t.total_amount === 0);
+
   if (tableTabs.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center py-24 bg-white border border-slate-200 rounded-2xl shadow-sm">
@@ -264,75 +267,60 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
     );
   }
 
-  const actionableTabs = tableTabs.filter(t => t.total_amount > 0);
-  const emptyTabs = tableTabs.filter(t => t.total_amount === 0);
-
   return (
-    <div className="flex flex-col gap-16 pb-12">
-      {/* Actionable Tabs (Orders with Money) */}
-      {actionableTabs.length > 0 && (
-        <div>
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center border border-indigo-100">
-              <Receipt className="w-5 h-5 text-indigo-600" />
-            </div>
-            <h2 className="text-2xl font-black tracking-tight text-slate-900">Tabs to Settle</h2>
+    <div className="space-y-8 pb-24">
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center border border-indigo-100 shadow-inner">
+            <Receipt className="w-6 h-6 text-indigo-600" />
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-start">
-            {actionableTabs.map(tab => (
+          <h2 className="text-2xl font-black tracking-tight text-slate-900">Active Tabs</h2>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-start">
+          {actionableTabs.map(tab => (
               <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/40 overflow-hidden flex flex-col border border-slate-200/60 hover:-translate-y-1 transition-transform duration-300">
                 {/* Header */}
                 <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6 flex items-start justify-between relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
-                  <div className="relative z-10">
+                  <div className="relative z-10 flex-1 pr-4">
                     <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
-                    <div className={`font-black tracking-tight leading-[1.1] pr-2 ${formatTable(tab.table_number).length > 12 ? 'text-2xl mt-1' : 'text-4xl'}`}>
-                      {formatTable(tab.table_number)}
-                    </div>
+                    <div className={`font-black tracking-tight leading-[1.2] ${tab.table_number.length > 18 ? 'text-lg' : tab.table_number.length > 10 ? 'text-xl' : 'text-3xl'}`}>{formatTable(tab.table_number)}</div>
                   </div>
-                  <div className="text-right relative z-10">
+                  <div className="text-right relative z-10 shrink-0">
                     <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-1">Total Due</div>
-                    <div className="text-3xl font-black text-emerald-400 tracking-tight">{currencySymbol}{tab.total_amount.toFixed(2)}</div>
+                    <div className="text-3xl font-black text-emerald-400">{currencySymbol}{tab.total_amount.toFixed(2)}</div>
                   </div>
-                </div>
-                
-                {/* Customers Summary */}
-                <div className="px-6 py-4 bg-slate-50/80 border-b border-dashed border-slate-300 flex items-center gap-3 text-sm text-slate-700 font-bold overflow-hidden whitespace-nowrap text-ellipsis">
-                  <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-                    <Users className="w-4 h-4" />
-                  </div>
-                  {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in Customer"}
                 </div>
 
-                {/* Receipt Body */}
-                <div className="p-6 flex-1 max-h-[300px] overflow-y-auto hide-scrollbar space-y-5 bg-amber-50/30">
-                  {tab.orders.map(order => (
-                    <div key={order.id} className="pb-5 border-b border-dashed border-slate-200 last:border-0 last:pb-0">
-                      <div className="flex justify-between items-center mb-3">
-                        <div className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Order #{formatOrderNumber(order.table_number, order.daily_order_number)}</div>
-                      </div>
-                      
-                      <div className="space-y-3">
-                        {order.order_items?.map(item => (
-                          <div key={item.id} className="flex justify-between items-start text-sm">
-                            <div className="flex gap-3">
-                              <span className="font-bold text-slate-400 w-4">{item.quantity}x</span>
-                              <span className="text-slate-700 font-medium">{item.menu_items?.name}</span>
-                            </div>
-                            <span className="font-semibold text-slate-900 tabular-nums">
-                              {currencySymbol}{((item.menu_items?.price || 0) * item.quantity).toFixed(2)}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                {/* Content */}
+                <div className="p-6 flex-1 flex flex-col bg-slate-50/50">
+                  <div className="flex items-center gap-3 mb-6 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm">
+                    <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 shrink-0">
+                      <Users className="w-4 h-4" />
                     </div>
-                  ))}
-                </div>
+                    <div className="font-bold text-slate-700 truncate">{tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in Customer"}</div>
+                  </div>
 
-                {/* Footer Actions */}
-                <div className="p-5 bg-white flex flex-col gap-3 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)] relative z-10">
-                  <div className="flex gap-3">
+                  <div className="flex-1 space-y-4">
+                    {/* Order Items Summary */}
+                    {tab.orders.map((o) => (
+                      <div key={o.id} className="text-sm">
+                        <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-2">Order #{formatOrderNumber(o.table_number, o.daily_order_number, o.created_at, o.restaurant_id, restaurantCreatedAt)}</div>
+                        <div className="space-y-1.5 border-l-2 border-indigo-100 pl-3 py-1">
+                          {o.order_items?.map((item, idx) => (
+                            <div key={idx} className="flex justify-between text-slate-600 font-medium">
+                              <span className="truncate pr-2">{item.quantity}x {item.menu_items?.name}</span>
+                              <span className="shrink-0">{currencySymbol}{((item.menu_items?.price || 0) * item.quantity).toFixed(2)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="mt-6 pt-6 border-t border-slate-200/60 flex gap-3">
                     <button 
                       onClick={() => handleSettleTab(tab.table_number, tab.customer_names[0])}
                       disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
@@ -358,168 +346,40 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
             ))}
           </div>
         </div>
-      )}
 
-      {/* Walk-in & History Split View */}
-      {(emptyTabs.length > 0 || historyTabs.length > 0) && (
-        <div className={actionableTabs.length > 0 ? "pt-12 border-t border-slate-200/60" : ""}>
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 items-start">
+        {emptyTabs.length > 0 && (
+          <div className="mt-12 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-200">
+                <Users className="w-5 h-5 text-slate-600" />
+              </div>
+              <h2 className="text-xl font-black tracking-tight text-slate-900">Currently Seated (Waiting to Order)</h2>
+              <span className="ml-auto text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-full shadow-sm">{emptyTabs.length}</span>
+            </div>
             
-            {/* Left Column: Currently Seated */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center border border-slate-200">
-                  <Users className="w-5 h-5 text-slate-600" />
-                </div>
-                <h2 className="text-xl font-black tracking-tight text-slate-900">Currently Seated</h2>
-                <span className="ml-auto text-xs font-bold bg-slate-900 text-white px-3 py-1.5 rounded-full shadow-sm">{emptyTabs.length}</span>
-              </div>
-              <div className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-xl shadow-slate-200/20 flex flex-col min-h-[400px]">
-                <div className="overflow-x-auto flex-1 p-2">
-                  <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="text-slate-400 uppercase tracking-widest text-[10px] font-bold">
-                      <tr>
-                        <th className="px-6 py-4">Table</th>
-                        <th className="px-6 py-4">Name</th>
-                        <th className="px-6 py-4">Guests</th>
-                        <th className="px-6 py-4">Time</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-50">
-                      {emptyTabs.slice((activePage - 1) * 15, activePage * 15).length === 0 ? (
-                        <tr>
-                          <td colSpan={4} className="px-6 py-16 text-center text-slate-400 font-medium">No tables currently seated.</td>
-                        </tr>
-                      ) : (
-                        emptyTabs.slice((activePage - 1) * 15, activePage * 15).map(tab => {
-                          const elapsedMins = Math.floor((new Date().getTime() - new Date(tab.created_at).getTime()) / 60000);
-                          return (
-                            <tr key={`${tab.table_number}-${tab.customer_names[0]}`} className="hover:bg-slate-50/50 transition-colors group">
-                              <td className="px-6 py-4">
-                                <div className="font-black text-slate-900 text-lg">{formatTable(tab.table_number)}</div>
-                              </td>
-                              <td className="px-6 py-4 font-bold text-slate-600 truncate max-w-[120px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
-                                {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}
-                              </td>
-                              <td className="px-6 py-4">
-                                {tab.party_size > 0 ? (
-                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">{tab.party_size}</span>
-                                ) : (
-                                  <span className="text-slate-300">-</span>
-                                )}
-                              </td>
-                              <td className="px-6 py-4">
-                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${elapsedMins > 60 ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'}`}>
-                                  {elapsedMins}m
-                                </span>
-                              </td>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-                {/* Pagination Active */}
-                {emptyTabs.length > 15 && (
-                  <div className="bg-slate-50/50 border-t border-slate-100 p-4 flex justify-between items-center text-sm font-bold">
-                    <button 
-                      disabled={activePage === 1} 
-                      onClick={() => setActivePage(p => p - 1)}
-                      className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-50 shadow-sm transition-all"
-                    >
-                      Prev
-                    </button>
-                    <span className="text-slate-400">Page {activePage} of {Math.ceil(emptyTabs.length / 15)}</span>
-                    <button 
-                      disabled={activePage >= Math.ceil(emptyTabs.length / 15)} 
-                      onClick={() => setActivePage(p => p + 1)}
-                      className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-50 shadow-sm transition-all"
-                    >
-                      Next
-                    </button>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {emptyTabs.map(tab => {
+                const elapsedMins = Math.floor((new Date().getTime() - new Date(tab.created_at).getTime()) / 60000);
+                return (
+                  <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white border border-slate-200/60 rounded-2xl p-4 flex flex-col shadow-sm">
+                    <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
+                    <div className="font-black text-slate-900 text-lg truncate mb-3">{formatTable(tab.table_number)}</div>
+                    
+                    <div className="mt-auto flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 truncate max-w-[80px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
+                        <Users className="w-3.5 h-3.5" />
+                        <span className="truncate">{tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}</span>
+                      </div>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold ${elapsedMins > 60 ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                        {elapsedMins}m
+                      </span>
+                    </div>
                   </div>
-                )}
-              </div>
+                );
+              })}
             </div>
-
-            {/* Right Column: History (Cleared) */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                </div>
-                <h2 className="text-xl font-black tracking-tight text-slate-900">Cleared Today</h2>
-                <span className="ml-auto text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1.5 rounded-full">{historyTabs.length}</span>
-              </div>
-              <div className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-xl shadow-slate-200/10 flex flex-col min-h-[400px]">
-                <div className="overflow-x-auto flex-1 p-2">
-                  <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="text-slate-400 uppercase tracking-widest text-[10px] font-bold">
-                      <tr>
-                        <th className="px-6 py-4">Table</th>
-                        <th className="px-6 py-4">Name</th>
-                        <th className="px-6 py-4">Status</th>
-                        <th className="px-6 py-4">Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-50">
-                      {historyTabs.slice((historyPage - 1) * 15, historyPage * 15).length === 0 ? (
-                        <tr>
-                          <td colSpan={4} className="px-6 py-16 text-center text-slate-400 font-medium">No cleared tables yet today.</td>
-                        </tr>
-                      ) : (
-                        historyTabs.slice((historyPage - 1) * 15, historyPage * 15).map(tab => {
-                          const isCancelled = tab.orders.some(o => ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(o.status?.toLowerCase() || ""));
-                          return (
-                            <tr key={`${tab.table_number}-${tab.customer_names[0]}-${tab.created_at}`} className="hover:bg-slate-50/50 transition-colors group">
-                              <td className="px-6 py-4 font-black text-slate-900 text-lg">{formatTable(tab.table_number)}</td>
-                              <td className="px-6 py-4 font-bold text-slate-600 truncate max-w-[120px]" title={tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}>
-                                {tab.customer_names[0] !== "Anonymous" ? tab.customer_names[0] : "Walk-in"}
-                              </td>
-                              <td className="px-6 py-4">
-                                {isCancelled ? (
-                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600">Voided</span>
-                                ) : (
-                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600">Paid</span>
-                                )}
-                              </td>
-                              <td className="px-6 py-4 font-black text-slate-900">
-                                {currencySymbol}{tab.total_amount.toFixed(2)}
-                              </td>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-                {/* Pagination History */}
-                {historyTabs.length > 15 && (
-                  <div className="bg-slate-50/50 border-t border-slate-100 p-4 flex justify-between items-center text-sm font-bold">
-                    <button 
-                      disabled={historyPage === 1} 
-                      onClick={() => setHistoryPage(p => p - 1)}
-                      className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-50 shadow-sm transition-all"
-                    >
-                      Prev
-                    </button>
-                    <span className="text-slate-400">Page {historyPage} of {Math.ceil(historyTabs.length / 15)}</span>
-                    <button 
-                      disabled={historyPage >= Math.ceil(historyTabs.length / 15)} 
-                      onClick={() => setHistoryPage(p => p + 1)}
-                      className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-50 hover:bg-slate-50 shadow-sm transition-all"
-                    >
-                      Next
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
   );
 }

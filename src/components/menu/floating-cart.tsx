@@ -8,7 +8,7 @@ import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt, Chec
 import { submitOrder, getOrderReceipt, getSlotAvailability } from "@/app/menu/[id]/actions";
 import { getCurrencySymbol } from "@/lib/currency-options";
 
-export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel, fulfillmentType, prepTimeMinutes, maxTakeawayPerSlot = 5, maxReservePerSlot = 5, openingTime = "09:00:00", closingTime = "23:00:00", plan, allowManualPayments = false }: {
+export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableNumber, themeStyle, primaryColor, currencySymbol, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", stripeAccountId, locationLabel, fulfillmentType, prepTimeMinutes, maxTakeawayPerSlot = 5, maxReservePerSlot = 5, openingTime = "09:00:00", closingTime = "23:00:00", plan, allowManualPayments = false }: {
   restaurantId: string;
   menuId: string;
   tableNumber?: string;
@@ -28,6 +28,7 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
   closingTime?: string;
   plan?: string;
   allowManualPayments?: boolean;
+  restaurantCreatedAt?: string | null;
 }) {
   const searchParams = useSearchParams();
   const urlMode = searchParams?.get('mode');
@@ -327,8 +328,8 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
                 <div className="text-sm text-slate-500 font-medium mb-1 tracking-widest uppercase">
                   Order Number
                 </div>
-                <div className="text-4xl font-black text-slate-900 tracking-tight">
-                  #{receipt ? formatOrderNumber(receipt.table_number, receipt.daily_order_number) : formatOrderNumber(table, successOrder.dailyNumber)}
+                <div className="text-2xl font-black text-slate-900 tracking-tight break-words">
+                  #{receipt ? formatOrderNumber(receipt.table_number, receipt.daily_order_number, receipt.created_at, receipt.restaurant_id, restaurantCreatedAt) : formatOrderNumber(table, successOrder.dailyNumber, new Date().toISOString(), restaurantId, restaurantCreatedAt)}
                 </div>
               </div>
               <div className="flex items-center pb-1">

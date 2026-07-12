@@ -35,12 +35,39 @@ export function getTableShortCode(tableStr: string | null | undefined): string {
   return tableStr.substring(0, 4).toUpperCase();
 }
 
-export function formatOrderNumber(tableStr: string | null | undefined, dailyOrderNumber: number | null | undefined): string {
+export function formatOrderNumber(
+  tableStr: string | null | undefined, 
+  dailyOrderNumber: number | null | undefined,
+  createdAtString?: string | null,
+  restaurantId?: string | null,
+  restaurantCreatedAt?: string | null
+): string {
+  // Use restaurant creation date as the epoch if provided, otherwise fallback to Jan 1, 2024
+  const epoch = restaurantCreatedAt ? new Date(restaurantCreatedAt).getTime() : new Date('2024-01-01T00:00:00Z').getTime();
+  
+  // Use provided createdAt, or current time if not provided
+  const orderTime = createdAtString ? new Date(createdAtString).getTime() : Date.now();
+  
+  // Calculate days since epoch
+  const daysSinceEpoch = Math.floor((orderTime - epoch) / (1000 * 60 * 60 * 24));
+  
+  // Calculate restaurant offset (only use this if we don't have the exact restaurant install date, to preserve backwards compatibility)
+  let offset = 0;
+  if (restaurantId && !restaurantCreatedAt) {
+    offset = Array.from(restaurantId).reduce((acc, char) => acc + char.charCodeAt(0), 0) % 26;
+  }
+  
+  // 26 letters in English alphabet
+  const letterIndex = Math.max(0, daysSinceEpoch + offset) % 26;
+  const dayLetter = String.fromCharCode(65 + letterIndex); // A-Z
+
   const shortCode = getTableShortCode(tableStr);
   const paddedOrderNum = String(dailyOrderNumber || 0).padStart(3, '0');
   
+  const formattedNumber = `${dayLetter}${paddedOrderNum}`;
+
   if (shortCode) {
-    return `${shortCode}-${paddedOrderNum}`;
+    return `${shortCode}-${formattedNumber}`;
   }
-  return paddedOrderNum;
+  return formattedNumber;
 }

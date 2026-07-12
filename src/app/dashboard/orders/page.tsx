@@ -107,7 +107,7 @@ export default async function OrdersPage() {
       </div>
 
       <div className="relative flex-1">
-        <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} locationLabel={locationLabel} currencySymbol={getCurrencySymbol(restaurant.currency)} />
+        <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} restaurantCreatedAt={restaurant.created_at} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} locationLabel={locationLabel} currencySymbol={getCurrencySymbol(restaurant.currency)} />
       </div>
     </div>
   );

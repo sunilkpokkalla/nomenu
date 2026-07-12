@@ -32,7 +32,8 @@ export default function FeedbackManualPage() {
         <ul className="space-y-3">
           <li><a href="#viewing-feedback" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">1. Viewing & Filtering Feedback</a></li>
           <li><a href="#service-recovery" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">2. AI Service Recovery Strategy</a></li>
-          <li><a href="#csv-export" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">3. Exporting Customer Data</a></li>
+          <li><a href="#loyalty-integration" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">3. Loyalty Program Integration</a></li>
+          <li><a href="#csv-export" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">4. Exporting Customer Data</a></li>
         </ul>
       </div>
 
@@ -85,9 +86,31 @@ export default function FeedbackManualPage() {
           </div>
         </section>
 
-        <section id="csv-export" className="scroll-mt-24 space-y-4">
+        <section id="loyalty-integration" className="scroll-mt-24 space-y-4">
           <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
             <span className="bg-slate-200 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span>
+            Loyalty Program Integration
+          </h2>
+          <p className="text-slate-600 leading-relaxed text-lg">
+            NoMenu seamlessly integrates your customer feedback with the built-in <strong>10-Stamp Loyalty Program</strong> to incentivize high ratings.
+          </p>
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mt-4">
+            <h4 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+              Automatic Loyalty Stamps
+            </h4>
+            <p className="text-slate-600 mb-4">When a customer leaves a 4 or 5-star review via the QR code on their table, they automatically earn a digital stamp.</p>
+            <ul className="list-disc list-inside space-y-3 text-slate-600 ml-2">
+              <li><strong>10-Stamp Cycle:</strong> Customers collect stamps until they reach 10 stamps, at which point they unlock a <strong>Mega Reward</strong> (configured in your Loyalty Settings).</li>
+              <li><strong>Cycles:</strong> After redeeming their Mega Reward, the customer's cycle restarts at 0 stamps, and their total <code>redeemed_cycles</code> count increases.</li>
+              <li><strong>In-Store Redemption:</strong> Customers can track their progress via their mobile devices and present their phone to the cashier when they have unlocked a Mega Reward.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="csv-export" className="scroll-mt-24 space-y-4">
+          <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
+            <span className="bg-slate-200 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center text-sm">4</span>
             Exporting Customer Data
           </h2>
           <p className="text-slate-600 leading-relaxed text-lg">

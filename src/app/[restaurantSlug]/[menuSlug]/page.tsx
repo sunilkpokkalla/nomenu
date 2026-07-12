@@ -205,6 +205,8 @@ export default async function StorefrontMenuPage(
       <ReceiptTracker 
         restaurantId={restaurant.id} 
         restaurantName={restaurant.name}
+        restaurantAddress={restaurant.address}
+        restaurantPhone={restaurant.phone}
         locationLabel={menu.location_label} 
         taxRate={menu.tax_rate || 0}
         serviceCharge={menu.service_charge || 0}

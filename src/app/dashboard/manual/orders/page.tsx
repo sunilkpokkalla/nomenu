@@ -33,6 +33,7 @@ export default function OrdersManualPage() {
           <li><a href="#understanding-kds" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">1. Understanding the KDS Layout</a></li>
           <li><a href="#order-flow" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">2. The Order Flow (Drag & Drop)</a></li>
           <li><a href="#cancellations" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">3. Cancellations & Automatic Refunds</a></li>
+          <li><a href="#order-numbering" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">4. How Order Numbering Works</a></li>
         </ul>
       </div>
 
@@ -126,6 +127,33 @@ export default function OrdersManualPage() {
                 Customers can now cancel their own items smoothly without annoying popups blocking the interface. When a customer cancels an item from their device, it will automatically update on the Kitchen Display System in real time.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section id="order-numbering" className="scroll-mt-24 space-y-4">
+          <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
+            <span className="bg-slate-200 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center text-sm">4</span>
+            How Order Numbering Works
+          </h2>
+          <p className="text-slate-600 leading-relaxed text-lg">
+            NoMenu's order numbering system is designed to uniquely identify orders without them becoming overwhelmingly large. Orders are formatted as <strong>[Day Letter][Daily Number]</strong> (e.g., <strong>A0001</strong>).
+          </p>
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mt-4">
+            <ul className="space-y-4 text-slate-600">
+              <li className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <div>
+                  <strong>The Starting Letter (A-Z):</strong> The letter at the start of the order represents the day of operations. This starts strictly on the exact day your restaurant account is installed/created on NoMenu. 
+                  <br/><br/>Day 1 of your installation = A. Day 2 = B. This automatically cycles through the alphabet indefinitely, providing a clear visual indicator for the kitchen staff that a new operational day has begun.
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <div>
+                  <strong>The Daily Number (0001+):</strong> The numeric portion resets to 0001 automatically at midnight based on your local timezone setting. This ensures the daily numbers remain short and easily readable.
+                </div>
+              </li>
+            </ul>
           </div>
         </section>
 

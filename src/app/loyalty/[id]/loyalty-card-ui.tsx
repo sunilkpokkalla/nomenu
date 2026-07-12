@@ -4,9 +4,10 @@ import { useState } from "react";
 import { 
   Star, Heart, Coffee, Pizza, Gift, Check, PartyPopper, Lock, CheckCircle2,
   Croissant, Utensils, IceCream, Wine, Cake, CupSoda,
-  Soup, BadgePercent, ChefHat, Sandwich
+  Soup, BadgePercent, ChefHat, Sandwich, Loader2
 } from "lucide-react";
 import * as Layouts from "./layouts";
+import { Button } from "@/components/ui/button";
 
 interface LoyaltyCardUIProps {
   cardId: string;
@@ -23,12 +24,17 @@ interface LoyaltyCardUIProps {
   hasPhoneNumber?: boolean;
   activeReward?: string | null;
   cardColor?: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rewardTemplates?: any[] | null;
+  redeemedCycles?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  milestoneRewards?: any[] | null;
 }
 
 export function LoyaltyCardUI({ 
   cardId, restaurantId, stamps: initialStamps, restaurantName, primaryColor, restaurantLogo, 
   stampColor = "amber", stampIcon = "star", layout = "classic", rewardText = "10 Stamps = 1 Free Item", isPreviewMode = false,
-  hasPhoneNumber = true, activeReward = null, cardColor
+  hasPhoneNumber = true, activeReward = null, cardColor, rewardTemplates, redeemedCycles = 0, milestoneRewards
 }: LoyaltyCardUIProps) {
   const [stamps, setStamps] = useState(initialStamps);
   const [isLinked, setIsLinked] = useState(hasPhoneNumber);
@@ -38,8 +44,30 @@ export function LoyaltyCardUI({
   const [currentActiveReward, setCurrentActiveReward] = useState(activeReward);
   const [isClaimingReward, setIsClaimingReward] = useState(false);
   const [confirmClaim, setConfirmClaim] = useState(false);
+  
+  // New cycle logic
+  const [currentStamps, setCurrentStamps] = useState(initialStamps);
+  const [currentCycles, setCurrentCycles] = useState(redeemedCycles);
 
-  const isFull = stamps >= 10;
+  const isFull = currentStamps >= 10;
+  
+  // Determine which template to show based on the current cycle
+  let cycleRewardText = rewardText;
+  if (rewardTemplates && rewardTemplates.length > 0) {
+    const cycleIndex = currentCycles % rewardTemplates.length;
+    cycleRewardText = rewardTemplates[cycleIndex].value || rewardText;
+  }
+
+  // Milestone logic
+  const lifetimeVisits = (currentCycles * 10) + currentStamps;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let activeMilestone: any = null;
+  if (isFull && milestoneRewards && milestoneRewards.length > 0) {
+    // Only trigger if they actually reached the exact milestone 
+    // e.g. lifetimeVisits === 100
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    activeMilestone = milestoneRewards.find((m: any) => m.visits === lifetimeVisits);
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ICONS: Record<string, any> = {
@@ -92,13 +120,13 @@ export function LoyaltyCardUI({
   };
 
   const commonProps = {
-    stamps,
+    stamps: currentStamps,
     restaurantName,
     primaryColor,
     stampColor,
     StampIcon,
     stampTheme,
-    rewardText,
+    rewardText: cycleRewardText,
     cardColor: cardColor || primaryColor || "#000000"
   };
 
@@ -223,15 +251,120 @@ export function LoyaltyCardUI({
 
       {/* Action Area */}
       {isFull ? (
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center space-y-3 animate-in zoom-in-95 duration-500">
-          <div className="flex justify-center">
-            <CheckCircle2 className="w-12 h-12 text-green-500" />
+        activeMilestone ? (
+          <div className="bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 border border-yellow-500 rounded-2xl p-6 text-center space-y-3 animate-in zoom-in-95 duration-500 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-20">
+              <PartyPopper className="w-24 h-24" />
+            </div>
+            <div className="flex justify-center relative z-10">
+              <PartyPopper className="w-12 h-12 text-yellow-900" />
+            </div>
+            <h2 className="text-2xl font-black text-yellow-950 relative z-10 uppercase tracking-wider">Milestone Unlocked!</h2>
+            <div className="bg-black/10 rounded-lg p-3 relative z-10">
+              <p className="text-yellow-950 font-bold text-lg mb-1">
+                You've reached {lifetimeVisits} visits!
+              </p>
+              <p className="text-yellow-900 text-sm">
+                Show this screen to your server to claim your mega reward:
+              </p>
+              <strong className="block text-2xl mt-2 text-yellow-950 drop-shadow-sm">{activeMilestone.reward}</strong>
+            </div>
+            
+            {confirmClaim ? (
+              <div className="mt-4 pt-4 border-t border-yellow-600/30 relative z-10">
+                <p className="text-sm text-yellow-900 font-bold mb-3 uppercase tracking-wide">Staff Only: Confirm Redemption</p>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 bg-white/50 border-yellow-600/30 text-yellow-900 hover:bg-white/80"
+                    onClick={() => setConfirmClaim(false)}
+                    disabled={isClaimingReward}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-yellow-900 hover:bg-black text-yellow-400"
+                    onClick={async () => {
+                      setIsClaimingReward(true);
+                      const { redeemLoyaltyReward } = await import('./actions');
+                      const res = await redeemLoyaltyReward(cardId);
+                      if (res?.success) {
+                        setCurrentStamps(Math.max(0, currentStamps - 10));
+                        setCurrentCycles(c => c + 1);
+                        setConfirmClaim(false);
+                      } else {
+                        alert(res?.error || "Failed to redeem reward.");
+                      }
+                      setIsClaimingReward(false);
+                    }}
+                    disabled={isClaimingReward}
+                  >
+                    {isClaimingReward ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Confirm"}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button 
+                className="w-full mt-4 bg-yellow-900 hover:bg-black text-yellow-400 font-bold h-12 rounded-xl relative z-10 text-lg shadow-lg"
+                onClick={() => setConfirmClaim(true)}
+              >
+                Redeem Mega Reward
+              </Button>
+            )}
           </div>
-          <h2 className="text-xl font-bold text-green-900">Reward Unlocked!</h2>
-          <p className="text-green-700 text-sm">
-            You've collected 10 stamps! Show this screen to your server to claim your free menu item (under $20).
-          </p>
+        ) : (
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center space-y-3 animate-in zoom-in-95 duration-500">
+            <div className="flex justify-center">
+              <CheckCircle2 className="w-12 h-12 text-green-500" />
+            </div>
+            <h2 className="text-xl font-bold text-green-900">Reward Unlocked!</h2>
+            <p className="text-green-700 text-sm">
+              You've collected 10 stamps! Show this screen to your server to claim: <strong className="block text-lg mt-1">{cycleRewardText}</strong>
+            </p>
+          
+          {confirmClaim ? (
+            <div className="mt-4 pt-4 border-t border-green-200">
+              <p className="text-sm text-green-800 font-bold mb-3 uppercase tracking-wide">Staff Only: Confirm Redemption</p>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 bg-white border-green-200 text-green-700 hover:bg-green-50"
+                  onClick={() => setConfirmClaim(false)}
+                  disabled={isClaimingReward}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                  onClick={async () => {
+                    setIsClaimingReward(true);
+                    const { redeemLoyaltyReward } = await import('./actions');
+                    const res = await redeemLoyaltyReward(cardId);
+                    if (res?.success) {
+                      setCurrentStamps(Math.max(0, currentStamps - 10));
+                      setCurrentCycles(c => c + 1);
+                      setConfirmClaim(false);
+                    } else {
+                      alert(res?.error || "Failed to redeem reward.");
+                    }
+                    setIsClaimingReward(false);
+                  }}
+                  disabled={isClaimingReward}
+                >
+                  {isClaimingReward ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Confirm"}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button 
+              className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-bold h-12 rounded-xl"
+              onClick={() => setConfirmClaim(true)}
+            >
+              Redeem Reward
+            </Button>
+          )}
         </div>
+        )
       ) : (
         <div className="bg-white border-2 border-indigo-100 rounded-2xl p-6 text-center shadow-sm">
           <div className="flex justify-center mb-4">

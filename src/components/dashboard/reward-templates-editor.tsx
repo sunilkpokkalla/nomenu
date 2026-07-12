@@ -35,6 +35,22 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
     setTemplates(newTemplates);
   };
 
+  const generateTenStepJourney = () => {
+    const journey: RewardTemplate[] = [
+      { label: "Free Appetizer", value: "Congratulations on your first 10 stamps! Claim a free appetizer of your choice." },
+      { label: "Free Dessert", value: "You hit 20 stamps! Celebrate with any free dessert." },
+      { label: "BOGO Entree", value: "30 stamps! Buy one entree, get one free on your next visit." },
+      { label: "Free Drink", value: "40 stamps! Any beverage is on the house today." },
+      { label: "15% Off Total", value: "Halfway to the mega reward! Enjoy 15% off your entire bill today." },
+      { label: "Free Premium Side", value: "60 stamps! Upgrade your meal with a free premium side." },
+      { label: "Free Signature Drink", value: "70 stamps! Try our signature cocktail or mocktail for free." },
+      { label: "Free Kids Meal", value: "80 stamps! Bring the family and get a free kids meal." },
+      { label: "25% Off Total", value: "90 stamps! Enjoy 25% off your entire order today." },
+      { label: "Mega Reward Next!", value: "100 stamps! You've unlocked the 100-visit milestone!" }
+    ];
+    setTemplates(journey);
+  };
+
   const [generatingStates, setGeneratingStates] = useState<Record<number, boolean>>({});
 
   const handleGenerate = async (index: number) => {
@@ -75,9 +91,14 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
           <p className="text-slate-500 text-sm mb-4">
             You haven't defined a 10-stamp reward yet. Add one below to incentivize your customers!
           </p>
-          <Button type="button" variant="outline" onClick={addTemplate} className="gap-2">
-            <Plus className="w-4 h-4" /> Set 10-Stamp Reward
-          </Button>
+          <div className="flex gap-2 justify-center">
+            <Button type="button" variant="outline" onClick={addTemplate} className="gap-2">
+              <Plus className="w-4 h-4" /> Add 10-Stamp Reward
+            </Button>
+            <Button type="button" onClick={generateTenStepJourney} className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Wand2 className="w-4 h-4" /> Quick Setup 10-Step Journey
+            </Button>
+          </div>
         </div>
       ) : (
         <div className="space-y-3">
@@ -134,9 +155,16 @@ export function RewardTemplatesEditor({ initialTemplates }: RewardTemplatesEdito
               </Button>
             </div>
           ))}
-          <Button type="button" variant="outline" onClick={addTemplate} className="w-full mt-2 border-dashed gap-2 text-slate-500 bg-transparent">
-            <Plus className="w-4 h-4" /> Add Alternate 10-Stamp Reward Choice
-          </Button>
+          <div className="flex gap-2 mt-2">
+            <Button type="button" variant="outline" onClick={addTemplate} className="flex-1 border-dashed gap-2 text-slate-500 bg-transparent">
+              <Plus className="w-4 h-4" /> Add Reward Tier
+            </Button>
+            {templates.length < 10 && (
+              <Button type="button" variant="secondary" onClick={generateTenStepJourney} className="flex-1 gap-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100">
+                <Wand2 className="w-4 h-4" /> Auto-fill 10 Tiers
+              </Button>
+            )}
+          </div>
         </div>
       )}
     </div>

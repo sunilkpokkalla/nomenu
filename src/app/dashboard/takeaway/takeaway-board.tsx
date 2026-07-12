@@ -37,7 +37,7 @@ type Order = {
   party_size?: number | null;
 };
 
-export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE" }: { initialOrders: Order[], restaurantId: string, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string }) {
+export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE" }: { initialOrders: Order[], restaurantId: string, restaurantCreatedAt?: string | null, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -122,7 +122,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
 
       setNotification({
         id: latestNew.id,
-        title: `New Order #${formatOrderNumber(latestNew.table_number, latestNew.daily_order_number)}`,
+        title: `New Order #${formatOrderNumber(latestNew.table_number, latestNew.daily_order_number, latestNew.created_at, latestNew.restaurant_id, restaurantCreatedAt)}`,
         subtitle: latestNew.customer_phone ? `Phone: ${latestNew.customer_phone}` : (latestNew.customer_name || 'Anonymous')
       });
       
@@ -131,7 +131,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
       // Add to known IDs
       newOrders.forEach(o => knownOrderIds.current.add(o.id));
     }
-  }, [orders, selectedDateStr, locationLabel, playNotificationSound]);
+  }, [orders, selectedDateStr, locationLabel, playNotificationSound, restaurantCreatedAt]);
 
   useEffect(() => {
     const pref = localStorage.getItem(`nomenu_kds_takeaway_sound_${restaurantId}`);
@@ -469,7 +469,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
             <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mb-6">
               <AlertTriangle className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-black text-slate-900 mb-2">Cancel Order #{formatOrderNumber(cancelOrderPrompt.table_number, cancelOrderPrompt.daily_order_number)}?</h3>
+            <h3 className="text-2xl font-black text-slate-900 mb-2">Cancel Order #{formatOrderNumber(cancelOrderPrompt.table_number, cancelOrderPrompt.daily_order_number, cancelOrderPrompt.created_at, cancelOrderPrompt.restaurant_id, restaurantCreatedAt)}?</h3>
             {cancelOrderPrompt.payment_intent_id ? (
               <p className="text-slate-500 font-medium mb-8">
                 WARNING: This order was paid online. Canceling it will <strong className="text-rose-600 font-bold">permanently refund ${Number(cancelOrderPrompt.total_amount).toFixed(2)}</strong> to the customer via Stripe. This action cannot be undone.
@@ -596,12 +596,12 @@ export function TakeawayBoard({ initialOrders, restaurantId, timezone, supabaseU
                                     }}
                                   >
                                     <div className="flex items-center gap-2">
-                                      <span className={`${!isExpanded && isInactiveStatus ? "text-lg" : "text-2xl"} font-black tracking-tighter font-mono ${
+                                      <span className={`${!isExpanded && isInactiveStatus ? "text-base" : "text-lg"} font-black tracking-tighter font-mono ${
                                         col.id === "cancelled" ? "text-rose-500" : 
                                         col.id === "completed" ? "text-emerald-500" :
                                         (isKdsMode ? "text-slate-100" : "text-slate-900")
                                       }`}>
-                                        #{formatOrderNumber(order.table_number, order.daily_order_number)}
+                                        #{formatOrderNumber(order.table_number, order.daily_order_number, order.created_at, order.restaurant_id, restaurantCreatedAt)}
                                       </span>
                                       
                                       {/* PAYMENT STATUS BADGE / TOGGLE */}

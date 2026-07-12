@@ -14,7 +14,7 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
 
   const { data: card, error } = await supabase
     .from("loyalty_cards")
-    .select("*, restaurants (name, logo_url, primary_color, loyalty_stamp_color, loyalty_stamp_icon, loyalty_card_layout, loyalty_reward_text, loyalty_card_color)")
+    .select("*, restaurants (name, logo_url, primary_color, loyalty_stamp_color, loyalty_stamp_icon, loyalty_card_layout, loyalty_reward_text, loyalty_card_color, reward_templates, milestone_rewards)")
     .eq("id", cardId)
     .maybeSingle();
 
@@ -51,6 +51,11 @@ export default async function LoyaltyCardPage(props: { params: Promise<{ id: str
         cardColor={restaurant.loyalty_card_color}
         hasPhoneNumber={!!card.phone_number}
         activeReward={card.active_reward}
+        rewardTemplates={restaurant.reward_templates}
+        // Fallback to 0 if the migration hasn't run yet
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        redeemedCycles={(card as any).redeemed_cycles || 0}
+        milestoneRewards={restaurant.milestone_rewards}
       />
       <AddToHomeScreen />
     </div>

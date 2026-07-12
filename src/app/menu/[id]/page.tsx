@@ -157,6 +157,7 @@ export default async function PublicMenuPage(
       {['elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') && (
         <FloatingCart 
           restaurantId={restaurant.id}
+          restaurantCreatedAt={restaurant.created_at}
           menuId={menu.id}
           tableNumber={effectiveTableNumber}
           themeStyle={activeThemeStyle || "bistro"}
@@ -177,7 +178,10 @@ export default async function PublicMenuPage(
       )}
       <ReceiptTracker 
         restaurantId={restaurant.id} 
+        restaurantCreatedAt={restaurant.created_at}
         restaurantName={restaurant.name}
+        restaurantAddress={restaurant.address}
+        restaurantPhone={restaurant.phone}
         locationLabel={menu.location_label} 
         taxRate={menu.tax_rate || 0}
         serviceCharge={menu.service_charge || 0}

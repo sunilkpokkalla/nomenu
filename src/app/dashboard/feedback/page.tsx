@@ -4,6 +4,7 @@ import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, Ma
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
+import { updateLoyaltyRewards } from "@/app/dashboard/actions";
 import { getSupabaseEnv } from "@/lib/env";
 import { FeedbackAnalytics, FeedbackData } from "./feedback-analytics";
 import { FeedbackList } from "./feedback-list";
@@ -15,6 +16,7 @@ import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsSync } from "@/components/ui/tabs-sync";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { RewardTemplatesEditor, RewardTemplate } from "@/components/dashboard/reward-templates-editor";
+import { MilestoneRewardsEditor, MilestoneReward } from "@/components/dashboard/milestone-rewards-editor";
 import { AutoRefresh } from "@/components/ui/auto-refresh";
 
 export const metadata = {
@@ -210,15 +212,37 @@ export default async function FeedbackPage({
           </TabsContent>
 
           <TabsContent value="rewards" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">10-Stamp Loyalty Program Setup</h3>
-              <p className="text-slate-600 mb-6">
-                Define the grand prize a customer automatically unlocks when they scan your QR codes and collect 10 loyalty stamps.
-              </p>
-              <RewardTemplatesEditor
-                initialTemplates={restaurant.reward_templates as RewardTemplate[] | null}
-              />
-            </div>
+            <form action={updateLoyaltyRewards} className="space-y-6">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">10-Step Loyalty Journey Setup</h3>
+                <p className="text-slate-600 mb-6">
+                  Define the rewards a customer automatically unlocks when they scan your QR codes and collect stamps. You can set different rewards for each cycle.
+                </p>
+                <RewardTemplatesEditor
+                  initialTemplates={restaurant.reward_templates as RewardTemplate[] | null}
+                />
+              </div>
+              
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-amber-600 mb-2 flex items-center gap-2">
+                  <Star className="w-5 h-5 fill-amber-600 text-amber-600" />
+                  Milestone Rewards
+                </h3>
+                <p className="text-slate-600 mb-6">
+                  Set grand prizes for your most loyal customers when they hit long-term milestones (e.g. 100 total visits).
+                </p>
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                <MilestoneRewardsEditor
+                  initialMilestones={restaurant.milestone_rewards as MilestoneReward[] | null}
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-colors shadow-sm">
+                  Save Loyalty Rewards
+                </button>
+              </div>
+            </form>
           </TabsContent>
         </TabsSync>
       )}

@@ -37,10 +37,13 @@ interface ReceiptTrackerProps {
   serviceCharge?: number;
   serviceChargeType?: string;
   restaurantName?: string;
+  restaurantAddress?: string | null;
+  restaurantPhone?: string | null;
   currencySymbol?: string;
+  restaurantCreatedAt?: string | null;
 }
 
-export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", restaurantName, currencySymbol = "$" }: ReceiptTrackerProps) {
+export function ReceiptTracker({ restaurantId, restaurantCreatedAt, locationLabel, taxRate = 0, serviceCharge = 0, serviceChargeType = "percentage", restaurantName, restaurantAddress, restaurantPhone, currencySymbol = "$" }: ReceiptTrackerProps) {
   const [orderIds, setOrderIds] = useState<string[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -280,14 +283,23 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
                   
                   <div className="p-6 pt-4 pb-8">
                     {restaurantName && (
-                      <div className="text-center font-black text-xl mb-6 uppercase tracking-wider border-b-2 border-slate-900 pb-2">
-                        {restaurantName}
+                      <div className="text-center mb-6 border-b-2 border-slate-900 pb-4">
+                        <div className="font-black text-lg uppercase tracking-wider mb-1">
+                          {restaurantName}
+                        </div>
+                        {(restaurantAddress || restaurantPhone) && (
+                          <div className="text-[10px] text-slate-500 uppercase font-bold mt-1">
+                            {restaurantAddress}
+                            {restaurantAddress && restaurantPhone && " | "}
+                            {restaurantPhone && `Contact: ${restaurantPhone}`}
+                          </div>
+                        )}
                       </div>
                     )}
 
                     <div className="text-center mb-6">
                       <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
-                      <div className="text-5xl font-black mb-4">#{formatOrderNumber(o.table_number, o.daily_order_number)}</div>
+                      <div className="text-2xl tracking-tight break-words font-black mb-4">#{formatOrderNumber(o.table_number, o.daily_order_number, o.created_at, restaurantId, restaurantCreatedAt)}</div>
                       
                       <div className="flex justify-between items-end text-left border-t border-slate-200 pt-4 mt-2">
                         {o.customer_name ? (

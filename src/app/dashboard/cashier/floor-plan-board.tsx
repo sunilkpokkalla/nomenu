@@ -43,7 +43,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
   const [isSaving, setIsSaving] = useState(false);
   const [isProcessingLiveAction, setIsProcessingLiveAction] = useState(false);
   const [editPlanName, setEditPlanName] = useState(activePlan?.name || "");
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(0.8);
   
   // New state for walk-in form
   const [walkInName, setWalkInName] = useState("");
@@ -476,7 +476,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                       className={`absolute w-4 h-4 rounded-full border-2 ${
                         isEditMode ? 'bg-slate-200 border-slate-300' : (isOccupied ? 'bg-red-200 border-red-300' : 'bg-emerald-200 border-emerald-300')
                       }`}
-                      style={{ left: `${left}px`, top: `${top}px` }}
+                      style={{ left: `${left.toFixed(2)}px`, top: `${top.toFixed(2)}px` }}
                     />
                   );
                 })}

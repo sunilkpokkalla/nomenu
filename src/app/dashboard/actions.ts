@@ -951,7 +951,8 @@ export async function updateRestaurantSettings(formData: FormData) {
     redirect("/dashboard/settings?message=Restaurant%20URL%20slug%20is%20required");
   }
 
-  let rewardTemplates = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let rewardTemplates: any = undefined;
   const rewardTemplatesRaw = formData.get("rewardTemplates");
   if (typeof rewardTemplatesRaw === "string" && rewardTemplatesRaw) {
     try {
@@ -1618,4 +1619,56 @@ export async function updateRestaurantWaitTime(restaurantId: string, status: str
   revalidatePath("/dashboard");
   revalidateTag("menu-data");
   return { success: true };
+}
+
+export async function updateLoyaltyRewards(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard");
+  }
+
+  let rewardTemplates = null;
+  const rewardTemplatesRaw = formData.get("rewardTemplates");
+  if (typeof rewardTemplatesRaw === "string" && rewardTemplatesRaw) {
+    try {
+      rewardTemplates = JSON.parse(rewardTemplatesRaw);
+    } catch (e) {
+      console.error("Failed to parse reward templates", e);
+    }
+  }
+
+  let milestoneRewards = null;
+  const milestoneRewardsRaw = formData.get("milestoneRewards");
+  if (typeof milestoneRewardsRaw === "string" && milestoneRewardsRaw) {
+    try {
+      milestoneRewards = JSON.parse(milestoneRewardsRaw);
+    } catch (e) {
+      console.error("Failed to parse milestone rewards", e);
+    }
+  }
+
+  const { error } = await supabase
+    .from("restaurants")
+    .update({
+      reward_templates: rewardTemplates,
+      milestone_rewards: milestoneRewards,
+    })
+    .eq("id", restaurant.id);
+
+  if (error) {
+    redirect(`/dashboard/feedback?message=${encodeURIComponent(error.message)}`);
+  }
+
+  revalidatePath("/dashboard/feedback");
+  revalidatePath("/dashboard/settings");
+  redirect("/dashboard/feedback?tab=rewards&success=Loyalty%20rewards%20updated%20successfully");
 }

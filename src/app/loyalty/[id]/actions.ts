@@ -124,3 +124,45 @@ export async function claimActiveReward(cardId: string) {
   }
   return { success: true };
 }
+
+export async function redeemLoyaltyReward(cardId: string) {
+  const adminClient = createAdminClient();
+  
+  // 1. Fetch current stamps
+  const { data: card, error: fetchError } = await adminClient
+    .from("loyalty_cards")
+    .select("stamps")
+    .eq("id", cardId)
+    .single();
+    
+  if (fetchError || !card) {
+    return { error: "Card not found." };
+  }
+  
+  if (card.stamps < 10) {
+    return { error: "Not enough stamps to redeem." };
+  }
+
+  // 2. Deduct 10 stamps. We use a fallback try/catch to attempt incrementing redeemed_cycles if the column exists.
+  let error;
+  
+  // Try to update with redeemed_cycles
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error: cycleError } = await (adminClient as any).rpc('redeem_loyalty_cycle', { target_card_id: cardId });
+  
+  if (cycleError) {
+    // Fallback: just deduct 10 stamps
+    const { error: updateError } = await adminClient
+      .from("loyalty_cards")
+      .update({ stamps: card.stamps - 10 })
+      .eq("id", cardId);
+    error = updateError;
+  }
+  
+  if (error) {
+    return { error: "Failed to redeem reward." };
+  }
+  
+  return { success: true };
+}
+

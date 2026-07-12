@@ -100,6 +100,7 @@ export default async function TakeawayPage() {
         <TakeawayBoard 
           initialOrders={initialOrders || []} 
           restaurantId={restaurant.id}
+          restaurantCreatedAt={restaurant.created_at}
           timezone={restaurant.timezone || "UTC"}
           supabaseUrl={getSupabaseEnv().url}
           supabaseAnonKey={getSupabaseEnv().anonKey}

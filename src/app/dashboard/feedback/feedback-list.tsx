@@ -781,7 +781,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                     <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Order Details</h4>
                                     <div className="bg-slate-50 border border-slate-100 rounded-lg p-3 text-sm text-slate-700">
                                       <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-200">
-                                        <span className="font-semibold">Order #{orderDetailsMap[fb.id].daily_order_number ? formatOrderNumber(fb.table_number, orderDetailsMap[fb.id].daily_order_number) : orderDetailsMap[fb.id].id.slice(0,6).toUpperCase()}</span>
+                                        <span className="font-semibold">Order #{orderDetailsMap[fb.id].daily_order_number ? formatOrderNumber(fb.table_number, orderDetailsMap[fb.id].daily_order_number, orderDetailsMap[fb.id].created_at, restaurantId) : orderDetailsMap[fb.id].id.slice(0,6).toUpperCase()}</span>
                                         <span className="text-xs text-slate-500">{format(new Date(orderDetailsMap[fb.id].created_at), "h:mm a")}</span>
                                       </div>
                                       <ul className="space-y-1.5">

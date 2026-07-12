@@ -102,10 +102,6 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
   }
 
   const isPro = restaurant.plan?.toLowerCase() === "pro";
-  
-  if (isPro && (tab === "history")) {
-    tab = "floor-plan";
-  }
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-[1600px] mx-auto py-8 px-4 sm:px-6 lg:px-8 pb-32">
@@ -136,14 +132,12 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
             >
               Active Tabs
             </Link>
-            {!isPro && (
-              <Link 
-                href="/dashboard/cashier?tab=history"
-                className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "history" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"}`}
-              >
-                History
-              </Link>
-            )}
+            <Link 
+              href="/dashboard/cashier?tab=history"
+              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${tab === "history" ? "bg-slate-900 text-white shadow-md" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"}`}
+            >
+              Overview & History
+            </Link>
           </div>
           <FohPopoutButton />
         </div>
@@ -153,6 +147,16 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
         {tab === "active" && (
           <CashierBoard 
             initialOrders={initialOrders || []} 
+            restaurantId={restaurant.id} 
+            restaurantCreatedAt={restaurant.created_at}
+            timezone={restaurant.timezone || "UTC"} 
+            supabaseUrl={getSupabaseEnv().url} 
+            supabaseAnonKey={getSupabaseEnv().anonKey} 
+            currencySymbol={getCurrencySymbol(restaurant.currency)} 
+          />
+        )}
+        {tab === "history" && (
+          <CompletedBoard 
             restaurantId={restaurant.id} 
             timezone={restaurant.timezone || "UTC"} 
             supabaseUrl={getSupabaseEnv().url} 
@@ -167,15 +171,6 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
             supabaseAnonKey={getSupabaseEnv().anonKey} 
             floorPlans={floorPlansData}
             activeOrders={initialOrders || []}
-          />
-        )}
-        {tab === "history" && (
-          <CompletedBoard 
-            restaurantId={restaurant.id} 
-            timezone={restaurant.timezone || "UTC"} 
-            supabaseUrl={getSupabaseEnv().url} 
-            supabaseAnonKey={getSupabaseEnv().anonKey} 
-            currencySymbol={getCurrencySymbol(restaurant.currency)} 
           />
         )}
         {tab === "floor-plan" && floorPlansData.length > 0 && (
