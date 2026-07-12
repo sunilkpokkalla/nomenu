@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { User, Mail, Phone, Star, Award, AlertCircle, MessageSquare } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import { User, Mail, Phone, Star, Award, AlertCircle, MessageSquare, Search, Gift } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { FeedbackData } from "./feedback-analytics";
 
@@ -23,9 +23,13 @@ interface CustomerProfile {
   latestComment: string;
   recoveryOfferGiven?: string | null;
   recoveryOfferDate?: string | null;
+  activeReward: string | null;
 }
 
 export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilter, setActiveFilter] = useState<'all' | 'top-regulars' | 'reward-ready'>('all');
+
   const { customers, topRegulars, rewardReady, totalIdentified } = useMemo(() => {
     const profileMap = new Map<string, CustomerProfile>();
     
@@ -41,24 +45,38 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
       
       const existing = profileMap.get(identifier);
       
-      // Determine stamps
       let stamps = 0;
+      let cardName = null;
+      let cardEmail = null;
+      let cardPhone = null;
+      let activeReward = null;
+
       if (f.loyalty_cards && f.loyalty_cards.length > 0) {
-        stamps = f.loyalty_cards[0].stamps;
+        const card = f.loyalty_cards[0] as { customer_name?: string, customer_email?: string, phone_number?: string, active_reward?: string, stamps: number };
+        stamps = card.stamps;
+        cardName = card.customer_name || null;
+        cardEmail = card.customer_email || null;
+        cardPhone = card.phone_number || null;
+        activeReward = card.active_reward || null;
       }
       
+      const resolvedName = cardName || f.customer_name || "Anonymous Customer";
+      const resolvedEmail = cardEmail || f.customer_email || null;
+      const resolvedPhone = cardPhone || f.customer_phone || null;
+
       if (!existing) {
         profileMap.set(identifier, {
           id: identifier,
-          name: f.customer_name || "Anonymous Customer",
-          email: f.customer_email || null,
-          phone: f.customer_phone || null,
+          name: resolvedName,
+          email: resolvedEmail,
+          phone: resolvedPhone,
           contactInfo: f.contact_info || "",
           totalFeedbacks: 1,
           averageRating: f.rating,
           latestFeedbackDate: f.created_at,
           loyaltyStamps: stamps,
           latestComment: f.comment || "",
+          activeReward: activeReward,
         });
       } else {
         // Update existing
@@ -68,14 +86,20 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
         // Running average
         existing.averageRating = ((existing.averageRating * (existing.totalFeedbacks - 1)) + f.rating) / existing.totalFeedbacks;
         
+        if (cardName) existing.name = cardName;
+        if (cardEmail) existing.email = cardEmail;
+        if (cardPhone) existing.phone = cardPhone;
+        if (activeReward !== undefined && activeReward !== null) existing.activeReward = activeReward;
+
         // If this feedback is newer, update latest info
         if (new Date(f.created_at) > new Date(existing.latestFeedbackDate)) {
           existing.latestFeedbackDate = f.created_at;
-          if (f.customer_name) existing.name = f.customer_name;
-          if (f.customer_email) existing.email = f.customer_email;
-          if (f.customer_phone) existing.phone = f.customer_phone;
           if (f.contact_info) existing.contactInfo = f.contact_info;
           if (f.comment) existing.latestComment = f.comment;
+          // Fallback to feedback details if card details are still missing
+          if (!existing.name || existing.name === "Anonymous Customer") existing.name = f.customer_name || "Anonymous Customer";
+          if (!existing.email && f.customer_email) existing.email = f.customer_email;
+          if (!existing.phone && f.customer_phone) existing.phone = f.customer_phone;
         }
       }
     });
@@ -84,7 +108,7 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
       .filter(c => c.loyaltyStamps > 0) // ONLY show loyalty members
       .sort((a, b) => new Date(b.latestFeedbackDate).getTime() - new Date(a.latestFeedbackDate).getTime());
     
-    const topRegulars = customerList.sort((a, b) => b.totalFeedbacks - a.totalFeedbacks).slice(0, 5);
+    const topRegulars = customerList.sort((a, b) => b.totalFeedbacks - a.totalFeedbacks).slice(0, 3);
     const rewardReady = customerList.filter(c => c.loyaltyStamps >= 10);
     
     return {
@@ -113,7 +137,10 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
     <div className="space-y-6">
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <button 
+          onClick={() => setActiveFilter('all')}
+          className={`text-left bg-white rounded-2xl p-6 border shadow-sm transition-all hover:shadow-md hover:border-blue-300 active:scale-[0.98] focus:outline-none ${activeFilter === 'all' ? 'ring-2 ring-blue-500 border-blue-200' : 'border-slate-200'}`}
+        >
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
               <User className="w-5 h-5" />
@@ -122,9 +149,12 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
           </div>
           <p className="text-3xl font-bold text-slate-900">{totalIdentified}</p>
           <p className="text-sm text-slate-500 mt-1">Active loyalty members</p>
-        </div>
+        </button>
         
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <button 
+          onClick={() => setActiveFilter('top-regulars')}
+          className={`text-left bg-white rounded-2xl p-6 border shadow-sm transition-all hover:shadow-md hover:border-amber-300 active:scale-[0.98] focus:outline-none ${activeFilter === 'top-regulars' ? 'ring-2 ring-amber-500 border-amber-200' : 'border-slate-200'}`}
+        >
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
               <Award className="w-5 h-5" />
@@ -133,9 +163,12 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
           </div>
           <p className="text-3xl font-bold text-slate-900">{topRegulars.length > 0 ? topRegulars[0].totalFeedbacks : 0}</p>
           <p className="text-sm text-slate-500 mt-1">Most visits by a member</p>
-        </div>
+        </button>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm border-emerald-200 bg-emerald-50/30">
+        <button 
+          onClick={() => setActiveFilter('reward-ready')}
+          className={`text-left bg-emerald-50/30 rounded-2xl p-6 border shadow-sm transition-all hover:shadow-md hover:border-emerald-400 active:scale-[0.98] focus:outline-none ${activeFilter === 'reward-ready' ? 'ring-2 ring-emerald-500 border-emerald-300 bg-emerald-50/80' : 'border-emerald-200'}`}
+        >
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-emerald-100 text-emerald-700 rounded-lg">
               <Star className="w-5 h-5" />
@@ -144,15 +177,27 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
           </div>
           <p className="text-3xl font-bold text-emerald-900">{rewardReady.length}</p>
           <p className="text-sm text-emerald-600 mt-1">Members with 10 stamps</p>
-        </div>
+        </button>
       </div>
 
       {/* Tables Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Directory Table */}
         <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-          <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-            <h3 className="font-bold text-slate-900">Loyalty Members</h3>
+          <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <h3 className="font-bold text-slate-900">
+              {activeFilter === 'top-regulars' ? 'Top Regulars' : activeFilter === 'reward-ready' ? 'Rewards Ready' : 'Loyalty Members'}
+            </h3>
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search name, phone, email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-64"
+              />
+            </div>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-slate-600">
@@ -161,11 +206,24 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
                   <th className="px-6 py-4 font-semibold">Customer</th>
                   <th className="px-6 py-4 font-semibold">Visits</th>
                   <th className="px-6 py-4 font-semibold">Loyalty Status</th>
+                  <th className="px-6 py-4 font-semibold">Active Reward</th>
                   <th className="px-6 py-4 font-semibold">Last Visit</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {customers.map((customer) => (
+                {customers.filter(c => {
+                  if (activeFilter === 'top-regulars') {
+                    if (!topRegulars.find(r => r.id === c.id)) return false;
+                  } else if (activeFilter === 'reward-ready') {
+                    if (c.loyaltyStamps < 10) return false;
+                  }
+                  
+                  if (!searchTerm) return true;
+                  const q = searchTerm.toLowerCase();
+                  return (c.name.toLowerCase().includes(q) || 
+                          (c.email && c.email.toLowerCase().includes(q)) || 
+                          (c.phone && c.phone.toLowerCase().includes(q)));
+                }).map((customer) => (
                   <tr key={customer.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-medium text-slate-900">{customer.name}</div>
@@ -197,6 +255,16 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
                         </span>
                       ) : (
                         <span className="text-slate-400 text-xs">No Card</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      {customer.activeReward ? (
+                        <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-100 max-w-[150px] truncate" title={customer.activeReward}>
+                          <Gift className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">{customer.activeReward}</span>
+                        </div>
+                      ) : (
+                        <span className="text-slate-400 text-xs">-</span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

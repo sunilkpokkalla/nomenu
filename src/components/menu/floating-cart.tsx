@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { formatOrderNumber } from "@/lib/utils";
 import { useCart } from "./cart-context";
 import { ShoppingBag, X, Plus, Minus, CreditCard, UtensilsCrossed, Receipt, CheckCircle2 } from "lucide-react";
 import { submitOrder, getOrderReceipt, getSlotAvailability } from "@/app/menu/[id]/actions";
@@ -323,9 +324,11 @@ export function FloatingCart({ restaurantId, menuId, tableNumber, themeStyle, pr
           }`}>
             <div className={`flex justify-between items-end border-b pb-4 ${themeStyle === "luxury" ? "border-white/10" : "border-black/10"}`}>
               <div>
-                <div className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Order Number</div>
-                <div className="text-3xl font-black text-amber-500">
-                  #{receipt ? String(receipt.daily_order_number).padStart(3, '0') : String(successOrder.dailyNumber).padStart(3, '0')}
+                <div className="text-sm text-slate-500 font-medium mb-1 tracking-widest uppercase">
+                  Order Number
+                </div>
+                <div className="text-4xl font-black text-slate-900 tracking-tight">
+                  #{receipt ? formatOrderNumber(receipt.table_number, receipt.daily_order_number) : formatOrderNumber(table, successOrder.dailyNumber)}
                 </div>
               </div>
               <div className="flex items-center pb-1">

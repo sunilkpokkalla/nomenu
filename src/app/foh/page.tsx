@@ -57,7 +57,7 @@ export default async function FOHPage({ searchParams }: { searchParams: Promise<
     .eq("restaurant_id", restaurant.id)
     .is("customer_phone", null) // Exclusively Dine-In orders
     .eq("is_paid", false)
-    .neq("status", "cancelled")
+    .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment")')
     .order("created_at", { ascending: true });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

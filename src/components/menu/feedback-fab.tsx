@@ -28,6 +28,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
   const [error, setError] = useState("");
   const [loyaltyCardId, setLoyaltyCardId] = useState<string | null>(null);
   const [loyaltyStamps, setLoyaltyStamps] = useState<number>(0);
+  const [activeReward, setActiveReward] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [loyaltyConfig, setLoyaltyConfig] = useState<any>(null);
   const [feedbackId, setFeedbackId] = useState<string | null>(null);
@@ -147,6 +148,9 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
     if (result.loyaltyConfig) {
       setLoyaltyConfig(result.loyaltyConfig);
     }
+    if (result.activeReward) {
+      setActiveReward(result.activeReward);
+    }
     setIsSuccess(true);
   };
 
@@ -224,6 +228,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                stampIcon={loyaltyConfig.loyalty_stamp_icon || "star"}
                                layout={loyaltyConfig.loyalty_card_layout || "classic"}
                                rewardText={loyaltyConfig.loyalty_reward_text}
+                               activeReward={activeReward}
                              />
                           </div>
                           <Link 
@@ -244,9 +249,9 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                           </div>
                           <h5 className="font-bold text-slate-900 text-lg mb-2 text-center"
                               style={loyaltyConfig?.primary_color ? { color: loyaltyConfig.primary_color } : {}}
-                          >You unlocked a VIP Card!</h5>
+                          >Unlock or Access VIP Card</h5>
                           <p className="text-slate-600 text-sm mb-4 text-center">
-                            As a thank you for your {rating}-star review, you've earned a loyalty stamp! Please provide your details to claim your card.
+                            Enter your details below to create a brand new VIP card, or to access your existing one!
                           </p>
                           <div className="space-y-3 mb-4">
                             <input
@@ -290,9 +295,21 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                   phone: customerPhone
                                 });
                                 if (res.success) {
-                                  setLoyaltyCardId(res.loyaltyCardId || null);
-                                  setLoyaltyStamps(res.loyaltyStamps || 1);
+                                  if (res.loyaltyCardId) setLoyaltyCardId(res.loyaltyCardId);
+                                  if (res.loyaltyStamps) setLoyaltyStamps(res.loyaltyStamps);
                                   if (res.loyaltyConfig) setLoyaltyConfig(res.loyaltyConfig);
+                                  if (res.activeReward) setActiveReward(res.activeReward);
+                                  
+                                  // Save to localStorage so they don't lose track of it
+                                  if (res.loyaltyCardId) {
+                                    try {
+                                      const storedCards = JSON.parse(localStorage.getItem('nomenu_loyalty_cards') || '{}');
+                                      storedCards[restaurantId] = res.loyaltyCardId;
+                                      localStorage.setItem('nomenu_loyalty_cards', JSON.stringify(storedCards));
+                                    } catch (e) {
+                                      console.error("Failed to save claimed loyalty card to local storage", e);
+                                    }
+                                  }
                                 } else {
                                   alert(res.error || "Failed to claim card.");
                                 }
@@ -301,13 +318,8 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                             className="block w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors text-center"
                             style={loyaltyConfig?.primary_color ? { backgroundColor: loyaltyConfig.primary_color } : {}}
                           >
-                            Claim My Card
+                            Access / Claim VIP Card
                           </button>
-                          <div className="mt-4 text-center">
-                            <Link href="/loyalty/find" className="text-indigo-600 text-sm font-semibold hover:underline">
-                              Already a member? Find your card
-                            </Link>
-                          </div>
                         </div>
                       ) : null}
                     </>
@@ -444,58 +456,148 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                   <span className="font-mono text-sm font-bold tracking-widest text-amber-800 uppercase">{recoveryOffer}</span>
                                 </div>
                               )}
-                              <button
-                                type="button"
-                                onClick={async () => {
-                                  if (feedbackId) {
-                                    await import("@/app/menu/[id]/actions").then(m => m.submitRecoveryRequest(feedbackId, 'compensation', recoveryOffer));
-                                    setHasSubmittedContact(true);
-                                  }
-                                }}
-                                className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
-                              >
-                                Claim Compensation
-                              </button>
-                            </div>
-                          )}
-
-                          {(escalationState === 'RESOLVED_SUCCESS' || escalationState === 'RESOLVED_COMPENSATION' || escalationState === 'INITIAL') && !hasRequestedManager && (
-                            <div>
-                                <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
-                                <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
-                                <div className="flex flex-col gap-2">
+                              
+                              {loyaltyCardId ? (
+                                <div className="space-y-2 mt-4 text-left border-t border-amber-200/50 pt-4">
+                                  <p className="text-xs text-amber-800 font-semibold mb-2">Since you are already a VIP, you can instantly claim this offer!</p>
+                                </div>
+                              ) : (
+                                <div className="space-y-2 mt-4 text-left border-t border-amber-200/50 pt-4">
+                                  <p className="text-xs text-amber-800 font-semibold mb-2">Enter your details below to claim this offer to your VIP Card:</p>
                                   <input
                                     type="text"
                                     value={customerName}
                                     onChange={(e) => setCustomerName(e.target.value)}
-                                    placeholder="Your Name (optional but helpful)"
-                                    className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+                                    placeholder="Your Name (Required)"
+                                    className="w-full rounded-xl border border-amber-200 bg-white p-2.5 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
                                   />
-                                  <div className="flex gap-2">
+                                  <input
+                                    type="email"
+                                    value={customerEmail}
+                                    onChange={(e) => setCustomerEmail(e.target.value)}
+                                    placeholder="Email Address (Required)"
+                                    className="w-full rounded-xl border border-amber-200 bg-white p-2.5 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+                                  />
+                                  <input
+                                    type="tel"
+                                    value={customerPhone}
+                                    onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                    placeholder="Phone Number (Required)"
+                                    className="w-full rounded-xl border border-amber-200 bg-white p-2.5 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+                                  />
+                                </div>
+                              )}
+
+                              <button
+                                type="button"
+                                disabled={!loyaltyCardId && (!customerName || !customerEmail || !customerPhone || customerPhone.length < 5)}
+                                onClick={async () => {
+                                  if (!feedbackId) return;
+                                  
+                                  await import("@/app/menu/[id]/actions").then(async m => {
+                                    // 1. Submit recovery request record
+                                    await m.submitRecoveryRequest(feedbackId, 'compensation', recoveryOffer);
+                                    
+                                    if (loyaltyCardId) {
+                                      // Known VIP: Just attach the reward
+                                      await m.attachRewardToLoyaltyCard(loyaltyCardId, recoveryOffer);
+                                      setActiveReward(recoveryOffer);
+                                    } else if (customerPhone) {
+                                      // New/Unknown: Create card and attach reward
+                                      const res = await m.claimLoyaltyCard({
+                                        feedbackId,
+                                        restaurantId,
+                                        name: customerName,
+                                        email: customerEmail,
+                                        phone: customerPhone,
+                                        recoveryOffer: recoveryOffer
+                                      });
+                                      
+                                      if (res.success && res.loyaltyCardId) {
+                                        setLoyaltyCardId(res.loyaltyCardId);
+                                        if (res.loyaltyStamps) setLoyaltyStamps(res.loyaltyStamps);
+                                        if (res.loyaltyConfig) setLoyaltyConfig(res.loyaltyConfig);
+                                        if (res.activeReward) setActiveReward(res.activeReward);
+                                        
+                                        try {
+                                          const storedCards = JSON.parse(localStorage.getItem('nomenu_loyalty_cards') || '{}');
+                                          storedCards[restaurantId] = res.loyaltyCardId;
+                                          localStorage.setItem('nomenu_loyalty_cards', JSON.stringify(storedCards));
+                                        } catch (e) {}
+                                      }
+                                    }
+                                  });
+                                  
+                                  setHasSubmittedContact(true);
+                                  setIsSuccess(true); // Jump to success screen so they see their VIP card!
+                                }}
+                                className="w-full bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl shadow transition-colors text-sm"
+                              >
+                                {loyaltyCardId ? "Claim Offer to your VIP Card" : "Claim Offer"}
+                              </button>
+                            </div>
+                          )}
+
+                          {(escalationState === 'RESOLVED_SUCCESS' || escalationState === 'INITIAL') && !hasRequestedManager && (
+                            <div>
+                              {loyaltyCardId ? (
+                                <>
+                                  <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
+                                  <p className="text-xs text-slate-500 mb-3">Since you're a VIP, we have your details on file. Click below to request a follow-up.</p>
+                                  <button
+                                    type="button"
+                                    onClick={async () => {
+                                      if (feedbackId) {
+                                        await import("@/app/menu/[id]/actions").then(m => {
+                                          m.submitRecoveryRequest(feedbackId, 'contact_later');
+                                        });
+                                        setHasSubmittedContact(true);
+                                      }
+                                    }}
+                                    className="w-full bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-md transition-colors"
+                                  >
+                                    Request Personal Follow-Up
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <p className="text-sm font-semibold text-slate-900">Want us to contact you later?</p>
+                                  <p className="text-xs text-slate-500 mb-2">Leave your phone number or email and we will contact you personally.</p>
+                                  <div className="flex flex-col gap-2">
                                     <input
-                                      type="tel"
-                                      value={customerPhone}
-                                      onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
-                                      placeholder="Phone Number (e.g. 555-123-4567)"
+                                      type="text"
+                                      value={customerName}
+                                      onChange={(e) => setCustomerName(e.target.value)}
+                                      placeholder="Your Name (optional but helpful)"
                                       className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
                                     />
-                                    <button
-                                      type="button"
-                                      onClick={async () => {
-                                        if (customerPhone && feedbackId) {
-                                          await import("@/app/menu/[id]/actions").then(m => {
-                                            m.updateFeedbackContact(feedbackId, customerPhone, customerName);
-                                            m.submitRecoveryRequest(feedbackId, 'contact_later');
-                                          });
-                                          setHasSubmittedContact(true);
-                                        }
-                                      }}
-                                      className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
-                                    >
-                                      Send
-                                    </button>
+                                    <div className="flex gap-2">
+                                      <input
+                                        type="tel"
+                                        value={customerPhone}
+                                        onChange={(e) => setCustomerPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                        placeholder="Phone Number (e.g. 555-123-4567)"
+                                        className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={async () => {
+                                          if (customerPhone && feedbackId) {
+                                            await import("@/app/menu/[id]/actions").then(m => {
+                                              m.updateFeedbackContact(feedbackId, customerPhone, customerName);
+                                              m.submitRecoveryRequest(feedbackId, 'contact_later');
+                                            });
+                                            setHasSubmittedContact(true);
+                                          }
+                                        }}
+                                        className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md transition-colors"
+                                      >
+                                        Send
+                                      </button>
+                                    </div>
                                   </div>
-                                </div>
+                                </>
+                              )}
                             </div>
                           )}
                         </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Receipt, X, ChefHat, CheckCircle2, Clock, Download, Loader2, CircleDollarSign } from "lucide-react";
+import { formatOrderNumber } from "@/lib/utils";
 import { toPng } from "html-to-image";
 import { getReceipts, cancelOrder } from "@/app/menu/[id]/actions";
 
@@ -285,8 +286,8 @@ export function ReceiptTracker({ restaurantId, locationLabel, taxRate = 0, servi
                     )}
 
                     <div className="text-center mb-6">
-                      <div className="text-sm uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
-                      <div className="text-5xl font-black mb-4">#{String(o.daily_order_number || 0).padStart(3, '0')}</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">Order Number</div>
+                      <div className="text-5xl font-black mb-4">#{formatOrderNumber(o.table_number, o.daily_order_number)}</div>
                       
                       <div className="flex justify-between items-end text-left border-t border-slate-200 pt-4 mt-2">
                         {o.customer_name ? (

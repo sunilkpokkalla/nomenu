@@ -188,6 +188,9 @@ export function GlobalOrderListener({
           if (pathname?.startsWith("/dashboard/feedback")) return;
 
           if (payload.eventType === "INSERT") {
+            const customerName = payload.new.customer_name;
+            const vipText = customerName ? ` ⭐ VIP (${customerName})` : "";
+            
             const notifiedKey = `notified_feedback_${payload.new.id}`;
             if (!localStorage.getItem(notifiedKey)) {
               localStorage.setItem(notifiedKey, "true");
@@ -197,7 +200,7 @@ export function GlobalOrderListener({
               setNotification({
                 id: payload.new.id,
                 title: "New Customer Feedback",
-                subtitle: `Table ${payload.new.table_number || "?"} left a review`,
+                subtitle: `Table ${payload.new.table_number || "?"}${vipText} left a review`,
                 link: "/dashboard/feedback"
               });
               setTimeout(() => setNotification(null), 6000);
@@ -212,6 +215,9 @@ export function GlobalOrderListener({
             const isUrgentContact = newContact?.includes("URGENT") && !oldContact?.includes("URGENT");
             
             if (isManagerVisit || isUrgentContact) {
+              const customerName = payload.new.customer_name;
+              const vipText = customerName ? ` ⭐ VIP (${customerName})` : "";
+              
               const notifiedKey = `notified_urgent_${payload.new.id}`;
               if (!localStorage.getItem(notifiedKey)) {
                 localStorage.setItem(notifiedKey, "true");
@@ -221,7 +227,7 @@ export function GlobalOrderListener({
                 setNotification({
                   id: payload.new.id,
                   title: "🚨 URGENT: Manager Requested",
-                  subtitle: `Table ${payload.new.table_number || "?"} requested a manager!`,
+                  subtitle: `Table ${payload.new.table_number || "?"}${vipText} requested a manager!`,
                   link: "/dashboard/feedback"
                 });
                 setTimeout(() => setNotification(null), 10000);

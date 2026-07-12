@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { formatOrderNumber } from "@/lib/utils";
 import { createBrowserClient } from "@supabase/ssr";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2 } from "lucide-react";
@@ -150,7 +151,7 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
     for (const [key, tableOrders] of Object.entries(grouped)) {
       const [table_number, customer_name] = key.split("::");
       const total_amount = tableOrders
-        .filter(o => o.status?.toLowerCase() !== 'cancelled')
+        .filter(o => !["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(o.status?.toLowerCase()))
         .reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
       const party_size = Math.max(...tableOrders.map(o => o.party_size || 0));
       const created_at = tableOrders.reduce((oldest, o) => !oldest || new Date(o.created_at) < new Date(oldest) ? o.created_at : oldest, tableOrders[0]?.created_at || new Date().toISOString());
@@ -309,7 +310,7 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
                   {tab.orders.map(order => (
                     <div key={order.id} className="pb-5 border-b border-dashed border-slate-200 last:border-0 last:pb-0">
                       <div className="flex justify-between items-center mb-3">
-                        <div className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Order #{String(order.daily_order_number).padStart(3, '0')}</div>
+                        <div className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Order #{formatOrderNumber(order.table_number, order.daily_order_number)}</div>
                       </div>
                       
                       <div className="space-y-3">
@@ -469,7 +470,7 @@ export function CashierBoard({ initialOrders, restaurantId, timezone, supabaseUr
                         </tr>
                       ) : (
                         historyTabs.slice((historyPage - 1) * 15, historyPage * 15).map(tab => {
-                          const isCancelled = tab.orders.some(o => o.status === 'cancelled');
+                          const isCancelled = tab.orders.some(o => ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(o.status?.toLowerCase() || ""));
                           return (
                             <tr key={`${tab.table_number}-${tab.customer_names[0]}-${tab.created_at}`} className="hover:bg-slate-50/50 transition-colors group">
                               <td className="px-6 py-4 font-black text-slate-900 text-lg">{formatTable(tab.table_number)}</td>

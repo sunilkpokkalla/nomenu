@@ -57,8 +57,9 @@ export async function submitFeedback(
 
   // Generate or Update Loyalty Card for 4 and 5 star reviews
   let loyaltyCardId = null;
-  let loyaltyConfig = null;
   let loyaltyStamps = 0;
+  let loyaltyConfig = null;
+  let activeReward = null;
   
   const isLoyaltyEligible = rating >= 4;
 
@@ -96,44 +97,28 @@ export async function submitFeedback(
 
   if (isLoyaltyEligible) {
     let cardData = null;
-    let cardError = null;
+    const cardError = null;
 
     if (existingLoyaltyCardId) {
       // Fetch existing card to verify it belongs to this restaurant
       const { data: existingCard } = await supabase
         .from("loyalty_cards")
-        .select("id, stamps, last_stamp_at, created_at")
+        .select("id, stamps, last_stamp_at, created_at, active_reward, customer_name, phone_number")
         .eq("id", existingLoyaltyCardId)
         .eq("restaurant_id", restaurantId)
         .maybeSingle();
 
       if (existingCard) {
-        // Check 12-hour cooldown
-        const lastStampTime = existingCard.last_stamp_at 
-          ? new Date(existingCard.last_stamp_at).getTime() 
-          : new Date(existingCard.created_at).getTime();
+        // Do not add stamps automatically on feedback, as stamps are managed by the staff scanner.
+        // Just link them to their existing card.
+        cardData = existingCard;
         
-        const twelveHoursInMs = 12 * 60 * 60 * 1000;
-        const now = new Date().getTime();
-
-        if (now - lastStampTime >= twelveHoursInMs) {
-          // Add 1 stamp to the existing card (cap at 10)
-          const newStamps = Math.min((existingCard.stamps || 0) + 1, 10);
-          const { data: updatedCard, error: updateError } = await supabase
-            .from("loyalty_cards")
-            .update({ 
-              stamps: newStamps,
-              last_stamp_at: new Date().toISOString()
-            })
-            .eq("id", existingLoyaltyCardId)
-            .select("id, stamps")
-            .single();
-            
-          cardData = updatedCard;
-          cardError = updateError;
-        } else {
-          // Cooldown active: don't add stamp, just return existing data
-          cardData = existingCard;
+        // Auto-link the feedback to the customer's known details so they aren't anonymous
+        if (finalFeedbackId && existingCard.phone_number) {
+          await supabase.from("customer_feedback").update({
+            customer_name: existingCard.customer_name || null,
+            contact_info: existingCard.phone_number
+          }).eq("id", finalFeedbackId);
         }
       }
     }
@@ -149,6 +134,7 @@ export async function submitFeedback(
     if (!cardError && cardData) {
       loyaltyCardId = cardData.id;
       loyaltyStamps = cardData.stamps;
+      activeReward = cardData.active_reward;
     } else {
       if (cardError) console.error("Error generating loyalty card:", cardError);
     }
@@ -183,6 +169,7 @@ export async function submitFeedback(
     loyaltyCardId,
     loyaltyConfig,
     loyaltyStamps,
+    activeReward,
     feedbackId: finalFeedbackId,
     isLoyaltyEligible,
     recoveryOfferText,
@@ -234,6 +221,7 @@ export async function claimLoyaltyCard(data: {
   name: string;
   email: string;
   phone: string;
+  recoveryOffer?: string;
 }) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -256,18 +244,72 @@ export async function claimLoyaltyCard(data: {
     return { error: "Failed to save customer details." };
   }
 
-  // 2. Create the loyalty card
-  const { data: newCard, error: insertError } = await supabase.from("loyalty_cards").insert({
-    restaurant_id: data.restaurantId,
-    feedback_id: data.feedbackId,
-    stamps: 1, // Start them with 1 stamp as a reward
-    last_stamp_at: new Date().toISOString(),
-    phone_number: data.phone
-  }).select("id, stamps").single();
+  // 2. Check if a loyalty card already exists for this phone number and restaurant
+  const { data: existingCard, error: existingError } = await supabase
+    .from("loyalty_cards")
+    .select("id, stamps, last_stamp_at, created_at, active_reward")
+    .eq("restaurant_id", data.restaurantId)
+    .eq("phone_number", data.phone)
+    .maybeSingle();
 
-  if (insertError) {
-    console.error("Error generating loyalty card:", insertError);
-    return { error: "Failed to generate card." };
+  let finalCardId;
+  let finalStamps;
+  let finalActiveReward = null;
+
+  if (existingCard) {
+    // Loyalty card exists. Do not add stamps automatically on feedback claim.
+    // Stamps are strictly managed by the staff scanner.
+    // Just link their new feedback to the existing card if possible, but mainly return their card info.
+    let newActiveReward = existingCard.active_reward;
+    if (data.recoveryOffer) {
+      newActiveReward = existingCard.active_reward 
+        ? `${existingCard.active_reward}, ${data.recoveryOffer}`
+        : data.recoveryOffer;
+    }
+
+    const { data: updatedCard, error: updateError } = await supabase
+      .from("loyalty_cards")
+      .update({ 
+        feedback_id: data.feedbackId,
+        customer_name: data.name,
+        customer_email: data.email,
+        ...(data.recoveryOffer ? { active_reward: newActiveReward } : {})
+      })
+      .eq("id", existingCard.id)
+      .select("id, stamps, active_reward")
+      .single();
+
+    if (updateError) {
+      console.error("Error updating existing loyalty card with new feedback:", updateError);
+      // fallback to existing card if update fails, not a critical failure
+      finalCardId = existingCard.id;
+      finalStamps = existingCard.stamps;
+      finalActiveReward = existingCard.active_reward;
+    } else {
+      finalCardId = updatedCard.id;
+      finalStamps = updatedCard.stamps;
+      finalActiveReward = updatedCard.active_reward;
+    }
+  } else {
+    // 2. Create the loyalty card since it doesn't exist
+    const { data: newCard, error: insertError } = await supabase.from("loyalty_cards").insert({
+      restaurant_id: data.restaurantId,
+      feedback_id: data.feedbackId,
+      stamps: 1, // Start them with 1 stamp as a reward
+      last_stamp_at: new Date().toISOString(),
+      phone_number: data.phone,
+      customer_name: data.name,
+      customer_email: data.email,
+      active_reward: data.recoveryOffer || null
+    }).select("id, stamps, active_reward").single();
+
+    if (insertError) {
+      console.error("Error generating loyalty card:", insertError);
+      return { error: "Failed to generate card." };
+    }
+    finalCardId = newCard.id;
+    finalStamps = newCard.stamps;
+    finalActiveReward = newCard.active_reward;
   }
 
   // 3. Get restaurant config to return
@@ -290,12 +332,42 @@ export async function claimLoyaltyCard(data: {
     };
   }
 
-  return {
-    success: true,
-    loyaltyCardId: newCard.id,
-    loyaltyStamps: newCard.stamps,
-    loyaltyConfig
+  return { 
+    success: true, 
+    loyaltyCardId: finalCardId,
+    loyaltyStamps: finalStamps,
+    activeReward: finalActiveReward,
+    loyaltyConfig 
   };
+}
+
+export async function attachRewardToLoyaltyCard(loyaltyCardId: string, reward: string) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+  );
+  // First fetch the existing card to see if there's already an active reward
+  const { data: existingCard } = await supabase
+    .from("loyalty_cards")
+    .select("active_reward")
+    .eq("id", loyaltyCardId)
+    .single();
+
+  let newActiveReward = reward;
+  if (existingCard?.active_reward && !existingCard.active_reward.includes(reward)) {
+    newActiveReward = `${existingCard.active_reward}, ${reward}`;
+  }
+
+  const { error } = await supabase
+    .from("loyalty_cards")
+    .update({ active_reward: newActiveReward })
+    .eq("id", loyaltyCardId);
+
+  if (error) {
+    console.error("Error attaching reward to loyalty card:", error);
+    return { success: false, error: "Failed to attach reward" };
+  }
+  return { success: true };
 }
 
 export async function getReceipts(orderIds: string[], restaurantId?: string) {

@@ -359,6 +359,8 @@ export interface Database {
           last_stamp_at: string | null;
           created_at: string | null;
           phone_number: string | null;
+          customer_name?: string | null;
+          customer_email?: string | null;
           active_reward?: string | null;
         };
         Insert: {
@@ -369,6 +371,8 @@ export interface Database {
           last_stamp_at?: string | null;
           created_at?: string | null;
           phone_number?: string | null;
+          customer_name?: string | null;
+          customer_email?: string | null;
           active_reward?: string | null;
         };
         Update: {
@@ -379,6 +383,8 @@ export interface Database {
           last_stamp_at?: string | null;
           created_at?: string | null;
           phone_number?: string | null;
+          customer_name?: string | null;
+          customer_email?: string | null;
           active_reward?: string | null;
         };
         Relationships: [

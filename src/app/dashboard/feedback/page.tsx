@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, MapPin, Mail, QrCode, MessageSquarePlus } from "lucide-react";
+import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, MapPin, Mail, QrCode, MessageSquarePlus, Users, Palette, Award, ShieldCheck, HeartHandshake } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
@@ -29,9 +29,9 @@ export default async function FeedbackPage({
 }) {
   const supabase = await createClient();
   const params = await searchParams;
-  const validTabs = ["reviews", "strategy", "directory", "design", "scanner", "rewards"];
+  const validTabs = ["analytics", "reviews", "strategy", "directory", "design", "scanner", "rewards"];
   const tabParam = typeof params.tab === "string" ? params.tab : "";
-  const tab = validTabs.includes(tabParam) ? tabParam : "reviews";
+  const tab = validTabs.includes(tabParam) ? tabParam : "analytics";
 
   const {
     data: { user },
@@ -112,18 +112,54 @@ export default async function FeedbackPage({
         </div>
       ) : (
         <TabsSync defaultValue={tab} className="w-full">
-          <TabsList className="mb-8 p-1 h-auto bg-slate-100/80 rounded-xl overflow-x-auto justify-start flex-nowrap hide-scrollbar flex w-full border border-slate-200">
-            <TabsTrigger value="reviews" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Customer Reviews</TabsTrigger>
-            <TabsTrigger value="strategy" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Service Recovery</TabsTrigger>
+          <TabsList className="mb-8 p-1.5 h-auto bg-slate-100/60 rounded-2xl flex flex-wrap md:flex-nowrap gap-1 w-full border border-slate-200/50 shadow-inner overflow-x-auto justify-start items-center">
+            {/* Feedback Section */}
+            <div className="flex items-center gap-1 bg-white p-1 rounded-xl shadow-sm border border-slate-200/50 mr-2 shrink-0">
+              <TabsTrigger value="analytics" className="rounded-lg py-2 px-3.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm text-sm font-semibold text-slate-600 transition-all flex items-center gap-2">
+                <TrendingUp className="w-4 h-4" />
+                Analytics
+              </TabsTrigger>
+              <TabsTrigger value="reviews" className="rounded-lg py-2 px-3.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm text-sm font-semibold text-slate-600 transition-all flex items-center gap-2">
+                <MessageSquare className="w-4 h-4" />
+                Reviews
+              </TabsTrigger>
+              <TabsTrigger value="strategy" className="rounded-lg py-2 px-3.5 data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm text-sm font-semibold text-slate-600 transition-all flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4" />
+                Service Recovery
+              </TabsTrigger>
+            </div>
+
+            {/* Loyalty Section */}
+            <div className="flex items-center gap-1 bg-white p-1 rounded-xl shadow-sm border border-slate-200/50 shrink-0">
+              <TabsTrigger value="directory" className="rounded-lg py-2 px-3.5 data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm text-sm font-semibold text-slate-600 transition-all flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                Members
+              </TabsTrigger>
+              <TabsTrigger value="rewards" className="rounded-lg py-2 px-3.5 data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm text-sm font-semibold text-slate-600 transition-all flex items-center gap-2">
+                <Award className="w-4 h-4" />
+                10-Stamp Program
+              </TabsTrigger>
+              <TabsTrigger value="design" className="rounded-lg py-2 px-3.5 data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm text-sm font-semibold text-slate-600 transition-all flex items-center gap-2">
+                <Palette className="w-4 h-4" />
+                Card Design
+              </TabsTrigger>
+            </div>
+
+            <div className="flex-grow"></div>
             
-            <div className="w-px h-6 bg-slate-300 mx-3 self-center shrink-0 hidden md:block"></div>
-            
-            <TabsTrigger value="directory" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Members</TabsTrigger>
-            <TabsTrigger value="design" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">Loyalty Card Design</TabsTrigger>
-            <TabsTrigger value="rewards" className="rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-medium transition-all">10-Stamp Loyalty Program</TabsTrigger>
-            <TabsTrigger value="scanner" className="ml-auto rounded-lg py-2.5 px-4 data-[state=active]:shadow-sm text-sm font-bold text-amber-700 data-[state=active]:text-amber-900 data-[state=active]:bg-amber-100 transition-all border border-amber-200/50 bg-amber-50/50">Staff Scanner (QR)</TabsTrigger>
+            {/* Tools Section */}
+            <div className="flex items-center shrink-0">
+              <TabsTrigger value="scanner" className="rounded-xl py-2.5 px-4 data-[state=active]:shadow-md text-sm font-bold text-amber-700 data-[state=active]:text-amber-900 bg-amber-50 data-[state=active]:bg-amber-100 transition-all border border-amber-200/50 shadow-sm flex items-center gap-2 ml-2 hover:bg-amber-100/80">
+                <QrCode className="w-4 h-4" />
+                Staff Scanner
+              </TabsTrigger>
+            </div>
           </TabsList>
           
+          <TabsContent value="analytics" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+            <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
+          </TabsContent>
+
           <TabsContent value="reviews" className="space-y-8 mt-0 focus-visible:outline-none focus-visible:ring-0">
             <div className="mb-8">
               <FeedbackList 
@@ -135,7 +171,6 @@ export default async function FeedbackPage({
                 recoveryOfferText={restaurant.recovery_offer_text || undefined}
               />
             </div>
-            <FeedbackAnalytics feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
           </TabsContent>
 
           <TabsContent value="directory" className="mt-0 focus-visible:outline-none focus-visible:ring-0">

@@ -6,8 +6,9 @@ import { toZonedTime } from "date-fns-tz";
 import { 
   MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, 
   Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send,
-  ChevronLeft, ChevronRight, Download, Phone, AlertCircle, CheckCircle2, Check
+  ChevronLeft, ChevronRight, Download, Phone, AlertCircle, CheckCircle2, Check, Award
 } from "lucide-react";
+import { formatOrderNumber } from "@/lib/utils";
 import { resolveManagerRequest } from "./reward-actions";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
@@ -63,6 +64,32 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [datePreset, setDatePreset] = useState<"today" | "7days" | "30days" | "all" | "custom">("today");
+
+  const applyDatePreset = (preset: "today" | "7days" | "30days" | "all" | "custom") => {
+    setDatePreset(preset);
+    if (preset === "all" || preset === "custom") {
+      setDateFrom("");
+      setDateTo("");
+      return;
+    }
+    const today = new Date();
+    const todayStr = format(today, "yyyy-MM-dd");
+    if (preset === "today") {
+      setDateFrom(todayStr);
+      setDateTo(todayStr);
+    } else if (preset === "7days") {
+      const past = new Date(today);
+      past.setDate(today.getDate() - 7);
+      setDateFrom(format(past, "yyyy-MM-dd"));
+      setDateTo(todayStr);
+    } else if (preset === "30days") {
+      const past = new Date(today);
+      past.setDate(today.getDate() - 30);
+      setDateFrom(format(past, "yyyy-MM-dd"));
+      setDateTo(todayStr);
+    }
+  };
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,6 +99,8 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [retentionOffers, setRetentionOffers] = useState<Record<string, ReturnType<typeof getRandomOfferForDay>>>({});
+  const [customRetentionText, setCustomRetentionText] = useState<Record<string, string>>({});
+  const [retentionDeadline, setRetentionDeadline] = useState<Record<string, number>>({});
   const [loyaltyIdeas, setLoyaltyIdeas] = useState<Record<string, ReturnType<typeof getRandomLoyaltyIdeaForDay>>>({});
   const [sentRewards, setSentRewards] = useState<Record<string, boolean>>({});
   const [sentRetention, setSentRetention] = useState<Record<string, boolean>>({});
@@ -104,6 +133,11 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
       document.removeEventListener('click', initAudio);
       document.removeEventListener('keydown', initAudio);
     };
+  }, []);
+
+  // Apply default date preset on mount
+  useEffect(() => {
+    applyDatePreset("today");
   }, []);
 
   // Reset to page 1 when filters or sorting change
@@ -365,42 +399,56 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
 
   const toggleRow = async (fb: FeedbackData) => {
     const id = fb.id;
+    const isCurrentlyExpanded = expandedRows.has(id);
+    
     setExpandedRows(prev => {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
       } else {
         next.add(id);
-        // Generate a retention offer if it's a poor rating and we don't have one yet
-        if (fb.rating <= 3 && !retentionOffers[id]) {
-          setRetentionOffers(currentOffers => ({
-            ...currentOffers,
-            [id]: recoveryOfferText 
-              ? { id: 'custom', text: recoveryOfferText, category: 'monday' as DayCategory }
-              : getRandomOfferForDay(fb.created_at)
-          }));
-        }
-        // Generate a loyalty idea if it's a great rating and we don't have one yet
-        if (fb.rating >= 4 && !loyaltyIdeas[id]) {
-          setLoyaltyIdeas(currentIdeas => ({
-            ...currentIdeas,
-            [id]: getRandomLoyaltyIdeaForDay(fb.created_at)
-          }));
-        }
-        
-        // Fetch order details if table number exists and we haven't fetched yet
-        if (fb.table_number && !orderDetailsMap[id]) {
-          fetchFeedbackOrderDetails(restaurantId, fb.table_number, fb.created_at).then((order) => {
-            if (order) {
-              setOrderDetailsMap(current => ({ ...current, [id]: order }));
-            } else {
-              setOrderDetailsMap(current => ({ ...current, [id]: { not_found: true } }));
-            }
-          });
-        }
       }
       return next;
     });
+
+    if (!isCurrentlyExpanded) {
+      // Generate a retention offer if it's a poor rating and we don't have one yet
+      if (fb.rating <= 3 && !retentionOffers[id]) {
+        const newOffer = recoveryOfferText 
+          ? { id: 'custom', text: recoveryOfferText, category: 'monday' as DayCategory }
+          : getRandomOfferForDay(new Date(fb.created_at));
+        setRetentionOffers(currentOffers => ({
+          ...currentOffers,
+          [id]: newOffer
+        }));
+        setCustomRetentionText(currentText => ({
+          ...currentText,
+          [id]: newOffer.text
+        }));
+        setRetentionDeadline(currentDeadline => ({
+          ...currentDeadline,
+          [id]: 7
+        }));
+      }
+      // Generate a loyalty idea if it's a great rating and we don't have one yet
+      if (fb.rating >= 4 && !loyaltyIdeas[id]) {
+        setLoyaltyIdeas(currentIdeas => ({
+          ...currentIdeas,
+          [id]: getRandomLoyaltyIdeaForDay(fb.created_at)
+        }));
+      }
+      
+      // Fetch order details if table number exists and we haven't fetched yet
+      if (fb.table_number && !orderDetailsMap[id]) {
+        fetchFeedbackOrderDetails(restaurantId, fb.table_number, fb.created_at).then((order) => {
+          if (order) {
+            setOrderDetailsMap(current => ({ ...current, [id]: order }));
+          } else {
+            setOrderDetailsMap(current => ({ ...current, [id]: { not_found: true } }));
+          }
+        });
+      }
+    }
   };
 
   if (!mounted) return null;
@@ -410,67 +458,115 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
       {/* Table Controls Header */}
-      <div className="p-4 sm:p-5 border-b border-slate-200 bg-white flex flex-col 2xl:flex-row gap-4 items-start 2xl:items-center justify-between">
-        <h2 className="font-bold text-slate-900 text-lg flex items-center gap-2 whitespace-nowrap">
+      <div className="p-4 sm:p-5 border-b border-slate-200 bg-white flex flex-col gap-4">
+        <h2 className="font-bold text-slate-900 text-lg flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-indigo-500" />
           Feedback Submissions
         </h2>
         
-        <div className="flex flex-wrap lg:flex-nowrap items-center gap-3 w-full 2xl:w-auto">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 w-full">
           {/* Search */}
-          <div className="relative flex-grow lg:flex-grow-0 lg:w-64">
+          <div className="relative w-full md:w-80 flex-shrink-0">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input 
               type="text" 
               placeholder="Search comments, names, tables..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full"
+              className="pl-9 pr-4 py-2.5 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full shadow-sm"
             />
           </div>
-          {/* Date Filter */}
-          <div className="flex items-center gap-2 flex-grow lg:flex-grow-0">
-            <input 
-              type="date"
-              value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
-              className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 focus:bg-white transition-colors focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-32"
-            />
-            <span className="text-slate-400 text-sm font-medium">to</span>
-            <input 
-              type="date"
-              value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
-              className="px-3 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 focus:bg-white transition-colors focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-32"
-            />
-          </div>
-          
-          {/* Rating Filter */}
-          <div className="relative flex-grow lg:flex-grow-0 lg:w-48">
-            <Filter className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <select 
-              value={ratingFilter}
-              onChange={(e) => setRatingFilter(e.target.value as RatingFilter)}
-              className="pl-9 pr-8 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 cursor-pointer appearance-none w-full"
-            >
-              <option value="all">All Ratings</option>
-              <option value="positive">Positive (4-5 Stars)</option>
-              <option value="neutral">Neutral (3 Stars)</option>
-              <option value="attention">Needs Attention (1-2 Stars)</option>
-            </select>
-            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
+          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto md:justify-end">
+            {/* Date Preset Filter */}
+            <div className="relative flex-grow sm:flex-grow-0 sm:w-40">
+              <Clock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <select 
+                value={datePreset}
+                onChange={(e) => applyDatePreset(e.target.value as "today" | "7days" | "30days" | "all" | "custom")}
+                className="pl-9 pr-8 py-2.5 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 cursor-pointer appearance-none w-full shadow-sm font-medium"
+              >
+                <option value="today">Today</option>
+                <option value="7days">Last 7 Days</option>
+                <option value="30days">Last 30 Days</option>
+                <option value="all">All Time</option>
+                <option value="custom">Custom...</option>
+              </select>
+              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
 
-          {/* Download CSV */}
-          <button
-            onClick={handleDownloadCSV}
-            disabled={processedFeedbacks.length === 0}
-            className="flex-shrink-0 flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            title="Download CSV"
-          >
-            <Download className="w-4 h-4 text-slate-500" />
-            <span className="hidden sm:inline">Export</span>
-          </button>
+            {/* Custom Date Inputs */}
+            {datePreset === "custom" && (
+              <div className="flex items-center gap-2 flex-grow sm:flex-grow-0">
+                <input 
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  className="px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 focus:bg-white transition-colors focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-36 shadow-sm"
+                />
+                <span className="text-slate-400 text-sm font-medium">to</span>
+                <input 
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  className="px-3 py-2.5 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 focus:bg-white transition-colors focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 w-full sm:w-36 shadow-sm"
+                />
+              </div>
+            )}
+            
+            {/* Rating Filter */}
+            <div className="relative flex-grow sm:flex-grow-0 sm:w-44">
+              <Filter className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <select 
+                value={ratingFilter}
+                onChange={(e) => setRatingFilter(e.target.value as RatingFilter)}
+                className="pl-9 pr-8 py-2.5 text-sm border border-slate-200 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-700 cursor-pointer appearance-none w-full shadow-sm font-medium"
+              >
+                <option value="all">All Ratings</option>
+                <option value="positive">Positive (4-5 Stars)</option>
+                <option value="neutral">Neutral (3 Stars)</option>
+                <option value="attention">Needs Attention (1-2 Stars)</option>
+              </select>
+              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+
+            {/* Export Button */}
+            <button
+              onClick={() => {
+                const csvData = liveFeedbacks.map(fb => ({
+                  Date: format(new Date(fb.created_at), "yyyy-MM-dd HH:mm"),
+                  Customer: fb.customer_name || "Anonymous",
+                  Contact: fb.contact_info || "N/A",
+                  Table: fb.table_number || "N/A",
+                  Rating: fb.rating,
+                  Comments: fb.comment || "",
+                  Status: fb.status || "new",
+                  "Recovery Action": fb.recovery_offer_given || "N/A"
+                }));
+                
+                const headers = Object.keys(csvData[0]);
+                const csvRows = [
+                  headers.join(","),
+                  ...csvData.map(row => 
+                    headers.map(header => {
+                      const val = row[header as keyof typeof row] || "";
+                      return `"${val.toString().replace(/"/g, '""')}"`;
+                    }).join(",")
+                  )
+                ];
+                
+                const blob = new Blob([csvRows.join("\\n")], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `nomenu-feedback-${format(new Date(), "yyyy-MM-dd")}.csv`;
+                a.click();
+              }}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-200 flex-grow sm:flex-grow-0"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">Export</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -565,18 +661,16 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                             {(fb.table_number || fb.qr_codes?.label) && (
                               <div className="flex gap-1.5 items-center">
                                 <span className="text-slate-300">•</span>
-                                {fb.table_number && (
-                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase">
-                                    <MapPin className="w-3 h-3 text-slate-400" /> Table {fb.table_number}
-                                  </span>
-                                )}
-                                {fb.qr_codes?.label && (
-                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase">
-                                    <QrCode className="w-3 h-3 text-slate-400" /> 
-                                    {fb.qr_codes.label} 
-                                    {fb.qr_codes.location_zone && ` (${fb.qr_codes.location_zone})`}
-                                  </span>
-                                )}
+                                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase">
+                                  <MapPin className="w-3 h-3 text-slate-400" /> 
+                                  {fb.table_number 
+                                    ? (fb.table_number.toLowerCase().includes('table') ? fb.table_number : `Table ${fb.table_number}`)
+                                    : (fb.qr_codes?.label 
+                                        ? `${fb.qr_codes.label}${fb.qr_codes.location_zone ? ` (${fb.qr_codes.location_zone})` : ''}`
+                                        : 'Unknown Location'
+                                      )
+                                  }
+                                </span>
                               </div>
                             )}
                           </div>
@@ -687,7 +781,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                     <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Order Details</h4>
                                     <div className="bg-slate-50 border border-slate-100 rounded-lg p-3 text-sm text-slate-700">
                                       <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-200">
-                                        <span className="font-semibold">Order #{orderDetailsMap[fb.id].daily_order_number || orderDetailsMap[fb.id].id.slice(0,6).toUpperCase()}</span>
+                                        <span className="font-semibold">Order #{orderDetailsMap[fb.id].daily_order_number ? formatOrderNumber(fb.table_number, orderDetailsMap[fb.id].daily_order_number) : orderDetailsMap[fb.id].id.slice(0,6).toUpperCase()}</span>
                                         <span className="text-xs text-slate-500">{format(new Date(orderDetailsMap[fb.id].created_at), "h:mm a")}</span>
                                       </div>
                                       <ul className="space-y-1.5">
@@ -826,8 +920,26 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                       <p className="text-sm text-slate-600 font-medium">
                                         Don't let this customer leave unhappy. Win them back by sending this exact offer right now:
                                       </p>
-                                      <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg text-slate-800 text-sm italic font-medium leading-relaxed">
-                                        "{retentionOffers[fb.id].text}"
+                                      <div className="flex flex-col gap-2">
+                                        <textarea
+                                          value={customRetentionText[fb.id] || retentionOffers[fb.id].text}
+                                          onChange={(e) => setCustomRetentionText(prev => ({ ...prev, [fb.id]: e.target.value }))}
+                                          className="bg-slate-50 border border-slate-200 p-3 rounded-lg text-slate-800 text-sm font-medium leading-relaxed resize-none w-full focus:ring-1 focus:ring-rose-400 focus:border-rose-400 transition-colors"
+                                          rows={3}
+                                        />
+                                        <div className="flex items-center gap-2 mt-1">
+                                          <span className="text-xs font-semibold text-slate-600">Deadline:</span>
+                                          <select 
+                                            value={retentionDeadline[fb.id] || 7}
+                                            onChange={(e) => setRetentionDeadline(prev => ({ ...prev, [fb.id]: parseInt(e.target.value) }))}
+                                            className="text-xs border border-slate-200 rounded-md py-1 px-2 bg-white text-slate-700 font-medium focus:ring-1 focus:ring-rose-400"
+                                          >
+                                            <option value={1}>24 Hours</option>
+                                            <option value={7}>7 Days</option>
+                                            <option value={14}>14 Days</option>
+                                            <option value={30}>30 Days</option>
+                                          </select>
+                                        </div>
                                       </div>
                                       
                                       {fb.loyalty_cards && fb.loyalty_cards.length > 0 ? (
@@ -842,9 +954,14 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                         ) : (
                                           <button 
                                             onClick={async () => {
-                                              const message = retentionOffers[fb.id].text;
+                                              const baseMessage = customRetentionText[fb.id] || retentionOffers[fb.id].text;
+                                              const deadlineDays = retentionDeadline[fb.id] || 7;
+                                              const expirationDate = new Date();
+                                              expirationDate.setDate(expirationDate.getDate() + deadlineDays);
+                                              const messageWithDeadline = `${baseMessage} (Expires: ${expirationDate.toLocaleDateString()})`;
+                                              
                                               const { sendLoyaltyReward } = await import("./reward-actions");
-                                              await sendLoyaltyReward(fb.id, message, fb.contact_info || null, restaurantId, fb.customer_name || null);
+                                              await sendLoyaltyReward(fb.id, messageWithDeadline, fb.contact_info || null, restaurantId, fb.customer_name || null);
                                               setSentRetention(prev => ({...prev, [fb.id]: true}));
                                             }}
                                             className="mt-1 w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
@@ -883,16 +1000,29 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, supabaseUrl, s
                                   <div className="bg-white border border-emerald-200 rounded-xl shadow-sm h-full flex flex-col relative overflow-hidden">
                                     <div className="bg-emerald-50 px-4 py-2.5 border-b border-emerald-100 flex items-center justify-between">
                                       <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs uppercase tracking-wider">
-                                        <Sparkles className="w-4 h-4" />
-                                        Loyalty Strategy
+                                        {fb.loyalty_cards && fb.loyalty_cards.length > 0 ? (
+                                          <>
+                                            <Award className="w-4 h-4" />
+                                            VIP Member
+                                          </>
+                                        ) : (
+                                          <>
+                                            <Sparkles className="w-4 h-4" />
+                                            Loyalty Strategy
+                                          </>
+                                        )}
                                       </div>
                                       <span className="text-[10px] font-bold bg-white text-emerald-600 px-2 py-0.5 rounded-full border border-emerald-100">
-                                        {loyaltyIdeas[fb.id].category.toUpperCase()} IDEA
+                                        {fb.loyalty_cards && fb.loyalty_cards.length > 0 
+                                          ? `${fb.loyalty_cards[0].stamps}/10 STAMPS` 
+                                          : `${loyaltyIdeas[fb.id].category.toUpperCase()} IDEA`}
                                       </span>
                                     </div>
                                     <div className="p-4 flex flex-col gap-3">
                                       <p className="text-sm text-slate-600 font-medium">
-                                        This customer loves you! Turn them into a raving regular by sending them this special surprise:
+                                        {fb.loyalty_cards && fb.loyalty_cards.length > 0
+                                          ? "This customer is already a loyal regular! Beam a special surprise to their VIP card to keep them delighted:"
+                                          : "This customer loves you! Turn them into a raving regular by sending them this special surprise:"}
                                       </p>
                                       <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg text-slate-800 text-sm italic font-medium leading-relaxed">
                                         "{loyaltyIdeas[fb.id].text}"

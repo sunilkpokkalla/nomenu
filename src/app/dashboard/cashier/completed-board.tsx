@@ -112,7 +112,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
     const groups = new Map<string, GroupedTab>();
 
     for (const order of filteredOrders) {
-      if (order.status === 'cancelled' && (!order.total_amount || Number(order.total_amount) === 0)) {
+      if (["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(order.status?.toLowerCase() || "") && (!order.total_amount || Number(order.total_amount) === 0)) {
         continue;
       }
 
@@ -134,7 +134,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
       
       const group = groups.get(key)!;
       group.orders.push(order);
-      if (order.status?.toLowerCase() !== 'cancelled') {
+      if (!["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(order.status?.toLowerCase() || "")) {
         group.total_amount += Number(order.total_amount);
       }
       group.order_count += 1;
