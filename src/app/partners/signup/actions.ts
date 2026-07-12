@@ -52,7 +52,7 @@ export async function signupAffiliate(formData: FormData) {
   });
 
   if (authError) {
-    let errMsg = authError.message || (authError as any).msg || "Authentication failed";
+    let errMsg = authError.message || (authError as unknown as { msg?: string }).msg || "Authentication failed";
     if (typeof errMsg === "object") {
       try { errMsg = JSON.stringify(errMsg); } catch { errMsg = "Authentication error"; }
     }
@@ -92,7 +92,7 @@ export async function signupAffiliate(formData: FormData) {
         redirect("/partners/signup?message=An%20account%20with%20this%20email%20already%20exists.%20Please%20log%20in%20or%20use%20a%20different%20email.");
       }
       
-      let errMsg = insertError.message || (insertError as any).msg || (insertError as any).details || "Database insertion failed";
+      let errMsg = insertError.message || (insertError as unknown as { msg?: string }).msg || (insertError as unknown as { details?: string }).details || "Database insertion failed";
       if (typeof errMsg === "object") {
         try { errMsg = JSON.stringify(errMsg); } catch { errMsg = "Database error"; }
       }
