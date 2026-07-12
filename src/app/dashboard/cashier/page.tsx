@@ -23,7 +23,7 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
   const params = await searchParams;
   const cookieStore = await cookies();
   const lastFohTab = cookieStore.get("last_foh_tab")?.value;
-  let tab = params.tab || lastFohTab || "active";
+  const tab = params.tab || lastFohTab || "active";
   const supabase = await createClient();
 
   // Get user session
