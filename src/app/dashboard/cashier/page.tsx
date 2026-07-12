@@ -104,7 +104,7 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
   const isPro = restaurant.plan?.toLowerCase() === "pro";
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-[1600px] mx-auto py-8 px-4 sm:px-6 lg:px-8 pb-32">
+    <div id="foh-dashboard-container" className="flex flex-col gap-8 w-full max-w-[1600px] mx-auto py-8 px-4 sm:px-6 lg:px-8 pb-32">
       <TabSaver tab={tab} />
       
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">

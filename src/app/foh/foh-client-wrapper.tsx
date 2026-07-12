@@ -30,18 +30,6 @@ export function FohClientWrapper({ children }: { children: React.ReactNode }) {
         isFullscreen ? "fixed inset-0 z-[100] h-screen w-screen" : ""
       }`}
     >
-      <button
-        onClick={toggleFullscreen}
-        className={`absolute top-6 right-6 z-50 flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
-          isFullscreen 
-            ? "bg-slate-800 hover:bg-slate-700 text-white" 
-            : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300"
-        }`}
-      >
-        {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
-        <span className="hidden sm:inline">{isFullscreen ? "Exit Fullscreen" : "Fullscreen FOH"}</span>
-      </button>
-
       {/* Main Content */}
       {children}
     </div>
