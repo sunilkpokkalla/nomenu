@@ -181,7 +181,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       {/* Feedback Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh] min-h-[350px] transition-all ease-in-out">
+          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh] transition-all ease-in-out">
             
             {/* Header */}
             <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 flex-shrink-0">
@@ -199,7 +199,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
             {/* Content Area - Scrollable */}
             <div className="overflow-y-auto flex-grow p-6 overscroll-contain">
               {isSuccess ? (
-                <div className="flex flex-col items-center justify-center py-8 text-center animate-in fade-in zoom-in duration-300">
+                <div className="flex flex-col items-center justify-start py-8 text-center animate-in fade-in zoom-in duration-300">
                   {rating >= 4 ? (
                     <>
                       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
