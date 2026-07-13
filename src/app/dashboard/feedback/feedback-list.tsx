@@ -222,13 +222,40 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
     }
   };
 
+  const fetchLatestFeedbacks = async () => {
+    const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+    const { data } = await supabase
+      .from("customer_feedback")
+      .select("*, qr_codes(label, location_zone), loyalty_cards(id, stamps, last_stamp_at)")
+      .eq("restaurant_id", restaurantId)
+      .order("created_at", { ascending: false })
+      .limit(100);
+      
+    if (data) {
+      // Create a map to preserve resolution notes properly
+      setLiveFeedbacks((current) => {
+        const newData = data as FeedbackData[];
+        // We just replace the liveFeedbacks with the fresh data from the server
+        // since resolution states are handled locally in separate state variables
+        return newData;
+      });
+    }
+  };
+
+  // Polling Auto-Refresh Fallback (runs every 15 seconds)
+  useEffect(() => {
+    const interval = setInterval(fetchLatestFeedbacks, 15000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restaurantId, supabaseUrl, supabaseAnonKey]);
+
   // Real-time subscription
   useEffect(() => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
     const channel = supabase.channel(`feedbacks-${restaurantId}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "customer_feedback" },
+        { event: "*", schema: "public", table: "customer_feedback", filter: `restaurant_id=eq.${restaurantId}` },
         async (payload) => {
           
           const recordId = payload.eventType === "DELETE" ? payload.old.id : payload.new.id;
