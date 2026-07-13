@@ -81,7 +81,8 @@ export default async function FeedbackPage({
     .from("customer_feedback")
     .select("*, qr_codes(label, location_zone), loyalty_cards(id, stamps, last_stamp_at)")
     .eq("restaurant_id", restaurant.id)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(500);
 
   if (error) {
     console.error("Error fetching feedback:", error);

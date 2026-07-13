@@ -179,7 +179,8 @@ export default async function DashboardPage(
   const { data: scans } = await supabase
     .from("menu_scans")
     .select("*")
-    .eq("restaurant_id", restaurant.id);
+    .eq("restaurant_id", restaurant.id)
+    .limit(2000);
 
   const { data: menuItems } = await supabase
     .from("menu_items")
