@@ -951,7 +951,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
                                       </p>
                                       <div className="flex flex-col gap-2">
                                         <textarea
-                                          value={customRetentionText[fb.id] || retentionOffers[fb.id].text}
+                                          value={customRetentionText[fb.id] ?? retentionOffers[fb.id].text}
                                           onChange={(e) => setCustomRetentionText(prev => ({ ...prev, [fb.id]: e.target.value }))}
                                           className="bg-slate-50 border border-slate-200 p-3 rounded-lg text-slate-800 text-sm font-medium leading-relaxed resize-none w-full focus:ring-1 focus:ring-rose-400 focus:border-rose-400 transition-colors"
                                           rows={3}
@@ -983,7 +983,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
                                         ) : (
                                           <button 
                                             onClick={async () => {
-                                              const baseMessage = customRetentionText[fb.id] || retentionOffers[fb.id].text;
+                                              const baseMessage = customRetentionText[fb.id] ?? retentionOffers[fb.id].text;
                                               const deadlineDays = retentionDeadline[fb.id] || 7;
                                               const expirationDate = new Date();
                                               expirationDate.setDate(expirationDate.getDate() + deadlineDays);
