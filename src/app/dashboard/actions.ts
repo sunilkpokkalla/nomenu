@@ -1672,3 +1672,40 @@ export async function updateLoyaltyRewards(formData: FormData) {
   revalidatePath("/dashboard/settings");
   redirect("/dashboard/feedback?tab=rewards&success=Loyalty%20rewards%20updated%20successfully");
 }
+
+export async function markClaimRedeemed(feedbackId: string) {
+  const supabase = await createClient();
+
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData.user;
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  // Verify access to the restaurant
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("id")
+    .eq("owner_id", user.id)
+    .single();
+
+  if (!restaurant) {
+    throw new Error("Restaurant not found");
+  }
+
+  const { error } = await supabase
+    .from("customer_feedback")
+    .update({
+      claim_status: "redeemed",
+      claim_redeemed_at: new Date().toISOString(),
+    })
+    .eq("id", feedbackId)
+    .eq("restaurant_id", restaurant.id);
+
+  if (error) {
+    throw new Error("Failed to redeem claim");
+  }
+
+  revalidatePath("/dashboard/feedback");
+}

@@ -33,6 +33,8 @@ export interface FeedbackData {
   recovery_request?: string | null;
   recovery_offer_given?: string | null;
   resolution_notes?: string | null;
+  claim_status?: "issued" | "redeemed" | "expired" | null;
+  claim_redeemed_at?: string | null;
   qr_codes?: { label: string | null; location_zone?: string | null } | null;
   loyalty_cards?: {
     id: string;

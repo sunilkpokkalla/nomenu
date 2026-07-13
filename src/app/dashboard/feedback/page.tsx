@@ -4,7 +4,7 @@ import { MessageSquare, Star, ArrowUpRight, ArrowDownRight, TrendingUp, User, Ma
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 
 import { createClient } from "@/lib/supabase/server";
-import { updateLoyaltyRewards } from "@/app/dashboard/actions";
+import { updateLoyaltyRewards, markClaimRedeemed } from "@/app/dashboard/actions";
 import { getSupabaseEnv } from "@/lib/env";
 import { FeedbackAnalytics, FeedbackData } from "./feedback-analytics";
 import { FeedbackList } from "./feedback-list";
@@ -12,6 +12,7 @@ import { FeedbackStrategyForm } from "./feedback-strategy-form";
 import { LoyaltyQrGenerator } from "@/app/dashboard/feedback/loyalty-qr-generator";
 import { LoyaltyDesignEditor } from "@/app/dashboard/feedback/loyalty-design-editor";
 import { CustomerDirectory } from "./customer-directory";
+import { FeedbackPopoutButton } from "./feedback-popout-button";
 import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsSync } from "@/components/ui/tabs-sync";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
@@ -92,8 +93,13 @@ export default async function FeedbackPage({
     <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
       <AutoRefresh intervalMs={15000} />
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Feedback & Loyalty</h1>
-        <p className="text-slate-500">Manage customer feedback, automated service recovery, and your digital loyalty program.</p>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Feedback & Loyalty</h1>
+          <FeedbackPopoutButton />
+        </div>
+        <p className="text-slate-500 font-medium text-lg">
+          Manage customer reviews, retention strategies, and digital loyalty programs.
+        </p>
       </div>
 
       {false ? (
@@ -177,7 +183,7 @@ export default async function FeedbackPage({
           </TabsContent>
 
           <TabsContent value="directory" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-            <CustomerDirectory feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} />
+            <CustomerDirectory feedbacks={allFeedbacks} timezone={restaurant.timezone || "UTC"} onRedeemClaim={markClaimRedeemed} />
           </TabsContent>
           
           <TabsContent value="strategy" className="mt-0 focus-visible:outline-none focus-visible:ring-0">

@@ -8,6 +8,7 @@ import { FeedbackData } from "./feedback-analytics";
 interface CustomerDirectoryProps {
   feedbacks: FeedbackData[];
   timezone: string;
+  onRedeemClaim?: (feedbackId: string) => Promise<void>;
 }
 
 interface CustomerProfile {
@@ -24,9 +25,10 @@ interface CustomerProfile {
   recoveryOfferGiven?: string | null;
   recoveryOfferDate?: string | null;
   activeReward: string | null;
+  pendingClaims: { id: string, text: string }[];
 }
 
-export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProps) {
+export function CustomerDirectory({ feedbacks, timezone, onRedeemClaim }: CustomerDirectoryProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState<'all' | 'top-regulars' | 'reward-ready'>('all');
 
@@ -64,6 +66,11 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
       const resolvedEmail = cardEmail || f.customer_email || null;
       const resolvedPhone = cardPhone || f.customer_phone || null;
 
+      const pendingClaims: { id: string, text: string }[] = [];
+      if (f.claim_status === "issued" && f.recovery_offer_given) {
+        pendingClaims.push({ id: f.id, text: f.recovery_offer_given });
+      }
+
       if (!existing) {
         profileMap.set(identifier, {
           id: identifier,
@@ -77,6 +84,7 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
           loyaltyStamps: stamps,
           latestComment: f.comment || "",
           activeReward: activeReward,
+          pendingClaims: pendingClaims,
         });
       } else {
         // Update existing
@@ -90,6 +98,7 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
         if (cardEmail) existing.email = cardEmail;
         if (cardPhone) existing.phone = cardPhone;
         if (activeReward !== undefined && activeReward !== null) existing.activeReward = activeReward;
+        if (pendingClaims.length > 0) existing.pendingClaims.push(...pendingClaims);
 
         // If this feedback is newer, update latest info
         if (new Date(f.created_at) > new Date(existing.latestFeedbackDate)) {
@@ -258,14 +267,40 @@ export function CustomerDirectory({ feedbacks, timezone }: CustomerDirectoryProp
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      {customer.activeReward ? (
-                        <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-100 max-w-[150px] truncate" title={customer.activeReward}>
-                          <Gift className="w-3.5 h-3.5 shrink-0" />
-                          <span className="truncate">{customer.activeReward}</span>
-                        </div>
-                      ) : (
-                        <span className="text-slate-400 text-xs">-</span>
-                      )}
+                      <div className="flex flex-col gap-1.5">
+                        {customer.activeReward && (
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-100 max-w-[200px] truncate" title={customer.activeReward}>
+                            <Gift className="w-3.5 h-3.5 shrink-0" />
+                            <span className="truncate">{customer.activeReward}</span>
+                          </div>
+                        )}
+                        {customer.pendingClaims.map(claim => (
+                          <div key={claim.id} className="flex flex-col gap-1 text-xs font-medium text-rose-700 bg-rose-50 px-2 py-1.5 rounded border border-rose-100 w-fit max-w-[250px]">
+                            <div className="flex items-center gap-1.5 truncate" title={claim.text}>
+                              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                              <span className="truncate font-semibold">Claim: {claim.text}</span>
+                            </div>
+                            {onRedeemClaim && (
+                              <button 
+                                onClick={async () => {
+                                  try {
+                                    await onRedeemClaim(claim.id);
+                                  } catch(e) {
+                                    console.error(e);
+                                    alert("Failed to redeem claim. Please try again.");
+                                  }
+                                }}
+                                className="bg-rose-600 text-white text-[10px] uppercase tracking-wider font-bold py-1 px-2 rounded self-start hover:bg-rose-700 transition-colors shadow-sm"
+                              >
+                                Mark Redeemed
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                        {!customer.activeReward && customer.pendingClaims.length === 0 && (
+                          <span className="text-slate-400 text-xs">-</span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {formatTimeAgoWithExact(customer.latestFeedbackDate, timezone)}
