@@ -246,7 +246,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
 
   // Polling Auto-Refresh Fallback (runs every 15 seconds)
   useEffect(() => {
-    const interval = setInterval(fetchLatestFeedbacks, 15000);
+    const interval = setInterval(fetchLatestFeedbacks, 300000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurantId, supabaseUrl, supabaseAnonKey]);

@@ -239,7 +239,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
 
   // Polling Auto-Refresh Fallback (runs every 15 seconds)
   useEffect(() => {
-    const interval = setInterval(fetchLatestOrders, 15000);
+    const interval = setInterval(fetchLatestOrders, 300000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDateStr, restaurantId, timezone, supabaseUrl, supabaseAnonKey]);
