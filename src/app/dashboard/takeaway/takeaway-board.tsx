@@ -504,7 +504,10 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
       <DragDropContext onDragEnd={onDragEnd}>
         <div className={`flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory ${isKdsMode ? "h-full" : "h-[calc(100vh-250px)] min-h-[600px]"} scrollbar-hide`}>
           {columns.map(col => {
-            const colOrders = orders.filter(o => col.matchStatus.includes(o.status)).filter(o => {
+            const colOrders = orders
+              .filter(o => col.matchStatus.includes(o.status))
+              .filter(o => o.order_items && o.order_items.length > 0)
+              .filter(o => {
               if (!selectedDateStr && (col.id === "completed" || col.id === "cancelled") && autoArchiveMinutes !== null) {
                 const completedAt = completedTimes.current.get(o.id);
                 if (completedAt) {
