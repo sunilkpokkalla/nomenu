@@ -84,6 +84,8 @@ export async function voidTableTab(restaurantId: string, tableNumber: string, cu
     throw new Error("Failed to void table tab");
   }
 
+  revalidatePath("/dashboard/cashier");
+  revalidatePath("/foh");
   return true;
 }
 
@@ -121,19 +123,22 @@ export async function removeTableFromTab(orderId: string, tableToRemove: string)
   const updatedTables = tables.filter((t: string) => t !== tableToRemove);
 
   if (updatedTables.length === 0) {
-    // If they removed the last table, just void the tab instead
-    return voidTableTab(
-      // We don't have restaurant_id or customer_name easily here without another fetch
-      // Let's just update the status to cancelled directly for this order ID
-      '', '', '' 
-    ).catch(async () => {
-      const adminSupabase = createAdminClient();
-      await adminSupabase.from("orders").update({ 
-        status: "cancelled", 
-        table_number: null,
-        paid_at: new Date().toISOString() 
-      }).eq("id", orderId);
-    });
+    // Last table removed — cancel the order directly by ID
+    const adminSupabase = createAdminClient();
+    const { error: cancelError } = await adminSupabase.from("orders").update({ 
+      status: "cancelled", 
+      table_number: null,
+      is_paid: false,
+      paid_at: new Date().toISOString() 
+    }).eq("id", orderId);
+
+    if (cancelError) {
+      throw new Error("Failed to void table tab");
+    }
+
+    revalidatePath("/dashboard/cashier");
+    revalidatePath("/foh");
+    return true;
   }
 
   // Update order with new table string
