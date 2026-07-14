@@ -701,7 +701,15 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                                   onClick={async () => {
                                     setIsProcessingLiveAction(true);
                                     try {
-                                      await removeTableFromTab(activeOrder.id, cName);
+                                      // Find the specific order that owns THIS table
+                                      const tableOrder = activeOrders.find(o => {
+                                        if (!o.table_number) return false;
+                                        return String(o.table_number).split(',').map(s=>s.trim()).includes(cName);
+                                      });
+
+                                      if (tableOrder) {
+                                        await removeTableFromTab(tableOrder.id, cName);
+                                      }
                                       setSelectedLiveTableIds(prev => prev.filter(id => id !== t.id));
                                       router.refresh();
                                     } catch (e) {
@@ -725,10 +733,19 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                         onClick={async () => {
                           setIsProcessingLiveAction(true);
                           try {
-                            // Remove specifically selected tables from the order
+                            // Remove specifically selected tables from their respective orders
                             for (const st of selectedTables) {
                               const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
-                              await removeTableFromTab(activeOrder.id, cName);
+                              
+                              // Find the specific order that owns THIS table
+                              const tableOrder = activeOrders.find(o => {
+                                if (!o.table_number) return false;
+                                return String(o.table_number).split(',').map(s=>s.trim()).includes(cName);
+                              });
+
+                              if (tableOrder) {
+                                await removeTableFromTab(tableOrder.id, cName);
+                              }
                             }
                             setSelectedLiveTableIds([]);
                             router.refresh();
