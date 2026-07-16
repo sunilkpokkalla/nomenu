@@ -21,7 +21,8 @@ export interface Category {
   name: string;
   description: string | null;
   sort_order: number;
-  translations?: Record<string, Record<string, string>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  translations?: any;
 }
 
 export interface MenuItem {
@@ -40,7 +41,8 @@ export interface MenuItem {
   allergens?: string[] | null;
   calories?: number | null;
   cooking_time?: number | null;
-  translations?: Record<string, Record<string, string>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  translations?: any;
 }
 
 export interface MenuThemeProps {
