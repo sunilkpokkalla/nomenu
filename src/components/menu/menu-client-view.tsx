@@ -55,22 +55,22 @@ export function MenuClientView(props: MenuClientViewProps) {
       
       // Check if all categories and items already have translations for this language
       const missingCategory = props.categories.find(c => {
-        const trans = c.translations as Record<string, any>;
+        const trans = c.translations as Record<string, Record<string, string>>;
         return !trans || !trans[lang] || !trans[lang].name;
       });
       const missingItem = props.items.find(i => {
-        const trans = i.translations as Record<string, any>;
+        const trans = i.translations as Record<string, Record<string, string>>;
         return !trans || !trans[lang] || !trans[lang].name;
       });
 
       if (!missingCategory && !missingItem) {
         // Build the local map since everything is already translated
-        const localMap = { categories: {} as Record<string, any>, items: {} as Record<string, any> };
+        const localMap = { categories: {} as Record<string, Record<string, string>>, items: {} as Record<string, Record<string, string>> };
         props.categories.forEach(c => {
-          if ((c.translations as any)?.[lang]) localMap.categories[c.id] = (c.translations as any)[lang];
+          if (c.translations?.[lang]) localMap.categories[c.id] = c.translations[lang];
         });
         props.items.forEach(i => {
-          if ((i.translations as any)?.[lang]) localMap.items[i.id] = (i.translations as any)[lang];
+          if (i.translations?.[lang]) localMap.items[i.id] = i.translations[lang];
         });
         setTranslationsMap(localMap);
         return; // Skip API call entirely
@@ -96,7 +96,7 @@ export function MenuClientView(props: MenuClientViewProps) {
     }
     
     fetchTranslations();
-  }, [props.displayLanguage, props.menuId, restaurant.id]);
+  }, [props.displayLanguage, props.menuId, restaurant.id, props.categories, props.items]);
 
   const getTranslatedProps = () => {
     if (!props.displayLanguage || props.displayLanguage === "en") return props;

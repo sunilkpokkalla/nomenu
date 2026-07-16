@@ -133,7 +133,7 @@ ${JSON.stringify(payloadToTranslate, null, 2)}
     }
 
     // 5. Save the translations back to Supabase in parallel
-    const updatePromises: PromiseLike<any>[] = [];
+    const updatePromises: PromiseLike<unknown>[] = [];
 
     // Update Categories
     if (translatedData.categories && Array.isArray(translatedData.categories)) {

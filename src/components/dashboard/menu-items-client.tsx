@@ -79,7 +79,7 @@ export function MenuItemsClient({
 
       if (!missingCategory && !missingItem) {
         // Build the local map since everything is already translated
-        const localMap = { categories: {} as Record<string, any>, items: {} as Record<string, any> };
+        const localMap = { categories: {} as Record<string, Record<string, string>>, items: {} as Record<string, Record<string, string>> };
         menuCategories.forEach(c => {
           if (c.translations?.[lang]) localMap.categories[c.id] = c.translations[lang];
         });
@@ -113,7 +113,7 @@ export function MenuItemsClient({
     } else {
       setDashboardTranslations({ categories: {}, items: {} });
     }
-  }, [selectedMenuId, menus, restaurant.id]);
+  }, [selectedMenuId, menus, restaurant.id, categories, items]);
 
   useEffect(() => {
     if (selectedCategoryId !== "all" && !categories.find(c => c.id === selectedCategoryId)) {

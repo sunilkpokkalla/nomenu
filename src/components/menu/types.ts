@@ -21,7 +21,7 @@ export interface Category {
   name: string;
   description: string | null;
   sort_order: number;
-  translations?: any;
+  translations?: Record<string, Record<string, string>>;
 }
 
 export interface MenuItem {
@@ -40,7 +40,7 @@ export interface MenuItem {
   allergens?: string[] | null;
   calories?: number | null;
   cooking_time?: number | null;
-  translations?: any;
+  translations?: Record<string, Record<string, string>>;
 }
 
 export interface MenuThemeProps {
