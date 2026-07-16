@@ -38,6 +38,7 @@ export default function MenusManualPage() {
           <li><a href="#creating-items" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">3. Creating Food Items</a></li>
           <li><a href="#allergens" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">4. Managing Allergens & Dietary Tags</a></li>
           <li><a href="#ai-features" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">5. AI Integration & Magic Import</a></li>
+          <li><a href="#ai-translations" className="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">6. Multi-Language AI Translations</a></li>
         </ul>
       </div>
 
@@ -179,6 +180,33 @@ export default function MenusManualPage() {
             </h4>
             <p className="text-indigo-800 mb-2">Struggling to write a description for a new dish?</p>
             <p className="text-indigo-800">Just type the name of the dish (e.g. "Truffle Fries") and click the <strong>✨ AI Writer</strong> button inside the item creation form. Our AI will instantly generate an appetizing, professional description that drives sales.</p>
+          </div>
+        </section>
+
+        {/* Section 6 */}
+        <section id="ai-translations" className="scroll-mt-24 space-y-4">
+          <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
+            <span className="bg-slate-200 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center text-sm">6</span>
+            Multi-Language AI Translations
+          </h2>
+          <p className="text-slate-600 leading-relaxed text-lg">
+            Restaurants on the <strong>Pro, Elite, and Enterprise</strong> plans can instantly translate their entire menu into multiple languages using AI.
+          </p>
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mt-4">
+            <ul className="space-y-4 text-slate-600">
+              <li className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <span><strong>Dashboard Translations:</strong> In your <strong>Menus</strong> dashboard, you can select a language from the dropdown menu in the top right. The AI will instantly translate all your categories and items.</span>
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <span><strong>Customer Storefront:</strong> When customers view your menu via QR code, they can select their preferred language. The system automatically fetches and caches the translated menu for lightning-fast performance.</span>
+              </li>
+              <li className="flex gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0" />
+                <span><strong>Performance:</strong> Translations are cached in the database. The first time a menu is translated, it takes about a second to save. Subsequent loads are instant!</span>
+              </li>
+            </ul>
           </div>
         </section>
 
