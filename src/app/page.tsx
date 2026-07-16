@@ -353,7 +353,7 @@ export default function LandingPage() {
           </div>
 
           {/* Key Benefits Grid */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             <div className="bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm text-center md:text-left flex flex-col items-center md:items-start">
               <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
                 <CircleDollarSign className="w-6 h-6 text-emerald-600" />
@@ -376,6 +376,14 @@ export default function LandingPage() {
               </div>
               <h4 className="font-extrabold text-slate-900 text-lg mb-2">Faster Table Turns</h4>
               <p className="text-sm text-slate-500 font-medium">Guests don't wait to order and don't wait to pay. Turn tables up to 20% faster during peak rush hours.</p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm text-center md:text-left flex flex-col items-center md:items-start">
+              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+                <Layers className="w-6 h-6 text-blue-600" />
+              </div>
+              <h4 className="font-extrabold text-slate-900 text-lg mb-2">Live FOH Table Sync</h4>
+              <p className="text-sm text-slate-500 font-medium">Front of house sees exactly which tables are seated, ordered, and waiting. Perfect organization, zero chaos.</p>
             </div>
           </div>
 
