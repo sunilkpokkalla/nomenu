@@ -26,7 +26,9 @@ import {
   ShieldAlert,
   ChefHat,
   Timer,
-  CircleDollarSign
+  CircleDollarSign,
+  Users,
+  Utensils
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DualDeviceMockup } from "@/components/marketing/dual-device-mockup";
@@ -387,6 +389,82 @@ export default function LandingPage() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* RESTAURANT NETWORK SYNC VISUAL */}
+      <section className="py-24 bg-slate-950 relative overflow-hidden text-white border-y border-slate-800/50">
+        <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
+        
+        <style>{`
+          @keyframes network-dash {
+            to { stroke-dashoffset: -60; }
+          }
+          .animate-network-dash {
+            animation: network-dash 2s linear infinite;
+          }
+        `}</style>
+
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight text-white">Live Operations Network</h2>
+            <p className="text-lg text-slate-400 font-medium">Your entire restaurant synchronized in real-time. Guests, kitchen, and waitstaff all connected seamlessly through a single, powerful system.</p>
+          </div>
+
+          <div className="relative max-w-5xl mx-auto w-full aspect-[4/3] md:aspect-[2/1] rounded-[2.5rem] border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-2xl shadow-black/50 overflow-hidden">
+            
+            {/* SVG Network Lines */}
+            <svg viewBox="0 0 1000 500" className="absolute inset-0 w-full h-full z-10">
+              {/* Core to Kitchen */}
+              <path d="M 500 250 C 650 250 650 150 800 150" fill="none" stroke="#1e293b" strokeWidth="4" />
+              <path d="M 500 250 C 650 250 650 150 800 150" fill="none" stroke="#10b981" strokeWidth="4" strokeDasharray="15 30" className="animate-network-dash drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+
+              {/* Core to Servers */}
+              <path d="M 500 250 C 650 250 650 350 800 350" fill="none" stroke="#1e293b" strokeWidth="4" />
+              <path d="M 500 250 C 650 250 650 350 800 350" fill="none" stroke="#f59e0b" strokeWidth="4" strokeDasharray="15 30" className="animate-network-dash drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+
+              {/* Guests to Core */}
+              <line x1="200" y1="250" x2="500" y2="250" stroke="#1e293b" strokeWidth="4" />
+              <line x1="200" y1="250" x2="500" y2="250" stroke="#6366f1" strokeWidth="4" strokeDasharray="15 30" className="animate-network-dash drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
+            </svg>
+
+            {/* Left Node: Guests */}
+            <div className="absolute left-[20%] top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-indigo-500/10 border border-indigo-400/30 flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(99,102,241,0.2)]">
+                <Users className="w-8 h-8 text-indigo-400" />
+              </div>
+              <h4 className="font-bold text-white text-sm md:text-base text-center leading-tight">1. Guests Order</h4>
+              <p className="text-[10px] md:text-xs text-slate-400 text-center mt-1">From their phone</p>
+            </div>
+
+            {/* Center Node: System Core */}
+            <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-[2rem] bg-blue-500/20 border border-blue-400/40 flex items-center justify-center mb-3 shadow-[0_0_40px_rgba(59,130,246,0.3)]">
+                <LayoutDashboard className="w-10 h-10 text-blue-400" />
+              </div>
+              <h4 className="font-extrabold text-white text-sm md:text-lg text-center leading-tight">FOH Core</h4>
+              <p className="text-[10px] md:text-xs text-blue-400 font-bold text-center mt-1 uppercase tracking-wider">Live Syncing</p>
+            </div>
+
+            {/* Top Right Node: Kitchen */}
+            <div className="absolute left-[80%] top-[30%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-emerald-500/10 border border-emerald-400/30 flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                <ChefHat className="w-8 h-8 text-emerald-400" />
+              </div>
+              <h4 className="font-bold text-white text-sm md:text-base text-center leading-tight">2. Kitchen Cooks</h4>
+              <p className="text-[10px] md:text-xs text-slate-400 text-center mt-1">Instant ticket</p>
+            </div>
+
+            {/* Bottom Right Node: Servers */}
+            <div className="absolute left-[80%] top-[70%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+                <Utensils className="w-8 h-8 text-amber-400" />
+              </div>
+              <h4 className="font-bold text-white text-sm md:text-base text-center leading-tight">3. Runners Serve</h4>
+              <p className="text-[10px] md:text-xs text-slate-400 text-center mt-1">Guided by FOH tablet</p>
+            </div>
+
+          </div>
         </div>
       </section>
 
