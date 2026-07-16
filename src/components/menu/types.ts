@@ -21,6 +21,7 @@ export interface Category {
   name: string;
   description: string | null;
   sort_order: number;
+  translations?: any;
 }
 
 export interface MenuItem {
@@ -39,6 +40,7 @@ export interface MenuItem {
   allergens?: string[] | null;
   calories?: number | null;
   cooking_time?: number | null;
+  translations?: any;
 }
 
 export interface MenuThemeProps {
@@ -48,4 +50,6 @@ export interface MenuThemeProps {
   tableNumber?: string;
   qrCodeId?: string;
   locationLabel?: string | null;
+  menuId?: string;
+  displayLanguage?: string | null;
 }

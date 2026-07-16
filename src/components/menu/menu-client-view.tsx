@@ -23,6 +23,8 @@ import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps }
 
 export function MenuClientView(props: MenuClientViewProps) {
   const { restaurant } = props;
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translationsMap, setTranslationsMap] = useState<{ categories: Record<string, Record<string, string>>, items: Record<string, Record<string, string>> }>({ categories: {}, items: {} });
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
   const isFreePlan = currentPlan === "free";
   
@@ -45,24 +47,92 @@ export function MenuClientView(props: MenuClientViewProps) {
     }
   }, [restaurant.id]);
 
+  useEffect(() => {
+    async function fetchTranslations() {
+      if (!props.displayLanguage || props.displayLanguage === "en") return;
+      
+      const lang = props.displayLanguage;
+      
+      // Check if all categories and items already have translations for this language
+      const missingCategory = props.categories.find(c => {
+        const trans = c.translations as Record<string, any>;
+        return !trans || !trans[lang] || !trans[lang].name;
+      });
+      const missingItem = props.items.find(i => {
+        const trans = i.translations as Record<string, any>;
+        return !trans || !trans[lang] || !trans[lang].name;
+      });
+
+      if (!missingCategory && !missingItem) {
+        // Build the local map since everything is already translated
+        const localMap = { categories: {} as Record<string, any>, items: {} as Record<string, any> };
+        props.categories.forEach(c => {
+          if ((c.translations as any)?.[lang]) localMap.categories[c.id] = (c.translations as any)[lang];
+        });
+        props.items.forEach(i => {
+          if ((i.translations as any)?.[lang]) localMap.items[i.id] = (i.translations as any)[lang];
+        });
+        setTranslationsMap(localMap);
+        return; // Skip API call entirely
+      }
+
+      setIsTranslating(true);
+      try {
+        // We pass menuId to translate API to handle menu-specific logic in the backend
+        const res = await fetch("/api/menu/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ restaurantId: restaurant.id, menuId: props.menuId, languageCode: props.displayLanguage })
+        });
+        const data = await res.json();
+        if (data.translations) {
+          setTranslationsMap(data.translations);
+        }
+      } catch (e) {
+        console.error("Translation failed", e);
+      } finally {
+        setIsTranslating(false);
+      }
+    }
+    
+    fetchTranslations();
+  }, [props.displayLanguage, props.menuId, restaurant.id]);
+
+  const getTranslatedProps = () => {
+    if (!props.displayLanguage || props.displayLanguage === "en") return props;
+
+    const tCategories = props.categories.map(c => {
+      const t = translationsMap.categories[c.id];
+      return t ? { ...c, name: t.name } : c;
+    });
+
+    const tItems = props.items.map(i => {
+      const t = translationsMap.items[i.id];
+      return t ? { ...i, name: t.name, description: t.description || i.description } : i;
+    });
+
+    return { ...props, categories: tCategories, items: tItems };
+  };
+
   const renderTheme = () => {
+    const tProps = getTranslatedProps();
     switch (themeStyle) {
-      case "noir": return <NoirTheme {...props} />;
-      case "brasserie": return <BrasserieTheme {...props} />;
-      case "bentopop": return <BentoTheme {...props} />;
-      case "zen": return <ZenTheme {...props} />;
-      case "omakase": return <OmakaseTheme {...props} />;
-      case "resort": return <ResortTheme {...props} />;
-      case "bistro": return <BistroTheme {...props} />;
-      case "lounge": return <LoungeTheme {...props} />;
-      case "popdiner": return <PopDinerTheme {...props} />;
-      case "editorial": return <EditorialTheme {...props} />;
-      case "boutique": return <BoutiqueTheme {...props} />;
-      case "botanical": return <BotanicalTheme {...props} />;
-      case "minimalist": return <MinimalistTheme {...props} />;
-      case "luxury": return <LuxuryTheme {...props} />;
-      case "vibrant": return <VibrantTheme {...props} />;
-      default: return <ClassicTheme {...props} />;
+      case "noir": return <NoirTheme {...tProps} />;
+      case "brasserie": return <BrasserieTheme {...tProps} />;
+      case "bentopop": return <BentoTheme {...tProps} />;
+      case "zen": return <ZenTheme {...tProps} />;
+      case "omakase": return <OmakaseTheme {...tProps} />;
+      case "resort": return <ResortTheme {...tProps} />;
+      case "bistro": return <BistroTheme {...tProps} />;
+      case "lounge": return <LoungeTheme {...tProps} />;
+      case "popdiner": return <PopDinerTheme {...tProps} />;
+      case "editorial": return <EditorialTheme {...tProps} />;
+      case "boutique": return <BoutiqueTheme {...tProps} />;
+      case "botanical": return <BotanicalTheme {...tProps} />;
+      case "minimalist": return <MinimalistTheme {...tProps} />;
+      case "luxury": return <LuxuryTheme {...tProps} />;
+      case "vibrant": return <VibrantTheme {...tProps} />;
+      default: return <ClassicTheme {...tProps} />;
     }
   };
 
@@ -94,6 +164,9 @@ export function MenuClientView(props: MenuClientViewProps) {
           </a>
         </div>
       )}
+
+
+
       {renderTheme()}
     </>
   );

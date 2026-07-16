@@ -6,6 +6,19 @@ import { getActiveRestaurant } from "@/lib/rbac";
 
 export async function getOrCreateFloorPlans(restaurantId: string) {
   const supabase = await createClient();
+  
+  async function syncZoneToRestaurant(restId: string, zoneName: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: rest } = await supabase.from("restaurants").select("location_zones" as any).eq("id", restId).single();
+    if (rest) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const currentZones: string[] = (rest as any).location_zones || ["Main Dining"];
+      if (!currentZones.includes(zoneName)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await supabase.from("restaurants").update({ location_zones: [...currentZones, zoneName] } as any).eq("id", restId);
+      }
+    }
+  }
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { success: false, error: "Unauthorized" };
 
@@ -42,7 +55,28 @@ export async function getOrCreateFloorPlans(restaurantId: string) {
       return { success: false, error: insertError.message };
     }
     
+    // Auto-sync "Main Floor" to location_zones
+    await syncZoneToRestaurant(restaurantId, "Main Floor");
+    
     return { success: true, floorPlans: [newPlan] };
+  }
+
+  // 3. Retroactively sync existing plans to location_zones
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentZones: string[] = (restaurant as any).location_zones || ["Main Dining"];
+  let needsUpdate = false;
+  const updatedZones = [...currentZones];
+  
+  for (const plan of existingPlans) {
+    if (!updatedZones.includes(plan.name)) {
+      updatedZones.push(plan.name);
+      needsUpdate = true;
+    }
+  }
+  
+  if (needsUpdate) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await supabase.from("restaurants").update({ location_zones: updatedZones } as any).eq("id", restaurantId);
   }
 
   return { success: true, floorPlans: existingPlans };
@@ -121,6 +155,40 @@ export async function addFloorPlanArea(restaurantId: string, name: string, templ
     return { success: false, error: "Unauthorized" };
   }
 
+  // Check if a floor plan with this name already exists
+  const { data: existingPlan } = await supabase
+    .from("floor_plans")
+    .select("id")
+    .eq("restaurant_id", restaurantId)
+    .eq("name", name)
+    .maybeSingle();
+
+  if (existingPlan) {
+    return { success: false, error: "A floor plan with this name already exists." };
+  }
+
+  // Check Zone Limits for this plan
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentZones: string[] = (restaurant as any).location_zones || ["Main Dining"];
+  if (!currentZones.includes(name)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const plan = ((restaurant as any).plan || "free").toLowerCase();
+    const maxZones = plan === "enterprise" ? Infinity : plan === "elite" ? 5 : 2;
+    
+    if (currentZones.length >= maxZones) {
+      if (plan === "pro") {
+        return { success: false, error: `Pro plan is limited to 2 Location Zones. Upgrade to Elite (5 Zones) or Enterprise (Unlimited).` };
+      }
+      if (plan === "elite") {
+        return { success: false, error: `Elite plan is limited to 5 Location Zones. Upgrade to Enterprise for Unlimited Zones.` };
+      }
+      return { 
+        success: false, 
+        error: `${plan.charAt(0).toUpperCase() + plan.slice(1)} plan is limited to ${maxZones} Location Zones. Upgrade to add more.` 
+      };
+    }
+  }
+
   const { data, error } = await supabase
     .from("floor_plans")
     .insert({
@@ -154,6 +222,13 @@ export async function addFloorPlanArea(restaurantId: string, name: string, templ
   } else {
     // If blank, just attach empty tables array
     finalData = { ...data, restaurant_tables: [] };
+  }
+  
+  // Auto-sync the new area name to location_zones
+  if (!currentZones.includes(name)) {
+    const newZones = [...currentZones, name];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await supabase.from("restaurants").update({ location_zones: newZones } as any).eq("id", restaurantId);
   }
   
   revalidatePath("/dashboard/cashier");
@@ -254,6 +329,15 @@ export async function saveTableLayout(
     if (updateError) {
       console.error("Failed to update floor plan name", updateError);
       return { success: false, error: updateError.message };
+    }
+
+    // Auto-sync the renamed plan to location_zones
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const currentZones: string[] = (restaurant as any).location_zones || ["Main Dining"];
+    if (!currentZones.includes(planName)) {
+      const newZones = [...currentZones, planName];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await supabase.from("restaurants").update({ location_zones: newZones } as any).eq("id", restaurant.id);
     }
   }
 

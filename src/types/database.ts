@@ -311,6 +311,7 @@ export interface Database {
           loyalty_card_color?: string | null;
 
           wait_time_status?: string | null;
+          location_label?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["restaurants"]["Insert"]>;
         Relationships: [];
@@ -449,6 +450,7 @@ export interface Database {
           created_at: string | null;
           slug: string | null;
           allow_manual_payments: boolean | null;
+          display_language: string | null;
         };
         Insert: {
           id?: string;
@@ -469,6 +471,7 @@ export interface Database {
           created_at?: string | null;
           slug?: string | null;
           allow_manual_payments?: boolean | null;
+          display_language?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["menus"]["Insert"]>;
         Relationships: [
@@ -487,6 +490,7 @@ export interface Database {
           name: string;
           description: string | null;
           sort_order: number;
+          translations: Json | null;
         };
         Insert: {
           id?: string;
@@ -494,6 +498,7 @@ export interface Database {
           name: string;
           description?: string | null;
           sort_order?: number;
+          translations?: Json | null;
         };
         Update: Partial<Database["public"]["Tables"]["categories"]["Insert"]>;
         Relationships: [
@@ -525,6 +530,7 @@ export interface Database {
           cooking_time: number | null;
           sort_order: number;
           created_at: string | null;
+          translations: Json | null;
         };
         Insert: {
           id?: string;
@@ -545,6 +551,7 @@ export interface Database {
           cooking_time?: number | null;
           sort_order?: number;
           created_at?: string | null;
+          translations?: Json | null;
         };
         Update: Partial<Database["public"]["Tables"]["menu_items"]["Insert"]>;
         Relationships: [

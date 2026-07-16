@@ -260,8 +260,8 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
       </div>
 
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/95 backdrop-blur-md">
-          <div className="w-full max-w-xl flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/95 backdrop-blur-md" onClick={() => setSelectedItem(null)}>
+          <div className="relative w-full max-w-xl flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             
             <button 
               onClick={() => setSelectedItem(null)}

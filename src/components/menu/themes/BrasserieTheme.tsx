@@ -270,8 +270,8 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
       </div>
 
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#292524]/20 backdrop-blur-sm p-4 font-sans animate-in fade-in duration-300">
-          <div className="bg-[#FDFBF7] w-full max-w-md rounded-[2.5rem] shadow-2xl shadow-stone-200/50 flex flex-col max-h-[90vh] overflow-hidden border border-[#E7E5E4]">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#292524]/20 backdrop-blur-sm p-4 font-sans animate-in fade-in duration-300" onClick={() => setSelectedItem(null)}>
+          <div className="relative bg-[#FDFBF7] w-full max-w-md rounded-[2.5rem] shadow-2xl shadow-stone-200/50 flex flex-col max-h-[90vh] overflow-hidden border border-[#E7E5E4]" onClick={(e) => e.stopPropagation()}>
             <div className="p-6 border-b border-[#E7E5E4] flex justify-between items-center bg-[#FDFBF7]">
               <h2 className="text-xl font-serif text-[#292524]">Item Details</h2>
               <button onClick={() => setSelectedItem(null)} className="text-[#A8A29E] hover:text-[#292524] p-2 rounded-full transition-colors bg-stone-100 hover:bg-stone-200">

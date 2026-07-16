@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Settings2, Loader2, UtensilsCrossed, Receipt, MapPin, Eye, Info, X, Sparkles } from "lucide-react";
+import { Settings2, Loader2, UtensilsCrossed, Receipt, MapPin, Eye, Info, X, Sparkles, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +21,7 @@ import {
   SPECIALTY_MENU_TYPES,
   getChefRecommendations
 } from "@/lib/menu-type-options";
+import { SUPPORTED_LANGUAGES } from "@/lib/languages";
 import { useFormStatus } from "react-dom";
 
 function SubmitButton() {
@@ -52,6 +53,7 @@ interface EditMenuProps {
     service_charge_type: string | null;
     location_label: string | null;
     allow_manual_payments: boolean | null;
+    display_language: string | null;
   };
   cuisineType?: string | null;
   editAction: (formData: FormData) => Promise<void>;
@@ -278,6 +280,33 @@ export function EditMenuModal({ menu, cuisineType, editAction, plan }: EditMenuP
                 <Info className="h-3.5 w-3.5 text-slate-400 mt-0.5 shrink-0" />
                 <p className="text-xs text-slate-500 leading-relaxed">
                   This determines what guests are prompted to enter when placing an order from this menu.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Localization Section */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+              <Globe className="h-4 w-4 text-slate-400" />
+              Localization
+            </div>
+            <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-100 space-y-1.5">
+              <Label htmlFor="displayLanguage" className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Display Language</Label>
+              <select
+                id="displayLanguage"
+                name="displayLanguage"
+                defaultValue={menu.display_language || "en"}
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 h-10 cursor-pointer shadow-sm"
+              >
+                {SUPPORTED_LANGUAGES.map(lang => (
+                  <option key={lang.code} value={lang.code}>{lang.name}</option>
+                ))}
+              </select>
+              <div className="flex items-start gap-1.5 mt-2">
+                <Info className="h-3.5 w-3.5 text-slate-400 mt-0.5 shrink-0" />
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  The menu will automatically be translated and displayed in this language to all customers.
                 </p>
               </div>
             </div>

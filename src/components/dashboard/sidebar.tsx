@@ -15,15 +15,11 @@ import {
   Clock,
   Utensils,
   Banknote,
-  LifeBuoy,
-  BookOpen,
   Plug,
   Gift,
   Wallet,
 } from "lucide-react";
 
-import { logout } from "@/app/auth/actions";
-import { Button } from "@/components/ui/button";
 import { UserRole } from "@/lib/rbac";
 
 export const getNavItems = (role: UserRole) => {
@@ -34,7 +30,7 @@ export const getNavItems = (role: UserRole) => {
     // Menu Content
     { href: "/dashboard/menus", label: "My Menus", icon: Menu, roles: ["owner", "manager"] as UserRole[] },
     { href: "/dashboard/items", label: "Menu Items", icon: Utensils, roles: ["owner", "manager"] as UserRole[] },
-    { href: "/dashboard/customize", label: "Customize", icon: Palette, badge: "PRO", roles: ["owner", "manager"] as UserRole[] },
+    { href: "/dashboard/customize", label: "Customize", icon: Palette, badge: "PRO", openToAll: true, roles: ["owner", "manager"] as UserRole[] },
     
     // Distribution
     { href: "/dashboard/qrcodes", label: "QR Codes", icon: QrCode, roles: ["owner", "manager"] as UserRole[] },
@@ -44,7 +40,7 @@ export const getNavItems = (role: UserRole) => {
     { href: "/dashboard/orders", label: "Dine-In Orders", icon: ShoppingBag, badge: "ELITE", roles: ["owner", "manager", "waitstaff", "kitchen", "kitchen_waitstaff"] as UserRole[] },
     { href: "/dashboard/takeaway", label: "Pickup & Reserve", icon: Clock, badge: "ENT.", roles: ["owner", "manager", "waitstaff", "kitchen", "kitchen_waitstaff"] as UserRole[] },
     { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ENT.", roles: ["owner"] as UserRole[] },
-    { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO", roles: ["owner", "manager"] as UserRole[] },
+    { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO", openToAll: true, roles: ["owner", "manager"] as UserRole[] },
     { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO", roles: ["owner", "manager"] as UserRole[] },
     
     // Account
@@ -89,7 +85,8 @@ export function Sidebar({ plan = "Free", role = "owner" }: { plan?: string, role
         {allowedNavItems.map((item) => {
           const Icon = item.icon;
           const requiredLevel = (item.badge === "ENT." || item.badge === "ENTERPRISE") ? 3 : item.badge === "ELITE" ? 2 : item.badge === "PRO" ? 1 : 0;
-          const isLocked = userLevel < requiredLevel;
+          const isLocked = userLevel < requiredLevel && !item.openToAll;
+          const isOpenPreview = userLevel < requiredLevel && !!item.openToAll;
 
           return (
             <Link
@@ -110,6 +107,11 @@ export function Sidebar({ plan = "Free", role = "owner" }: { plan?: string, role
               {isLocked && item.badge && (
                 <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-slate-100 text-slate-400 border-slate-200">
                   🔒 {item.badge}
+                </span>
+              )}
+              {isOpenPreview && item.badge && (
+                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-emerald-50 text-emerald-600 border-emerald-100">
+                  🔓 {item.badge}
                 </span>
               )}
             </Link>

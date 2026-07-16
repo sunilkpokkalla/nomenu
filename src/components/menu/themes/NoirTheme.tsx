@@ -308,8 +308,8 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
       </div>
 
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0A0A0A]/80 backdrop-blur-md p-4 font-sans animate-in fade-in duration-300">
-          <div className="bg-[#111111] w-full max-w-md rounded-t-3xl shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.8)] overflow-hidden border border-zinc-800/50 flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0A0A0A]/80 backdrop-blur-md p-4 font-sans animate-in fade-in duration-300" onClick={() => setSelectedItem(null)}>
+          <div className="relative bg-[#111111] w-full max-w-md rounded-t-3xl shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.8)] overflow-hidden border border-zinc-800/50 flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-800 flex justify-between items-center bg-[#0A0A0A]">
               <h2 className="text-xl font-serif text-white tracking-widest uppercase">Details</h2>
               <button onClick={() => setSelectedItem(null)} className="text-zinc-500 hover:text-white p-2 rounded-full transition-colors">

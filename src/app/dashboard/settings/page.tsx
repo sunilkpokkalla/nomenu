@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/server";
 import { PhoneInputField } from "@/components/ui/phone-input";
+import { Switch } from "@/components/ui/switch";
 
 
 import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
@@ -198,6 +199,7 @@ export default async function SettingsPage(
                 <p className="text-[10px] text-muted-foreground">Used for analytics and feedback timestamps.</p>
               </div>
             </div>
+            
 
             <Button type="submit" className="w-full sm:w-auto mt-6">
               <Save className="mr-2 h-4 w-4" /> Save Changes

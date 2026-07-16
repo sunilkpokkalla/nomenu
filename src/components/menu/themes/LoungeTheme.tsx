@@ -188,9 +188,9 @@ export function LoungeTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Lounge) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-xl">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-xl" onClick={() => setters.setSelectedItem(null)}>
           
-          <div className="bg-[#111] sm:border border-white/10 sm:rounded-[40px] rounded-t-[40px] w-full max-w-xl mx-auto flex flex-col max-h-[90vh] shadow-[0_0_80px_rgba(0,0,0,0.8)] overflow-hidden relative animate-in slide-in-from-bottom-8 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
+          <div className="bg-[#111] sm:border border-white/10 sm:rounded-[40px] rounded-t-[40px] w-full max-w-xl mx-auto flex flex-col max-h-[90vh] shadow-[0_0_80px_rgba(0,0,0,0.8)] overflow-hidden relative animate-in slide-in-from-bottom-8 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300" onClick={(e) => e.stopPropagation()}>
             
             <button onClick={() => setters.setSelectedItem(null)} className="absolute top-6 right-6 bg-black/50 backdrop-blur-xl border border-white/10 text-white hover:bg-white/10 p-3 rounded-full transition-colors z-20">
               <X size={20} strokeWidth={2} />

@@ -69,12 +69,12 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (activePlan) {
+    if (activePlan && !isEditMode) {
       setTables(activePlan.restaurant_tables || []);
       setSelectedTableId(null);
       setEditPlanName(activePlan.name);
     }
-  }, [activePlanId, activePlan]);
+  }, [activePlanId, activePlan, isEditMode]);
 
   const handleAddTable = () => {
     let newX = 50;
@@ -167,7 +167,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
           setActivePlanId(res.area.id);
         }
       } else {
-        showError("Failed to add floor plan.");
+        showError(res.error || "Failed to add floor plan.");
       }
     } catch (error) {
       showError("Error adding floor plan.");
@@ -270,7 +270,10 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
               <button
                 key={plan.id}
                 onClick={() => {
-                  if (!isEditMode) setActivePlanId(plan.id);
+                  if (!isEditMode) {
+                    setActivePlanId(plan.id);
+                    setSelectedLiveTableIds([]);
+                  }
                 }}
                 disabled={isEditMode}
                 className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${
@@ -601,7 +604,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
         {!isEditMode && onSelectTable && selectedLiveTableIds.length > 0 && (
           <div className="w-80 bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col">
             {(() => {
-              const allTables = initialFloorPlans.flatMap(p => (p.restaurant_tables || []).map((t: Record<string, unknown>) => ({ ...t, _planName: p.name })));
+              const allTables = initialFloorPlans.flatMap(p => (p.restaurant_tables || []).map((t: RestaurantTable) => ({ ...t, _planName: p.name })));
               const selectedTables = allTables.filter(t => selectedLiveTableIds.includes(t.id));
               const tableNumbersString = selectedTables.map(t => t.table_number).join(', ');
               const compositeTableString = selectedTables.map(t => `${t._planName || "Main Floor"} - ${t.table_number}`).join(', ');
@@ -638,7 +641,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
         {!isEditMode && !onSelectTable && selectedLiveTableIds.length > 0 && (
           <div className="w-80 bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col overflow-y-auto">
             {(() => {
-              const allTables = initialFloorPlans.flatMap(p => (p.restaurant_tables || []).map((t: Record<string, unknown>) => ({ ...t, _planName: p.name })));
+              const allTables = initialFloorPlans.flatMap(p => (p.restaurant_tables || []).map((t: RestaurantTable) => ({ ...t, _planName: p.name })));
               const selectedTables = allTables.filter(t => selectedLiveTableIds.includes(t.id));
               const tableNumbersString = selectedTables.map(t => t.table_number).join(', ');
               const compositeTableString = selectedTables.map(t => `${t._planName || "Main Floor"} - ${t.table_number}`).join(', ');

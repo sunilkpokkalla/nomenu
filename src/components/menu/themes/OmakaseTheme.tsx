@@ -169,8 +169,8 @@ export function OmakaseTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Omakase) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg">
-          <div className="bg-[#0F0F0F] border border-[#222] w-full max-w-xl flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg" onClick={() => setters.setSelectedItem(null)}>
+          <div className="bg-[#0F0F0F] border border-[#222] w-full max-w-xl flex flex-col max-h-[90vh] relative" onClick={(e) => e.stopPropagation()}>
             
             <button 
               onClick={() => setters.setSelectedItem(null)}

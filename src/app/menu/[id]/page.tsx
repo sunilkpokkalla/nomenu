@@ -153,6 +153,8 @@ export default async function PublicMenuPage(
         tableNumber={effectiveTableNumber}
         qrCodeId={qrCodeId}
         locationLabel={menu.location_label}
+        menuId={menu.id}
+        displayLanguage={menu.display_language}
       />
       {['elite', 'enterprise'].includes(restaurant.plan?.toLowerCase() || '') && (
         <FloatingCart 

@@ -45,6 +45,30 @@ export async function inviteStaff(formData: FormData, restaurantId: string) {
     redirect("/dashboard/settings/team?message=Kitchen%20staff%20roles%20require%20the%20Elite%20plan");
   }
 
+  // Count existing staff
+  const { count, error: countError } = await supabase
+    .from("restaurant_staff")
+    .select("*", { count: 'exact', head: true })
+    .eq("restaurant_id", restaurantId);
+
+  if (countError) {
+    redirect("/dashboard/settings/team?message=Failed%20to%20verify%20staff%20limits");
+  }
+
+  const currentStaffCount = count || 0;
+
+  if (restaurant.plan === "pro" && currentStaffCount >= 2) {
+    redirect("/dashboard/settings/team?message=Pro%20plan%20limit%20reached%20(2%20staff).%20Upgrade%20to%20Elite%20to%20invite%20more.");
+  }
+
+  if (restaurant.plan === "elite" && currentStaffCount >= 5) {
+    redirect("/dashboard/settings/team?message=Elite%20plan%20limit%20reached%20(5%20staff).%20Upgrade%20to%20Enterprise%20to%20invite%20more.");
+  }
+
+  if (restaurant.plan === "enterprise" && currentStaffCount >= 10) {
+    redirect("/dashboard/settings/team?message=Enterprise%20plan%20limit%20reached%20(10%20staff).");
+  }
+
   // Check if email already exists in staff
   const { data: existingStaff } = await supabase
     .from("restaurant_staff")

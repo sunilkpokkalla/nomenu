@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { createQrCode, bulkCreateQrCodes, deleteQrCode } from "@/app/dashboard/actions";
+import { createQrCode, bulkCreateQrCodes, syncQrCodesFromFloorPlan, deleteQrCode } from "@/app/dashboard/actions";
 import { CopyButton, DownloadButton } from "@/components/dashboard/qr-actions";
 import { QrDesignerModal } from "@/components/dashboard/qr-designer-modal";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
@@ -135,6 +135,7 @@ export default async function QrCodesPage(
           <CreateQrSheet 
             createAction={createQrCode} 
             bulkCreateAction={bulkCreateQrCodes}
+            syncAction={syncQrCodesFromFloorPlan}
             locationZones={locationZones} 
             menusList={menusList} 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

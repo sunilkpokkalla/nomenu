@@ -197,9 +197,9 @@ export function ResortTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Resort) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 bg-[#003366]/40 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center p-0 sm:p-4 bg-[#003366]/40 backdrop-blur-md" onClick={() => setters.setSelectedItem(null)}>
           
-          <div className="bg-white sm:rounded-[40px] rounded-t-[40px] w-full max-w-lg mx-auto flex flex-col max-h-[90vh] shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom-8 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
+          <div className="bg-white sm:rounded-[40px] rounded-t-[40px] w-full max-w-lg mx-auto flex flex-col max-h-[90vh] shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom-8 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300" onClick={(e) => e.stopPropagation()}>
             
             <button onClick={() => setters.setSelectedItem(null)} className="absolute top-4 right-4 bg-black/20 backdrop-blur-xl text-white hover:bg-black/40 p-3 rounded-full transition-colors z-20">
               <X size={20} strokeWidth={3} />

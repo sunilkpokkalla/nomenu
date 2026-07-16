@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { formatOrderNumber } from "@/lib/utils";
 import { createBrowserClient } from "@supabase/ssr";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
-import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2 } from "lucide-react";
+import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2, Loader2, Trash2 } from "lucide-react";
 import { settleTableTab, voidTableTab } from "@/app/dashboard/cashier/actions";
 
 type OrderItem = {
@@ -324,10 +324,12 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
                     <button 
                       onClick={() => handleSettleTab(tab.table_number, tab.customer_names[0])}
                       disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
-                      className={`flex-1 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 text-white shadow-lg ${confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-gradient-to-r from-orange-500 to-amber-500 hover:shadow-orange-500/25" : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-emerald-500/25 hover:scale-[1.02]"}`}
+                      className={`flex-1 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-90 text-white shadow-lg ${confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-slate-900 hover:bg-slate-800 shadow-slate-900/25 scale-[0.98]" : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-emerald-500/25 hover:scale-[1.02]"}`}
                     >
-                      {confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
-                        <>Sure? Click to Settle</>
+                      {isProcessing === `${tab.table_number}::${tab.customer_names[0]}` && confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                        <><Loader2 className="w-5 h-5 animate-spin" /> Settling...</>
+                      ) : confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                        <><CheckCircle2 className="w-5 h-5 animate-pulse text-emerald-400" /> Confirm Payment</>
                       ) : (
                         <><CircleDollarSign className="w-5 h-5" /> Settle Tab</>
                       )}
@@ -335,10 +337,16 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
                     <button 
                       onClick={() => handleVoidTab(tab.table_number, tab.customer_names[0])}
                       disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
-                      className={`w-14 rounded-2xl font-bold flex items-center justify-center transition-all disabled:opacity-50 ${confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-red-500 text-white shadow-lg shadow-red-500/25" : "bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-500"}`}
+                      className={`w-14 rounded-2xl font-bold flex items-center justify-center transition-all disabled:opacity-50 ${confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-rose-600 text-white shadow-lg shadow-rose-600/25 scale-[0.98]" : "bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-500"}`}
                       title="Void unpaid tab"
                     >
-                      {confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? <XCircle className="w-6 h-6 animate-pulse" /> : <XCircle className="w-5 h-5" />}
+                      {isProcessing === `${tab.table_number}::${tab.customer_names[0]}` && confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                        <Trash2 className="w-5 h-5 animate-pulse" />
+                      ) : (
+                        <XCircle className="w-5 h-5" />
+                      )}
                     </button>
                   </div>
                 </div>

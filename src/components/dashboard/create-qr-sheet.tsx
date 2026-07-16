@@ -18,15 +18,16 @@ import {
 interface CreateQrSheetProps {
   createAction: (formData: FormData) => Promise<void>;
   bulkCreateAction: (formData: FormData) => Promise<void>;
+  syncAction: (formData: FormData) => Promise<void>;
   locationZones: string[];
   menusList: { id: string; name: string; is_active: boolean }[];
   ManageLocationZonesModal: React.ReactNode;
   plan: string;
 }
 
-export function CreateQrSheet({ createAction, bulkCreateAction, locationZones, menusList, ManageLocationZonesModal, plan }: CreateQrSheetProps) {
+export function CreateQrSheet({ createAction, bulkCreateAction, syncAction, locationZones, menusList, ManageLocationZonesModal, plan }: CreateQrSheetProps) {
     const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"single" | "bulk">("single");
+  const [activeTab, setActiveTab] = useState<"single" | "bulk" | "sync">("single");
   const [isPending, startTransition] = useTransition();
   const [mode, setMode] = useState("dine_in");
   const [isAddingNewZone, setIsAddingNewZone] = useState(false);
@@ -83,14 +84,17 @@ export function CreateQrSheet({ createAction, bulkCreateAction, locationZones, m
           <div className="flex bg-slate-100 p-1 rounded-xl mb-4 mt-4">
             <button type="button" onClick={() => setActiveTab("single")} className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === 'single' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>Single QR</button>
             <button type="button" onClick={() => setActiveTab("bulk")} className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === 'bulk' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>Bulk Generate</button>
+            <button type="button" onClick={() => setActiveTab("sync")} className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === 'sync' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>Sync Floor Plan</button>
           </div>
 
           <form action={(formData) => {
             startTransition(async () => {
               if (activeTab === "single") {
                 await createAction(formData);
-              } else {
+              } else if (activeTab === "bulk") {
                 await bulkCreateAction(formData);
+              } else if (activeTab === "sync") {
+                await syncAction(formData);
               }
               setIsOpen(false);
             });
@@ -173,22 +177,35 @@ export function CreateQrSheet({ createAction, bulkCreateAction, locationZones, m
               </div>
             )}
             
-            {activeTab === "single" ? (
-              <div className="space-y-2.5">
-                <Label htmlFor="label" className="text-slate-700 font-medium">
-                  {mode === "dine_in" ? "Specific Location / Label" : "Label (e.g. Front Window)"}
-                </Label>
-                <Input 
-                  id="label" 
-                  name="label" 
-                  placeholder="e.g. Table 12, Seat 4A, Cabana 3" 
-                  required={activeTab === "single"}
-                  className="rounded-xl px-3.5 py-2.5 shadow-sm border-slate-200 focus-visible:ring-indigo-500/50 focus-visible:border-indigo-500 h-auto"
-                />
-              </div>
-            ) : (
-              <div className="space-y-4 border rounded-xl p-4 bg-slate-50 border-slate-100">
+            {activeTab === "single" && (
+              <div className="space-y-4">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-sm text-slate-600 shadow-sm">
+                  <span className="font-semibold text-slate-800 block mb-1">When to use Single QR:</span>
+                  <p>Best for <span className="font-medium text-slate-700">Food Trucks</span> (e.g., 'Order Window'), <span className="font-medium text-slate-700">Theaters</span> (e.g., 'Seat 4A'), or creating one-off codes for specific spots like a pool chair or bar.</p>
+                </div>
                 <div className="space-y-2.5">
+                  <Label htmlFor="label" className="text-slate-700 font-medium">
+                    Location Name / Label
+                  </Label>
+                  <Input 
+                    id="label" 
+                    name="label" 
+                    placeholder="e.g. Table 12, Seat 4A, Order Window" 
+                    required={activeTab === "single"}
+                    className="rounded-xl px-3.5 py-2.5 shadow-sm border-slate-200 focus-visible:ring-indigo-500/50 focus-visible:border-indigo-500 h-auto"
+                  />
+                </div>
+              </div>
+            )}
+            
+            {activeTab === "bulk" && (
+              <div className="space-y-4">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-sm text-slate-600 shadow-sm">
+                  <span className="font-semibold text-slate-800 block mb-1">When to use Bulk QR:</span>
+                  <p>Best for <span className="font-medium text-slate-700">Hotels</span> (Rooms 101-200), <span className="font-medium text-slate-700">Beachfronts</span> (Cabanas 1-20), or <span className="font-medium text-slate-700">Stadiums</span> to quickly generate many codes without drawing a visual map.</p>
+                </div>
+                <div className="space-y-4 border rounded-xl p-4 bg-slate-50/50 border-slate-200">
+                  <div className="space-y-2.5">
                   <Label htmlFor="prefix" className="text-slate-700 font-medium">Label Prefix</Label>
                   <Input 
                     id="prefix" 
@@ -225,6 +242,16 @@ export function CreateQrSheet({ createAction, bulkCreateAction, locationZones, m
                     />
                   </div>
                 </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "sync" && (
+              <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-sm text-indigo-800 shadow-sm">
+                <span className="font-semibold block mb-1">When to use Floor Sync (Recommended):</span>
+                <p className="text-indigo-700/90 leading-relaxed">
+                  Best for <span className="font-semibold">Fine Dining, Patios, & Seated Restaurants</span>. Automatically generate QR codes directly from your visual Floor Plan so your printed codes and Cashier map always match perfectly.
+                </p>
               </div>
             )}
             
@@ -253,7 +280,7 @@ export function CreateQrSheet({ createAction, bulkCreateAction, locationZones, m
               {isPending ? "Generating..." : (
                 <>
                   <Plus className="mr-2 h-4 w-4" />
-                  {activeTab === "single" ? "Generate QR Code" : "Bulk Generate QR Codes"}
+                  {activeTab === "single" ? "Generate QR Code" : activeTab === "bulk" ? "Bulk Generate QR Codes" : "Sync QR Codes from Floor Plan"}
                 </>
               )}
             </Button>

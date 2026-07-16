@@ -162,8 +162,8 @@ export function EditorialTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Editorial) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-[#F9F8F6]/90 backdrop-blur-md">
-          <div className="bg-white w-full max-w-5xl flex flex-col md:flex-row max-h-[95vh] shadow-2xl relative animate-in fade-in duration-500 overflow-hidden border border-[#E2DFD8]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-[#F9F8F6]/90 backdrop-blur-md" onClick={() => setters.setSelectedItem(null)}>
+          <div className="bg-white w-full max-w-5xl flex flex-col md:flex-row max-h-[95vh] shadow-2xl relative animate-in fade-in duration-500 overflow-hidden border border-[#E2DFD8]" onClick={(e) => e.stopPropagation()}>
             
             <button onClick={() => setters.setSelectedItem(null)} className="absolute top-6 right-6 text-[#1A1918] hover:opacity-50 transition-opacity z-20 mix-blend-difference">
               <X size={28} strokeWidth={1} color="white" />

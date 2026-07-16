@@ -162,9 +162,9 @@ export function BoutiqueTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Boutique UI) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-[#4A3B42]/40 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-[#4A3B42]/40 backdrop-blur-sm" onClick={() => setters.setSelectedItem(null)}>
           
-          <div className="bg-white w-full sm:max-w-md sm:rounded-[32px] rounded-t-[32px] flex flex-col max-h-[90vh] shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom-8 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
+          <div className="bg-white w-full sm:max-w-md sm:rounded-[32px] rounded-t-[32px] flex flex-col max-h-[90vh] shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom-8 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300" onClick={(e) => e.stopPropagation()}>
             
             <button onClick={() => setters.setSelectedItem(null)} className="absolute top-4 right-4 bg-white/50 backdrop-blur-md text-[#4A3B42] hover:bg-white p-2 rounded-full transition-colors z-20 shadow-sm">
               <X size={20} strokeWidth={3} />

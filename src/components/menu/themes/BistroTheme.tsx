@@ -179,9 +179,9 @@ export function BistroTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Bistro) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#FDFBF7]/90 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#FDFBF7]/90 backdrop-blur-sm" onClick={() => setters.setSelectedItem(null)}>
           
-          <div className="bg-[#FDFBF7] w-full max-w-2xl max-h-[90vh] flex flex-col sm:flex-row shadow-[0_30px_60px_rgba(0,0,0,0.1)] border border-[#EAE3D2] overflow-hidden relative animate-in fade-in zoom-in-95 duration-500">
+          <div className="bg-[#FDFBF7] w-full max-w-2xl max-h-[90vh] flex flex-col sm:flex-row shadow-[0_30px_60px_rgba(0,0,0,0.1)] border border-[#EAE3D2] overflow-hidden relative animate-in fade-in zoom-in-95 duration-500" onClick={(e) => e.stopPropagation()}>
             
             <button onClick={() => setters.setSelectedItem(null)} className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-[#1A1A1A] hover:bg-black hover:text-white p-2 rounded-full transition-colors z-20">
               <X size={20} strokeWidth={1} />

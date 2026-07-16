@@ -193,6 +193,7 @@ export async function createMenu(formData: FormData) {
     service_charge_type: serviceChargeType,
     location_label: locationLabel,
     allow_manual_payments: allowManualPayments,
+    display_language: field(formData, "displayLanguage") || 'en',
   });
 
   if (error) {
@@ -302,6 +303,7 @@ export async function editMenu(formData: FormData) {
       service_charge_type: serviceChargeType,
       location_label: locationLabel,
       allow_manual_payments: allowManualPayments,
+      display_language: field(formData, "displayLanguage") || 'en',
     })
     .eq("id", menuId)
     .eq("restaurant_id", restaurant.id);
@@ -313,6 +315,7 @@ export async function editMenu(formData: FormData) {
   revalidatePath("/dashboard/menus");
   revalidatePath(`/dashboard/menus/${menuId}/customize`);
   revalidatePath("/dashboard/items");
+  revalidateTag("menu-data");
   redirect("/dashboard/menus");
 }
 
@@ -741,9 +744,18 @@ export async function createQrCode(formData: FormData) {
     redirect(`/dashboard/qrcodes?message=A%20QR%20code%20with%20label%20"${encodeURIComponent(label)}"%20already%20exists`);
   }
 
+  // Check if we are adding a NEW zone
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const currentZones = (restaurant as any).location_zones || [];
   if (locationZone && !currentZones.includes(locationZone)) {
+    // Check Zone Limits based on Plan
+    if (currentPlan === "pro" && currentZones.length >= 2) {
+      redirect(`/dashboard/qrcodes?message=Pro%20plan%20is%20limited%20to%202%20Location%20Zones.%20Upgrade%20to%20Elite%20(5%20Zones)%20or%20Enterprise%20(Unlimited%20Zones).`);
+    }
+    if (currentPlan === "elite" && currentZones.length >= 5) {
+      redirect(`/dashboard/qrcodes?message=Elite%20plan%20is%20limited%20to%205%20Location%20Zones.%20Upgrade%20to%20Enterprise%20for%20Unlimited%20Zones.`);
+    }
+
     await supabase.from("restaurants").update({
       location_zones: [...currentZones, locationZone]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -816,10 +828,18 @@ export async function bulkCreateQrCodes(formData: FormData) {
     }
   }
 
-  // Ensure location zone exists
+  // Ensure location zone exists and check limits if adding a new one
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const currentZones = (restaurant as any).location_zones || [];
   if (locationZone && !currentZones.includes(locationZone)) {
+    // Check Zone Limits based on Plan
+    if (currentPlan === "pro" && currentZones.length >= 2) {
+      redirect(`/dashboard/qrcodes?message=Pro%20plan%20is%20limited%20to%202%20Location%20Zones.%20Upgrade%20to%20Elite%20(5%20Zones)%20or%20Enterprise%20(Unlimited%20Zones).`);
+    }
+    if (currentPlan === "elite" && currentZones.length >= 5) {
+      redirect(`/dashboard/qrcodes?message=Elite%20plan%20is%20limited%20to%205%20Location%20Zones.%20Upgrade%20to%20Enterprise%20for%20Unlimited%20Zones.`);
+    }
+
     await supabase.from("restaurants").update({
       location_zones: [...currentZones, locationZone]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -852,6 +872,108 @@ export async function bulkCreateQrCodes(formData: FormData) {
 
   revalidatePath("/dashboard/qrcodes");
   redirect("/dashboard/qrcodes");
+}
+
+export async function syncQrCodesFromFloorPlan(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const restaurant = await getRestaurantForUser(supabase, user.id);
+  if (!restaurant) {
+    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
+  }
+
+  const menuId = field(formData, "menuId");
+  const locationZone = field(formData, "location_zone");
+
+  if (!menuId || !locationZone) {
+    redirect("/dashboard/qrcodes?message=Menu%20and%20Location%20Zone%20are%20required");
+  }
+
+  // 1. Fetch the floor plan for this zone
+  const { data: floorPlan } = await supabase
+    .from("floor_plans")
+    .select("id")
+    .eq("restaurant_id", restaurant.id)
+    .eq("name", locationZone)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!floorPlan) {
+    redirect(`/dashboard/qrcodes?message=No%20Floor%20Plan%20found%20for%20zone%20"${encodeURIComponent(locationZone)}".`);
+  }
+
+  // 1b. Fetch tables for this floor plan
+  const { data: tables } = await supabase
+    .from("restaurant_tables")
+    .select("id, table_number")
+    .eq("floor_plan_id", floorPlan.id);
+
+  if (!tables || tables.length === 0) {
+    redirect(`/dashboard/qrcodes?message=No%20tables%20found%20on%20the%20Floor%20Plan%20for%20zone%20"${encodeURIComponent(locationZone)}".`);
+  }
+
+  // 2. Fetch existing QR codes to avoid duplicates
+  const { data: existingQrs } = await supabase
+    .from("qr_codes")
+    .select("label")
+    .eq("restaurant_id", restaurant.id)
+    .eq("location_zone", locationZone);
+
+  const existingLabels = new Set(existingQrs?.map(qr => qr.label) || []);
+
+  // 3. Prepare new QR codes
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const newQrCodes: any[] = [];
+  
+  for (const table of tables) {
+    // If the table doesn't already have a QR code, prepare it
+    if (!existingLabels.has(table.table_number)) {
+      newQrCodes.push({
+        restaurant_id: restaurant.id,
+        menu_id: menuId,
+        label: table.table_number,
+        location_zone: locationZone,
+        scan_count: 0,
+        mode: "dine_in",
+      });
+    }
+  }
+
+  if (newQrCodes.length === 0) {
+    redirect(`/dashboard/qrcodes?message=All%20tables%20in%20zone%20"${encodeURIComponent(locationZone)}"%20already%20have%20QR%20codes.`);
+  }
+
+  // Check Plan Limits before bulk inserting
+  const currentPlan = restaurant.plan || "free";
+  if (currentPlan === "free") {
+    const { count: qrCount } = await supabase
+      .from("qr_codes")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+      
+    const limit = 1;
+    if (qrCount !== null && qrCount + newQrCodes.length > limit) {
+      redirect(`/dashboard/qrcodes?message=Free%20plan%20is%20limited%20to%20${limit}%20QR%20codes.%20Upgrade%20your%20plan%20to%20sync.`);
+    }
+  }
+
+  // 4. Insert them
+  const { error } = await supabase.from("qr_codes").insert(newQrCodes);
+
+  if (error) {
+    redirect(`/dashboard/qrcodes?message=${encodeURIComponent("Failed to sync QR codes from Floor Plan.")}`);
+  }
+
+  revalidatePath("/dashboard/qrcodes");
+  redirect("/dashboard/qrcodes?success=Successfully%20synced%20QR%20codes%20from%20Floor%20Plan!");
 }
 
 export async function deleteQrCode(formData: FormData) {

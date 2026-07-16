@@ -256,8 +256,8 @@ export function BentoTheme({ restaurant, categories, items, tableNumber, qrCodeI
       </div>
 
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-sans animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-md border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-sans animate-in fade-in duration-300" onClick={() => setSelectedItem(null)}>
+          <div className="relative bg-white w-full max-w-md border-4 border-black shadow-[8px_8px_0_0_rgba(0,0,0,1)] flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <div className="p-4 border-b-4 border-black flex justify-between items-center bg-[#FFD166]">
               <h2 className="text-xl font-black text-black uppercase">Item Details</h2>
               <button onClick={() => setSelectedItem(null)} className="text-black hover:bg-black hover:text-white p-1 border-2 border-transparent hover:border-black transition-colors">

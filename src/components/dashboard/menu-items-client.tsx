@@ -42,12 +42,78 @@ export function MenuItemsClient({
   const [selectedMenuId, setSelectedMenuId] = useState(initialMenuId);
   const [selectedCategoryId, setSelectedCategoryId] = useState(initialCategoryId);
   const [isCreateSheetOpen, setIsCreateSheetOpen] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [dashboardTranslations, setDashboardTranslations] = useState<{ categories: any, items: any }>({ categories: {}, items: {} });
 
   useEffect(() => {
     if (selectedMenuId !== "all" && !menus.find(m => m.id === selectedMenuId)) {
       setSelectedMenuId("all");
     }
   }, [menus, selectedMenuId]);
+
+  useEffect(() => {
+    async function translateDashboard() {
+      const menu = menus.find(m => m.id === selectedMenuId);
+      if (!menu || !menu.display_language || menu.display_language === "en") {
+        setDashboardTranslations({ categories: {}, items: {} });
+        return;
+      }
+      
+      const lang = menu.display_language;
+
+      // Filter categories and items to only those belonging to this menu
+      const menuCategories = categories.filter(c => c.menu_id === menu.id);
+      const menuCategoryIds = menuCategories.map(c => c.id);
+      const menuItems = items.filter(i => menuCategoryIds.includes(i.category_id));
+
+      // Check if all categories and items already have translations for this language
+      const missingCategory = menuCategories.find(c => {
+        const trans = c.translations;
+        return !trans || !trans[lang] || !trans[lang].name;
+      });
+      const missingItem = menuItems.find(i => {
+        const trans = i.translations;
+        return !trans || !trans[lang] || !trans[lang].name;
+      });
+
+      if (!missingCategory && !missingItem) {
+        // Build the local map since everything is already translated
+        const localMap = { categories: {} as Record<string, any>, items: {} as Record<string, any> };
+        menuCategories.forEach(c => {
+          if (c.translations?.[lang]) localMap.categories[c.id] = c.translations[lang];
+        });
+        menuItems.forEach(i => {
+          if (i.translations?.[lang]) localMap.items[i.id] = i.translations[lang];
+        });
+        setDashboardTranslations(localMap);
+        return; // Skip API call entirely
+      }
+
+      setIsTranslating(true);
+      try {
+        const res = await fetch("/api/menu/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ restaurantId: restaurant.id, menuId: menu.id, languageCode: menu.display_language })
+        });
+        const data = await res.json();
+        if (data.translations) {
+          setDashboardTranslations(data.translations);
+        }
+      } catch (e) {
+        console.error("Dashboard translation failed", e);
+      } finally {
+        setIsTranslating(false);
+      }
+    }
+    
+    if (selectedMenuId !== "all") {
+      translateDashboard();
+    } else {
+      setDashboardTranslations({ categories: {}, items: {} });
+    }
+  }, [selectedMenuId, menus, restaurant.id]);
 
   useEffect(() => {
     if (selectedCategoryId !== "all" && !categories.find(c => c.id === selectedCategoryId)) {
@@ -196,13 +262,20 @@ export function MenuItemsClient({
         {/* Header Actions */}
         <div className="flex flex-col gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="min-w-[200px] flex-1">
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 break-words">
-                {selectedMenuId === "all" ? "All Items" : selectedCategoryId === "all" ? `${selectedMenuName}` : `${selectedCategoryName}`}
-              </h1>
-              <p className="text-sm text-slate-500 mt-1">
-                Showing {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
-              </p>
+            <div className="min-w-[200px] flex-1 flex items-center gap-3">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 break-words flex items-center gap-2">
+                  {selectedMenuId === "all" ? "All Items" : selectedCategoryId === "all" ? `${selectedMenuName}` : `${selectedCategoryName}`}
+                </h1>
+                <p className="text-sm text-slate-500 mt-1">
+                  Showing {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
+                </p>
+              </div>
+              {isTranslating && (
+                <div className="flex items-center gap-1.5 bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-full text-xs font-semibold animate-pulse border border-indigo-100 mt-1">
+                  <Sparkles className="w-3.5 h-3.5" /> Auto-translating...
+                </div>
+              )}
             </div>
             
             <div className="flex flex-wrap items-center justify-end gap-2">
@@ -313,14 +386,20 @@ export function MenuItemsClient({
                 <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
                   <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
                     {group.category ? (
-                      selectedMenuId === "all" && group.menu ? (
-                        <>
-                          <Badge variant="outline" className="text-xs bg-slate-50">{group.menu.name}</Badge>
-                          {group.category.name}
-                        </>
-                      ) : (
-                        group.category.name
-                      )
+                      (() => {
+                        const menu = group.menu;
+                        const lang = menu?.display_language;
+                        const translatedName = (lang && lang !== "en") 
+                          ? (dashboardTranslations.categories[group.category.id]?.name || group.category.translations?.[lang]?.name || group.category.name)
+                          : group.category.name;
+                          
+                        return selectedMenuId === "all" && menu ? (
+                          <>
+                            <Badge variant="outline" className="text-xs bg-slate-50">{menu.name}</Badge>
+                            {translatedName}
+                          </>
+                        ) : translatedName;
+                      })()
                     ) : (
                       "Uncategorized"
                     )}
@@ -357,19 +436,32 @@ export function MenuItemsClient({
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
-                              <div>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <h3 className="text-lg font-bold text-slate-900 truncate">{item.name}</h3>
-                                  {!item.is_available && (
-                                    <Badge variant="secondary" className="bg-red-50 text-red-700 border-red-200 h-5 px-1.5 text-[10px] uppercase tracking-wider">
-                                      Sold Out
-                                    </Badge>
-                                  )}
+                                <div>
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <h3 className="text-lg font-bold text-slate-900 truncate">
+                                      {(() => {
+                                        const lang = menu?.display_language;
+                                        return (lang && lang !== "en") 
+                                          ? (dashboardTranslations.items[item.id]?.name || item.translations?.[lang]?.name || item.name)
+                                          : item.name;
+                                      })()}
+                                    </h3>
+                                    {!item.is_available && (
+                                      <Badge variant="secondary" className="bg-red-50 text-red-700 border-red-200 h-5 px-1.5 text-[10px] uppercase tracking-wider">
+                                        Sold Out
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-slate-500 mt-1 line-clamp-2 max-w-xl">
+                                    {(() => {
+                                      const lang = menu?.display_language;
+                                      const desc = (lang && lang !== "en") 
+                                        ? (dashboardTranslations.items[item.id]?.description || item.translations?.[lang]?.description || item.description)
+                                        : item.description;
+                                      return desc || <span className="italic opacity-50">No description provided</span>;
+                                    })()}
+                                  </p>
                                 </div>
-                                <p className="text-sm text-slate-500 mt-1 line-clamp-2 max-w-xl">
-                                  {item.description || <span className="italic opacity-50">No description provided</span>}
-                                </p>
-                              </div>
                               <div className="text-left sm:text-right shrink-0 mt-2 sm:mt-0">
                                 <div className="font-bold text-slate-900 text-lg sm:text-base whitespace-nowrap">
                                 {getCurrencySymbol(restaurant.currency)}{Number(item.price).toFixed(2)}
