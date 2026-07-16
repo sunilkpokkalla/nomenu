@@ -97,23 +97,11 @@ const config: Config = {
           "90%": { opacity: "1" },
           "100%": { left: "100%", opacity: "0" },
         },
-        "scan-horizontal-reverse": {
-          "0%": { right: "0%", opacity: "0" },
-          "10%": { opacity: "1" },
-          "90%": { opacity: "1" },
-          "100%": { right: "100%", opacity: "0" },
-        },
         "scan-vertical": {
           "0%": { top: "0%", opacity: "0" },
           "10%": { opacity: "1" },
           "90%": { opacity: "1" },
           "100%": { top: "100%", opacity: "0" },
-        },
-        "scan-vertical-reverse": {
-          "0%": { bottom: "0%", opacity: "0" },
-          "10%": { opacity: "1" },
-          "90%": { opacity: "1" },
-          "100%": { bottom: "100%", opacity: "0" },
         },
       },
       animation: {
@@ -122,9 +110,7 @@ const config: Config = {
         'float-fast': 'float 5s ease-in-out infinite',
         "infinite-scroll": "infinite-scroll 40s linear infinite",
         "scan-horizontal": "scan-horizontal 2s linear infinite",
-        "scan-horizontal-reverse": "scan-horizontal-reverse 2s linear infinite",
         "scan-vertical": "scan-vertical 2s linear infinite",
-        "scan-vertical-reverse": "scan-vertical-reverse 2s linear infinite",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "sans-serif"],

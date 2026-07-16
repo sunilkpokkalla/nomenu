@@ -306,49 +306,25 @@ export default function LandingPage() {
           </div>
 
           {/* Flowchart Visual */}
-          <div className="relative max-w-5xl mx-auto bg-white rounded-[2.5rem] border border-slate-200/60 p-8 md:p-12 shadow-xl shadow-slate-900/5 mb-16 overflow-hidden">
+          <div className="relative max-w-4xl mx-auto bg-white rounded-[2.5rem] border border-slate-200/60 p-8 md:p-12 shadow-xl shadow-slate-900/5 mb-16 overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
             
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
               
-              {/* Node 3: Front of House */}
-              <div className="flex flex-col items-center text-center w-40 relative z-20">
-                <div className="w-20 h-20 rounded-2xl bg-blue-50 border border-blue-200 shadow-sm flex items-center justify-center mb-4 relative z-10">
-                  <Layers className="w-8 h-8 text-blue-600" />
-                </div>
-                <h4 className="font-extrabold text-slate-900 leading-tight">Front of House</h4>
-                <p className="text-xs text-slate-500 mt-1 font-medium">Live table status & sync.</p>
-              </div>
-
-              {/* Connecting Pipeline 1 (FOH <- Customer) */}
-              <div className="flex-1 flex items-center justify-center relative min-h-[40px] md:min-h-0 w-full md:w-auto scale-x-[-1] md:scale-x-100">
-                <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-slate-100 rounded-full -translate-y-1/2" />
-                <div className="md:hidden absolute top-0 bottom-0 left-1/2 w-1 bg-slate-100 rounded-full -translate-x-1/2" />
-                
-                {/* Animated beam (reverse direction for desktop) */}
-                <div className="hidden md:block absolute top-1/2 right-0 h-1 w-24 bg-gradient-to-l from-transparent via-blue-400 to-blue-500 rounded-full -translate-y-1/2 shadow-[0_0_15px_rgba(59,130,246,0.5)] animate-scan-horizontal-reverse" />
-                
-                {/* Mobile animated beam */}
-                <div className="md:hidden absolute top-0 left-1/2 w-1 h-24 bg-gradient-to-t from-transparent via-blue-400 to-blue-500 rounded-full -translate-x-1/2 shadow-[0_0_15px_rgba(59,130,246,0.5)] animate-scan-vertical-reverse" />
-
-                <div className="relative z-20 bg-white border border-blue-200/50 rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm scale-x-[-1] md:scale-x-100">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-500" strokeWidth={3} />
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Syncs Status</span>
-                </div>
-              </div>
-
               {/* Node 1: Customer */}
-              <div className="flex flex-col items-center text-center w-40 relative z-20">
+              <div className="flex flex-col items-center text-center w-48 relative z-20">
                 <div className="w-20 h-20 rounded-2xl bg-indigo-50 border border-indigo-200 shadow-sm flex items-center justify-center mb-4 relative z-10">
                   <Smartphone className="w-8 h-8 text-indigo-600" />
                 </div>
-                <h4 className="font-extrabold text-slate-900 leading-tight">1. Customer Scans</h4>
-                <p className="text-xs text-slate-500 mt-1 font-medium">Orders directly from phone.</p>
+                <h4 className="font-extrabold text-slate-900">1. Customer Scans</h4>
+                <p className="text-xs text-slate-500 mt-1 font-medium">No waiting for a server to take the order.</p>
               </div>
 
-              {/* Connecting Pipeline 2 (Customer -> Kitchen) */}
+              {/* Connecting Pipeline */}
               <div className="flex-1 flex items-center justify-center relative min-h-[40px] md:min-h-0 w-full md:w-auto">
                 <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-slate-100 rounded-full -translate-y-1/2" />
+                
+                {/* Mobile vertical line */}
                 <div className="md:hidden absolute top-0 bottom-0 left-1/2 w-1 bg-slate-100 rounded-full -translate-x-1/2" />
                 
                 {/* Animated beam */}
@@ -357,19 +333,20 @@ export default function LandingPage() {
                 {/* Mobile animated beam */}
                 <div className="md:hidden absolute top-0 left-1/2 w-1 h-24 bg-gradient-to-b from-transparent via-emerald-400 to-emerald-500 rounded-full -translate-x-1/2 shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-scan-vertical" />
 
+                {/* Bypassing Badge */}
                 <div className="relative z-20 bg-white border border-rose-200/50 rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm">
                   <X className="w-3.5 h-3.5 text-rose-500" strokeWidth={3} />
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Bypasses Waitstaff</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Bypassing Waitstaff</span>
                 </div>
               </div>
 
               {/* Node 2: Kitchen */}
-              <div className="flex flex-col items-center text-center w-40 relative z-20">
+              <div className="flex flex-col items-center text-center w-48 relative z-20">
                 <div className="w-20 h-20 rounded-2xl bg-amber-50 border border-amber-200 shadow-sm flex items-center justify-center mb-4 relative z-10">
                   <ChefHat className="w-8 h-8 text-amber-600" />
                 </div>
-                <h4 className="font-extrabold text-slate-900 leading-tight">2. Kitchen Display</h4>
-                <p className="text-xs text-slate-500 mt-1 font-medium">Ticket appears instantly.</p>
+                <h4 className="font-extrabold text-slate-900">2. Kitchen Display</h4>
+                <p className="text-xs text-slate-500 mt-1 font-medium">Ticket appears instantly, perfectly formatted.</p>
               </div>
 
             </div>
