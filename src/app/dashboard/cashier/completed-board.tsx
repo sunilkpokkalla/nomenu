@@ -28,7 +28,10 @@ type GroupedTab = {
 };
 
 export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAnonKey, currencySymbol }: { restaurantId: string; timezone: string; supabaseUrl: string; supabaseAnonKey: string; currencySymbol: string }) {
-  const formatTable = (raw: string) => raw.includes(" - ") ? raw.split(" - ")[1] : raw;
+  const formatTable = (raw: string | null) => {
+    if (!raw) return "Walk-in";
+    return raw.includes(" - ") ? raw.split(" - ")[1] : raw;
+  };
   const [completedOrders, setCompletedOrders] = useState<CompletedOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -159,7 +162,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
       const q = searchQuery.toLowerCase();
       result = result.filter(g => 
         g.customer_name.toLowerCase().includes(q) || 
-        g.table_number.toLowerCase().includes(q)
+        (g.table_number && g.table_number.toLowerCase().includes(q))
       );
     }
     

@@ -503,11 +503,6 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                         {activeOrder.party_size} Guests
                       </span>
                     )}
-                    {activeOrder?.total_amount ? (
-                      <span className="text-xs font-medium bg-white/90 px-2 py-0.5 rounded-full shadow-sm text-slate-900">
-                        ${(activeOrder.total_amount / 100).toFixed(2)}
-                      </span>
-                    ) : null}
                   </div>
                 )}
               </div>

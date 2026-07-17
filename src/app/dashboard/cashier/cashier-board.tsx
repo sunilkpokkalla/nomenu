@@ -413,8 +413,22 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
               {emptyTabs.map(tab => {
                 const elapsedMins = Math.floor((new Date().getTime() - new Date(tab.created_at).getTime()) / 60000);
                 return (
-                  <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white border border-slate-200/60 rounded-2xl p-4 flex flex-col shadow-sm">
-                    <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-1">Table</div>
+                  <div key={`${tab.table_number}-${tab.customer_names[0]}`} className="bg-white border border-slate-200/60 rounded-2xl p-4 flex flex-col shadow-sm relative group">
+                    <div className="flex justify-between items-start mb-1">
+                      <div className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Table</div>
+                      <button
+                        onClick={() => handleVoidTab(tab.table_number, tab.customer_names[0])}
+                        disabled={!!isProcessing}
+                        className={`${confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? 'text-red-600 bg-red-50' : 'text-slate-400 hover:text-red-500 hover:bg-slate-50'} rounded-full p-1 -mt-1 -mr-1 transition-colors`}
+                        title="Remove Table"
+                      >
+                        {confirmVoid === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                          <span className="text-[10px] font-bold px-1">Confirm</span>
+                        ) : (
+                          <XCircle className="w-4 h-4" />
+                        )}
+                      </button>
+                    </div>
                     <div className="font-black text-slate-900 text-lg truncate mb-3">{formatTable(tab.table_number)}</div>
                     
                     <div className="mt-auto flex items-center justify-between">
