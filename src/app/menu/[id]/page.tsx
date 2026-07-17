@@ -90,27 +90,40 @@ export default async function PublicMenuPage(
       deviceType = "iOS";
     }
 
-    // Insert scan log securely bypassing RLS
-    await supabaseAdmin.from("menu_scans").insert({
-      qr_code_id: qrCodeId,
-      restaurant_id: restaurant.id,
-      device_type: deviceType,
-      country: (await headers()).get("x-vercel-ip-country") || "US",
-    });
-
-    // Increment scan count on QR code record securely
+    // Fetch location zone first
     const { data: qrRecord } = await supabaseAdmin
       .from("qr_codes")
       .select("scan_count, location_zone")
       .eq("id", qrCodeId)
       .maybeSingle();
 
+    // Fire and forget insert
+    const country = (await headers()).get("x-vercel-ip-country") || "US";
+    (async () => {
+      try {
+        await supabaseAdmin.from("menu_scans").insert({
+          qr_code_id: qrCodeId,
+          restaurant_id: restaurant.id,
+          device_type: deviceType,
+          country: country,
+        });
+      } catch (error) {
+        console.error("Failed to insert menu scan:", error);
+      }
+    })();
+
     if (qrRecord) {
       locationZone = qrRecord.location_zone || null;
-      await supabaseAdmin
-        .from("qr_codes")
-        .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
-        .eq("id", qrCodeId);
+      (async () => {
+        try {
+          await supabaseAdmin
+            .from("qr_codes")
+            .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
+            .eq("id", qrCodeId);
+        } catch (error) {
+          console.error("Failed to increment QR code scan count:", error);
+        }
+      })();
     }
   }
 

@@ -111,23 +111,27 @@ export default async function StorefrontMenuPage(
       deviceType = "iOS";
     }
 
-    // Fetch location zone and label (we need this for rendering) and trigger insert in parallel
-    const [qrRecordRes] = await Promise.all([
-      supabaseAdmin
-        .from("qr_codes")
-        .select("scan_count, location_zone, label")
-        .eq("id", qrCodeId)
-        .maybeSingle(),
-      // Insert scan log securely bypassing RLS (Fire and forget from the user's perspective, but we await it in Promise.all so Next.js doesn't kill it early)
-      supabaseAdmin.from("menu_scans").insert({
-        qr_code_id: qrCodeId,
-        restaurant_id: restaurant.id,
-        device_type: deviceType,
-        country: country,
-      })
-    ]);
+    // Fetch location zone and label (we need this for rendering)
+    const { data: qrRecord } = await supabaseAdmin
+      .from("qr_codes")
+      .select("scan_count, location_zone, label")
+      .eq("id", qrCodeId)
+      .maybeSingle();
 
-    const qrRecord = qrRecordRes.data;
+    // Fire and forget analytics
+    (async () => {
+      try {
+        await supabaseAdmin.from("menu_scans").insert({
+          qr_code_id: qrCodeId,
+          restaurant_id: restaurant.id,
+          device_type: deviceType,
+          country: country,
+        });
+      } catch (error) {
+        console.error("Failed to insert menu scan:", error);
+      }
+    })();
+
     if (qrRecord) {
       locationZone = qrRecord.location_zone || null;
       if (qrRecord.label && locationZone) {
@@ -136,14 +140,16 @@ export default async function StorefrontMenuPage(
         qrTableLabel = qrRecord.label || locationZone;
       }
       
-      try {
-        await supabaseAdmin
-          .from("qr_codes")
-          .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
-          .eq("id", qrCodeId);
-      } catch (error) {
-        console.error("Failed to increment QR code scan count:", error);
-      }
+      (async () => {
+        try {
+          await supabaseAdmin
+            .from("qr_codes")
+            .update({ scan_count: (qrRecord.scan_count || 0) + 1 })
+            .eq("id", qrCodeId);
+        } catch (error) {
+          console.error("Failed to increment QR code scan count:", error);
+        }
+      })();
     }
   }
 

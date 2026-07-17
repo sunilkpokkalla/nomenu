@@ -2,22 +2,41 @@
 
 import React, { useState, useEffect } from "react";
 import { Star, Clock } from "lucide-react";
-import { NoirTheme } from "./themes/NoirTheme";
-import { BrasserieTheme } from "./themes/BrasserieTheme";
-import { BentoTheme } from "./themes/BentoTheme";
-import { ZenTheme } from "./themes/ZenTheme";
-import { ClassicTheme } from "./themes/ClassicTheme";
-import { OmakaseTheme } from "./themes/OmakaseTheme";
-import { ResortTheme } from "./themes/ResortTheme";
-import { BistroTheme } from "./themes/BistroTheme";
-import { LoungeTheme } from "./themes/LoungeTheme";
-import { PopDinerTheme } from "./themes/PopDinerTheme";
-import { EditorialTheme } from "./themes/EditorialTheme";
-import { BoutiqueTheme } from "./themes/BoutiqueTheme";
-import { BotanicalTheme } from "./themes/BotanicalTheme";
-import { MinimalistTheme } from "./themes/MinimalistTheme";
-import { LuxuryTheme } from "./themes/LuxuryTheme";
-import { VibrantTheme } from "./themes/VibrantTheme";
+import dynamic from "next/dynamic";
+
+const NoirTheme = dynamic(() => import("./themes/NoirTheme").then(mod => mod.NoirTheme));
+const BrasserieTheme = dynamic(() => import("./themes/BrasserieTheme").then(mod => mod.BrasserieTheme));
+const BentoTheme = dynamic(() => import("./themes/BentoTheme").then(mod => mod.BentoTheme));
+const ZenTheme = dynamic(() => import("./themes/ZenTheme").then(mod => mod.ZenTheme));
+const ClassicTheme = dynamic(() => import("./themes/ClassicTheme").then(mod => mod.ClassicTheme));
+const OmakaseTheme = dynamic(() => import("./themes/OmakaseTheme").then(mod => mod.OmakaseTheme));
+const ResortTheme = dynamic(() => import("./themes/ResortTheme").then(mod => mod.ResortTheme));
+const BistroTheme = dynamic(() => import("./themes/BistroTheme").then(mod => mod.BistroTheme));
+const LoungeTheme = dynamic(() => import("./themes/LoungeTheme").then(mod => mod.LoungeTheme));
+const PopDinerTheme = dynamic(() => import("./themes/PopDinerTheme").then(mod => mod.PopDinerTheme));
+const EditorialTheme = dynamic(() => import("./themes/EditorialTheme").then(mod => mod.EditorialTheme));
+const BoutiqueTheme = dynamic(() => import("./themes/BoutiqueTheme").then(mod => mod.BoutiqueTheme));
+const BotanicalTheme = dynamic(() => import("./themes/BotanicalTheme").then(mod => mod.BotanicalTheme));
+const MinimalistTheme = dynamic(() => import("./themes/MinimalistTheme").then(mod => mod.MinimalistTheme));
+const LuxuryTheme = dynamic(() => import("./themes/LuxuryTheme").then(mod => mod.LuxuryTheme));
+const VibrantTheme = dynamic(() => import("./themes/VibrantTheme").then(mod => mod.VibrantTheme));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import { Restaurant, Category, MenuItem, MenuThemeProps as MenuClientViewProps } from "./types";
 
