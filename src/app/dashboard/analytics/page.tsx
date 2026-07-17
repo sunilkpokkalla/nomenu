@@ -96,7 +96,7 @@ export default async function AnalyticsPage(props: PageProps) {
     .from("orders")
     .select("id, total_amount, tip_amount, table_number, created_at")
     .eq("restaurant_id", restaurant.id)
-    .eq("status", "completed")
+    .or("status.in.(completed,cleared),is_paid.eq.true")
     .gte("created_at", startDateUtc.toISOString());
     
   if (endDateUtc) {
