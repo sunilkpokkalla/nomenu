@@ -9,5 +9,8 @@ export const SUPPORTED_LANGUAGES = [
   { code: "ar", name: "Arabic" },
   { code: "hi", name: "Hindi" },
   { code: "ko", name: "Korean" },
-  { code: "pt", name: "Portuguese" }
+  { code: "pt", name: "Portuguese" },
+  { code: "te", name: "Telugu" },
+  { code: "ta", name: "Tamil" },
+  { code: "kn", name: "Kannada" }
 ];

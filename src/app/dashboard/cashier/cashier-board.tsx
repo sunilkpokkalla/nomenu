@@ -5,7 +5,7 @@ import { formatOrderNumber } from "@/lib/utils";
 import { createBrowserClient } from "@supabase/ssr";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2, Loader2, Trash2 } from "lucide-react";
-import { settleTableTab, voidTableTab } from "@/app/dashboard/cashier/actions";
+import { settleTableTab, voidTableTab, clearTableTab } from "@/app/dashboard/cashier/actions";
 
 type OrderItem = {
   id: string;
@@ -67,8 +67,8 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
       .is("customer_phone", null)
-      .eq("is_paid", false)
-      .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment")')
+      .is("customer_phone", null)
+      .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment","cleared")')
       .order("created_at", { ascending: true });
       
     if (activeData) setOrders(activeData as unknown as Order[]);
@@ -113,7 +113,7 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
                 .eq("id", payload.new.id)
                 .single();
               
-              if (newOrder && !newOrder.is_paid) {
+              if (newOrder) {
                 setOrders(prev => {
                   if (prev.some(o => o.id === newOrder.id)) return prev;
                   return [...prev, newOrder as Order];
@@ -123,8 +123,8 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
           } else if (payload.eventType === "UPDATE") {
             if (payload.new.customer_phone !== null) return;
             
-            if (payload.new.is_paid || ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant", "awaiting_payment"].includes(payload.new.status)) {
-              // Remove it from the board if it gets paid, cancelled, or hasn't finished checking out
+            if (["cancelled", "cancelled_by_customer", "cancelled_by_restaurant", "awaiting_payment", "cleared"].includes(payload.new.status)) {
+              // Remove it from the board if it gets cancelled, cleared, or hasn't finished checking out
               setOrders(prev => prev.filter(o => o.id !== payload.new.id));
             } else {
               setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));
@@ -195,6 +195,34 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
 
   const [confirmSettle, setConfirmSettle] = useState<string | null>(null);
   const [confirmVoid, setConfirmVoid] = useState<string | null>(null);
+  const [confirmClear, setConfirmClear] = useState<string | null>(null);
+
+  const handleClearTab = async (table_number: string, customer_name: string) => {
+    if (isProcessing) return;
+    const processKey = `${table_number}::${customer_name}`;
+    
+    if (confirmClear !== processKey) {
+      setConfirmClear(processKey);
+      setConfirmSettle(null);
+      setConfirmVoid(null);
+      setTimeout(() => setConfirmClear(null), 3000); // revert after 3s
+      return;
+    }
+    
+    setIsProcessing(processKey);
+    setConfirmClear(null);
+    
+    try {
+      await clearTableTab(restaurantId, table_number, customer_name);
+      // Remove it from active board locally
+      setOrders(prev => prev.filter(o => !(o.table_number === table_number && (o.customer_name || "Anonymous") === customer_name)));
+    } catch (e) {
+      console.error(e);
+      alert("Failed to clear table");
+    } finally {
+      setIsProcessing(null);
+    }
+  };
 
   const handleSettleTab = async (table_number: string, customer_name: string) => {
     if (isProcessing) return;
@@ -321,19 +349,35 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
 
                   {/* Actions */}
                   <div className="mt-6 pt-6 border-t border-slate-200/60 flex gap-3">
-                    <button 
-                      onClick={() => handleSettleTab(tab.table_number, tab.customer_names[0])}
-                      disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
-                      className={`flex-1 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-90 text-white shadow-lg ${confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-slate-900 hover:bg-slate-800 shadow-slate-900/25 scale-[0.98]" : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-emerald-500/25 hover:scale-[1.02]"}`}
-                    >
-                      {isProcessing === `${tab.table_number}::${tab.customer_names[0]}` && confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
-                        <><Loader2 className="w-5 h-5 animate-spin" /> Settling...</>
-                      ) : confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
-                        <><CheckCircle2 className="w-5 h-5 animate-pulse text-emerald-400" /> Confirm Payment</>
-                      ) : (
-                        <><CircleDollarSign className="w-5 h-5" /> Settle Tab</>
-                      )}
-                    </button>
+                    {tab.orders.every(o => o.is_paid && o.status === 'completed') ? (
+                      <button 
+                        onClick={() => handleClearTab(tab.table_number, tab.customer_names[0])}
+                        disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
+                        className={`flex-1 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-90 text-white shadow-lg ${confirmClear === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-slate-900 hover:bg-slate-800 shadow-slate-900/25 scale-[0.98]" : "bg-gradient-to-r from-blue-500 to-indigo-500 hover:shadow-blue-500/25 hover:scale-[1.02]"}`}
+                      >
+                        {isProcessing === `${tab.table_number}::${tab.customer_names[0]}` && confirmClear === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                          <><Loader2 className="w-5 h-5 animate-spin" /> Clearing...</>
+                        ) : confirmClear === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                          <><CheckCircle2 className="w-5 h-5 animate-pulse text-blue-200" /> Confirm Clear</>
+                        ) : (
+                          <><CheckCircle2 className="w-5 h-5" /> Clear Table</>
+                        )}
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => handleSettleTab(tab.table_number, tab.customer_names[0])}
+                        disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}
+                        className={`flex-1 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-90 text-white shadow-lg ${confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? "bg-slate-900 hover:bg-slate-800 shadow-slate-900/25 scale-[0.98]" : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:shadow-emerald-500/25 hover:scale-[1.02]"}`}
+                      >
+                        {isProcessing === `${tab.table_number}::${tab.customer_names[0]}` && confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                          <><Loader2 className="w-5 h-5 animate-spin" /> Settling...</>
+                        ) : confirmSettle === `${tab.table_number}::${tab.customer_names[0]}` ? (
+                          <><CheckCircle2 className="w-5 h-5 animate-pulse text-emerald-400" /> Confirm Payment</>
+                        ) : (
+                          <><CircleDollarSign className="w-5 h-5" /> Settle Tab</>
+                        )}
+                      </button>
+                    )}
                     <button 
                       onClick={() => handleVoidTab(tab.table_number, tab.customer_names[0])}
                       disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}

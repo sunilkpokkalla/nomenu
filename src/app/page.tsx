@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SocialProofMarquee } from "@/components/SocialProofMarquee";
 import { 
   ArrowRight, 
@@ -97,6 +97,111 @@ function HeroLivePopups() {
       </div>
     </>
   )
+}
+
+type TableData = { id: number; type: string; status: string; x: number; y: number };
+function FloorTable({ table }: { table: TableData }) {
+  const [currentStatus, setCurrentStatus] = useState(table.status);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    let startDelay: NodeJS.Timeout;
+    
+    // Customer 1 path: Host to Table 1 (dur=4s, begin=1s)
+    // Starts at 1s, reaches table at 5s. 
+    // Repeats every 4 seconds. So it arrives at 5s, 9s, 13s...
+    if (table.id === 1) {
+      startDelay = setTimeout(() => {
+        setCurrentStatus('ordering');
+        interval = setInterval(() => {
+          setCurrentStatus('available');
+          setTimeout(() => setCurrentStatus('ordering'), 3000); // customer arrives again after 3s
+        }, 4000);
+      }, 5000);
+    }
+    
+    // Customer 2 path: Host to Table 4 (dur=6s, begin=3s)
+    // Starts at 3s, reaches table at 9s.
+    // Repeats every 6 seconds. So it arrives at 9s, 15s, 21s...
+    if (table.id === 4) {
+      startDelay = setTimeout(() => {
+        setCurrentStatus('ordering');
+        interval = setInterval(() => {
+          setCurrentStatus('available');
+          setTimeout(() => setCurrentStatus('ordering'), 5000); // customer arrives again after 5s
+        }, 6000);
+      }, 9000);
+    }
+
+    return () => {
+      clearTimeout(startDelay);
+      if (interval) clearInterval(interval);
+    };
+  }, [table.id]);
+
+  const isRect = table.type === 'rect';
+  
+  const colorMaps = {
+    available: {
+      chair: 'bg-emerald-200 border-emerald-300',
+      tableBg: 'bg-emerald-50 border-emerald-300',
+      innerBg: 'border-emerald-200',
+      text: 'text-emerald-600',
+      badge: 'bg-emerald-500',
+      label: 'Available'
+    },
+    ordering: {
+      chair: 'bg-red-300 border-red-400',
+      tableBg: 'bg-red-50 border-red-300',
+      innerBg: 'border-red-200',
+      text: 'text-red-600',
+      badge: 'bg-red-500',
+      label: 'Ordering'
+    },
+    paid: {
+      chair: 'bg-blue-200 border-blue-300',
+      tableBg: 'bg-blue-50 border-blue-300',
+      innerBg: 'border-blue-200',
+      text: 'text-blue-600',
+      badge: 'bg-blue-500',
+      label: 'Paid / Leaving'
+    },
+    eating: {
+      chair: 'bg-amber-200 border-amber-300',
+      tableBg: 'bg-amber-50 border-amber-300',
+      innerBg: 'border-amber-200',
+      text: 'text-amber-600',
+      badge: 'bg-amber-500',
+      label: 'Eating'
+    }
+  };
+
+  const colors = colorMaps[currentStatus as keyof typeof colorMaps];
+
+  return (
+    <div key={table.id} className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 scale-[0.5] md:scale-[0.55] transition-all duration-300" style={{ left: `${table.x}%`, top: `${table.y}%` }}>
+      <div className="relative mb-3 mt-3">
+        {/* Chairs */}
+        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 ${isRect ? 'w-10' : 'w-8'} h-3 rounded-t-full shadow-inner border transition-colors duration-300 ${colors.chair}`}></div>
+        <div className={`absolute -bottom-3 left-1/2 -translate-x-1/2 ${isRect ? 'w-10' : 'w-8'} h-3 rounded-b-full shadow-inner border transition-colors duration-300 ${colors.chair}`}></div>
+        <div className={`absolute top-1/2 -left-3 -translate-y-1/2 w-3 ${isRect ? 'h-10' : 'h-8'} rounded-l-full shadow-inner border transition-colors duration-300 ${colors.chair}`}></div>
+        <div className={`absolute top-1/2 -right-3 -translate-y-1/2 w-3 ${isRect ? 'h-10' : 'h-8'} rounded-r-full shadow-inner border transition-colors duration-300 ${colors.chair}`}></div>
+        
+        {/* Table Top */}
+        <div className={`w-24 h-24 transition-colors duration-300 ${colors.tableBg} ${isRect ? 'rounded-2xl' : 'rounded-full'} shadow-lg border-4 flex items-center justify-center relative z-10`}>
+          {currentStatus === 'ordering' && (
+            <div className="absolute -top-2 -right-2 bg-red-500 text-white p-1.5 rounded-full shadow-md animate-bounce z-20">
+              <Sparkles className="w-4 h-4" />
+            </div>
+          )}
+          <div className={`w-12 h-12 ${isRect ? 'rounded-xl' : 'rounded-full'} border transition-colors duration-300 ${colors.innerBg} flex items-center justify-center bg-white/50`}>
+            <span className={`font-bold transition-colors duration-300 ${colors.text} text-xl`}>{table.id < 10 ? `0${table.id}` : table.id}</span>
+          </div>
+        </div>
+      </div>
+      <span className={`text-[12px] text-white transition-colors duration-300 ${colors.badge} font-bold px-4 py-1.5 rounded-full shadow-md whitespace-nowrap`}>{colors.label}</span>
+    </div>
+  );
 }
 
 export default function LandingPage() {
@@ -389,82 +494,6 @@ export default function LandingPage() {
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* RESTAURANT NETWORK SYNC VISUAL */}
-      <section className="py-24 bg-slate-950 relative overflow-hidden text-white border-y border-slate-800/50">
-        <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
-        
-        <style>{`
-          @keyframes network-dash {
-            to { stroke-dashoffset: -60; }
-          }
-          .animate-network-dash {
-            animation: network-dash 2s linear infinite;
-          }
-        `}</style>
-
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight text-white">Live Operations Network</h2>
-            <p className="text-lg text-slate-400 font-medium">Your entire restaurant synchronized in real-time. Guests, kitchen, and waitstaff all connected seamlessly through a single, powerful system.</p>
-          </div>
-
-          <div className="relative max-w-5xl mx-auto w-full aspect-[4/3] md:aspect-[2/1] rounded-[2.5rem] border border-slate-800 bg-slate-900/50 backdrop-blur-md shadow-2xl shadow-black/50 overflow-hidden">
-            
-            {/* SVG Network Lines */}
-            <svg viewBox="0 0 1000 500" className="absolute inset-0 w-full h-full z-10">
-              {/* Core to Kitchen */}
-              <path d="M 500 250 C 650 250 650 150 800 150" fill="none" stroke="#1e293b" strokeWidth="4" />
-              <path d="M 500 250 C 650 250 650 150 800 150" fill="none" stroke="#10b981" strokeWidth="4" strokeDasharray="15 30" className="animate-network-dash drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-
-              {/* Core to Servers */}
-              <path d="M 500 250 C 650 250 650 350 800 350" fill="none" stroke="#1e293b" strokeWidth="4" />
-              <path d="M 500 250 C 650 250 650 350 800 350" fill="none" stroke="#f59e0b" strokeWidth="4" strokeDasharray="15 30" className="animate-network-dash drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-
-              {/* Guests to Core */}
-              <line x1="200" y1="250" x2="500" y2="250" stroke="#1e293b" strokeWidth="4" />
-              <line x1="200" y1="250" x2="500" y2="250" stroke="#6366f1" strokeWidth="4" strokeDasharray="15 30" className="animate-network-dash drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
-            </svg>
-
-            {/* Left Node: Guests */}
-            <div className="absolute left-[20%] top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-indigo-500/10 border border-indigo-400/30 flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(99,102,241,0.2)]">
-                <Users className="w-8 h-8 text-indigo-400" />
-              </div>
-              <h4 className="font-bold text-white text-sm md:text-base text-center leading-tight">1. Guests Order</h4>
-              <p className="text-[10px] md:text-xs text-slate-400 text-center mt-1">From their phone</p>
-            </div>
-
-            {/* Center Node: System Core */}
-            <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-[2rem] bg-blue-500/20 border border-blue-400/40 flex items-center justify-center mb-3 shadow-[0_0_40px_rgba(59,130,246,0.3)]">
-                <LayoutDashboard className="w-10 h-10 text-blue-400" />
-              </div>
-              <h4 className="font-extrabold text-white text-sm md:text-lg text-center leading-tight">FOH Core</h4>
-              <p className="text-[10px] md:text-xs text-blue-400 font-bold text-center mt-1 uppercase tracking-wider">Live Syncing</p>
-            </div>
-
-            {/* Top Right Node: Kitchen */}
-            <div className="absolute left-[80%] top-[30%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-emerald-500/10 border border-emerald-400/30 flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                <ChefHat className="w-8 h-8 text-emerald-400" />
-              </div>
-              <h4 className="font-bold text-white text-sm md:text-base text-center leading-tight">2. Kitchen Cooks</h4>
-              <p className="text-[10px] md:text-xs text-slate-400 text-center mt-1">Instant ticket</p>
-            </div>
-
-            {/* Bottom Right Node: Servers */}
-            <div className="absolute left-[80%] top-[70%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
-                <Utensils className="w-8 h-8 text-amber-400" />
-              </div>
-              <h4 className="font-bold text-white text-sm md:text-base text-center leading-tight">3. Runners Serve</h4>
-              <p className="text-[10px] md:text-xs text-slate-400 text-center mt-1">Guided by FOH tablet</p>
-            </div>
-
-          </div>
         </div>
       </section>
 
@@ -1024,6 +1053,192 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* RESTAURANT NETWORK SYNC VISUAL (FLOOR PLAN) */}
+      <section className="py-24 bg-slate-50 relative overflow-hidden border-y border-slate-200">
+        <div className="absolute inset-0 bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:24px_24px] opacity-20"></div>
+        
+        <style>{`
+          @keyframes order-dash {
+            to { stroke-dashoffset: -40; }
+          }
+          .animate-order-dash {
+            animation: order-dash 1.5s linear infinite;
+          }
+          .animate-slow-dash {
+            animation: order-dash 3s linear infinite;
+          }
+          .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          }
+          @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+          }
+        `}</style>
+
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight text-slate-900">Your Entire Restaurant, Synced.</h2>
+            <p className="text-lg text-slate-500 font-medium">Watch Nomenu connect your front-of-house, kitchen, and guests in real-time. No missing tickets, no confused servers.</p>
+          </div>
+
+          {/* Floorplan Container */}
+          <div className="relative max-w-7xl mx-auto w-full aspect-[1/1] md:aspect-[21/9] bg-white border border-slate-200/80 rounded-[3rem] shadow-2xl overflow-hidden">
+            
+            {/* SVG Lines */}
+            <svg viewBox="0 0 1200 500" preserveAspectRatio="none" className="absolute inset-0 w-full h-full z-10 pointer-events-none hidden md:block">
+              
+              {/* Walkins to Host (Grey subtle) */}
+              <path id="pathWalkin1" d="M 60 150 C 120 150, 150 250, 220 250" fill="none" stroke="#e2e8f0" strokeWidth="3" />
+              <path d="M 60 150 C 120 150, 150 250, 220 250" fill="none" stroke="#94a3b8" strokeWidth="3" strokeDasharray="8 12" className="animate-slow-dash" />
+
+              <path id="pathWalkin3" d="M 60 350 C 120 350, 150 250, 220 250" fill="none" stroke="#e2e8f0" strokeWidth="3" />
+              <path d="M 60 350 C 120 350, 150 250, 220 250" fill="none" stroke="#94a3b8" strokeWidth="3" strokeDasharray="8 12" className="animate-slow-dash" />
+
+              {/* Host to Available Table 1 (Green Seating Path) */}
+              <path id="pathHostToTable1" d="M 220 250 C 280 250, 320 150, 420 150" fill="none" stroke="#dcfce7" strokeWidth="3" />
+              <path d="M 220 250 C 280 250, 320 150, 420 150" fill="none" stroke="#22c55e" strokeWidth="3" strokeDasharray="8 12" className="animate-slow-dash opacity-60" />
+
+              {/* Host to Available Table 4 (Green Seating Path) */}
+              <path id="pathHostToTable4" d="M 220 250 C 280 250, 320 350, 420 350" fill="none" stroke="#dcfce7" strokeWidth="3" />
+              <path d="M 220 250 C 280 250, 320 350, 420 350" fill="none" stroke="#22c55e" strokeWidth="3" strokeDasharray="8 12" className="animate-slow-dash opacity-60" />
+
+              {/* Order from Ordering Table 2 to KDS (Red Order Path) */}
+              <path d="M 600 150 C 750 150, 850 250, 1000 250" fill="none" stroke="#fee2e2" strokeWidth="4" />
+              <path d="M 600 150 C 750 150, 850 250, 1000 250" fill="none" stroke="#ef4444" strokeWidth="4" strokeDasharray="10 15" className="animate-order-dash shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
+
+              {/* Kitchen Delivery to Eating Table 3 (Amber Delivery Path) */}
+              <path id="pathRunner1" d="M 1000 250 C 900 250, 850 150, 780 150" fill="none" stroke="#fef3c7" strokeWidth="3" />
+              <path d="M 1000 250 C 900 250, 850 150, 780 150" fill="none" stroke="#f59e0b" strokeWidth="3" strokeDasharray="8 12" className="animate-slow-dash" />
+
+              {/* Kitchen Delivery to Eating Table 6 (Amber Delivery Path) */}
+              <path id="pathRunner2" d="M 1000 250 C 900 250, 850 350, 780 350" fill="none" stroke="#fef3c7" strokeWidth="3" />
+              <path d="M 1000 250 C 900 250, 850 350, 780 350" fill="none" stroke="#f59e0b" strokeWidth="3" strokeDasharray="8 12" className="animate-slow-dash" />
+
+              {/* Table Paid 5 to Host (Blue Path) */}
+              <path id="pathPaid" d="M 600 350 C 450 350, 350 250, 220 250" fill="none" stroke="#e0e7ff" strokeWidth="3" />
+              <path d="M 600 350 C 450 350, 350 250, 220 250" fill="none" stroke="#3b82f6" strokeWidth="3" strokeDasharray="8 12" className="animate-slow-dash opacity-60" />
+
+              {/* TRAVERSING ICONS VIA ANIMATEMOTION */}
+              
+              {/* Customer 1 (Walkin) */}
+              <g>
+                <circle r="14" fill="#ffffff" stroke="#cbd5e1" strokeWidth="2" />
+                <g transform="translate(-8, -8) scale(0.65)" stroke="#64748b" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </g>
+                <animateMotion dur="6s" repeatCount="indefinite">
+                  <mpath href="#pathWalkin1" />
+                </animateMotion>
+              </g>
+
+              {/* Customer 2 (Walkin) */}
+              <g>
+                <circle r="14" fill="#ffffff" stroke="#cbd5e1" strokeWidth="2" />
+                <g transform="translate(-8, -8) scale(0.65)" stroke="#64748b" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </g>
+                <animateMotion dur="5s" repeatCount="indefinite" begin="2s">
+                  <mpath href="#pathWalkin3" />
+                </animateMotion>
+              </g>
+
+              {/* Customer Being Seated (Host to Table 1) */}
+              <g>
+                <circle r="14" fill="#ffffff" stroke="#86efac" strokeWidth="2" />
+                <g transform="translate(-8, -8) scale(0.65)" stroke="#22c55e" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </g>
+                <animateMotion dur="4s" repeatCount="indefinite" begin="1s">
+                  <mpath href="#pathHostToTable1" />
+                </animateMotion>
+              </g>
+
+              {/* Customer Being Seated (Host to Table 4) */}
+              <g>
+                <circle r="14" fill="#ffffff" stroke="#86efac" strokeWidth="2" />
+                <g transform="translate(-8, -8) scale(0.65)" stroke="#22c55e" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </g>
+                <animateMotion dur="6s" repeatCount="indefinite" begin="3s">
+                  <mpath href="#pathHostToTable4" />
+                </animateMotion>
+              </g>
+
+              {/* Food Runner 1 (Kitchen to Table 3) */}
+              <g>
+                <circle r="16" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2" />
+                <g transform="translate(-8, -8) scale(0.65)" stroke="#d97706" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+                </g>
+                <animateMotion dur="3s" repeatCount="indefinite">
+                  <mpath href="#pathRunner1" />
+                </animateMotion>
+              </g>
+
+              {/* Food Runner 2 (Kitchen to Table 5) */}
+              <g>
+                <circle r="16" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2" />
+                <g transform="translate(-8, -8) scale(0.65)" stroke="#d97706" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+                </g>
+                <animateMotion dur="4.5s" repeatCount="indefinite" begin="1.5s">
+                  <mpath href="#pathRunner2" />
+                </animateMotion>
+              </g>
+
+              {/* Payment Traversing ($ icon from Table 4 to Host) */}
+              <g>
+                <circle r="14" fill="#eff6ff" stroke="#3b82f6" strokeWidth="2" />
+                <g transform="translate(-8, -8) scale(0.65)" stroke="#2563eb" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </g>
+                <animateMotion dur="5s" repeatCount="indefinite">
+                  <mpath href="#pathPaid" />
+                </animateMotion>
+              </g>
+
+            </svg>
+
+            {/* Walkins HTML nodes moved to SVG animateMotion */}
+
+            {/* NODE: FOH Host System */}
+            <div className="absolute left-[20%] md:left-[16.6%] top-[40%] md:top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-xl shadow-slate-200 border border-slate-200 flex items-center justify-center mb-2 relative">
+                <div className="absolute inset-0 bg-indigo-500 rounded-2xl pulse-ring"></div>
+                <Layers className="w-8 h-8 md:w-10 md:h-10 text-indigo-600 relative z-10" />
+              </div>
+              <h4 className="font-extrabold text-slate-900 text-xs md:text-sm text-center leading-tight bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm whitespace-nowrap">FOH Host</h4>
+              <span className="text-[7px] md:text-[9px] text-slate-500 font-bold mt-1 uppercase tracking-wider hidden md:block">Assigning Tables</span>
+            </div>
+
+            {/* THE RESTAURANT FLOOR (6 TABLES IN PERFECT 3x2 GRID) */}
+            {[
+              { id: 1, type: 'rect', status: 'available', x: 35, y: 30 },
+              { id: 2, type: 'circle', status: 'ordering', x: 50, y: 30 },
+              { id: 3, type: 'rect', status: 'eating', x: 65, y: 30 },
+              { id: 4, type: 'circle', status: 'available', x: 35, y: 70 },
+              { id: 5, type: 'rect', status: 'paid', x: 50, y: 70 },
+              { id: 6, type: 'circle', status: 'eating', x: 65, y: 70 },
+            ].map((table) => (
+              <FloorTable key={table.id} table={table} />
+            ))}
+
+            {/* Runner HTML node moved to SVG animateMotion */}
+
+            {/* NODE: Kitchen / KDS */}
+            <div className="absolute left-[50%] md:left-[87.5%] top-[88%] md:top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 scale-75 md:scale-100">
+              <div className="w-20 h-20 md:w-28 md:h-28 bg-slate-900 rounded-3xl shadow-2xl shadow-slate-900/30 border-4 border-slate-800 flex items-center justify-center mb-2 md:mb-3">
+                <ChefHat className="w-10 h-10 md:w-12 md:h-12 text-white" />
+              </div>
+              <h4 className="font-extrabold text-slate-900 text-xs md:text-sm text-center leading-tight bg-white px-3 md:px-4 py-1 md:py-1.5 rounded-full shadow-md border border-slate-200 whitespace-nowrap">Kitchen (KDS)</h4>
+              <span className="text-[8px] md:text-[10px] text-slate-500 font-bold mt-1 md:mt-2 uppercase tracking-wider hidden md:block">Receiving Orders</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       <CompetitiveComparison />
 
       {/* PRICING SECTION */}
@@ -1109,7 +1324,13 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Table Management & Floor Plan
                     </li>
                     <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Full Front of House Ops (Any Device)
+                    </li>
+                    <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Digital Waitlist System
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Instant AI Multi-Language Translation
                     </li>
                     <li className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Team & Staff Management (RBAC)

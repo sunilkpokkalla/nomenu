@@ -46,6 +46,47 @@ export async function settleTableTab(restaurantId: string, tableNumber: string, 
   return true;
 }
 
+export async function clearTableTab(restaurantId: string, tableNumber: string, customerName: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const restaurant = await getActiveRestaurant(supabase, user.id);
+  if (!restaurant || restaurant.id !== restaurantId) {
+    throw new Error("Unauthorized");
+  }
+
+  // Mark all paid orders for this table + customer as cleared
+  const adminSupabase = createAdminClient();
+  let query = adminSupabase
+    .from("orders")
+    .update({ status: "cleared" })
+    .eq("restaurant_id", restaurantId)
+    .eq("table_number", tableNumber)
+    .eq("is_paid", true)
+    .is("customer_phone", null); // dine-in only
+
+  if (customerName && customerName !== "Anonymous") {
+    query = query.eq("customer_name", customerName);
+  } else {
+    query = query.is("customer_name", null);
+  }
+
+  const { error } = await query;
+
+  if (error) {
+    throw new Error("Failed to clear table tab");
+  }
+
+  return true;
+}
+
 export async function voidTableTab(restaurantId: string, tableNumber: string, customerName: string) {
   const supabase = await createClient();
 

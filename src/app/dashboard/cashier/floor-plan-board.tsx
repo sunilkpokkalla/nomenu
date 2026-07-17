@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Plus, Save, Trash2, Edit2, CheckCircle2, User, Users, Coffee, Ban, X } from "lucide-react";
 import { saveTableLayout, addFloorPlanArea, deleteFloorPlanArea } from "./floor-plan-actions";
 import { useRouter } from "next/navigation";
-import { createWalkInTab, voidTableTab, removeTableFromTab } from "./actions";
+import { createWalkInTab, voidTableTab, removeTableFromTab, clearTableTab } from "./actions";
 
 type TableShape = "rectangle" | "circle" | "square";
 
@@ -424,6 +424,8 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
               o.table_number && String(o.table_number).split(',').map(s=>s.trim()).includes(compositeName)
             ) : null;
             const isOccupied = !!activeOrder;
+            // Blue if it is paid and the kitchen is done with it
+            const isPaidAndCompleted = isOccupied && activeOrder.is_paid && activeOrder.status === 'completed';
             const isSelectedLive = !isEditMode && selectedLiveTableIds.includes(table.id);
 
             return (
@@ -447,9 +449,11 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                   ${table.shape === 'circle' ? 'rounded-full' : 'rounded-xl'}
                   ${isEditMode && selectedTableId !== table.id ? 'bg-white border-slate-300 text-slate-700 hover:border-slate-400' : ''}
                   ${isEditMode && selectedTableId === table.id ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : ''}
-                  ${!isEditMode && isOccupied ? 'bg-red-50 border-red-500 text-red-700' : ''}
+                  ${!isEditMode && isOccupied && !isPaidAndCompleted ? 'bg-red-50 border-red-500 text-red-700' : ''}
+                  ${!isEditMode && isPaidAndCompleted ? 'bg-blue-50 border-blue-500 text-blue-700 ring-2 ring-blue-500/20' : ''}
                   ${!isEditMode && !isOccupied ? 'bg-emerald-50 border-emerald-400 text-emerald-700 hover:bg-emerald-100' : ''}
-                  ${isSelectedLive && isOccupied ? 'ring-4 ring-red-200 shadow-lg' : ''}
+                  ${isSelectedLive && isOccupied && !isPaidAndCompleted ? 'ring-4 ring-red-200 shadow-lg' : ''}
+                  ${isSelectedLive && isPaidAndCompleted ? 'ring-4 ring-blue-200 shadow-lg' : ''}
                   ${isSelectedLive && !isOccupied ? 'ring-4 ring-emerald-200 shadow-lg' : ''}
                 `}
               >
@@ -477,7 +481,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                     <div 
                       key={i} 
                       className={`absolute w-4 h-4 rounded-full border-2 ${
-                        isEditMode ? 'bg-slate-200 border-slate-300' : (isOccupied ? 'bg-red-200 border-red-300' : 'bg-emerald-200 border-emerald-300')
+                        isEditMode ? 'bg-slate-200 border-slate-300' : (isPaidAndCompleted ? 'bg-blue-200 border-blue-300' : isOccupied ? 'bg-red-200 border-red-300' : 'bg-emerald-200 border-emerald-300')
                       }`}
                       style={{ left: `${left.toFixed(2)}px`, top: `${top.toFixed(2)}px` }}
                     />
@@ -675,21 +679,28 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
                   {activeOrder ? (
                     <div className="flex-1 flex flex-col gap-4">
-                      <div className="bg-red-50 border border-red-100 rounded-xl p-4 flex flex-col items-center justify-center py-6 mb-2">
-                        <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-3">
-                          <Coffee className="w-6 h-6" />
+                      {activeOrder.is_paid && activeOrder.status === 'completed' ? (
+                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex flex-col items-center justify-center py-6 mb-2">
+                          <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-3">
+                            <CheckCircle2 className="w-6 h-6" />
+                          </div>
+                          <span className="font-bold text-blue-900 text-lg">Needs Bussing</span>
+                          <span className="text-blue-600 font-medium text-sm mt-1 text-center">Paid & Completed</span>
                         </div>
-                        <span className="font-bold text-red-900 text-lg">Occupied</span>
-                        <span className="text-red-600 font-medium text-sm mt-1 text-center">{activeOrder.customer_name || 'Walk-in'}</span>
-                        {activeOrder.party_size && activeOrder.party_size > 0 && (
-                          <span className="mt-1 bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full font-bold">
-                            {activeOrder.party_size} Guests
-                          </span>
-                        )}
-                        {activeOrder.total_amount > 0 && (
-                          <span className="mt-3 font-black text-2xl text-red-950">${(activeOrder.total_amount / 100).toFixed(2)}</span>
-                        )}
-                      </div>
+                      ) : (
+                        <div className="bg-red-50 border border-red-100 rounded-xl p-4 flex flex-col items-center justify-center py-6 mb-2">
+                          <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-3">
+                            <Coffee className="w-6 h-6" />
+                          </div>
+                          <span className="font-bold text-red-900 text-lg">Occupied</span>
+                          <span className="text-red-600 font-medium text-sm mt-1 text-center">{activeOrder.customer_name || 'Walk-in'}</span>
+                          {activeOrder.party_size && activeOrder.party_size > 0 && (
+                            <span className="mt-1 bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full font-bold">
+                              {activeOrder.party_size} Guests
+                            </span>
+                          )}
+                        </div>
+                      )}
                       
                       {selectedTables.length > 1 && (
                         <div className="flex flex-col gap-2 mb-2">
@@ -731,37 +742,64 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                         </div>
                       )}
 
-                      <button 
-                        disabled={isProcessingLiveAction}
-                        onClick={async () => {
-                          setIsProcessingLiveAction(true);
-                          try {
-                            // Remove specifically selected tables from their respective orders
-                            for (const st of selectedTables) {
-                              const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
-                              
-                              // Find the specific order that owns THIS table
-                              const tableOrder = activeOrders.find(o => {
-                                if (!o.table_number) return false;
-                                return String(o.table_number).split(',').map(s=>s.trim()).includes(cName);
-                              });
-
-                              if (tableOrder) {
-                                await removeTableFromTab(tableOrder.id, cName);
+                      {activeOrder.is_paid && activeOrder.status === 'completed' ? (
+                        <button 
+                          disabled={isProcessingLiveAction}
+                          onClick={async () => {
+                            setIsProcessingLiveAction(true);
+                            try {
+                              for (const st of selectedTables) {
+                                const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
+                                const tableOrder = activeOrders.find(o => o.table_number && String(o.table_number).split(',').map(s=>s.trim()).includes(cName));
+                                if (tableOrder) {
+                                  await clearTableTab(restaurantId, tableOrder.table_number, tableOrder.customer_name || "Anonymous");
+                                }
                               }
+                              setSelectedLiveTableIds([]);
+                              router.refresh();
+                            } catch (error) {
+                              showError("Failed to clear table(s).");
                             }
-                            setSelectedLiveTableIds([]);
-                            router.refresh();
-                          } catch (error) {
-                            showError("Failed to clear table(s).");
-                          }
-                          setIsProcessingLiveAction(false);
-                        }}
-                        className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 bg-white border-2 border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-colors disabled:opacity-50"
-                      >
-                        <Ban className="w-5 h-5" />
-                        Clear Selected Table(s)
-                      </button>
+                            setIsProcessingLiveAction(false);
+                          }}
+                          className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200 disabled:opacity-50"
+                        >
+                          <CheckCircle2 className="w-5 h-5" />
+                          Clear Bussed Table
+                        </button>
+                      ) : (
+                        <button 
+                          disabled={isProcessingLiveAction}
+                          onClick={async () => {
+                            setIsProcessingLiveAction(true);
+                            try {
+                              // Remove specifically selected tables from their respective orders
+                              for (const st of selectedTables) {
+                                const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
+                                
+                                // Find the specific order that owns THIS table
+                                const tableOrder = activeOrders.find(o => {
+                                  if (!o.table_number) return false;
+                                  return String(o.table_number).split(',').map(s=>s.trim()).includes(cName);
+                                });
+
+                                if (tableOrder) {
+                                  await removeTableFromTab(tableOrder.id, cName);
+                                }
+                              }
+                              setSelectedLiveTableIds([]);
+                              router.refresh();
+                            } catch (error) {
+                              showError("Failed to void table(s).");
+                            }
+                            setIsProcessingLiveAction(false);
+                          }}
+                          className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 bg-white border-2 border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-colors disabled:opacity-50"
+                        >
+                          <Ban className="w-5 h-5" />
+                          Void Selected Table(s)
+                        </button>
+                      )}
                     </div>
                   ) : (
                     <div className="flex-1 flex flex-col gap-4">

@@ -16,7 +16,9 @@ const getPlans = (isAnnual: boolean) => [
     features: [
       "Unlimited Menus & Items",
       "Table Management & Interactive Floor Plan",
+      "Full Front of House Ops (Any Device)",
       "Digital Waitlist System",
+      "Instant AI Multi-Language Translation",
       "Team & Staff Management (RBAC)",
       "25 Magic AI Credits / month",
       "Private Customer Feedback System",

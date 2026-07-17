@@ -41,6 +41,18 @@ const COMPARISON_DATA = [
     addon: "Paid add-on (+$50/mo)",
     nomenu: "Included",
   },
+  {
+    feature: "Front of House Ops",
+    legacy: "Handhelds (+$50/mo/device)",
+    addon: "Not Supported",
+    nomenu: "Included (Any device)",
+  },
+  {
+    feature: "Multi-Language Menus",
+    legacy: "Clunky or Needs 3rd Party",
+    addon: "Basic / Manual Translation",
+    nomenu: "Instant AI Translation",
+  },
 ];
 
 export function CompetitiveComparison() {
