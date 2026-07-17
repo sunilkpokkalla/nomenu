@@ -349,7 +349,7 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
 
                   {/* Actions */}
                   <div className="mt-6 pt-6 border-t border-slate-200/60 flex gap-3">
-                    {tab.orders.every(o => o.is_paid && o.status === 'completed') ? (
+                    {tab.orders.every(o => o.is_paid) ? (
                       <button 
                         onClick={() => handleClearTab(tab.table_number, tab.customer_names[0])}
                         disabled={isProcessing === `${tab.table_number}::${tab.customer_names[0]}`}

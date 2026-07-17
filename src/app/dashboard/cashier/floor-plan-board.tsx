@@ -425,7 +425,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
             ) : null;
             const isOccupied = !!activeOrder;
             // Blue if it is paid and the kitchen is done with it
-            const isPaidAndCompleted = isOccupied && activeOrder.is_paid && activeOrder.status === 'completed';
+            const isPaidAndCompleted = isOccupied && activeOrder.is_paid;
             const isSelectedLive = !isEditMode && selectedLiveTableIds.includes(table.id);
 
             return (
@@ -674,7 +674,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
                   {activeOrder ? (
                     <div className="flex-1 flex flex-col gap-4">
-                      {activeOrder.is_paid && activeOrder.status === 'completed' ? (
+                      {activeOrder.is_paid ? (
                         <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex flex-col items-center justify-center py-6 mb-2">
                           <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-3">
                             <CheckCircle2 className="w-6 h-6" />
@@ -737,7 +737,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                         </div>
                       )}
 
-                      {activeOrder.is_paid && activeOrder.status === 'completed' ? (
+                      {activeOrder.is_paid ? (
                         <button 
                           disabled={isProcessingLiveAction}
                           onClick={async () => {
