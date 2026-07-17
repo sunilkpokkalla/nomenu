@@ -36,6 +36,17 @@ export async function createRestaurant(formData: FormData) {
     redirect("/dashboard/settings?message=Settings%20cannot%20be%20saved%20in%20the%20read-only%20demo%20account");
   }
 
+  // Check if user already has a restaurant to prevent duplicates
+  const { data: existingRestaurant } = await supabase
+    .from("restaurants")
+    .select("id")
+    .eq("owner_id", user.id)
+    .maybeSingle();
+
+  if (existingRestaurant) {
+    redirect("/dashboard");
+  }
+
   const name = field(formData, "name");
   if (!name) {
     redirect("/dashboard?message=Restaurant%20name%20is%20required");
