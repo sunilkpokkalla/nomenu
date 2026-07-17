@@ -67,7 +67,7 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
       .is("customer_phone", null)
-      .is("customer_phone", null)
+      .eq("is_paid", false) // Exclude paid orders from active tabs
       .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment","cleared")')
       .order("created_at", { ascending: true });
       
