@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Link2, Plug, CheckCircle2, ChevronRight } from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
+import { getActiveRestaurant } from "@/lib/rbac";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SquareConnectButton } from "@/components/dashboard/square-connect-button";
@@ -22,11 +23,7 @@ export default async function IntegrationsPage(
     redirect("/login");
   }
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*, stripe_account_id, square_merchant_id")
-    .eq("owner_id", user.id)
-    .single();
+  const restaurant = await getActiveRestaurant(supabase, user.id);
 
   if (!restaurant) {
     redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
