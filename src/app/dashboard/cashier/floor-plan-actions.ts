@@ -241,7 +241,7 @@ export async function deleteFloorPlanArea(id: string) {
   if (!user) return { success: false, error: "Unauthorized" };
 
   // Get the plan first
-  const { data: plan } = await supabase.from("floor_plans").select("restaurant_id").eq("id", id).single();
+  const { data: plan } = await supabase.from("floor_plans").select("restaurant_id, name").eq("id", id).single();
   if (!plan) return { success: false, error: "Plan not found" };
 
   const restaurant = await getActiveRestaurant(supabase, user.id);
@@ -255,6 +255,15 @@ export async function deleteFloorPlanArea(id: string) {
     .eq("id", id);
 
   if (error) return { success: false, error: error.message };
+  
+  // Remove the deleted plan name from location_zones
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentZones: string[] = (restaurant as any).location_zones || [];
+  if (currentZones.includes(plan.name)) {
+    const newZones = currentZones.filter(z => z !== plan.name);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await supabase.from("restaurants").update({ location_zones: newZones } as any).eq("id", restaurant.id);
+  }
   
   revalidatePath("/dashboard/cashier");
   return { success: true };

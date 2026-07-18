@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { formatOrderNumber } from "@/lib/utils";
 import { createBrowserClient } from "@supabase/ssr";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2, Loader2, Trash2 } from "lucide-react";
 import { settleTableTab, voidTableTab, clearTableTab } from "@/app/dashboard/cashier/actions";
@@ -58,8 +59,12 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
 
   const fetchLatestOrders = async () => {
     const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const tz = timezone || "UTC";
+    const nowUtc = new Date();
+    const nowZoned = toZonedTime(nowUtc, tz);
+    const startOfTodayZoned = new Date(nowZoned);
+    startOfTodayZoned.setHours(0, 0, 0, 0);
+    const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
     
     // Fetch active orders
     const { data: activeData } = await supabase
@@ -79,7 +84,7 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
       .is("customer_phone", null)
-      .or(`paid_at.gte.${today.toISOString()},and(status.in.(cancelled,cancelled_by_customer,cancelled_by_restaurant),created_at.gte.${today.toISOString()})`)
+      .or(`paid_at.gte.${startOfTodayUtc.toISOString()},and(status.in.(cancelled,cancelled_by_customer,cancelled_by_restaurant),created_at.gte.${startOfTodayUtc.toISOString()})`)
       .order("created_at", { ascending: false });
       
     if (historyData) setHistoryOrders(historyData as unknown as Order[]);

@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatTimezone } from "@/lib/date-utils";
+import { toZonedTime } from "date-fns-tz";
 import { WelcomeChecklist } from "@/components/dashboard/welcome-checklist";
 import { WaitTimeToggle } from "@/components/dashboard/wait-time-toggle";
 
@@ -30,6 +31,12 @@ import { TIMEZONE_OPTIONS } from "@/lib/timezone-options";
 import { OnboardingForm } from "@/components/dashboard/onboarding-form";
 
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
+import { getSupabaseEnv } from "@/lib/env";
+import { getCurrencySymbol } from "@/lib/currency-options";
+import { getOrCreateFloorPlans } from "@/app/dashboard/cashier/floor-plan-actions";
+import { OpsProvider, GlobalMuteButton } from "@/components/dashboard/ops-provider";
+import { KitchenOpsSlider } from "@/components/dashboard/kitchen-ops-slider";
+import { CustomerOpsSlider } from "@/components/dashboard/customer-ops-slider";
 
 export const dynamic = 'force-dynamic';
 
@@ -202,22 +209,26 @@ export default async function DashboardPage(
   const qrCodesList = qrCodes || [];
   const menusList = menus || [];
 
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
+  const tz = restaurant.timezone || "UTC";
+  const nowUtc = new Date();
+  const nowZoned = toZonedTime(nowUtc, tz);
 
-  const startOfMonth = new Date();
-  startOfMonth.setDate(1);
-  startOfMonth.setHours(0, 0, 0, 0);
+  const startOfTodayZoned = new Date(nowZoned);
+  startOfTodayZoned.setHours(0, 0, 0, 0);
+
+  const startOfMonthZoned = new Date(nowZoned);
+  startOfMonthZoned.setDate(1);
+  startOfMonthZoned.setHours(0, 0, 0, 0);
 
   // Stats Calculations
-  const scansToday = scansList.filter((s) => s.scanned_at && new Date(s.scanned_at) >= startOfToday).length;
-  const scansThisMonth = scansList.filter((s) => s.scanned_at && new Date(s.scanned_at) >= startOfMonth).length;
+  const scansToday = scansList.filter((s) => s.scanned_at && toZonedTime(new Date(s.scanned_at), tz) >= startOfTodayZoned).length;
+  const scansThisMonth = scansList.filter((s) => s.scanned_at && toZonedTime(new Date(s.scanned_at), tz) >= startOfMonthZoned).length;
   const activeItemsCount = itemsList.filter((item) => item.is_available).length;
   const qrCodesCount = qrCodesList.length;
 
   // Generate 7-day Scan Chart history
   const last7Days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date();
+    const d = new Date(nowZoned);
     d.setDate(d.getDate() - i);
     d.setHours(0, 0, 0, 0);
     return d;
@@ -228,7 +239,7 @@ export default async function DashboardPage(
     nextDay.setDate(nextDay.getDate() + 1);
     const count = scansList.filter((s) => {
       if (!s.scanned_at) return false;
-      const scanDate = new Date(s.scanned_at);
+      const scanDate = toZonedTime(new Date(s.scanned_at), tz);
       return scanDate >= day && scanDate < nextDay;
     }).length;
     return {
@@ -267,7 +278,6 @@ export default async function DashboardPage(
   // Active Menu Configuration
   const activeMenu = menusList.find((m) => m.is_active) || menusList[0];
 
-  // Top 5 scans log
   const recentScans = [...scansList]
     .sort((a, b) => {
       const timeA = a.scanned_at ? new Date(a.scanned_at).getTime() : 0;
@@ -276,11 +286,44 @@ export default async function DashboardPage(
     })
     .slice(0, 5);
 
+  // Fetch FOH/Kitchen Ops data
+  const { data: initialOrders } = await supabase
+    .from("orders")
+    .select(`
+      *,
+      order_items (
+        *,
+        menu_items (
+          name,
+          price
+        )
+      )
+    `)
+    .eq("restaurant_id", restaurant.id)
+    .eq("is_paid", false)
+    .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment","cleared")')
+    .order("created_at", { ascending: true });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let floorPlansData: any[] = [];
+  const res = await getOrCreateFloorPlans(restaurant.id);
+  if (res.success) {
+    floorPlansData = res.floorPlans || [];
+  }
+
+  const { data: feedbacks } = await supabase
+    .from("customer_feedback")
+    .select("*, qr_codes(label, location_zone), loyalty_cards(id, stamps, last_stamp_at)")
+    .eq("restaurant_id", restaurant.id)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
   const planName = restaurant.plan ?? "free";
   const isPremiumPlan = planName !== "free";
 
   return (
-    <div className="px-6 py-10 lg:px-10 bg-slate-50/50 min-h-[100dvh] font-sans-vibrant">
+    <OpsProvider>
+      <div className="px-6 py-10 lg:px-10 bg-slate-50/50 min-h-[100dvh] font-sans-vibrant">
       <WelcomeChecklist 
         menusCount={menusList.length} 
         itemsCount={itemsList.length} 
@@ -312,7 +355,34 @@ export default async function DashboardPage(
           </p>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 justify-end">
+          <GlobalMuteButton />
+          
+          {isPremiumPlan && (
+            <>
+              <KitchenOpsSlider
+                initialOrders={initialOrders || []}
+                restaurantId={restaurant.id}
+                timezone={restaurant.timezone || "UTC"}
+                supabaseUrl={getSupabaseEnv().url}
+                supabaseAnonKey={getSupabaseEnv().anonKey}
+              />
+              <CustomerOpsSlider
+                initialOrders={initialOrders || []}
+                floorPlans={floorPlansData}
+                feedbackData={feedbacks || []}
+                restaurantId={restaurant.id}
+                restaurantCreatedAt={restaurant.created_at || new Date().toISOString()}
+                timezone={restaurant.timezone || "UTC"}
+                supabaseUrl={getSupabaseEnv().url}
+                supabaseAnonKey={getSupabaseEnv().anonKey}
+                currencySymbol={getCurrencySymbol(restaurant.currency)}
+                userRole={role as "owner" | "waitstaff" | "kitchen" | "kitchen_waitstaff"}
+                recoveryOfferText={restaurant.recovery_offer_text || undefined}
+              />
+            </>
+          )}
+
           <WaitTimeToggle restaurantId={restaurant.id} initialStatus={restaurant.wait_time_status || "normal"} />
           <Button 
             asChild 
@@ -597,5 +667,6 @@ export default async function DashboardPage(
 
       </div>
     </div>
+    </OpsProvider>
   );
 }

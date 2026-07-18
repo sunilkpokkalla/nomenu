@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { OrdersBoard } from "@/app/dashboard/orders/orders-board";
 import { ClipboardList } from "lucide-react";
 
@@ -36,8 +37,12 @@ export default async function KDSPage() {
   }
 
   // Fetch today's/active orders initially
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const tz = restaurant.timezone || "UTC";
+  const nowUtc = new Date();
+  const nowZoned = toZonedTime(nowUtc, tz);
+  const startOfTodayZoned = new Date(nowZoned);
+  startOfTodayZoned.setHours(0, 0, 0, 0);
+  const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
 
   const { data: initialOrders } = await supabase
     .from("orders")
@@ -55,7 +60,7 @@ export default async function KDSPage() {
     `)
     .eq("restaurant_id", restaurant.id)
     .in("status", ["pending", "preparing"])
-    .gte("created_at", today.toISOString())
+    .gte("created_at", startOfTodayUtc.toISOString())
     .order("created_at", { ascending: false });
 
   // If not elite or enterprise plan, lock it

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { differenceInMinutes } from "date-fns";
 import { formatOrderNumber } from "@/lib/utils";
-import { toZonedTime } from "date-fns-tz";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
 import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings, Volume2, VolumeX } from "lucide-react";
 import { updateOrderStatus, toggleOrderPaymentStatus } from "./actions";
@@ -240,14 +240,22 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
     if (selectedDateStr) {
       // Archive Mode: Fetch all orders for the exact selected date
       const [y, m, d] = selectedDateStr.split("-").map(Number);
-      const startOfDay = new Date(y, m - 1, d, 0, 0, 0);
-      const endOfDay = new Date(y, m - 1, d, 23, 59, 59, 999);
-      query = query.gte("created_at", startOfDay.toISOString()).lte("created_at", endOfDay.toISOString());
+      // Construct date in restaurant's timezone, then convert to UTC for Supabase query
+      const startOfDayZoned = new Date(y, m - 1, d, 0, 0, 0);
+      const endOfDayZoned = new Date(y, m - 1, d, 23, 59, 59, 999);
+      const startOfDayUtc = fromZonedTime(startOfDayZoned, timezone);
+      const endOfDayUtc = fromZonedTime(endOfDayZoned, timezone);
+      
+      query = query.gte("created_at", startOfDayUtc.toISOString()).lte("created_at", endOfDayUtc.toISOString());
     } else {
       // Live Mode: Fetch active tickets OR tickets created today
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      query = query.or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`);
+      const nowUtc = new Date();
+      const nowZoned = toZonedTime(nowUtc, timezone);
+      const startOfTodayZoned = new Date(nowZoned);
+      startOfTodayZoned.setHours(0, 0, 0, 0);
+      const startOfTodayUtc = fromZonedTime(startOfTodayZoned, timezone);
+      
+      query = query.or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`);
     }
 
     const { data } = await query;

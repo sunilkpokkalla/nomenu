@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import { Receipt, History, User, Search, DollarSign, Users, ChevronDown, ChevronUp } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
+import { toZonedTime } from "date-fns-tz";
 
 type CompletedOrder = {
   id: string;
@@ -83,30 +84,37 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
   const filteredAndGroupedTabs = useMemo(() => {
     // 1. Filter by time
     let filteredOrders = completedOrders;
-    const now = new Date();
+    
+    const nowUtc = new Date();
+    const nowZoned = toZonedTime(nowUtc, timezone);
     
     if (timeFilter === "last_hour") {
-      const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+      const oneHourAgo = new Date(nowUtc.getTime() - 60 * 60 * 1000);
       filteredOrders = filteredOrders.filter(o => {
-        const time = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
-        return time >= oneHourAgo;
+        const timeUtc = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
+        return timeUtc >= oneHourAgo;
       });
     } else if (timeFilter === "today") {
-      const startOfToday = new Date();
-      startOfToday.setHours(0, 0, 0, 0);
+      const startOfTodayZoned = new Date(nowZoned);
+      startOfTodayZoned.setHours(0, 0, 0, 0);
+      
       filteredOrders = filteredOrders.filter(o => {
-        const time = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
-        return time >= startOfToday;
+        const timeUtc = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
+        const timeZoned = toZonedTime(timeUtc, timezone);
+        return timeZoned >= startOfTodayZoned;
       });
     } else if (timeFilter === "yesterday") {
-      const startOfYesterday = new Date();
-      startOfYesterday.setDate(startOfYesterday.getDate() - 1);
-      startOfYesterday.setHours(0, 0, 0, 0);
-      const startOfToday = new Date();
-      startOfToday.setHours(0, 0, 0, 0);
+      const startOfYesterdayZoned = new Date(nowZoned);
+      startOfYesterdayZoned.setDate(startOfYesterdayZoned.getDate() - 1);
+      startOfYesterdayZoned.setHours(0, 0, 0, 0);
+      
+      const startOfTodayZoned = new Date(nowZoned);
+      startOfTodayZoned.setHours(0, 0, 0, 0);
+      
       filteredOrders = filteredOrders.filter(o => {
-        const time = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
-        return time >= startOfYesterday && time < startOfToday;
+        const timeUtc = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
+        const timeZoned = toZonedTime(timeUtc, timezone);
+        return timeZoned >= startOfYesterdayZoned && timeZoned < startOfTodayZoned;
       });
     }
     // "last_7_days" includes all data since the fetch already limits to 7 days
@@ -169,7 +177,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
     // 4. Sort by most recently active
     return result.sort((a, b) => new Date(b.last_activity).getTime() - new Date(a.last_activity).getTime());
 
-  }, [completedOrders, searchQuery, timeFilter]);
+  }, [completedOrders, searchQuery, timeFilter, timezone]);
 
   const totalRevenue = useMemo(() => {
     return filteredAndGroupedTabs

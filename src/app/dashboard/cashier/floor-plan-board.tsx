@@ -257,110 +257,98 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
     setIsDragging(false);
     (e.target as HTMLElement).releasePointerCapture(e.pointerId);
   };
-
   const selectedTableData = tables.find(t => t.id === selectedTableId);
 
   return (
-    <div className="flex flex-col h-full space-y-4">
-      {/* Areas Tabs */}
-      <div className="flex items-center gap-2">
-        {initialFloorPlans.length > 0 && (
-          <div className="flex bg-slate-100 p-1 rounded-xl w-fit">
-            {initialFloorPlans.map((plan) => (
-              <button
-                key={plan.id}
-                onClick={() => {
-                  if (!isEditMode) {
-                    setActivePlanId(plan.id);
-                    setSelectedLiveTableIds([]);
-                  }
-                }}
-                disabled={isEditMode}
-                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                  activePlanId === plan.id ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                } ${isEditMode ? "opacity-50 cursor-not-allowed" : ""}`}
-              >
-                {plan.name}
-              </button>
-            ))}
-          </div>
-        )}
-        
-        {canEdit && !isEditMode && !onSelectTable && (
-          isAddingArea ? (
-            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl p-1 shadow-sm">
-              <input 
-                type="text"
-                autoFocus
-                value={newAreaName}
-                onChange={e => setNewAreaName(e.target.value)}
-                placeholder="e.g. Patio"
-                className="px-3 py-1.5 text-sm border-none focus:outline-none focus:ring-0 w-32"
-                onKeyDown={e => e.key === 'Enter' && handleAddArea()}
-              />
-              <select
-                value={newAreaTemplate}
-                onChange={e => setNewAreaTemplate(e.target.value)}
-                className="px-2 py-1.5 text-sm border-none bg-slate-50 rounded-lg text-slate-600 focus:outline-none cursor-pointer"
-              >
-                <option value="blank">Blank (Build from scratch)</option>
-                <option value="casual">Casual Dining / Bistro</option>
-                <option value="fine">Fine Dining / Formal Room</option>
-                <option value="sports">Sports Bar & Grill</option>
-                <option value="cafe">Cafe / Coffee Shop</option>
-                <option value="patio">Outdoor Patio / Beer Garden</option>
-              </select>
-              <button 
-                onClick={handleAddArea}
-                disabled={isProcessingLiveAction || !newAreaName.trim()}
-                className="px-3 py-1.5 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition-colors"
-              >
-                Save
-              </button>
-              <button 
-                onClick={() => {
-                  setIsAddingArea(false);
-                  setNewAreaName("");
-                  setNewAreaTemplate("blank");
-                }}
-                className="px-3 py-1.5 text-slate-500 hover:text-slate-700 text-sm font-bold transition-colors"
-              >
-                Cancel
-              </button>
+    <div className="flex flex-col h-full p-4 sm:p-6 space-y-4">
+      {/* Unified Toolbar */}
+      <div className="flex justify-between items-center bg-white p-3 sm:px-4 sm:py-3 rounded-xl border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-2">
+          {initialFloorPlans.length > 0 && (
+            <div className="flex bg-slate-100 p-1 rounded-xl w-fit">
+              {initialFloorPlans.map((plan) => (
+                <button
+                  key={plan.id}
+                  onClick={() => {
+                    if (!isEditMode) {
+                      setActivePlanId(plan.id);
+                      setSelectedLiveTableIds([]);
+                    }
+                  }}
+                  disabled={isEditMode}
+                  className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${
+                    activePlanId === plan.id ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  } ${isEditMode ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  {plan.name}
+                </button>
+              ))}
             </div>
-          ) : (
-            <button 
-              onClick={() => setIsAddingArea(true)}
-              className="flex items-center gap-1 px-3 py-2 text-sm font-bold text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors"
-            >
-              <Plus className="w-4 h-4" /> Add Floor
-            </button>
-          )
-        )}
-      </div>
+          )}
+          
+          {canEdit && !isEditMode && !onSelectTable && (
+            isAddingArea ? (
+              <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl p-1 shadow-sm">
+                <input 
+                  type="text"
+                  autoFocus
+                  value={newAreaName}
+                  onChange={e => setNewAreaName(e.target.value)}
+                  placeholder="e.g. Patio"
+                  className="px-3 py-1.5 text-sm border-none focus:outline-none focus:ring-0 w-32"
+                  onKeyDown={e => e.key === 'Enter' && handleAddArea()}
+                />
+                <select
+                  value={newAreaTemplate}
+                  onChange={e => setNewAreaTemplate(e.target.value)}
+                  className="px-2 py-1.5 text-sm border-none bg-slate-50 rounded-lg text-slate-600 focus:outline-none cursor-pointer hidden sm:block"
+                >
+                  <option value="blank">Blank</option>
+                  <option value="casual">Casual</option>
+                  <option value="fine">Fine Dining</option>
+                  <option value="patio">Patio</option>
+                </select>
+                <button 
+                  onClick={handleAddArea}
+                  disabled={isProcessingLiveAction || !newAreaName.trim()}
+                  className="px-3 py-1.5 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  Save
+                </button>
+                <button 
+                  onClick={() => {
+                    setIsAddingArea(false);
+                    setNewAreaName("");
+                    setNewAreaTemplate("blank");
+                  }}
+                  className="px-3 py-1.5 text-slate-500 hover:text-slate-700 text-sm font-bold transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => setIsAddingArea(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-slate-500 hover:text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+              >
+                <Plus className="w-4 h-4" /> Add Floor
+              </button>
+            )
+          )}
 
-      {/* Controls Bar */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <div>
-          {isEditMode ? (
+          {isEditMode && (
             <input 
               type="text"
               value={editPlanName}
               onChange={e => setEditPlanName(e.target.value)}
-              className="text-xl font-bold text-slate-900 border-b-2 border-indigo-200 focus:border-indigo-500 focus:outline-none bg-transparent px-1 py-0.5 w-64 mb-1"
+              className="text-sm font-bold text-slate-900 border border-indigo-200 rounded-lg focus:border-indigo-500 focus:outline-none bg-white px-3 py-1.5 w-40 ml-2 shadow-sm"
               placeholder="Floor Plan Name"
             />
-          ) : (
-            <h2 className="text-xl font-bold text-slate-900">{activePlan?.name || "Floor Plan"}</h2>
           )}
-          {errorMessage ? (
-            <p className="text-sm font-bold text-rose-600 animate-in fade-in duration-300">
+          {errorMessage && (
+            <span className="text-sm font-bold text-rose-600 animate-in fade-in duration-300 ml-2">
               {errorMessage}
-            </p>
-          ) : (
-            <p className="text-sm text-slate-500">
-              {isEditMode ? "Drag tables to reposition them." : "Live view of occupied tables."}
-            </p>
+            </span>
           )}
         </div>
 

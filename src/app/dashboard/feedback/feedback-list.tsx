@@ -485,7 +485,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
   let lastDateStr = "";
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full">
       {/* Table Controls Header */}
       <div className="p-4 sm:p-5 border-b border-slate-200 bg-white flex flex-col gap-4">
         <h2 className="font-bold text-slate-900 text-lg flex items-center gap-2">
@@ -600,7 +600,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="flex-1 overflow-auto">
         <table className="w-full text-left text-sm whitespace-nowrap">
           <thead className="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">
             <tr>

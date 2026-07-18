@@ -5,6 +5,7 @@ import { getSupabaseEnv } from "@/lib/env";
 import { TakeawayBoard } from "./takeaway-board";
 import { ClipboardList } from "lucide-react";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
 
 export const metadata = {
   title: "Takeaway & Priority | NoMenu Dashboard",
@@ -32,8 +33,14 @@ export default async function TakeawayPage() {
 
   // Fetch today's orders initially
   // We'll let the client component handle real-time and more complex fetching
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Start of today
+  const tz = restaurant.timezone || "UTC";
+  const nowUtc = new Date();
+  const nowZoned = toZonedTime(nowUtc, tz);
+  
+  const startOfTodayZoned = new Date(nowZoned);
+  startOfTodayZoned.setHours(0, 0, 0, 0); // Start of today in local restaurant time
+  
+  const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
 
   const { data: initialOrders } = await supabase
     .from("orders")
@@ -51,7 +58,7 @@ export default async function TakeawayPage() {
     `)
     .eq("restaurant_id", restaurant.id)
     .not("customer_phone", "is", null) // Exclusively Takeaway/Priority
-    .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
+    .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
     .order("created_at", { ascending: false });
 
   const isLocked = !restaurant.plan || !["enterprise"].includes(restaurant.plan.toLowerCase());

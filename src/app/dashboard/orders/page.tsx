@@ -7,6 +7,7 @@ import { ClipboardList } from "lucide-react";
 import { getActiveRestaurant } from "@/lib/rbac";
 import { WaitTimeToggle } from "@/components/dashboard/wait-time-toggle";
 import { getCurrencySymbol } from "@/lib/currency-options";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
 
 export const metadata = {
   title: "Orders | NoMenu Dashboard",
@@ -34,8 +35,14 @@ export default async function OrdersPage() {
 
   // Fetch today's orders initially
   // We'll let the client component handle real-time and more complex fetching
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Start of today
+  const tz = restaurant.timezone || "UTC";
+  const nowUtc = new Date();
+  const nowZoned = toZonedTime(nowUtc, tz);
+  
+  const startOfTodayZoned = new Date(nowZoned);
+  startOfTodayZoned.setHours(0, 0, 0, 0); // Start of today in local restaurant time
+  
+  const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
 
   const { data: initialOrders } = await supabase
     .from("orders")
@@ -53,7 +60,7 @@ export default async function OrdersPage() {
     `)
     .eq("restaurant_id", restaurant.id)
     .is("customer_phone", null) // Exclusively Dine-In orders
-    .or(`status.in.(pending,preparing),created_at.gte.${today.toISOString()}`)
+    .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
     .order("created_at", { ascending: false });
 
   const isLocked = !restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase());
