@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { MenuItem } from "./types";
+import { calculateTotalItems, calculateTotalPrice } from "@/lib/cart-utils";
 
 export type CartItem = {
   menuItem: MenuItem;
@@ -59,9 +60,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clearCart = () => setItems([]);
 
   const validItems = items.filter(i => i.quantity !== undefined && !isNaN(i.quantity));
-  const totalItems = validItems.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = validItems.reduce((sum, item) => sum + (Number(item.menuItem.price) * item.quantity), 0);
-
+  const totalItems = calculateTotalItems(items);
+  const totalPrice = calculateTotalPrice(items);
   return (
     <CartContext.Provider value={{ items: validItems, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice }}>
       {children}

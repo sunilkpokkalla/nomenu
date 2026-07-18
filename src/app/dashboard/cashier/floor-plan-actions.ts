@@ -263,6 +263,9 @@ export async function deleteFloorPlanArea(id: string) {
     const newZones = currentZones.filter(z => z !== plan.name);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await supabase.from("restaurants").update({ location_zones: newZones } as any).eq("id", restaurant.id);
+    
+    // Clear out the deleted zone from any QR codes
+    await supabase.from("qr_codes").update({ location_zone: "Main Dining" }).eq("restaurant_id", restaurant.id).eq("location_zone", plan.name);
   }
   
   revalidatePath("/dashboard/cashier");
@@ -281,7 +284,7 @@ export async function saveTableLayout(
   if (!user) return { success: false, error: "Unauthorized" };
 
   // Get the plan first
-  const { data: plan } = await supabase.from("floor_plans").select("restaurant_id").eq("id", floorPlanId).single();
+  const { data: plan } = await supabase.from("floor_plans").select("restaurant_id, name").eq("id", floorPlanId).single();
   if (!plan) return { success: false, error: "Plan not found" };
 
   const restaurant = await getActiveRestaurant(supabase, user.id);
@@ -340,13 +343,24 @@ export async function saveTableLayout(
       return { success: false, error: updateError.message };
     }
 
-    // Auto-sync the renamed plan to location_zones
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const currentZones: string[] = (restaurant as any).location_zones || ["Main Dining"];
-    if (!currentZones.includes(planName)) {
-      const newZones = [...currentZones, planName];
+    // Auto-sync the renamed plan to location_zones and QR codes
+    if (plan.name !== planName) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await supabase.from("restaurants").update({ location_zones: newZones } as any).eq("id", restaurant.id);
+      const currentZones: string[] = (restaurant as any).location_zones || ["Main Dining"];
+      const filteredZones = currentZones.filter(z => z !== plan.name);
+      
+      if (!filteredZones.includes(planName)) {
+        filteredZones.push(planName);
+      }
+      
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await supabase.from("restaurants").update({ location_zones: filteredZones } as any).eq("id", restaurant.id);
+      
+      // Update existing QR codes to the new zone name
+      await supabase.from("qr_codes")
+        .update({ location_zone: planName })
+        .eq("restaurant_id", restaurant.id)
+        .eq("location_zone", plan.name);
     }
   }
 

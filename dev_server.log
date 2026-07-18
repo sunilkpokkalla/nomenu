@@ -1,0 +1,30 @@
+
+> nomenu@0.1.0 dev
+> NODE_OPTIONS='--dns-result-order=ipv4first' next dev -p 3008
+
+   ▲ Next.js 15.5.19
+   - Local:        http://localhost:3008
+   - Network:      http://192.168.1.66:3008
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverActions
+
+ ✓ Starting...
+Using secrets defined in .dev.vars
+ ✓ Ready in 1654ms
+ ○ Compiling /[restaurantSlug]/[menuSlug] ...
+ ✓ Compiled /[restaurantSlug]/[menuSlug] in 2.3s (1278 modules)
+ ✓ Compiled in 274ms (470 modules)
+ GET /velvet-fork/menu 404 in 3235ms
+ ✓ Compiled / in 308ms (1311 modules)
+ GET / 200 in 616ms
+ GET / 200 in 97ms
+ GET /velvet-fork/tasting-menu 200 in 744ms
+ GET /velvet-fork/tasting-menu 200 in 571ms
+ GET / 200 in 126ms
+ GET / 200 in 110ms
+ GET /velvet-fork/tasting-menu 200 in 725ms
+ GET / 200 in 192ms
+ GET / 200 in 380ms
+ GET /velvet-fork/tasting-menu 200 in 439ms
+ ✓ Compiled in 2.8s (492 modules)

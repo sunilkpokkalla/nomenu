@@ -447,7 +447,9 @@ export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableN
         <div className="fixed inset-0 z-50 flex flex-col justify-end sm:justify-center sm:p-4 bg-black/60 backdrop-blur-sm">
           <div className="absolute inset-0" onClick={() => setIsOpen(false)} />
           
-          <div className={`relative w-full max-w-lg mx-auto sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden ${
+          <div 
+            data-testid="cart-modal"
+            className={`relative w-full max-w-lg mx-auto sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden ${
             themeStyle === "luxury" ? "bg-[#0C0C0E] border border-zinc-900 text-zinc-100" : 
             themeStyle === "vibrant" ? "bg-[#FEFCE8] border-4 border-black text-black" : 
             "bg-white text-slate-900"

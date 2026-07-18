@@ -92,7 +92,7 @@ export async function POST(req: Request) {
 
     const prompt = `You are a professional culinary translator and restaurant menu expert.
 Translate the following dish names and descriptions from English into ${targetLanguageName}.
-Keep proper nouns, brand names, and iconic culinary terms (e.g. Samosa, Pho, Sushi) in their recognized form if appropriate.
+You MUST translate all dish names and descriptions into ${targetLanguageName}. Do not leave them in English unless it is a specific trademarked brand name.
 Return a pure JSON object. Do NOT wrap it in markdown blockquotes or backticks.
 The JSON must EXACTLY match this structure, substituting translations where appropriate.
 {
