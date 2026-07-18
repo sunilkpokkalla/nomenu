@@ -12,5 +12,6 @@ export const SUPPORTED_LANGUAGES = [
   { code: "pt", name: "Portuguese" },
   { code: "te", name: "Telugu" },
   { code: "ta", name: "Tamil" },
-  { code: "kn", name: "Kannada" }
+  { code: "kn", name: "Kannada" },
+  { code: "tr", name: "Turkish" }
 ];

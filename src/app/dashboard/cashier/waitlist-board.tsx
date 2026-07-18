@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 import { Users, Clock, CheckCircle2, XCircle, UserPlus, Phone } from "lucide-react";
-import { addWaitlistEntry, updateWaitlistStatus, getWaitlist } from "./actions";
+import { addWaitlistEntry, updateWaitlistStatus, getWaitlist, createWalkInTab } from "./actions";
 import { FloorPlanBoard } from "./floor-plan-board";
 
 type WaitlistEntry = {
@@ -96,8 +96,8 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
 
   if (seatingEntryId) {
     return (
-      <div className="flex flex-col gap-6">
-        <div className="flex justify-between items-center bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm mb-2">
+      <div className="flex flex-col gap-6 h-full overflow-y-auto pb-24">
+        <div className="flex justify-between items-center bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm mb-2 shrink-0">
           <div>
             <h3 className="font-bold text-2xl text-slate-900 tracking-tight">Select Table for Party</h3>
             <p className="text-sm text-slate-500 font-medium mt-1">
@@ -124,8 +124,18 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
               </button>
               <button 
                 onClick={() => {
-                  handleUpdateStatus(seatingEntryId, 'seated', undefined, seatingError.compositeTableString);
-                  setSeatingError(null);
+                  const entry = entries.find(e => e.id === seatingEntryId);
+                  if (entry) {
+                    createWalkInTab(restaurantId, seatingError.compositeTableString, entry.customer_name, entry.party_size)
+                      .then(() => {
+                        handleUpdateStatus(seatingEntryId, 'seated', undefined, seatingError.compositeTableString);
+                        setSeatingError(null);
+                      })
+                      .catch(err => {
+                        console.error(err);
+                        alert("Failed to seat customer: " + (err as Error).message);
+                      });
+                  }
                 }}
                 className="px-4 py-2 bg-amber-500 text-white font-bold rounded-lg shadow-sm hover:bg-amber-600 transition-colors"
               >
@@ -154,7 +164,15 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                 return;
               }
 
-              handleUpdateStatus(seatingEntryId, 'seated', undefined, compositeTableString);
+              // Create a Walk-in tab (order) so the table becomes occupied in the system
+              createWalkInTab(restaurantId, compositeTableString, entry.customer_name, entry.party_size)
+                .then(() => {
+                  handleUpdateStatus(seatingEntryId, 'seated', undefined, compositeTableString);
+                })
+                .catch(err => {
+                  console.error(err);
+                  alert("Failed to seat customer: " + (err as Error).message);
+                });
             }}
           />
         </div>
@@ -163,8 +181,8 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
   }
 
   return (
-    <div className="flex flex-col gap-8 pb-12">
-      <div className="flex justify-between items-center bg-white p-6 rounded-[2rem] shadow-xl shadow-slate-200/20 mb-2 border border-slate-100">
+    <div className="flex flex-col gap-8 pb-24 h-full overflow-y-auto">
+      <div className="flex justify-between items-center bg-white p-6 rounded-[2rem] shadow-xl shadow-slate-200/20 mb-2 border border-slate-100 shrink-0">
         <h2 className="text-3xl font-black text-slate-900 flex items-center gap-4 tracking-tight">
           <div className="p-3 bg-indigo-50 rounded-2xl border border-indigo-100">
             <Clock className="w-8 h-8 text-indigo-600" />

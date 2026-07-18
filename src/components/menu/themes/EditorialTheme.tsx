@@ -35,9 +35,7 @@ export function EditorialTheme(props: MenuThemeProps) {
       {/* Editorial Header */}
       <header className="relative w-full pt-24 pb-16 px-6 flex flex-col items-center text-center border-b border-[#E2DFD8]">
         <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
-          <p className="text-[10px] tracking-[0.3em] uppercase text-[#8C8881] mb-6 font-medium">
-            Vol. 1 — {restaurant.cuisine_type || "Fine Dining"}
-          </p>
+
           <h1 className="text-5xl sm:text-7xl font-serif tracking-tight text-[#1A1918] mb-6 leading-none" style={{ fontFamily: '"Playfair Display", "Times New Roman", serif' }}>
             {restaurant.name}
           </h1>

@@ -128,8 +128,8 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
           } else if (payload.eventType === "UPDATE") {
             if (payload.new.customer_phone !== null) return;
             
-            if (["cancelled", "cancelled_by_customer", "cancelled_by_restaurant", "awaiting_payment", "cleared"].includes(payload.new.status)) {
-              // Remove it from the board if it gets cancelled, cleared, or hasn't finished checking out
+            if (payload.new.is_paid || ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant", "awaiting_payment", "cleared"].includes(payload.new.status)) {
+              // Remove it from the board if it gets paid, cancelled, cleared, or hasn't finished checking out
               setOrders(prev => prev.filter(o => o.id !== payload.new.id));
             } else {
               setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));

@@ -601,7 +601,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
               const planNames = Array.from(new Set(selectedTables.map(t => t._planName || "Main Floor"))).join(' & ');
 
               return (
-                <div className="flex flex-col h-full gap-4">
+                <div className="flex flex-col flex-1 gap-4">
                   <div>
                     <h3 className="font-black text-2xl text-slate-900 leading-tight">Table {tableNumbersString}</h3>
                     <p className="text-sm text-slate-500 font-medium mt-1">
@@ -614,7 +614,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                       onSelectTable(selectedTables, compositeTableString);
                       setSelectedLiveTableIds([]);
                     }}
-                    className="mt-auto flex items-center justify-center gap-2 w-full py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200"
+                    className="mt-6 flex items-center justify-center gap-2 w-full py-3.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200"
                   >
                     Confirm Seating
                   </button>
