@@ -84,7 +84,7 @@ export default async function ReferralsPage(
   const referralLink = `https://nomenu.us?ref=${restaurant.slug}`;
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-24">
+    <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8 space-y-6 pb-24">
       
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">

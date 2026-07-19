@@ -41,7 +41,7 @@ export default async function SettingsPage(
   const hasCustomLegacyCurrency = restaurant.currency && !CURRENCY_OPTIONS.some((c) => c.code === restaurant.currency);
 
   return (
-    <>
+    <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -207,6 +207,6 @@ export default async function SettingsPage(
           </form>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }
