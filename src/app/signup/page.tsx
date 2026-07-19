@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { signup, loginWithGoogle } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
+import { FbqEvent } from "@/components/marketing/FbqEvent";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -15,6 +16,7 @@ export default async function SignupPage(
   const searchParams = await props.searchParams;
   return (
     <main className="flex min-h-screen bg-white font-sans-vibrant">
+      <FbqEvent eventName="Lead" params={{ content_name: 'Create Free Menu' }} />
       {/* LEFT SIDE - EDITORIAL IMAGE */}
       <div className="relative hidden lg:flex lg:w-1/2 overflow-hidden bg-slate-950">
         {/* Background Image */}

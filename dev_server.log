@@ -29,3 +29,15 @@ Using secrets defined in .dev.vars
  GET /velvet-fork/tasting-menu 200 in 439ms
  ✓ Compiled in 2.8s (492 modules)
  ✓ Compiled in 1185ms (1309 modules)
+   Reload env: .env.local
+ ✓ Compiled in 8.4s (1372 modules)
+ ✓ Compiled in 486ms (495 modules)
+ ✓ Compiled in 1388ms (495 modules)
+ ✓ Compiled in 460ms (495 modules)
+ ✓ Compiled in 247ms (495 modules)
+ ✓ Compiled in 274ms (495 modules)
+ ✓ Compiled in 158ms (495 modules)
+ ✓ Compiled in 184ms (495 modules)
+ ✓ Compiled in 153ms (495 modules)
+ ✓ Compiled in 257ms (495 modules)
+ ✓ Compiled in 156ms (495 modules)

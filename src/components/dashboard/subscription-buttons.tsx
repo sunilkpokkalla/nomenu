@@ -21,6 +21,15 @@ export function SubscriptionButton({
   const handleCheckout = async () => {
     try {
       setLoading(true);
+
+      // Trigger Meta Pixel InitiateCheckout event
+      if (typeof window !== 'undefined' && ('fbq' in window)) {
+        // @ts-expect-error - fbq is injected dynamically by Meta Pixel
+        window.fbq('track', 'InitiateCheckout', {
+          content_name: planName,
+        });
+      }
+
       const res = await fetch("/api/stripe/subscription-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

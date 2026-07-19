@@ -77,7 +77,7 @@ export async function signup(formData: FormData) {
 
   if (data.user && data.session) {
     revalidatePath("/", "layout");
-    redirect("/dashboard");
+    redirect("/dashboard?signup=true");
   } else {
     redirect("/login?message=Account%20created!%20Please%20check%20your%20email%20to%20confirm%20and%20activate%20your%20account.");
   }

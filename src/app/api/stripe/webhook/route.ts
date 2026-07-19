@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 import { createClient } from "@supabase/supabase-js";
 import { verifyStripeWebhook, fetchStripe } from "@/lib/stripe-fetch";
 import { getAffiliatePayout } from "@/lib/affiliate";
+import { sendMetaServerEvent } from "@/lib/meta-capi";
 
 export async function POST(req: Request) {
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -66,6 +67,16 @@ export async function POST(req: Request) {
             console.error("Failed to upgrade SaaS plan:", updateError);
           } else {
             console.log(`Restaurant ${restaurantId} upgraded to ${planId}. Added ${bonus} magic credits.`);
+            
+            // Send Meta CAPI Purchase event
+            const amount = session.amount_total ? session.amount_total / 100 : 0;
+            await sendMetaServerEvent({
+              eventName: 'Purchase',
+              eventId: session.id,
+              email: session.customer_details?.email,
+              value: amount,
+              currency: session.currency || 'usd'
+            });
           }
         }
       }
