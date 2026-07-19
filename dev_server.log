@@ -28,3 +28,4 @@ Using secrets defined in .dev.vars
  GET / 200 in 380ms
  GET /velvet-fork/tasting-menu 200 in 439ms
  ✓ Compiled in 2.8s (492 modules)
+ ✓ Compiled in 1185ms (1309 modules)

@@ -67,6 +67,7 @@ export const metadata: Metadata = {
 import { SupabaseHashListener } from "@/components/supabase-hash-listener";
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
 import { ReferralTracker } from "@/components/referral-tracker";
+import Script from "next/script";
 
 export default function RootLayout({
   children,
@@ -75,7 +76,30 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          id="meta-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src='https://connect.facebook.net/en_US/fbevents.js';
+              s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script');
+              fbq('init', '2198654707623743');
+              fbq('track', 'PageView');
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${lora.variable} ${montserrat.variable} ${cormorant.variable} ${poppins.variable} ${outfit.variable} ${spaceMono.variable} font-sans antialiased`} suppressHydrationWarning>
+        <noscript>
+          <img height="1" width="1" style={{ display: 'none' }} src="https://www.facebook.com/tr?id=2198654707623743&ev=PageView&noscript=1" alt="" />
+        </noscript>
         <SupabaseHashListener />
         <ReferralTracker />
         <NextTopLoader
