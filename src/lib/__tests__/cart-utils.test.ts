@@ -3,13 +3,15 @@ import { CartItem } from "@/components/menu/cart-context";
 
 describe("Cart Utils", () => {
   const mockItem1: CartItem = {
-    menuItem: { id: "1", name: "Burger", price: 10, category_id: "c1", created_at: "", restaurant_id: "r1", is_available: true, sort_order: 1 },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    menuItem: { id: "1", name: "Burger", price: 10, category_id: "c1", is_available: true, sort_order: 1 } as any,
     quantity: 2,
     notes: ""
   };
   
   const mockItem2: CartItem = {
-    menuItem: { id: "2", name: "Fries", price: 5, category_id: "c1", created_at: "", restaurant_id: "r1", is_available: true, sort_order: 2 },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    menuItem: { id: "2", name: "Fries", price: 5, category_id: "c1", is_available: true, sort_order: 2 } as any,
     quantity: 1,
     notes: ""
   };
