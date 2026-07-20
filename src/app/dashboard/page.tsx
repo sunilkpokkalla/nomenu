@@ -43,7 +43,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage(
   props: {
-    searchParams: Promise<{ message?: string; signup?: string }>;
+    searchParams: Promise<{ message?: string; signup?: string; registered?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
