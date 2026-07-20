@@ -110,7 +110,7 @@ export async function createRestaurant(formData: FormData) {
   }
 
   revalidatePath("/dashboard");
-  redirect("/dashboard");
+  redirect("/dashboard?registered=true");
 }
 
 // MENU ACTIONS

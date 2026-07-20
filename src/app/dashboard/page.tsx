@@ -97,11 +97,7 @@ export default async function DashboardPage(
           <div className="absolute -bottom-48 -left-48 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
           <div className="absolute -top-48 -right-48 w-96 h-96 bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
           
-          {/* FbqEvent for CompleteRegistration if user just signed up */}
-      {searchParams.signup === 'true' && (
-        <FbqEvent eventName="CompleteRegistration" params={{ content_name: 'Restaurant Signup' }} />
-      )}
-
+          {/* FbqEvent for Lead/Signup moved to onboarding layer if needed */}
       {/* Hero Section */}
           <div className="relative z-10 flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white shadow-md">
@@ -329,6 +325,9 @@ export default async function DashboardPage(
 
   return (
     <OpsProvider>
+      {searchParams.registered === 'true' && (
+        <FbqEvent eventName="CompleteRegistration" params={{ content_name: 'Restaurant Account Created' }} />
+      )}
       <div className="px-6 py-10 lg:px-10 bg-slate-50/50 min-h-[100dvh] font-sans-vibrant">
       <WelcomeChecklist 
         menusCount={menusList.length} 
