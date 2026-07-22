@@ -1,0 +1,119 @@
+
+> nomenu@0.1.0 build
+> next build
+
+Using secrets defined in .dev.vars
+   ▲ Next.js 15.5.19
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverActions
+
+   Creating an optimized production build ...
+Using secrets defined in .dev.vars
+Using secrets defined in .dev.vars
+Using secrets defined in .dev.vars
+ ✓ Compiled successfully in 8.6s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/31) ...
+   Generating static pages (7/31) 
+   Generating static pages (15/31) 
+   Generating static pages (23/31) 
+ ✓ Generating static pages (31/31)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    20.5 kB         138 kB
+├ ○ /_not-found                            214 B         103 kB
+├ ƒ /[restaurantSlug]                      214 B         103 kB
+├ ƒ /[restaurantSlug]/[menuSlug]           136 B         131 kB
+├ ƒ /admin                                 817 B         104 kB
+├ ƒ /admin/billing                         817 B         104 kB
+├ ƒ /admin/marketing                     8.41 kB         111 kB
+├ ƒ /admin/partners                      5.75 kB         122 kB
+├ ƒ /admin/payouts                         817 B         104 kB
+├ ƒ /admin/restaurants                   4.39 kB         147 kB
+├ ƒ /admin/settings                      5.98 kB         117 kB
+├ ƒ /admin/support                         817 B         104 kB
+├ ƒ /api/cron/generate-ai-images           214 B         103 kB
+├ ƒ /api/integrations/square/callback      214 B         103 kB
+├ ƒ /api/integrations/square/connect       214 B         103 kB
+├ ƒ /api/integrations/square/disconnect    214 B         103 kB
+├ ƒ /api/integrations/square/sync          214 B         103 kB
+├ ƒ /api/library                           214 B         103 kB
+├ ƒ /api/menu/generate-description         214 B         103 kB
+├ ƒ /api/menu/magic-generate               214 B         103 kB
+├ ƒ /api/menu/magic-import                 214 B         103 kB
+├ ƒ /api/menu/translate                    214 B         103 kB
+├ ƒ /api/qr                                214 B         103 kB
+├ ƒ /api/restaurant/credits                214 B         103 kB
+├ ƒ /api/stripe/checkout                   214 B         103 kB
+├ ƒ /api/stripe/checkout-ai-images         214 B         103 kB
+├ ƒ /api/stripe/connect                    214 B         103 kB
+├ ƒ /api/stripe/connect-webhook            214 B         103 kB
+├ ƒ /api/stripe/create-portal              214 B         103 kB
+├ ƒ /api/stripe/credit-checkout            214 B         103 kB
+├ ƒ /api/stripe/partner-connect            214 B         103 kB
+├ ƒ /api/stripe/subscription-checkout      214 B         103 kB
+├ ƒ /api/stripe/webhook                    214 B         103 kB
+├ ƒ /api/support                           214 B         103 kB
+├ ƒ /api/upload                            214 B         103 kB
+├ ƒ /auth/callback                         214 B         103 kB
+├ ƒ /dashboard                           13.1 kB         302 kB
+├ ƒ /dashboard/analytics                 1.39 kB         104 kB
+├ ƒ /dashboard/billing                   2.45 kB         109 kB
+├ ƒ /dashboard/cashier                    1.2 kB         209 kB
+├ ƒ /dashboard/customize                 2.05 kB         134 kB
+├ ƒ /dashboard/feedback                   132 kB         370 kB
+├ ƒ /dashboard/integrations              3.58 kB         118 kB
+├ ƒ /dashboard/items                     86.4 kB         262 kB
+├ ƒ /dashboard/manual                      863 B         107 kB
+├ ƒ /dashboard/manual/analytics            863 B         107 kB
+├ ƒ /dashboard/manual/customize            863 B         107 kB
+├ ƒ /dashboard/manual/feedback             863 B         107 kB
+├ ƒ /dashboard/manual/menus                863 B         107 kB
+├ ƒ /dashboard/manual/orders               863 B         107 kB
+├ ƒ /dashboard/manual/qr-codes             863 B         107 kB
+├ ƒ /dashboard/manual/security             863 B         107 kB
+├ ƒ /dashboard/menus                       14 kB         143 kB
+├ ƒ /dashboard/menus/[id]/customize        196 B         132 kB
+├ ƒ /dashboard/orders                    3.91 kB         230 kB
+├ ƒ /dashboard/payouts                   1.81 kB         108 kB
+├ ƒ /dashboard/qrcodes                   77.3 kB         252 kB
+├ ƒ /dashboard/referrals                 3.98 kB         119 kB
+├ ƒ /dashboard/settings                  52.5 kB         164 kB
+├ ƒ /dashboard/settings/team             5.09 kB         120 kB
+├ ƒ /dashboard/support                   2.98 kB         106 kB
+├ ƒ /dashboard/takeaway                  3.28 kB         229 kB
+├ ƒ /foh                                   540 B         208 kB
+├ ƒ /forgot-password                     1.98 kB         113 kB
+├ ○ /icon.svg                                0 B            0 B
+├ ƒ /kds                                 3.15 kB         229 kB
+├ ƒ /live-feedback                        3.6 kB         182 kB
+├ ƒ /login                               1.98 kB         113 kB
+├ ƒ /loyalty/[id]                        3.07 kB         125 kB
+├ ○ /loyalty/find                        3.63 kB         110 kB
+├ ƒ /loyalty/scan                           3 kB         106 kB
+├ ○ /manifest.webmanifest                  214 B         103 kB
+├ ƒ /menu/[id]                             136 B         131 kB
+├ ○ /partners                              863 B         107 kB
+├ ƒ /partners/dashboard                  3.33 kB         115 kB
+├ ƒ /partners/login                      1.98 kB         113 kB
+├ ƒ /partners/signup                     1.95 kB         108 kB
+├ ○ /privacy                               863 B         107 kB
+├ ƒ /reset-password                      1.98 kB         113 kB
+├ ○ /robots.txt                            214 B         103 kB
+├ ƒ /signup                              2.05 kB         113 kB
+├ ƒ /sitemap.xml                           214 B         103 kB
+├ ƒ /team/join                           4.24 kB         119 kB
+└ ○ /terms                                 863 B         107 kB
++ First Load JS shared by all             103 kB
+  ├ chunks/1255-b8cf77ab14370e57.js        46 kB
+  ├ chunks/4bd1b696-100b9d70ed4e49c1.js  54.2 kB
+  └ other shared chunks (total)          2.52 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -191,7 +191,7 @@ export function MenuItemsClient({
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
       {/* LEFT SIDEBAR NAVIGATION */}
-      <div className="w-full lg:w-64 shrink-0 bg-white border border-slate-200 rounded-xl overflow-hidden sticky top-6 flex flex-col max-h-[calc(100vh-3rem)] shadow-sm">
+      <div className="w-full lg:w-64 shrink-0 bg-white border border-slate-200 rounded-xl overflow-hidden lg:sticky lg:top-6 flex flex-col lg:max-h-[calc(100vh-3rem)] shadow-sm">
         <div className="p-4 border-b border-slate-100 bg-slate-50/50">
           <h2 className="font-semibold text-slate-800">Menu Navigation</h2>
         </div>
@@ -322,14 +322,15 @@ export function MenuItemsClient({
                     Add Item
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="w-full sm:max-w-md overflow-y-auto border-l-0 sm:border-l">
-                  <SheetHeader>
-                    <SheetTitle>Create Menu Item</SheetTitle>
-                    <SheetDescription>
-                      Add a new dish or drink to your digital menu.
-                    </SheetDescription>
-                  </SheetHeader>
-                  <div className="mt-6">
+                <SheetContent className="w-full sm:max-w-md overflow-hidden p-0 flex flex-col border-l-0 sm:border-l">
+                  <div className="flex-1 overflow-y-auto p-6 flex flex-col">
+                    <SheetHeader className="shrink-0 mb-6">
+                      <SheetTitle>Create Menu Item</SheetTitle>
+                      <SheetDescription>
+                        Add a new dish or drink to your digital menu.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="flex-1">
                     {menus.length === 0 ? (
                       <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
                         <ShieldAlert className="inline mr-2 h-4 w-4 text-amber-600" />
@@ -347,6 +348,7 @@ export function MenuItemsClient({
                         onSuccess={() => setIsCreateSheetOpen(false)}
                       />
                     )}
+                    </div>
                   </div>
                 </SheetContent>
               </Sheet>

@@ -266,15 +266,17 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
           </div>
         </div>
 
-        <div className="pt-2 border-t mt-4">
+        <div className="pt-2 border-t mt-4 mb-6">
           <Label className="mb-2 block text-xs font-semibold text-slate-700">Item Image (Optional)</Label>
           <ImageUploader value={imageUrl} onChange={setImageUrl} />
         </div>
 
-        <Button type="submit" className="w-full">
-          {initialData ? null : <Plus className="mr-2 h-4 w-4" />}
-          {initialData ? "Save Changes" : "Save Menu Item"}
-        </Button>
+        <div className="sticky bottom-0 -mx-6 -mb-6 p-6 bg-white border-t border-slate-100 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)] z-10 mt-auto">
+          <Button type="submit" className="w-full">
+            {initialData ? null : <Plus className="mr-2 h-4 w-4" />}
+            {initialData ? "Save Changes" : "Save Menu Item"}
+          </Button>
+        </div>
       </form>
     </div>
   );

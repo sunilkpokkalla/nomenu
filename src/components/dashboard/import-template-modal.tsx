@@ -93,10 +93,10 @@ export function ImportTemplateModal({
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[850px] p-0 overflow-hidden bg-white gap-0">
-        <div className="flex h-[600px] flex-col sm:flex-row">
+        <div className="flex h-[85vh] sm:h-[600px] flex-col sm:flex-row">
           
           {/* Left Sidebar: List of templates */}
-          <div className="w-full sm:w-[300px] border-r border-slate-100 flex flex-col bg-slate-50/30">
+          <div className="w-full sm:w-[300px] h-[35vh] sm:h-auto border-b sm:border-b-0 sm:border-r border-slate-100 flex flex-col bg-slate-50/30 shrink-0">
             <div className="p-4 border-b border-slate-100">
               <DialogTitle className="text-lg font-bold tracking-tight text-slate-900 mb-3">Templates</DialogTitle>
               <div className="relative">

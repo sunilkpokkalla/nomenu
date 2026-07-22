@@ -359,7 +359,7 @@ export function EditMenuModal({ menu, cuisineType, editAction, plan }: EditMenuP
             )}
           </div>
 
-          <div className="pt-2">
+          <div className="sticky bottom-0 -mx-6 -mb-6 p-6 bg-white border-t border-slate-100 shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)] z-10 mt-6">
             <SubmitButton />
           </div>
         </form>
