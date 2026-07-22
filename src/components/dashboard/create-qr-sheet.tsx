@@ -57,7 +57,7 @@ export function CreateQrSheet({ createAction, bulkCreateAction, syncAction, loca
           Generate QR Code
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+      <SheetContent className="w-full sm:max-w-md overflow-y-auto overscroll-contain touch-pan-y">
         <SheetHeader className="mb-6">
           <div className="flex items-start justify-between">
             <div>

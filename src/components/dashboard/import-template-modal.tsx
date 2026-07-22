@@ -96,7 +96,7 @@ export function ImportTemplateModal({
         <div className="flex h-[85vh] sm:h-[600px] flex-col sm:flex-row">
           
           {/* Left Sidebar: List of templates */}
-          <div className="w-full sm:w-[300px] h-[35vh] sm:h-auto border-b sm:border-b-0 sm:border-r border-slate-100 flex flex-col bg-slate-50/30 shrink-0">
+          <div className="w-full sm:w-[300px] h-[35vh] sm:h-auto border-b sm:border-b-0 sm:border-r border-slate-100 flex flex-col bg-slate-50/30 shrink-0 min-h-0">
             <div className="p-4 border-b border-slate-100">
               <DialogTitle className="text-lg font-bold tracking-tight text-slate-900 mb-3">Templates</DialogTitle>
               <div className="relative">
@@ -111,7 +111,7 @@ export function ImportTemplateModal({
               </div>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-2 space-y-1">
+            <div className="flex-1 overflow-y-auto overscroll-contain touch-pan-y p-2 space-y-1">
               {filteredTemplates.length === 0 ? (
                 <div className="text-center py-8 text-slate-500 text-sm">
                   No templates found.
@@ -150,7 +150,7 @@ export function ImportTemplateModal({
           </div>
 
           {/* Right Side: Preview */}
-          <div className="flex-1 flex flex-col bg-white min-w-0">
+          <div className="flex-1 flex flex-col bg-white min-w-0 min-h-0">
             {selectedTemplate ? (
               <>
                 {/* Premium Gradient Header */}
@@ -173,7 +173,7 @@ export function ImportTemplateModal({
                   </div>
                 </div>
                 
-                <div className="flex-1 overflow-y-auto p-8 bg-slate-50/30">
+                <div className="flex-1 overflow-y-auto overscroll-contain touch-pan-y p-8 bg-slate-50/30">
                   <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Menu Structure Preview</h4>
                   <div className="space-y-8">
                     {selectedTemplate.categories.map((cat, i) => (

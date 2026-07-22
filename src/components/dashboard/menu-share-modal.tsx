@@ -38,7 +38,7 @@ export function MenuShareModal({ baseMenuUrl, menuName, plan }: { baseMenuUrl: s
           <Share2 className="h-4 w-4 text-slate-500" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl rounded-3xl p-8 bg-white/95 backdrop-blur-xl border-white/20 shadow-2xl max-h-[90vh] overflow-y-auto top-[5vh] translate-y-0 mb-[5vh]">
+      <DialogContent className="max-w-3xl rounded-3xl p-8 bg-white/95 backdrop-blur-xl border-white/20 shadow-2xl max-h-[90vh] overflow-y-auto overscroll-contain touch-pan-y top-[5vh] translate-y-0 mb-[5vh]">
         <DialogHeader className="mb-6 text-center">
           <DialogTitle className="text-3xl font-black tracking-tight text-slate-900">
             Share "{menuName}"

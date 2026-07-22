@@ -100,7 +100,7 @@ export function EditMenuModal({ menu, cuisineType, editAction, plan }: EditMenuP
           <Settings2 className="h-4 w-4 text-slate-500" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 shadow-2xl rounded-2xl top-[5vh] translate-y-0 mb-[5vh]">
+      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto overscroll-contain touch-pan-y p-0 gap-0 border-0 shadow-2xl rounded-2xl top-[5vh] translate-y-0 mb-[5vh]">
         <DialogHeader className="p-6 pb-4 border-b border-slate-100 bg-white sticky top-0 z-10">
           <DialogTitle className="text-xl font-bold flex items-center justify-between gap-2 w-full">
             <div className="flex items-center gap-2">
