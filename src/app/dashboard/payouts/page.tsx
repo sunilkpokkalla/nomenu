@@ -27,7 +27,7 @@ export default async function PayoutsPage(
   }
 
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
-  const isEnterprise = currentPlan === "enterprise";
+  const canUsePayouts = currentPlan === "enterprise" || currentPlan === "elite";
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 lg:px-8">
@@ -39,14 +39,14 @@ export default async function PayoutsPage(
         </p>
       </div>
 
-      {!isEnterprise ? (
+      {!canUsePayouts ? (
         <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm">
           <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
             <CreditCard className="w-8 h-8 text-slate-400" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Enterprise</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Elite</h2>
           <p className="text-slate-600 max-w-lg mx-auto mb-8">
-            Direct bank payouts, Apple Pay support, and 2.5% platform fees are exclusively available on the Enterprise plan. Upgrade to unlock the full commerce suite.
+            Direct bank payouts, Apple Pay support, and low platform fees (0% to 1%) are exclusively available on Elite and Enterprise plans. Upgrade to unlock the full commerce suite.
           </p>
           <Link
             href="/dashboard/billing"
@@ -103,7 +103,7 @@ export default async function PayoutsPage(
               <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
                 <h3 className="font-semibold text-slate-900 mb-2">Transaction Fees</h3>
                 <p className="text-sm text-slate-600">
-                  Nomenu charges a 2.5% platform fee per order (Waived to 0% for your first year on an Annual Enterprise plan). Standard Stripe processing fees (typically 2.9% + 30¢) also apply.
+                  Nomenu charges a platform fee of just 1.0% (Elite) or 0% (Enterprise). If you are on the Elite Monthly plan, you can waive your 1% fee to <strong>0% Lifetime</strong> simply by upgrading to an Annual Plan! Standard Stripe processing fees (typically 2.9% + 30¢) also apply.
                 </p>
               </div>
               <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">

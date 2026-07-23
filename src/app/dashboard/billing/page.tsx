@@ -41,6 +41,7 @@ const getPlans = (isAnnual: boolean) => [
       "50 Magic AI Credits / month",
       "All 8+ Premium Elite Themes",
       "White-labeled Branding",
+      isAnnual ? "0% Platform Fee (Lifetime)" : "1.0% Platform Transaction Fee",
     ],
   },
   {
@@ -58,7 +59,7 @@ const getPlans = (isAnnual: boolean) => [
       "Intelligent Order Capacity Pacing",
       "Order & Pay via Apple Pay / Card",
       "Direct Bank Payouts (Stripe Connect)",
-      isAnnual ? "0% Platform Fee (First Year)" : "2.5% Platform Transaction Fee",
+      "0% Platform Transaction Fee (Lifetime)",
       "Dedicated Account Manager",
     ],
   },
@@ -241,7 +242,7 @@ export default async function BillingPage(
                     </p>
                     {isElite && currentTier === 0 && isAnnual && (
                       <div className="mt-2.5 inline-flex items-center gap-1.5 w-fit rounded-md bg-indigo-50 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-indigo-600 border border-indigo-200">
-                        <Sparkles className="h-3 w-3" /> 14-Day Free Trial
+                        <Sparkles className="h-3 w-3" /> 30-Day Money-Back Guarantee
                       </div>
                     )}
                   </div>

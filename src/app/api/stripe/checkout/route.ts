@@ -7,7 +7,7 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   try {
-    const { restaurantId, items, returnUrl, orderId, tableNumber, customerName, customerPhone, reservationTime, partySize, tipAmount } = await req.json();
+    const { restaurantId, items, returnUrl, orderId, tableNumber, customerName, customerPhone, reservationTime, partySize, tipAmount, taxAmount, restaurantServiceFee } = await req.json();
 
     if (!restaurantId || !items || !items.length || !orderId) {
       return NextResponse.json({ error: "Invalid request payload" }, { status: 400 });
@@ -71,19 +71,76 @@ export async function POST(req: Request) {
         quantity: 1,
       });
     }
+    const safeTaxAmount = taxAmount ? Math.max(0, Number(taxAmount)) : 0;
+    if (safeTaxAmount > 0) {
+      const taxAmountCents = Math.round(safeTaxAmount * 100);
+      totalAmountCents += taxAmountCents;
+      lineItems.push({
+        price_data: {
+          currency: restaurantCurrency,
+          product_data: {
+            name: "Tax",
+          },
+          unit_amount: taxAmountCents,
+        },
+        quantity: 1,
+      });
+    }
 
-    // 2.5% Platform Fee - WAIVED for first-year Enterprise Annual plans
-    let applicationFeeAmountCents = Math.round(totalAmountCents * 0.025);
+    const safeServiceFeeAmount = restaurantServiceFee ? Math.max(0, Number(restaurantServiceFee)) : 0;
+    if (safeServiceFeeAmount > 0) {
+      const serviceFeeAmountCents = Math.round(safeServiceFeeAmount * 100);
+      totalAmountCents += serviceFeeAmountCents;
+      lineItems.push({
+        price_data: {
+          currency: restaurantCurrency,
+          product_data: {
+            name: "Service Charge",
+            description: "Restaurant service charge or auto-gratuity.",
+          },
+          unit_amount: serviceFeeAmountCents,
+        },
+        quantity: 1,
+      });
+    }
+
+    let applicationFeeAmountCents = 0;
+    const FLAT_FEE_CURRENCIES = ["usd", "cad", "gbp", "eur", "aud"];
     
-    if (restaurant.plan === "enterprise" && restaurant.is_annual_plan && restaurant.subscription_start_date) {
-      const startDate = new Date(restaurant.subscription_start_date);
-      const now = new Date();
-      const diffTime = Math.abs(now.getTime() - startDate.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // First, determine if we are charging a customer convenience fee
+    if (FLAT_FEE_CURRENCIES.includes(restaurantCurrency)) {
+      // $0.49 Flat Customer Convenience Fee for major Western currencies
+      const CONVENIENCE_FEE_CENTS = 49;
       
-      if (diffDays <= 365) {
-        applicationFeeAmountCents = 0;
-      }
+      lineItems.push({
+        price_data: {
+          currency: restaurantCurrency,
+          product_data: {
+            name: "Convenience Fee",
+            description: "Helps power your digital menu experience.",
+          },
+          unit_amount: CONVENIENCE_FEE_CENTS,
+        },
+        quantity: 1,
+      });
+      
+      totalAmountCents += CONVENIENCE_FEE_CENTS;
+      applicationFeeAmountCents += CONVENIENCE_FEE_CENTS; // NoMenu keeps the convenience fee
+    }
+    
+    // Second, calculate the restaurant's platform fee based on their subscription tier
+    if (restaurant.is_annual_plan) {
+      // 0% Platform Fee for Annual Plans (Lifetime waiver)
+      // We add nothing extra to the applicationFeeAmountCents
+    } else if (restaurant.plan === "enterprise") {
+      // 0% Platform Fee for Enterprise Monthly
+      // We add nothing extra
+    } else if (restaurant.plan === "elite") {
+      // 1.0% Platform Fee for Elite Monthly
+      applicationFeeAmountCents += Math.round(totalAmountCents * 0.01);
+    } else {
+      // Fallback 2.5% for free/pro if they somehow process orders
+      applicationFeeAmountCents += Math.round(totalAmountCents * 0.025);
     }
 
     // Pre-insert the order into the database securely via Service Role

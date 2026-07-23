@@ -224,6 +224,8 @@ export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableN
             reservationTime: pickupTime || null,
             partySize: partySize ? parseInt(partySize, 10) : null,
             tipAmount: tipAmount || 0,
+            taxAmount: taxAmount || 0,
+            restaurantServiceFee: serviceFeeAmount || 0,
           })
         });
 

@@ -1367,7 +1367,7 @@ export default function LandingPage() {
                   <h4 className="text-2xl lg:text-3xl font-black text-white">Elite Plan</h4>
                   <p className="text-xs text-slate-400 font-medium">Real-time ordering for premium venues and groups.</p>
                   <div className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-indigo-500/20 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-indigo-300 border border-indigo-500/30">
-                    <Sparkles className="h-3 w-3" /> 14-Day Free Trial (Annual)
+                    <Sparkles className="h-3 w-3" /> 30-Day Money-Back Guarantee (Annual)
                   </div>
                   <div className="pt-2 flex items-baseline">
                     <span className="text-4xl lg:text-5xl font-black text-white">$79</span>
@@ -1404,12 +1404,15 @@ export default function LandingPage() {
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> White-labeled Branding
                     </li>
+                    <li className="flex items-start gap-2.5 text-white">
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 1.0% Platform Fee (0% Lifetime on Annual)
+                    </li>
                   </ul>
                 </div>
 
                 <div className="mt-8 pt-4">
                   <Button asChild className="w-full bg-indigo-650 hover:bg-indigo-600 text-white rounded-full font-extrabold h-10 text-[10px] lg:text-xs uppercase tracking-wider shadow-lg shadow-indigo-650/15 active:scale-[0.98] transition-all">
-                    <Link href="/signup">Start 14-Day Trial</Link>
+                    <Link href="/signup">Get Started</Link>
                   </Button>
                 </div>
               </div>
@@ -1455,7 +1458,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Direct Bank Payouts (Stripe Connect)</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> 0% Platform Fee (First Year on Annual Plan)
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>0% Platform Fee (Lifetime)</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Dedicated Account Manager
