@@ -223,8 +223,8 @@ export function CreateMenuSheet({ createAction, chefRecommendations, plan }: Cre
             <Eye className="h-5 w-5 text-indigo-500" />
           </div>
 
-          {/* Enterprise Settings */}
-          {plan === 'enterprise' && (
+          {/* Enterprise & Elite Settings */}
+          {(plan === 'enterprise' || plan === 'elite') && (
             <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
               <div className="mt-0.5 flex items-center h-5">
                 <Switch 

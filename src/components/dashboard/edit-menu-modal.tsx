@@ -334,8 +334,8 @@ export function EditMenuModal({ menu, cuisineType, editAction, plan }: EditMenuP
               </div>
             </div>
 
-            {/* Enterprise Settings Section */}
-            {plan === 'enterprise' && (
+            {/* Enterprise & Elite Settings Section */}
+            {(plan === 'enterprise' || plan === 'elite') && (
               <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
                 <div className="mt-0.5">
                   <input 
