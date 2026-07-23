@@ -39,7 +39,7 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
   if (new Date() > new Date(token.expires_at)) return { error: "This QR code has expired." };
 
   let targetCardId = cardId;
-  let isNewCard = false;
+  const isNewCard = false;
 
   // 2. Resolve target card
   if (!targetCardId && phoneNumber) {
@@ -49,35 +49,10 @@ export async function claimLoyaltyStamp(tokenId: string, cardId?: string, phoneN
     if (consolidatedId) {
       targetCardId = consolidatedId;
     } else {
-      // Create new card with phone number
-      const { data: newCard, error: newCardError } = await supabase
-        .from("loyalty_cards")
-        .insert({
-          restaurant_id: token.restaurant_id,
-          phone_number: phoneNumber,
-          stamps: 0,
-        })
-        .select("id")
-        .single();
-      
-      if (newCardError || !newCard) return { error: `Failed to create loyalty card: ${newCardError?.message || "Unknown error"}` };
-      targetCardId = newCard.id;
-      isNewCard = true;
+      return { error: "This phone number is not part of the VIP membership. Please check your number and try again." };
     }
   } else if (!targetCardId) {
-    // Create new anonymous card
-    const { data: newCard, error: newCardError } = await supabase
-      .from("loyalty_cards")
-      .insert({
-        restaurant_id: token.restaurant_id,
-        stamps: 0,
-      })
-      .select("id")
-      .single();
-      
-    if (newCardError || !newCard) return { error: `Failed to create loyalty card: ${newCardError?.message || "Unknown error"}` };
-    targetCardId = newCard.id;
-    isNewCard = true;
+    return { error: "No VIP card or phone number provided." };
   }
 
   // 3. Verify card and check cooldown

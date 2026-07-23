@@ -69,6 +69,17 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
       return;
     }
 
+    if (customerEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    const phoneDigits = customerPhone.replace(/\D/g, '');
+    if (customerPhone && phoneDigits.length < 10) {
+      setError("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
     setIsSubmitting(true);
     setError("");
 
@@ -281,7 +292,8 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                           <button 
                             type="button"
                             onClick={async () => {
-                              if (!customerName || !customerEmail || !customerPhone) {
+                              const phoneDigits = customerPhone.replace(/\D/g, '');
+                              if (!customerName || !customerEmail || !customerPhone || phoneDigits.length < 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail)) {
                                 alert("Please fill out all fields to claim your card.");
                                 return;
                               }
@@ -490,7 +502,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
 
                               <button
                                 type="button"
-                                disabled={!loyaltyCardId && (!customerName || !customerEmail || !customerPhone || customerPhone.length < 5)}
+                                disabled={!loyaltyCardId && (!customerName || !customerEmail || !customerPhone || customerPhone.replace(/\D/g, '').length < 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail))}
                                 onClick={async () => {
                                   if (!feedbackId) return;
                                   

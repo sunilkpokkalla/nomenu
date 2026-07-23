@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import { User, Mail, Phone, Star, Award, AlertCircle, MessageSquare, Search, Gift } from "lucide-react";
+import React, { useMemo, useState, useEffect } from "react";
+import { User, Mail, Phone, Star, Award, AlertCircle, MessageSquare, Search, Gift, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { FeedbackData } from "./feedback-analytics";
 
@@ -10,6 +10,17 @@ interface CustomerDirectoryProps {
   timezone: string;
   onRedeemClaim?: (feedbackId: string) => Promise<void>;
 }
+
+const formatPhone = (phoneStr?: string | null) => {
+  if (!phoneStr) return '';
+  const cleaned = phoneStr.replace(/\D/g, '');
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0,3)}) ${cleaned.slice(3,6)}-${cleaned.slice(6,10)}`;
+  } else if (cleaned.length > 10) {
+    return `+${cleaned.slice(0, cleaned.length - 10)} (${cleaned.slice(cleaned.length - 10, cleaned.length - 7)}) ${cleaned.slice(cleaned.length - 7, cleaned.length - 4)}-${cleaned.slice(cleaned.length - 4)}`;
+  }
+  return phoneStr; // Return raw string if it's strangely short (legacy data)
+};
 
 interface CustomerProfile {
   id: string; // The primary identifier (email, phone, name, or card id)
@@ -31,6 +42,12 @@ interface CustomerProfile {
 export function CustomerDirectory({ feedbacks, timezone, onRedeemClaim }: CustomerDirectoryProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState<'all' | 'top-regulars' | 'reward-ready'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 15;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, activeFilter]);
 
   const { customers, topRegulars, rewardReady, totalIdentified } = useMemo(() => {
     const profileMap = new Map<string, CustomerProfile>();
@@ -143,56 +160,11 @@ export function CustomerDirectory({ feedbacks, timezone, onRedeemClaim }: Custom
   }
 
   return (
-    <div className="space-y-6">
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <button 
-          onClick={() => setActiveFilter('all')}
-          className={`text-left bg-white rounded-2xl p-6 border shadow-sm transition-all hover:shadow-md hover:border-blue-300 active:scale-[0.98] focus:outline-none ${activeFilter === 'all' ? 'ring-2 ring-blue-500 border-blue-200' : 'border-slate-200'}`}
-        >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-              <User className="w-5 h-5" />
-            </div>
-            <h3 className="font-semibold text-slate-700">Total Members</h3>
-          </div>
-          <p className="text-3xl font-bold text-slate-900">{totalIdentified}</p>
-          <p className="text-sm text-slate-500 mt-1">Active loyalty members</p>
-        </button>
-        
-        <button 
-          onClick={() => setActiveFilter('top-regulars')}
-          className={`text-left bg-white rounded-2xl p-6 border shadow-sm transition-all hover:shadow-md hover:border-amber-300 active:scale-[0.98] focus:outline-none ${activeFilter === 'top-regulars' ? 'ring-2 ring-amber-500 border-amber-200' : 'border-slate-200'}`}
-        >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
-              <Award className="w-5 h-5" />
-            </div>
-            <h3 className="font-semibold text-slate-700">Top Regulars</h3>
-          </div>
-          <p className="text-3xl font-bold text-slate-900">{topRegulars.length > 0 ? topRegulars[0].totalFeedbacks : 0}</p>
-          <p className="text-sm text-slate-500 mt-1">Most visits by a member</p>
-        </button>
-
-        <button 
-          onClick={() => setActiveFilter('reward-ready')}
-          className={`text-left bg-emerald-50/30 rounded-2xl p-6 border shadow-sm transition-all hover:shadow-md hover:border-emerald-400 active:scale-[0.98] focus:outline-none ${activeFilter === 'reward-ready' ? 'ring-2 ring-emerald-500 border-emerald-300 bg-emerald-50/80' : 'border-emerald-200'}`}
-        >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-emerald-100 text-emerald-700 rounded-lg">
-              <Star className="w-5 h-5" />
-            </div>
-            <h3 className="font-semibold text-emerald-800">Rewards Ready</h3>
-          </div>
-          <p className="text-3xl font-bold text-emerald-900">{rewardReady.length}</p>
-          <p className="text-sm text-emerald-600 mt-1">Members with 10 stamps</p>
-        </button>
-      </div>
-
-      {/* Tables Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="space-y-6 flex flex-col">
+      {/* Table Section */}
+      <div className="w-full order-2 flex flex-col gap-6">
         {/* Main Directory Table */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
           <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <h3 className="font-bold text-slate-900">
               {activeFilter === 'top-regulars' ? 'Top Regulars' : activeFilter === 'reward-ready' ? 'Rewards Ready' : 'Loyalty Members'}
@@ -220,26 +192,34 @@ export function CustomerDirectory({ feedbacks, timezone, onRedeemClaim }: Custom
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {customers.filter(c => {
-                  if (activeFilter === 'top-regulars') {
-                    if (!topRegulars.find(r => r.id === c.id)) return false;
-                  } else if (activeFilter === 'reward-ready') {
-                    if (c.loyaltyStamps < 10) return false;
-                  }
+                {(() => {
+                  const filteredCustomers = customers.filter(c => {
+                    if (activeFilter === 'top-regulars') {
+                      if (!topRegulars.find(r => r.id === c.id)) return false;
+                    } else if (activeFilter === 'reward-ready') {
+                      if (c.loyaltyStamps < 10) return false;
+                    }
+                    
+                    if (!searchTerm) return true;
+                    const q = searchTerm.toLowerCase();
+                    return (c.name.toLowerCase().includes(q) || 
+                            (c.email && c.email.toLowerCase().includes(q)) || 
+                            (c.phone && c.phone.toLowerCase().includes(q)));
+                  });
                   
-                  if (!searchTerm) return true;
-                  const q = searchTerm.toLowerCase();
-                  return (c.name.toLowerCase().includes(q) || 
-                          (c.email && c.email.toLowerCase().includes(q)) || 
-                          (c.phone && c.phone.toLowerCase().includes(q)));
-                }).map((customer) => (
+                  const totalPages = Math.max(1, Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE));
+                  const paginatedCustomers = filteredCustomers.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+                  return (
+                    <>
+                      {paginatedCustomers.map((customer) => (
                   <tr key={customer.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-medium text-slate-900">{customer.name}</div>
                       {(customer.email || customer.phone || customer.contactInfo) && (
                         <div className="text-xs text-slate-500 mt-0.5 space-y-0.5">
                           {customer.email && <div className="flex items-center gap-1"><Mail className="w-3 h-3" />{customer.email}</div>}
-                          {customer.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" />{customer.phone}</div>}
+                          {customer.phone && <div className="flex items-center gap-1"><Phone className="w-3 h-3" />{formatPhone(customer.phone)}</div>}
                           {!customer.email && !customer.phone && customer.contactInfo && <div>{customer.contactInfo}</div>}
                         </div>
                       )}
@@ -307,79 +287,167 @@ export function CustomerDirectory({ feedbacks, timezone, onRedeemClaim }: Custom
                     </td>
                   </tr>
                 ))}
+                    </>
+                  );
+                })()}
               </tbody>
             </table>
           </div>
+          
+          {/* Pagination Controls */}
+          <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <span className="text-sm text-slate-500">
+              {(() => {
+                const filteredCount = customers.filter(c => {
+                  if (activeFilter === 'top-regulars') return topRegulars.find(r => r.id === c.id);
+                  if (activeFilter === 'reward-ready') return c.loyaltyStamps >= 10;
+                  if (!searchTerm) return true;
+                  const q = searchTerm.toLowerCase();
+                  return (c.name.toLowerCase().includes(q) || (c.email && c.email.toLowerCase().includes(q)) || (c.phone && c.phone.toLowerCase().includes(q)));
+                }).length;
+                if (filteredCount === 0) return "No results found";
+                return `Showing ${((currentPage - 1) * ITEMS_PER_PAGE) + 1} to ${Math.min(currentPage * ITEMS_PER_PAGE, filteredCount)} of ${filteredCount} members`;
+              })()}
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-slate-600 transition-colors bg-white shadow-sm"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setCurrentPage(p => {
+                  const filteredCount = customers.filter(c => {
+                    if (activeFilter === 'top-regulars') return topRegulars.find(r => r.id === c.id);
+                    if (activeFilter === 'reward-ready') return c.loyaltyStamps >= 10;
+                    if (!searchTerm) return true;
+                    const q = searchTerm.toLowerCase();
+                    return (c.name.toLowerCase().includes(q) || (c.email && c.email.toLowerCase().includes(q)) || (c.phone && c.phone.toLowerCase().includes(q)));
+                  }).length;
+                  const totalPages = Math.max(1, Math.ceil(filteredCount / ITEMS_PER_PAGE));
+                  return Math.min(totalPages, p + 1);
+                })}
+                disabled={(() => {
+                  const filteredCount = customers.filter(c => {
+                    if (activeFilter === 'top-regulars') return topRegulars.find(r => r.id === c.id);
+                    if (activeFilter === 'reward-ready') return c.loyaltyStamps >= 10;
+                    if (!searchTerm) return true;
+                    const q = searchTerm.toLowerCase();
+                    return (c.name.toLowerCase().includes(q) || (c.email && c.email.toLowerCase().includes(q)) || (c.phone && c.phone.toLowerCase().includes(q)));
+                  }).length;
+                  const totalPages = Math.max(1, Math.ceil(filteredCount / ITEMS_PER_PAGE));
+                  return currentPage >= totalPages;
+                })()}
+                className="p-2 border border-slate-200 rounded-lg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-slate-600 transition-colors bg-white shadow-sm"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 5 Bottom Analytics Blocks */}
+      <div className="w-full order-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {/* Block 1: Total Members */}
+        <button 
+          onClick={() => setActiveFilter('all')}
+          className={`text-left bg-white rounded-2xl p-5 border shadow-sm transition-all hover:shadow-md hover:border-blue-300 active:scale-[0.98] focus:outline-none flex flex-col justify-between ${activeFilter === 'all' ? 'ring-2 ring-blue-500 border-blue-200' : 'border-slate-200'}`}
+        >
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                <User className="w-5 h-5" />
+              </div>
+              <h3 className="font-semibold text-slate-700 text-sm">Total Members</h3>
+            </div>
+            <p className="text-3xl font-bold text-slate-900 mt-2">{totalIdentified}</p>
+          </div>
+          <p className="text-xs text-slate-500 mt-2">Active loyalty members</p>
+        </button>
+        
+        {/* Block 2: Top Regulars Metric */}
+        <button 
+          onClick={() => setActiveFilter('top-regulars')}
+          className={`text-left bg-white rounded-2xl p-5 border shadow-sm transition-all hover:shadow-md hover:border-amber-300 active:scale-[0.98] focus:outline-none flex flex-col justify-between ${activeFilter === 'top-regulars' ? 'ring-2 ring-amber-500 border-amber-200' : 'border-slate-200'}`}
+        >
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
+                <Award className="w-5 h-5" />
+              </div>
+              <h3 className="font-semibold text-slate-700 text-sm">Top Regulars</h3>
+            </div>
+            <p className="text-3xl font-bold text-slate-900 mt-2">{topRegulars.length > 0 ? topRegulars[0].totalFeedbacks : 0}</p>
+          </div>
+          <p className="text-xs text-slate-500 mt-2">Most visits by a member</p>
+        </button>
+
+        {/* Block 3: Rewards Ready Metric */}
+        <button 
+          onClick={() => setActiveFilter('reward-ready')}
+          className={`text-left bg-emerald-50/30 rounded-2xl p-5 border shadow-sm transition-all hover:shadow-md hover:border-emerald-400 active:scale-[0.98] focus:outline-none flex flex-col justify-between ${activeFilter === 'reward-ready' ? 'ring-2 ring-emerald-500 border-emerald-300 bg-emerald-50/80' : 'border-emerald-200'}`}
+        >
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-emerald-100 text-emerald-700 rounded-lg">
+                <Star className="w-5 h-5" />
+              </div>
+              <h3 className="font-semibold text-emerald-800 text-sm">Rewards Ready</h3>
+            </div>
+            <p className="text-3xl font-bold text-emerald-900 mt-2">{rewardReady.length}</p>
+          </div>
+          <p className="text-xs text-emerald-600 mt-2">Members with 10 stamps</p>
+        </button>
+
+        {/* Block 4: Top Regulars List */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div className="p-3 border-b border-slate-100 bg-amber-50/50 flex items-center justify-between">
+            <h3 className="font-bold text-amber-900 text-xs flex items-center gap-1.5 uppercase tracking-wider">
+              <Award className="w-3.5 h-3.5" />
+              Top Visitors
+            </h3>
+          </div>
+          <div className="divide-y divide-slate-100 overflow-y-auto flex-1 p-2">
+            {topRegulars.length > 0 ? topRegulars.map(customer => (
+              <div key={customer.id} className="py-2 px-1 flex justify-between items-center">
+                <div className="flex flex-col truncate pr-2">
+                  <span className="font-semibold text-slate-900 text-xs truncate">{customer.name}</span>
+                </div>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 shrink-0">
+                  {customer.totalFeedbacks} visits
+                </span>
+              </div>
+            )) : (
+              <div className="p-4 text-center text-xs text-slate-400">No regulars yet</div>
+            )}
+          </div>
         </div>
 
-        {/* Side Panel */}
-        <div className="space-y-6">
-          {/* Reward Ready Panel */}
-          {rewardReady.length > 0 && (
-            <div className="bg-emerald-50/50 rounded-2xl border border-emerald-200 shadow-sm overflow-hidden">
-              <div className="p-4 border-b border-emerald-100 bg-emerald-100 flex items-center justify-between">
-                <h3 className="font-bold text-emerald-900 flex items-center gap-2">
-                  <Star className="w-4 h-4 fill-emerald-600" />
-                  Rewards Ready
-                </h3>
-                <span className="text-xs font-bold bg-white text-emerald-800 px-2 py-0.5 rounded-full">{rewardReady.length}</span>
+        {/* Block 5: Rewards Ready List */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div className="p-3 border-b border-slate-100 bg-emerald-50/50 flex items-center justify-between">
+            <h3 className="font-bold text-emerald-900 text-xs flex items-center gap-1.5 uppercase tracking-wider">
+              <Star className="w-3.5 h-3.5 fill-emerald-600" />
+              Claim Ready
+            </h3>
+          </div>
+          <div className="divide-y divide-slate-100 overflow-y-auto flex-1 p-2">
+            {rewardReady.length > 0 ? rewardReady.slice(0, 3).map(customer => (
+              <div key={customer.id} className="py-2 px-1 flex justify-between items-center">
+                <div className="flex flex-col truncate pr-2">
+                  <span className="font-semibold text-slate-900 text-xs truncate">{customer.name}</span>
+                </div>
+                <span className="inline-flex items-center text-[9px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded shadow-sm shrink-0">
+                  Verify ID
+                </span>
               </div>
-              <div className="divide-y divide-emerald-100">
-                {rewardReady.map(customer => (
-                  <div key={customer.id} className="p-4">
-                    <div className="flex justify-between items-start mb-1">
-                      <span className="font-semibold text-slate-900">{customer.name}</span>
-                      <span className="flex items-center text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-200 px-2 py-0.5 rounded shadow-sm">
-                        Verify ID
-                      </span>
-                    </div>
-                    {(customer.email || customer.phone || customer.contactInfo) && (
-                      <div className="text-xs text-slate-600 mb-2 font-mono bg-white px-2 py-1 rounded inline-block border border-emerald-100">
-                        {customer.email && <div>{customer.email}</div>}
-                        {customer.phone && <div>{customer.phone}</div>}
-                        {!customer.email && !customer.phone && customer.contactInfo && <div>{customer.contactInfo}</div>}
-                      </div>
-                    )}
-                    <div className="text-xs text-slate-500 mt-1">
-                      Ready to claim 10-stamp reward.
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Top Regulars */}
-          {topRegulars.length > 0 && (
-            <div className="bg-amber-50/50 rounded-2xl border border-amber-100 shadow-sm overflow-hidden">
-              <div className="p-4 border-b border-amber-100 bg-amber-50 flex items-center justify-between">
-                <h3 className="font-bold text-amber-900 flex items-center gap-2">
-                  <Award className="w-4 h-4" />
-                  Top Regulars
-                </h3>
-              </div>
-              <div className="divide-y divide-amber-100">
-                {topRegulars.map(customer => (
-                  <div key={customer.id} className="p-4 flex justify-between items-center">
-                    <div>
-                      <span className="font-semibold text-slate-900 block">{customer.name}</span>
-                      <span className="text-xs text-slate-500">{formatTimeAgoWithExact(customer.latestFeedbackDate, timezone)}</span>
-                    </div>
-                    <div className="text-right flex flex-col items-end gap-1">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">
-                        {customer.totalFeedbacks} Visits
-                      </span>
-                      {customer.loyaltyStamps > 0 && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">
-                          {customer.loyaltyStamps}/10 Stamps
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+            )) : (
+              <div className="p-4 text-center text-xs text-slate-400">None ready</div>
+            )}
+          </div>
         </div>
       </div>
     </div>

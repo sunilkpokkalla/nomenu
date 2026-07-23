@@ -412,6 +412,15 @@ export function LoyaltyCardUI({
         </div>
       )}
 
+      {/* Expiration Notice */}
+      {!isPreviewMode && (
+        <div className="text-center mt-8 opacity-60">
+          <p className="text-[10px] uppercase tracking-wider font-semibold text-slate-400">
+            * Stamps automatically expire after 6 months of inactivity
+          </p>
+        </div>
+      )}
+
 
     </div>
   );

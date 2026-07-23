@@ -46,7 +46,7 @@ export default function LoyaltyScanPage({
           await submitClaim(existingCardId, undefined);
         } else {
           setStatus("needs_phone");
-          setMessage("Enter your phone number to retrieve your existing VIP card or create a new one.");
+          setMessage("Enter your phone number to retrieve your VIP card.");
         }
       } catch (err) {
         setStatus("error");
@@ -86,7 +86,16 @@ export default function LoyaltyScanPage({
   const handlePhoneSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (status === "loading") return;
-    if (!phoneNumber.trim()) return;
+    const digits = phoneNumber.replace(/\D/g, '');
+    if (digits.length < 10) {
+      setStatus("error");
+      setMessage("Please enter a valid 10-digit phone number.");
+      setTimeout(() => {
+        setStatus("needs_phone");
+        setMessage("Enter your phone number to retrieve your VIP card.");
+      }, 3000);
+      return;
+    }
     submitClaim(undefined, phoneNumber.trim());
   };
 
