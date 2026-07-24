@@ -2,17 +2,17 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
-import { TakeawayBoard } from "./takeaway-board";
+import { ReservationsBoard } from "./reservations-board";
 import { ClipboardList } from "lucide-react";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 
 export const metadata = {
-  title: "Takeaway | NoMenu Dashboard",
-  description: "Manage incoming pickup orders in real-time.",
+  title: "Priority Reservations | NoMenu Dashboard",
+  description: "Manage incoming priority reservations in real-time.",
 };
 
-export default async function TakeawayPage() {
+export default async function ReservationsPage() {
   const supabase = await createClient();
 
   // Get user session
@@ -57,8 +57,7 @@ export default async function TakeawayPage() {
       )
     `)
     .eq("restaurant_id", restaurant.id)
-    .not("customer_phone", "is", null) // Exclusively Takeaway/Priority
-    .is("reservation_time", null) // Exclusively Takeaway (no reservation)
+    .not("reservation_time", "is", null) // Exclusively Priority Reservations
     .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
     .order("created_at", { ascending: false });
 
@@ -79,8 +78,8 @@ export default async function TakeawayPage() {
     return (
       <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Takeaway Orders</h1>
-          <p className="text-slate-500 mt-2">Manage incoming pickup orders in real-time.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Priority Reservations</h1>
+          <p className="text-slate-500 mt-2">Manage incoming priority reservations in real-time.</p>
         </div>
         
         <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12 w-full">
@@ -89,7 +88,7 @@ export default async function TakeawayPage() {
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Enterprise</h2>
           <p className="text-slate-600 mb-8 leading-relaxed">
-            The Takeaway system is exclusively available on the Enterprise plan. Upgrade to start accepting remote takeaway orders.
+            The Priority Reservations system is exclusively available on the Enterprise plan. Upgrade to start accepting priority orders.
           </p>
           <Link
             href="/dashboard/billing"
@@ -105,7 +104,7 @@ export default async function TakeawayPage() {
   return (
     <div className="h-screen flex flex-col bg-slate-50 relative overflow-hidden">
       <div className="flex-1 overflow-hidden p-6 relative z-10">
-        <TakeawayBoard 
+        <ReservationsBoard 
           initialOrders={initialOrders || []} 
           restaurantId={restaurant.id}
           restaurantCreatedAt={restaurant.created_at}

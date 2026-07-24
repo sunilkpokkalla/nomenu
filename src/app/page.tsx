@@ -204,14 +204,29 @@ function FloorTable({ table }: { table: TableData }) {
   );
 }
 
+const HERO_HEADINGS = [
+  "Replace your clunky POS.",
+  "Ditch the legacy hardware.",
+  "Speed up your kitchen ops.",
+  "Turn tables faster today."
+];
+
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTheme, setActiveTheme] = useState("portrait");
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroIndex((current) => (current + 1) % HERO_HEADINGS.length);
+    }, 4000); // 4 seconds is usually the sweet spot for readability!
+    return () => clearInterval(interval);
+  }, []);
 
   const activeThemeData = THEME_PREVIEWS.find(t => t.id === activeTheme) || THEME_PREVIEWS[0];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 selection:bg-indigo-600 selection:text-white relative overflow-x-hidden font-sans-vibrant">
+    <main className="min-h-screen bg-slate-50 text-slate-800 selection:bg-indigo-600 selection:text-white relative overflow-x-hidden font-sans-vibrant">
       {/* Decorative ambient background glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.08),transparent_50%)] pointer-events-none -z-10" />
       <div className="absolute top-[20%] -left-48 w-96 h-96 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
@@ -236,7 +251,7 @@ export default function LandingPage() {
               <a href="#how-it-works" className="hover:text-slate-900 transition-colors duration-200">How it Works</a>
               <a href="#compare" className="hover:text-slate-900 transition-colors duration-200">Compare</a>
               <a href="#pricing" className="hover:text-slate-900 transition-colors duration-200">Pricing</a>
-              <Link href="/partners" className="hover:text-indigo-600 transition-colors duration-200 text-indigo-500">Partners</Link>
+              <Link href="/blog" className="hover:text-indigo-600 text-indigo-500 transition-colors duration-200">Blog</Link>
             </nav>
           </div>
 
@@ -269,7 +284,7 @@ export default function LandingPage() {
               <a href="#themes" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">QR Templates</a>
               <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">Pricing</a>
               <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-55 transition-colors">How it Works</a>
-              <Link href="/partners" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors">Partners</Link>
+              <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors">Blog</Link>
             </nav>
             <hr className="border-slate-100" />
             <div className="flex flex-col gap-2.5">
@@ -296,25 +311,44 @@ export default function LandingPage() {
           </div>
 
           {/* Main Headings */}
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-950 sm:text-6xl md:text-7xl leading-[1.05] max-w-5xl mx-auto">
-            Run your entire restaurant. <br className="hidden sm:inline" />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-violet-600 to-amber-500 font-serif-luxury italic font-medium capitalize">
-              from one single scan.
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-950 sm:text-6xl md:text-7xl leading-[1.05] max-w-5xl mx-auto flex flex-col items-center">
+            <span key={heroIndex} className="relative inline-flex items-center gap-3 animate-in fade-in slide-in-from-left-4 duration-1000 ease-out">
+              {HERO_HEADINGS[heroIndex]}
+              <Sparkles className="h-8 w-8 text-amber-500 animate-pulse absolute -right-12 top-1/2 -translate-y-1/2" strokeWidth={1.5} />
+            </span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-violet-600 to-amber-500 font-serif-luxury italic font-medium capitalize mt-1">
+              Run your entire restaurant.
             </span>
           </h1>
 
-          <p className="mx-auto mt-8 max-w-2xl text-base sm:text-lg text-slate-500 leading-relaxed font-medium">
-            The powerful, all-in-one ordering system built for independent cafes, food trucks, and pop-ups. <strong className="text-slate-800">Zero proprietary hardware. No multi-year contracts.</strong> Bring your own iPad, print a QR code, and start taking orders in 10 minutes.
+          <p className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-slate-500 leading-relaxed font-medium text-center">
+            The powerful, all-in-one ordering system built for restaurants, cafes, food trucks, hotel rooms, and poolside cabanas. <br className="hidden sm:block" />
+            Guests scan a QR code to order instantly—<strong className="text-slate-800">growing your profits by up to 280%.</strong>
           </p>
+
+          <div className="mx-auto mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-indigo-50 text-indigo-700 text-sm font-black border border-indigo-200/60 shadow-sm">
+              ✨ 0% Commission Forever
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-slate-700 text-sm font-bold border border-slate-200 shadow-sm">
+              📱 Zero Hardware
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-slate-700 text-sm font-bold border border-slate-200 shadow-sm">
+              🔓 No Locked-in Contracts
+            </span>
+          </div>
 
           {/* CTAs */}
           <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row max-w-md mx-auto sm:max-w-none px-4">
-            <Button asChild size="lg" className="rounded-full bg-slate-950 hover:bg-slate-900 text-white font-bold text-sm px-6 py-6 shadow-lg shadow-slate-950/10 active:scale-[0.98] transition-all duration-300 group">
-              <Link href="/signup" className="flex items-center gap-3">
-                Create Free Menu
-                <span className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center group-hover:translate-x-1 group-hover:-translate-y-[1px] transition-transform duration-300">
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </span>
+            <Button asChild size="lg" className="rounded-full bg-slate-950 hover:bg-slate-900 text-white font-bold text-sm px-8 py-6 shadow-xl shadow-slate-950/20 active:scale-[0.98] transition-all duration-300 group">
+              <Link href="/signup">
+                Start for Free
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="rounded-full bg-white/80 hover:bg-slate-50 text-slate-800 border-slate-200/60 font-bold text-sm px-8 py-6 shadow-sm active:scale-[0.98] transition-all duration-300 backdrop-blur-sm">
+              <Link href="/demo" className="flex items-center gap-2">
+                Watch Demo
               </Link>
             </Button>
           </div>
@@ -1507,6 +1541,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }

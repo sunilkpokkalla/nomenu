@@ -38,7 +38,8 @@ export const getNavItems = (role: UserRole) => {
     // Operations & Insights
     { href: "/dashboard/cashier", label: "Front of House", icon: Wallet, badge: "PRO", roles: ["owner", "manager", "waitstaff", "kitchen_waitstaff"] as UserRole[] },
     { href: "/dashboard/orders", label: "Priority Dine-In", icon: ShoppingBag, badge: "ELITE", roles: ["owner", "manager", "waitstaff", "kitchen", "kitchen_waitstaff"] as UserRole[] },
-    { href: "/dashboard/takeaway", label: "Takeaway", icon: Clock, badge: "ENT.", roles: ["owner", "manager", "waitstaff", "kitchen", "kitchen_waitstaff"] as UserRole[] },
+    { href: "/dashboard/takeaway", label: "Takeaway", icon: ShoppingBag, badge: "ENT.", roles: ["owner", "manager", "waitstaff", "kitchen", "kitchen_waitstaff"] as UserRole[] },
+    { href: "/dashboard/reservations", label: "Priority Reserves", icon: Clock, badge: "ENT.", roles: ["owner", "manager", "waitstaff", "kitchen", "kitchen_waitstaff"] as UserRole[] },
     { href: "/dashboard/payouts", label: "Payouts", icon: Banknote, badge: "ELITE", roles: ["owner"] as UserRole[] },
     { href: "/dashboard/feedback", label: "Feedback", icon: MessageSquare, badge: "PRO", openToAll: true, roles: ["owner", "manager"] as UserRole[] },
     { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3, badge: "PRO", roles: ["owner", "manager"] as UserRole[] },

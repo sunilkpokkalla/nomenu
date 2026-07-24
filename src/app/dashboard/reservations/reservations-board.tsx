@@ -37,11 +37,20 @@ type Order = {
   party_size?: number | null;
 };
 
-export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt, timezone, supabaseUrl, supabaseAnonKey, isStandalone = false, locationLabel = "TABLE" }: { initialOrders: Order[], restaurantId: string, restaurantCreatedAt?: string | null, timezone: string, supabaseUrl: string, supabaseAnonKey: string, isStandalone?: boolean, locationLabel?: string }) {
+type ReservationsBoardProps = {
+  initialOrders: Order[];
+  restaurantId: string;
+  restaurantCreatedAt?: string | null;
+  timezone: string;
+  supabaseUrl: string;
+  supabaseAnonKey: string;
+};
+
+export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreatedAt, timezone, supabaseUrl, supabaseAnonKey }: ReservationsBoardProps) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [isKdsMode, setIsKdsMode] = useState(isStandalone);
+  const [isKdsMode, setIsKdsMode] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string } | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
@@ -131,7 +140,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
       // Add to known IDs
       newOrders.forEach(o => knownOrderIds.current.add(o.id));
     }
-  }, [orders, selectedDateStr, locationLabel, playNotificationSound, restaurantCreatedAt]);
+  }, [orders, selectedDateStr, playNotificationSound, restaurantCreatedAt]);
 
   useEffect(() => {
     const pref = localStorage.getItem(`nomenu_kds_takeaway_sound_${restaurantId}`);
@@ -202,8 +211,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
       .from("orders")
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
-      .not("customer_phone", "is", null)
-      .is("reservation_time", null) // Exclusively Takeaway orders
+      .not("reservation_time", "is", null) // Exclusively Priority Reservations
       .order("created_at", { ascending: true });
       
     if (selectedDateStr) {
@@ -310,11 +318,11 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      if (!document.fullscreenElement && !isStandalone) setIsKdsMode(false);
+      if (!document.fullscreenElement) setIsKdsMode(false);
     };
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, [isStandalone]);
+  }, []);
 
   const toggleKdsMode = () => {
     if (!document.fullscreenElement) {
@@ -439,7 +447,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
             </div>
           )}
           
-          {!isKdsMode && !isStandalone && (
+          {!isKdsMode && (
             <button 
               onClick={() => window.open('/kds', 'KDS', 'width=1280,height=800,menubar=no,toolbar=no')}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300"
@@ -715,7 +723,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
                                         {formatTimeAgoWithExact(order.created_at, timezone)}
                                       </div>
                                       
-                                      {(order.customer_name || order.customer_phone) && (
+                                      {(order.customer_name || order.customer_phone || order.reservation_time) && (
                                         <div className="flex flex-col gap-1 mt-1">
                                           <div className="flex items-center gap-2">
                                             {order.customer_name && (
@@ -730,6 +738,23 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
                                               </span>
                                             )}
                                           </div>
+                                          {order.reservation_time && (
+                                            <div className="flex items-center gap-2">
+                                              <span className={`text-[11px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center ${
+                                                isKdsMode ? "bg-amber-500/20 text-amber-300" : "bg-amber-100 text-amber-700"
+                                              }`}>
+                                                <Clock className="w-3 h-3 mr-1" />
+                                                {new Date(order.reservation_time).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', month: 'short', day: 'numeric' })}
+                                              </span>
+                                              {order.party_size && (
+                                                <span className={`text-[11px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded flex items-center ${
+                                                  isKdsMode ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"
+                                                }`}>
+                                                  <User className="w-3 h-3 mr-1" /> Party of {order.party_size}
+                                                </span>
+                                              )}
+                                            </div>
+                                          )}
                                         </div>
                                       )}
                                     </div>

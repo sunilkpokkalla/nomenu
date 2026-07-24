@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     // Get the restaurant's stripe_account_id
     const { data: _restaurantData, error: fetchError } = await supabase
       .from("restaurants")
-      .select("stripe_account_id, plan, prep_time_minutes, currency, is_annual_plan, subscription_start_date")
+      .select("stripe_account_id, plan, prep_time_minutes, currency, is_annual_plan, subscription_start_date, takeaway_fee, priority_reserve_fee")
       .eq("id", restaurantId)
       .single();
 
@@ -126,6 +126,44 @@ export async function POST(req: Request) {
       
       totalAmountCents += CONVENIENCE_FEE_CENTS;
       applicationFeeAmountCents += CONVENIENCE_FEE_CENTS; // NoMenu keeps the convenience fee
+    }
+    
+    // Custom Enterprise Takeaway & Priority Reserve Fees
+    const isReserve = !!reservationTime && !!partySize;
+    const isTakeaway = !!customerPhone && !isReserve && !tableNumber;
+    
+    if (isTakeaway && restaurant.takeaway_fee && restaurant.takeaway_fee > 0) {
+      const takeawayFeeCents = Math.round(restaurant.takeaway_fee * 100);
+      lineItems.push({
+        price_data: {
+          currency: restaurantCurrency,
+          product_data: {
+            name: "Takeaway Convenience Fee",
+            description: "Covers packaging and preparation.",
+          },
+          unit_amount: takeawayFeeCents,
+        },
+        quantity: 1,
+      });
+      totalAmountCents += takeawayFeeCents;
+      applicationFeeAmountCents += Math.round(takeawayFeeCents * 0.10); // NoMenu 10% cut
+    }
+    
+    if (isReserve && restaurant.priority_reserve_fee && restaurant.priority_reserve_fee > 0) {
+      const reserveFeeCents = Math.round(restaurant.priority_reserve_fee * 100);
+      lineItems.push({
+        price_data: {
+          currency: restaurantCurrency,
+          product_data: {
+            name: "Priority Reserve Fee",
+            description: "Secures your VIP priority reservation.",
+          },
+          unit_amount: reserveFeeCents,
+        },
+        quantity: 1,
+      });
+      totalAmountCents += reserveFeeCents;
+      applicationFeeAmountCents += Math.round(reserveFeeCents * 0.10); // NoMenu 10% cut
     }
     
     // Second, calculate the restaurant's platform fee based on their subscription tier

@@ -273,7 +273,7 @@ export function GlobalOrderListener({
             }}
             className="mt-3 text-[10px] uppercase font-bold tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors"
           >
-            View Order →
+            {notification.link.includes('feedback') ? 'View Feedback →' : 'View Order →'}
           </button>
         </div>
         <button 

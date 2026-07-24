@@ -322,6 +322,7 @@ export default async function DashboardPage(
 
   const planName = restaurant.plan ?? "free";
   const isPremiumPlan = planName !== "free";
+  const isEliteOrEnterprise = planName.toLowerCase() === "elite" || planName.toLowerCase() === "enterprise";
 
   return (
     <OpsProvider>
@@ -363,29 +364,31 @@ export default async function DashboardPage(
         <div className="flex flex-wrap items-center gap-4 justify-end">
           <GlobalMuteButton />
           
+          {isEliteOrEnterprise && (
+            <KitchenOpsSlider
+              initialOrders={initialOrders || []}
+              restaurantId={restaurant.id}
+              restaurantPlan={restaurant.plan || ""}
+              timezone={restaurant.timezone || "UTC"}
+              supabaseUrl={getSupabaseEnv().url}
+              supabaseAnonKey={getSupabaseEnv().anonKey}
+            />
+          )}
+          
           {isPremiumPlan && (
-            <>
-              <KitchenOpsSlider
-                initialOrders={initialOrders || []}
-                restaurantId={restaurant.id}
-                timezone={restaurant.timezone || "UTC"}
-                supabaseUrl={getSupabaseEnv().url}
-                supabaseAnonKey={getSupabaseEnv().anonKey}
-              />
-              <CustomerOpsSlider
-                initialOrders={initialOrders || []}
-                floorPlans={floorPlansData}
-                feedbackData={feedbacks || []}
-                restaurantId={restaurant.id}
-                restaurantCreatedAt={restaurant.created_at || new Date().toISOString()}
-                timezone={restaurant.timezone || "UTC"}
-                supabaseUrl={getSupabaseEnv().url}
-                supabaseAnonKey={getSupabaseEnv().anonKey}
-                currencySymbol={getCurrencySymbol(restaurant.currency)}
-                userRole={role as "owner" | "waitstaff" | "kitchen" | "kitchen_waitstaff"}
-                recoveryOfferText={restaurant.recovery_offer_text || undefined}
-              />
-            </>
+            <CustomerOpsSlider
+              initialOrders={initialOrders || []}
+              floorPlans={floorPlansData}
+              feedbackData={feedbacks || []}
+              restaurantId={restaurant.id}
+              restaurantCreatedAt={restaurant.created_at || new Date().toISOString()}
+              timezone={restaurant.timezone || "UTC"}
+              supabaseUrl={getSupabaseEnv().url}
+              supabaseAnonKey={getSupabaseEnv().anonKey}
+              currencySymbol={getCurrencySymbol(restaurant.currency)}
+              userRole={role as "owner" | "waitstaff" | "kitchen" | "kitchen_waitstaff"}
+              recoveryOfferText={restaurant.recovery_offer_text || undefined}
+            />
           )}
 
           <WaitTimeToggle restaurantId={restaurant.id} initialStatus={restaurant.wait_time_status || "normal"} />

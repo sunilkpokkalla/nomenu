@@ -32,11 +32,11 @@ import NextTopLoader from "nextjs-toploader";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: "NoMenu | Digital QR Menus for Restaurants",
+    default: "NoMenu | The All-in-One Restaurant Platform",
     template: "%s | NoMenu"
   },
-  description: "Create and manage beautiful digital QR code menus for your restaurant in minutes. Fast, contactless, and easy to update.",
-  keywords: ["QR menu", "restaurant menu app", "digital menu", "contactless menu", "restaurant technology", "menu generator", "NoMenu"],
+  description: "Replace your clunky POS with NoMenu. Get unified QR code menus, Kitchen Display Systems (KDS), digital payments, and marketing automation in one seamless platform.",
+  keywords: ["restaurant pos", "kitchen display system", "kds", "digital menu", "qr code ordering", "restaurant platform", "restaurant marketing", "NoMenu"],
   authors: [{ name: "AmBrightTech LLC" }],
   creator: "AmBrightTech LLC",
   publisher: "AmBrightTech LLC",
@@ -45,21 +45,22 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: "NoMenu",
-    title: "NoMenu | Digital QR Menus for Restaurants",
-    description: "Create and manage beautiful digital QR code menus for your restaurant in minutes. Fast, contactless, and easy to update.",
+    title: "NoMenu | The All-in-One Restaurant Platform",
+    description: "Replace your clunky POS with NoMenu. Get unified QR code menus, Kitchen Display Systems (KDS), digital payments, and marketing automation in one seamless platform.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "NoMenu - Digital QR Menus for Restaurants",
+        alt: "NoMenu - The All-in-One Restaurant Platform",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NoMenu | Digital QR Menus for Restaurants",
-    description: "Create and manage beautiful digital QR code menus for your restaurant in minutes. Fast, contactless, and easy to update.",
+    title: "NoMenu | The All-in-One Restaurant Platform",
+    description: "Replace your clunky POS with NoMenu. Get unified QR code menus, Kitchen Display Systems (KDS), digital payments, and marketing automation in one seamless platform.",
+    creator: "@nomenu",
     images: ["/og-image.png"],
   },
 };
@@ -117,6 +118,29 @@ export default function RootLayout({
         <ClientErrorLogger />
         <CSPostHogProvider>
           {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "NoMenu",
+              "operatingSystem": "Web",
+              "applicationCategory": "BusinessApplication",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "description": "Replace your clunky POS with NoMenu. Get unified QR code menus, Kitchen Display Systems (KDS), digital payments, and marketing automation in one seamless platform.",
+              "url": "https://nomenu.us",
+              "publisher": {
+                "@type": "Organization",
+                "name": "AmBrightTech LLC"
+              }
+            })
+          }}
+        />
         </CSPostHogProvider>
       </body>
     </html>

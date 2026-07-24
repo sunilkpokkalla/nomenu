@@ -250,6 +250,8 @@ export interface Database {
           offer_manager_visit: boolean | null;
           offer_compensation: boolean | null;
           manager_visit_timer_minutes: number | null;
+          takeaway_fee: number | null;
+          priority_reserve_fee: number | null;
           loyalty_stamp_color: string | null;
           loyalty_stamp_icon: string | null;
           loyalty_card_layout: string | null;
@@ -304,6 +306,8 @@ export interface Database {
           offer_manager_visit?: boolean | null;
           offer_compensation?: boolean | null;
           manager_visit_timer_minutes?: number | null;
+          takeaway_fee?: number | null;
+          priority_reserve_fee?: number | null;
           loyalty_stamp_color?: string | null;
           loyalty_stamp_icon?: string | null;
           loyalty_card_layout?: string | null;

@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChefHat, ShoppingBag, UtensilsCrossed, ChevronLeft } from "lucide-react";
 import { OrdersBoard } from "@/app/dashboard/orders/orders-board";
 import { TakeawayBoard } from "@/app/dashboard/takeaway/takeaway-board";
+import { ReservationsBoard } from "@/app/dashboard/reservations/reservations-board";
 import { Database } from "@/types/database";
 
 type Order = Database["public"]["Tables"]["orders"]["Row"] & {
@@ -18,6 +19,7 @@ type Order = Database["public"]["Tables"]["orders"]["Row"] & {
 interface KitchenOpsSliderProps {
   initialOrders: Order[];
   restaurantId: string;
+  restaurantPlan: string;
   timezone: string;
   supabaseUrl: string;
   supabaseAnonKey: string;
@@ -26,15 +28,19 @@ interface KitchenOpsSliderProps {
 export function KitchenOpsSlider({
   initialOrders,
   restaurantId,
+  restaurantPlan,
   timezone,
   supabaseUrl,
   supabaseAnonKey,
 }: KitchenOpsSliderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const isEnterprise = restaurantPlan?.toLowerCase() === "enterprise";
+
   // Filter orders for each board
   const dineInOrders = initialOrders.filter((o) => !o.customer_phone);
-  const takeawayOrders = initialOrders.filter((o) => !!o.customer_phone);
+  const takeawayOrders = initialOrders.filter((o) => !!o.customer_phone && !o.reservation_time);
+  const reservationOrders = initialOrders.filter((o) => !!o.reservation_time);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -76,13 +82,25 @@ export function KitchenOpsSlider({
                   <UtensilsCrossed className="h-4 w-4" />
                   Priority Dine-In
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="takeaway"
-                  className="rounded-lg py-1.5 px-4 data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:shadow-sm text-slate-600 hover:text-slate-900 font-semibold flex items-center gap-2 flex-1 sm:flex-none justify-center text-sm transition-all"
-                >
-                  <ShoppingBag className="h-4 w-4" />
-                  Takeaway
-                </TabsTrigger>
+                
+                {isEnterprise && (
+                  <>
+                    <TabsTrigger 
+                      value="takeaway"
+                      className="rounded-lg py-1.5 px-4 data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:shadow-sm text-slate-600 hover:text-slate-900 font-semibold flex items-center gap-2 flex-1 sm:flex-none justify-center text-sm transition-all"
+                    >
+                      <ShoppingBag className="h-4 w-4" />
+                      Takeaway
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="reservations"
+                      className="rounded-lg py-1.5 px-4 data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:shadow-sm text-slate-600 hover:text-slate-900 font-semibold flex items-center gap-2 flex-1 sm:flex-none justify-center text-sm transition-all"
+                    >
+                      <ShoppingBag className="h-4 w-4" />
+                      Priority Reserves
+                    </TabsTrigger>
+                  </>
+                )}
               </TabsList>
             </div>
           </SheetHeader>
@@ -97,23 +115,37 @@ export function KitchenOpsSlider({
                   timezone={timezone}
                   supabaseUrl={supabaseUrl}
                   supabaseAnonKey={supabaseAnonKey}
-                  isStandalone={false}
                 />
               </div>
             </TabsContent>
             
-            <TabsContent value="takeaway" className="absolute inset-0 m-0 border-0 p-0 focus-visible:outline-none outline-none">
-              <div className="absolute inset-0 overflow-y-auto bg-slate-50">
-                <TakeawayBoard
-                  initialOrders={takeawayOrders}
-                  restaurantId={restaurantId}
-                  timezone={timezone}
-                  supabaseUrl={supabaseUrl}
-                  supabaseAnonKey={supabaseAnonKey}
-                  isStandalone={false}
-                />
-              </div>
-            </TabsContent>
+            {isEnterprise && (
+              <>
+                <TabsContent value="takeaway" className="absolute inset-0 m-0 border-0 p-0 focus-visible:outline-none outline-none">
+                  <div className="absolute inset-0 overflow-y-auto bg-slate-50">
+                    <TakeawayBoard
+                      initialOrders={takeawayOrders}
+                      restaurantId={restaurantId}
+                      timezone={timezone}
+                      supabaseUrl={supabaseUrl}
+                      supabaseAnonKey={supabaseAnonKey}
+                    />
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="reservations" className="absolute inset-0 m-0 border-0 p-0 focus-visible:outline-none outline-none">
+                  <div className="absolute inset-0 overflow-y-auto bg-slate-50">
+                    <ReservationsBoard
+                      initialOrders={reservationOrders}
+                      restaurantId={restaurantId}
+                      timezone={timezone}
+                      supabaseUrl={supabaseUrl}
+                      supabaseAnonKey={supabaseAnonKey}
+                    />
+                  </div>
+                </TabsContent>
+              </>
+            )}
           </div>
         </Tabs>
       </SheetContent>
