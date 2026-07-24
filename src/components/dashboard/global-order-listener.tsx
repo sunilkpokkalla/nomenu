@@ -159,14 +159,15 @@ export function GlobalOrderListener({
           }
 
           if (shouldAlert) {
-            const isTakeaway = payload.new.customer_phone !== null;
+            const orderRecord = payload.new as { id: string, customer_phone?: string | null, customer_name?: string | null, table_number?: string | null };
+            const isTakeaway = orderRecord.customer_phone !== null;
             
             // Skip if the current page already natively handles this specific order type
             if (isTakeaway && pathname?.startsWith("/dashboard/takeaway")) return;
             if (!isTakeaway && pathname?.startsWith("/dashboard/orders")) return;
             if (pathname?.startsWith("/dashboard/cashier")) return; // Cashier handles everything
             
-            const notifiedKey = `notified_order_${payload.new.id}`;
+            const notifiedKey = `notified_order_${orderRecord.id}`;
             if (!localStorage.getItem(notifiedKey)) {
               localStorage.setItem(notifiedKey, "true");
               playNotificationSound();
@@ -175,9 +176,9 @@ export function GlobalOrderListener({
             }
             
             setNotification({
-              id: payload.new.id,
+              id: orderRecord.id,
               title: `New ${isTakeaway ? "Takeaway" : "Dine-In"} Order!`,
-              subtitle: payload.new.customer_name || (payload.new.table_number ? `Table ${payload.new.table_number}` : "Incoming Order"),
+              subtitle: orderRecord.customer_name || (orderRecord.table_number ? `Table ${orderRecord.table_number}` : "Incoming Order"),
               link: isTakeaway ? "/dashboard/takeaway" : "/dashboard/orders"
             });
 

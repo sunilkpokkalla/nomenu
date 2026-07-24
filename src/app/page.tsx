@@ -1387,7 +1387,7 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Active Tabs & Tab Management
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Pay at Counter & Tab Settling
+                      <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Flexible Checkout (Upfront or At Counter)
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-indigo-400 shrink-0" /> Real-Time Live Orders Dashboard
@@ -1437,9 +1437,6 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Everything in Elite</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Partner Agency Integrations</strong>
-                    </li>
-                    <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>75 Magic AI Credits / month</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
@@ -1452,10 +1449,10 @@ export default function LandingPage() {
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Intelligent Order Capacity Pacing</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Order & Pay via Apple Pay / Credit Card</strong>
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Advanced Interactive Floor Plans</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
-                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>Direct Bank Payouts (Stripe Connect)</strong>
+                      <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>White-Glove Menu Setup & VIP Support</strong>
                     </li>
                     <li className="flex items-start gap-2.5 text-white">
                       <Check className="h-4 w-4 text-emerald-400 shrink-0" strokeWidth={3} /> <strong>0% Platform Fee (Lifetime)</strong>
