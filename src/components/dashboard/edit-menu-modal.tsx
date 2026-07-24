@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Settings2, Loader2, UtensilsCrossed, Receipt, MapPin, Eye, Info, X, Sparkles, Globe } from "lucide-react";
+import { Settings2, Loader2, UtensilsCrossed, Receipt, MapPin, Eye, Info, X, Sparkles, Globe, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +23,7 @@ import {
 } from "@/lib/menu-type-options";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
 import { useFormStatus } from "react-dom";
+import Link from "next/link";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -58,13 +59,16 @@ interface EditMenuProps {
   cuisineType?: string | null;
   editAction: (formData: FormData) => Promise<void>;
   plan: string;
+  chefRecommendations?: { value: string; label: string }[];
+  hasStripe?: boolean;
 }
 
-export function EditMenuModal({ menu, cuisineType, editAction, plan }: EditMenuProps) {
+export function EditMenuModal({ menu, cuisineType, editAction, plan, chefRecommendations: _chefRecommendations, hasStripe = false }: EditMenuProps) {
   const [open, setOpen] = useState(false);
   const [description, setDescription] = useState(menu.description || "");
   const [isGeneratingDesc, setIsGeneratingDesc] = useState(false);
-  const chefRecommendations = getChefRecommendations(cuisineType);
+  const [allowManualPayments, setAllowManualPayments] = useState(hasStripe ? menu.allow_manual_payments || false : true);
+  const chefRecommendations = _chefRecommendations || getChefRecommendations(cuisineType);
 
   const handleGenerateDescription = async () => {
     const nameInput = document.getElementById("name") as HTMLInputElement | null;
@@ -336,25 +340,54 @@ export function EditMenuModal({ menu, cuisineType, editAction, plan }: EditMenuP
 
             {/* Enterprise & Elite Settings Section */}
             {(plan === 'enterprise' || plan === 'elite') && (
-              <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
-                <div className="mt-0.5">
-                  <input 
-                    type="checkbox" 
-                    id={`allowManualPayments-${menu.id}`} 
-                    name="allowManualPayments" 
-                    defaultChecked={menu.allow_manual_payments || false}
-                    className="peer sr-only"
-                  />
-                  <div className="h-5 w-9 rounded-full bg-slate-200 transition-colors peer-checked:bg-indigo-600 peer-focus:ring-2 peer-focus:ring-indigo-600 peer-focus:ring-offset-2 relative after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-4"></div>
-                </div>
+              <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col gap-3">
                 <div className="flex flex-col gap-1">
-                  <Label htmlFor={`allowManualPayments-${menu.id}`} className="text-sm font-semibold text-slate-900 cursor-pointer">
-                    Pay at Counter
-                  </Label>
+                  <Label className="text-sm font-semibold text-slate-900">Payment Flow</Label>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Allow customers to order without Stripe and pay later at the counter (e.g., Cash or POS).
+                    Choose how guests pay for orders on this menu.
                   </p>
                 </div>
+
+                <div className="grid grid-cols-2 gap-2 bg-white p-1 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => setAllowManualPayments(true)}
+                    className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg text-sm transition-all duration-200 ${
+                      allowManualPayments
+                        ? "bg-red-50 border border-red-200 text-red-700 shadow-sm font-medium"
+                        : "text-slate-500 hover:bg-slate-50 font-normal border border-transparent"
+                    }`}
+                  >
+                    Pay at Counter
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!hasStripe}
+                    onClick={() => setAllowManualPayments(false)}
+                    className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg text-sm transition-all duration-200 ${
+                      !allowManualPayments
+                        ? "bg-emerald-50 border border-emerald-200 text-emerald-700 shadow-sm font-medium"
+                        : "text-slate-500 hover:bg-slate-50 font-normal border border-transparent"
+                    } ${!hasStripe ? "opacity-60 cursor-not-allowed" : ""}`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      Pay Upfront
+                      {!hasStripe && <Lock className="h-3 w-3" />}
+                    </div>
+                  </button>
+                </div>
+                
+                {allowManualPayments && <input type="hidden" name="allowManualPayments" value="on" />}
+
+                {!hasStripe && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 leading-relaxed flex items-start gap-2 mt-1">
+                    <Info className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold block mb-0.5">Stripe Not Connected</span>
+                      You must <Link href="/dashboard/payouts" className="underline font-medium hover:text-amber-900">connect your bank account</Link> to unlock Upfront Payments.
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

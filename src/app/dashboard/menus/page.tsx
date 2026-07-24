@@ -93,7 +93,7 @@ export default async function MenusPage(
         </div>
         <div className="shrink-0">
           {menusList.length > 0 && (
-            <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} plan={plan} />
+            <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} plan={plan} hasStripe={!!restaurant?.stripe_account_id} />
           )}
         </div>
       </div>
@@ -153,10 +153,12 @@ export default async function MenusPage(
                             <div className="hidden sm:block h-5 w-px bg-slate-200 shrink-0" />
                             <div className="shrink-0">
                               <EditMenuModal 
-                                menu={menu} 
-                                cuisineType={restaurant.cuisine_type} 
-                                editAction={editMenu} 
+                                menu={menu}
+                                cuisineType={restaurant.cuisine_type}
+                                editAction={editMenu}
                                 plan={plan}
+                                chefRecommendations={chefRecommendations}
+                                hasStripe={!!restaurant?.stripe_account_id}
                               />
                             </div>
                             <div className="hidden sm:block h-5 w-px bg-slate-200 shrink-0" />
@@ -247,7 +249,7 @@ export default async function MenusPage(
               Get started by creating your first digital menu.
             </p>
             <div className="mt-6">
-              <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} plan={plan} />
+              <CreateMenuSheet createAction={createMenu} chefRecommendations={chefRecommendations} plan={plan} hasStripe={!!restaurant?.stripe_account_id} />
             </div>
           </div>
         )}

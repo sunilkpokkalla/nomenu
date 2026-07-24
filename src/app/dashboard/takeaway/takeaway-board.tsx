@@ -277,7 +277,29 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
             }, 1500);
           } else if (payload.eventType === "UPDATE") {
             if (payload.new.customer_phone === null) return;
-            setOrders(prev => prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o));
+            setOrders(prev => {
+              const exists = prev.some(o => o.id === payload.new.id);
+              if (exists) {
+                return prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o);
+              } else {
+                if (payload.new.status === "pending" || payload.new.status === "preparing") {
+                  setTimeout(async () => {
+                    const { data: fullOrder } = await supabase
+                      .from("orders")
+                      .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
+                      .eq("id", payload.new.id)
+                      .single();
+                    if (fullOrder) {
+                      setOrders(current => {
+                        if (current.some(o => o.id === fullOrder.id)) return current;
+                        return [...current, fullOrder as Order];
+                      });
+                    }
+                  }, 500);
+                }
+                return prev;
+              }
+            });
           }
         }
       ).subscribe();

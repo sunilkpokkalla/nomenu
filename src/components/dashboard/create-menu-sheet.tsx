@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, UtensilsCrossed, MapPin, Receipt, Eye, Loader2, Globe, Info } from "lucide-react";
+import { Plus, UtensilsCrossed, MapPin, Receipt, Eye, Loader2, Globe, Info, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,16 +22,22 @@ import {
   SPECIALTY_MENU_TYPES,
 } from "@/lib/menu-type-options";
 import { SUPPORTED_LANGUAGES } from "@/lib/languages";
+import Link from "next/link";
 
-interface CreateMenuSheetProps {
-  createAction: (formData: FormData) => Promise<void>;
-  chefRecommendations: { value: string; label: string }[];
-  plan: string;
-}
-
-export function CreateMenuSheet({ createAction, chefRecommendations, plan }: CreateMenuSheetProps) {
+export function CreateMenuSheet({ 
+  createAction, 
+  plan, 
+  chefRecommendations = [],
+  hasStripe = false
+}: { 
+  createAction: (formData: FormData) => Promise<void>, 
+  plan: string, 
+  chefRecommendations?: { value: string; label: string }[],
+  hasStripe?: boolean
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [allowManualPayments, setAllowManualPayments] = useState(hasStripe ? false : true);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -208,20 +214,54 @@ export function CreateMenuSheet({ createAction, chefRecommendations, plan }: Cre
 
           {/* Enterprise & Elite Settings */}
           {(plan === 'enterprise' || plan === 'elite') && (
-            <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
-              <div className="mt-0.5 flex items-center h-5">
-                <Switch 
-                  id="allowManualPayments" 
-                  name="allowManualPayments" 
-                  defaultChecked={false}
-                />
-              </div>
+            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col gap-3">
               <div className="flex flex-col gap-1">
-                <Label htmlFor="allowManualPayments" className="text-sm font-semibold text-slate-900 cursor-pointer">Pay at Counter</Label>
+                <Label className="text-sm font-semibold text-slate-900">Payment Flow</Label>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Allow customers to order without Stripe and pay later at the counter (e.g., Cash or POS). 
+                  Choose how guests pay for orders on this menu.
                 </p>
               </div>
+
+              <div className="grid grid-cols-2 gap-2 bg-white p-1 rounded-xl border border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setAllowManualPayments(true)}
+                  className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg text-sm transition-all duration-200 ${
+                    allowManualPayments
+                      ? "bg-red-50 border border-red-200 text-red-700 shadow-sm font-medium"
+                      : "text-slate-500 hover:bg-slate-50 font-normal border border-transparent"
+                  }`}
+                >
+                  Pay at Counter
+                </button>
+                <button
+                  type="button"
+                  disabled={!hasStripe}
+                  onClick={() => setAllowManualPayments(false)}
+                  className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg text-sm transition-all duration-200 ${
+                    !allowManualPayments
+                      ? "bg-emerald-50 border border-emerald-200 text-emerald-700 shadow-sm font-medium"
+                      : "text-slate-500 hover:bg-slate-50 font-normal border border-transparent"
+                  } ${!hasStripe ? "opacity-60 cursor-not-allowed" : ""}`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    Pay Upfront
+                    {!hasStripe && <Lock className="h-3 w-3" />}
+                  </div>
+                </button>
+              </div>
+              
+              {allowManualPayments && <input type="hidden" name="allowManualPayments" value="on" />}
+
+              {!hasStripe && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 leading-relaxed flex items-start gap-2 mt-1">
+                  <Info className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-semibold block mb-0.5">Stripe Not Connected</span>
+                    You must <Link href="/dashboard/payouts" className="underline font-medium hover:text-amber-900">connect your bank account</Link> to unlock Upfront Payments.
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

@@ -143,12 +143,22 @@ export function GlobalOrderListener({
       .channel(`global-orders-${restaurantId}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
+        { event: "*", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
         (payload) => {
-          const status = payload.new.status;
-          
-          // Only alert for brand new incoming orders
-          if (status === "pending" || status === "awaiting_payment") {
+          // Only alert for brand new incoming orders (or when an awaiting_payment order becomes pending)
+          let shouldAlert = false;
+
+          if (payload.eventType === "INSERT") {
+            if (payload.new.status === "pending") {
+              shouldAlert = true;
+            }
+          } else if (payload.eventType === "UPDATE") {
+            if (payload.old.status === "awaiting_payment" && payload.new.status === "pending") {
+              shouldAlert = true;
+            }
+          }
+
+          if (shouldAlert) {
             const isTakeaway = payload.new.customer_phone !== null;
             
             // Skip if the current page already natively handles this specific order type
