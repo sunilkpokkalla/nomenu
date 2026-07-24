@@ -203,7 +203,7 @@ export default async function StorefrontMenuPage(
           taxRate={menu.tax_rate || 0}
           serviceCharge={menu.service_charge || 0}
           serviceChargeType={menu.service_charge_type || "percentage"}
-          stripeAccountId={restaurant.plan?.toLowerCase() === 'enterprise' ? restaurant.stripe_account_id : null}
+          stripeAccountId={restaurant.stripe_account_id}
           locationLabel={menu.location_label}
           fulfillmentType={menu.fulfillment_type || "dine_in"}
           prepTimeMinutes={restaurant.prep_time_minutes ?? 20}

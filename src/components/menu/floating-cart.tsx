@@ -709,8 +709,8 @@ export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableN
                   )}
                 </button>
 
-                {/* Optional Manual Payment Button (Enterprise Only) */}
-                {allowManualPayments && stripeAccountId && plan === 'enterprise' && (
+                {/* Optional Manual Payment Button (Enterprise & Elite) */}
+                {allowManualPayments && stripeAccountId && (plan === 'enterprise' || plan === 'elite') && (
                   <button
                     type="button"
                     onClick={(e) => handleCheckout(e, true)}

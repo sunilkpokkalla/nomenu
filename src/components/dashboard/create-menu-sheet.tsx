@@ -203,25 +203,8 @@ export function CreateMenuSheet({ createAction, chefRecommendations, plan }: Cre
             </div>
           </div>
 
-          {/* Status Section */}
-          <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 flex items-start gap-3">
-            <div className="mt-0.5 flex items-center h-5">
-              <Switch 
-                id="isActive" 
-                name="isActive" 
-                value="true" 
-                defaultChecked={true} 
-                className="data-[state=checked]:bg-indigo-600"
-              />
-            </div>
-            <div className="flex-1 space-y-1">
-              <Label htmlFor="isActive" className="text-sm font-semibold text-slate-900 cursor-pointer">Menu is Active & Visible</Label>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                When unchecked, this menu is hidden from your public page and guests cannot place orders.
-              </p>
-            </div>
-            <Eye className="h-5 w-5 text-indigo-500" />
-          </div>
+          {/* Status Section - Hidden by default for cleaner UX, always active on creation */}
+          <input type="hidden" name="isActive" value="true" />
 
           {/* Enterprise & Elite Settings */}
           {(plan === 'enterprise' || plan === 'elite') && (
