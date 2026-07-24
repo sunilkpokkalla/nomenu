@@ -66,7 +66,7 @@ export const metadata: Metadata = {
 };
 
 import { SupabaseHashListener } from "@/components/supabase-hash-listener";
-import { CSPostHogProvider } from "@/components/providers/posthog-provider";
+import { PostHogWrapper } from "@/components/providers/posthog-wrapper";
 import { ReferralTracker } from "@/components/referral-tracker";
 import Script from "next/script";
 
@@ -116,7 +116,7 @@ export default function RootLayout({
           shadow="0 0 10px #2563EB,0 0 5px #2563EB"
         />
         <ClientErrorLogger />
-        <CSPostHogProvider>
+        <PostHogWrapper>
           {children}
         <script
           type="application/ld+json"
@@ -141,7 +141,7 @@ export default function RootLayout({
             })
           }}
         />
-        </CSPostHogProvider>
+        </PostHogWrapper>
       </body>
     </html>
   );

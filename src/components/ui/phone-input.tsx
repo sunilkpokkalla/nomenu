@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import PhoneInput from "react-phone-number-input";
+import dynamic from "next/dynamic";
+const PhoneInput = dynamic(() => import("react-phone-number-input"), { ssr: false });
 import "react-phone-number-input/style.css";
 
 export interface PhoneInputProps {
