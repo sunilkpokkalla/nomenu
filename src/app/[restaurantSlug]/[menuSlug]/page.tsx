@@ -207,6 +207,8 @@ export default async function StorefrontMenuPage(
           locationLabel={menu.location_label}
           fulfillmentType={menu.fulfillment_type || "dine_in"}
           prepTimeMinutes={restaurant.prep_time_minutes ?? 20}
+          openingTime={restaurant.opening_time ? restaurant.opening_time.substring(0, 5) : "09:00"}
+          closingTime={restaurant.closing_time ? restaurant.closing_time.substring(0, 5) : "23:00"}
           plan={plan}
           allowManualPayments={menu.allow_manual_payments || false}
         />
