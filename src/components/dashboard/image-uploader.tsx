@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 // import { createClient } from "@/lib/supabase/client";
 
-import imageCompression from 'browser-image-compression';
-
 interface ImageUploaderProps {
   value?: string;
   onChange?: (value: string) => void;
@@ -94,6 +92,8 @@ export function ImageUploader({ value: externalValue, onChange, folder = "item-l
           useWebWorker: true,
           fileType: "image/webp" as string
         };
+        const imageCompressionModule = await import('browser-image-compression');
+        const imageCompression = imageCompressionModule.default;
         compressedFile = await imageCompression(file, options);
       } catch (compressionError) {
         console.warn("Failed to compress image, falling back to original", compressionError);

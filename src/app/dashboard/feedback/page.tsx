@@ -6,7 +6,14 @@ import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createClient } from "@/lib/supabase/server";
 import { updateLoyaltyRewards, markClaimRedeemed } from "@/app/dashboard/actions";
 import { getSupabaseEnv } from "@/lib/env";
-import { FeedbackAnalytics, FeedbackData } from "./feedback-analytics";
+import type { FeedbackData } from "./feedback-analytics";
+import dynamic from "next/dynamic";
+
+const FeedbackAnalytics = dynamic(
+  () => import("./feedback-analytics").then(mod => mod.FeedbackAnalytics),
+  { ssr: false }
+);
+
 import { FeedbackList } from "./feedback-list";
 import { FeedbackStrategyForm } from "./feedback-strategy-form";
 import { LoyaltyQrGenerator } from "@/app/dashboard/feedback/loyalty-qr-generator";
