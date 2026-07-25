@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export function SubscriptionButton({ 
@@ -46,7 +47,7 @@ export function SubscriptionButton({
       }
     } catch (error) {
       console.error(error);
-      alert(error instanceof Error ? error.message : "Failed to checkout. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to checkout. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -95,7 +96,7 @@ export function PortalButton({
       }
     } catch (error) {
       console.error(error);
-      alert("Failed to open billing portal.");
+      toast.error("Failed to open billing portal.");
     } finally {
       setLoading(false);
     }

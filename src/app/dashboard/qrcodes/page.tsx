@@ -10,17 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ManageLocationZonesModal } from "@/components/dashboard/manage-location-zones-modal";
 import { QrCategoryFilter } from "@/components/dashboard/qr-category-filter";
-import dynamic from "next/dynamic";
-
-const QrDesignerModal = dynamic(
-  () => import("@/components/dashboard/qr-designer-modal").then(mod => mod.QrDesignerModal),
-  { ssr: false }
-);
-
-const CreateQrSheet = dynamic(
-  () => import("@/components/dashboard/create-qr-sheet").then(mod => mod.CreateQrSheet),
-  { ssr: false }
-);
+import { QrDesignerModal, CreateQrSheet } from "@/components/client-wrappers";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
 

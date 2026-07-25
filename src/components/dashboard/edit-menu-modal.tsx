@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Settings2, Loader2, UtensilsCrossed, Receipt, MapPin, Eye, Info, X, Sparkles, Globe, Lock } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -75,7 +76,7 @@ export function EditMenuModal({ menu, cuisineType, editAction, plan, chefRecomme
     const name = nameInput?.value || menu.name;
     
     if (!name) {
-      alert("Please enter a Menu Name first!");
+      toast.error("Please enter a Menu Name first!");
       return;
     }
     

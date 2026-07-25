@@ -11,6 +11,7 @@ import Image from "next/image";
 import { ImageUploader } from "@/components/dashboard/image-uploader";
 import { toPng } from "html-to-image";
 import JSZip from "jszip";
+import { toast } from "sonner";
 import { saveAs } from "file-saver";
 
 interface BatchQRDesignerModalProps {
@@ -87,7 +88,7 @@ export function BatchQrDesignerModal({ selectedQrs, restaurant, baseUrl, rootDom
       
     } catch (err) {
       console.error("Failed to generate ZIP", err);
-      alert("Failed to generate ZIP. Please try again.");
+      toast.error("Failed to generate ZIP. Please try again.");
     } finally {
       setIsGenerating(false);
     }

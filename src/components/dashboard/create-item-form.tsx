@@ -211,6 +211,27 @@ export function CreateItemForm({ cuisineType, menus, categories, createAction, i
           <p className="text-xs text-muted-foreground">
             Select an existing category or type a new one to create it instantly.
           </p>
+          {filteredCategories.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {filteredCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => {
+                    setNewCategoryName(cat.name);
+                    setCategoryId(cat.id);
+                  }}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${
+                    newCategoryName === cat.name
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+          )}
           <input type="hidden" name="categoryId" value={categoryId} />
         </div>
 

@@ -2,8 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import nodemailer from "nodemailer";
-
+import { sendEmail } from "@/lib/email";
 export type CampaignAudience = "free_users" | "pro_users" | "custom";
 export type CampaignTemplate = "soulful_pitch" | "pro_upgrade" | "custom";
 
@@ -64,23 +63,11 @@ export async function sendCampaignAction(formData: FormData) {
       return { success: false, error: "No valid email addresses found." };
     }
 
-    // 4. Configure Nodemailer with Zoho SMTP
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || "smtp.zoho.com",
-      port: Number(process.env.SMTP_PORT) || 465,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    });
-
     // 5. Send emails
     let sentCount = 0;
     for (const email of emails) {
       try {
-        await transporter.sendMail({
-          from: `"NoMenu" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+        await sendEmail({
           to: email,
           subject: subject,
           html: messageBody,

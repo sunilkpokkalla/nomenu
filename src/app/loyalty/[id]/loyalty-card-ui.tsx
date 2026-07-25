@@ -1,6 +1,7 @@
 "use client";
 // Force re-render for Next.js Fast Refresh
 import { useState } from "react";
+import { toast } from "sonner";
 import { 
   Star, Heart, Coffee, Pizza, Gift, Check, PartyPopper, Lock, CheckCircle2,
   Croissant, Utensils, IceCream, Wine, Cake, CupSoda,
@@ -206,7 +207,7 @@ export function LoyaltyCardUI({
                   if (res.success) {
                     setCurrentActiveReward(null);
                   } else {
-                    alert("Failed to claim reward. Please try again.");
+                    toast.error("Failed to claim reward. Please try again.");
                   }
                   setIsClaimingReward(false);
                 } else {
@@ -293,7 +294,7 @@ export function LoyaltyCardUI({
                         setCurrentCycles(c => c + 1);
                         setConfirmClaim(false);
                       } else {
-                        alert(res?.error || "Failed to redeem reward.");
+                        toast.error(res?.error || "Failed to redeem reward.");
                       }
                       setIsClaimingReward(false);
                     }}
@@ -345,7 +346,7 @@ export function LoyaltyCardUI({
                       setCurrentCycles(c => c + 1);
                       setConfirmClaim(false);
                     } else {
-                      alert(res?.error || "Failed to redeem reward.");
+                      toast.error(res?.error || "Failed to redeem reward.");
                     }
                     setIsClaimingReward(false);
                   }}

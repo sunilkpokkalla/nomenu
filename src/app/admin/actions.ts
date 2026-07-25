@@ -2,8 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import nodemailer from "nodemailer";
-
+import { sendEmail } from "@/lib/email";
 
 export async function sendMarketingEmailAction() {
   // 1. Verify caller is an Admin
@@ -47,25 +46,13 @@ export async function sendMarketingEmailAction() {
     return { success: true, count: 0, message: "No free tier users found." };
   }
 
-  // 5. Configure Nodemailer with Zoho SMTP
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.zoho.com",
-    port: Number(process.env.SMTP_PORT) || 465,
-    secure: true,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  });
-
   const domain = process.env.NEXT_PUBLIC_APP_URL || "https://nomenu.us";
 
   // 6. Send emails
   let sentCount = 0;
   for (const email of emails) {
     try {
-      await transporter.sendMail({
-        from: `"NoMenu" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+      await sendEmail({
         to: email,
         subject: "Unlock Premium Themes & Custom Domains for Your Digital Menu",
         html: `

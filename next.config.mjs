@@ -120,7 +120,6 @@ const nextConfig = {
       allowedOrigins: ['localhost:3000', '*.trycloudflare.com', 'nomenu.us', '*.nomenu.us'],
     },
     optimizePackageImports: ['lucide-react', 'recharts', '@radix-ui/react-icons'],
-    serverComponentsExternalPackages: ['puppeteer'],
   },
 };
 

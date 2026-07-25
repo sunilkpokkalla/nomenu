@@ -15,6 +15,7 @@ import {
   UtensilsCrossed
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -122,7 +123,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
       }
     } catch (error) {
       console.error(error);
-      alert("Failed to initiate checkout");
+      toast.error("Failed to initiate checkout");
     }
   };
 
@@ -284,7 +285,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
       const data = await res.json();
       if (!res.ok) {
         if (data.code === "OUT_OF_CREDITS") {
-          alert("You are out of Magic Credits! Please purchase more to continue.");
+          toast.error("You are out of Magic Credits! Please purchase more to continue.");
           setMagicCredits(0);
           return;
         }
@@ -296,7 +297,7 @@ export function ChefLibraryModal({ cuisineType, menus, categories, onSelectDish 
       }
     } catch (error) {
       console.error("AI Generation Error:", error);
-      alert("Failed to generate dish. Please try again.");
+      toast.error("Failed to generate dish. Please try again.");
     } finally {
       setIsGenerating(false);
     }

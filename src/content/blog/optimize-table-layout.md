@@ -3,7 +3,7 @@ title: "How to Optimize Your Table Layout for Faster Turnover"
 date: "2026-06-20"
 excerpt: "The architectural and digital strategies that increase your seats-per-hour metric."
 author: "NoMenu Team"
-coverImage: "/blog/img_layout.jpg"
+coverImage: "/blog/table_layout.png"
 ---
 
 Content for this article is being written. Check back soon for the full deep dive into how to optimize your table layout for faster turnover.

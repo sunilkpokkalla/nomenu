@@ -3,7 +3,7 @@ title: "The Benefits of Zero-Commission Ordering Platforms"
 date: "2026-07-30"
 excerpt: "Stop paying a 30% tax to delivery apps. How to take back control of your customer data and margins."
 author: "NoMenu Team"
-coverImage: "/blog/img_delivery.jpg"
+coverImage: "/blog/zero_commission.png"
 ---
 
 Content for this article is being written. Check back soon for the full deep dive into the benefits of zero-commission ordering platforms.

@@ -3,7 +3,7 @@ title: "Securing Customer Data in the Era of Digital Dining"
 date: "2026-07-10"
 excerpt: "What every restaurant owner needs to know about PCI compliance and data privacy."
 author: "NoMenu Team"
-coverImage: "/blog/img_security.jpg"
+coverImage: "/blog/data_security.png"
 ---
 
 Content for this article is being written. Check back soon for the full deep dive into securing customer data in the era of digital dining.

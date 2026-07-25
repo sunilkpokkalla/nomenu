@@ -3,7 +3,7 @@ title: "The Hidden Cost of Legacy POS Systems in 2024"
 date: "2026-06-05"
 excerpt: "Are you losing 3% of your revenue to hidden fees? Why modern restaurants are ditching legacy hardware."
 author: "NoMenu Team"
-coverImage: "/blog/img_cashregister.jpg"
+coverImage: "/blog/legacy_pos.png"
 ---
 
 When you sign a contract with a legacy Point of Sale (POS) provider, you are often locked into a closed ecosystem. While they might advertise low upfront costs or even "free" hardware, the reality is far more expensive.

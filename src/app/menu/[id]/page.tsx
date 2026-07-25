@@ -8,12 +8,7 @@ import { MenuClientView } from "@/components/menu/menu-client-view";
 import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
 import { getCurrencySymbol } from "@/lib/currency-options";
-import dynamic from "next/dynamic";
-
-const ReceiptTracker = dynamic(
-  () => import("@/components/menu/receipt-tracker").then(mod => mod.ReceiptTracker),
-  { ssr: false }
-);
+import { ReceiptTracker } from "@/components/client-wrappers";
 
 export default async function PublicMenuPage(
   props: {

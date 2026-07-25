@@ -2,6 +2,8 @@
 
 import React, { useMemo, useState, useEffect } from "react";
 import { User, Mail, Phone, Star, Award, AlertCircle, MessageSquare, Search, Gift, ChevronLeft, ChevronRight } from "lucide-react";
+import { toast } from "sonner";
+import { createBrowserClient } from "@supabase/ssr";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { FeedbackData } from "./feedback-analytics";
 
@@ -267,7 +269,7 @@ export function CustomerDirectory({ feedbacks, timezone, onRedeemClaim }: Custom
                                     await onRedeemClaim(claim.id);
                                   } catch(e) {
                                     console.error(e);
-                                    alert("Failed to redeem claim. Please try again.");
+                                    toast.error("Failed to redeem claim. Please try again.");
                                   }
                                 }}
                                 className="bg-rose-600 text-white text-[10px] uppercase tracking-wider font-bold py-1 px-2 rounded self-start hover:bg-rose-700 transition-colors shadow-sm"

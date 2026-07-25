@@ -3,7 +3,7 @@ title: "How QR Code Menus Increase Average Order Value by 25%"
 date: "2026-06-30"
 excerpt: "Discover the psychological reasons why customers spend more when ordering from their phones."
 author: "NoMenu Team"
-coverImage: "/blog/img_qrcode.jpg"
+coverImage: "/blog/qr_code_menus.png"
 ---
 
 For decades, the restaurant industry relied on physical menus and human servers to drive sales. But data from the past three years shows a fascinating trend: restaurants that switch to interactive QR code menus see an average order value (AOV) increase of 20% to 25%.

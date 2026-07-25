@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, Share, PlusSquare } from "lucide-react";
+import { toast } from "sonner";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => void;
@@ -73,7 +74,7 @@ export function AddToHomeScreen() {
           console.error("Share failed", err);
         }
       } else {
-        alert("To add this card, tap the Share icon at the bottom of your screen and select 'Add to Home Screen'.");
+        toast("To add this card, tap the Share icon at the bottom of your screen and select 'Add to Home Screen'.");
       }
     }
   };

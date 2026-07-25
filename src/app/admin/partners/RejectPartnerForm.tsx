@@ -8,6 +8,7 @@ export function RejectPartnerForm({ id, email, label = "Reject" }: { id: string;
   return (
     <form action={async (formData) => {
       const reason = window.prompt("Reason for rejection/revocation (optional). This will be emailed to the partner:");
+      if (reason === null) return; // User cancelled the prompt
       if (reason !== null) {
         formData.append("reason", reason);
         await rejectPartnerAction(id, email, formData);

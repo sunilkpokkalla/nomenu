@@ -3,7 +3,7 @@ title: "The Future of Hospitality: AI, Automation, and Personalization"
 date: "2026-05-11"
 excerpt: "A look at the next 5 years of restaurant technology and how to prepare your business."
 author: "NoMenu Team"
-coverImage: "/blog/img_future.jpg"
+coverImage: "/blog/future_hospitality.png"
 ---
 
 Content for this article is being written. Check back soon for the full deep dive into the future of hospitality: ai, automation, and personalization.

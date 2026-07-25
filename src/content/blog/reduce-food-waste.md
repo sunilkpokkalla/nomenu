@@ -3,7 +3,7 @@ title: "How to Reduce Food Waste with Real-Time Inventory Sync"
 date: "2026-07-05"
 excerpt: "Connecting your digital orders directly to your prep lists to ensure perfect par levels."
 author: "NoMenu Team"
-coverImage: "/blog/img_waste.jpg"
+coverImage: "/blog/food_waste.png"
 ---
 
 Content for this article is being written. Check back soon for the full deep dive into how to reduce food waste with real-time inventory sync.

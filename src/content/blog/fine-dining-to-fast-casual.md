@@ -3,7 +3,7 @@ title: "Transitioning from Fine Dining to Fast Casual: A Tech Guide"
 date: "2026-05-01"
 excerpt: "The technology stack required to pivot your full-service concept into a high-volume counter model."
 author: "NoMenu Team"
-coverImage: "/blog/img_finedining.jpg"
+coverImage: "/blog/fine_dining.png"
 ---
 
 Content for this article is being written. Check back soon for the full deep dive into transitioning from fine dining to fast casual: a tech guide.

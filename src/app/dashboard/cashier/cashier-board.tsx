@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { formatOrderNumber } from "@/lib/utils";
 import { createBrowserClient } from "@supabase/ssr";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
@@ -223,7 +225,7 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
       setOrders(prev => prev.filter(o => !(o.table_number === table_number && (o.customer_name || "Anonymous") === customer_name)));
     } catch (e) {
       console.error(e);
-      alert("Failed to clear table");
+      toast.error("Failed to clear table");
     } finally {
       setIsProcessing(null);
     }
@@ -250,7 +252,7 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
       setHistoryOrders(prev => [...settled.map(o => ({...o, is_paid: true, paid_at: new Date().toISOString()} as Order & { paid_at?: string | null })), ...prev]);
     } catch (e) {
       console.error(e);
-      alert("Failed to settle tab");
+      toast.error("Failed to settle tab");
     } finally {
       setIsProcessing(null);
     }
@@ -277,7 +279,7 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
       setHistoryOrders(prev => [...voided.map(o => ({...o, status: "cancelled", paid_at: new Date().toISOString()} as Order & { paid_at?: string | null })), ...prev]);
     } catch (e) {
       console.error(e);
-      alert("Failed to void tab");
+      toast.error("Failed to void tab");
     } finally {
       setIsProcessing(null);
     }

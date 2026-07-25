@@ -7,12 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { updateLoyaltyRewards, markClaimRedeemed } from "@/app/dashboard/actions";
 import { getSupabaseEnv } from "@/lib/env";
 import type { FeedbackData } from "./feedback-analytics";
-import dynamic from "next/dynamic";
-
-const FeedbackAnalytics = dynamic(
-  () => import("./feedback-analytics").then(mod => mod.FeedbackAnalytics),
-  { ssr: false }
-);
+import { FeedbackAnalytics } from "@/components/client-wrappers";
 
 import { FeedbackList } from "./feedback-list";
 import { FeedbackStrategyForm } from "./feedback-strategy-form";

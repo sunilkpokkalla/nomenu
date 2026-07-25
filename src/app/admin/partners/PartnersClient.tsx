@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
+import { createBrowserClient } from "@supabase/ssr";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check, Search, UserPlus, X } from "lucide-react";
@@ -62,7 +64,7 @@ export function PartnersClient({ pending, approved, rejected }: PartnersClientPr
       // Optional: show a success toast here
     } catch (err) {
       console.error(err);
-      alert("Failed to invite partner");
+      toast.error("Failed to invite partner");
     } finally {
       setIsSubmitting(false);
     }

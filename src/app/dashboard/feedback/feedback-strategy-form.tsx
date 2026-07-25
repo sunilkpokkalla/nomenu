@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Save, Globe, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -71,10 +72,10 @@ export function FeedbackStrategyForm({
         setRecoveryOffer(result.offer);
         setRecoveryMessage(result.resolutionMessage);
       } else {
-        alert(result.error || "Failed to generate strategy");
+        toast.error(result.error || "Failed to generate strategy");
       }
     } catch (e) {
-      alert("An error occurred");
+      toast.error("An error occurred");
     } finally {
       setIsGenerating(false);
     }

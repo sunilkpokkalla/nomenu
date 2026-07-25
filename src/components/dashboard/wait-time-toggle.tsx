@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { updateRestaurantWaitTime } from "@/app/dashboard/actions";
+import { toast } from "sonner";
 import { Clock, Loader2 } from "lucide-react";
 
 export function WaitTimeToggle({ restaurantId, initialStatus = "normal" }: { restaurantId: string, initialStatus?: string }) {
@@ -14,7 +15,7 @@ export function WaitTimeToggle({ restaurantId, initialStatus = "normal" }: { res
       const res = await updateRestaurantWaitTime(restaurantId, newStatus);
       if (!res.success) {
         setStatus(status); // Revert on failure
-        alert("Failed to update wait time: " + res.error);
+        toast.error("Failed to update wait time: " + res.error);
       }
     });
   };

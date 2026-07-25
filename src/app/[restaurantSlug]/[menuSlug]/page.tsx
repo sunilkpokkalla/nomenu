@@ -10,13 +10,8 @@ import { MenuClientView } from "@/components/menu/menu-client-view";
 import { CartProvider } from "@/components/menu/cart-context";
 import { FloatingCart } from "@/components/menu/floating-cart";
 import { getCurrencySymbol } from "@/lib/currency-options";
-import dynamic from "next/dynamic";
-
-const ReceiptTracker = dynamic(
-  () => import("@/components/menu/receipt-tracker").then(mod => mod.ReceiptTracker),
-  { ssr: false }
-);
-
+import { ReceiptTracker } from "@/components/client-wrappers";
+import { after } from "next/server";
 export async function generateMetadata(
   props: { params: Promise<{ restaurantSlug: string, menuSlug: string }> },
   parent: ResolvingMetadata
@@ -123,8 +118,8 @@ export default async function StorefrontMenuPage(
       .eq("id", qrCodeId)
       .maybeSingle();
 
-    // Fire and forget analytics
-    (async () => {
+    // Fire and forget analytics safely on Edge
+    after(async () => {
       try {
         await supabaseAdmin.from("menu_scans").insert({
           qr_code_id: qrCodeId,
@@ -135,7 +130,7 @@ export default async function StorefrontMenuPage(
       } catch (error) {
         console.error("Failed to insert menu scan:", error);
       }
-    })();
+    });
 
     if (qrRecord) {
       locationZone = qrRecord.location_zone || null;
@@ -145,7 +140,7 @@ export default async function StorefrontMenuPage(
         qrTableLabel = qrRecord.label || locationZone;
       }
       
-      (async () => {
+      after(async () => {
         try {
           await supabaseAdmin
             .from("qr_codes")
@@ -154,7 +149,7 @@ export default async function StorefrontMenuPage(
         } catch (error) {
           console.error("Failed to increment QR code scan count:", error);
         }
-      })();
+      });
     }
   }
 

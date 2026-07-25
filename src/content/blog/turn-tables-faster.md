@@ -3,7 +3,7 @@ title: "The Ultimate Guide to Turning Tables Faster During Peak Rush"
 date: "2026-07-25"
 excerpt: "How to safely increase table turnover by 20% without making your guests feel rushed."
 author: "NoMenu Team"
-coverImage: "/blog/img_waiter.jpg"
+coverImage: "/blog/turn_tables.png"
 ---
 
 Friday night at 7:30 PM. The lobby is packed, wait times are creeping up to 45 minutes, and your guests are getting impatient. Every restaurant manager knows this feeling. Turning tables efficiently during peak rush is the single biggest factor in weekend profitability.

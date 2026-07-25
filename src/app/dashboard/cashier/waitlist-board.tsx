@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
+import { toast } from "sonner";
 import { Users, Clock, CheckCircle2, XCircle, UserPlus, Phone } from "lucide-react";
 import { addWaitlistEntry, updateWaitlistStatus, getWaitlist, createWalkInTab } from "./actions";
 import { FloorPlanBoard } from "./floor-plan-board";
@@ -68,7 +69,7 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
       fetchWaitlist();
     } catch (error) {
       console.error(error);
-      alert("Failed to add to waitlist");
+      toast.error("Failed to add to waitlist");
     } finally {
       setIsProcessing(null);
     }
@@ -86,7 +87,7 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
       }
     } catch (e) {
       console.error(e);
-      alert("Failed to update status");
+      toast.error("Failed to update status");
     } finally {
       setIsProcessing(null);
     }
@@ -133,7 +134,7 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                       })
                       .catch(err => {
                         console.error(err);
-                        alert("Failed to seat customer: " + (err as Error).message);
+                        toast.error("Failed to seat customer: " + (err as Error).message);
                       });
                   }
                 }}
@@ -171,7 +172,7 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                 })
                 .catch(err => {
                   console.error(err);
-                  alert("Failed to seat customer: " + (err as Error).message);
+                  toast.error("Failed to seat customer: " + (err as Error).message);
                 });
             }}
           />

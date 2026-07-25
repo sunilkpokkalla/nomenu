@@ -3,7 +3,7 @@ title: "Setting Up Dynamic Pricing for Happy Hour"
 date: "2026-04-26"
 excerpt: "Automate your price changes at 4:00 PM exactly, without reprinting a single menu."
 author: "NoMenu Team"
-coverImage: "/blog/img_happyhour.jpg"
+coverImage: "/blog/happy_hour.png"
 ---
 
 Content for this article is being written. Check back soon for the full deep dive into setting up dynamic pricing for happy hour.

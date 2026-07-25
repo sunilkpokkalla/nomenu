@@ -3,7 +3,7 @@ title: "Why Food Trucks are Ditching Hardware for Software-Only Solutions"
 date: "2026-05-06"
 excerpt: "Space is limited. Power is limited. Why bulky POS systems make no sense for modern food trucks."
 author: "NoMenu Team"
-coverImage: "/blog/img_foodtruck.jpg"
+coverImage: "/blog/food_truck.png"
 ---
 
 Running a food truck is an exercise in extreme efficiency. You are operating a high-volume kitchen in a 100-square-foot metal box. Every inch of counter space matters, and every amp of electricity is carefully calculated.

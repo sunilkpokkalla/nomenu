@@ -14,6 +14,8 @@ import { formatTimeAgoWithExact } from "@/lib/date-utils";
 import { createBrowserClient } from "@supabase/ssr";
 import { getRandomOfferForDay, DayCategory } from "@/lib/retention-offers";
 import { getRandomLoyaltyIdeaForDay } from "@/lib/loyalty-offers";
+import { FeedbackStrategyForm } from "./feedback-strategy-form";
+import { toast } from "sonner";
 import { fetchFeedbackOrderDetails } from "./fetch-order-action";
 
 interface FeedbackData {
@@ -913,12 +915,12 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
                                                 if (success) {
                                                   setResolvedRequests(prev => ({...prev, [fb.id]: true}));
                                                 } else {
-                                                  alert("Failed to save: " + (error || "Unknown error"));
+                                                  toast.error("Failed to save: " + (error || "Unknown error"));
                                                   console.error("Resolve error:", details);
                                                 }
                                               } catch (err) {
                                                 const errorMessage = err instanceof Error ? err.message : String(err);
-                                                alert("Network error: " + errorMessage);
+                                                toast.error("Network error: " + errorMessage);
                                                 console.error(err);
                                               }
                                             }}

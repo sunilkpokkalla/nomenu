@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function SquareSyncButton({ targetMenuId, isConnected }: { targetMenuId: string, isConnected: boolean }) {
   const [isSyncing, setIsSyncing] = useState(false);
@@ -20,13 +21,13 @@ export function SquareSyncButton({ targetMenuId, isConnected }: { targetMenuId: 
       const data = await res.json();
       
       if (!res.ok) {
-        alert(data.error || "Failed to sync with Square");
+        toast.error(data.error || "Failed to sync with Square");
       } else {
-        alert(data.message || "Successfully synced with Square!");
+        toast.success(data.message || "Successfully synced with Square!");
         window.location.reload(); // Reload to show new items
       }
     } catch (error) {
-      alert("Network error while syncing with Square");
+      toast.error("Network error while syncing with Square");
     } finally {
       setIsSyncing(false);
     }

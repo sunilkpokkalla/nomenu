@@ -3,8 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
-import nodemailer from "nodemailer";
-
+import { sendEmail } from "@/lib/email";
 export async function approvePartnerAction(affiliateId: string, email: string, formData?: FormData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -31,20 +30,9 @@ export async function approvePartnerAction(affiliateId: string, email: string, f
 
   // Send Approval Email
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || "smtp.zoho.com",
-      port: Number(process.env.SMTP_PORT) || 465,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    });
-
     const domain = process.env.NEXT_PUBLIC_APP_URL || "https://nomenu.us";
 
-    await transporter.sendMail({
-      from: `"NoMenu Partners" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+    await sendEmail({
       to: email,
       subject: "Welcome! Your Partner Application is Approved",
       html: `
@@ -95,22 +83,11 @@ export async function rejectPartnerAction(affiliateId: string, email: string, fo
 
   // Send Rejection/Revoke Email
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || "smtp.zoho.com",
-      port: Number(process.env.SMTP_PORT) || 465,
-      secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    });
-
     const reasonHtml = reason && reason.trim().length > 0 
       ? `<div style="background-color: #f1f5f9; padding: 16px; border-left: 4px solid #ef4444; margin: 24px 0;"><strong>Feedback from Admin:</strong><br/>${reason}</div>`
       : "";
 
-    await transporter.sendMail({
-      from: `"NoMenu Partners" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+    await sendEmail({
       to: email,
       subject: "Update on your Partner Application",
       html: `
@@ -119,8 +96,8 @@ export async function rejectPartnerAction(affiliateId: string, email: string, fo
           <p>Thank you for your interest in the NoMenu Partner Program.</p>
           <p>After careful review, we are unfortunately unable to approve or continue your partnership at this time.</p>
           ${reasonHtml}
-          <p>We appreciate your interest and wish you the best.</p>
-          <p>Best,<br/>The NoMenu Team</p>
+          <p>We appreciate the time you took to apply.</p>
+          <p>Best regards,<br/>The NoMenu Team</p>
         </div>
       `,
     });

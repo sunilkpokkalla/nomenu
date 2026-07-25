@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare, Star, X, CheckCircle2, Search, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { submitFeedback } from "@/app/menu/[id]/actions";
 import { LoyaltyCardUI } from "@/app/loyalty/[id]/loyalty-card-ui";
 import Link from "next/link";
@@ -294,7 +296,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                             onClick={async () => {
                               const phoneDigits = customerPhone.replace(/\D/g, '');
                               if (!customerName || !customerEmail || !customerPhone || phoneDigits.length < 10 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail)) {
-                                alert("Please fill out all fields to claim your card.");
+                                toast.error("Please fill out all fields to claim your card.");
                                 return;
                               }
                               if (feedbackId) {
@@ -323,7 +325,7 @@ export function FeedbackFAB({ restaurantId, tableNumber, qrCodeId }: FeedbackFAB
                                     }
                                   }
                                 } else {
-                                  alert(res.error || "Failed to claim card.");
+                                  toast.error(res.error || "Failed to claim card.");
                                 }
                               }
                             }}

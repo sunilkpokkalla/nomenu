@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
-import nodemailer from "nodemailer";
+import { sendEmail } from "@/lib/email";
 
 function getString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -103,21 +103,10 @@ export async function signupAffiliate(formData: FormData) {
 
     // Send Emails
     try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST || "smtp.zoho.com",
-        port: Number(process.env.SMTP_PORT) || 465,
-        secure: true,
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
-        },
-      });
-
       const adminEmail = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(",")[0] : "admin@nomenu.us";
 
       // Email to Admin
-      await transporter.sendMail({
-        from: `"NoMenu Partners" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+      await sendEmail({
         to: adminEmail,
         subject: "New Partner Application Received",
         html: `
@@ -137,10 +126,8 @@ export async function signupAffiliate(formData: FormData) {
           </div>
         `,
       });
-
       // Email to User
-      await transporter.sendMail({
-        from: `"NoMenu Partners" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+      await sendEmail({
         to: email,
         subject: "Your NoMenu Partner Application is Under Review",
         html: `

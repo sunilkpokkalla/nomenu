@@ -28,6 +28,7 @@ const spaceMono = Space_Mono({
 
 import { ClientErrorLogger } from "@/components/client-error-logger";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
@@ -141,7 +142,7 @@ export default function RootLayout({
             })
           }}
         />
-
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   );

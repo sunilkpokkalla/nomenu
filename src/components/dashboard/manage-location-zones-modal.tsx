@@ -5,6 +5,7 @@ import { Plus, X, Loader2, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -54,7 +55,7 @@ export function ManageLocationZonesModal({ restaurantId, initialZones }: ManageL
       router.refresh();
     } catch (error) {
       console.error(error);
-      alert("Failed to save location zones.");
+      toast.error("Failed to save location zones.");
     } finally {
       setIsLoading(false);
     }

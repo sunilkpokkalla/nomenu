@@ -3,7 +3,7 @@ title: "How to Handle Bad Yelp Reviews Before They Go Public"
 date: "2026-05-21"
 excerpt: "A single 1-star review can cost you thousands. Here is how modern platforms intercept them first."
 author: "NoMenu Team"
-coverImage: "/blog/img_review.jpg"
+coverImage: "/blog/yelp_reviews.png"
 ---
 
 In the restaurant industry, reputation is everything. A drop from a 4.5 to a 3.9 on Yelp or Google Maps can result in a catastrophic drop in foot traffic. The scariest part? You often don't know a customer was unhappy until you read their scathing review on the internet three days later.

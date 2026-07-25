@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import nodemailer from "nodemailer";
+import { sendEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/server-admin";
 import { isDemoUser } from "@/lib/demo";
 
@@ -103,19 +103,8 @@ export async function inviteStaff(formData: FormData, restaurantId: string) {
   // Send email via nodemailer
   const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/team/join?token=${newStaff.id}`;
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.zoho.com",
-    port: Number(process.env.SMTP_PORT) || 465,
-    secure: true,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  });
-
   try {
-    await transporter.sendMail({
-      from: `"NoMenu" <${process.env.SMTP_USER || "noreply@nomenu.us"}>`,
+    await sendEmail({
       to: email,
       subject: `You've been invited to join ${restaurant.name} on NoMenu`,
       html: `

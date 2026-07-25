@@ -3,7 +3,7 @@ title: "Creating Multi-Language Menus Instantly with AI"
 date: "2026-06-15"
 excerpt: "Serve tourists perfectly by offering your menu in 14 languages with a single click."
 author: "NoMenu Team"
-coverImage: "/blog/img_language.jpg"
+coverImage: "/blog/language_menu.png"
 ---
 
 Content for this article is being written. Check back soon for the full deep dive into creating multi-language menus instantly with ai.
