@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     // Get the restaurant's stripe_account_id
     const { data: _restaurantData, error: fetchError } = await supabase
       .from("restaurants")
-      .select("stripe_account_id, plan, prep_time_minutes, currency, is_annual_plan, subscription_start_date")
+      .select("stripe_account_id, plan, prep_time_minutes, currency, is_annual_plan, subscription_start_date, takeaway_fee, priority_reserve_fee")
       .eq("id", restaurantId)
       .single();
 
