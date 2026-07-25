@@ -29,6 +29,7 @@ type Order = {
   status: string;
   created_at: string;
   daily_order_number?: number | null;
+  ended_at?: string | null;
   payment_intent_id?: string | null;
   is_paid?: boolean;
   order_items?: OrderItem[];
@@ -67,8 +68,17 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
   useEffect(() => {
     // track when orders enter completed/cancelled state
     orders.forEach(o => {
-      if ((o.status === "completed" || o.status === "cancelled") && !completedTimes.current.has(o.id)) {
-        completedTimes.current.set(o.id, Date.now());
+      if ((o.status === "completed" || o.status === "cancelled" || o.status === "cancelled_by_customer" || o.status === "cancelled_by_restaurant") && !completedTimes.current.has(o.id)) {
+        if (o.ended_at) {
+          completedTimes.current.set(o.id, new Date(o.ended_at).getTime());
+        } else {
+          const createdTime = new Date(o.created_at).getTime();
+          if (Date.now() - createdTime > 15 * 60000) {
+            completedTimes.current.set(o.id, createdTime);
+          } else {
+            completedTimes.current.set(o.id, Date.now());
+          }
+        }
       }
     });
   }, [orders]);
@@ -345,10 +355,12 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
     }
 
     // Optimistic update
-    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+    const timestamp = Date.now();
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus, ended_at: new Date(timestamp).toISOString() } : o));
     
     // Auto-collapse if moved to an inactive status
     if (newStatus === "completed" || newStatus === "cancelled") {
+      completedTimes.current.set(orderId, timestamp);
       setExpandedOrders(prev => {
         const next = new Set(prev);
         next.delete(orderId);
@@ -393,7 +405,7 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
       <div className={`flex items-center justify-between ${isKdsMode ? "text-slate-100" : "text-slate-900"}`}>
         <h2 className="font-extrabold tracking-tight text-2xl flex items-center gap-3">
           {isKdsMode ? <ChefHat className="w-7 h-7 text-emerald-400" /> : <Clock className="w-6 h-6 text-indigo-500" />}
-          {isKdsMode ? "KDS Live Terminal (Pickup & Reserve)" : "Kitchen Display System"}
+          {isKdsMode ? "KDS Live Terminal (Priority Reserve)" : "Priority Reserve Board"}
         </h2>
         
         <div className="flex items-center gap-4">
@@ -546,7 +558,7 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
               .filter(o => o.order_items && o.order_items.length > 0)
               .filter(o => {
               if (!selectedDateStr && (col.id === "completed" || col.id === "cancelled") && autoArchiveMinutes !== null) {
-                const completedAt = completedTimes.current.get(o.id);
+                const completedAt = o.ended_at ? new Date(o.ended_at).getTime() : completedTimes.current.get(o.id);
                 if (completedAt) {
                   const minsPassed = (currentTime.getTime() - completedAt) / 60000;
                   return minsPassed <= autoArchiveMinutes;

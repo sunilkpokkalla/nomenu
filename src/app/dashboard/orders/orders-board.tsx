@@ -422,7 +422,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
       <div className={`flex items-center justify-between ${isKdsMode ? "text-slate-100" : "text-slate-900"}`}>
         <h2 className="font-extrabold tracking-tight text-2xl flex items-center gap-3">
           {isKdsMode ? <ChefHat className="w-7 h-7 text-emerald-400" /> : <Clock className="w-6 h-6 text-indigo-500" />}
-          {isKdsMode ? "KDS Live Terminal (Dine-In)" : "Kitchen Display System"}
+          {isKdsMode ? "KDS Live Terminal (Dine-In)" : "Dine-In Dashboard"}
         </h2>
         
         <div className="flex items-center gap-4">
