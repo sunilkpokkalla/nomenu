@@ -1129,6 +1129,7 @@ export async function updateRestaurantSettings(formData: FormData) {
 
   revalidatePath("/dashboard/settings");
   revalidatePath("/dashboard");
+  revalidatePath("/", "layout"); // Force clear all cached menu pages
   redirect("/dashboard/settings?success=Settings%20updated%20successfully");
 }
 
