@@ -61,6 +61,7 @@ export default async function KDSPage() {
     .eq("restaurant_id", restaurant.id)
     .in("status", ["pending", "preparing"])
     .gte("created_at", startOfTodayUtc.toISOString())
+    .or("table_number.not.is.null,is_paid.eq.true") // KDS only sees Dine-In (table) or Paid Takeaway
     .order("created_at", { ascending: false });
 
   // If not elite or enterprise plan, lock it

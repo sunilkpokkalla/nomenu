@@ -234,8 +234,11 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
       .from("orders")
       .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
       .eq("restaurant_id", restaurantId)
-      .is("customer_phone", null) // Exclusively Dine-In orders
       .order("created_at", { ascending: true });
+      
+    if (isKdsMode) {
+      query = query.or("table_number.not.is.null,is_paid.eq.true"); // KDS: Dine-in or Paid Takeaway
+    }
       
     if (selectedDateStr) {
       // Archive Mode: Fetch all orders for the exact selected date
@@ -293,7 +296,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
         { event: "*", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
         async (payload) => {
           if (payload.eventType === "INSERT") {
-            if (payload.new.customer_phone !== null) return; // Only track Dine-In
+            if (isKdsMode && payload.new.table_number === null && payload.new.is_paid === false) return; // KDS ignores unpaid Takeaway
             // Give the backend 1.5s to finish inserting the order_items before we fetch the full order
             setTimeout(async () => {
               const { data: newOrder } = await supabase
@@ -311,7 +314,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
               }
             }, 1500);
           } else if (payload.eventType === "UPDATE") {
-            if (payload.new.customer_phone !== null) return;
+            if (isKdsMode && payload.new.table_number === null && payload.new.is_paid === false) return; // KDS ignores unpaid Takeaway
             setOrders(prev => {
               const exists = prev.some(o => o.id === payload.new.id);
               if (exists) {
@@ -341,7 +344,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
       ).subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, [restaurantId, supabaseUrl, supabaseAnonKey]);
+  }, [restaurantId, supabaseUrl, supabaseAnonKey, isKdsMode]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {

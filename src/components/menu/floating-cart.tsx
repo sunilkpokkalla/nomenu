@@ -700,7 +700,11 @@ export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableN
                 <button
                   type="button"
                   disabled={isSubmitting || isClosed || (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0)}
-                  onClick={(e) => handleCheckout(e, allowManualPayments)}
+                  onClick={(e) => {
+                    const mustPayUpfront = stripeAccountId && activeFulfillmentType !== 'dine_in';
+                    const skipStripe = !mustPayUpfront && allowManualPayments;
+                    handleCheckout(e, skipStripe);
+                  }}
                   className={`w-full py-4 rounded-xl font-bold text-lg flex justify-center items-center gap-2 shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed text-white`}
                   style={{ backgroundColor: primaryColor }}
                 >
@@ -713,7 +717,7 @@ export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableN
                   ) : (
                     <>
                       <CreditCard className="w-5 h-5" />
-                      {stripeAccountId && !allowManualPayments ? "Secure Checkout" : "Place Order (Pay at Counter)"}
+                      {stripeAccountId && !(allowManualPayments && activeFulfillmentType === 'dine_in') ? "Secure Checkout" : "Place Order (Pay at Counter)"}
                     </>
                   )}
                 </button>

@@ -59,7 +59,6 @@ export default async function OrdersPage() {
       )
     `)
     .eq("restaurant_id", restaurant.id)
-    .is("customer_phone", null) // Exclusively Dine-In orders
     .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
     .order("created_at", { ascending: false });
 
