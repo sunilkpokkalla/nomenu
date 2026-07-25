@@ -162,7 +162,8 @@ export function ReceiptTracker({ restaurantId, restaurantCreatedAt, locationLabe
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const validOrders = res.orders.filter((o: any) => {
           const orderTime = new Date(o.created_at).getTime();
-          return (now - orderTime) < 24 * 60 * 60 * 1000;
+          // Filter out abandoned checkouts so they don't clutter the customer's view
+          return (now - orderTime) < 24 * 60 * 60 * 1000 && o.status !== "awaiting_payment";
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const validIds = validOrders.map((o: any) => o.id);
@@ -187,7 +188,8 @@ export function ReceiptTracker({ restaurantId, restaurantCreatedAt, locationLabe
     
     const checkActiveOrders = () => {
       // Only poll if we have orders that are not completed or cancelled
-      const hasActiveOrders = orders.some(o => !["completed", "cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(o.status));
+      const validOrders = orders.filter(o => o.status !== "awaiting_payment");
+      const hasActiveOrders = validOrders.some(o => !["completed", "cancelled", "cancelled_by_customer", "cancelled_by_restaurant"].includes(o.status));
       if (hasActiveOrders && orderIds.length > 0) {
         fetchOrders(orderIds, false);
       }

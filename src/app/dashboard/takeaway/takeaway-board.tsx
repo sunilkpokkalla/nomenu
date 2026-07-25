@@ -260,6 +260,7 @@ export function TakeawayBoard({ initialOrders, restaurantId, restaurantCreatedAt
         async (payload) => {
           if (payload.eventType === "INSERT") {
             if (payload.new.customer_phone === null) return; // Only track Takeaway/Priority
+            if (payload.new.status === 'awaiting_payment') return; // Hide unconfirmed checkouts
             // Give the backend 1.5s to finish inserting the order_items before we fetch the full order
             setTimeout(async () => {
               const { data: newOrder } = await supabase

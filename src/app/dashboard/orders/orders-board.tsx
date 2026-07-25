@@ -314,7 +314,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
               if (exists) {
                 return prev.map(o => o.id === payload.new.id ? { ...o, ...payload.new } : o);
               } else {
-                // If the order wasn't in state (e.g. it was awaiting_payment on load) and became pending
+                // If the order wasn't in state and became pending
                 if (payload.new.status === "pending" || payload.new.status === "preparing") {
                   setTimeout(async () => {
                     const { data: fullOrder } = await supabase
@@ -396,7 +396,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
     await handleStatusChange(draggableId, destination.droppableId);
   };
   const columns = [
-    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending", "cancel_requested"] },
+    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending"] },
     { id: "preparing", title: "Preparing", icon: ChefHat, matchStatus: ["preparing"] },
     { id: "completed", title: "Ready / Done", icon: CheckCircle2, matchStatus: ["completed"] },
     { id: "cancelled", title: "Cancelled", icon: XCircle, matchStatus: ["cancelled", "cancelled_by_customer", "cancelled_by_restaurant"] }
@@ -674,9 +674,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
                                       </span>
                                       
                                       {/* PAYMENT STATUS BADGE / TOGGLE */}
-                                      {order.status === 'awaiting_payment' ? (
-                                        <span className="px-1.5 py-0.5 text-[10px] font-black tracking-wide uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20">Unpaid</span>
-                                      ) : order.payment_intent_id ? (
+                                      {order.payment_intent_id ? (
                                         <span className="px-1.5 py-0.5 text-[10px] font-black tracking-wide uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
                                           <CheckCircle2 className="w-3 h-3" /> Paid Online
                                         </span>
@@ -803,15 +801,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
                                           </div>
                                         ) : (
                                           <>
-                                            {col.id === "pending" && order.status === "awaiting_payment" && (
-                                              <button 
-                                                onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "cancelled"); }} 
-                                                className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border border-rose-500/20 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
-                                              >
-                                                Dismiss
-                                              </button>
-                                            )}
-                                            {col.id === "pending" && order.status !== "awaiting_payment" && (
+                                            {col.id === "pending" && (
                                               <button 
                                                 onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "preparing"); }} 
                                                 className="bg-amber-500 text-amber-950 hover:bg-amber-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
