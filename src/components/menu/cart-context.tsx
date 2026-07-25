@@ -22,8 +22,32 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({ children, restaurantId = "default" }: { children: ReactNode, restaurantId?: string }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Load from localStorage on mount
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem(`nomenu_cart_${restaurantId}`);
+      if (stored) {
+        setItems(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.warn("Could not load cart from local storage", e);
+    }
+    setIsInitialized(true);
+  }, [restaurantId]);
+
+  // Save to localStorage whenever items change (after initial load)
+  React.useEffect(() => {
+    if (!isInitialized) return;
+    try {
+      localStorage.setItem(`nomenu_cart_${restaurantId}`, JSON.stringify(items));
+    } catch (e) {
+      console.warn("Could not save cart to local storage", e);
+    }
+  }, [items, isInitialized, restaurantId]);
 
   const addToCart = (menuItem: MenuItem, quantity: number, notes: string) => {
     // Safety check: ensure quantity is a valid number, otherwise default to 1

@@ -166,7 +166,7 @@ export default async function StorefrontMenuPage(
   const effectiveTableNumber = tableNumber || qrTableLabel || undefined;
 
   return (
-    <CartProvider>
+    <CartProvider restaurantId={menu.restaurant_id}>
       <MenuClientView 
         restaurant={{
           id: restaurant.id,

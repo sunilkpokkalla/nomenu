@@ -143,7 +143,7 @@ export default async function PublicMenuPage(
     : tableNumber;
 
   return (
-    <CartProvider>
+    <CartProvider restaurantId={menu.restaurant_id}>
       <MenuClientView 
         restaurant={{
           id: restaurant.id,
