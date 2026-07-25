@@ -112,13 +112,13 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
   useEffect(() => {
     if (selectedDateStr) return; // Only notify on live "Today" view
     
-    const newOrders = orders.filter(o => 
+    const activeOrders = orders.filter((o) => 
       !knownOrderIds.current.has(o.id) && 
-      (o.status === "pending" || o.status === "awaiting_payment" || o.status === "preparing")
+      (o.status === "pending" || o.status === "preparing")
     );
     
-    if (newOrders.length > 0) {
-      const latestNew = newOrders[newOrders.length - 1];
+    if (activeOrders.length > 0) {
+      const latestNew = activeOrders[activeOrders.length - 1];
       
       // Cross-tab deduplication: Ensure only ONE tab plays the sound
       const notifiedKey = `notified_order_${latestNew.id}`;
@@ -138,7 +138,7 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
       setTimeout(() => setNotification(null), 6000);
       
       // Add to known IDs
-      newOrders.forEach(o => knownOrderIds.current.add(o.id));
+      activeOrders.forEach(o => knownOrderIds.current.add(o.id));
     }
   }, [orders, selectedDateStr, playNotificationSound, restaurantCreatedAt]);
 
@@ -366,7 +366,7 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
   };
 
   const columns = [
-    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending", "awaiting_payment"] },
+    { id: "pending", title: "New Orders", icon: Clock, matchStatus: ["pending"] },
     { id: "preparing", title: "Preparing", icon: ChefHat, matchStatus: ["preparing"] },
     { id: "completed", title: "Ready / Done", icon: CheckCircle2, matchStatus: ["completed"] },
     { id: "cancelled", title: "Cancelled", icon: XCircle, matchStatus: ["cancelled"] }
@@ -644,9 +644,7 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
                                       </span>
                                       
                                       {/* PAYMENT STATUS BADGE / TOGGLE */}
-                                      {order.status === 'awaiting_payment' ? (
-                                        <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-rose-500/10 text-rose-500 border border-rose-500/20">Unpaid</span>
-                                      ) : order.payment_intent_id ? (
+                                      {order.payment_intent_id ? (
                                         <span className="px-2 py-0.5 text-[10px] font-black tracking-widest uppercase rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center gap-1">
                                           <CheckCircle2 className="w-3 h-3" /> Paid Online
                                         </span>
@@ -762,15 +760,7 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
                                     {/* Right Side: Quick Action Button (Light mode only to keep KDS clean, or maybe keep everywhere) */}
                                     {!selectedDateStr && (
                                       <div className="flex items-center gap-2 ml-auto">
-                                        {col.id === "pending" && order.status === "awaiting_payment" && (
-                                          <button 
-                                            onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "cancelled"); }} 
-                                            className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border border-rose-500/20 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
-                                          >
-                                            Dismiss
-                                          </button>
-                                        )}
-                                        {col.id === "pending" && order.status !== "awaiting_payment" && (
+                                        {col.id === "pending" && (
                                           <button 
                                             onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, "preparing"); }} 
                                             className="bg-amber-500 text-amber-950 hover:bg-amber-400 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide transition-colors active:scale-95"
