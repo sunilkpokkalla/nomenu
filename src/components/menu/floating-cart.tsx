@@ -690,13 +690,14 @@ export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableN
 
                 {/* Main Checkout Button */}
                 <button
-                  type="submit"
+                  type="button"
                   disabled={isSubmitting || isClosed || (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0)}
-                  className="w-full py-4 rounded-xl font-bold flex justify-center items-center gap-2 shadow-lg hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
-                  style={{ backgroundColor: btnColor, color: textColor }}
+                  onClick={(e) => handleCheckout(e, allowManualPayments)}
+                  className={`w-full py-4 rounded-xl font-bold text-lg flex justify-center items-center gap-2 shadow-lg hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed text-white`}
+                  style={{ backgroundColor: primaryColor }}
                 >
                   {isSubmitting ? (
-                    <span className="animate-pulse">Processing...</span>
+                    "Processing..."
                   ) : isClosed ? (
                     "Currently Closed"
                   ) : (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0) ? (
@@ -704,22 +705,10 @@ export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableN
                   ) : (
                     <>
                       <CreditCard className="w-5 h-5" />
-                      {stripeAccountId ? "Secure Checkout" : "Place Order (Pay at Counter)"}
+                      {stripeAccountId && !allowManualPayments ? "Secure Checkout" : "Place Order (Pay at Counter)"}
                     </>
                   )}
                 </button>
-
-                {/* Optional Manual Payment Button (Enterprise & Elite) */}
-                {allowManualPayments && stripeAccountId && (plan === 'enterprise' || plan === 'elite') && (
-                  <button
-                    type="button"
-                    onClick={(e) => handleCheckout(e, true)}
-                    disabled={isSubmitting || isClosed || (activeFulfillmentType !== 'dine_in' && timeSlots.length === 0)}
-                    className="w-full py-3 mt-2 rounded-xl font-semibold flex justify-center items-center gap-2 bg-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-all disabled:opacity-50 text-sm"
-                  >
-                    Pay at Counter (Cash / POS)
-                  </button>
-                )}
               </form>
             </div>
           </div>

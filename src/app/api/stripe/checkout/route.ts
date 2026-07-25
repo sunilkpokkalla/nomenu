@@ -13,7 +13,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid request payload" }, { status: 400 });
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+    );
 
     // Get the restaurant's stripe_account_id
     const { data: _restaurantData, error: fetchError } = await supabase
