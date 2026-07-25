@@ -93,7 +93,7 @@ export default async function FeedbackPage({
   const allFeedbacks: FeedbackData[] = (feedbacks || []) as FeedbackData[];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="p-6 lg:p-10 w-full max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-500">
       <AutoRefresh intervalMs={15000} />
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">

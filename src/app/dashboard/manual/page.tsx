@@ -20,7 +20,7 @@ export const dynamic = 'force-dynamic';
 
 export default function ManualIndexPage() {
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="p-6 w-full max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-500">
       
       {/* Header */}
       <div className="flex flex-col gap-2 pb-6 border-b border-slate-200">

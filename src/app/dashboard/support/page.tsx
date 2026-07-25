@@ -24,7 +24,7 @@ export default async function SupportPage() {
   const restaurant = await getActiveRestaurant(supabase, user.id);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="p-6 w-full max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
           <LifeBuoy className="w-8 h-8 text-indigo-600" />

@@ -30,7 +30,7 @@ export default async function PayoutsPage(
   const canUsePayouts = currentPlan === "enterprise" || currentPlan === "elite";
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 lg:px-8">
+    <div className="mx-auto w-full max-w-[1600px] px-4 py-8 lg:px-8">
       {/* Header */}
       <div className="mb-10">
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Payments & Payouts</h1>

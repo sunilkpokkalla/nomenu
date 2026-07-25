@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function CustomizeManualPage() {
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500 pb-20">
+    <div className="p-6 w-full max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-500 pb-20">
       
       <Link 
         href="/dashboard/manual"

@@ -101,7 +101,7 @@ export default async function BillingPage(
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 lg:px-8">
+    <div className="mx-auto w-full max-w-[1600px] px-4 py-8 lg:px-8">
       {/* Header */}
       <div className="mb-10 max-w-2xl">
         <h1 className="text-3xl font-bold tracking-tight text-slate-950">Plans & Billing</h1>
