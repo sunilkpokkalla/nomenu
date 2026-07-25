@@ -200,6 +200,43 @@ export default async function SettingsPage(
               </div>
             </div>
             
+            {(restaurant.plan || "").toLowerCase() === "enterprise" && (
+              <div className="grid gap-4 sm:grid-cols-2 pt-4 border-t mt-6">
+                <div className="space-y-2">
+                  <Label htmlFor="takeawayFee">Takeaway Convenience Fee ($)</Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2.5 text-muted-foreground text-sm">$</span>
+                    <Input 
+                      id="takeawayFee" 
+                      name="takeawayFee" 
+                      type="number" 
+                      step="0.01" 
+                      min="0"
+                      className="pl-7" 
+                      defaultValue={restaurant.takeaway_fee || 0} 
+                    />
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">Added to takeaway orders to cover packaging. You keep 90% of this fee.</p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="priorityReserveFee">Priority Reserve Fee ($)</Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2.5 text-muted-foreground text-sm">$</span>
+                    <Input 
+                      id="priorityReserveFee" 
+                      name="priorityReserveFee" 
+                      type="number" 
+                      step="0.01" 
+                      min="0"
+                      className="pl-7" 
+                      defaultValue={restaurant.priority_reserve_fee || 0} 
+                    />
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">Added to VIP reservations. You keep 90% of this fee.</p>
+                </div>
+              </div>
+            )}
+
             <Button type="submit" className="w-full sm:w-auto mt-6">
               <Save className="mr-2 h-4 w-4" /> Save Changes
             </Button>

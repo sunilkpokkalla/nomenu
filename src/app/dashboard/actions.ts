@@ -1113,6 +1113,10 @@ export async function updateRestaurantSettings(formData: FormData) {
       opening_time: (field(formData, "openingTime") || "09:00") + ":00",
       closing_time: (field(formData, "closingTime") || "23:00") + ":00",
       reward_templates: rewardTemplates,
+      ...((restaurant.plan || "").toLowerCase() === "enterprise" ? {
+        takeaway_fee: field(formData, "takeawayFee") ? parseFloat(field(formData, "takeawayFee")!) : null,
+        priority_reserve_fee: field(formData, "priorityReserveFee") ? parseFloat(field(formData, "priorityReserveFee")!) : null,
+      } : {}),
     })
     .eq("id", restaurant.id);
 
