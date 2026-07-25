@@ -5,13 +5,22 @@ import { redirect } from "next/navigation";
 
 import { createQrCode, bulkCreateQrCodes, syncQrCodesFromFloorPlan, deleteQrCode } from "@/app/dashboard/actions";
 import { CopyButton, DownloadButton } from "@/components/dashboard/qr-actions";
-import { QrDesignerModal } from "@/components/dashboard/qr-designer-modal";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CreateQrSheet } from "@/components/dashboard/create-qr-sheet";
 import { ManageLocationZonesModal } from "@/components/dashboard/manage-location-zones-modal";
 import { QrCategoryFilter } from "@/components/dashboard/qr-category-filter";
+import dynamic from "next/dynamic";
+
+const QrDesignerModal = dynamic(
+  () => import("@/components/dashboard/qr-designer-modal").then(mod => mod.QrDesignerModal),
+  { ssr: false }
+);
+
+const CreateQrSheet = dynamic(
+  () => import("@/components/dashboard/create-qr-sheet").then(mod => mod.CreateQrSheet),
+  { ssr: false }
+);
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/server";
 

@@ -2,14 +2,28 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { CopyButton, DownloadButton } from "@/components/dashboard/qr-actions";
-import { QrDesignerModal } from "@/components/dashboard/qr-designer-modal";
 import { DeleteConfirmForm } from "@/components/dashboard/delete-confirm";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Printer, Trash2 } from "lucide-react";
 import { deleteQrCode, bulkDeleteQrCodes } from "@/app/dashboard/actions";
-import { BatchQrDesignerModal } from "@/components/dashboard/batch-qr-designer-modal";
 import { QRCodeSVG } from "qrcode.react";
+import dynamic from "next/dynamic";
+
+const QrDesignerModal = dynamic(
+  () => import("@/components/dashboard/qr-designer-modal").then(mod => mod.QrDesignerModal),
+  { ssr: false }
+);
+
+const BatchQrDesignerModal = dynamic(
+  () => import("@/components/dashboard/batch-qr-designer-modal").then(mod => mod.BatchQrDesignerModal),
+  { ssr: false }
+);
+
+const BatchQrDesignerModal = dynamic(
+  () => import("@/components/dashboard/batch-qr-designer-modal").then(mod => mod.BatchQrDesignerModal),
+  { ssr: false }
+);
 
 const getGridClass = (count: number) => {
   if (count <= 2) return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
