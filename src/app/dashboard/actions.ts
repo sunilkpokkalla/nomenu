@@ -142,7 +142,7 @@ export async function createMenu(formData: FormData) {
   const serviceChargeType = field(formData, "serviceChargeType") || "percentage";
   const locationLabel = field(formData, "locationLabel") || "Table";
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
-  const allowManualPayments = currentPlan === "enterprise" ? formData.get("allowManualPayments") === "true" : false;
+  const allowManualPayments = (currentPlan === "enterprise" || currentPlan === "elite") ? formData.get("allowManualPayments") === "true" : false;
   if (currentPlan === "free") {
     const { count: menuCount } = await supabase
       .from("menus")
@@ -248,7 +248,7 @@ export async function editMenu(formData: FormData) {
   const serviceChargeType = field(formData, "serviceChargeType") || "percentage";
   const locationLabel = field(formData, "locationLabel") || "Table";
   const currentPlan = restaurant.plan?.toLowerCase() || "free";
-  const allowManualPayments = currentPlan === "enterprise" ? formData.get("allowManualPayments") === "true" : false;
+  const allowManualPayments = (currentPlan === "enterprise" || currentPlan === "elite") ? formData.get("allowManualPayments") === "true" : false;
 
   // First, verify the menu belongs to this restaurant
   const { data: existingMenu } = await supabase

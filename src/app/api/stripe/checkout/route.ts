@@ -21,14 +21,15 @@ export async function POST(req: Request) {
     // Get the restaurant's stripe_account_id
     const { data: _restaurantData, error: fetchError } = await supabase
       .from("restaurants")
-      .select("stripe_account_id, plan, prep_time_minutes, currency, is_annual_plan, subscription_start_date, takeaway_fee, priority_reserve_fee")
+      .select("stripe_account_id, plan, prep_time_minutes, currency, is_annual_plan, subscription_start_date")
       .eq("id", restaurantId)
       .single();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const restaurant = _restaurantData as any;
     if (fetchError || !restaurant) {
-      return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
+      console.error("Stripe Checkout fetchError:", fetchError, "restaurantId:", restaurantId);
+      return NextResponse.json({ error: `Restaurant not found. ID: ${restaurantId}. Error: ${fetchError?.message || 'No data'}` }, { status: 404 });
     }
 
     if (!restaurant.stripe_account_id) {
