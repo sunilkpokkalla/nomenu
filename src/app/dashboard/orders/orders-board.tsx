@@ -300,7 +300,7 @@ export function OrdersBoard({ initialOrders, restaurantId, restaurantCreatedAt, 
                 .eq("id", payload.new.id)
                 .single();
               
-              if (newOrder) {
+              if (newOrder && (newOrder.status === "pending" || newOrder.status === "preparing")) {
                 setOrders(prev => {
                   // Prevent duplicate insertions if polling already grabbed it
                   if (prev.some(o => o.id === newOrder.id)) return prev;
