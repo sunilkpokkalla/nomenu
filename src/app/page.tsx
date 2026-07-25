@@ -205,11 +205,14 @@ function FloorTable({ table }: { table: TableData }) {
 }
 
 const HERO_HEADINGS = [
+  "Run your entire restaurant.",
   "Replace your clunky POS.",
   "Ditch the legacy hardware.",
   "Speed up your kitchen ops.",
   "Turn tables faster today."
 ];
+
+
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -219,7 +222,7 @@ export default function LandingPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setHeroIndex((current) => (current + 1) % HERO_HEADINGS.length);
-    }, 4000); // 4 seconds is usually the sweet spot for readability!
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -314,16 +317,14 @@ export default function LandingPage() {
           <h1 className="text-4xl font-extrabold tracking-tight text-slate-950 sm:text-6xl md:text-7xl leading-[1.05] max-w-5xl mx-auto flex flex-col items-center">
             <span key={heroIndex} className="relative inline-flex items-center gap-3 animate-in fade-in slide-in-from-left-4 duration-1000 ease-out">
               {HERO_HEADINGS[heroIndex]}
-              <Sparkles className="h-8 w-8 text-amber-500 animate-pulse absolute -right-12 top-1/2 -translate-y-1/2" strokeWidth={1.5} />
             </span>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-violet-600 to-amber-500 font-serif-luxury italic font-medium capitalize mt-1">
-              Run your entire restaurant.
+              From One Single Scan.
             </span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-slate-500 leading-relaxed font-medium text-center">
-            The powerful, all-in-one ordering system built for restaurants, cafes, food trucks, hotel rooms, and poolside cabanas. <br className="hidden sm:block" />
-            Guests scan a QR code to order instantly—<strong className="text-slate-800">growing your profits by up to 280%.</strong>
+            More than just beautiful QR menus. It’s a powerful, all-in-one ordering suite built for modern hospitality. From a real-time Kitchen Display System to an AI-powered feedback engine, guests order instantly—<strong className="text-slate-800">growing your profits by up to 288%.</strong>
           </p>
 
           <div className="mx-auto mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
