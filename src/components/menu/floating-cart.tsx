@@ -83,6 +83,14 @@ export function FloatingCart({ restaurantId, restaurantCreatedAt, menuId, tableN
         const endTime = new Date(now);
         endTime.setHours(closeHours, closeMins, 0, 0);
 
+        if (closeHours < openHours) {
+          if (now.getHours() < closeHours) {
+            openTimeDate.setDate(openTimeDate.getDate() - 1);
+          } else {
+            endTime.setDate(endTime.getDate() + 1);
+          }
+        }
+
         const closed = now < openTimeDate || now >= endTime;
         setIsClosed(closed);
 
