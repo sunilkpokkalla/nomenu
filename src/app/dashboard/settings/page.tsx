@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { updateRestaurantSettings } from "@/app/dashboard/actions";
 import { CuisineSelect } from "@/components/dashboard/cuisine-select";
-import { CURRENCY_OPTIONS } from "@/lib/currency-options";
+import { CURRENCY_OPTIONS, getCurrencySymbol } from "@/lib/currency-options";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,6 +39,8 @@ export default async function SettingsPage(
   }
 
   const hasCustomLegacyCurrency = restaurant.currency && !CURRENCY_OPTIONS.some((c) => c.code === restaurant.currency);
+
+  const currencySymbol = getCurrencySymbol(restaurant.currency);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -203,9 +205,9 @@ export default async function SettingsPage(
             {(restaurant.plan || "").toLowerCase() === "enterprise" && (
               <div className="grid gap-4 sm:grid-cols-2 pt-4 border-t mt-6">
                 <div className="space-y-2">
-                  <Label htmlFor="takeawayFee">Takeaway Convenience Fee ($)</Label>
+                  <Label htmlFor="takeawayFee">Takeaway Convenience Fee ({currencySymbol})</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2.5 text-muted-foreground text-sm">$</span>
+                    <span className="absolute left-3 top-2.5 text-muted-foreground text-sm">{currencySymbol}</span>
                     <Input 
                       id="takeawayFee" 
                       name="takeawayFee" 
@@ -219,9 +221,9 @@ export default async function SettingsPage(
                   <p className="text-[10px] text-muted-foreground">Added to takeaway orders to cover packaging. You keep 90% of this fee.</p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="priorityReserveFee">Priority Reserve Fee ($)</Label>
+                  <Label htmlFor="priorityReserveFee">Priority Reserve Fee ({currencySymbol})</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2.5 text-muted-foreground text-sm">$</span>
+                    <span className="absolute left-3 top-2.5 text-muted-foreground text-sm">{currencySymbol}</span>
                     <Input 
                       id="priorityReserveFee" 
                       name="priorityReserveFee" 
