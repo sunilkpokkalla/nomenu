@@ -894,7 +894,15 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                         onClick={async () => {
                           setIsProcessingLiveAction(true);
                           try {
-                            await createWalkInTab(restaurantId, compositeTableString, walkInName || "Walk-in", walkInCount);
+                            if (selectedTables.length === 1) {
+                              await createWalkInTab(restaurantId, compositeTableString, walkInName || "Walk-in", walkInCount);
+                            } else {
+                              // Create separate independent tabs for each selected table
+                              for (const table of selectedTables) {
+                                const singleTableName = `${table._planName || "Main Floor"} - ${table.table_number}`;
+                                await createWalkInTab(restaurantId, singleTableName, walkInName || "Walk-in", Math.max(1, Math.floor(walkInCount / selectedTables.length)));
+                              }
+                            }
                             setSelectedLiveTableIds([]);
                             setWalkInName("");
                             setWalkInCount(2);
