@@ -183,7 +183,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
       // Find if this table is currently occupied
       const compositeName = `${activePlan?.name || "Main Floor"} - ${table.table_number}`;
       const activeOrder = activeOrders.find(o => 
-        o.table_number && String(o.table_number).split(',').map(s=>s.trim()).includes(compositeName)
+        o.table_number && String(o.table_number).split(',').map((s: string) => s.trim()).includes(compositeName)
       );
 
       if (activeOrder) {
@@ -206,7 +206,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
             const t = tables.find(tb => tb.id === tid);
             if (!t) return false;
             const cName = `${activePlan?.name || "Main Floor"} - ${t.table_number}`;
-            return activeOrders.some(o => o.table_number && String(o.table_number).split(',').map(s=>s.trim()).includes(cName));
+            return activeOrders.some(o => o.table_number && String(o.table_number).split(',').map((s: string) => s.trim()).includes(cName));
           });
           
           if (hasOccupiedSelected) {
@@ -396,7 +396,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
           {/* Canvas */}
           <div 
             ref={containerRef}
-            className={`absolute top-0 left-0 touch-none ${isEditMode ? "shadow-inner" : ""}`}
+            className="w-[1200px] h-[900px] relative transition-transform duration-200 origin-top-left"
             style={{ 
               minWidth: '1200px',
               minHeight: '900px',
@@ -406,10 +406,79 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
               backgroundSize: '20px 20px' 
             }}
           >
+
+            {/* Draw lines between currently selected tables ONLY when seating from waitlist (onSelectTable is true) */}
+            {!isEditMode && onSelectTable && selectedLiveTableIds.length > 1 && (
+              <svg className="absolute inset-0 pointer-events-none z-0" style={{ width: '100%', height: '100%' }}>
+                {(() => {
+                  const selectedTables = tables.filter(t => selectedLiveTableIds.includes(t.id));
+                  let d = "";
+                  selectedTables.forEach((t, index) => {
+                    const cx = t.x + (t.width || 80) / 2;
+                    const cy = t.y + (t.height || 80) / 2;
+                    if (index === 0) d += `M ${cx} ${cy} `;
+                    else d += `L ${cx} ${cy} `;
+                  });
+                  return (
+                    <path 
+                      d={d} 
+                      fill="none" 
+                      stroke="#3b82f6" 
+                      strokeWidth="6" 
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="10 10" 
+                      className="opacity-50"
+                    />
+                  );
+                })()}
+              </svg>
+            )}
+
+            {/* Draw solid lines between tables that are ALREADY grouped in an active order */}
+            {!isEditMode && (
+              <svg className="absolute inset-0 pointer-events-none z-0" style={{ width: '100%', height: '100%' }}>
+                {activeOrders.map(order => {
+                  if (!order.table_number || !String(order.table_number).includes(',')) return null;
+                  
+                  // Get table composite names for this order
+                  const orderTableNames = String(order.table_number).split(',').map((s: string) => s.trim());
+                  
+                  // Find matching tables in the CURRENT floor plan
+                  const groupedTables = tables.filter(t => {
+                    const compositeName = `${activePlan?.name || "Main Floor"} - ${t.table_number}`;
+                    return orderTableNames.includes(compositeName);
+                  });
+
+                  if (groupedTables.length < 2) return null;
+
+                  let d = "";
+                  groupedTables.forEach((t, index) => {
+                    const cx = t.x + (t.width || 80) / 2;
+                    const cy = t.y + (t.height || 80) / 2;
+                    if (index === 0) d += `M ${cx} ${cy} `;
+                    else d += `L ${cx} ${cy} `;
+                  });
+
+                  return (
+                    <path 
+                      key={order.id}
+                      d={d} 
+                      fill="none" 
+                      stroke="#ef4444" // red to match occupied tables
+                      strokeWidth="6" 
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="opacity-40"
+                    />
+                  );
+                })}
+              </svg>
+            )}
             {tables.map(table => {
             const compositeName = `${activePlan?.name || "Main Floor"} - ${table.table_number}`;
             const activeOrder = !isEditMode ? activeOrders.find(o => 
-              o.table_number && String(o.table_number).split(',').map(s=>s.trim()).includes(compositeName)
+              o.table_number && String(o.table_number).split(',').map((s: string) => s.trim()).includes(compositeName)
             ) : null;
             const isOccupied = !!activeOrder;
             // Blue if it is paid and the kitchen is done with it
@@ -589,7 +658,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
         {/* Waitlist Seating Confirmation Sidebar */}
         {!isEditMode && onSelectTable && selectedLiveTableIds.length > 0 && (
-          <div className="w-80 bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col">
+          <div className="w-80 bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col overflow-hidden h-full max-h-[calc(100vh-200px)]">
             {(() => {
               const allTables = initialFloorPlans.flatMap(p => (p.restaurant_tables || []).map((t: RestaurantTable) => ({ ...t, _planName: p.name })));
               const selectedTables = allTables.filter(t => selectedLiveTableIds.includes(t.id));
@@ -626,7 +695,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
         {/* Live Action Sidebar */}
         {!isEditMode && !onSelectTable && selectedLiveTableIds.length > 0 && (
-          <div className="w-80 bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col overflow-y-auto">
+          <div className="w-80 bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col overflow-hidden h-full max-h-[calc(100vh-200px)]">
             {(() => {
               const allTables = initialFloorPlans.flatMap(p => (p.restaurant_tables || []).map((t: RestaurantTable) => ({ ...t, _planName: p.name })));
               const selectedTables = allTables.filter(t => selectedLiveTableIds.includes(t.id));
@@ -639,7 +708,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
               
               const activeOrder = activeOrders.find(o => {
                 if (!o.table_number) return false;
-                const orderTables = String(o.table_number).split(',').map(s=>s.trim());
+                const orderTables = String(o.table_number).split(',').map((s: string) => s.trim());
                 return selectedTables.some(t => orderTables.includes(`${t._planName || "Main Floor"} - ${t.table_number}`));
               });
 
@@ -661,128 +730,132 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                   </div>
 
                   {activeOrder ? (
-                    <div className="flex-1 flex flex-col gap-4">
-                      {activeOrder.is_paid ? (
-                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex flex-col items-center justify-center py-6 mb-2">
-                          <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-3">
-                            <CheckCircle2 className="w-6 h-6" />
+                    <div className="flex-1 flex flex-col min-h-0">
+                      <div className="flex-1 overflow-y-auto pr-1 pb-2 flex flex-col gap-4">
+                        {activeOrder.is_paid ? (
+                          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex flex-col items-center justify-center py-6 mb-2 shrink-0">
+                            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-3">
+                              <CheckCircle2 className="w-6 h-6" />
+                            </div>
+                            <span className="font-bold text-blue-900 text-lg">Needs Bussing</span>
+                            <span className="text-blue-600 font-medium text-sm mt-1 text-center">Paid & Completed</span>
                           </div>
-                          <span className="font-bold text-blue-900 text-lg">Needs Bussing</span>
-                          <span className="text-blue-600 font-medium text-sm mt-1 text-center">Paid & Completed</span>
-                        </div>
-                      ) : (
-                        <div className="bg-red-50 border border-red-100 rounded-xl p-4 flex flex-col items-center justify-center py-6 mb-2">
-                          <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-3">
-                            <Coffee className="w-6 h-6" />
+                        ) : (
+                          <div className="bg-red-50 border border-red-100 rounded-xl p-4 flex flex-col items-center justify-center py-6 mb-2 shrink-0">
+                            <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-3">
+                              <Coffee className="w-6 h-6" />
+                            </div>
+                            <span className="font-bold text-red-900 text-lg">Occupied</span>
+                            <span className="text-red-600 font-medium text-sm mt-1 text-center">{activeOrder.customer_name || 'Walk-in'}</span>
+                            {activeOrder.party_size && activeOrder.party_size > 0 && (
+                              <span className="mt-1 bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full font-bold">
+                                {activeOrder.party_size} Guests
+                              </span>
+                            )}
                           </div>
-                          <span className="font-bold text-red-900 text-lg">Occupied</span>
-                          <span className="text-red-600 font-medium text-sm mt-1 text-center">{activeOrder.customer_name || 'Walk-in'}</span>
-                          {activeOrder.party_size && activeOrder.party_size > 0 && (
-                            <span className="mt-1 bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full font-bold">
-                              {activeOrder.party_size} Guests
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      
-                      {selectedTables.length > 1 && (
-                        <div className="flex flex-col gap-2 mb-2">
-                          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Grouped Tables</h4>
-                          {selectedTables.map(t => {
-                            const cName = `${t._planName || "Main Floor"} - ${t.table_number}`;
-                            return (
-                              <div key={t.id} className="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm">
-                                <span className="font-bold text-sm text-slate-700">{t.table_number} <span className="text-[10px] text-slate-400 font-medium">({t._planName || "Main"})</span></span>
-                                <button
-                                  disabled={isProcessingLiveAction}
-                                  onClick={async () => {
-                                    setIsProcessingLiveAction(true);
-                                    try {
-                                      // Find the specific order that owns THIS table
-                                      const tableOrder = activeOrders.find(o => {
-                                        if (!o.table_number) return false;
-                                        return String(o.table_number).split(',').map(s=>s.trim()).includes(cName);
-                                      });
+                        )}
+                        
+                        {selectedTables.length > 1 && (
+                          <div className="flex flex-col gap-2 shrink-0">
+                            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Grouped Tables</h4>
+                            {selectedTables.map(t => {
+                              const cName = `${t._planName || "Main Floor"} - ${t.table_number}`;
+                              return (
+                                <div key={t.id} className="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm">
+                                  <span className="font-bold text-sm text-slate-700">{t.table_number} <span className="text-[10px] text-slate-400 font-medium">({t._planName || "Main"})</span></span>
+                                  <button
+                                    disabled={isProcessingLiveAction}
+                                    onClick={async () => {
+                                      setIsProcessingLiveAction(true);
+                                      try {
+                                        // Find the specific order that owns THIS table
+                                        const tableOrder = activeOrders.find(o => {
+                                          if (!o.table_number) return false;
+                                          return String(o.table_number).split(',').map((s: string) => s.trim()).includes(cName);
+                                        });
 
-                                      if (tableOrder) {
-                                        await removeTableFromTab(tableOrder.id, cName);
+                                        if (tableOrder) {
+                                          await removeTableFromTab(tableOrder.id, cName);
+                                        }
+                                        setSelectedLiveTableIds(prev => prev.filter(id => id !== t.id));
+                                        router.refresh();
+                                      } catch (e) {
+                                        showError("Failed to remove table.");
                                       }
-                                      setSelectedLiveTableIds(prev => prev.filter(id => id !== t.id));
-                                      router.refresh();
-                                    } catch (e) {
-                                      showError("Failed to remove table.");
-                                    }
-                                    setIsProcessingLiveAction(false);
-                                  }}
-                                  className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1.5 rounded-md transition-colors"
-                                  title="Remove from group"
-                                >
-                                  <X className="w-4 h-4" />
-                                </button>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
+                                      setIsProcessingLiveAction(false);
+                                    }}
+                                    className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1.5 rounded-md transition-colors"
+                                    title="Remove from group"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
 
-                      {activeOrder.is_paid ? (
-                        <button 
-                          disabled={isProcessingLiveAction}
-                          onClick={async () => {
-                            setIsProcessingLiveAction(true);
-                            try {
-                              for (const st of selectedTables) {
-                                const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
-                                const tableOrder = activeOrders.find(o => o.table_number && String(o.table_number).split(',').map(s=>s.trim()).includes(cName));
-                                if (tableOrder) {
-                                  await clearTableTab(restaurantId, tableOrder.table_number, tableOrder.customer_name || "Anonymous");
+                      <div className="pt-3 mt-auto shrink-0 border-t border-slate-100">
+                        {activeOrder.is_paid ? (
+                          <button 
+                            disabled={isProcessingLiveAction}
+                            onClick={async () => {
+                              setIsProcessingLiveAction(true);
+                              try {
+                                for (const st of selectedTables) {
+                                  const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
+                                  const tableOrder = activeOrders.find(o => o.table_number && String(o.table_number).split(',').map((s: string) => s.trim()).includes(cName));
+                                  if (tableOrder) {
+                                    await clearTableTab(restaurantId, tableOrder.table_number, tableOrder.customer_name || "Anonymous");
+                                  }
                                 }
+                                setSelectedLiveTableIds([]);
+                                router.refresh();
+                              } catch (error) {
+                                showError("Failed to clear table(s).");
                               }
-                              setSelectedLiveTableIds([]);
-                              router.refresh();
-                            } catch (error) {
-                              showError("Failed to clear table(s).");
-                            }
-                            setIsProcessingLiveAction(false);
-                          }}
-                          className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200 disabled:opacity-50"
-                        >
-                          <CheckCircle2 className="w-5 h-5" />
-                          Clear Bussed Table
-                        </button>
-                      ) : (
-                        <button 
-                          disabled={isProcessingLiveAction}
-                          onClick={async () => {
-                            setIsProcessingLiveAction(true);
-                            try {
-                              // Remove specifically selected tables from their respective orders
-                              for (const st of selectedTables) {
-                                const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
-                                
-                                // Find the specific order that owns THIS table
-                                const tableOrder = activeOrders.find(o => {
-                                  if (!o.table_number) return false;
-                                  return String(o.table_number).split(',').map(s=>s.trim()).includes(cName);
-                                });
+                              setIsProcessingLiveAction(false);
+                            }}
+                            className="flex items-center justify-center gap-2 w-full py-3.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200 disabled:opacity-50"
+                          >
+                            <CheckCircle2 className="w-5 h-5" />
+                            Clear Bussed Table
+                          </button>
+                        ) : (
+                          <button 
+                            disabled={isProcessingLiveAction}
+                            onClick={async () => {
+                              setIsProcessingLiveAction(true);
+                              try {
+                                // Remove specifically selected tables from their respective orders
+                                for (const st of selectedTables) {
+                                  const cName = `${st._planName || "Main Floor"} - ${st.table_number}`;
+                                  
+                                  // Find the specific order that owns THIS table
+                                  const tableOrder = activeOrders.find(o => {
+                                    if (!o.table_number) return false;
+                                    return String(o.table_number).split(',').map((s: string) => s.trim()).includes(cName);
+                                  });
 
-                                if (tableOrder) {
-                                  await removeTableFromTab(tableOrder.id, cName);
+                                  if (tableOrder) {
+                                    await removeTableFromTab(tableOrder.id, cName);
+                                  }
                                 }
+                                setSelectedLiveTableIds([]);
+                                router.refresh();
+                              } catch (error) {
+                                showError("Failed to void table(s).");
                               }
-                              setSelectedLiveTableIds([]);
-                              router.refresh();
-                            } catch (error) {
-                              showError("Failed to void table(s).");
-                            }
-                            setIsProcessingLiveAction(false);
-                          }}
-                          className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 bg-white border-2 border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-colors disabled:opacity-50"
-                        >
-                          <Ban className="w-5 h-5" />
-                          Void Selected Table(s)
-                        </button>
-                      )}
+                              setIsProcessingLiveAction(false);
+                            }}
+                            className="flex items-center justify-center gap-2 w-full py-3.5 bg-white border-2 border-rose-200 text-rose-600 font-bold rounded-xl hover:bg-rose-50 hover:border-rose-300 transition-colors disabled:opacity-50"
+                          >
+                            <Ban className="w-5 h-5" />
+                            Void Selected Table(s)
+                          </button>
+                        )}
+                      </div>
                     </div>
                   ) : (
                     <div className="flex-1 flex flex-col gap-4">

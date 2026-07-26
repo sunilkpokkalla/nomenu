@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 import { toast } from "sonner";
-import { Users, Clock, CheckCircle2, XCircle, UserPlus, Phone } from "lucide-react";
+import { Users, Clock, CheckCircle2, XCircle, UserPlus, Phone, Receipt } from "lucide-react";
 import { addWaitlistEntry, updateWaitlistStatus, getWaitlist, createWalkInTab } from "./actions";
 import { FloorPlanBoard } from "./floor-plan-board";
 
@@ -331,7 +331,7 @@ export function WaitlistBoard({ restaurantId, supabaseUrl, supabaseAnonKey, floo
                         </button>
                         <button 
                           onClick={() => setSeatingEntryId(entry.id)}
-                          className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-all text-xs"
+                          className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-all text-xs shadow-sm shadow-indigo-200"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" /> Seat
                         </button>

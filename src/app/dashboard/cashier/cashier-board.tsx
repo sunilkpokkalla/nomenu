@@ -7,8 +7,8 @@ import { formatOrderNumber } from "@/lib/utils";
 import { createBrowserClient } from "@supabase/ssr";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { formatTimeAgoWithExact } from "@/lib/date-utils";
-import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2, Loader2, Trash2 } from "lucide-react";
-import { settleTableTab, voidTableTab, clearTableTab } from "@/app/dashboard/cashier/actions";
+import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2, Loader2, Trash2, Plus } from "lucide-react";
+import { settleTableTab, voidTableTab, clearTableTab, createWalkInTab } from "@/app/dashboard/cashier/actions";
 
 type OrderItem = {
   id: string;
@@ -305,11 +305,35 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
   return (
     <div className="space-y-8 pb-24">
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center border border-indigo-100 shadow-inner">
-            <Receipt className="w-6 h-6 text-indigo-600" />
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center border border-indigo-100 shadow-inner">
+              <Receipt className="w-6 h-6 text-indigo-600" />
+            </div>
+            <h2 className="text-2xl font-black tracking-tight text-slate-900">Active Tabs</h2>
           </div>
-          <h2 className="text-2xl font-black tracking-tight text-slate-900">Active Tabs</h2>
+          
+          <button 
+            disabled={isProcessing === 'new-walk-in'}
+            onClick={async () => {
+              setIsProcessing('new-walk-in');
+              try {
+                await createWalkInTab(restaurantId, "Unknown", "Walk-in", 1);
+                // It will auto-refresh via Supabase realtime subscription
+              } catch (error) {
+                console.error(error);
+              }
+              setIsProcessing(null);
+            }}
+            className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200 disabled:opacity-50"
+          >
+            {isProcessing === 'new-walk-in' ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <Plus className="w-5 h-5" />
+            )}
+            New Walk-in Tab
+          </button>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-start">

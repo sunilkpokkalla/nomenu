@@ -27,9 +27,14 @@ export async function settleTableTab(restaurantId: string, tableNumber: string, 
     .from("orders")
     .update({ is_paid: true, paid_at: new Date().toISOString() })
     .eq("restaurant_id", restaurantId)
-    .eq("table_number", tableNumber)
     .eq("is_paid", false)
     .is("customer_phone", null); // dine-in only
+
+  if (tableNumber === "Unknown") {
+    query = query.is("table_number", null);
+  } else {
+    query = query.eq("table_number", tableNumber);
+  }
 
   if (customerName && customerName !== "Anonymous") {
     query = query.eq("customer_name", customerName);
@@ -68,9 +73,14 @@ export async function clearTableTab(restaurantId: string, tableNumber: string, c
     .from("orders")
     .update({ status: "cleared" })
     .eq("restaurant_id", restaurantId)
-    .eq("table_number", tableNumber)
     .eq("is_paid", true)
     .is("customer_phone", null); // dine-in only
+
+  if (tableNumber === "Unknown") {
+    query = query.is("table_number", null);
+  } else {
+    query = query.eq("table_number", tableNumber);
+  }
 
   if (customerName && customerName !== "Anonymous") {
     query = query.eq("customer_name", customerName);
@@ -109,9 +119,14 @@ export async function voidTableTab(restaurantId: string, tableNumber: string, cu
     .from("orders")
     .update({ status: "cancelled", paid_at: new Date().toISOString() })
     .eq("restaurant_id", restaurantId)
-    .eq("table_number", tableNumber)
     .eq("is_paid", false)
     .is("customer_phone", null); // dine-in only
+
+  if (tableNumber === "Unknown") {
+    query = query.is("table_number", null);
+  } else {
+    query = query.eq("table_number", tableNumber);
+  }
 
   if (customerName && customerName !== "Anonymous") {
     query = query.eq("customer_name", customerName);
@@ -296,10 +311,25 @@ export async function createWalkInTab(restaurantId: string, tableNumber: string,
   }
 
   const adminSupabase = createAdminClient();
+
+  let finalCustomerName = customerName;
+  if (!customerName || customerName.trim().toLowerCase() === "walk-in") {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    
+    const { count } = await adminSupabase
+      .from("orders")
+      .select("*", { count: 'exact', head: true })
+      .eq("restaurant_id", restaurantId)
+      .gte("created_at", startOfDay.toISOString());
+      
+    finalCustomerName = `Walk-in ${count ? count + 1 : 1}`;
+  }
+
   const { error } = await adminSupabase.from("orders").insert({
     restaurant_id: restaurantId,
     table_number: tableNumber,
-    customer_name: customerName,
+    customer_name: finalCustomerName,
     party_size: partySize,
     total_amount: 0,
     status: "seated",
