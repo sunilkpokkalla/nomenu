@@ -58,6 +58,20 @@ const STATIC_ANSWERS: Record<string, string> = {
 <suggestions>
 - What features are included in the Free Plan?
 - Can I connect my existing Square POS?
+</suggestions>`,
+
+  "what is the cost of the enterprise plan": `The Enterprise Plan costs $119/mo (or $107/mo when billed annually). It includes everything in Elite, plus Dine-in, Takeaway & Priority Reserve, Multiple Kitchen Displays (KDS), Intelligent Order Capacity Pacing, Advanced Interactive Floor Plans, 75 AI Credits/mo, VIP support, and a 0% lifetime platform fee on all billing tiers.
+
+<suggestions>
+- How does the Enterprise Plan save me money?
+- What features are included in the Free Plan?
+</suggestions>`,
+
+  "how does the enterprise plan save me money": `The Enterprise Plan saves you money by immediately dropping your platform transaction fee to 0% (even on monthly billing). For a restaurant doing $15,000/mo in online sales, a 1.0% fee on other plans costs $150/mo. By upgrading to Enterprise ($119/mo), you pay $0 in transaction fees, instantly saving $150/mo and getting multiple KDS and Capacity Pacing completely for free!
+
+<suggestions>
+- What is the cost of the Enterprise Plan?
+- Can I connect my existing Square POS?
 </suggestions>`
 };
 
@@ -106,6 +120,7 @@ PROACTIVE QUALIFICATION QUESTIONS:
 INTELLIGENT BUSINESS BRAINSTORMING & ROI LOGIC:
 - When users ask about pricing or saving money, proactively show the ROI math.
 - Example: "A standard restaurant doing $50k/mo pays $500/mo in legacy QR software transaction fees. With NoMenu's Elite Plan billed annually ($79/mo), you pay 0% platform fees—putting an extra $421 back into your pocket every single month!"
+- Enterprise ROI Math: "If your restaurant does $15,000/mo in sales, a standard 1% transaction fee costs $150/mo. By upgrading to the Enterprise Plan ($119/mo), your platform transaction fee drops to 0% immediately, saving you $150/mo in transaction fees alone—instantly paying for the software and putting extra profit in your pocket!"
 - Remind them that servers freed from taking orders can focus on hospitality, reducing table turn-around times by 15-20% and raising average check size by 20% through smart digital upselling.
 
 INTELLIGENT OBJECTION HANDLING:
@@ -126,13 +141,14 @@ COMPLETE NOMENU FEATURE KNOWLEDGE:
 BILLING & PRICING PLANS:
 - Free Plan ($0/mo): 1 active menu, 30 items, standard view. Perfect for testing.
 - Pro Plan ($35/mo): Unlimited menus/items, table management, digital waitlist, AI translation.
-- Elite Plan ($79/mo) [HIGHLY RECOMMENDED]: Fully integrated POS & ordering, active tabs, live orders dashboard, white-labeled branding, 0% LIFETIME platform fee on annual billing (or 1% fee on monthly billing).
+- Elite Plan ($79/mo): Fully integrated POS & ordering, active tabs, live orders dashboard, white-labeled branding, 0% LIFETIME platform fee on annual billing (or 1% fee on monthly billing).
+- Enterprise Plan ($119/mo, or $107/mo billed annually): Everything in Elite, 75 Magic AI Credits/mo, Dine-in, Takeaway & Priority Reserve, Multiple Kitchen Displays (KDS), Intelligent Order Capacity Pacing, Advanced Interactive Floor Plans, VIP support, and a 0% platform transaction fee on all billing options.
 
-ELITE PLAN INSPIRATIONAL PITCH TRIGGERS:
-- Frame the Elite Plan ($79/mo) as the ultimate operational and prestige upgrade for ambitious restaurants.
-- Focus on Brand Control: The Elite plan offers full white-labeling (removes all NoMenu branding and lets them run on their own custom domain), making their restaurant look extremely high-end, premium, and professional to their guests.
-- Focus on Hospitality Freedom: With guests ordering and running active checkout tabs on their own phones, servers never have to spend time processing card transactions or handling bills. They can focus 100% of their energy on delivering actual hospitality and making guests feel special.
-- Focus on Growth: Emphasize that the Elite Plan is an immediate revenue multiplier (bringing a 15-20% boost in average ticket size and a 0% lifetime platform fee on annual billing).
+ELITE & ENTERPRISE PLAN PITCH TRIGGERS:
+- Frame the Elite and Enterprise Plans as the ultimate operational and prestige upgrades for ambitious restaurants.
+- Focus on Brand Control: The Elite and Enterprise plans offer full white-labeling (removes all NoMenu branding and lets them run on their own custom domain), making their restaurant look extremely high-end, premium, and professional to their guests.
+- Focus on Hospitality Freedom: With guests ordering and running active checkout tabs on their own phones, servers never have to spend time processing card transactions or handling bills. They can focus 100% of their energy on delivering actual hospitality.
+- Focus on Growth: Emphasize that the Elite and Enterprise Plans are immediate revenue multipliers (bringing a 15-20% boost in average ticket size and a 0% lifetime platform fee).
 
 SUGGESTION SYSTEM (MANDATORY):
 At the very end of your response, you must ALWAYS generate exactly 2-3 relevant follow-up questions that the user might want to ask next based on your response. You MUST format them inside a custom tag at the absolute end of the response like this:
