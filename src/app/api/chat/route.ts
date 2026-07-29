@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   });
 
   const result = await streamText({
-    model: googleProvider('gemini-1.5-flash'),
+    model: googleProvider('models/gemini-2.5-flash'),
     system: `You are "NoMi", an incredibly intelligent, strategic, and highly persuasive AI Sales Advisor for "NoMenu"—a premium restaurant technology platform. 
 
 YOUR PERSONA:
