@@ -4,8 +4,29 @@ import { Button } from "@/components/ui/button";
 import { DemoChatbot } from "@/components/demo-chatbot";
 
 export const metadata = {
-  title: "Book a Demo",
-  description: "Schedule a personalized walkthrough of NoMenu to see how we can increase your restaurant's profits.",
+  title: "Watch Demo & Chat with NoMi",
+  description: "Watch a live walkthrough of NoMenu's 0% commission restaurant platform and consult with NoMi, our AI growth advisor.",
+  openGraph: {
+    title: "See NoMenu in Action | Watch Live Demo",
+    description: "Watch how NoMenu eliminates paper reprint costs and increases tableside order values by 20%. Chat with NoMi, our AI consultant, for custom advice.",
+    url: "/demo",
+    siteName: "NoMenu",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "NoMenu - Watch Demo",
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "See NoMenu in Action | Watch Live Demo",
+    description: "Watch how NoMenu eliminates paper reprint costs and increases tableside order values by 20%. Chat with NoMi, our AI consultant, for custom advice.",
+    images: ["/og-image.png"],
+  }
 };
 
 export default function DemoPage() {
