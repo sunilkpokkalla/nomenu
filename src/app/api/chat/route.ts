@@ -1,18 +1,18 @@
-import { google } from '@ai-sdk/google';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { streamText } from 'ai';
-
-// Ensure the Google AI SDK gets the API key from GEMINI_API_KEY if needed
-if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY && process.env.GEMINI_API_KEY) {
-  process.env.GOOGLE_GENERATIVE_AI_API_KEY = process.env.GEMINI_API_KEY;
-}
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  const googleProvider = createGoogleGenerativeAI({
+    apiKey: apiKey,
+  });
+
   const result = await streamText({
-    model: google('gemini-1.5-flash'),
+    model: googleProvider('gemini-1.5-flash'),
     system: `You are "NoMi", an incredibly intelligent, strategic, and highly persuasive AI Sales Advisor for "NoMenu"—a premium restaurant technology platform. 
 
 YOUR PERSONA:
