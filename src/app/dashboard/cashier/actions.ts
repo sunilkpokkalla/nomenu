@@ -321,7 +321,8 @@ export async function createWalkInTab(restaurantId: string, tableNumber: string,
       .from("orders")
       .select("*", { count: 'exact', head: true })
       .eq("restaurant_id", restaurantId)
-      .gte("created_at", startOfDay.toISOString());
+      .gte("created_at", startOfDay.toISOString())
+      .ilike("customer_name", "Walk-in %");
       
     finalCustomerName = `Walk-in ${count ? count + 1 : 1}`;
   }

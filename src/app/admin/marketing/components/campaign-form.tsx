@@ -100,76 +100,14 @@ const TEMPLATES = {
     subject: "Increase check sizes by 20% effortlessly",
     body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=600&h=300&fit=crop" alt="Food Imagery" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&h=300&fit=crop" alt="Fine Dining" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
-  <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">People eat with their eyes.</h2>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Text-only menus are leaving money on the table. When guests see high-quality images of your dishes, they order more.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Nomenu includes built-in AI tools to automatically generate mouth-watering photos for your entire menu in seconds, no expensive food photographer required.</p>
-  <ul style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
-    <li><strong>Visual Upselling:</strong> Studies show visual menus increase order sizes by 20-30%.</li>
-    <li><strong>AI Generation:</strong> Instantly create perfect images that match your brand.</li>
-    <li><strong>Highlight Specials:</strong> Make your high-margin items impossible to resist.</li>
-  </ul>
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Turn your menu into a passive sales engine.</h2>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">When a guest sits down at a table, they are ready to spend. But if your servers are busy running drinks, those guests are waiting instead of ordering.</p>
+  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Nomenu's smart checkout features and active cart encourage immediate ordering. Combined with beautiful visual categories, our restaurant partners experience a 15-20% average boost in check size with no extra effort from waitstaff.</p>
   <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
-    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Boost Your Revenue</a>
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Maximize Your Revenue</a>
   </div>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>The Nomenu Team<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
-</div>`
-  },
-  b2b_labor_cost: {
-    name: "The 'Labor Cost' Pitch (B2B)",
-    subject: "Faster table turns & 0 bad Yelp reviews",
-    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
-  <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&h=300&fit=crop" alt="Restaurant Management" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
-  </div>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi there,</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I know labor costs and front-of-house bottlenecks are the biggest headaches in hospitality right now.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We built Nomenu to fix exactly that. Guests simply scan a custom QR code at their table, order directly to your Kitchen Display System, and pay on their phones. No waiting, no order mistakes, and no friction.</p>
-  <ul style="color: #475569; font-size: 16px; line-height: 1.6;">
-    <li><strong>Increase table turns by 20%</strong> instantly</li>
-    <li><strong>Syncs directly</strong> with your Square POS</li>
-    <li><strong>AI intercepts 1-3 star reviews</strong> before they ever reach Yelp</li>
-  </ul>
-  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
-    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">See How It Works</a>
-  </div>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Can I show you a quick 2-minute demo of how this would look for your restaurant?</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
-</div>`
-  },
-  tech_chef_influencer: {
-    name: "Tech Chef Influencer (Partnership)",
-    subject: "Love your content! Quick partnership idea",
-    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
-  <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=600&h=300&fit=crop" alt="Chef Influencer" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
-  </div>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hey!</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I absolutely love the content you’re putting out for the restaurant industry. Your insights are always spot on.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I'm the founder of Nomenu, a new restaurant OS that replaces waitstaff bottlenecks with a direct-to-KDS ordering system. We are launching an exclusive Partner Program, and I think your audience of restaurant owners would get massive value from it.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We offer a <strong>20% recurring revenue share</strong> for every restaurant you refer. Since it integrates natively with Square POS, it’s a very easy sell to any restaurant wanting to cut labor costs and boost margins.</p>
-  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
-    <a href="https://nomenu.us/partners" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">View Partner Program</a>
-  </div>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Would you be open to chatting about a potential partnership?</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
-</div>`
-  },
-  vp_sales: {
-    name: "VP of Sales / Executive Pitch",
-    subject: "Building a unicorn in hospitality tech",
-    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fafafa;">
-  <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?w=600&h=300&fit=crop" alt="Sales Pitch" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
-  </div>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">Hi there,</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">I’ve been closely following your success scaling SaaS revenue. I’m the founder of Nomenu—a restaurant OS that replaces waitstaff bottlenecks with a direct-to-KDS ordering system and AI-driven Yelp protection.</p>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">We have the product, the POS integrations, and the AI infrastructure fully built. Now, I am looking for a killer VP of Sales/GTM leader to build the outbound machine and scale us from early traction to $1M ARR and beyond.</p>
-  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
-    <a href="https://nomenu.us" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Explore Nomenu</a>
-  </div>
-  <p style="color: #475569; font-size: 16px; line-height: 1.6;">If you're interested in building a unicorn in the hospitality tech space, let's grab coffee.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
   },
@@ -195,7 +133,7 @@ const TEMPLATES = {
 
 export function CampaignForm() {
   const [isPending, startTransition] = useTransition();
-  const [audience, setAudience] = useState<"free_users" | "pro_users" | "custom">("free_users");
+  const [audience, setAudience] = useState<"free_users" | "pro_users" | "custom" | "nomi_leads">("free_users");
   const [template, setTemplate] = useState<keyof typeof TEMPLATES>("custom");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -216,9 +154,6 @@ export function CampaignForm() {
       const result = await sendCampaignAction(formData);
       if (result.success) {
         setFeedback({ type: 'success', message: result.message || 'Campaign sent!' });
-        if (audience === 'custom') {
-          // Reset form somewhat
-        }
       } else {
         setFeedback({ type: 'error', message: result.error || 'Failed to send campaign.' });
       }
@@ -235,7 +170,7 @@ export function CampaignForm() {
           <h2 className="text-lg font-bold text-slate-900">1. Select Audience</h2>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'free_users' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:border-slate-300')}>
             <input type="radio" name="audience" value="free_users" checked={audience === 'free_users'} onChange={() => setAudience('free_users')} className="sr-only" />
             <span className="font-bold text-slate-900">Existing Free Users</span>
@@ -245,6 +180,11 @@ export function CampaignForm() {
             <input type="radio" name="audience" value="pro_users" checked={audience === 'pro_users'} onChange={() => setAudience('pro_users')} className="sr-only" />
             <span className="font-bold text-slate-900">Active Pro Users</span>
             <span className="text-xs text-slate-500">Announce new features to paid users.</span>
+          </label>
+          <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'nomi_leads' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:border-slate-300')}>
+            <input type="radio" name="audience" value="nomi_leads" checked={audience === 'nomi_leads'} onChange={() => setAudience('nomi_leads')} className="sr-only" />
+            <span className="font-bold text-slate-900">Nomi Chatbot Leads</span>
+            <span className="text-xs text-slate-500">Blast captured emails of chatbot visitors.</span>
           </label>
           <label className={"cursor-pointer border rounded-xl p-4 flex flex-col gap-2 transition-colors " + (audience === 'custom' ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 bg-white hover:border-slate-300')}>
             <input type="radio" name="audience" value="custom" checked={audience === 'custom'} onChange={() => setAudience('custom')} className="sr-only" />

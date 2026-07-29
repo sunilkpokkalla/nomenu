@@ -3,8 +3,37 @@
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
-export type CampaignAudience = "free_users" | "pro_users" | "custom";
+export type CampaignAudience = "free_users" | "pro_users" | "custom" | "nomi_leads";
 export type CampaignTemplate = "soulful_pitch" | "pro_upgrade" | "custom";
+
+export async function fetchNomiLeadsAction() {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !user.email) throw new Error("Not logged in");
+    
+    const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
+    if (!adminEmails.includes(user.email)) {
+      throw new Error("Unauthorized");
+    }
+
+    const adminSupabase = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+    );
+
+    const { data: leads, error } = await adminSupabase
+      .from("nomi_leads")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return { success: true, leads };
+  } catch (error) {
+    console.error("Fetch leads error:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Failed to fetch leads" };
+  }
+}
 
 export async function sendCampaignAction(formData: FormData) {
   const audience = formData.get("audience") as CampaignAudience;
@@ -38,13 +67,10 @@ export async function sendCampaignAction(formData: FormData) {
       const { data: restaurants, error } = await adminSupabase
         .from("restaurants")
         .select("owner_id")
-        .eq("subscription_status", isPro ? "active" : "inactive") // simplistic mapping, or we check != 'active'
+        .eq("subscription_status", isPro ? "active" : "inactive")
         .not("owner_id", "is", null);
 
       if (!error && restaurants) {
-        // More robust: if pro_users, eq('subscription_status', 'active')
-        // if free_users, neq('subscription_status', 'active')
-        
         const ownerIds = [...new Set(restaurants.map(r => r.owner_id as string))];
         const userResponses = await Promise.all(
           ownerIds.map(id => adminSupabase.auth.admin.getUserById(id))
@@ -53,6 +79,15 @@ export async function sendCampaignAction(formData: FormData) {
         emails = userResponses
           .map(res => res.data?.user?.email)
           .filter((email): email is string => !!email);
+      }
+    } else if (audience === "nomi_leads") {
+      const { data: leads, error } = await adminSupabase
+        .from("nomi_leads")
+        .select("email")
+        .order("created_at", { ascending: false });
+
+      if (!error && leads) {
+        emails = leads.map(l => l.email);
       }
     } else if (audience === "custom" && customEmails) {
       // Split by comma or newline

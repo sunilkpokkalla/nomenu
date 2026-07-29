@@ -17,6 +17,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "dependencies": {
+    "@ai-sdk/google": "^0.0.26",
+    "@ai-sdk/react": "npm:empty-npm-package@^1.0.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@opennextjs/cloudflare": "^1.19.11",
     "@radix-ui/react-checkbox": "^1.3.4",
@@ -33,6 +35,7 @@
     "@stripe/stripe-js": "^9.7.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",
+    "ai": "^3.2.14",
     "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

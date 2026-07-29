@@ -1,10 +1,13 @@
-import { CampaignForm } from "./components/campaign-form";
-import { EmailScraper } from "./components/email-scraper";
+import { MarketingTabs } from "./components/marketing-tabs";
 import { MailOpen } from "lucide-react";
+import { fetchNomiLeadsAction } from "./actions";
 
 export const dynamic = 'force-dynamic';
 
 export default async function MarketingCampaignsPage() {
+  const result = await fetchNomiLeadsAction();
+  const leads = result.success ? (result.leads || []) : [];
+
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Header */}
@@ -20,10 +23,9 @@ export default async function MarketingCampaignsPage() {
         </div>
       </div>
 
-      <EmailScraper />
-      
-      <CampaignForm />
+      <MarketingTabs initialLeads={leads} />
       
     </div>
   );
 }
+

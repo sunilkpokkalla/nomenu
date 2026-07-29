@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Calendar } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Calendar, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DemoChatbot } from "@/components/demo-chatbot";
 
 export const metadata = {
   title: "Book a Demo",
@@ -32,14 +33,13 @@ export default function DemoPage() {
         
         {/* Top Section: Video Player */}
         <div className="w-full bg-slate-950 aspect-video relative flex items-center justify-center">
-          {/* Replace this div with your actual YouTube or Vimeo iframe */}
-          <div className="text-center text-slate-400">
-            <div className="w-20 h-20 bg-indigo-600/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-indigo-500/30">
-              <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-indigo-500 border-b-[12px] border-b-transparent ml-2" />
-            </div>
-            <p className="font-bold">On-Demand Demo Video</p>
-            <p className="text-xs mt-2 opacity-70">Embed your YouTube/Vimeo link here.</p>
-          </div>
+          <iframe 
+            className="absolute inset-0 w-full h-full border-0"
+            src="https://www.youtube.com/embed/cfbNGSWVILM"
+            title="NoMenu Demo Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
         </div>
 
         {/* Bottom Section: Social Proof & Calendar */}
@@ -70,17 +70,14 @@ export default function DemoPage() {
 
           <div className="w-full md:w-1/2 p-10 flex flex-col items-center justify-center text-center">
             <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 mb-4">
-              <Calendar className="w-6 h-6 text-indigo-600" />
+              <Bot className="w-6 h-6 text-indigo-600" />
             </div>
             <h3 className="text-2xl font-black text-slate-900 mb-2">Have Questions?</h3>
             <p className="text-slate-500 text-sm font-medium max-w-sm mb-8">
-              Book a quick 10-minute chat with an expert to get custom pricing for your restaurant.
+              Chat with our intelligent AI Assistant to get instant answers about features, integrations, and custom pricing.
             </p>
             
-            {/* Calendar Embed Placeholder */}
-            <div className="w-full bg-white border border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center text-slate-400 min-h-[250px] shadow-inner">
-              <p className="text-sm font-bold text-slate-600">Calendly Widget Embed Here</p>
-            </div>
+            <DemoChatbot />
           </div>
 
         </div>
