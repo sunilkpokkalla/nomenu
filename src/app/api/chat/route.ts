@@ -3,8 +3,41 @@ import { streamText } from 'ai';
 
 export const maxDuration = 30;
 
+const STATIC_ANSWERS: Record<string, string> = {
+  "how does nomenu save me money": `NoMenu saves you money by replacing expensive paper menus (which cost $1,200+/year to reprint) and eliminating high legacy POS platform commission fees. By putting guest-led ordering in place, you increase your average check size by 20% through automated visual upsells and lower labor overhead.
+
+<suggestions>
+- How does the 0% platform fee work?
+- What features are included in the Free Plan?
+</suggestions>`,
+  
+  "how does the 0% platform fee work": `When you sign up for NoMenu's Elite Plan on annual billing, we charge a 0% lifetime platform fee on orders. Unlike Toast or other providers who charge transaction commissions or high monthly fees, you keep 100% of your margins. We only charge a flat $79/mo subscription fee.
+
+<suggestions>
+- Can I connect my existing Square POS?
+- What is the cost of the Pro Plan?
+</suggestions>`,
+  
+  "is there a completely free plan": `Yes, absolutely! NoMenu offers a 100% Free Plan. It includes 1 active menu, up to 30 items, and a beautiful mobile-responsive menu. There are no credit cards required to start. You can upgrade to Pro or Elite whenever you're ready to scale.
+
+<suggestions>
+- What is the difference between Pro and Elite?
+- How do I set up a free menu?
+</suggestions>`
+};
+
 export async function POST(req: Request) {
   const { messages } = await req.json();
+
+  const lastMessage = messages[messages.length - 1]?.content || "";
+  const normalizedMessage = lastMessage.trim().toLowerCase().replace(/[?.!]$/, "");
+
+  // If the user asks a common default question, answer instantly and bypass Gemini API (100% Free)
+  if (STATIC_ANSWERS[normalizedMessage]) {
+    return new Response(STATIC_ANSWERS[normalizedMessage], {
+      headers: { "Content-Type": "text/plain; charset=utf-8" }
+    });
+  }
 
   const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
   const googleProvider = createGoogleGenerativeAI({
