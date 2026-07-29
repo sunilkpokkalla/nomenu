@@ -69,8 +69,14 @@ export async function POST(req: Request) {
 
   // If the user asks a common default question, answer instantly and bypass Gemini API (100% Free)
   if (STATIC_ANSWERS[normalizedMessage]) {
-    return new Response(STATIC_ANSWERS[normalizedMessage], {
-      headers: { "Content-Type": "text/plain; charset=utf-8" }
+    const textChunk = JSON.stringify(STATIC_ANSWERS[normalizedMessage]);
+    const protocolData = `0:${textChunk}\n`;
+
+    return new Response(protocolData, {
+      headers: { 
+        "Content-Type": "text/plain; charset=utf-8",
+        "x-vercel-ai-stream-protocol": "v1"
+      }
     });
   }
 
