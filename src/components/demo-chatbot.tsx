@@ -93,11 +93,11 @@ export function DemoChatbot() {
 
       {/* Floating Wrapper in Corner */}
       <div 
-        className={`fixed inset-0 pointer-events-none z-50 flex items-end justify-end p-6 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed inset-0 pointer-events-none z-50 flex items-end justify-end sm:p-6 p-0 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
       >
         {/* Chat Window */}
         <div 
-          className={`pointer-events-auto w-[400px] max-w-[calc(100vw-2rem)] h-[640px] max-h-[calc(100vh-2rem)] bg-white rounded-[24px] shadow-2xl border border-slate-200 flex flex-col overflow-hidden transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-4 opacity-0 pointer-events-none'}`}
+          className={`pointer-events-auto w-full h-full sm:w-[400px] sm:max-w-[calc(100vw-2rem)] sm:h-[640px] sm:max-h-[calc(100vh-2rem)] bg-white rounded-none sm:rounded-[24px] shadow-2xl border-0 sm:border border-slate-200 flex flex-col overflow-hidden transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-4 opacity-0 pointer-events-none'}`}
         >
           {/* Header */}
           <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white px-5 py-4 flex items-center justify-between shrink-0 border-b border-indigo-950/20 relative overflow-hidden">
