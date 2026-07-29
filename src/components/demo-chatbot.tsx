@@ -136,39 +136,54 @@ export function DemoChatbot() {
           {/* Messages Area / Lead Capture Form */}
           <div className="flex-1 overflow-y-auto p-5 flex flex-col bg-white">
             {!isEmailSubmitted ? (
-              <div className="flex flex-col items-center justify-center h-full text-center px-4 py-8 my-auto">
-                <div className="w-14 h-14 bg-indigo-500/10 rounded-full flex items-center justify-center mb-4 border border-indigo-500/20 relative">
-                  <Sparkles className="w-6 h-6 text-indigo-500" />
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full animate-pulse" />
+              <div className="flex-1 flex flex-col gap-4">
+                {/* Default Greeting displayed by default */}
+                <div className="flex gap-3 items-start">
+                  <div className="w-8 h-8 bg-[#e0f2fe] rounded-full flex items-center justify-center shrink-0 border border-sky-100">
+                    <Bot className="w-5 h-5 text-[#0c2340]" />
+                  </div>
+                  <div className="bg-[#f3f4f6] text-slate-800 p-4 rounded-[18px] rounded-tl-none text-sm leading-relaxed max-w-[85%] font-medium">
+                    Hi, I'm NoMi! 👋 I'm here to help you find the perfect NoMenu plan for your restaurant.
+                  </div>
                 </div>
-                <h3 className="font-bold text-lg text-slate-900 mb-2">Chat with NoMenu AI</h3>
-                <p className="text-sm text-slate-500 font-medium mb-6 max-w-[280px]">
-                  Enter your email address to unlock real-time pricing and consultation with our AI Assistant.
-                </p>
-                <form onSubmit={handleEmailSubmit} className="w-full max-w-[280px] space-y-3">
-                  <input
-                    type="email"
-                    required
-                    value={emailInput}
-                    onChange={(e) => setEmailInput(e.target.value)}
-                    placeholder="Enter your email..."
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-150 rounded-xl text-sm transition-all outline-none"
-                  />
-                  <button
-                    type="submit"
-                    disabled={isSubmittingEmail || !emailInput.trim() || !emailInput.includes('@')}
-                    className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-indigo-100 hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
-                  >
-                    {isSubmittingEmail ? (
-                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    ) : (
-                      <>
-                        <span>Start Chatting</span>
-                        <Send className="w-3.5 h-3.5" />
-                      </>
-                    )}
-                  </button>
-                </form>
+
+                {/* Email Prompt Message */}
+                <div className="flex gap-3 items-start">
+                  <div className="w-8 h-8 bg-[#e0f2fe] rounded-full flex items-center justify-center shrink-0 border border-sky-100">
+                    <Bot className="w-5 h-5 text-[#0c2340]" />
+                  </div>
+                  <div className="bg-[#f3f4f6] text-slate-800 p-4 rounded-[18px] rounded-tl-none text-sm leading-relaxed max-w-[85%] font-medium">
+                    To start our conversation, please enter your email address:
+                  </div>
+                </div>
+
+                {/* Email Form Card */}
+                <div className="pl-11 pr-4 mt-2">
+                  <form onSubmit={handleEmailSubmit} className="w-full max-w-[280px] space-y-3 bg-slate-50 border border-slate-200 p-4 rounded-2xl shadow-sm">
+                    <input
+                      type="email"
+                      required
+                      value={emailInput}
+                      onChange={(e) => setEmailInput(e.target.value)}
+                      placeholder="Enter your email..."
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 rounded-xl text-sm transition-all outline-none text-slate-800 placeholder:text-slate-400 font-medium"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmittingEmail || !emailInput.trim() || !emailInput.includes('@')}
+                      className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-indigo-100 hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      {isSubmittingEmail ? (
+                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      ) : (
+                        <>
+                          <span>Start Chatting</span>
+                          <Send className="w-3.5 h-3.5" />
+                        </>
+                      )}
+                    </button>
+                  </form>
+                </div>
               </div>
             ) : (
               <div className="flex-1 flex flex-col gap-5">
