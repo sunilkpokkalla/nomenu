@@ -23,6 +23,41 @@ const STATIC_ANSWERS: Record<string, string> = {
 <suggestions>
 - What is the difference between Pro and Elite?
 - How do I set up a free menu?
+</suggestions>`,
+
+  "what features are included in the free plan": `The Free Plan ($0/mo) includes 1 active digital menu, up to 30 menu items, and a beautiful mobile-responsive layout. It's perfect for testing out NoMenu or running a small menu. No credit card is required to start!
+
+<suggestions>
+- How do I set up a free menu?
+- What is the difference between Pro and Elite?
+</suggestions>`,
+
+  "can i connect my existing square pos": `Yes, absolutely! NoMenu integrates seamlessly with Square POS. You can import your menus, sync item availability, and route guest checkout orders directly to your Square catalog in under 10 minutes.
+
+<suggestions>
+- What is the difference between Pro and Elite?
+- How does the 0% platform fee work?
+</suggestions>`,
+
+  "what is the cost of the pro plan": `The Pro Plan costs $35/mo. It unlocks unlimited digital menus, unlimited items, advanced table management, digital waitlists, custom colors, and AI-powered multi-language translation.
+
+<suggestions>
+- What is the difference between Pro and Elite?
+- Is there a completely free plan?
+</suggestions>`,
+
+  "what is the difference between pro and elite": `The Pro Plan ($35/mo) is focused on menu display, waitlists, and translations. The Elite Plan ($79/mo) adds full mobile ordering, active guest checkout tabs, Square POS sync, white-labeling (removal of NoMenu branding on your own domain), and a 0% platform fee.
+
+<suggestions>
+- How does the 0% platform fee work?
+- Can I connect my existing Square POS?
+</suggestions>`,
+
+  "how do i set up a free menu": `Setting up a free menu is easy! Just click "Create Free Menu" or sign up on our website. You can import your items manually or sync your existing Square POS catalog in under 10 minutes.
+
+<suggestions>
+- What features are included in the Free Plan?
+- Can I connect my existing Square POS?
 </suggestions>`
 };
 
