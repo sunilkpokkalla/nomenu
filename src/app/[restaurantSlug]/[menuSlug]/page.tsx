@@ -27,7 +27,7 @@ export async function generateMetadata(
     return { title: `${restaurant.name} | NoMenu` };
   }
 
-  const previousImages = (await parent).openGraph?.images || [];
+  const shareImage = restaurant.cover_image_url || restaurant.logo_url || "/og-image.png";
   const metaTitle = `${restaurant.name} - ${menu.name} | Digital Menu`;
   const metaDesc = menu.description || `Browse the ${menu.name} at ${restaurant.name}. Order directly from your table with NoMenu.`;
 
@@ -37,11 +37,20 @@ export async function generateMetadata(
     openGraph: {
       title: metaTitle,
       description: metaDesc,
-      images: [...previousImages],
+      images: [
+        {
+          url: shareImage,
+          width: 1200,
+          height: 630,
+          alt: `${restaurant.name} - ${menu.name}`,
+        }
+      ],
     },
     twitter: {
+      card: "summary_large_image",
       title: metaTitle,
       description: metaDesc,
+      images: [shareImage],
     }
   };
 }

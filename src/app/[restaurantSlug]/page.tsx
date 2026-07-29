@@ -11,7 +11,7 @@ export async function generateMetadata(
   const supabase = await createClient();
   const { data: restaurant } = await supabase
     .from("restaurants")
-    .select("name, cuisine_type")
+    .select("name, cuisine_type, logo_url, cover_image_url")
     .eq("slug", params.restaurantSlug)
     .maybeSingle();
 
@@ -19,7 +19,7 @@ export async function generateMetadata(
     return { title: "Restaurant Not Found | NoMenu" };
   }
 
-  const previousImages = (await parent).openGraph?.images || [];
+  const shareImage = restaurant.cover_image_url || restaurant.logo_url || "/og-image.png";
 
   return {
     title: `${restaurant.name} | Digital Menu by NoMenu`,
@@ -27,11 +27,20 @@ export async function generateMetadata(
     openGraph: {
       title: `${restaurant.name} | Digital Menu by NoMenu`,
       description: `View the digital menu for ${restaurant.name}, offering amazing ${restaurant.cuisine_type || 'cuisine'}. Order directly from your phone.`,
-      images: [...previousImages],
+      images: [
+        {
+          url: shareImage,
+          width: 1200,
+          height: 630,
+          alt: `${restaurant.name} Digital Menu`,
+        }
+      ],
     },
     twitter: {
+      card: "summary_large_image",
       title: `${restaurant.name} | Digital Menu by NoMenu`,
       description: `View the digital menu for ${restaurant.name}. Order directly from your phone.`,
+      images: [shareImage],
     }
   };
 }

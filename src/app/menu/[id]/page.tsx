@@ -1,8 +1,64 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import { headers } from "next/headers";
 import { QrCode } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
+
+export async function generateMetadata(
+  props: { params: Promise<{ id: string }> },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const params = await props.params;
+  const supabase = await createClient();
+
+  const { data: menu } = await supabase
+    .from("menus")
+    .select("name, description, restaurant_id")
+    .eq("id", params.id)
+    .maybeSingle();
+
+  if (!menu) {
+    return { title: "Menu Not Found | NoMenu" };
+  }
+
+  const { data: restaurant } = await supabase
+    .from("restaurants")
+    .select("name, logo_url, cover_image_url, cuisine_type")
+    .eq("id", menu.restaurant_id)
+    .maybeSingle();
+
+  if (!restaurant) {
+    return { title: `${menu.name} | NoMenu` };
+  }
+
+  const shareImage = restaurant.cover_image_url || restaurant.logo_url || "/og-image.png";
+  const title = `${restaurant.name} - ${menu.name} | Digital Menu`;
+  const description = menu.description || `Browse the ${menu.name} at ${restaurant.name}. Order directly from your table.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: shareImage,
+          width: 1200,
+          height: 630,
+          alt: `${restaurant.name} Menu`,
+        }
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [shareImage],
+    }
+  };
+}
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { MenuClientView } from "@/components/menu/menu-client-view";
 import { CartProvider } from "@/components/menu/cart-context";
