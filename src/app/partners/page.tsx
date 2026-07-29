@@ -2,6 +2,31 @@ import Link from "next/link";
 import { ArrowLeft, Sparkles, DollarSign, TrendingUp, Link as LinkIcon, CheckCircle2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+export const metadata = {
+  title: "Partner Program | Earn 20% Recurring Commission",
+  description: "Join the NoMenu Partner Program. Help local restaurants adopt guest-led ordering with 0% platform fees and earn high recurring revenue.",
+  openGraph: {
+    title: "Partner Program | Earn 20% Recurring Commission",
+    description: "Join the NoMenu Partner Program. Help local restaurants adopt guest-led ordering with 0% platform fees and earn high recurring revenue.",
+    url: "/partners",
+    siteName: "NoMenu",
+    images: [
+      {
+        url: "/partner-login-bg.png",
+        width: 1200,
+        height: 630,
+        alt: "NoMenu - Partner Program",
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Partner Program | Earn 20% Recurring Commission",
+    description: "Join the NoMenu Partner Program. Help local restaurants adopt guest-led ordering with 0% platform fees and earn high recurring revenue.",
+    images: ["/partner-login-bg.png"],
+  }
+};
+
 export default function PartnersLandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans-vibrant">

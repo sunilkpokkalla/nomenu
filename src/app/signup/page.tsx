@@ -8,6 +8,31 @@ import { FbqEvent } from "@/components/marketing/FbqEvent";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+export const metadata = {
+  title: "Start for Free | Join NoMenu",
+  description: "Create your free digital QR code menu in under 10 minutes. No credit card required. Upgrade when you are ready.",
+  openGraph: {
+    title: "Start for Free | Join NoMenu",
+    description: "Create your free digital QR code menu in under 10 minutes. No credit card required.",
+    url: "/signup",
+    siteName: "NoMenu",
+    images: [
+      {
+        url: "/auth-bg-signup.png",
+        width: 1200,
+        height: 630,
+        alt: "NoMenu - Sign Up",
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Start for Free | Join NoMenu",
+    description: "Create your free digital QR code menu in under 10 minutes. No credit card required.",
+    images: ["/auth-bg-signup.png"],
+  }
+};
+
 export default async function SignupPage(
   props: {
     searchParams: Promise<{ message?: string }>;

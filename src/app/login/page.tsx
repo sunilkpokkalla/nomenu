@@ -7,6 +7,31 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+export const metadata = {
+  title: "Login | Manage Your Restaurant Dashboard",
+  description: "Sign in to NoMenu to access live orders, manage active checkout tabs, sync POS menus, and edit item catalogs.",
+  openGraph: {
+    title: "Login | Manage Your Restaurant Dashboard",
+    description: "Sign in to NoMenu to access live orders, manage active checkout tabs, and edit catalogs.",
+    url: "/login",
+    siteName: "NoMenu",
+    images: [
+      {
+        url: "/auth-bg-login.png",
+        width: 1200,
+        height: 630,
+        alt: "NoMenu - Login",
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Login | Manage Your Restaurant Dashboard",
+    description: "Sign in to NoMenu to access live orders, manage active checkout tabs, and edit catalogs.",
+    images: ["/auth-bg-login.png"],
+  }
+};
+
 export default async function LoginPage(
   props: {
     searchParams: Promise<{ message?: string; next?: string }>;
