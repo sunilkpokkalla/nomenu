@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { MobileNav } from "@/components/dashboard/mobile-nav";
 import { TopHeader } from "@/components/dashboard/top-header";
+import { TrialBanner } from "@/components/dashboard/trial-banner";
 import { hasSupabaseEnv, getSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
@@ -44,10 +45,11 @@ export default async function DashboardLayout({
     <div className="min-h-screen bg-slate-50">
       {isDemoUser(user) && <DemoModeBanner />}
       <div className="flex">
-        {hasRestaurant && <Sidebar plan={restaurant.plan || "Free"} role={role} />}
+        {hasRestaurant && <Sidebar plan={restaurant.plan || "Free"} role={role} createdAt={restaurant.created_at} />}
         <main className="min-h-screen flex-1 flex flex-col">
           {hasRestaurant && <MobileNav plan={restaurant.plan || "Free"} role={role} />}
           {hasRestaurant && <TopHeader />}
+          {hasRestaurant && <TrialBanner createdAt={restaurant.created_at} plan={restaurant.plan || "Free"} />}
           <div className="flex-1">
             {children}
           </div>

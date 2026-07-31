@@ -69,7 +69,8 @@ export function CustomizeDashboardClient({ restaurant, menus }: { restaurant: an
   };
 
   const plan = restaurant.plan?.toLowerCase() || "basic";
-  const isPremiumThemeEnabled = plan === "enterprise" || plan === "elite" || plan === "pro";
+  const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
+  const isPremiumThemeEnabled = isTrial || plan === "enterprise" || plan === "elite" || plan === "pro";
 
   return (
     <div className="space-y-6">

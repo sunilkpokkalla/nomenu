@@ -65,6 +65,17 @@ export async function signup(formData: FormData) {
     },
   });
 
+  if (!error && email) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase as any)
+        .from("nomi_leads")
+        .upsert({ email }, { onConflict: "email" });
+    } catch (dbErr) {
+      console.error("Failed to save signup lead to nomi_leads:", dbErr);
+    }
+  }
+
   if (error) {
     let errorMessage = error.message;
     if (errorMessage.toLowerCase().includes("user already registered")) {

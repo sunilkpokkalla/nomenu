@@ -8,6 +8,7 @@ import { getActiveRestaurant } from "@/lib/rbac";
 import { WaitTimeToggle } from "@/components/dashboard/wait-time-toggle";
 import { getCurrencySymbol } from "@/lib/currency-options";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
+import { FeatureLockout } from "@/components/dashboard/feature-lockout";
 
 export const metadata = {
   title: "Orders | NoMenu Dashboard",
@@ -62,7 +63,8 @@ export default async function OrdersPage() {
     .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
     .order("created_at", { ascending: false });
 
-  const isLocked = !restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase());
+  const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
+  const isLocked = !isTrial && (!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase()));
   
   // Fetch active menu to get custom location label
   const { data: menu } = await supabase
@@ -77,28 +79,12 @@ export default async function OrdersPage() {
   
   if (isLocked) {
     return (
-      <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Orders Dashboard</h1>
-          <p className="text-slate-500 mt-2">Manage incoming orders from your customers in real-time.</p>
-        </div>
-        
-        <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12 w-full">
-          <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-            <ClipboardList className="w-8 h-8 text-slate-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Elite</h2>
-          <p className="text-slate-600 mb-8 leading-relaxed">
-            The Live Kitchen Display System (KDS) and real-time ordering board are exclusively available on the Elite plan. Upgrade to start accepting live orders.
-          </p>
-          <Link
-            href="/dashboard/billing"
-            className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-all hover:scale-[1.02]"
-          >
-            View Pricing Plans
-          </Link>
-        </div>
-      </div>
+      <FeatureLockout 
+        featureName="Orders Dashboard"
+        requiredPlan="Elite"
+        description="The Live Kitchen Display System (KDS) and real-time ordering board are exclusively available on the Elite plan. Upgrade to start accepting live orders."
+        icon={ClipboardList}
+      />
     );
   }
 

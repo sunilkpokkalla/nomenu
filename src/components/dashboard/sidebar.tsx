@@ -54,7 +54,7 @@ export const getNavItems = (role: UserRole) => {
   return items.filter(item => item.roles.includes(role));
 };
 
-export function Sidebar({ plan = "Free", role = "owner" }: { plan?: string, role?: UserRole }) {
+export function Sidebar({ plan = "Free", role = "owner", createdAt }: { plan?: string, role?: UserRole, createdAt?: string | null }) {
   const pathname = usePathname();
   
   const planLevels: Record<string, number> = {
@@ -64,6 +64,8 @@ export function Sidebar({ plan = "Free", role = "owner" }: { plan?: string, role
     enterprise: 3,
   };
   const userLevel = planLevels[plan.toLowerCase()] ?? 0;
+
+  const isTrial = createdAt ? new Date(createdAt).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
 
   const allowedNavItems = getNavItems(role);
 
@@ -86,8 +88,8 @@ export function Sidebar({ plan = "Free", role = "owner" }: { plan?: string, role
         {allowedNavItems.map((item) => {
           const Icon = item.icon;
           const requiredLevel = (item.badge === "ENT." || item.badge === "ENTERPRISE") ? 3 : item.badge === "ELITE" ? 2 : item.badge === "PRO" ? 1 : 0;
-          const isLocked = userLevel < requiredLevel && !item.openToAll;
-          const isOpenPreview = userLevel < requiredLevel && !!item.openToAll;
+          const isLocked = !isTrial && userLevel < requiredLevel && !item.openToAll;
+          const isOpenPreview = !isTrial && userLevel < requiredLevel && !!item.openToAll;
 
           return (
             <Link
@@ -106,12 +108,17 @@ export function Sidebar({ plan = "Free", role = "owner" }: { plan?: string, role
                 {item.label}
               </div>
               {isLocked && item.badge && (
-                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-slate-100 text-slate-400 border-slate-200">
+                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-slate-100 text-slate-400 border-slate-200 whitespace-nowrap shrink-0">
                   🔒 {item.badge}
                 </span>
               )}
+              {isTrial && userLevel < requiredLevel && item.badge && (
+                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-amber-50 text-amber-600 border-amber-200/50 animate-pulse whitespace-nowrap shrink-0">
+                  ⚡ {item.badge}
+                </span>
+              )}
               {isOpenPreview && item.badge && (
-                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-emerald-50 text-emerald-600 border-emerald-100">
+                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-emerald-50 text-emerald-600 border-emerald-100 whitespace-nowrap shrink-0">
                   🔓 {item.badge}
                 </span>
               )}

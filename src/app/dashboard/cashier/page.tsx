@@ -14,6 +14,8 @@ import { getCurrencySymbol } from "@/lib/currency-options";
 import { TabSaver } from "./tab-saver";
 import { FohPopoutButton } from "./foh-popout-button";
 
+import { FeatureLockout } from "@/components/dashboard/feature-lockout";
+
 export const metadata = {
   title: "Cashier Tabs | NoMenu Dashboard",
   description: "Manage open table tabs and process payments.",
@@ -72,32 +74,17 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
     floorPlansData = res.floorPlans || [];
   }
 
-  const isLocked = !restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.toLowerCase());
+  const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
+  const isLocked = !isTrial && (!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.toLowerCase()));
   
   if (isLocked) {
     return (
-      <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 mb-20">
-        <div>
-          <h1 className="text-3xl font-black tracking-tight text-slate-900">Front of House</h1>
-          <p className="text-slate-500 mt-2 font-medium">Manage open table tabs and waitlists.</p>
-        </div>
-        
-        <div className="bg-white border border-slate-200/60 rounded-3xl p-10 text-center shadow-xl shadow-slate-200/20 max-w-2xl mx-auto mt-12 w-full">
-          <div className="mx-auto w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-slate-100">
-            <Wallet className="w-8 h-8 text-slate-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Pro</h2>
-          <p className="text-slate-500 font-medium mb-8">
-            The Cashier and Waitlist systems are available on the Pro plan. Manage your tables, waitlist, and floor plan efficiently.
-          </p>
-          <Link
-            href="/dashboard/billing"
-            className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-slate-900/20 hover:bg-slate-800 transition-all hover:-translate-y-0.5"
-          >
-            View Pricing Plans
-          </Link>
-        </div>
-      </div>
+      <FeatureLockout 
+        featureName="Front of House"
+        requiredPlan="Pro"
+        description="The Cashier and Waitlist systems are available on the Pro plan. Manage your tables, waitlist, and floor plan efficiently."
+        icon={Wallet}
+      />
     );
   }
 

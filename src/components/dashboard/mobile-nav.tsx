@@ -99,7 +99,7 @@ export function MobileNav({ plan = "Free", role = "owner" }: { plan?: string, ro
                       {item.label}
                     </div>
                     {item.badge && (
-                      <span className={`rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border ${
+                      <span className={`rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border whitespace-nowrap shrink-0 ${
                         isLocked 
                           ? "bg-slate-100 text-slate-400 border-slate-200" 
                           : "bg-indigo-50 text-indigo-600 border-indigo-100/50"

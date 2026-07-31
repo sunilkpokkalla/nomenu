@@ -5,6 +5,7 @@ import { getSupabaseEnv } from "@/lib/env";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { OrdersBoard } from "@/app/dashboard/orders/orders-board";
 import { ClipboardList } from "lucide-react";
+import { FeatureLockout } from "@/components/dashboard/feature-lockout";
 
 export const metadata = {
   title: "Live KDS | NoMenu",
@@ -63,24 +64,19 @@ export default async function KDSPage() {
     .gte("created_at", startOfTodayUtc.toISOString())
     .order("created_at", { ascending: false });
 
+  const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
+  
   // If not elite or enterprise plan, lock it
-  if (!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase())) {
+  if (!isTrial && (!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase()))) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-slate-100 font-sans">
-        <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 text-center max-w-sm">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-            <ClipboardList className="h-8 w-8" />
-          </div>
-          <h3 className="text-xl font-bold text-slate-900">Live Orders Locked</h3>
-          <p className="mt-3 text-sm text-slate-500 mb-6 font-medium">
-            Upgrade to the Elite Plan to unlock the real-time ordering system and kitchen display board.
-          </p>
-          <Link
-            href="/dashboard/billing"
-            className="inline-block w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm hover:bg-slate-800 transition"
-          >
-            Upgrade to Elite Plan
-          </Link>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="w-full max-w-2xl">
+          <FeatureLockout 
+            featureName="Kitchen Display System (KDS)"
+            requiredPlan="Elite"
+            description="The real-time Kitchen Display System is exclusively available on the Elite plan. Upgrade to start managing orders efficiently in your kitchen."
+            icon={ClipboardList}
+          />
         </div>
       </div>
     );

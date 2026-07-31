@@ -6,6 +6,7 @@ import { TakeawayBoard } from "./takeaway-board";
 import { ClipboardList } from "lucide-react";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
+import { FeatureLockout } from "@/components/dashboard/feature-lockout";
 
 export const metadata = {
   title: "Takeaway | NoMenu Dashboard",
@@ -31,15 +32,12 @@ export default async function TakeawayPage() {
     redirect("/dashboard/settings");
   }
 
-  // Fetch today's orders initially
-  // We'll let the client component handle real-time and more complex fetching
+  // Fetch today's/active orders initially
   const tz = restaurant.timezone || "UTC";
   const nowUtc = new Date();
   const nowZoned = toZonedTime(nowUtc, tz);
-  
   const startOfTodayZoned = new Date(nowZoned);
-  startOfTodayZoned.setHours(0, 0, 0, 0); // Start of today in local restaurant time
-  
+  startOfTodayZoned.setHours(0, 0, 0, 0);
   const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
 
   const { data: initialOrders } = await supabase
@@ -62,7 +60,8 @@ export default async function TakeawayPage() {
     .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
     .order("created_at", { ascending: false });
 
-  const isLocked = !restaurant.plan || !["enterprise"].includes(restaurant.plan.toLowerCase());
+  const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
+  const isLocked = !isTrial && (!restaurant.plan || !["enterprise"].includes(restaurant.plan.toLowerCase()));
   
   // Fetch active menu to get custom location label
   const { data: menu } = await supabase
@@ -77,28 +76,12 @@ export default async function TakeawayPage() {
   
   if (isLocked) {
     return (
-      <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Takeaway Orders</h1>
-          <p className="text-slate-500 mt-2">Manage incoming pickup orders in real-time.</p>
-        </div>
-        
-        <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm max-w-2xl mx-auto mt-12 w-full">
-          <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-            <ClipboardList className="w-8 h-8 text-slate-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Upgrade to Enterprise</h2>
-          <p className="text-slate-600 mb-8 leading-relaxed">
-            The Takeaway system is exclusively available on the Enterprise plan. Upgrade to start accepting remote takeaway orders.
-          </p>
-          <Link
-            href="/dashboard/billing"
-            className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-all hover:scale-[1.02]"
-          >
-            View Pricing Plans
-          </Link>
-        </div>
-      </div>
+      <FeatureLockout 
+        featureName="Takeaway Orders"
+        requiredPlan="Enterprise"
+        description="The Takeaway system is exclusively available on the Enterprise plan. Upgrade to start accepting remote takeaway orders."
+        icon={ClipboardList}
+      />
     );
   }
 

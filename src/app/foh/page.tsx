@@ -67,7 +67,8 @@ export default async function FOHPage({ searchParams }: { searchParams: Promise<
     floorPlansData = res.floorPlans || [];
   }
 
-  const isLocked = !restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.toLowerCase());
+  const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
+  const isLocked = !isTrial && (!restaurant.plan || !["pro", "elite", "enterprise"].includes(restaurant.plan.toLowerCase()));
   
   if (isLocked) {
     return (

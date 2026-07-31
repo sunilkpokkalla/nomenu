@@ -1181,41 +1181,6 @@ export async function updateRestaurantBranding(formData: FormData) {
   redirect("/dashboard/customize?success=Branding%20updated%20successfully");
 }
 
-export async function updateRestaurantPlan(formData: FormData) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const restaurant = await getRestaurantForUser(supabase, user.id);
-  if (!restaurant) {
-    redirect("/dashboard?message=Create%20a%20restaurant%20profile%20first");
-  }
-
-  const plan = field(formData, "plan");
-  if (!plan) {
-    redirect("/dashboard/billing?message=Plan%20is%20required");
-  }
-
-  const { error } = await supabase
-    .from("restaurants")
-    .update({
-      plan: plan,
-    })
-    .eq("id", restaurant.id);
-
-  if (error) {
-    redirect(`/dashboard/billing?message=${encodeURIComponent(error.message)}`);
-  }
-
-  revalidatePath("/dashboard/billing");
-  revalidatePath("/dashboard");
-  redirect("/dashboard/billing?success=Plan%20updated%20successfully");
-}
 
 export async function updateMenuBranding(menuId: string, formData: FormData, redirectTo?: string) {
   const supabase = await createClient();

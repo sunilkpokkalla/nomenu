@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Plus, Save, Trash2, Edit2, CheckCircle2, User, Users, Coffee, Ban, X } from "lucide-react";
+import { Plus, Save, Trash2, Edit2, CheckCircle2, User, Users, Coffee, Ban, X, Bed, Wine, Sofa, Palmtree, ConciergeBell } from "lucide-react";
 import { saveTableLayout, addFloorPlanArea, deleteFloorPlanArea } from "./floor-plan-actions";
 import { useRouter } from "next/navigation";
 import { createWalkInTab, voidTableTab, removeTableFromTab, clearTableTab } from "./actions";
 
-type TableShape = "rectangle" | "circle" | "square";
+type TableShape = "rectangle" | "circle" | "square" | "room" | "bar" | "lounge" | "pool" | "counter";
 
 interface RestaurantTable {
   id: string;
@@ -79,23 +79,31 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
   const handleAddTable = () => {
     let newX = 50;
     let newY = 50;
+    let defaultShape: TableShape = "rectangle";
+    let defaultCapacity = 4;
+    let defaultWidth = 120;
+    let defaultHeight = 80;
     
     if (tables.length > 0) {
       const lastTable = tables[tables.length - 1];
       newX = lastTable.x + 30;
       newY = lastTable.y + 30;
+      defaultShape = lastTable.shape;
+      defaultCapacity = lastTable.capacity;
+      defaultWidth = lastTable.width;
+      defaultHeight = lastTable.height;
     }
 
     const newTable: RestaurantTable = {
       id: `temp-${Date.now()}`,
       floor_plan_id: activePlanId,
       table_number: `${tables.length + 1}`,
-      capacity: 4,
-      shape: "rectangle",
+      capacity: defaultCapacity,
+      shape: defaultShape,
       x: newX,
       y: newY,
-      width: 120,
-      height: 80,
+      width: defaultWidth,
+      height: defaultHeight,
       isNew: true
     };
     setTables([...tables, newTable]);
@@ -231,7 +239,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
       
       setDragOffset({ x: offsetX, y: offsetY });
       setIsDragging(true);
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     }
   };
 
@@ -255,7 +263,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
   const handlePointerUp = (e: React.PointerEvent) => {
     setIsDragging(false);
-    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
   };
   const selectedTableData = tables.find(t => t.id === selectedTableId);
 
@@ -514,8 +522,8 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                   ${isSelectedLive && !isOccupied ? 'ring-4 ring-emerald-200 shadow-lg' : ''}
                 `}
               >
-                {/* Render visual chairs around the table */}
-                {Array.from({ length: table.capacity }).map((_, i) => {
+                {/* Render visual chairs around the table (unless it is a Room, Bar, Lounge, Pool, or Counter) */}
+                {!['room', 'bar', 'lounge', 'pool', 'counter'].includes(table.shape) && Array.from({ length: table.capacity }).map((_, i) => {
                   // Distribute chairs evenly along the perimeter
                   const angle = (i / table.capacity) * 2 * Math.PI;
                   const chairOffset = 12; // Distance from table edge
@@ -545,12 +553,31 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                   );
                 })}
 
-                <span className="font-bold text-lg z-10">{table.table_number}</span>
-                {/* Physical Table Capacity (when not occupied or in edit mode) */}
-                {table.capacity > 0 && (!isOccupied || isEditMode) && (
-                  <div className="flex items-center gap-1 text-[10px] opacity-70 mt-1 z-10">
-                    <Users className="w-3 h-3" /> {table.capacity}
+                {['room', 'bar', 'lounge', 'pool', 'counter'].includes(table.shape) ? (
+                  <div className="flex flex-col items-center justify-center h-full w-full p-2 pointer-events-none select-none">
+                    {table.shape === 'room' && <Bed className="h-6 w-6 mb-1 opacity-70 text-current" />}
+                    {table.shape === 'bar' && <Wine className="h-6 w-6 mb-1 opacity-70 text-current" />}
+                    {table.shape === 'lounge' && <Sofa className="h-6 w-6 mb-1 opacity-70 text-current" />}
+                    {table.shape === 'pool' && <Palmtree className="h-6 w-6 mb-1 opacity-70 text-current" />}
+                    {table.shape === 'counter' && <ConciergeBell className="h-6 w-6 mb-1 opacity-70 text-current" />}
+                    <span className="font-bold text-base z-10">{table.table_number}</span>
+                    {/* Physical Table/Room Capacity (when not occupied or in edit mode) */}
+                    {table.capacity > 0 && (!isOccupied || isEditMode) && (
+                      <div className="flex items-center gap-1 text-[10px] opacity-80 mt-0.5 z-10">
+                        <Users className="w-3 h-3" /> {table.capacity}
+                      </div>
+                    )}
                   </div>
+                ) : (
+                  <>
+                    <span className="font-bold text-lg z-10">{table.table_number}</span>
+                    {/* Physical Table Capacity (when not occupied or in edit mode) */}
+                    {table.capacity > 0 && (!isOccupied || isEditMode) && (
+                      <div className="flex items-center gap-1 text-[10px] opacity-80 mt-0.5 z-10">
+                        <Users className="w-3 h-3" /> {table.capacity}
+                      </div>
+                    )}
+                  </>
                 )}
                 {/* Guest Count (when occupied) */}
                 {!isEditMode && isOccupied && (
@@ -631,7 +658,7 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
 
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Shape</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   <button 
                     onClick={() => updateSelectedTable({ shape: 'rectangle', width: 120, height: 80 })}
                     className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'rectangle' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
@@ -649,6 +676,36 @@ export function FloorPlanBoard({ restaurantId, initialFloorPlans, activeOrders, 
                     className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'circle' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
                   >
                     Circle
+                  </button>
+                  <button 
+                    onClick={() => updateSelectedTable({ shape: 'room', width: 100, height: 100 })}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'room' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
+                  >
+                    Hotel Room
+                  </button>
+                  <button 
+                    onClick={() => updateSelectedTable({ shape: 'bar', width: 80, height: 80 })}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'bar' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
+                  >
+                    Bar Stool
+                  </button>
+                  <button 
+                    onClick={() => updateSelectedTable({ shape: 'lounge', width: 140, height: 90 })}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'lounge' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
+                  >
+                    Lounge Couch
+                  </button>
+                  <button 
+                    onClick={() => updateSelectedTable({ shape: 'pool', width: 95, height: 95 })}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'pool' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
+                  >
+                    Pool / Cabana
+                  </button>
+                  <button 
+                    onClick={() => updateSelectedTable({ shape: 'counter', width: 140, height: 80 })}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${selectedTableData.shape === 'counter' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}`}
+                  >
+                    Service Counter
                   </button>
                 </div>
               </div>

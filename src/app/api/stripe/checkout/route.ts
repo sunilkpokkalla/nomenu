@@ -130,6 +130,27 @@ export async function POST(req: Request) {
       
       totalAmountCents += CONVENIENCE_FEE_CENTS;
       applicationFeeAmountCents += CONVENIENCE_FEE_CENTS; // NoMenu keeps the convenience fee
+    } else {
+      // 1.0% Convenience Fee fallback for other countries
+      const CONVENIENCE_FEE_PERCENT = 0.01;
+      const convenienceFeeCents = Math.round(totalAmountCents * CONVENIENCE_FEE_PERCENT);
+      
+      if (convenienceFeeCents > 0) {
+        lineItems.push({
+          price_data: {
+            currency: restaurantCurrency,
+            product_data: {
+              name: "Convenience Fee",
+              description: "Helps power your digital menu experience.",
+            },
+            unit_amount: convenienceFeeCents,
+          },
+          quantity: 1,
+        });
+        
+        totalAmountCents += convenienceFeeCents;
+        applicationFeeAmountCents += convenienceFeeCents; // NoMenu keeps the convenience fee
+      }
     }
     
     // Custom Enterprise Takeaway & Priority Reserve Fees
