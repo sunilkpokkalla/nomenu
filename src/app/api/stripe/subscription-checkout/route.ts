@@ -116,6 +116,11 @@ export async function POST(req: Request) {
     const sessionBody: any = {
       customer: customerId,
       mode: "subscription",
+      metadata: {
+        restaurant_id: restaurant.id,
+        plan_id: planId,
+        billing_cycle: billingCycle,
+      },
       line_items: [
         {
           price: priceId,
