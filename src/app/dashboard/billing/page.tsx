@@ -65,62 +65,68 @@ const getPlans = (isAnnual: boolean) => [
 ];
 
 export default async function BillingPage(
-  props: {
-    searchParams: Promise<{ message?: string; success?: string; billing?: string }>;
-  }
-) {
-  const searchParams = await props.searchParams;
-  const isAnnual = searchParams.billing === "annual";
-  const plans = getPlans(isAnnual);
-
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  const restaurant = await getActiveRestaurant(supabase, user.id);
-
-  if (!restaurant) {
-    redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
-  }
-
-  const currentPlan = restaurant.plan || "free";
-
-  // Fetch Free Plan Usage
-  let menuCount = 0;
-  if (currentPlan === "free") {
-    const { count: mCount } = await supabase
-      .from("menus")
-      .select("*", { count: "exact", head: true })
-      .eq("restaurant_id", restaurant.id);
-    menuCount = mCount || 0;
-  }
-
-  return (
-    <div className="mx-auto w-full max-w-[1600px] px-4 py-8 lg:px-8">
-      {/* Header */}
-      <div className="mb-10 max-w-2xl">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-950">Plans & Billing</h1>
-        <p className="mt-2 text-slate-500 font-medium text-base">
-          Manage your subscription and billing details. Upgrade to unlock advanced capabilities.
-        </p>
-      </div>
-
-      {searchParams.success && (
-        <div className="mb-8 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-medium text-emerald-800 shadow-sm">
-          {searchParams.success}
+    props: {
+      searchParams: Promise<{ message?: string; success?: string; billing?: string; canceled?: string }>;
+    }
+  ) {
+    const searchParams = await props.searchParams;
+    const isAnnual = searchParams.billing === "annual";
+    const plans = getPlans(isAnnual);
+  
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+  
+    if (!user) {
+      redirect("/login");
+    }
+  
+    const restaurant = await getActiveRestaurant(supabase, user.id);
+  
+    if (!restaurant) {
+      redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
+    }
+  
+    const currentPlan = restaurant.plan || "free";
+  
+    // Fetch Free Plan Usage
+    let menuCount = 0;
+    if (currentPlan === "free") {
+      const { count: mCount } = await supabase
+        .from("menus")
+        .select("*", { count: "exact", head: true })
+        .eq("restaurant_id", restaurant.id);
+      menuCount = mCount || 0;
+    }
+  
+    return (
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-8 lg:px-8">
+        {/* Header */}
+        <div className="mb-10 max-w-2xl">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-950">Plans & Billing</h1>
+          <p className="mt-2 text-slate-500 font-medium text-base">
+            Manage your subscription and billing details. Upgrade to unlock advanced capabilities.
+          </p>
         </div>
-      )}
-      {searchParams.message && (
-        <div className="mb-8 rounded-xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-medium text-rose-800 shadow-sm flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4" />
-          {searchParams.message}
-        </div>
-      )}
+  
+        {searchParams.success && (
+          <div className="mb-8 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-medium text-emerald-800 shadow-sm">
+            {searchParams.success}
+          </div>
+        )}
+        {searchParams.canceled && (
+          <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-medium text-amber-800 shadow-sm flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
+            Checkout was canceled. No charges were made.
+          </div>
+        )}
+        {searchParams.message && (
+          <div className="mb-8 rounded-xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm font-medium text-rose-800 shadow-sm flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-rose-600" />
+            {searchParams.message}
+          </div>
+        )}
 
       {/* Active Plan Dashboard Widget - Minimalist */}
       <div className="mb-12">
