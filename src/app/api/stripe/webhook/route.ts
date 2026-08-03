@@ -60,7 +60,8 @@ export async function POST(req: Request) {
             .update({
               plan: planId,
               stripe_subscription_id: session.subscription as string,
-              magic_credits: newCredits
+              magic_credits: newCredits,
+              subscription_status: "active"
             })
             .eq("id", restaurantId);
           if (updateError) {
@@ -150,7 +151,8 @@ export async function POST(req: Request) {
         .update({ 
           plan: "free",
           is_annual_plan: false,
-          subscription_start_date: null
+          subscription_start_date: null,
+          subscription_status: subscription.status
         })
         .eq("stripe_subscription_id", subscription.id);
       
@@ -203,6 +205,7 @@ export async function POST(req: Request) {
               subscription_start_date: new Date().toISOString(),
               magic_credits: newCredits,
               stripe_subscription_id: subscription.id,
+              subscription_status: subscription.status,
             })
             .eq("id", restaurantId);
             

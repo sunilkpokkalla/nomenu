@@ -92,6 +92,7 @@ export default async function BillingPage(
     let currentPlan = restaurant.plan || "free";
   
     // Fetch subscription details directly from Stripe to ensure accurate cancellation status
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let stripeSubscription: any = null;
     if (restaurant.stripe_subscription_id) {
       try {
@@ -99,6 +100,7 @@ export default async function BillingPage(
         
         // If the subscription is actually canceled or unpaid, downgrade it immediately
         if (stripeSubscription && (stripeSubscription.status === "canceled" || stripeSubscription.status === "unpaid") && currentPlan !== "free") {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (supabase as any)
             .from("restaurants")
             .update({
