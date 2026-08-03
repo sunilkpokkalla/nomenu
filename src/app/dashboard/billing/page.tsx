@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SubscriptionButton, PortalButton } from "@/components/dashboard/subscription-buttons";
 import { BillingToggle } from "@/components/dashboard/billing-toggle";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
+import { fetchStripe } from "@/lib/stripe-fetch";
 
 const getPlans = (isAnnual: boolean) => [
   {
@@ -88,7 +89,31 @@ export default async function BillingPage(
       redirect("/dashboard?message=Please%20set%20up%20your%20restaurant%20first");
     }
   
-    const currentPlan = restaurant.plan || "free";
+    let currentPlan = restaurant.plan || "free";
+  
+    // Fetch subscription details directly from Stripe to ensure accurate cancellation status
+    let stripeSubscription: any = null;
+    if (restaurant.stripe_subscription_id) {
+      try {
+        stripeSubscription = await fetchStripe(`/subscriptions/${restaurant.stripe_subscription_id}`);
+        
+        // If the subscription is actually canceled or unpaid, downgrade it immediately
+        if (stripeSubscription && (stripeSubscription.status === "canceled" || stripeSubscription.status === "unpaid") && currentPlan !== "free") {
+          await (supabase as any)
+            .from("restaurants")
+            .update({
+              plan: "free",
+              is_annual_plan: false,
+              subscription_start_date: null,
+              subscription_status: stripeSubscription.status
+            })
+            .eq("id", restaurant.id);
+          currentPlan = "free";
+        }
+      } catch (e) {
+        console.error("Failed to fetch subscription from Stripe:", e);
+      }
+    }
   
     // Fetch Free Plan Usage
     let menuCount = 0;
@@ -127,6 +152,28 @@ export default async function BillingPage(
             {searchParams.message}
           </div>
         )}
+  
+        {stripeSubscription?.cancel_at_period_end && (
+          <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-medium text-amber-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0" />
+              <span>
+                Your subscription is scheduled to cancel on{" "}
+                <strong className="text-slate-900">
+                  {new Date(stripeSubscription.cancel_at * 1000).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </strong>
+                . You will retain your plan and access until then.
+              </span>
+            </div>
+            <div className="shrink-0">
+              <PortalButton text="Reactivate Subscription" />
+            </div>
+          </div>
+        )}
 
       {/* Active Plan Dashboard Widget - Minimalist */}
       <div className="mb-12">
@@ -142,10 +189,17 @@ export default async function BillingPage(
               </div>
               <div className="flex items-baseline gap-3">
                 <span className="text-2xl font-bold text-slate-950 tracking-tight capitalize">{currentPlan} Plan</span>
-                <div className="flex items-center gap-1.5 rounded-md bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-700">
-                  <div className="h-1.5 w-1.5 rounded-full bg-slate-900"></div>
-                  Active
-                </div>
+                {stripeSubscription?.cancel_at_period_end ? (
+                  <div className="flex items-center gap-1.5 rounded-md bg-amber-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-800 border border-amber-100">
+                    <div className="h-1.5 w-1.5 rounded-full bg-amber-500"></div>
+                    Canceling
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 rounded-md bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-700">
+                    <div className="h-1.5 w-1.5 rounded-full bg-slate-900"></div>
+                    Active
+                  </div>
+                )}
               </div>
               <p className="mt-1 text-sm font-medium text-slate-500">
                 Secured by Stripe billing.
