@@ -179,7 +179,7 @@ function FloorTable({ table }: { table: TableData }) {
   const colors = colorMaps[currentStatus as keyof typeof colorMaps];
 
   return (
-    <div key={table.id} className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 scale-[0.5] md:scale-[0.55] transition-all duration-300" style={{ left: `${table.x}%`, top: `${table.y}%` }}>
+    <div key={table.id} className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 scale-[0.38] sm:scale-[0.45] md:scale-[0.55] transition-all duration-300" style={{ left: `${table.x}%`, top: `${table.y}%` }}>
       <div className="relative mb-3 mt-3">
         {/* Chairs */}
         <div className={`absolute -top-3 left-1/2 -translate-x-1/2 ${isRect ? 'w-10' : 'w-8'} h-3 rounded-t-full shadow-inner border transition-colors duration-300 ${colors.chair}`}></div>
@@ -1238,23 +1238,23 @@ export default function LandingPage() {
             {/* Walkins HTML nodes moved to SVG animateMotion */}
 
             {/* NODE: FOH Host System */}
-            <div className="absolute left-[20%] md:left-[16.6%] top-[40%] md:top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-xl shadow-slate-200 border border-slate-200 flex items-center justify-center mb-2 relative">
+            <div className="absolute left-[12%] md:left-[16.6%] top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-white rounded-2xl shadow-xl shadow-slate-200 border border-slate-200 flex items-center justify-center mb-2 relative">
                 <div className="absolute inset-0 bg-indigo-500 rounded-2xl pulse-ring"></div>
-                <Layers className="w-8 h-8 md:w-10 md:h-10 text-indigo-600 relative z-10" />
+                <Layers className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-indigo-600 relative z-10" />
               </div>
-              <h4 className="font-extrabold text-slate-900 text-xs md:text-sm text-center leading-tight bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm whitespace-nowrap">FOH Host</h4>
+              <h4 className="font-extrabold text-slate-900 text-[10px] md:text-sm text-center leading-tight bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm whitespace-nowrap">FOH Host</h4>
               <span className="text-[7px] md:text-[9px] text-slate-500 font-bold mt-1 uppercase tracking-wider hidden md:block">Assigning Tables</span>
             </div>
 
             {/* THE RESTAURANT FLOOR (6 TABLES IN PERFECT 3x2 GRID) */}
             {[
-              { id: 1, type: 'rect', status: 'available', x: 35, y: 30 },
+              { id: 1, type: 'rect', status: 'available', x: 36, y: 30 },
               { id: 2, type: 'circle', status: 'ordering', x: 50, y: 30 },
-              { id: 3, type: 'rect', status: 'eating', x: 65, y: 30 },
-              { id: 4, type: 'circle', status: 'available', x: 35, y: 70 },
+              { id: 3, type: 'rect', status: 'eating', x: 64, y: 30 },
+              { id: 4, type: 'circle', status: 'available', x: 36, y: 70 },
               { id: 5, type: 'rect', status: 'paid', x: 50, y: 70 },
-              { id: 6, type: 'circle', status: 'eating', x: 65, y: 70 },
+              { id: 6, type: 'circle', status: 'eating', x: 64, y: 70 },
             ].map((table) => (
               <FloorTable key={table.id} table={table} />
             ))}
@@ -1262,12 +1262,14 @@ export default function LandingPage() {
             {/* Runner HTML node moved to SVG animateMotion */}
 
             {/* NODE: Kitchen / KDS */}
-            <div className="absolute left-[50%] md:left-[87.5%] top-[88%] md:top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 scale-75 md:scale-100">
-              <div className="w-20 h-20 md:w-28 md:h-28 bg-slate-900 rounded-3xl shadow-2xl shadow-slate-900/30 border-4 border-slate-800 flex items-center justify-center mb-2 md:mb-3">
-                <ChefHat className="w-10 h-10 md:w-12 md:h-12 text-white" />
+            <div className="absolute left-[88%] md:left-[87.5%] top-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 scale-75 md:scale-100">
+              <div className="w-14 h-14 sm:w-20 sm:h-20 md:w-28 md:h-28 bg-slate-900 rounded-3xl shadow-2xl shadow-slate-900/30 border-4 border-slate-800 flex items-center justify-center mb-2 md:mb-3">
+                <ChefHat className="w-7 h-7 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
               </div>
-              <h4 className="font-extrabold text-slate-900 text-xs md:text-sm text-center leading-tight bg-white px-3 md:px-4 py-1 md:py-1.5 rounded-full shadow-md border border-slate-200 whitespace-nowrap">Kitchen (KDS)</h4>
-              <span className="text-[8px] md:text-[10px] text-slate-500 font-bold mt-1 md:mt-2 uppercase tracking-wider hidden md:block">Receiving Orders</span>
+              <div className="flex flex-col items-center">
+                <h4 className="font-extrabold text-slate-900 text-[10px] md:text-sm text-center leading-tight bg-white px-3 md:px-4 py-1 md:py-1.5 rounded-full shadow-md border border-slate-200 whitespace-nowrap">Kitchen (KDS)</h4>
+                <span className="text-[8px] md:text-[10px] text-slate-500 font-bold mt-1 md:mt-2 uppercase tracking-wider hidden md:block">Receiving Orders</span>
+              </div>
             </div>
 
           </div>
