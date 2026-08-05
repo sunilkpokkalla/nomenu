@@ -56,7 +56,7 @@ export default function DemoPage() {
         <div className="w-full bg-slate-950 aspect-video relative flex items-center justify-center">
           <iframe 
             className="absolute inset-0 w-full h-full border-0"
-            src="https://www.youtube.com/embed/cfbNGSWVILM"
+            src="https://www.youtube.com/embed/KvZ-en2ISIA"
             title="NoMenu Demo Video"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
