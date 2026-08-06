@@ -128,6 +128,52 @@ const TEMPLATES = {
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">I would love to walk you through our traction and our 12-month roadmap.</p>
   <p style="color: #475569; font-size: 16px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
+  },
+  onboarding_guide: {
+    name: "User Onboarding & Quick-Start Guide",
+    subject: "Your 3-Step Setup Plan: How to launch your digital menu in 5 minutes! 🚀",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  
+  <!-- Header Info / Support -->
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 24px;">
+    <span style="font-weight: bold; color: #0f172a; font-size: 18px;">Nomenu</span>
+    <span style="font-size: 13px; color: #64748b;">Need help? Email <a href="mailto:support@nomenu.us" style="color: #2563eb; text-decoration: none;">support@nomenu.us</a></span>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&h=250&fit=crop" alt="Digital Menu Onboarding" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Ready to wow your guests? Let's get set up!</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Hi there,</p>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Welcome to Nomenu! We noticed you onboarded recently. If you are not sure where to start, don't worry—getting your digital menu live takes less than 5 minutes. Here is your quick-start roadmap:</p>
+
+  <div style="background-color: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; border-radius: 4px; margin: 24px 0;">
+    <h3 style="margin-top: 0; color: #0f172a; font-size: 16px; font-weight: 700;">Your 3-Step Setup Plan</h3>
+    
+    <ol style="color: #475569; font-size: 14px; line-height: 1.8; margin-bottom: 0; padding-left: 20px;">
+      <li style="margin-bottom: 10px;">
+        <strong>Create a Menu:</strong> Log into your dashboard, go to the <strong>Menus</strong> tab, and click <em>"Create Menu"</em>. Give it a name (e.g., "Main Menu", "Drinks Menu") and choose your style.
+      </li>
+      <li style="margin-bottom: 10px;">
+        <strong>Create Menu Items:</strong> Inside your newly created menu, click on <em>"Add Item"</em>. Put in the dish name, description, price, and upload a delicious photo to entice guests.
+      </li>
+      <li>
+        <strong>Create QR Codes:</strong> Navigate to the <strong>QR Codes</strong> section in the sidebar. Generate a QR code linked directly to your menu. You can customize the styling, frame templates, and colors, then download it for print!
+      </li>
+    </ol>
+  </div>
+
+  <p style="color: #475569; font-size: 15px; line-height: 1.6; font-weight: 600;">💡 Motivation: Restaurants using digital menus experience up to a 20% increase in order values and zero reprint costs.</p>
+
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us/dashboard" style="display: inline-block; background-color: #2563eb; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Go to Dashboard & Start Creating</a>
+  </div>
+
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">If you have any doubts, need help setting things up, or want a quick walkthrough, just reach out to us at <a href="mailto:support@nomenu.us" style="color: #2563eb; text-decoration: none;">support@nomenu.us</a> or click the Support button in the dashboard header.</p>
+  
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
   }
 };
 
