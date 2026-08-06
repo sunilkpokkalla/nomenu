@@ -174,6 +174,48 @@ const TEMPLATES = {
   
   <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
 </div>`
+  },
+  welcome_discount_15: {
+    name: "Welcome Discount (15% Off)",
+    subject: "Claim your 15% discount on Nomenu Pro! 🎁",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  
+  <!-- Header Info / Support -->
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 24px;">
+    <span style="font-weight: bold; color: #0f172a; font-size: 18px;">Nomenu</span>
+    <span style="font-size: 13px; color: #64748b;">Need help? Email <a href="mailto:support@nomenu.us" style="color: #2563eb; text-decoration: none;">support@nomenu.us</a></span>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&h=250&fit=crop" alt="Exclusive Discount" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Unlock the full power of your digital menu.</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Hi there,</p>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">We hope you are enjoying your Nomenu digital experience! To help you take your brand to the next level, we are offering an exclusive <strong>15% discount</strong> on all our annual plans.</p>
+
+  <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; text-align: center; margin: 24px 0;">
+    <span style="font-size: 13px; font-weight: bold; color: #166534; text-transform: uppercase; letter-spacing: 1px;">Limited Time Offer</span>
+    <h3 style="margin: 8px 0; color: #15803d; font-size: 24px; font-weight: 900;">15% OFF ANNUAL PLANS</h3>
+    <p style="margin: 0; font-size: 14px; color: #166534;">Use our special welcome referral link below to automatically apply your 15% discount at checkout.</p>
+  </div>
+
+  <h3 style="color: #0f172a; font-size: 16px; font-weight: 700; margin-top: 24px; margin-bottom: 12px;">What you unlock with Pro & Elite:</h3>
+  <ul style="color: #475569; font-size: 14px; line-height: 1.8; margin-bottom: 24px; padding-left: 20px;">
+    <li><strong>Premium Themes:</strong> Access custom, cinematic, and gorgeous menu styles that match your brand.</li>
+    <li><strong>Custom Domain:</strong> Host your menu on your own custom web link (e.g., menu.yourrestaurant.com).</li>
+    <li><strong>Zero Watermarks:</strong> Remove the "Powered by Nomenu" tag for a completely white-labeled experience.</li>
+    <li><strong>Unlimited Orders & KDS:</strong> Access our high-end Kitchen Display System for seamless order routing.</li>
+  </ul>
+
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us?ref=WELCOME" style="display: inline-block; background-color: #16a34a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2);">Claim 15% Off Now</a>
+  </div>
+
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">If you have any questions or need help setting up your menu first, feel free to reply directly to this email or reach out to us at <a href="mailto:support@nomenu.us" style="color: #2563eb; text-decoration: none;">support@nomenu.us</a>.</p>
+  
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
   }
 };
 
