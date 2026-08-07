@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/generate-ai-images",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-users",
+      "schedule": "0 0 * * *"
     }
   ]
 }
