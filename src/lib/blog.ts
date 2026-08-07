@@ -1,43 +1,28 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+import { POSTS, type BlogPost } from './blog-posts-data';
 
-const contentDirectory = path.join(process.cwd(), 'src/content/blog');
-
-export type BlogPost = {
-  slug: string;
-  title: string;
-  date: string;
-  excerpt: string;
-  author: string;
-  coverImage?: string;
-  content?: string;
-};
+export type { BlogPost };
 
 export function getPostSlugs() {
-  if (!fs.existsSync(contentDirectory)) return [];
-  return fs.readdirSync(contentDirectory).filter(file => file.endsWith('.md'));
+  return POSTS.map(post => `${post.slug}.md`);
 }
 
 export function getPostBySlug(slug: string, fields: string[] = []) {
   const realSlug = slug.replace(/\.md$/, '');
-  const fullPath = path.join(contentDirectory, `${realSlug}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
+  const post = POSTS.find(p => p.slug === realSlug);
+  
+  if (!post) {
+    throw new Error(`Post not found with slug: ${realSlug}`);
+  }
 
   const items: Partial<BlogPost> = {};
 
   fields.forEach((field) => {
     if (field === 'slug') {
       items[field] = realSlug;
-    }
-    if (field === 'content') {
-      items[field] = content;
-    }
-
-    if (typeof data[field] !== 'undefined') {
-      // @ts-expect-error - dynamic field assignment
-      items[field] = data[field];
+    } else if (field === 'content') {
+      items[field] = post.content;
+    } else if (field === 'title' || field === 'date' || field === 'excerpt' || field === 'author' || field === 'coverImage') {
+      items[field] = post[field as keyof BlogPost];
     }
   });
 
@@ -45,10 +30,17 @@ export function getPostBySlug(slug: string, fields: string[] = []) {
 }
 
 export function getAllPosts(fields: string[] = []) {
-  const slugs = getPostSlugs();
-  const posts = slugs
-    .map((slug) => getPostBySlug(slug, fields))
-    // sort posts by date in descending order
-    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
-  return posts;
+  return POSTS.map(post => {
+    const items: Partial<BlogPost> = {};
+    fields.forEach((field) => {
+      if (field === 'slug') {
+        items[field] = post.slug;
+      } else if (field === 'content') {
+        items[field] = post.content;
+      } else if (field === 'title' || field === 'date' || field === 'excerpt' || field === 'author' || field === 'coverImage') {
+        items[field] = post[field as keyof BlogPost];
+      }
+    });
+    return items as BlogPost;
+  });
 }
