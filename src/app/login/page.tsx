@@ -48,11 +48,11 @@ export default async function LoginPage(
             src="/auth-bg-login.png" 
             alt="High end restaurant table setting" 
             fill 
-            className="object-cover opacity-70"
+            className="object-cover opacity-90"
             priority
           />
           {/* Subtle gradient overlay to make text readable */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-slate-950/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-slate-950/5" />
         </div>
 
         {/* Brand Text over Image */}
