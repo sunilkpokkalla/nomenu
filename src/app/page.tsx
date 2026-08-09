@@ -229,7 +229,7 @@ export default function LandingPage() {
   const activeThemeData = THEME_PREVIEWS.find(t => t.id === activeTheme) || THEME_PREVIEWS[0];
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 selection:bg-indigo-600 selection:text-white relative overflow-x-hidden font-sans-vibrant">
+    <main className="min-h-screen bg-white text-slate-800 selection:bg-indigo-600 selection:text-white relative overflow-x-hidden font-sans-vibrant">
       {/* Decorative ambient background glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.08),transparent_50%)] pointer-events-none -z-10" />
       <div className="absolute top-[20%] -left-48 w-96 h-96 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none -z-10" />
