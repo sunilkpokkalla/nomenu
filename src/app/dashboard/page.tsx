@@ -43,7 +43,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage(
   props: {
-    searchParams: Promise<{ message?: string; signup?: string; registered?: string }>;
+    searchParams: Promise<{ message?: string; signup?: string; registered?: string; eventId?: string }>;
   }
 ) {
   const searchParams = await props.searchParams;
@@ -327,7 +327,15 @@ export default async function DashboardPage(
   return (
     <OpsProvider>
       {searchParams.registered === 'true' && (
-        <FbqEvent eventName="CompleteRegistration" params={{ content_name: 'Restaurant Account Created' }} />
+        <FbqEvent 
+          eventName="CompleteRegistration" 
+          eventId={searchParams.eventId}
+          params={{ 
+            content_name: 'Restaurant Account Created',
+            value: 0.00,
+            currency: restaurant?.currency || 'USD'
+          }} 
+        />
       )}
       <div className="px-6 py-10 lg:px-10 bg-slate-50/50 min-h-[100dvh] font-sans-vibrant">
       <WelcomeChecklist 

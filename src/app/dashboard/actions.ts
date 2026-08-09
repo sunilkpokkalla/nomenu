@@ -2,7 +2,9 @@
 
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+
+import { sendMetaServerEvent } from "@/lib/meta-capi";
 
 import { createClient } from "@/lib/supabase/server";
 import { slugify } from "@/lib/utils/slugify";
@@ -90,27 +92,56 @@ export async function createRestaurant(formData: FormData) {
     }
   }
 
-  const { error } = await supabase.from("restaurants").insert({
-    owner_id: user.id,
-    name,
-    slug: finalSlug,
-    cuisine_type: field(formData, "cuisineType"),
-    address: field(formData, "address"),
-    phone: field(formData, "phone"),
-    currency: field(formData, "currency") ?? "USD",
-    timezone: field(formData, "timezone") ?? "UTC",
-    primary_color: "#2563EB",
-    accent_color: field(formData, "accentColor") ?? "#F59E0B",
-    theme_style: "minimalist",
-    referred_by_code: validRefCode,
-  });
+  const { data: newRestaurant, error } = await supabase
+    .from("restaurants")
+    .insert({
+      owner_id: user.id,
+      name,
+      slug: finalSlug,
+      cuisine_type: field(formData, "cuisineType"),
+      address: field(formData, "address"),
+      phone: field(formData, "phone"),
+      currency: field(formData, "currency") ?? "USD",
+      timezone: field(formData, "timezone") ?? "UTC",
+      primary_color: "#2563EB",
+      accent_color: field(formData, "accentColor") ?? "#F59E0B",
+      theme_style: "minimalist",
+      referred_by_code: validRefCode,
+    })
+    .select("id, currency")
+    .single();
 
-  if (error) {
-    redirect(`/dashboard?message=${encodeURIComponent(error.message)}`);
+  if (error || !newRestaurant) {
+    redirect(`/dashboard?message=${encodeURIComponent(error?.message || "Failed to create restaurant")}`);
+  }
+
+  // Trigger Conversions API (CAPI) event for CompleteRegistration
+  const eventId = `reg_${newRestaurant.id}`;
+  try {
+    const headersList = await headers();
+    const clientIpAddress = headersList.get("x-forwarded-for")?.split(",")[0] || headersList.get("x-real-ip") || undefined;
+    const clientUserAgent = headersList.get("user-agent") || undefined;
+    const host = headersList.get("host") || "nomenu.us";
+    const protocol = headersList.get("x-forwarded-proto") || "https";
+    const sourceUrl = `${protocol}://${host}/dashboard`;
+
+    await sendMetaServerEvent({
+      eventName: "CompleteRegistration",
+      eventId: eventId,
+      email: user.email || undefined,
+      phone: field(formData, "phone") || undefined,
+      value: 0.00,
+      currency: newRestaurant.currency || "USD",
+      clientIpAddress,
+      clientUserAgent,
+      sourceUrl,
+    });
+  } catch (capiErr) {
+    console.error("[Meta CAPI] Error sending CompleteRegistration event:", capiErr);
   }
 
   revalidatePath("/dashboard");
-  redirect("/dashboard?registered=true");
+  redirect(`/dashboard?registered=true&eventId=${eventId}`);
 }
 
 // MENU ACTIONS

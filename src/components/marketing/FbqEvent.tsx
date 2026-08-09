@@ -2,13 +2,30 @@
 
 import { useEffect } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function FbqEvent({ eventName, params = {} }: { eventName: string, params?: Record<string, unknown> }) {
+export function FbqEvent({ 
+  eventName, 
+  params = {}, 
+  eventId 
+}: { 
+  eventName: string; 
+  params?: Record<string, unknown>; 
+  eventId?: string; 
+}) {
   useEffect(() => {
-    if (typeof window !== 'undefined' && ('fbq' in window)) {
-      // @ts-expect-error - fbq is dynamically injected
-      window.fbq('track', eventName, params);
+    if (!eventName) {
+      console.warn('[Meta Pixel] Skipping event track call: eventName is missing or empty.');
+      return;
     }
-  }, [eventName, params]);
+    if (typeof window !== 'undefined' && ('fbq' in window)) {
+      if (eventId) {
+        // @ts-expect-error - fbq is dynamically injected by Meta
+        window.fbq('track', eventName, params, { eventID: eventId });
+      } else {
+        // @ts-expect-error - fbq is dynamically injected by Meta
+        window.fbq('track', eventName, params);
+      }
+    }
+  }, [eventName, params, eventId]);
   return null;
 }
+
