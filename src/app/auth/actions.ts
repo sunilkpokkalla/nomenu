@@ -42,6 +42,18 @@ export async function signup(formData: FormData) {
   const email = getString(formData, "email");
   const password = getString(formData, "password");
 
+  // Save lead immediately for abandonment recovery
+  if (email) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase as any)
+        .from("nomi_leads")
+        .upsert({ email }, { onConflict: "email" });
+    } catch (dbErr) {
+      console.error("Failed to save signup lead immediately to nomi_leads:", dbErr);
+    }
+  }
+
   const headersList = await headers();
   const origin = headersList.get("origin");
   const host = headersList.get("host");
@@ -64,17 +76,6 @@ export async function signup(formData: FormData) {
       emailRedirectTo: `${cleanAppUrl}/auth/callback`,
     },
   });
-
-  if (!error && email) {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase as any)
-        .from("nomi_leads")
-        .upsert({ email }, { onConflict: "email" });
-    } catch (dbErr) {
-      console.error("Failed to save signup lead to nomi_leads:", dbErr);
-    }
-  }
 
   if (error) {
     let errorMessage = error.message;

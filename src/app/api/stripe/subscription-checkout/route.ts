@@ -35,32 +35,81 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Restaurant not found" }, { status: 404 });
     }
 
-
-
-    // Map plans to Stripe Price IDs
-    const priceMap: Record<string, Record<string, string | undefined>> = {
-      pro: {
-        monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO,
-        annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL,
-      },
-      elite: {
-        monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE,
-        annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE_ANNUAL,
-      },
-      enterprise: {
-        monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE,
-        annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_ANNUAL,
-      },
-    };
-
     const billingCycle = isAnnual ? "annual" : "monthly";
-    const priceId = priceMap[planId.toLowerCase()]?.[billingCycle];
+    const isTestMode = process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_");
 
-    if (!priceId) {
-      if (isAnnual) {
-        return NextResponse.json({ error: `Annual pricing for ${planId} is not yet configured. Please select Monthly billing or contact support.` }, { status: 400 });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let lineItems: any[] = [];
+
+    if (isTestMode) {
+      // Dynamic inline test price mapping to bypass needing exact pre-created test price IDs in Stripe dashboard
+      const planPrices: Record<string, Record<string, { amount: number; name: string }>> = {
+        pro: {
+          monthly: { amount: 3900, name: "Pro Plan (Monthly)" },
+          annual: { amount: 42000, name: "Pro Plan (Annual)" },
+        },
+        elite: {
+          monthly: { amount: 7900, name: "Elite Plan (Monthly)" },
+          annual: { amount: 85200, name: "Elite Plan (Annual)" },
+        },
+        enterprise: {
+          monthly: { amount: 11900, name: "Enterprise Plan (Monthly)" },
+          annual: { amount: 128400, name: "Enterprise Plan (Annual)" },
+        },
+      };
+
+      const selectedPrice = planPrices[planId.toLowerCase()]?.[billingCycle];
+      if (!selectedPrice) {
+        return NextResponse.json({ error: "Invalid plan or billing cycle." }, { status: 400 });
       }
-      return NextResponse.json({ error: "Invalid plan or missing price ID in environment variables." }, { status: 400 });
+
+      lineItems = [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: selectedPrice.name,
+            },
+            unit_amount: selectedPrice.amount,
+            recurring: {
+              interval: isAnnual ? "year" : "month",
+            },
+          },
+          quantity: 1,
+        },
+      ];
+    } else {
+      // Map plans to Stripe Price IDs (Production Live mode)
+      const priceMap: Record<string, Record<string, string | undefined>> = {
+        pro: {
+          monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO,
+          annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL,
+        },
+        elite: {
+          monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE,
+          annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE_ANNUAL,
+        },
+        enterprise: {
+          monthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE,
+          annual: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE_ANNUAL,
+        },
+      };
+
+      const priceId = priceMap[planId.toLowerCase()]?.[billingCycle];
+
+      if (!priceId) {
+        if (isAnnual) {
+          return NextResponse.json({ error: `Annual pricing for ${planId} is not yet configured. Please select Monthly billing or contact support.` }, { status: 400 });
+        }
+        return NextResponse.json({ error: "Invalid plan or missing price ID in environment variables." }, { status: 400 });
+      }
+
+      lineItems = [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ];
     }
 
     let customerId = restaurant.stripe_customer_id;
@@ -85,7 +134,8 @@ export async function POST(req: Request) {
 
     const discounts = [];
 
-    if (isAnnual) {
+    // Only apply discounts in live production mode or if not in test mode to prevent crashes from missing coupons
+    if (isAnnual && !isTestMode) {
       if (!restaurant.referred_by_code) {
         // No Referral -> 10% Discount
         const discountId = process.env.STRIPE_ANNUAL_DISCOUNT_COUPON_ID;
@@ -121,12 +171,7 @@ export async function POST(req: Request) {
         plan_id: planId,
         billing_cycle: billingCycle,
       },
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
+      line_items: lineItems,
       success_url: `${origin}/dashboard/billing?success=Subscription%20updated%20successfully!`,
       cancel_url: `${origin}/dashboard/billing?canceled=true`,
       subscription_data: {
