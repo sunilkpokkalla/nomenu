@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       html: `
         <div style="font-family: sans-serif; padding: 20px; color: #0c2340;">
           <h2>New 1-on-1 Demo Booked</h2>
-          <p>A visitor has scheduled a 15-minute walkthrough of NoMenu.</p>
+          <p>A visitor has scheduled a 30-minute walkthrough of NoMenu.</p>
           <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
           <p><strong>Customer Email:</strong> ${email}</p>
           <p><strong>Date:</strong> ${date}</p>
@@ -53,11 +53,11 @@ export async function POST(req: Request) {
         <div style="font-family: sans-serif; padding: 20px; color: #0c2340; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 16px;">
           <h2 style="color: #4f46e5; margin-bottom: 20px;">Demo Scheduled Successfully!</h2>
           <p>Hi there,</p>
-          <p>Thank you for scheduling a 15-minute walkthrough of NoMenu. Here are your booking details:</p>
+          <p>Thank you for scheduling a 30-minute walkthrough of NoMenu. Here are your booking details:</p>
           <div style="background-color: #f8fafc; padding: 15px; border-radius: 12px; margin: 20px 0; border: 1px solid #f1f5f9;">
             <p style="margin: 5px 0;"><strong>Date:</strong> ${date}</p>
             <p style="margin: 5px 0;"><strong>Time:</strong> ${time}</p>
-            <p style="margin: 5px 0;"><strong>Duration:</strong> 15 minutes</p>
+            <p style="margin: 5px 0;"><strong>Duration:</strong> 30 minutes</p>
           </div>
           <p>A product expert will reach out to you at this email address with a Google Meet invitation shortly.</p>
           <p>If you need to reschedule or have any questions beforehand, please reply to this email.</p>

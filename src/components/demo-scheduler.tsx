@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar as CalendarIcon, Clock, CheckCircle, ChevronRight, Loader2 } from "lucide-react";
 
 // Generate next 7 days (excluding Sunday)
@@ -52,6 +52,26 @@ export function DemoScheduler() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Check if lead has already booked a demo on this device
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const bookedDate = localStorage.getItem('nomi_demo_booked_date');
+      const bookedTime = localStorage.getItem('nomi_demo_booked_time');
+      const bookedEmail = localStorage.getItem('nomi_demo_booked_email');
+      if (bookedDate && bookedTime && bookedEmail) {
+        setSelectedDate({
+          dayName: "",
+          dayNum: 0,
+          month: "",
+          fullString: bookedDate
+        });
+        setSelectedTime(bookedTime);
+        setEmail(bookedEmail);
+        setStep("success");
+      }
+    }
+  }, []);
+
   const handleDateSelect = (date: typeof dates[0]) => {
     setSelectedDate(date);
     setStep("time");
@@ -85,6 +105,10 @@ export function DemoScheduler() {
       const data = await res.json();
       
       if (data.success) {
+        // Save booking details to localStorage so it remembers the booking
+        localStorage.setItem('nomi_demo_booked_date', selectedDate.fullString);
+        localStorage.setItem('nomi_demo_booked_time', selectedTime);
+        localStorage.setItem('nomi_demo_booked_email', email);
         setStep("success");
       } else {
         throw new Error(data.error || "Failed to book slot");
@@ -169,7 +193,7 @@ export function DemoScheduler() {
         </div>
         
         <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 mb-5 text-xs text-slate-600 space-y-1">
-          <p><strong>Walkthrough:</strong> 15-Minute 1-on-1 Demo</p>
+          <p><strong>Walkthrough:</strong> 30-Minute 1-on-1 Demo</p>
           <p><strong>Date:</strong> {selectedDate?.fullString}</p>
           <p><strong>Time Slot:</strong> {selectedTime}</p>
         </div>
