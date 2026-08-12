@@ -53,12 +53,13 @@ export function DemoChatbot({ floatingOnly = false }: { floatingOnly?: boolean }
       const data = await res.json();
       if (data.success) {
         localStorage.setItem('nomi_lead_email', emailInput);
+      } else {
+        console.error("Server failed to save lead email:", data.error || "Unknown error");
       }
     } catch (err) {
       console.error("Failed to submit lead email", err);
     } finally {
       // Transition to chat regardless of DB state so guests are never blocked
-      localStorage.setItem('nomi_lead_email', emailInput);
       setIsEmailSubmitted(true);
       setIsSubmittingEmail(false);
     }
