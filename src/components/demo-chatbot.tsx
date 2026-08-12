@@ -18,7 +18,7 @@ const extractSuggestions = (content: string) => {
     .filter(line => line.length > 0);
 };
 
-export function DemoChatbot() {
+export function DemoChatbot({ floatingOnly = false }: { floatingOnly?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -78,18 +78,35 @@ export function DemoChatbot() {
   return (
     <>
       {/* Inline Trigger Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="w-full bg-indigo-600 border border-indigo-500 rounded-xl p-8 flex flex-col items-center justify-center text-white min-h-[200px] shadow-xl relative overflow-hidden hover:bg-indigo-700 transition-colors group"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent_70%)] pointer-events-none" />
-        <Bot className="w-12 h-12 text-indigo-200 mb-4 group-hover:scale-110 transition-transform duration-300" />
-        <h4 className="text-xl font-black mb-1 z-10">NoMenu Platform Assistance</h4>
-        <p className="text-sm font-medium text-indigo-200 z-10">Chat with NoMi, our AI Assistant</p>
-        <div className="mt-4 px-4 py-1.5 bg-white/10 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-sm border border-white/10">
-          Available 24/7
-        </div>
-      </button>
+      {!floatingOnly && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="w-full bg-indigo-600 border border-indigo-500 rounded-xl p-8 flex flex-col items-center justify-center text-white min-h-[200px] shadow-xl relative overflow-hidden hover:bg-indigo-700 transition-colors group"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent_70%)] pointer-events-none" />
+          <Bot className="w-12 h-12 text-indigo-200 mb-4 group-hover:scale-110 transition-transform duration-300" />
+          <h4 className="text-xl font-black mb-1 z-10">NoMenu Platform Assistance</h4>
+          <p className="text-sm font-medium text-indigo-200 z-10">Chat with NoMi, our AI Assistant</p>
+          <div className="mt-4 px-4 py-1.5 bg-white/10 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-sm border border-white/10">
+            Available 24/7
+          </div>
+        </button>
+      )}
+
+      {/* Floating Trigger Bubble (Home Page floating mode) */}
+      {floatingOnly && !isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-indigo-600 border border-indigo-500 text-white shadow-2xl flex items-center justify-center hover:scale-105 hover:bg-indigo-700 active:scale-95 transition-all duration-200 pointer-events-auto group"
+          title="Chat with NoMi"
+        >
+          <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-amber-500"></span>
+          </span>
+          <MessageSquare className="w-6 h-6 group-hover:rotate-12 transition-transform duration-200" />
+        </button>
+      )}
 
       {/* Floating Wrapper in Corner */}
       <div 

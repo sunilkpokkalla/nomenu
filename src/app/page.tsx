@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { SocialProofMarquee } from "@/components/SocialProofMarquee";
+import { DemoChatbot } from "@/components/demo-chatbot";
 import { 
   ArrowRight, 
   QrCode, 
@@ -1544,6 +1545,7 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      <DemoChatbot floatingOnly={true} />
     </main>
   );
 }

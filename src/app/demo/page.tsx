@@ -91,14 +91,19 @@ export default function DemoPage() {
 
           <div className="w-full md:w-1/2 p-10 flex flex-col items-center justify-center text-center">
             <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 mb-4">
-              <Bot className="w-6 h-6 text-indigo-600" />
+              <Calendar className="w-6 h-6 text-indigo-600" />
             </div>
-            <h3 className="text-2xl font-black text-slate-900 mb-2">Have Questions?</h3>
+            <h3 className="text-2xl font-black text-slate-900 mb-2">Want a Personalized Walkthrough?</h3>
             <p className="text-slate-500 text-sm font-medium max-w-sm mb-8">
-              Chat with our intelligent AI Assistant to get instant answers about features, integrations, and custom pricing.
+              Book a 15-minute 1-on-1 demo call with a product expert to get all your questions answered.
             </p>
             
-            <DemoChatbot />
+            <Button asChild className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+              <Link href="https://calendly.com/nomenu/15min" target="_blank" rel="noopener noreferrer">
+                <Calendar className="w-5 h-5" />
+                Book 1-on-1 Demo
+              </Link>
+            </Button>
           </div>
 
         </div>
