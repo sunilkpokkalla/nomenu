@@ -26,9 +26,9 @@ export async function POST(req: Request) {
     }
 
     // 2. Send email to admin
-    const adminEmail = process.env.ADMIN_EMAILS?.split(",")[0] || "admin@nomenu.us";
+    const recipients = ["support@nomenu.us", "skpokkalla@gmail.com"];
     await sendEmail({
-      to: adminEmail,
+      to: recipients,
       subject: `📅 New Demo Booking: ${email}`,
       html: `
         <div style="font-family: sans-serif; padding: 20px; color: #0c2340;">
