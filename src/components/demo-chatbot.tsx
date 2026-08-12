@@ -97,7 +97,7 @@ export function DemoChatbot({ floatingOnly = false }: { floatingOnly?: boolean }
       {floatingOnly && !isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-indigo-600 border border-indigo-500 text-white shadow-2xl flex items-center justify-center hover:scale-105 hover:bg-indigo-700 active:scale-95 transition-all duration-200 pointer-events-auto group"
+          className="fixed bottom-6 right-6 z-[9999] h-14 w-14 rounded-full bg-indigo-600 border border-indigo-500 text-white shadow-2xl flex items-center justify-center hover:scale-105 hover:bg-indigo-700 active:scale-95 transition-all duration-200 pointer-events-auto group"
           title="Chat with NoMi"
         >
           <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
@@ -110,7 +110,7 @@ export function DemoChatbot({ floatingOnly = false }: { floatingOnly?: boolean }
 
       {/* Floating Wrapper in Corner */}
       <div 
-        className={`fixed inset-0 pointer-events-none z-50 flex items-end justify-end sm:p-6 p-0 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed inset-0 pointer-events-none z-[9999] flex items-end justify-end sm:p-6 p-0 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
       >
         {/* Chat Window */}
         <div 
