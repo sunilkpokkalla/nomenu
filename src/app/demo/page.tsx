@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Calendar, Bot } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { DemoChatbot } from "@/components/demo-chatbot";
+import { ArrowLeft, CheckCircle2, Calendar } from "lucide-react";
+import { DemoScheduler } from "@/components/demo-scheduler";
 
 export const metadata = {
   title: "Watch Demo & Chat with NoMi",
@@ -89,21 +88,8 @@ export default function DemoPage() {
             </div>
           </div>
 
-          <div className="w-full md:w-1/2 p-10 flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 mb-4">
-              <Calendar className="w-6 h-6 text-indigo-600" />
-            </div>
-            <h3 className="text-2xl font-black text-slate-900 mb-2">Want a Personalized Walkthrough?</h3>
-            <p className="text-slate-500 text-sm font-medium max-w-sm mb-8">
-              Book a 15-minute 1-on-1 demo call with a product expert to get all your questions answered.
-            </p>
-            
-            <Button asChild className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
-              <Link href="https://calendly.com/nomenu/15min" target="_blank" rel="noopener noreferrer">
-                <Calendar className="w-5 h-5" />
-                Book 1-on-1 Demo
-              </Link>
-            </Button>
+          <div className="w-full md:w-1/2 p-10 flex flex-col items-center justify-center">
+            <DemoScheduler />
           </div>
 
         </div>
