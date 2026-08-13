@@ -70,20 +70,20 @@ export function Sidebar({ plan = "Free", role = "owner", createdAt }: { plan?: s
   const allowedNavItems = getNavItems(role);
 
   return (
-    <aside className="hidden min-h-screen w-72 border-r bg-white px-4 py-5 lg:flex lg:flex-col">
-      <Link href="/dashboard" className="mb-8 flex items-center gap-3 px-2">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white shadow-sm">
-          <QrCode className="h-5 w-5" />
+    <aside className="hidden min-h-screen w-64 border-r border-slate-200/50 bg-[#fafafa] px-4 py-6 lg:flex lg:flex-col">
+      <Link href="/dashboard" className="mb-6 flex items-center gap-3 px-2">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm">
+          <QrCode className="h-4.5 w-4.5" strokeWidth={2.0} />
         </div>
         <div>
-          <p className="text-lg font-bold leading-tight">NoMenu</p>
-          <p className="text-xs text-muted-foreground">Restaurant console</p>
+          <p className="text-sm font-bold leading-tight text-slate-950 font-display">NoMenu</p>
+          <p className="text-[10px] text-slate-400 font-mono">Restaurant console</p>
         </div>
       </Link>
 
-      <nav className="flex flex-1 flex-col gap-2 mt-6">
+      <nav className="flex flex-1 flex-col gap-1.5 mt-6">
         <div className="px-3 mb-2">
-          <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Main Menu</p>
+          <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 font-mono">Main Menu</p>
         </div>
         {allowedNavItems.map((item) => {
           const Icon = item.icon;
@@ -91,35 +91,37 @@ export function Sidebar({ plan = "Free", role = "owner", createdAt }: { plan?: s
           const isLocked = !isTrial && userLevel < requiredLevel && !item.openToAll;
           const isOpenPreview = !isTrial && userLevel < requiredLevel && !!item.openToAll;
 
+          const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(item.href));
+
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`w-full flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold transition-all duration-200 ease-in-out hover:bg-slate-100 active:scale-[0.98] ${
-                pathname === item.href || (item.href !== "/dashboard" && pathname?.startsWith(item.href))
-                  ? "bg-slate-100 text-primary"
-                  : isLocked 
-                    ? "opacity-60 grayscale hover:text-slate-600 text-slate-500" 
-                    : "text-slate-600 hover:text-slate-900"
+              className={`w-full flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ease-in-out active:scale-[0.98] ${
+                isActive
+                  ? "bg-slate-950 text-white shadow-sm"
+                  : isLocked
+                    ? "opacity-60 grayscale hover:text-slate-950 text-slate-500"
+                    : "text-slate-600 hover:text-slate-950 hover:bg-slate-900/5"
               }`}
             >
-              <div className="flex items-center gap-3.5">
-                <Icon className="h-4 w-4" />
-                {item.label}
+              <div className="flex items-center gap-3">
+                <Icon className="h-4 w-4" strokeWidth={isActive ? 2.0 : 1.5} />
+                <span>{item.label}</span>
               </div>
               {isLocked && item.badge && (
-                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-slate-100 text-slate-400 border-slate-200 whitespace-nowrap shrink-0">
-                  🔒 {item.badge}
+                <span className="rounded px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide bg-slate-100 text-slate-450 border border-slate-200/60 whitespace-nowrap shrink-0 font-mono">
+                  {item.badge}
                 </span>
               )}
               {isTrial && userLevel < requiredLevel && item.badge && (
-                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-amber-50 text-amber-600 border-amber-200/50 animate-pulse whitespace-nowrap shrink-0">
-                  ⚡ {item.badge}
+                <span className="rounded px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide bg-amber-50 text-amber-700 border border-amber-200/50 animate-pulse whitespace-nowrap shrink-0 font-mono">
+                  {item.badge}
                 </span>
               )}
               {isOpenPreview && item.badge && (
-                <span className="rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider shadow-sm border bg-emerald-50 text-emerald-600 border-emerald-100 whitespace-nowrap shrink-0">
-                  🔓 {item.badge}
+                <span className="rounded px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-100 whitespace-nowrap shrink-0 font-mono">
+                  {item.badge}
                 </span>
               )}
             </Link>
