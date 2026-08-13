@@ -27,7 +27,7 @@ export function FeatureLockout({ featureName, requiredPlan, description, icon: I
           <div className="flex gap-2">
             <ShieldAlert className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
             <p className="text-xs text-slate-600 font-medium leading-relaxed">
-              Your 24-Hour All-Access Pass has expired. To keep using this premium feature and optimize your restaurant operations, upgrade your plan.
+              To use this premium feature and optimize your restaurant operations, please upgrade your plan.
             </p>
           </div>
         </div>
