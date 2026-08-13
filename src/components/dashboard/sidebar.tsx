@@ -70,14 +70,14 @@ export function Sidebar({ plan = "Free", role = "owner", createdAt }: { plan?: s
   const allowedNavItems = getNavItems(role);
 
   return (
-    <aside className="hidden min-h-screen w-64 border-r border-slate-200/50 bg-[#fafafa] px-4 py-6 lg:flex lg:flex-col">
-      <Link href="/dashboard" className="mb-6 flex items-center gap-3 px-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm">
+    <aside className="hidden min-h-screen w-64 border-r border-amber-900/10 bg-[#fdfbf7] px-4 py-6 lg:flex lg:flex-col shadow-[1px_0_10px_rgba(0,0,0,0.02)]">
+      <Link href="/dashboard" className="mb-6 flex items-center gap-3 px-2 transition-all duration-300 hover:opacity-90">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/15">
           <QrCode className="h-4.5 w-4.5" strokeWidth={2.0} />
         </div>
         <div>
-          <p className="text-sm font-bold leading-tight text-slate-950 font-display">NoMenu</p>
-          <p className="text-[10px] text-slate-400 font-mono">Restaurant console</p>
+          <p className="text-sm font-bold leading-tight text-indigo-950 font-display tracking-tight">NoMenu</p>
+          <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 font-mono">Restaurant console</p>
         </div>
       </Link>
 
@@ -97,20 +97,20 @@ export function Sidebar({ plan = "Free", role = "owner", createdAt }: { plan?: s
             <Link
               key={item.href}
               href={item.href}
-              className={`w-full flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ease-in-out active:scale-[0.98] ${
+              className={`w-full flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-all duration-300 ease-in-out active:scale-[0.97] group ${
                 isActive
-                  ? "bg-slate-950 text-white shadow-sm"
+                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/15"
                   : isLocked
-                    ? "opacity-60 grayscale hover:text-slate-950 text-slate-500"
-                    : "text-slate-600 hover:text-slate-950 hover:bg-slate-900/5"
+                    ? "opacity-50 grayscale hover:text-indigo-950 text-slate-400 hover:opacity-100 hover:bg-amber-100/30"
+                    : "text-slate-600 hover:text-indigo-950 hover:bg-indigo-50/50 hover:translate-x-1"
               }`}
             >
               <div className="flex items-center gap-3">
-                <Icon className="h-4 w-4" strokeWidth={isActive ? 2.0 : 1.5} />
+                <Icon className={`h-4 w-4 transition-transform duration-300 group-hover:scale-110 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-indigo-600'}`} strokeWidth={isActive ? 2.0 : 1.5} />
                 <span>{item.label}</span>
               </div>
               {isLocked && item.badge && (
-                <span className="rounded px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide bg-slate-100 text-slate-450 border border-slate-200/60 whitespace-nowrap shrink-0 font-mono">
+                <span className="rounded px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide bg-slate-100 text-slate-550 border border-slate-200/60 whitespace-nowrap shrink-0 font-mono transition-colors group-hover:bg-slate-200">
                   {item.badge}
                 </span>
               )}
