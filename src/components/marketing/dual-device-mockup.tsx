@@ -3,12 +3,12 @@ import { ChefHat, Clock, CheckCircle2 } from 'lucide-react';
 
 export function DualDeviceMockup() {
   return (
-    <div className="w-full h-full bg-slate-50 relative flex items-center justify-center overflow-hidden p-4">
+    <div className="w-full h-full bg-[#fdfbf7] relative flex items-center justify-center overflow-visible p-4 [perspective:1500px] [transform-style:preserve-3d]">
       
       {/* iPad Mockup (KDS) */}
-      <div className="absolute left-[5%] md:left-[12%] w-[68%] md:w-[62%] h-[82%] md:h-[85%] bg-[#0e1117] rounded-[1.5rem] md:rounded-[2.5rem] border-[4px] md:border-[8px] border-slate-800 shadow-2xl overflow-hidden flex flex-col transform rotate-[-2deg] transition-all duration-700 hover:rotate-0 hover:scale-[1.01]">
+      <div className="absolute left-[5%] md:left-[12%] w-[68%] md:w-[62%] h-[82%] md:h-[85%] bg-[#0e1117] rounded-[1.5rem] md:rounded-[2.5rem] border-[4px] md:border-[8px] border-slate-800 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col transition-all duration-700 ease-out [transform:rotateX(18deg)_rotateY(-18deg)_rotateZ(-2deg)] hover:[transform:rotateX(8deg)_rotateY(-8deg)_translateZ(20px)]">
         
-        {/* iPad Camera/Bezel top center */}
+        {/* iPad Bezel ... */}
         <div className="h-3 w-full flex justify-center mt-1.5 shrink-0">
           <div className="w-10 md:w-16 h-1 bg-slate-800 rounded-full" />
         </div>
@@ -102,7 +102,7 @@ export function DualDeviceMockup() {
       </div>
 
       {/* iPhone Mockup (Digital Menu) */}
-      <div className="absolute right-[4%] md:right-[15%] w-[42%] sm:w-[35%] md:w-[22%] h-[88%] md:h-[92%] bg-white rounded-[1.2rem] md:rounded-[2.2rem] border-[3px] md:border-[6px] border-slate-200 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col transform rotate-[4deg] transition-all duration-700 hover:rotate-0 hover:scale-[1.03] z-10">
+      <div className="absolute right-[4%] md:right-[15%] w-[42%] sm:w-[35%] md:w-[22%] h-[88%] md:h-[92%] bg-white rounded-[1.2rem] md:rounded-[2.2rem] border-[3px] md:border-[6px] border-slate-200 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col transition-all duration-700 ease-out [transform:rotateX(18deg)_rotateY(-18deg)_rotateZ(4deg)_translateZ(60px)] hover:[transform:rotateX(8deg)_rotateY(-8deg)_translateZ(100px)] z-20">
         
         {/* Dynamic Island / Notch */}
         <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-[35%] h-3.5 bg-black rounded-full z-20 shrink-0" />
