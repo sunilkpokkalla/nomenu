@@ -35,6 +35,40 @@ export async function fetchNomiLeadsAction() {
   }
 }
 
+export async function deleteNomiLeadsAction(ids: string[]) {
+  try {
+    if (!ids || ids.length === 0) {
+      return { success: false, error: "No lead IDs provided" };
+    }
+
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !user.email) throw new Error("Not logged in");
+    
+    const adminEmails = (process.env.ADMIN_EMAILS || "admin@nomenu.us").split(",");
+    if (!adminEmails.includes(user.email)) {
+      throw new Error("Unauthorized");
+    }
+
+    const adminSupabase = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)!
+    );
+
+    const { error } = await adminSupabase
+      .from("nomi_leads")
+      .delete()
+      .in("id", ids);
+
+    if (error) throw error;
+
+    return { success: true, message: `Successfully deleted ${ids.length} lead(s).` };
+  } catch (error) {
+    console.error("Delete leads error:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Failed to delete leads" };
+  }
+}
+
 export async function sendCampaignAction(formData: FormData) {
   const audience = formData.get("audience") as CampaignAudience;
   const templateType = formData.get("template") as CampaignTemplate;
