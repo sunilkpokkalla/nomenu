@@ -47,7 +47,10 @@ export function DemoScheduler() {
   
   const [selectedDate, setSelectedDate] = useState<typeof dates[0] | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [restaurantName, setRestaurantName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [step, setStep] = useState<"date" | "time" | "email" | "success">("date");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,6 +61,8 @@ export function DemoScheduler() {
       const bookedDate = localStorage.getItem('nomi_demo_booked_date');
       const bookedTime = localStorage.getItem('nomi_demo_booked_time');
       const bookedEmail = localStorage.getItem('nomi_demo_booked_email');
+      const bookedName = localStorage.getItem('nomi_demo_booked_name');
+      const bookedRest = localStorage.getItem('nomi_demo_booked_restaurant');
       if (bookedDate && bookedTime && bookedEmail) {
         setSelectedDate({
           dayName: "",
@@ -67,6 +72,8 @@ export function DemoScheduler() {
         });
         setSelectedTime(bookedTime);
         setEmail(bookedEmail);
+        if (bookedName) setName(bookedName);
+        if (bookedRest) setRestaurantName(bookedRest);
         setStep("success");
       }
     }
@@ -84,8 +91,8 @@ export function DemoScheduler() {
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !email.includes("@") || !selectedDate || !selectedTime) {
-      setError("Please enter a valid email address.");
+    if (!name.trim() || !restaurantName.trim() || !email || !email.includes("@") || !selectedDate || !selectedTime) {
+      setError("Please fill out your name, restaurant, and a valid email address.");
       return;
     }
 
@@ -97,7 +104,10 @@ export function DemoScheduler() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email,
+          name: name.trim(),
+          restaurant_name: restaurantName.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
           date: selectedDate.fullString,
           time: selectedTime
         })
@@ -109,6 +119,8 @@ export function DemoScheduler() {
         localStorage.setItem('nomi_demo_booked_date', selectedDate.fullString);
         localStorage.setItem('nomi_demo_booked_time', selectedTime);
         localStorage.setItem('nomi_demo_booked_email', email);
+        localStorage.setItem('nomi_demo_booked_name', name);
+        localStorage.setItem('nomi_demo_booked_restaurant', restaurantName);
         setStep("success");
       } else {
         throw new Error(data.error || "Failed to book slot");
@@ -198,17 +210,54 @@ export function DemoScheduler() {
           <p><strong>Time Slot:</strong> {selectedTime}</p>
         </div>
 
-        <form onSubmit={handleBookingSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Your Email Address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@restaurant.com"
-              required
-              className="w-full h-12 px-4 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-600 bg-white"
-            />
+        <form onSubmit={handleBookingSubmit} className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Your Full Name *</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                required
+                className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-600 bg-white"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Restaurant / Business *</label>
+              <input
+                type="text"
+                value={restaurantName}
+                onChange={(e) => setRestaurantName(e.target.value)}
+                placeholder="Bella Italia Bistro"
+                required
+                className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-600 bg-white"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Work Email *</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="john@restaurant.com"
+                required
+                className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-600 bg-white"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500">Phone Number (Optional)</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="(555) 000-0000"
+                className="w-full h-11 px-3.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-600 bg-white"
+              />
+            </div>
           </div>
           
           {error && (
@@ -218,7 +267,7 @@ export function DemoScheduler() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-extrabold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+            className="w-full h-12 mt-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-extrabold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

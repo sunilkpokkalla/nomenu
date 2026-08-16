@@ -9,6 +9,10 @@ import { deleteNomiLeadsAction } from "../actions";
 interface Lead {
   id: string;
   email: string;
+  name?: string;
+  restaurant_name?: string;
+  phone?: string;
+  demo_time?: string;
   created_at: string;
 }
 
@@ -33,9 +37,11 @@ export function MarketingTabs({ initialLeads }: MarketingTabsProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Filter leads based on search term
+  // Filter leads based on search term (search name, email, or restaurant)
   const filteredLeads = leads.filter(l => 
-    l.email.toLowerCase().includes(searchTerm.toLowerCase())
+    l.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (l.name && l.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (l.restaurant_name && l.restaurant_name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const allFilteredSelected = filteredLeads.length > 0 && filteredLeads.every(l => selectedIds.includes(l.id));
@@ -60,8 +66,8 @@ export function MarketingTabs({ initialLeads }: MarketingTabsProps) {
     if (idsToDelete.length === 0) return;
 
     const confirmMsg = idsToDelete.length === 1 
-      ? "Are you sure you want to delete this lead email?" 
-      : `Are you sure you want to delete ${idsToDelete.length} selected lead emails?`;
+      ? "Are you sure you want to delete this lead?" 
+      : `Are you sure you want to delete ${idsToDelete.length} selected leads?`;
 
     if (!window.confirm(confirmMsg)) return;
 
@@ -128,8 +134,8 @@ export function MarketingTabs({ initialLeads }: MarketingTabsProps) {
                 <Users className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <h3 className="font-bold text-slate-900">Captured Leads</h3>
-                <p className="text-xs text-slate-500">{leads.length} total subscribers from Nomi Chatbot</p>
+                <h3 className="font-bold text-slate-900">Captured Leads & Demo Bookings</h3>
+                <p className="text-xs text-slate-500">{leads.length} total leads from Nomi Chatbot & Calendar</p>
               </div>
             </div>
 
@@ -165,7 +171,7 @@ export function MarketingTabs({ initialLeads }: MarketingTabsProps) {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search leads by email..."
+                  placeholder="Search leads by name, email, or restaurant..."
                   className="w-full bg-transparent border-none text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:ring-0 focus:outline-none"
                 />
                 {searchTerm && (
@@ -199,23 +205,23 @@ export function MarketingTabs({ initialLeads }: MarketingTabsProps) {
 
             {filteredLeads.length === 0 ? (
               <div className="p-8 text-center text-slate-500 text-sm">
-                {searchTerm ? "No leads matching search." : "No Nomi chatbot leads captured yet."}
+                {searchTerm ? "No leads matching search." : "No Nomi chatbot or demo leads captured yet."}
               </div>
             ) : (
-              <div className="divide-y divide-slate-100 max-h-[400px] overflow-y-auto">
+              <div className="divide-y divide-slate-100 max-h-[480px] overflow-y-auto">
                 {filteredLeads.map((lead) => {
                   const isSelected = selectedIds.includes(lead.id);
                   return (
                     <div 
                       key={lead.id} 
-                      className={`p-4 flex items-center justify-between transition-colors ${
+                      className={`p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors ${
                         isSelected ? "bg-indigo-50/40" : "hover:bg-slate-50/50"
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-start sm:items-center gap-3">
                         <button
                           onClick={() => toggleSelectOne(lead.id)}
-                          className="text-slate-400 hover:text-indigo-600 transition-colors"
+                          className="mt-1 sm:mt-0 text-slate-400 hover:text-indigo-600 transition-colors"
                         >
                           {isSelected ? (
                             <CheckSquare className="w-4 h-4 text-indigo-600" />
@@ -223,14 +229,40 @@ export function MarketingTabs({ initialLeads }: MarketingTabsProps) {
                             <Square className="w-4 h-4 text-slate-400" />
                           )}
                         </button>
-                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
+                        
+                        <div className="w-9 h-9 rounded-full bg-slate-100 flex shrink-0 items-center justify-center text-slate-600">
                           <Mail className="w-4 h-4" />
                         </div>
-                        <span className="text-sm font-bold text-slate-900">{lead.email}</span>
+
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {lead.name ? (
+                              <span className="text-sm font-extrabold text-slate-900">{lead.name}</span>
+                            ) : null}
+                            {lead.restaurant_name ? (
+                              <span className="text-xs font-bold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-md border border-indigo-100">
+                                🏢 {lead.restaurant_name}
+                              </span>
+                            ) : null}
+                          </div>
+                          
+                          <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5 flex-wrap">
+                            <span className="font-medium text-slate-700">{lead.email}</span>
+                            {lead.phone ? (
+                              <span className="font-semibold text-slate-600">📞 {lead.phone}</span>
+                            ) : null}
+                          </div>
+
+                          {lead.demo_time ? (
+                            <div className="text-[11px] font-bold text-indigo-600 mt-1 flex items-center gap-1">
+                              <span>📅 Demo Booked: {lead.demo_time}</span>
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+                      <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100">
+                        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
                           <Calendar className="w-3.5 h-3.5" />
                           <span>{new Date(lead.created_at).toLocaleDateString()}</span>
                         </div>
