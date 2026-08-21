@@ -6,11 +6,17 @@ export function BillingToggle() {
   const searchParams = useSearchParams();
   const isAnnual = searchParams.get("billing") === "annual";
 
+  const getToggleUrl = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("billing", isAnnual ? "monthly" : "annual");
+    return `?${params.toString()}`;
+  };
+
   return (
     <div className="flex items-center justify-center gap-4 mb-12">
       <span className={`text-sm transition-colors ${!isAnnual ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-medium'}`}>Monthly</span>
       <Link 
-        href={`?billing=${isAnnual ? 'monthly' : 'annual'}`}
+        href={getToggleUrl()}
         className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none ${isAnnual ? 'bg-emerald-500' : 'bg-slate-300'}`}
         scroll={false}
       >
