@@ -7,7 +7,7 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   try {
-    const { planId, isAnnual } = await req.json();
+    const { planId, isAnnual, promoCode, inviteDate } = await req.json();
 
     if (!planId) {
       return NextResponse.json({ error: "Missing planId" }, { status: 400 });
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     // Get the restaurant for this user
     const { data: _restaurantData, error: fetchError } = await supabase
       .from("restaurants")
-      .select("id, stripe_customer_id, plan, referred_by_code")
+      .select("id, stripe_customer_id, plan, referred_by_code, created_at")
       .eq("owner_id", user.id)
       .order("created_at", { ascending: true })
       .limit(1)
@@ -37,6 +37,22 @@ export async function POST(req: Request) {
 
     const billingCycle = isAnnual ? "annual" : "monthly";
     const isTestMode = process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_");
+    const normalizedPromo = (promoCode || restaurant.referred_by_code || "").toUpperCase().trim();
+    let is75PercentOff = normalizedPromo === "INVITE75" || normalizedPromo === "75OFF" || normalizedPromo === "VIP75";
+    let is50PercentOff = normalizedPromo === "HALFPRICE" || normalizedPromo === "50OFF";
+
+    // 7-day rule for VIP invite: If invite is older than 7 days, step down from 75% OFF to 50% OFF
+    if (is75PercentOff) {
+      const inviteTime = inviteDate ? new Date(inviteDate).getTime() : new Date(restaurant.created_at || Date.now()).getTime();
+      const SevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+      const isWithin7Days = (Date.now() - inviteTime) <= SevenDaysMs;
+
+      if (!isWithin7Days) {
+        // Invite is older than 7 days -> Step down to 50% OFF
+        is75PercentOff = false;
+        is50PercentOff = true;
+      }
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let lineItems: any[] = [];
@@ -63,14 +79,26 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Invalid plan or billing cycle." }, { status: 400 });
       }
 
+      // Apply 75% or 50% discount if promo is used
+      let finalAmount = selectedPrice.amount;
+      let displayName = selectedPrice.name;
+
+      if (is75PercentOff) {
+        finalAmount = Math.round(selectedPrice.amount * 0.25);
+        displayName = `${selectedPrice.name} (75% OFF - VIP 7-Day Invite)`;
+      } else if (is50PercentOff) {
+        finalAmount = Math.round(selectedPrice.amount * 0.5);
+        displayName = `${selectedPrice.name} (50% OFF - Invite Special)`;
+      }
+
       lineItems = [
         {
           price_data: {
             currency: "usd",
             product_data: {
-              name: selectedPrice.name,
+              name: displayName,
             },
-            unit_amount: selectedPrice.amount,
+            unit_amount: finalAmount,
             recurring: {
               interval: isAnnual ? "year" : "month",
             },
@@ -134,26 +162,46 @@ export async function POST(req: Request) {
 
     const discounts = [];
 
-    // Only apply discounts in live production mode or if not in test mode to prevent crashes from missing coupons
-    if (isAnnual && !isTestMode) {
-      if (!restaurant.referred_by_code) {
-        // No Referral -> 10% Discount
-        const discountId = process.env.STRIPE_ANNUAL_DISCOUNT_COUPON_ID;
-        if (discountId) {
-          if (discountId.startsWith('promo_')) {
-            discounts.push({ promotion_code: discountId });
+    // Apply discounts in live production mode (works for both annual and promo codes)
+    if (!isTestMode) {
+      if (is75PercentOff) {
+        const discount75 = process.env.STRIPE_75OFF_COUPON_ID || process.env.STRIPE_REFERRAL_COUPON_ID;
+        if (discount75) {
+          if (discount75.startsWith('promo_')) {
+            discounts.push({ promotion_code: discount75 });
           } else {
-            discounts.push({ coupon: discountId });
+            discounts.push({ coupon: discount75 });
           }
         }
-      } else {
-        // Referred -> 15% Discount
-        const referralId = process.env.STRIPE_REFERRAL_COUPON_ID;
-        if (referralId) {
-          if (referralId.startsWith('promo_')) {
-            discounts.push({ promotion_code: referralId });
+      } else if (is50PercentOff) {
+        const discount50 = process.env.STRIPE_50OFF_COUPON_ID || process.env.STRIPE_REFERRAL_COUPON_ID;
+        if (discount50) {
+          if (discount50.startsWith('promo_')) {
+            discounts.push({ promotion_code: discount50 });
           } else {
-            discounts.push({ coupon: referralId });
+            discounts.push({ coupon: discount50 });
+          }
+        }
+      } else if (isAnnual) {
+        if (!restaurant.referred_by_code) {
+          // No Referral -> 10% Discount
+          const discountId = process.env.STRIPE_ANNUAL_DISCOUNT_COUPON_ID;
+          if (discountId) {
+            if (discountId.startsWith('promo_')) {
+              discounts.push({ promotion_code: discountId });
+            } else {
+              discounts.push({ coupon: discountId });
+            }
+          }
+        } else {
+          // Referred -> 15% Discount
+          const referralId = process.env.STRIPE_REFERRAL_COUPON_ID;
+          if (referralId) {
+            if (referralId.startsWith('promo_')) {
+              discounts.push({ promotion_code: referralId });
+            } else {
+              discounts.push({ coupon: referralId });
+            }
           }
         }
       }
@@ -166,10 +214,12 @@ export async function POST(req: Request) {
     const sessionBody: any = {
       customer: customerId,
       mode: "subscription",
+      allow_promotion_codes: discounts.length === 0 ? true : undefined,
       metadata: {
         restaurant_id: restaurant.id,
         plan_id: planId,
         billing_cycle: billingCycle,
+        promo_code: normalizedPromo || undefined,
       },
       line_items: lineItems,
       success_url: `${origin}/dashboard/billing?success=Subscription%20updated%20successfully!`,

@@ -4,7 +4,23 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
 export type CampaignAudience = "free_users" | "pro_users" | "custom" | "nomi_leads";
-export type CampaignTemplate = "soulful_pitch" | "pro_upgrade" | "custom";
+export type CampaignTemplate =
+  | "custom"
+  | "soulful_pitch"
+  | "pro_upgrade"
+  | "serverless_seamless"
+  | "modern_qr"
+  | "revenue_booster"
+  | "investor_deck"
+  | "onboarding_guide"
+  | "welcome_discount_15"
+  | "kds_kitchen_display"
+  | "happy_hour_promo"
+  | "multi_location"
+  | "review_booster"
+  | "loyalty_rewards"
+  | "discount_50_first_year"
+  | "discount_75_invite";
 
 export async function fetchNomiLeadsAction() {
   try {

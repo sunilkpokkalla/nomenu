@@ -141,7 +141,7 @@ const TEMPLATES = {
   </div>
 
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&h=250&fit=crop" alt="Digital Menu Onboarding" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&h=250&fit=crop" alt="Digital Menu Setup" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
 
   <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Ready to wow your guests? Let's get set up!</h2>
@@ -187,7 +187,7 @@ const TEMPLATES = {
   </div>
 
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&h=250&fit=crop" alt="Exclusive Discount" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+    <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&h=250&fit=crop" alt="Exclusive Discount" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
   </div>
 
   <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Unlock the full power of your digital menu.</h2>
@@ -215,6 +215,175 @@ const TEMPLATES = {
   <p style="color: #475569; font-size: 14px; line-height: 1.6;">If you have any questions or need help setting up your menu first, feel free to reply directly to this email or reach out to us at <a href="mailto:support@nomenu.us" style="color: #2563eb; text-decoration: none;">support@nomenu.us</a>.</p>
   
   <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  kds_kitchen_display: {
+    name: "Kitchen Display System (KDS) Upgrade",
+    subject: "Stop losing paper tickets in the kitchen 🍳",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&h=250&fit=crop" alt="Kitchen Display System" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Real-time digital ticket routing for your chefs.</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Lost orders, greasy ticket printers, and misheard modifications slow down your line and ruin guest experiences.</p>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Nomenu's Kitchen Display System (KDS) streams table and takeaway orders straight to kitchen touchscreens in real time with color-coded timers.</p>
+  <ul style="color: #475569; font-size: 14px; line-height: 1.8; margin-bottom: 24px; padding-left: 20px;">
+    <li><strong>Instant Order Sync:</strong> Orders appear immediately as guests pay or order at the table.</li>
+    <li><strong>Live Prep Timers:</strong> Track ticket age and eliminate long wait times.</li>
+    <li><strong>Zero Ink & Printer Paper:</strong> Save hundreds every year on thermal paper rolls.</li>
+  </ul>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us/dashboard" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Try Nomenu KDS</a>
+  </div>
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  happy_hour_promo: {
+    name: "Automated Happy Hour & Dynamic Menus",
+    subject: "Automate your Happy Hour specials on Nomenu 🍹",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&h=250&fit=crop" alt="Happy Hour Specials" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Schedule price updates automatically.</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Forgetting to switch back menu pricing after Happy Hour? Tired of printing separate drink cards?</p>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">With Nomenu, you can schedule automated menu dynamic changes so your Happy Hour discounts, weekend specials, and late-night menus activate automatically at preset times.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us/dashboard" style="display: inline-block; background-color: #d97706; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Schedule Happy Hour</a>
+  </div>
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>The Nomenu Team<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  multi_location: {
+    name: "Multi-Location & Franchise Management",
+    subject: "Manage all your restaurant locations in one dashboard 🏢",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=250&fit=crop" alt="Multi-Location Restaurant" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Scale your restaurant group seamlessly.</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Managing separate digital menus across multiple restaurant branches can quickly get chaotic.</p>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Nomenu Multi-Location allows group owners to centralize brand themes, deploy master menus, and grant store managers isolated location controls.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us" style="display: inline-block; background-color: #4f46e5; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Explore Multi-Location</a>
+  </div>
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  review_booster: {
+    name: "5-Star Review & Feedback Collector",
+    subject: "Turn dining guests into 5-star Google reviews ⭐",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=250&fit=crop" alt="Customer Reviews" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Capture positive feedback at the table.</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Nomenu includes built-in instant feedback prompts when guests finish viewing your menu or ordering. Direct happy customers straight to Google Reviews while routing private feedback directly to management.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us/dashboard" style="display: inline-block; background-color: #059669; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Boost Google Reviews</a>
+  </div>
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>The Nomenu Team<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  loyalty_rewards: {
+    name: "VIP Customer Loyalty & Repeat Visits",
+    subject: "Bring guests back twice as often with Nomenu Loyalty 🎁",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=250&fit=crop" alt="Digital Loyalty Program" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Digital punch cards directly on guests' phones.</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">No paper cards to lose. Reward your regulars with seamless digital stamp cards right from your QR menu.</p>
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us/dashboard" style="display: inline-block; background-color: #9333ea; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">Activate Loyalty Club</a>
+  </div>
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #2563eb; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  discount_50_first_year: {
+    name: "50% OFF First Year Special",
+    subject: "Claim 50% OFF your first year on Nomenu Pro! 🔥",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  
+  <!-- Header Info / Support -->
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 24px;">
+    <span style="font-weight: bold; color: #0f172a; font-size: 18px;">Nomenu</span>
+    <span style="font-size: 13px; color: #64748b;">Need help? Email <a href="mailto:support@nomenu.us" style="color: #2563eb; text-decoration: none;">support@nomenu.us</a></span>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&h=250&fit=crop" alt="50% OFF First Year" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 900; letter-spacing: -0.5px; text-align: center; color: #dc2626;">EXCLUSIVE: 50% OFF YOUR FIRST YEAR</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Hi there,</p>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">To celebrate our latest platform release, we are offering an unprecedented <strong>50% discount on your first year</strong> of Nomenu Pro & Elite!</p>
+
+  <div style="background-color: #fef2f2; border: 2px dashed #fca5a5; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;">
+    <span style="font-size: 12px; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 1.5px;">PROMO CODE: HALFPRICE</span>
+    <h3 style="margin: 8px 0; color: #dc2626; font-size: 28px; font-weight: 900;">SAVE 50% ON ANNUAL PLANS</h3>
+    <p style="margin: 0; font-size: 14px; color: #7f1d1d; font-weight: 600;">Lock in half-price digital menus, QR ordering, and custom domain hosting for an entire year.</p>
+  </div>
+
+  <h3 style="color: #0f172a; font-size: 16px; font-weight: 700; margin-top: 24px; margin-bottom: 12px;">Included in the 50% Off First Year Pass:</h3>
+  <ul style="color: #475569; font-size: 14px; line-height: 1.8; margin-bottom: 24px; padding-left: 20px;">
+    <li><strong>Unlimited Digital Menus & QR Codes:</strong> Complete design freedom.</li>
+    <li><strong>Kitchen Display System (KDS):</strong> Direct order routing to your kitchen touchscreens.</li>
+    <li><strong>Custom Domain Branding:</strong> Use menu.yourrestaurant.com with zero watermarks.</li>
+    <li><strong>Dedicated 24/7 Support:</strong> Priority onboarding & menu digitizing assistance.</li>
+  </ul>
+
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us/dashboard/billing?promo=HALFPRICE" style="display: inline-block; background-color: #dc2626; color: #ffffff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: 900; font-size: 18px; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);">Claim 50% Off First Year Now</a>
+  </div>
+
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Offer valid for new annual upgrades this month. If you have any questions, reply directly to this email or contact <a href="mailto:support@nomenu.us" style="color: #dc2626; text-decoration: none;">support@nomenu.us</a>.</p>
+  
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #dc2626; text-decoration: none;">nomenu.us</a></p>
+</div>`
+  },
+  discount_75_invite: {
+    name: "VIP Invite Only (75% OFF First 7 Days -> 50% OFF)",
+    subject: "You're invited! 75% OFF Nomenu Pro (Valid 7 Days Only) 🎁",
+    body: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+  
+  <!-- Header Info / Support -->
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 24px;">
+    <span style="font-weight: bold; color: #0f172a; font-size: 18px;">Nomenu VIP</span>
+    <span style="font-size: 13px; color: #dc2626; font-weight: bold;">⏳ 7-Day Limited Invite Pass</span>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&h=250&fit=crop" alt="VIP Invite 75% OFF" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" />
+  </div>
+
+  <h2 style="color: #0f172a; margin-top: 0; font-size: 24px; font-weight: 900; letter-spacing: -0.5px; text-align: center; color: #7c3aed;">EXCLUSIVE VIP INVITATION PASS</h2>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">Hi there,</p>
+  <p style="color: #475569; font-size: 15px; line-height: 1.6;">You have been selected for our exclusive **Founder's VIP Pass**. Act fast to unlock maximum savings:</p>
+
+  <div style="background-color: #f5f3ff; border: 2px dashed #8b5cf6; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;">
+    <span style="font-size: 11px; font-weight: 800; color: #6d28d9; text-transform: uppercase; letter-spacing: 1.5px; background: #ede9fe; padding: 4px 12px; border-radius: 20px;">PROMO CODE: INVITE75</span>
+    <h3 style="margin: 12px 0 4px 0; color: #7c3aed; font-size: 32px; font-weight: 900;">75% OFF FOR THE FIRST 7 DAYS</h3>
+    <p style="margin: 0 0 12px 0; font-size: 13px; color: #5b21b6; font-weight: 700;">Claim within 7 days to get 75% OFF any annual plan.</p>
+    <div style="border-t: 1px solid #ddd6fe; pt: 12px; font-size: 13px; color: #6d28d9; font-style: italic;">
+      ⏱️ After 7 days, this invite automatically steps down to <strong>50% OFF</strong> for the rest of the month.
+    </div>
+  </div>
+
+  <h3 style="color: #0f172a; font-size: 16px; font-weight: 700; margin-top: 24px; margin-bottom: 12px;">What your VIP Invite Pass includes:</h3>
+  <ul style="color: #475569; font-size: 14px; line-height: 1.8; margin-bottom: 24px; padding-left: 20px;">
+    <li><strong>Full Suite Access:</strong> Digital QR Menus, KDS Kitchen Display, & Analytics.</li>
+    <li><strong>Custom Branding & Domains:</strong> Completely white-labeled experience.</li>
+    <li><strong>VIP Concierge Onboarding:</strong> Our team digitizes your menu for free within 24 hours.</li>
+  </ul>
+
+  <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+    <a href="https://nomenu.us/dashboard/billing?promo=INVITE75" style="display: inline-block; background-color: #7c3aed; color: #ffffff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: 900; font-size: 18px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">Claim 75% OFF (Valid 7 Days)</a>
+  </div>
+
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">This invite link will expire its 75% tier in 7 days and step down to 50% OFF afterwards. For support, reply directly to this email or contact <a href="mailto:sunil@nomenu.us" style="color: #7c3aed; text-decoration: none;">sunil@nomenu.us</a>.</p>
+  
+  <p style="color: #475569; font-size: 14px; line-height: 1.6;">Best,<br>Sunil<br>Founder, Nomenu<br><a href="https://nomenu.us" style="color: #7c3aed; text-decoration: none;">nomenu.us</a></p>
 </div>`
   }
 };
