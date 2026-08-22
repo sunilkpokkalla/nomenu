@@ -44,16 +44,16 @@ export async function POST(req: Request) {
       // Dynamic inline test price mapping to bypass needing exact pre-created test price IDs in Stripe dashboard
       const planPrices: Record<string, Record<string, { amount: number; name: string }>> = {
         pro: {
-          monthly: { amount: 3900, name: "Pro Plan (Monthly)" },
-          annual: { amount: 42000, name: "Pro Plan (Annual)" },
+          monthly: { amount: 1900, name: "Pro Plan (Monthly)" },
+          annual: { amount: 20400, name: "Pro Plan (Annual)" },
         },
         elite: {
-          monthly: { amount: 7900, name: "Elite Plan (Monthly)" },
-          annual: { amount: 85200, name: "Elite Plan (Annual)" },
+          monthly: { amount: 4900, name: "Elite Plan (Monthly)" },
+          annual: { amount: 52800, name: "Elite Plan (Annual)" },
         },
         enterprise: {
-          monthly: { amount: 11900, name: "Enterprise Plan (Monthly)" },
-          annual: { amount: 128400, name: "Enterprise Plan (Annual)" },
+          monthly: { amount: 7900, name: "Enterprise Plan (Monthly)" },
+          annual: { amount: 85200, name: "Enterprise Plan (Annual)" },
         },
       };
 

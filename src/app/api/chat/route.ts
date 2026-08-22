@@ -11,7 +11,7 @@ const STATIC_ANSWERS: Record<string, string> = {
 - What features are included in the Free Plan?
 </suggestions>`,
   
-  "how does the 0% platform fee work": `When you sign up for NoMenu's Elite Plan on annual billing, we charge a 0% lifetime platform fee on orders. Unlike Toast or other providers who charge transaction commissions or high monthly fees, you keep 100% of your margins. We only charge a flat $79/mo subscription fee.
+  "how does the 0% platform fee work": `When you sign up for NoMenu's Elite Plan on annual billing, we charge a 0% lifetime platform fee on orders. Unlike Toast or other providers who charge transaction commissions or high monthly fees, you keep 100% of your margins. We only charge a flat $49/mo subscription fee.
 
 <suggestions>
 - Can I connect my existing Square POS?
@@ -39,14 +39,14 @@ const STATIC_ANSWERS: Record<string, string> = {
 - How does the 0% platform fee work?
 </suggestions>`,
 
-  "what is the cost of the pro plan": `The Pro Plan costs $35/mo. It unlocks unlimited digital menus, unlimited items, advanced table management, digital waitlists, custom colors, and AI-powered multi-language translation.
+  "what is the cost of the pro plan": `The Pro Plan costs $19/mo (or $17/mo billed annually). It unlocks unlimited digital menus, unlimited items, advanced table management, digital waitlists, custom colors, and AI-powered multi-language translation.
 
 <suggestions>
 - What is the difference between Pro and Elite?
 - Is there a completely free plan?
 </suggestions>`,
 
-  "what is the difference between pro and elite": `The Pro Plan ($35/mo) is focused on menu display, waitlists, and translations. The Elite Plan ($79/mo) adds full mobile ordering, active guest checkout tabs, Square POS sync, white-labeling (removal of NoMenu branding on your own domain), and a 0% platform fee.
+  "what is the difference between pro and elite": `The Pro Plan ($19/mo) is focused on menu display, waitlists, and translations. The Elite Plan ($49/mo) adds full mobile ordering, active guest checkout tabs, Square POS sync, white-labeling (removal of NoMenu branding on your own domain), and a 0% platform fee.
 
 <suggestions>
 - How does the 0% platform fee work?
@@ -60,14 +60,14 @@ const STATIC_ANSWERS: Record<string, string> = {
 - Can I connect my existing Square POS?
 </suggestions>`,
 
-  "what is the cost of the enterprise plan": `The Enterprise Plan costs $119/mo (or $107/mo when billed annually). It includes everything in Elite, plus Dine-in, Takeaway & Priority Reserve, Multiple Kitchen Displays (KDS), Intelligent Order Capacity Pacing, Advanced Interactive Floor Plans, 75 AI Credits/mo, VIP support, and a 0% lifetime platform fee on all billing tiers.
+  "what is the cost of the enterprise plan": `The Enterprise Plan costs $79/mo (or $71/mo when billed annually). It includes everything in Elite, plus Dine-in, Takeaway & Priority Reserve, Multiple Kitchen Displays (KDS), Intelligent Order Capacity Pacing, Advanced Interactive Floor Plans, 75 AI Credits/mo, VIP support, and a 0% lifetime platform fee on all billing tiers.
 
 <suggestions>
 - How does the Enterprise Plan save me money?
 - What features are included in the Free Plan?
 </suggestions>`,
 
-  "how does the enterprise plan save me money": `The Enterprise Plan saves you money by immediately dropping your platform transaction fee to 0% (even on monthly billing). For a restaurant doing $15,000/mo in online sales, a 1.0% fee on other plans costs $150/mo. By upgrading to Enterprise ($119/mo), you pay $0 in transaction fees, instantly saving $150/mo and getting multiple KDS and Capacity Pacing completely for free!
+  "how does the enterprise plan save me money": `The Enterprise Plan saves you money by immediately dropping your platform transaction fee to 0% (even on monthly billing). For a restaurant doing $15,000/mo in online sales, a 1.0% fee on other plans costs $150/mo. By upgrading to Enterprise ($79/mo), you pay $0 in transaction fees, instantly saving $150/mo and getting multiple KDS and Capacity Pacing completely for free!
 
 <suggestions>
 - What is the cost of the Enterprise Plan?
@@ -119,8 +119,8 @@ PROACTIVE QUALIFICATION QUESTIONS:
 
 INTELLIGENT BUSINESS BRAINSTORMING & ROI LOGIC:
 - When users ask about pricing or saving money, proactively show the ROI math.
-- Example: "A standard restaurant doing $50k/mo pays $500/mo in legacy QR software transaction fees. With NoMenu's Elite Plan billed annually ($79/mo), you pay 0% platform fees—putting an extra $421 back into your pocket every single month!"
-- Enterprise ROI Math: "If your restaurant does $15,000/mo in sales, a standard 1% transaction fee costs $150/mo. By upgrading to the Enterprise Plan ($119/mo), your platform transaction fee drops to 0% immediately, saving you $150/mo in transaction fees alone—instantly paying for the software and putting extra profit in your pocket!"
+- Example: "A standard restaurant doing $50k/mo pays $500/mo in legacy QR software transaction fees. With NoMenu's Elite Plan billed annually ($44/mo), you pay 0% platform fees—putting an extra $456 back into your pocket every single month!"
+- Enterprise ROI Math: "If your restaurant does $15,000/mo in sales, a standard 1% transaction fee costs $150/mo. By upgrading to the Enterprise Plan ($79/mo), your platform transaction fee drops to 0% immediately, saving you $150/mo in transaction fees alone—instantly paying for the software and putting extra profit in your pocket!"
 - Remind them that servers freed from taking orders can focus on hospitality, reducing table turn-around times by 15-20% and raising average check size by 20% through smart digital upselling.
 
 INTELLIGENT OBJECTION HANDLING:
@@ -140,9 +140,9 @@ COMPLETE NOMENU FEATURE KNOWLEDGE:
 
 BILLING & PRICING PLANS:
 - Free Plan ($0/mo): 1 active menu, 30 items, standard view. Perfect for testing.
-- Pro Plan ($35/mo): Unlimited menus/items, table management, digital waitlist, AI translation.
-- Elite Plan ($79/mo): Fully integrated POS & ordering, active tabs, live orders dashboard, white-labeled branding, 0% LIFETIME platform fee on annual billing (or 1% fee on monthly billing).
-- Enterprise Plan ($119/mo, or $107/mo billed annually): Everything in Elite, 75 Magic AI Credits/mo, Dine-in, Takeaway & Priority Reserve, Multiple Kitchen Displays (KDS), Intelligent Order Capacity Pacing, Advanced Interactive Floor Plans, VIP support, and a 0% platform transaction fee on all billing options.
+- Pro Plan ($19/mo, or $17/mo billed annually): Unlimited menus/items, table management, digital waitlist, AI translation.
+- Elite Plan ($49/mo, or $44/mo billed annually): Fully integrated POS & ordering, active tabs, live orders dashboard, white-labeled branding, 0% LIFETIME platform fee on annual billing (or 1% fee on monthly billing).
+- Enterprise Plan ($79/mo, or $71/mo billed annually): Everything in Elite, 75 Magic AI Credits/mo, Dine-in, Takeaway & Priority Reserve, Multiple Kitchen Displays (KDS), Intelligent Order Capacity Pacing, Advanced Interactive Floor Plans, VIP support, and a 0% platform transaction fee on all billing options.
 
 ELITE & ENTERPRISE PLAN PITCH TRIGGERS:
 - Frame the Elite and Enterprise Plans as the ultimate operational and prestige upgrades for ambitious restaurants.

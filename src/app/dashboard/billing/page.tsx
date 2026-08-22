@@ -11,7 +11,7 @@ const getPlans = (isAnnual: boolean) => [
   {
     id: "pro", // Kept ID for backward compatibility
     name: "Pro",
-    price: isAnnual ? "$35" : "$39",
+    price: isAnnual ? "$17" : "$19",
     period: "/mo",
     description: "Unlimited flexibility for high-volume venues.",
     features: [
@@ -29,7 +29,7 @@ const getPlans = (isAnnual: boolean) => [
   {
     id: "elite",
     name: "Elite",
-    price: isAnnual ? "$71" : "$79",
+    price: isAnnual ? "$44" : "$49",
     period: "/mo",
     description: "Real-time ordering for premium venues and groups.",
     features: [
@@ -48,7 +48,7 @@ const getPlans = (isAnnual: boolean) => [
   {
     id: "enterprise",
     name: "Enterprise",
-    price: isAnnual ? "$107" : "$119",
+    price: isAnnual ? "$71" : "$79",
     period: "/mo",
     description: "Full commerce suite with direct payouts.",
     features: [
