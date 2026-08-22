@@ -128,18 +128,18 @@ export default function PartnersLandingPage() {
           <div className="grid sm:grid-cols-3 gap-6">
             <div className="bg-white rounded-3xl p-8 border border-slate-200 text-center shadow-sm">
               <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Pro Plan</h3>
-              <div className="text-4xl font-black text-slate-950 mb-4">$35</div>
+              <div className="text-4xl font-black text-slate-950 mb-4">$19</div>
               <p className="text-sm text-slate-500 font-medium">Earned per restaurant</p>
             </div>
             <div className="bg-white rounded-3xl p-8 border-2 border-amber-400 text-center shadow-xl shadow-amber-500/5 relative scale-105">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-400 text-amber-950 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">Most Popular</div>
               <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Elite Plan</h3>
-              <div className="text-5xl font-black text-slate-950 mb-4">$75</div>
+              <div className="text-5xl font-black text-slate-950 mb-4">$49</div>
               <p className="text-sm text-slate-500 font-medium">Earned per restaurant</p>
             </div>
             <div className="bg-white rounded-3xl p-8 border border-slate-200 text-center shadow-sm">
               <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Enterprise Plan</h3>
-              <div className="text-4xl font-black text-slate-950 mb-4">$100</div>
+              <div className="text-4xl font-black text-slate-950 mb-4">$79</div>
               <p className="text-sm text-slate-500 font-medium">Earned per restaurant</p>
             </div>
           </div>

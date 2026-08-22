@@ -1348,7 +1348,7 @@ export default function LandingPage() {
                   <h4 className="text-2xl lg:text-3xl font-black">Pro Plan</h4>
                   <p className="text-xs text-slate-400 font-medium">Unlimited flexibility for high-volume venues.</p>
                   <div className="pt-2 flex items-baseline">
-                    <span className="text-4xl lg:text-5xl font-black">$35</span>
+                    <span className="text-4xl lg:text-5xl font-black">$19</span>
                     <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
                   
@@ -1408,7 +1408,7 @@ export default function LandingPage() {
                     <Sparkles className="h-3 w-3" /> 30-Day Money-Back Guarantee (Annual)
                   </div>
                   <div className="pt-2 flex items-baseline">
-                    <span className="text-4xl lg:text-5xl font-black text-white">$79</span>
+                    <span className="text-4xl lg:text-5xl font-black text-white">$49</span>
                     <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
 
@@ -1464,7 +1464,7 @@ export default function LandingPage() {
                   <h4 className="text-2xl lg:text-3xl font-black text-white">Enterprise Plan</h4>
                   <p className="text-xs text-slate-400 font-medium">Full commerce suite with direct payouts.</p>
                   <div className="pt-2 flex items-baseline">
-                    <span className="text-4xl lg:text-5xl font-black text-white">$119</span>
+                    <span className="text-4xl lg:text-5xl font-black text-white">$79</span>
                     <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
                   </div>
 
