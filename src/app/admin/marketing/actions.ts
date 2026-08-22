@@ -18,9 +18,7 @@ export type CampaignTemplate =
   | "happy_hour_promo"
   | "multi_location"
   | "review_booster"
-  | "loyalty_rewards"
-  | "discount_50_first_year"
-  | "discount_75_invite";
+  | "loyalty_rewards";
 
 export async function fetchNomiLeadsAction() {
   try {

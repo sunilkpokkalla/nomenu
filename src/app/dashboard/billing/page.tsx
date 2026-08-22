@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SubscriptionButton, PortalButton } from "@/components/dashboard/subscription-buttons";
 import { BillingToggle } from "@/components/dashboard/billing-toggle";
-import { PromoCodeInput } from "@/components/dashboard/promo-code-input";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
 import { fetchStripe } from "@/lib/stripe-fetch";
 
@@ -261,9 +260,6 @@ export default async function BillingPage(
           )}
         </div>
       </div>
-
-      {/* Promo Code Input & Active Banner */}
-      <PromoCodeInput />
 
       {/* Monthly/Annual Toggle */}
       <BillingToggle />

@@ -3,31 +3,25 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function SubscriptionButton({ 
   planId, 
   planName, 
   isElite,
-  isAnnual = false,
-  promoCode: promoCodeProp
+  isAnnual = false
 }: { 
   planId: string; 
   planName: string; 
   isElite: boolean;
   isAnnual?: boolean;
-  promoCode?: string;
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async () => {
     try {
       setLoading(true);
-
-      // Extract promo code from props or URL search params
-      const promoCode = promoCodeProp || searchParams.get("promo") || searchParams.get("ref") || searchParams.get("coupon") || "";
 
       // Trigger Meta Pixel InitiateCheckout event
       if (typeof window !== 'undefined' && ('fbq' in window)) {
@@ -42,8 +36,7 @@ export function SubscriptionButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           planId,
-          isAnnual,
-          promoCode
+          isAnnual
         })
       });
       const data = await res.json();
