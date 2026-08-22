@@ -1,6 +1,9 @@
 import { Check, ShieldCheck, Sparkles, Zap, AlertTriangle } from "lucide-react";
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import { createClient } from "@/lib/supabase/server";
 import { SubscriptionButton, PortalButton } from "@/components/dashboard/subscription-buttons";
 import { BillingToggle } from "@/components/dashboard/billing-toggle";
