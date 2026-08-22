@@ -237,10 +237,28 @@ export async function POST(req: Request) {
       sessionBody.discounts = discounts;
     }
 
-    const session = await fetchStripe("/checkout/sessions", {
+    let session = await fetchStripe("/checkout/sessions", {
       method: "POST",
       body: sessionBody
     });
+
+    // If Stripe returns a coupon error (e.g. coupon_applies_to_nothing), fallback gracefully by enabling allow_promotion_codes and retrying
+    if (session.error) {
+      const isCouponError = session.error.code === "coupon_applies_to_nothing" || 
+                            session.error.message?.toLowerCase().includes("coupon") || 
+                            session.error.message?.toLowerCase().includes("discount");
+
+      if (isCouponError && sessionBody.discounts) {
+        console.warn("Stripe Coupon Error detected, falling back to allow_promotion_codes:", session.error.message);
+        delete sessionBody.discounts;
+        sessionBody.allow_promotion_codes = true;
+
+        session = await fetchStripe("/checkout/sessions", {
+          method: "POST",
+          body: sessionBody
+        });
+      }
+    }
 
     if (session.error) {
       console.error("Stripe API Error:", session.error);
