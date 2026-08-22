@@ -44,10 +44,11 @@ export function PromoCodeInput() {
             <Sparkles className={`w-5 h-5 ${is75Off ? "text-purple-600 animate-pulse" : "text-rose-600 animate-pulse"}`} />
             <div>
               <div className="text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                <span>{is75Off ? "🎉 75% OFF VIP Invite Applied!" : "🔥 50% OFF Promo Applied!"}</span>
+                <span>{is75Off ? "🎉 75% OFF VIP Invite Applied! (First 7 Days)" : "🔥 50% OFF Promo Applied!"}</span>
               </div>
               <p className="text-xs font-semibold opacity-80">
                 Code <span className="font-mono underline">{currentPromo}</span> is active for checkout.
+                {is75Off && <span className="block text-[11px] text-purple-700 font-normal mt-0.5">⏱️ Valid for 7 days from invite date; steps down to 50% OFF afterwards.</span>}
               </p>
             </div>
           </div>
