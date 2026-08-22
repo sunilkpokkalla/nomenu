@@ -11,6 +11,7 @@ const getPlans = (isAnnual: boolean) => [
   {
     id: "pro", // Kept ID for backward compatibility
     name: "Pro",
+    originalPrice: isAnnual ? "$35" : "$39",
     price: isAnnual ? "$17" : "$19",
     period: "/mo",
     description: "Unlimited flexibility for high-volume venues.",
@@ -29,6 +30,7 @@ const getPlans = (isAnnual: boolean) => [
   {
     id: "elite",
     name: "Elite",
+    originalPrice: isAnnual ? "$71" : "$79",
     price: isAnnual ? "$44" : "$49",
     period: "/mo",
     description: "Real-time ordering for premium venues and groups.",
@@ -48,6 +50,7 @@ const getPlans = (isAnnual: boolean) => [
   {
     id: "enterprise",
     name: "Enterprise",
+    originalPrice: isAnnual ? "$107" : "$119",
     price: isAnnual ? "$71" : "$79",
     period: "/mo",
     description: "Full commerce suite with direct payouts.",
@@ -317,19 +320,19 @@ export default async function BillingPage(
 
                 {/* Pricing */}
                 <div className="mb-8 border-b border-slate-100 pb-8">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold tracking-tight text-slate-950">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xl font-bold text-slate-400 line-through decoration-rose-500/70">
+                      {plan.originalPrice}
+                    </span>
+                    <span className="text-4xl font-extrabold tracking-tight text-slate-950">
                       {plan.price}
                     </span>
                     <span className="text-sm font-semibold text-slate-400">
                       {plan.period}
                     </span>
                   </div>
-                  <div className="mt-2 text-[11px] font-bold text-indigo-600 uppercase tracking-widest flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5" /> First Year Special Rate
-                  </div>
                   {isAnnual && (
-                    <div className="mt-1 text-[11px] font-bold text-emerald-600 uppercase tracking-widest">
+                    <div className="mt-2 text-[11px] font-bold text-emerald-600 uppercase tracking-widest">
                       Billed Annually
                     </div>
                   )}
