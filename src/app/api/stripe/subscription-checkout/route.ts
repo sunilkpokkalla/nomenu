@@ -237,19 +237,20 @@ export async function POST(req: Request) {
       sessionBody.discounts = discounts;
     }
 
-    let session = await fetchStripe("/checkout/sessions", {
-      method: "POST",
-      body: sessionBody
-    });
-
-    // If Stripe returns a coupon error (e.g. coupon_applies_to_nothing), fallback gracefully by enabling allow_promotion_codes and retrying
-    if (session.error) {
-      const isCouponError = session.error.code === "coupon_applies_to_nothing" || 
-                            session.error.message?.toLowerCase().includes("coupon") || 
-                            session.error.message?.toLowerCase().includes("discount");
+    let session;
+    try {
+      session = await fetchStripe("/checkout/sessions", {
+        method: "POST",
+        body: sessionBody
+      });
+    } catch (err: unknown) {
+      const errMessage = (err instanceof Error ? err.message : String(err));
+      const isCouponError = errMessage.includes("coupon_applies_to_nothing") || 
+                            errMessage.toLowerCase().includes("coupon") || 
+                            errMessage.toLowerCase().includes("discount");
 
       if (isCouponError && sessionBody.discounts) {
-        console.warn("Stripe Coupon Error detected, falling back to allow_promotion_codes:", session.error.message);
+        console.warn("Stripe Coupon Error caught, retrying checkout with allow_promotion_codes:", errMessage);
         delete sessionBody.discounts;
         sessionBody.allow_promotion_codes = true;
 
@@ -257,12 +258,13 @@ export async function POST(req: Request) {
           method: "POST",
           body: sessionBody
         });
+      } else {
+        throw err;
       }
     }
 
-    if (session.error) {
-      console.error("Stripe API Error:", session.error);
-      throw new Error(session.error.message || "Failed to create checkout session with Stripe.");
+    if (!session || !session.url) {
+      throw new Error(session?.error?.message || "Failed to create checkout session with Stripe.");
     }
 
     return NextResponse.json({ 
