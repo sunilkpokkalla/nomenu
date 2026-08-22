@@ -325,8 +325,11 @@ export default async function BillingPage(
                       {plan.period}
                     </span>
                   </div>
+                  <div className="mt-2 text-[11px] font-bold text-indigo-600 uppercase tracking-widest flex items-center gap-1">
+                    <Sparkles className="w-3.5 h-3.5" /> First Year Special Rate
+                  </div>
                   {isAnnual && (
-                    <div className="mt-2 text-[11px] font-bold text-emerald-600 uppercase tracking-widest">
+                    <div className="mt-1 text-[11px] font-bold text-emerald-600 uppercase tracking-widest">
                       Billed Annually
                     </div>
                   )}

@@ -1347,9 +1347,14 @@ export default function LandingPage() {
                   <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-slate-500">Growth</span>
                   <h4 className="text-2xl lg:text-3xl font-black">Pro Plan</h4>
                   <p className="text-xs text-slate-400 font-medium">Unlimited flexibility for high-volume venues.</p>
-                  <div className="pt-2 flex items-baseline">
-                    <span className="text-4xl lg:text-5xl font-black">$19</span>
-                    <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                  <div className="pt-2 flex flex-col items-start">
+                    <div className="flex items-baseline">
+                      <span className="text-4xl lg:text-5xl font-black">$19</span>
+                      <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mt-1 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" /> First Year Special Rate
+                    </span>
                   </div>
                   
                   <hr className="border-slate-800" />
@@ -1407,9 +1412,14 @@ export default function LandingPage() {
                   <div className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-indigo-500/20 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-indigo-300 border border-indigo-500/30">
                     <Sparkles className="h-3 w-3" /> 30-Day Money-Back Guarantee (Annual)
                   </div>
-                  <div className="pt-2 flex items-baseline">
-                    <span className="text-4xl lg:text-5xl font-black text-white">$49</span>
-                    <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                  <div className="pt-2 flex flex-col items-start">
+                    <div className="flex items-baseline">
+                      <span className="text-4xl lg:text-5xl font-black text-white">$49</span>
+                      <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mt-1 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" /> First Year Special Rate
+                    </span>
                   </div>
 
                   <hr className="border-slate-800" />
@@ -1463,9 +1473,14 @@ export default function LandingPage() {
                   <span className="text-[10px] uppercase font-extrabold tracking-[0.15em] text-slate-500">Premium</span>
                   <h4 className="text-2xl lg:text-3xl font-black text-white">Enterprise Plan</h4>
                   <p className="text-xs text-slate-400 font-medium">Full commerce suite with direct payouts.</p>
-                  <div className="pt-2 flex items-baseline">
-                    <span className="text-4xl lg:text-5xl font-black text-white">$79</span>
-                    <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                  <div className="pt-2 flex flex-col items-start">
+                    <div className="flex items-baseline">
+                      <span className="text-4xl lg:text-5xl font-black text-white">$79</span>
+                      <span className="text-[10px] text-slate-500 font-extrabold ml-1 uppercase tracking-wider">/ month</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mt-1 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" /> First Year Special Rate
+                    </span>
                   </div>
 
                   <hr className="border-slate-800" />
