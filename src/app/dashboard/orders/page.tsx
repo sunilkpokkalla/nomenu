@@ -1,14 +1,14 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import { ComponentProps } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
-import { OrdersBoard } from "./orders-board";
 import { ClipboardList } from "lucide-react";
 import { getActiveRestaurant } from "@/lib/rbac";
 import { WaitTimeToggle } from "@/components/dashboard/wait-time-toggle";
 import { getCurrencySymbol } from "@/lib/currency-options";
-import { toZonedTime, fromZonedTime } from "date-fns-tz";
+import { safeToZonedTime, safeFromZonedTime } from "@/lib/date-utils";
 import { FeatureLockout } from "@/components/dashboard/feature-lockout";
+import { OrdersBoardWrapper } from "@/components/client-wrappers";
 
 export const metadata = {
   title: "Orders | NoMenu Dashboard",
@@ -34,34 +34,44 @@ export default async function OrdersPage() {
     redirect("/dashboard/settings");
   }
 
-  // Fetch today's orders initially
-  // We'll let the client component handle real-time and more complex fetching
-  const tz = restaurant.timezone || "UTC";
-  const nowUtc = new Date();
-  const nowZoned = toZonedTime(nowUtc, tz);
-  
-  const startOfTodayZoned = new Date(nowZoned);
-  startOfTodayZoned.setHours(0, 0, 0, 0); // Start of today in local restaurant time
-  
-  const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
+  let initialOrders: unknown[] = [];
+  try {
+    // Fetch today's orders initially
+    const tz = restaurant.timezone || "UTC";
+    const nowUtc = new Date();
+    const nowZoned = safeToZonedTime(nowUtc, tz);
+    
+    const startOfTodayZoned = new Date(nowZoned);
+    startOfTodayZoned.setHours(0, 0, 0, 0); // Start of today in local restaurant time
+    
+    const startOfTodayUtc = safeFromZonedTime(startOfTodayZoned, tz);
 
-  const { data: initialOrders } = await supabase
-    .from("orders")
-    .select(`
-      *,
-      order_items (
-        id,
-        quantity,
-        customer_notes,
-        menu_items (
-          name,
-          price
+    const { data, error } = await supabase
+      .from("orders")
+      .select(`
+        *,
+        order_items (
+          id,
+          quantity,
+          customer_notes,
+          menu_items (
+            name,
+            price
+          )
         )
-      )
-    `)
-    .eq("restaurant_id", restaurant.id)
-    .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
-    .order("created_at", { ascending: false });
+      `)
+      .eq("restaurant_id", restaurant.id)
+      .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error loading initial orders:", error);
+    } else if (data) {
+      initialOrders = data;
+    }
+  } catch (err) {
+    console.error("Exception in OrdersPage order fetching:", err);
+  }
 
   const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
   const isLocked = !isTrial && (!restaurant.plan || !["elite", "enterprise"].includes(restaurant.plan.toLowerCase()));
@@ -99,7 +109,7 @@ export default async function OrdersPage() {
       </div>
 
       <div className="relative flex-1">
-        <OrdersBoard initialOrders={initialOrders || []} restaurantId={restaurant.id} restaurantCreatedAt={restaurant.created_at} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} locationLabel={locationLabel} currencySymbol={getCurrencySymbol(restaurant.currency)} />
+        <OrdersBoardWrapper initialOrders={(initialOrders as unknown as ComponentProps<typeof OrdersBoardWrapper>['initialOrders']) || []} restaurantId={restaurant.id} restaurantCreatedAt={restaurant.created_at} timezone={restaurant.timezone || "UTC"} supabaseUrl={getSupabaseEnv().url} supabaseAnonKey={getSupabaseEnv().anonKey} locationLabel={locationLabel} currencySymbol={getCurrencySymbol(restaurant.currency)} />
       </div>
     </div>
   );

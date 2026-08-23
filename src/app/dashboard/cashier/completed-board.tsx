@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import { Receipt, History, User, Search, DollarSign, Users, ChevronDown, ChevronUp } from "lucide-react";
-import { formatTimeAgoWithExact } from "@/lib/date-utils";
-import { toZonedTime } from "date-fns-tz";
+import { formatTimeAgoWithExact, safeToZonedTime } from "@/lib/date-utils";
 
 type CompletedOrder = {
   id: string;
@@ -86,7 +85,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
     let filteredOrders = completedOrders;
     
     const nowUtc = new Date();
-    const nowZoned = toZonedTime(nowUtc, timezone);
+    const nowZoned = safeToZonedTime(nowUtc, timezone);
     
     if (timeFilter === "last_hour") {
       const oneHourAgo = new Date(nowUtc.getTime() - 60 * 60 * 1000);
@@ -100,7 +99,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
       
       filteredOrders = filteredOrders.filter(o => {
         const timeUtc = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
-        const timeZoned = toZonedTime(timeUtc, timezone);
+        const timeZoned = safeToZonedTime(timeUtc, timezone);
         return timeZoned >= startOfTodayZoned;
       });
     } else if (timeFilter === "yesterday") {
@@ -113,7 +112,7 @@ export function CompletedBoard({ restaurantId, timezone, supabaseUrl, supabaseAn
       
       filteredOrders = filteredOrders.filter(o => {
         const timeUtc = new Date((o as CompletedOrder & { paid_at?: string | null }).paid_at || o.created_at);
-        const timeZoned = toZonedTime(timeUtc, timezone);
+        const timeZoned = safeToZonedTime(timeUtc, timezone);
         return timeZoned >= startOfYesterdayZoned && timeZoned < startOfTodayZoned;
       });
     }

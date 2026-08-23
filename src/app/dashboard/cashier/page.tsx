@@ -1,12 +1,15 @@
 import { redirect } from "next/navigation";
+import { ComponentProps } from "react";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
-import { CashierBoard } from "@/app/dashboard/cashier/cashier-board";
-import { WaitlistBoard } from "@/app/dashboard/cashier/waitlist-board";
-import { CompletedBoard } from "@/app/dashboard/cashier/completed-board";
-import { FloorPlanBoard } from "@/app/dashboard/cashier/floor-plan-board";
+import { 
+  CashierBoardWrapper, 
+  CompletedBoardWrapper, 
+  WaitlistBoardWrapper, 
+  FloorPlanBoardWrapper 
+} from "@/components/client-wrappers";
 import { getOrCreateFloorPlans } from "@/app/dashboard/cashier/floor-plan-actions";
 import { Wallet } from "lucide-react";
 import { getActiveRestaurant, getUserRole } from "@/lib/rbac";
@@ -46,32 +49,46 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
   
   const userRole = await getUserRole(supabase, user.id, restaurant.id);
 
-  // Fetch only unpaid dine-in orders initially to calculate open tabs
-  const { data: initialOrders } = await supabase
-    .from("orders")
-    .select(`
-      *,
-      order_items (
-        id,
-        quantity,
-        customer_notes,
-        menu_items (
-          name,
-          price
+  let initialOrders: unknown[] = [];
+  try {
+    // Fetch only unpaid dine-in orders initially to calculate open tabs
+    const { data, error } = await supabase
+      .from("orders")
+      .select(`
+        *,
+        order_items (
+          id,
+          quantity,
+          customer_notes,
+          menu_items (
+            name,
+            price
+          )
         )
-      )
-    `)
-    .eq("restaurant_id", restaurant.id)
-    .is("customer_phone", null) // Exclusively Dine-In orders
-    .eq("is_paid", false) // Exclude paid orders from active tabs
-    .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment","cleared")')
-    .order("created_at", { ascending: true });
+      `)
+      .eq("restaurant_id", restaurant.id)
+      .is("customer_phone", null) // Exclusively Dine-In orders
+      .eq("is_paid", false) // Exclude paid orders from active tabs
+      .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment","cleared")')
+      .order("created_at", { ascending: true });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let floorPlansData: any[] = [];
-  const res = await getOrCreateFloorPlans(restaurant.id);
-  if (res.success) {
-    floorPlansData = res.floorPlans || [];
+    if (error) {
+      console.error("Error fetching initial cashier orders:", error);
+    } else if (data) {
+      initialOrders = data;
+    }
+  } catch (err) {
+    console.error("Exception in CashierPage order fetching:", err);
+  }
+
+  let floorPlansData: unknown[] = [];
+  try {
+    const res = await getOrCreateFloorPlans(restaurant.id);
+    if (res.success) {
+      floorPlansData = res.floorPlans || [];
+    }
+  } catch (err) {
+    console.error("Exception in getOrCreateFloorPlans:", err);
   }
 
   const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
@@ -87,8 +104,6 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
       />
     );
   }
-
-  const isPro = restaurant.plan?.toLowerCase() === "pro";
 
   return (
     <div id="foh-dashboard-container" className="flex flex-col gap-8 w-full max-w-[1600px] mx-auto py-8 px-4 sm:px-6 lg:px-8 pb-32">
@@ -132,8 +147,8 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
 
       <div className="relative flex-1 min-h-[500px]">
         {tab === "active" && (
-          <CashierBoard 
-            initialOrders={initialOrders || []} 
+          <CashierBoardWrapper 
+            initialOrders={(initialOrders as unknown as ComponentProps<typeof CashierBoardWrapper>['initialOrders']) || []} 
             restaurantId={restaurant.id} 
             restaurantCreatedAt={restaurant.created_at}
             timezone={restaurant.timezone || "UTC"} 
@@ -143,7 +158,7 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
           />
         )}
         {tab === "history" && (
-          <CompletedBoard 
+          <CompletedBoardWrapper 
             restaurantId={restaurant.id} 
             timezone={restaurant.timezone || "UTC"} 
             supabaseUrl={getSupabaseEnv().url} 
@@ -152,19 +167,19 @@ export default async function CashierPage({ searchParams }: { searchParams: Prom
           />
         )}
         {tab === "waitlist" && (
-          <WaitlistBoard 
+          <WaitlistBoardWrapper 
             restaurantId={restaurant.id} 
             supabaseUrl={getSupabaseEnv().url} 
             supabaseAnonKey={getSupabaseEnv().anonKey} 
-            floorPlans={floorPlansData}
-            activeOrders={initialOrders || []}
+            floorPlans={(floorPlansData as unknown as ComponentProps<typeof WaitlistBoardWrapper>['floorPlans']) || []}
+            activeOrders={(initialOrders as unknown as ComponentProps<typeof WaitlistBoardWrapper>['activeOrders']) || []}
           />
         )}
         {tab === "floor-plan" && floorPlansData.length > 0 && (
-          <FloorPlanBoard
+          <FloorPlanBoardWrapper
             restaurantId={restaurant.id}
-            initialFloorPlans={floorPlansData}
-            activeOrders={initialOrders || []}
+            initialFloorPlans={(floorPlansData as unknown as ComponentProps<typeof FloorPlanBoardWrapper>['initialFloorPlans']) || []}
+            activeOrders={(initialOrders as unknown as ComponentProps<typeof FloorPlanBoardWrapper>['activeOrders']) || []}
             userRole={userRole || "waitstaff"}
           />
         )}

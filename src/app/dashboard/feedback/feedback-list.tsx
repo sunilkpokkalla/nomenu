@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { format, isToday, isYesterday } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
+import { safeToZonedTime } from "@/lib/date-utils";
 import { 
   MessageSquare, Star, ArrowUpRight, ArrowDownRight, User, MapPin, 
   Mail, QrCode, Search, ChevronDown, ChevronUp, Clock, Filter, Sparkles, Send,
@@ -327,7 +327,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
     // Filter by Date Range
     if (dateFrom || dateTo) {
       result = result.filter(fb => {
-        const fbDate = toZonedTime(new Date(fb.created_at), timezone);
+        const fbDate = safeToZonedTime(new Date(fb.created_at), timezone);
         const fbDateString = format(fbDate, 'yyyy-MM-dd');
         
         if (dateFrom && fbDateString < dateFrom) {
@@ -392,7 +392,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
     };
 
     const rows = processedFeedbacks.map(fb => {
-      const fbDate = toZonedTime(new Date(fb.created_at), timezone);
+      const fbDate = safeToZonedTime(new Date(fb.created_at), timezone);
       const sentiment = fb.rating >= 4 ? "Positive" : fb.rating === 3 ? "Neutral" : "Needs Attention";
       const location = [fb.table_number ? `T-${fb.table_number}` : "", fb.qr_codes?.label || ""].filter(Boolean).join(" ");
       
@@ -637,7 +637,7 @@ export function FeedbackList({ feedbacks, timezone, restaurantId, restaurantCrea
             ) : (
               paginatedFeedbacks.map((fb) => {
                 const isExpanded = expandedRows.has(fb.id);
-                const fbDate = toZonedTime(new Date(fb.created_at), timezone);
+                const fbDate = safeToZonedTime(new Date(fb.created_at), timezone);
                 const dateStr = format(fbDate, "MMM d, yyyy");
                 
                 let dateHeader = null;

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AnalyticsDashboard } from "./analytics-dashboard-wrapper";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
-import { toZonedTime, fromZonedTime } from "date-fns-tz";
+import { safeToZonedTime, safeFromZonedTime } from "@/lib/date-utils";
 
 type PageProps = {
   searchParams: Promise<{ range?: string; date?: string; startDate?: string; endDate?: string }>;
@@ -34,7 +34,7 @@ export default async function AnalyticsPage(props: PageProps) {
 
   const tz = restaurant.timezone || "UTC";
   const nowUtc = new Date();
-  const nowLocal = toZonedTime(nowUtc, tz);
+  const nowLocal = safeToZonedTime(nowUtc, tz);
 
   let startLocal: Date;
   let endLocal: Date | undefined = undefined;
@@ -74,8 +74,8 @@ export default async function AnalyticsPage(props: PageProps) {
     startLocal.setHours(0, 0, 0, 0);
   }
 
-  const startDateUtc = fromZonedTime(startLocal, tz);
-  const endDateUtc = endLocal ? fromZonedTime(endLocal, tz) : undefined;
+  const startDateUtc = safeFromZonedTime(startLocal, tz);
+  const endDateUtc = endLocal ? safeFromZonedTime(endLocal, tz) : undefined;
 
   // Fetch scans
   let scansQuery = supabase
@@ -210,13 +210,13 @@ export default async function AnalyticsPage(props: PageProps) {
 
   const revenueData = buckets.map((bucket) => {
     const dayOrders = ordersList.filter((o) => {
-      const d = toZonedTime(new Date(o.created_at), tz);
+      const d = safeToZonedTime(new Date(o.created_at), tz);
       return d >= bucket.date && d < bucket.nextDate;
     });
     
     const dayScans = scans?.filter(s => {
       if (!s.scanned_at) return false;
-      const d = toZonedTime(new Date(s.scanned_at), tz);
+      const d = safeToZonedTime(new Date(s.scanned_at), tz);
       return d >= bucket.date && d < bucket.nextDate;
     });
 

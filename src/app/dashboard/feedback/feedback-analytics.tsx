@@ -15,7 +15,7 @@ import {
   LineChart,
 } from "recharts";
 import { format, subDays, startOfWeek, addDays, subMonths, isAfter, isSameDay } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
+import { safeToZonedTime } from "@/lib/date-utils";
 import { Star, TrendingUp, MessageSquare, Calendar } from "lucide-react";
 
 export interface FeedbackData {
@@ -68,7 +68,7 @@ export function FeedbackAnalytics({
     historyChartData,
   } = useMemo(() => {
     const now = new Date();
-    const zonedNow = toZonedTime(now, tz);
+    const zonedNow = safeToZonedTime(now, tz);
 
     // Filter valid feedbacks
     const validFeedbacks = feedbacks.filter((f) => f.created_at);
@@ -79,12 +79,12 @@ export function FeedbackAnalytics({
     const lastWeekEnd = subDays(currentWeekStart, 1);
 
     const currentWeekFeedbacks = validFeedbacks.filter((f) => {
-      const d = toZonedTime(new Date(f.created_at), tz);
+      const d = safeToZonedTime(new Date(f.created_at), tz);
       return d >= currentWeekStart;
     });
 
     const lastWeekFeedbacks = validFeedbacks.filter((f) => {
-      const d = toZonedTime(new Date(f.created_at), tz);
+      const d = safeToZonedTime(new Date(f.created_at), tz);
       return d >= lastWeekStart && d <= lastWeekEnd;
     });
 
@@ -105,7 +105,7 @@ export function FeedbackAnalytics({
     // Best Day of Week
     const daysMap: Record<number, { count: number; sum: number }> = {};
     validFeedbacks.forEach((f) => {
-      const d = toZonedTime(new Date(f.created_at), tz);
+      const d = safeToZonedTime(new Date(f.created_at), tz);
       const day = d.getDay(); // 0 = Sun, 1 = Mon, etc.
       if (!daysMap[day]) daysMap[day] = { count: 0, sum: 0 };
       daysMap[day].count += 1;
@@ -130,7 +130,7 @@ export function FeedbackAnalytics({
       avg: 0,
     }));
     validFeedbacks.forEach((f) => {
-      const d = toZonedTime(new Date(f.created_at), tz);
+      const d = safeToZonedTime(new Date(f.created_at), tz);
       if (isSameDay(d, zonedNow)) {
         const h = d.getHours();
         hourlyData[h].count += 1;
@@ -153,7 +153,7 @@ export function FeedbackAnalytics({
       };
     });
     currentWeekFeedbacks.forEach((f) => {
-      const d = toZonedTime(new Date(f.created_at), tz);
+      const d = safeToZonedTime(new Date(f.created_at), tz);
       const idx = d.getDay() === 0 ? 6 : d.getDay() - 1; // Mon = 0, Sun = 6
       if (idx >= 0 && idx < 7) {
         if (f.rating >= 4) weekData[idx].positive += 1;
@@ -168,7 +168,7 @@ export function FeedbackAnalytics({
     const historyStart = subMonths(zonedNow, historyRange);
     const monthsMap: Record<string, { positive: number; negative: number; sum: number; count: number; avg: number }> = {};
     validFeedbacks.forEach((f) => {
-      const d = toZonedTime(new Date(f.created_at), tz);
+      const d = safeToZonedTime(new Date(f.created_at), tz);
       if (isAfter(d, historyStart)) {
         const m = format(d, "MMM yyyy");
         if (!monthsMap[m]) monthsMap[m] = { positive: 0, negative: 0, sum: 0, count: 0, avg: 0 };
@@ -205,10 +205,7 @@ export function FeedbackAnalytics({
     };
   }, [feedbacks, tz, historyRange]);
 
-  const diffTotal = totalFeedback - totalLastWeek; // Wait, total vs last week total doesn't make sense if total is all-time.
-  // Actually, total is all-time. The prompt says "Add: 'vs last week' comparison on each stat card".
-  // This probably means "Current week's new feedback vs Last week's new feedback".
-  const currentWeekNew = feedbacks.filter((f) => toZonedTime(new Date(f.created_at), tz) >= startOfWeek(toZonedTime(new Date(), tz), { weekStartsOn: 1 })).length;
+  const currentWeekNew = feedbacks.filter((f) => safeToZonedTime(new Date(f.created_at), tz) >= startOfWeek(safeToZonedTime(new Date(), tz), { weekStartsOn: 1 })).length;
   const diffNew = currentWeekNew - totalLastWeek;
   
   const diffAvg = (parseFloat(avgRating) - parseFloat(avgRatingLastWeek)).toFixed(1);

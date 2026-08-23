@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
+import { ComponentProps } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
-import { TakeawayBoard } from "./takeaway-board";
+import { TakeawayBoardWrapper } from "@/components/client-wrappers";
 import { ClipboardList } from "lucide-react";
 import { getActiveRestaurant, UserRole } from "@/lib/rbac";
-import { toZonedTime, fromZonedTime } from "date-fns-tz";
+import { safeToZonedTime, safeFromZonedTime } from "@/lib/date-utils";
 import { FeatureLockout } from "@/components/dashboard/feature-lockout";
 
 export const metadata = {
@@ -32,47 +33,47 @@ export default async function TakeawayPage() {
     redirect("/dashboard/settings");
   }
 
-  // Fetch today's/active orders initially
-  const tz = restaurant.timezone || "UTC";
-  const nowUtc = new Date();
-  const nowZoned = toZonedTime(nowUtc, tz);
-  const startOfTodayZoned = new Date(nowZoned);
-  startOfTodayZoned.setHours(0, 0, 0, 0);
-  const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
+  let initialOrders: unknown[] = [];
+  try {
+    // Fetch today's/active orders initially
+    const tz = restaurant.timezone || "UTC";
+    const nowUtc = new Date();
+    const nowZoned = safeToZonedTime(nowUtc, tz);
+    const startOfTodayZoned = new Date(nowZoned);
+    startOfTodayZoned.setHours(0, 0, 0, 0);
+    const startOfTodayUtc = safeFromZonedTime(startOfTodayZoned, tz);
 
-  const { data: initialOrders } = await supabase
-    .from("orders")
-    .select(`
-      *,
-      order_items (
-        id,
-        quantity,
-        customer_notes,
-        menu_items (
-          name,
-          price
+    const { data, error } = await supabase
+      .from("orders")
+      .select(`
+        *,
+        order_items (
+          id,
+          quantity,
+          customer_notes,
+          menu_items (
+            name,
+            price
+          )
         )
-      )
-    `)
-    .eq("restaurant_id", restaurant.id)
-    .not("customer_phone", "is", null) // Exclusively Takeaway/Priority
-    .is("reservation_time", null) // Exclusively Takeaway (no reservation)
-    .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
-    .order("created_at", { ascending: false });
+      `)
+      .eq("restaurant_id", restaurant.id)
+      .not("customer_phone", "is", null) // Exclusively Takeaway/Priority
+      .is("reservation_time", null) // Exclusively Takeaway (no reservation)
+      .or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching takeaway initial orders:", error);
+    } else if (data) {
+      initialOrders = data;
+    }
+  } catch (err) {
+    console.error("Exception in TakeawayPage order fetching:", err);
+  }
 
   const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
   const isLocked = !isTrial && (!restaurant.plan || !["enterprise"].includes(restaurant.plan.toLowerCase()));
-  
-  // Fetch active menu to get custom location label
-  const { data: menu } = await supabase
-    .from("menus")
-    .select("location_label")
-    .eq("restaurant_id", restaurant.id)
-    .eq("is_active", true)
-    .limit(1)
-    .maybeSingle();
-
-  const locationLabel = menu?.location_label || "TABLE";
   
   if (isLocked) {
     return (
@@ -88,8 +89,8 @@ export default async function TakeawayPage() {
   return (
     <div className="h-screen flex flex-col bg-slate-50 relative overflow-hidden">
       <div className="flex-1 overflow-hidden p-6 relative z-10">
-        <TakeawayBoard 
-          initialOrders={initialOrders || []} 
+        <TakeawayBoardWrapper 
+          initialOrders={(initialOrders as unknown as ComponentProps<typeof TakeawayBoardWrapper>['initialOrders']) || []} 
           restaurantId={restaurant.id}
           restaurantCreatedAt={restaurant.created_at}
           timezone={restaurant.timezone || "UTC"}

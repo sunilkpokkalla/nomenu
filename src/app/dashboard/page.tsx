@@ -22,8 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
-import { formatTimezone } from "@/lib/date-utils";
-import { toZonedTime } from "date-fns-tz";
+import { formatTimezone, safeToZonedTime } from "@/lib/date-utils";
 import { WelcomeChecklist } from "@/components/dashboard/welcome-checklist";
 import { WaitTimeToggle } from "@/components/dashboard/wait-time-toggle";
 
@@ -213,7 +212,7 @@ export default async function DashboardPage(
 
   const tz = restaurant.timezone || "UTC";
   const nowUtc = new Date();
-  const nowZoned = toZonedTime(nowUtc, tz);
+  const nowZoned = safeToZonedTime(nowUtc, tz);
 
   const startOfTodayZoned = new Date(nowZoned);
   startOfTodayZoned.setHours(0, 0, 0, 0);
@@ -223,8 +222,8 @@ export default async function DashboardPage(
   startOfMonthZoned.setHours(0, 0, 0, 0);
 
   // Stats Calculations
-  const scansToday = scansList.filter((s) => s.scanned_at && toZonedTime(new Date(s.scanned_at), tz) >= startOfTodayZoned).length;
-  const scansThisMonth = scansList.filter((s) => s.scanned_at && toZonedTime(new Date(s.scanned_at), tz) >= startOfMonthZoned).length;
+  const scansToday = scansList.filter((s) => s.scanned_at && safeToZonedTime(new Date(s.scanned_at), tz) >= startOfTodayZoned).length;
+  const scansThisMonth = scansList.filter((s) => s.scanned_at && safeToZonedTime(new Date(s.scanned_at), tz) >= startOfMonthZoned).length;
   const activeItemsCount = itemsList.filter((item) => item.is_available).length;
   const qrCodesCount = qrCodesList.length;
 
@@ -241,7 +240,7 @@ export default async function DashboardPage(
     nextDay.setDate(nextDay.getDate() + 1);
     const count = scansList.filter((s) => {
       if (!s.scanned_at) return false;
-      const scanDate = toZonedTime(new Date(s.scanned_at), tz);
+      const scanDate = safeToZonedTime(new Date(s.scanned_at), tz);
       return scanDate >= day && scanDate < nextDay;
     }).length;
     return {

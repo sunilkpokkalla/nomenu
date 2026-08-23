@@ -1,5 +1,31 @@
-import { formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone, toZonedTime, fromZonedTime } from "date-fns-tz";
 import { formatDistanceToNow } from "date-fns";
+
+export function safeToZonedTime(date: Date | string | number, timezone: string | null | undefined): Date {
+  const tz = timezone || "UTC";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return new Date();
+  try {
+    const zoned = toZonedTime(d, tz);
+    if (isNaN(zoned.getTime())) return d;
+    return zoned;
+  } catch (error) {
+    return d;
+  }
+}
+
+export function safeFromZonedTime(date: Date | string | number, timezone: string | null | undefined): Date {
+  const tz = timezone || "UTC";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return new Date();
+  try {
+    const fromZoned = fromZonedTime(d, tz);
+    if (isNaN(fromZoned.getTime())) return d;
+    return fromZoned;
+  } catch (error) {
+    return d;
+  }
+}
 
 export function formatTimezone(dateString: string | null | undefined, timezone: string | null | undefined, formatStr: string = "MMM d, yyyy 'at' h:mm a"): string {
   if (!dateString) return "Unknown date";
@@ -38,3 +64,4 @@ export function formatTimeAgoWithExact(dateString: string | null | undefined, ti
 
   return `${timeAgo} (${exactTime})`;
 }
+

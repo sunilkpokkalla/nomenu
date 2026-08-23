@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { formatTimeAgoWithExact } from "@/lib/date-utils";
+import { formatTimeAgoWithExact, safeToZonedTime, safeFromZonedTime } from "@/lib/date-utils";
 import { differenceInMinutes } from "date-fns";
 import { formatOrderNumber } from "@/lib/utils";
-import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { createBrowserClient } from "@supabase/ssr";
 import { Clock, CheckCircle2, ChefHat, User, MapPin, XCircle, Calendar as CalendarIcon, ChevronDown, ChevronUp, X, Maximize, Minimize, AlertTriangle, ExternalLink, Settings, Volume2, VolumeX } from "lucide-react";
 import { updateOrderStatus, toggleOrderPaymentStatus } from "../orders/actions";
@@ -216,36 +215,44 @@ export function ReservationsBoard({ initialOrders, restaurantId, restaurantCreat
   }, [restaurantId]);
 
   const fetchLatestOrders = async () => {
-    const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
-    let query = supabase
-      .from("orders")
-      .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
-      .eq("restaurant_id", restaurantId)
-      .not("reservation_time", "is", null) // Exclusively Priority Reservations
-      .order("created_at", { ascending: true });
-      
-    if (selectedDateStr) {
-      // Archive Mode: Fetch all orders for the exact selected date
-      const [y, m, d] = selectedDateStr.split("-").map(Number);
-      const startOfDayZoned = new Date(y, m - 1, d, 0, 0, 0);
-      const endOfDayZoned = new Date(y, m - 1, d, 23, 59, 59, 999);
-      const startOfDayUtc = fromZonedTime(startOfDayZoned, timezone);
-      const endOfDayUtc = fromZonedTime(endOfDayZoned, timezone);
-      query = query.gte("created_at", startOfDayUtc.toISOString()).lte("created_at", endOfDayUtc.toISOString());
-    } else {
-      // Live Mode: Fetch active tickets OR tickets created today
-      const nowUtc = new Date();
-      const nowZoned = toZonedTime(nowUtc, timezone);
-      const startOfTodayZoned = new Date(nowZoned);
-      startOfTodayZoned.setHours(0, 0, 0, 0);
-      const startOfTodayUtc = fromZonedTime(startOfTodayZoned, timezone);
-      query = query.or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`);
-    }
+    try {
+      const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+      let query = supabase
+        .from("orders")
+        .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
+        .eq("restaurant_id", restaurantId)
+        .not("reservation_time", "is", null) // Exclusively Priority Reservations
+        .order("created_at", { ascending: true });
+        
+      if (selectedDateStr) {
+        // Archive Mode: Fetch all orders for the exact selected date
+        const [y, m, d] = selectedDateStr.split("-").map(Number);
+        const startOfDayZoned = new Date(y, m - 1, d, 0, 0, 0);
+        const endOfDayZoned = new Date(y, m - 1, d, 23, 59, 59, 999);
+        const startOfDayUtc = safeFromZonedTime(startOfDayZoned, timezone);
+        const endOfDayUtc = safeFromZonedTime(endOfDayZoned, timezone);
+        query = query.gte("created_at", startOfDayUtc.toISOString()).lte("created_at", endOfDayUtc.toISOString());
+      } else {
+        // Live Mode: Fetch active tickets OR tickets created today
+        const nowUtc = new Date();
+        const nowZoned = safeToZonedTime(nowUtc, timezone);
+        const startOfTodayZoned = new Date(nowZoned);
+        startOfTodayZoned.setHours(0, 0, 0, 0);
+        const startOfTodayUtc = safeFromZonedTime(startOfTodayZoned, timezone);
+        query = query.or(`status.in.(pending,preparing),created_at.gte.${startOfTodayUtc.toISOString()}`);
+      }
 
-    const { data } = await query;
-    if (!data) return;
-    
-    setOrders(data as unknown as Order[]);
+      const { data, error } = await query;
+      if (error) {
+        console.error("Error fetching latest reservations:", error);
+        return;
+      }
+      if (!data) return;
+      
+      setOrders(data as unknown as Order[]);
+    } catch (err) {
+      console.error("Exception in fetchLatestOrders reservations:", err);
+    }
   };
 
   // Initial load or date filter change

@@ -20,6 +20,11 @@ export function GlobalOrderListener({
   const router = useRouter();
   const [notification, setNotification] = useState<{ id: string; title: string; subtitle: string; link: string } | null>(null);
   
+  const pathnameRef = useRef(pathname);
+  useEffect(() => {
+    pathnameRef.current = pathname;
+  }, [pathname]);
+  
   const audioContextRef = useRef<AudioContext | null>(null);
 
   // Initialize audio context
@@ -163,9 +168,9 @@ export function GlobalOrderListener({
             const isTakeaway = orderRecord.customer_phone !== null;
             
             // Skip if the current page already natively handles this specific order type
-            if (isTakeaway && pathname?.startsWith("/dashboard/takeaway")) return;
-            if (!isTakeaway && pathname?.startsWith("/dashboard/orders")) return;
-            if (pathname?.startsWith("/dashboard/cashier")) return; // Cashier handles everything
+            if (isTakeaway && pathnameRef.current?.startsWith("/dashboard/takeaway")) return;
+            if (!isTakeaway && pathnameRef.current?.startsWith("/dashboard/orders")) return;
+            if (pathnameRef.current?.startsWith("/dashboard/cashier")) return; // Cashier handles everything
             
             const notifiedKey = `notified_order_${orderRecord.id}`;
             if (!localStorage.getItem(notifiedKey)) {
@@ -196,7 +201,7 @@ export function GlobalOrderListener({
         "postgres_changes",
         { event: "*", schema: "public", table: "customer_feedback" },
         (payload) => {
-          if (pathname?.startsWith("/dashboard/feedback")) return;
+          if (pathnameRef.current?.startsWith("/dashboard/feedback")) return;
 
           if (payload.eventType === "INSERT") {
             const customerName = payload.new.customer_name;
@@ -253,7 +258,7 @@ export function GlobalOrderListener({
       supabase.removeChannel(channel);
       supabase.removeChannel(feedbackChannel);
     };
-  }, [restaurantId, supabaseUrl, supabaseAnonKey, pathname, playNotificationSound, playFeedbackSound, playUrgentSound]);
+  }, [restaurantId, supabaseUrl, supabaseAnonKey, playNotificationSound, playFeedbackSound, playUrgentSound]);
 
   if (!notification) return null;
 

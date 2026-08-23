@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import { ComponentProps } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseEnv } from "@/lib/env";
-import { toZonedTime, fromZonedTime } from "date-fns-tz";
-import { OrdersBoard } from "@/app/dashboard/orders/orders-board";
+import { safeToZonedTime, safeFromZonedTime } from "@/lib/date-utils";
 import { ClipboardList } from "lucide-react";
 import { FeatureLockout } from "@/components/dashboard/feature-lockout";
+import { OrdersBoardWrapper } from "@/components/client-wrappers";
 
 export const metadata = {
   title: "Live KDS | NoMenu",
@@ -37,32 +37,43 @@ export default async function KDSPage() {
     redirect("/dashboard/settings");
   }
 
-  // Fetch today's/active orders initially
-  const tz = restaurant.timezone || "UTC";
-  const nowUtc = new Date();
-  const nowZoned = toZonedTime(nowUtc, tz);
-  const startOfTodayZoned = new Date(nowZoned);
-  startOfTodayZoned.setHours(0, 0, 0, 0);
-  const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
+  let initialOrders: unknown[] = [];
+  try {
+    // Fetch today's/active orders initially
+    const tz = restaurant.timezone || "UTC";
+    const nowUtc = new Date();
+    const nowZoned = safeToZonedTime(nowUtc, tz);
+    const startOfTodayZoned = new Date(nowZoned);
+    startOfTodayZoned.setHours(0, 0, 0, 0);
+    const startOfTodayUtc = safeFromZonedTime(startOfTodayZoned, tz);
 
-  const { data: initialOrders } = await supabase
-    .from("orders")
-    .select(`
-      *,
-      order_items (
-        id,
-        quantity,
-        customer_notes,
-        menu_items (
-          name,
-          price
+    const { data, error } = await supabase
+      .from("orders")
+      .select(`
+        *,
+        order_items (
+          id,
+          quantity,
+          customer_notes,
+          menu_items (
+            name,
+            price
+          )
         )
-      )
-    `)
-    .eq("restaurant_id", restaurant.id)
-    .in("status", ["pending", "preparing"])
-    .gte("created_at", startOfTodayUtc.toISOString())
-    .order("created_at", { ascending: false });
+      `)
+      .eq("restaurant_id", restaurant.id)
+      .in("status", ["pending", "preparing"])
+      .gte("created_at", startOfTodayUtc.toISOString())
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error loading KDS initial orders:", error);
+    } else if (data) {
+      initialOrders = data;
+    }
+  } catch (err) {
+    console.error("Exception in KDSPage order fetching:", err);
+  }
 
   const isTrial = restaurant.created_at ? new Date(restaurant.created_at).getTime() + 24 * 60 * 60 * 1000 > Date.now() : false;
   
@@ -84,8 +95,8 @@ export default async function KDSPage() {
 
   return (
     <main className="h-screen w-full overflow-hidden bg-[#0f1115]">
-      <OrdersBoard 
-        initialOrders={initialOrders || []} 
+      <OrdersBoardWrapper 
+        initialOrders={(initialOrders as unknown as ComponentProps<typeof OrdersBoardWrapper>['initialOrders']) || []} 
         restaurantId={restaurant.id} 
         timezone={restaurant.timezone || "UTC"} 
         supabaseUrl={getSupabaseEnv().url} 

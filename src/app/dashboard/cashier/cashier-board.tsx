@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { formatOrderNumber } from "@/lib/utils";
 import { createBrowserClient } from "@supabase/ssr";
-import { toZonedTime, fromZonedTime } from "date-fns-tz";
-import { formatTimeAgoWithExact } from "@/lib/date-utils";
+import { formatTimeAgoWithExact, safeToZonedTime, safeFromZonedTime } from "@/lib/date-utils";
 import { Users, Receipt, CircleDollarSign, XCircle, CreditCard, CheckCircle2, Loader2, Trash2, Plus } from "lucide-react";
 import { settleTableTab, voidTableTab, clearTableTab, createWalkInTab } from "@/app/dashboard/cashier/actions";
 
@@ -60,36 +59,42 @@ export function CashierBoard({ initialOrders, restaurantId, restaurantCreatedAt,
   }, []);
 
   const fetchLatestOrders = async () => {
-    const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
-    const tz = timezone || "UTC";
-    const nowUtc = new Date();
-    const nowZoned = toZonedTime(nowUtc, tz);
-    const startOfTodayZoned = new Date(nowZoned);
-    startOfTodayZoned.setHours(0, 0, 0, 0);
-    const startOfTodayUtc = fromZonedTime(startOfTodayZoned, tz);
-    
-    // Fetch active orders
-    const { data: activeData } = await supabase
-      .from("orders")
-      .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
-      .eq("restaurant_id", restaurantId)
-      .is("customer_phone", null)
-      .eq("is_paid", false) // Exclude paid orders from active tabs
-      .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment","cleared")')
-      .order("created_at", { ascending: true });
+    try {
+      const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+      const tz = timezone || "UTC";
+      const nowUtc = new Date();
+      const nowZoned = safeToZonedTime(nowUtc, tz);
+      const startOfTodayZoned = new Date(nowZoned);
+      startOfTodayZoned.setHours(0, 0, 0, 0);
+      const startOfTodayUtc = safeFromZonedTime(startOfTodayZoned, tz);
       
-    if (activeData) setOrders(activeData as unknown as Order[]);
-    
-    // Fetch history (paid or cancelled today)
-    const { data: historyData } = await supabase
-      .from("orders")
-      .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
-      .eq("restaurant_id", restaurantId)
-      .is("customer_phone", null)
-      .or(`paid_at.gte.${startOfTodayUtc.toISOString()},and(status.in.(cancelled,cancelled_by_customer,cancelled_by_restaurant),created_at.gte.${startOfTodayUtc.toISOString()})`)
-      .order("created_at", { ascending: false });
+      // Fetch active orders
+      const { data: activeData, error: activeErr } = await supabase
+        .from("orders")
+        .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
+        .eq("restaurant_id", restaurantId)
+        .is("customer_phone", null)
+        .eq("is_paid", false) // Exclude paid orders from active tabs
+        .not("status", "in", '("cancelled","cancelled_by_customer","cancelled_by_restaurant","awaiting_payment","cleared")')
+        .order("created_at", { ascending: true });
+        
+      if (activeErr) console.error("Error fetching active cashier orders:", activeErr);
+      else if (activeData) setOrders(activeData as unknown as Order[]);
       
-    if (historyData) setHistoryOrders(historyData as unknown as Order[]);
+      // Fetch history (paid or cancelled today)
+      const { data: historyData, error: historyErr } = await supabase
+        .from("orders")
+        .select(`*, order_items (id, quantity, customer_notes, menu_items (name, price))`)
+        .eq("restaurant_id", restaurantId)
+        .is("customer_phone", null)
+        .or(`paid_at.gte.${startOfTodayUtc.toISOString()},and(status.in.(cancelled,cancelled_by_customer,cancelled_by_restaurant),created_at.gte.${startOfTodayUtc.toISOString()})`)
+        .order("created_at", { ascending: false });
+        
+      if (historyErr) console.error("Error fetching cashier history orders:", historyErr);
+      else if (historyData) setHistoryOrders(historyData as unknown as Order[]);
+    } catch (err) {
+      console.error("Exception in fetchLatestOrders cashier:", err);
+    }
   };
 
   // Polling Auto-Refresh Fallback (runs every 15 seconds)
