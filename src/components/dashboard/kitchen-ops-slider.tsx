@@ -47,7 +47,7 @@ export function KitchenOpsSlider({
       <SheetTrigger asChild>
         <Button 
           variant="outline" 
-          className="h-12 px-6 rounded-2xl bg-white border-slate-200 shadow-sm hover:shadow-md hover:bg-slate-50 transition-all font-bold text-slate-800 flex items-center gap-2"
+          className="h-12 px-6 rounded-2xl bg-white border-slate-200 shadow-sm hover:shadow-md hover:bg-slate-50 hover:text-slate-900 transition-all font-bold text-slate-800 flex items-center gap-2"
         >
           <div className="flex h-6 w-6 items-center justify-center rounded-full bg-orange-100 text-orange-600">
             <ChefHat className="h-3.5 w-3.5" />
