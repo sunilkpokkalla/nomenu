@@ -121,7 +121,7 @@ export function EditorialTheme(props: MenuThemeProps) {
                         className={`group cursor-pointer flex flex-col ${isWide ? "md:col-span-2 md:flex-row md:items-center gap-8" : "gap-4"}`}
                       >
                         {item.image_url && (
-                          <div className={`relative overflow-hidden ${isWide ? "w-full md:w-1/2 aspect-[4/3]" : "w-full aspect-[3/4]"} bg-[#E2DFD8]`}>
+                          <div className={`relative overflow-hidden rounded-xl border border-[#E2DFD8] ${isWide ? "w-full md:w-1/2 aspect-[4/3]" : "w-full aspect-[4/3]"} bg-[#E2DFD8]`}>
                             <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out" fill />
                           </div>
                         )}

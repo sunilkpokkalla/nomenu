@@ -239,7 +239,7 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
                     )}
                   </div>
 
-                  <div className="grid gap-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12">
                     {categoryItems.map((item) => {
                       const price = `${currencySign}${Number(item.price).toFixed(2)}`;
                       
