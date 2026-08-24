@@ -117,7 +117,7 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] font-sans selection:bg-amber-500/30">
-      <div className="mx-auto max-w-md min-h-screen bg-[#0A0A0A] shadow-2xl shadow-black flex flex-col pb-28 relative">
+      <div className="mx-auto w-full max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl min-h-screen bg-[#0A0A0A] shadow-2xl shadow-black flex flex-col pb-28 relative">
         
         {/* Cinematic Hero */}
         <div className="w-full h-[40vh] relative shrink-0">
@@ -308,9 +308,10 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
       </div>
 
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#0A0A0A]/80 backdrop-blur-md p-4 font-sans animate-in fade-in duration-300" onClick={() => setSelectedItem(null)}>
-          <div className="relative bg-[#111111] w-full max-w-md rounded-t-3xl shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.8)] overflow-hidden border border-zinc-800/50 flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-800 flex justify-between items-center bg-[#0A0A0A]">
+        <div className="fixed inset-x-0 bottom-0 sm:inset-0 z-50 flex items-end sm:items-center justify-center bg-[#0A0A0A]/80 backdrop-blur-md p-0 sm:p-4 font-sans animate-in fade-in duration-300" onClick={() => setSelectedItem(null)}>
+          <div className="relative bg-[#111111] w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.8)] overflow-hidden border border-zinc-800/50 flex flex-col max-h-[92vh]" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-1.5 bg-zinc-700 rounded-full mx-auto my-2 sm:hidden"></div>
+            <div className="p-4 sm:p-6 border-b border-zinc-800 flex justify-between items-center bg-[#0A0A0A]">
               <h2 className="text-xl font-serif text-white tracking-widest uppercase">Details</h2>
               <button onClick={() => setSelectedItem(null)} className="text-zinc-500 hover:text-white p-2 rounded-full transition-colors">
                 <X className="w-5 h-5" />

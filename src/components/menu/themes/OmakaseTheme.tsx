@@ -104,7 +104,7 @@ export function OmakaseTheme(props: MenuThemeProps) {
       </div>
 
       {/* Menu Content */}
-      <main className="max-w-2xl mx-auto px-6 pt-12 space-y-24">
+      <main className="max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 space-y-16 sm:space-y-24">
         {categories.map(cat => {
           const catItems = filteredItems.filter(i => i.category_id === cat.id);
           if (catItems.length === 0) return null;
@@ -169,8 +169,9 @@ export function OmakaseTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Omakase) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg" onClick={() => setters.setSelectedItem(null)}>
-          <div className="bg-[#0F0F0F] border border-[#222] w-full max-w-xl flex flex-col max-h-[90vh] relative" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-x-0 bottom-0 sm:inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/95 backdrop-blur-lg animate-in fade-in duration-300" onClick={() => setters.setSelectedItem(null)}>
+          <div className="bg-[#0F0F0F] border border-[#222] w-full sm:max-w-xl rounded-t-3xl sm:rounded-none flex flex-col max-h-[92vh] relative" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-1.5 bg-zinc-700 rounded-full mx-auto my-2 sm:hidden"></div>
             
             <button 
               onClick={() => setters.setSelectedItem(null)}

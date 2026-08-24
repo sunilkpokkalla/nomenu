@@ -160,8 +160,9 @@ export function EditorialTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Editorial) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-[#F9F8F6]/90 backdrop-blur-md" onClick={() => setters.setSelectedItem(null)}>
-          <div className="bg-white w-full max-w-5xl flex flex-col md:flex-row max-h-[95vh] shadow-2xl relative animate-in fade-in duration-500 overflow-hidden border border-[#E2DFD8]" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-x-0 bottom-0 sm:inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-[#F9F8F6]/90 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setters.setSelectedItem(null)}>
+          <div className="bg-white w-full sm:max-w-4xl max-h-[92vh] rounded-t-3xl sm:rounded-none flex flex-col md:flex-row shadow-2xl relative overflow-hidden border border-[#E2DFD8] animate-in slide-in-from-bottom sm:zoom-in-95 duration-300" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-1.5 bg-[#1A1918]/20 rounded-full mx-auto my-2 md:hidden"></div>
             
             <button onClick={() => setters.setSelectedItem(null)} className="absolute top-6 right-6 text-[#1A1918] hover:opacity-50 transition-opacity z-20 mix-blend-difference">
               <X size={28} strokeWidth={1} color="white" />

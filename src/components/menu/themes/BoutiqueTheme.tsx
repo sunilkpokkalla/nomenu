@@ -106,16 +106,16 @@ export function BoutiqueTheme(props: MenuThemeProps) {
                   </div>
                 </div>
 
-                {/* Horizontal Snap Scroll Container */}
-                <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none px-6 pb-8 gap-6">
+                {/* Horizontal Snap Scroll on Mobile / Grid on Desktop */}
+                <div className="flex sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory scrollbar-none px-4 sm:px-6 pb-8 gap-6">
                   {/* Spacer for mobile alignment */}
-                  <div className="w-1 shrink-0 lg:hidden"></div>
+                  <div className="w-1 shrink-0 sm:hidden"></div>
                   
                   {catItems.map((item) => (
                     <div 
                       key={item.id} 
                       onClick={() => setters.setSelectedItem(item)}
-                      className="snap-center shrink-0 w-[260px] sm:w-[300px] cursor-pointer group flex flex-col"
+                      className="snap-center shrink-0 w-[260px] sm:w-auto cursor-pointer group flex flex-col"
                     >
                       {/* Image Card */}
                       <div className="w-full aspect-square rounded-3xl overflow-hidden mb-4 relative shadow-md bg-white">

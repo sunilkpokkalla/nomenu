@@ -39,8 +39,8 @@ export function VibrantTheme({ restaurant, categories: rawCategories, items, tab
         className="pt-16 pb-12 px-6 rounded-b-[40px] mb-8 shadow-sm"
         style={{ backgroundColor: accentColor }}
       >
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
+        <div className="max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
             {restaurant.name}
           </h1>
           {restaurant.wifi_password && (
@@ -53,7 +53,7 @@ export function VibrantTheme({ restaurant, categories: rawCategories, items, tab
 
       {/* Navigation */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md pt-2 pb-4 border-b border-slate-100">
-        <div className="flex overflow-x-auto hide-scrollbar px-4 max-w-4xl mx-auto gap-3">
+        <div className="flex overflow-x-auto hide-scrollbar px-4 max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto gap-3">
           {categories.map((category) => (
             <button
               key={category.id}
@@ -77,7 +77,7 @@ export function VibrantTheme({ restaurant, categories: rawCategories, items, tab
       </div>
 
       {/* Menu Items */}
-      <main className="max-w-4xl mx-auto p-4 space-y-16 mt-8">
+      <main className="max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto p-4 sm:p-6 space-y-16 mt-6 sm:mt-8">
         {categories.map((category) => (
           <section key={category.id} id={`category-${category.id}`} className="scroll-mt-32">
             <h2 className="text-3xl font-black tracking-tight mb-8 text-slate-900 px-2">{category.name}</h2>

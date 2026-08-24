@@ -96,7 +96,7 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] font-serif selection:bg-orange-200">
-      <div className="mx-auto max-w-md min-h-screen bg-[#FDFBF7] shadow-xl shadow-stone-200/50 flex flex-col pb-28 relative">
+      <div className="mx-auto w-full max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl min-h-screen bg-[#FDFBF7] shadow-xl shadow-stone-200/50 flex flex-col pb-28 relative">
         
         {/* Soft Organic Header */}
         <div className="pt-16 pb-10 px-8 text-center relative shrink-0">
@@ -270,9 +270,10 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
       </div>
 
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#292524]/20 backdrop-blur-sm p-4 font-sans animate-in fade-in duration-300" onClick={() => setSelectedItem(null)}>
-          <div className="relative bg-[#FDFBF7] w-full max-w-md rounded-[2.5rem] shadow-2xl shadow-stone-200/50 flex flex-col max-h-[90vh] overflow-hidden border border-[#E7E5E4]" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-[#E7E5E4] flex justify-between items-center bg-[#FDFBF7]">
+        <div className="fixed inset-x-0 bottom-0 sm:inset-0 z-50 flex items-end sm:items-center justify-center bg-[#292524]/20 backdrop-blur-sm p-0 sm:p-4 font-sans animate-in fade-in duration-300" onClick={() => setSelectedItem(null)}>
+          <div className="relative bg-[#FDFBF7] w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl shadow-stone-200/50 flex flex-col max-h-[92vh] overflow-hidden border border-[#E7E5E4]" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-1.5 bg-[#292524]/20 rounded-full mx-auto my-2 sm:hidden"></div>
+            <div className="p-4 sm:p-6 border-b border-[#E7E5E4] flex justify-between items-center bg-[#FDFBF7]">
               <h2 className="text-xl font-serif text-[#292524]">Item Details</h2>
               <button onClick={() => setSelectedItem(null)} className="text-[#A8A29E] hover:text-[#292524] p-2 rounded-full transition-colors bg-stone-100 hover:bg-stone-200">
                 <X className="w-5 h-5" />

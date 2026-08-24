@@ -120,7 +120,7 @@ export function BistroTheme(props: MenuThemeProps) {
                 </div>
 
                 <div className={layoutMode === "grid" 
-                  ? "grid grid-cols-2 md:grid-cols-3 auto-rows-[250px] gap-x-8 gap-y-12" 
+                  ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-auto sm:auto-rows-[250px] gap-6 sm:gap-x-8 sm:gap-y-12" 
                   : "flex flex-col gap-8 max-w-3xl mx-auto"}>
                   
                   {catItems.map((item, index) => {
@@ -131,10 +131,10 @@ export function BistroTheme(props: MenuThemeProps) {
                       <div 
                         key={item.id} 
                         onClick={() => setters.setSelectedItem(item)}
-                        className={`group cursor-pointer flex ${layoutMode === "list" ? "flex-col sm:flex-row gap-6 items-center border-b border-[#EAE3D2] pb-8" : `${bentoClass} flex-col h-full`}`}
+                        className={`group cursor-pointer flex ${layoutMode === "list" ? "flex-col sm:flex-row gap-6 items-center border-b border-[#EAE3D2] pb-8" : `${bentoClass} flex-col h-full border-b sm:border-b-0 border-[#EAE3D2] pb-6 sm:pb-0`}`}
                       >
                         {item.image_url ? (
-                          <div className={`${layoutMode === "list" ? "w-full sm:w-48 h-48" : "w-full h-3/5 mb-4"} overflow-hidden relative grayscale-[20%] group-hover:grayscale-0 transition-all duration-700`}>
+                          <div className={`${layoutMode === "list" ? "w-full sm:w-48 h-48" : "w-full h-48 sm:h-3/5 mb-4"} overflow-hidden relative grayscale-[20%] group-hover:grayscale-0 transition-all duration-700`}>
                             <Image src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" fill />
                           </div>
                         ) : (
@@ -146,7 +146,7 @@ export function BistroTheme(props: MenuThemeProps) {
                           
                           <div>
                             <div className="flex justify-between items-baseline gap-4 mb-2">
-                              <h3 className={`font-normal tracking-wide text-[#1A1A1A] ${isGiant ? "text-3xl" : "text-xl"}`}>
+                              <h3 className={`font-normal tracking-wide text-[#1A1A1A] ${isGiant ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl"}`}>
                                 {item.name}
                               </h3>
                               <span className="font-sans text-sm tracking-widest text-[#666666] shrink-0">
@@ -179,9 +179,9 @@ export function BistroTheme(props: MenuThemeProps) {
 
       {/* Item Modal (Bistro) */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#FDFBF7]/90 backdrop-blur-sm" onClick={() => setters.setSelectedItem(null)}>
-          
-          <div className="bg-[#FDFBF7] w-full max-w-2xl max-h-[90vh] flex flex-col sm:flex-row shadow-[0_30px_60px_rgba(0,0,0,0.1)] border border-[#EAE3D2] overflow-hidden relative animate-in fade-in zoom-in-95 duration-500" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-x-0 bottom-0 sm:inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-[#FDFBF7]/90 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setters.setSelectedItem(null)}>
+          <div className="bg-[#FDFBF7] w-full sm:max-w-2xl max-h-[92vh] rounded-t-3xl sm:rounded-none flex flex-col sm:flex-row shadow-[0_30px_60px_rgba(0,0,0,0.15)] border border-[#EAE3D2] overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-300" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-1.5 bg-[#1A1A1A]/20 rounded-full mx-auto my-2 sm:hidden"></div>
             
             <button onClick={() => setters.setSelectedItem(null)} className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-[#1A1A1A] hover:bg-black hover:text-white p-2 rounded-full transition-colors z-20">
               <X size={20} strokeWidth={1} />

@@ -98,7 +98,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-zinc-100">
-      <div className="mx-auto max-w-md min-h-screen bg-white flex flex-col pb-28 relative">
+      <div className="mx-auto w-full max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl min-h-screen bg-white flex flex-col pb-28 relative">
         
         {/* Pure Minimal Header */}
         <div className="pt-20 pb-12 px-8 text-center relative shrink-0">
@@ -194,7 +194,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
                     )}
                   </div>
 
-                  <div className="grid gap-16">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-16">
                     {categoryItems.map((item, index) => {
                       const price = `${currencySign}${Number(item.price).toFixed(2)}`;
                       const isEven = index % 2 === 0;
@@ -260,8 +260,9 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
       </div>
 
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/95 backdrop-blur-md" onClick={() => setSelectedItem(null)}>
-          <div className="relative w-full max-w-xl flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-x-0 bottom-0 sm:inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-white/95 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setSelectedItem(null)}>
+          <div className="relative w-full sm:max-w-xl flex flex-col max-h-[92vh] rounded-t-3xl sm:rounded-none" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-1.5 bg-zinc-300 rounded-full mx-auto my-2 sm:hidden"></div>
             
             <button 
               onClick={() => setSelectedItem(null)}

@@ -49,7 +49,7 @@ export function ClassicTheme({ restaurant, categories: rawCategories, items, tab
 
       {/* Navigation */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-200 py-3 shadow-sm">
-        <div className="flex overflow-x-auto hide-scrollbar px-6 max-w-4xl mx-auto gap-4">
+        <div className="flex overflow-x-auto hide-scrollbar px-4 sm:px-6 max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto gap-3 sm:gap-4">
           {categories.map((category) => (
             <button
               key={category.id}
@@ -70,7 +70,7 @@ export function ClassicTheme({ restaurant, categories: rawCategories, items, tab
       </div>
 
       {/* Menu Items */}
-      <main className="max-w-4xl mx-auto p-6 mt-8 space-y-12">
+      <main className="max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto p-4 sm:p-6 mt-4 sm:mt-8 space-y-12">
         {categories.map((category) => (
           <section key={category.id} id={`category-${category.id}`} className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-6 text-gray-900 border-b border-gray-200 pb-2">{category.name}</h2>

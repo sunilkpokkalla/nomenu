@@ -36,11 +36,11 @@ export function ResortTheme(props: MenuThemeProps) {
     
     // 5-box asymmetric pattern
     const pattern = index % 5;
-    if (pattern === 0) return "col-span-2 row-span-2 md:col-span-2 md:row-span-2"; // Giant Hero Card
-    if (pattern === 1) return "col-span-1 row-span-1 md:col-span-1 md:row-span-1"; // Small square
-    if (pattern === 2) return "col-span-1 row-span-1 md:col-span-1 md:row-span-1"; // Small square
-    if (pattern === 3) return "col-span-2 md:col-span-2 row-span-1"; // Wide banner
-    if (pattern === 4) return "col-span-2 md:col-span-1 row-span-1"; // Medium square
+    if (pattern === 0) return "col-span-1 sm:col-span-2 row-span-1 sm:row-span-2"; // Giant Hero Card
+    if (pattern === 1) return "col-span-1 row-span-1"; // Small square
+    if (pattern === 2) return "col-span-1 row-span-1"; // Small square
+    if (pattern === 3) return "col-span-1 sm:col-span-2 row-span-1"; // Wide banner
+    if (pattern === 4) return "col-span-1 row-span-1"; // Medium square
     return "col-span-1 row-span-1";
   };
 
@@ -131,7 +131,7 @@ export function ResortTheme(props: MenuThemeProps) {
                 </div>
 
                 <div className={layoutMode === "grid" 
-                  ? "grid grid-cols-2 md:grid-cols-3 auto-rows-[220px] gap-4 sm:gap-6 grid-flow-dense" 
+                  ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 auto-rows-auto sm:auto-rows-[220px] gap-4 sm:gap-6 grid-flow-dense" 
                   : "flex flex-col gap-4 max-w-3xl mx-auto"}>
                   
                   {catItems.map((item, index) => {

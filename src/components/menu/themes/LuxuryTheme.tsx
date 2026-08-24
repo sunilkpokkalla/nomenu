@@ -35,8 +35,8 @@ export function LuxuryTheme({ restaurant, categories: rawCategories, items, tabl
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-[#FDFCF0] font-serif pb-32">
       {/* Header */}
-      <div className="pt-24 pb-16 px-6 max-w-4xl mx-auto text-center border-b border-white/10">
-        <h1 className="text-4xl md:text-5xl font-normal tracking-widest uppercase text-white mb-6" style={{ color: accentColor }}>
+      <div className="pt-16 sm:pt-24 pb-8 sm:pb-16 px-4 sm:px-6 max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto text-center border-b border-white/10">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-normal tracking-widest uppercase text-white mb-4 sm:mb-6" style={{ color: accentColor }}>
           {restaurant.name}
         </h1>
         {restaurant.wifi_password && (
@@ -48,7 +48,7 @@ export function LuxuryTheme({ restaurant, categories: rawCategories, items, tabl
 
       {/* Navigation */}
       <div className="sticky top-0 z-40 bg-[#0F0F0F]/95 backdrop-blur-md border-b border-white/10">
-        <div className="flex overflow-x-auto hide-scrollbar px-6 py-5 max-w-4xl mx-auto gap-10 justify-center">
+        <div className="flex overflow-x-auto hide-scrollbar px-4 sm:px-6 py-4 sm:py-5 max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto gap-6 sm:gap-10 justify-start sm:justify-center">
           {categories.map((category) => (
             <button
               key={category.id}
@@ -72,7 +72,7 @@ export function LuxuryTheme({ restaurant, categories: rawCategories, items, tabl
       </div>
 
       {/* Menu Items */}
-      <main className="max-w-4xl mx-auto p-6 space-y-32 mt-16">
+      <main className="max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto p-4 sm:p-6 space-y-16 sm:space-y-32 mt-8 sm:mt-16">
         {categories.map((category) => (
           <section key={category.id} id={`category-${category.id}`} className="scroll-mt-32">
             <h2 className="text-2xl italic tracking-wide mb-16 text-center text-white/80">

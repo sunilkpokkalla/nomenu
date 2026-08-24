@@ -167,8 +167,9 @@ export function PopDinerTheme(props: MenuThemeProps) {
 
       {/* Pop Diner Item Modal */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={() => setters.setSelectedItem(null)}>
-          <div className="bg-white w-full max-w-2xl max-h-[90vh] rounded-3xl border-4 border-slate-900 shadow-[12px_12px_0px_0px_rgba(225,29,72,1)] flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-x-0 bottom-0 sm:inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setters.setSelectedItem(null)}>
+          <div className="bg-white w-full sm:max-w-2xl max-h-[92vh] rounded-t-3xl sm:rounded-3xl border-t-4 sm:border-4 border-slate-900 shadow-[0_-10px_30px_rgba(0,0,0,0.2)] sm:shadow-[12px_12px_0px_0px_rgba(225,29,72,1)] flex flex-col relative overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300" onClick={(e) => e.stopPropagation()}>
+            <div className="w-12 h-1.5 bg-slate-400 rounded-full mx-auto my-2 sm:hidden"></div>
             
             <button 
               onClick={() => setters.setSelectedItem(null)} 

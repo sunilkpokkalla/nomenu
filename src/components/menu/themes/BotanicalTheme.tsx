@@ -63,7 +63,7 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
 
       {/* Earthy Navigation */}
       <div className="sticky top-0 z-40 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#EAE3D2]">
-        <div className="flex overflow-x-auto hide-scrollbar px-4 py-4 max-w-4xl mx-auto gap-8">
+        <div className="flex overflow-x-auto hide-scrollbar px-4 sm:px-6 py-4 max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto gap-6 sm:gap-8">
           {categories.map((category) => (
             <button
               key={category.id}
@@ -83,7 +83,7 @@ export function BotanicalTheme({ restaurant, categories: rawCategories, items, t
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto p-4 sm:p-8 space-y-24 mt-8">
+      <main className="max-w-full sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto p-4 sm:p-8 space-y-16 sm:space-y-24 mt-6 sm:mt-8">
         {categories.map((category) => (
           <section key={category.id} id={`category-${category.id}`} className="scroll-mt-32">
             <div className="mb-12 text-center">
