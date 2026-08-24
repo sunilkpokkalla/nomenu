@@ -211,11 +211,11 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
                           className="group cursor-pointer flex flex-col gap-6"
                         >
                           {item.image_url && (
-                            <div className="w-full aspect-square bg-zinc-50 relative">
+                            <div className="w-full aspect-square bg-zinc-50 relative overflow-hidden rounded-xl">
                               <Image 
                                 src={item.image_url} 
                                 alt={item.name} 
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out grayscale-[20%]" 
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
                                 fill 
                               />
                             </div>
@@ -279,8 +279,8 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
             <div className="p-8 sm:p-12 flex flex-col flex-grow overflow-y-auto bg-white border border-zinc-100 shadow-2xl">
               
               {selectedItem.image_url && (
-                <div className="w-full h-64 mb-10 overflow-hidden bg-zinc-50 relative">
-                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover grayscale-[20%]" fill />
+                <div className="w-full aspect-video sm:aspect-[16/10] mb-8 overflow-hidden bg-zinc-50 relative rounded-2xl border border-zinc-100 shadow-lg">
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" fill />
                 </div>
               )}
               

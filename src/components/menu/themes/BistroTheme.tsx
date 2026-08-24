@@ -188,7 +188,7 @@ export function BistroTheme(props: MenuThemeProps) {
             </button>
             
             {selectedItem.image_url && (
-              <div className="w-full sm:w-1/2 h-64 sm:h-auto relative grayscale-[10%]">
+              <div className="w-full sm:w-1/2 h-64 sm:h-auto relative">
                 <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" fill />
               </div>
             )}
