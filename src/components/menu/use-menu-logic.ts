@@ -38,6 +38,11 @@ export function useMenuLogic(categories: Category[], items: MenuItem[]) {
   const isScrolling = useRef(false);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  const activeCategoryRef = useRef(activeCategory);
+  useEffect(() => {
+    activeCategoryRef.current = activeCategory;
+  }, [activeCategory]);
+
   // Set up active category scrolling highlights
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +57,7 @@ export function useMenuLogic(categories: Category[], items: MenuItem[]) {
         }
       }
       
-      if (currentCategory && currentCategory !== activeCategory) {
+      if (currentCategory && currentCategory !== activeCategoryRef.current) {
         setActiveCategory(currentCategory);
         // Center the active pill in the horizontal scrolling menu
         const activeNavEl = document.getElementById(`nav-pill-${currentCategory}`);
@@ -64,13 +69,13 @@ export function useMenuLogic(categories: Category[], items: MenuItem[]) {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     // Trigger initial run
-    if (categories.length > 0 && !activeCategory) {
+    if (categories.length > 0 && !activeCategoryRef.current) {
       setActiveCategory(categories[0].id);
     }
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeCategory, categories]);
+  }, [categories]);
 
   // Smooth scroll handler to categories
   const scrollToCategory = (catId: string) => {

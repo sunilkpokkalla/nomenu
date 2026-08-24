@@ -41,6 +41,11 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
   const isScrolling = useRef(false);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  const activeCategoryRef = useRef(activeCategory);
+  useEffect(() => {
+    activeCategoryRef.current = activeCategory;
+  }, [activeCategory]);
+
   useEffect(() => {
     const handleScroll = () => {
       if (isScrolling.current) return;
@@ -54,7 +59,7 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
         }
       }
       
-      if (currentCategory && currentCategory !== activeCategory) {
+      if (currentCategory && currentCategory !== activeCategoryRef.current) {
         setActiveCategory(currentCategory);
         const activeNavEl = document.getElementById(`nav-pill-${currentCategory}`);
         if (activeNavEl && categoryNavRef.current) {
@@ -65,12 +70,12 @@ export function BrasserieTheme({ restaurant, categories, items, tableNumber, qrC
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    if (categories.length > 0) {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    if (categories.length > 0 && !activeCategoryRef.current) {
       setActiveCategory(categories[0].id);
     }
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeCategory, categories]);
+  }, [categories]);
 
   const scrollToCategory = (catId: string) => {
     setActiveCategory(catId);

@@ -53,6 +53,11 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
   const isScrolling = useRef(false);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  const activeCategoryRef = useRef(activeCategory);
+  useEffect(() => {
+    activeCategoryRef.current = activeCategory;
+  }, [activeCategory]);
+
   // Setup active category scrolling highlights
   useEffect(() => {
     const handleScroll = () => {
@@ -67,7 +72,7 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
         }
       }
       
-      if (currentCategory && currentCategory !== activeCategory) {
+      if (currentCategory && currentCategory !== activeCategoryRef.current) {
         setActiveCategory(currentCategory);
         const activeNavEl = document.getElementById(`nav-pill-${currentCategory}`);
         if (activeNavEl && categoryNavRef.current) {
@@ -78,12 +83,12 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    if (categories.length > 0) {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    if (categories.length > 0 && !activeCategoryRef.current) {
       setActiveCategory(categories[0].id);
     }
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeCategory, categories]);
+  }, [categories]);
 
   const scrollToCategory = (catId: string) => {
     setActiveCategory(catId);
