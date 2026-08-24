@@ -20,6 +20,7 @@ const BotanicalTheme = dynamic(() => import("./themes/BotanicalTheme").then(mod 
 const MinimalistTheme = dynamic(() => import("./themes/MinimalistTheme").then(mod => mod.MinimalistTheme));
 const LuxuryTheme = dynamic(() => import("./themes/LuxuryTheme").then(mod => mod.LuxuryTheme));
 const VibrantTheme = dynamic(() => import("./themes/VibrantTheme").then(mod => mod.VibrantTheme));
+const CyberNeonTheme = dynamic(() => import("./themes/CyberNeonTheme").then(mod => mod.CyberNeonTheme));
 
 
 
@@ -151,6 +152,7 @@ export function MenuClientView(props: MenuClientViewProps) {
       case "minimalist": return <MinimalistTheme {...tProps} />;
       case "luxury": return <LuxuryTheme {...tProps} />;
       case "vibrant": return <VibrantTheme {...tProps} />;
+      case "cyberneon": return <CyberNeonTheme {...tProps} />;
       default: return <ClassicTheme {...tProps} />;
     }
   };
