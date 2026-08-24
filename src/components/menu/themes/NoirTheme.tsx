@@ -325,8 +325,8 @@ export function NoirTheme({ restaurant, categories, items, tableNumber, qrCodeId
             
             <div className="overflow-y-auto flex-grow bg-[#0A0A0A] pb-8">
               {selectedItem.image_url && (
-                <div className="w-full aspect-video relative bg-zinc-900 border-b border-zinc-800">
-                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover opacity-80" fill />
+                <div className="w-full aspect-[4/3] sm:aspect-[16/11] relative bg-zinc-900 border-b border-zinc-800">
+                  <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" fill />
                 </div>
               )}
               

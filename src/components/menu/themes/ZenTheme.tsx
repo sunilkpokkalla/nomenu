@@ -279,7 +279,7 @@ export function ZenTheme({ restaurant, categories, items, tableNumber, qrCodeId 
             <div className="p-8 sm:p-12 flex flex-col flex-grow overflow-y-auto bg-white border border-zinc-100 shadow-2xl">
               
               {selectedItem.image_url && (
-                <div className="w-full aspect-video sm:aspect-[16/10] mb-8 overflow-hidden bg-zinc-50 relative rounded-2xl border border-zinc-100 shadow-lg">
+                <div className="w-full aspect-[4/3] sm:aspect-[16/11] mb-8 overflow-hidden bg-zinc-50 relative rounded-2xl border border-zinc-100 shadow-xl">
                   <Image src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-full object-cover" fill />
                 </div>
               )}
