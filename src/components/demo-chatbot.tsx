@@ -110,13 +110,20 @@ export function DemoChatbot({ floatingOnly = false }: { floatingOnly?: boolean }
       )}
 
       {/* Floating Wrapper in Corner */}
-      <div 
-        className={`fixed inset-0 pointer-events-none z-[9999] flex items-end justify-end sm:p-6 p-0 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
-      >
-        {/* Chat Window */}
+      {isOpen && (
         <div 
-          className={`pointer-events-auto w-full h-full sm:w-[400px] sm:max-w-[calc(100vw-2rem)] sm:h-[640px] sm:max-h-[calc(100vh-2rem)] bg-white rounded-none sm:rounded-[24px] shadow-2xl border-0 sm:border border-slate-200 flex flex-col overflow-hidden transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-4 opacity-0 pointer-events-none'}`}
+          className="fixed inset-0 z-[9999] flex items-end sm:items-end justify-end p-0 sm:p-6 transition-all duration-300 animate-in fade-in duration-200"
         >
+          {/* Mobile Backdrop Overlay */}
+          <div 
+            className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs sm:hidden"
+            onClick={() => setIsOpen(false)}
+          />
+
+          {/* Chat Window */}
+          <div 
+            className="relative z-10 w-full h-[90vh] sm:w-[400px] sm:max-w-[calc(100vw-2rem)] sm:h-[640px] sm:max-h-[calc(100vh-2rem)] bg-white rounded-t-3xl sm:rounded-[24px] shadow-2xl border-0 sm:border border-slate-200 flex flex-col overflow-hidden transition-all duration-300"
+          >
           {/* Header */}
           <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white px-5 py-4 flex items-center justify-between shrink-0 border-b border-indigo-950/20 relative overflow-hidden">
             {/* Subtle glow line at top */}
@@ -325,6 +332,7 @@ export function DemoChatbot({ floatingOnly = false }: { floatingOnly?: boolean }
           )}
         </div>
       </div>
-    </>
+    )}
+  </>
   );
 }

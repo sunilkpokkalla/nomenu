@@ -255,6 +255,7 @@ export default function LandingPage() {
               <a href="#how-it-works" className="hover:text-slate-900 transition-colors duration-200">How it Works</a>
               <a href="#compare" className="hover:text-slate-900 transition-colors duration-200">Compare</a>
               <a href="#pricing" className="hover:text-slate-900 transition-colors duration-200">Pricing</a>
+              <Link href="/demo" className="hover:text-indigo-600 text-indigo-600 font-extrabold transition-colors duration-200">Demo</Link>
               <Link href="/blog" className="hover:text-indigo-600 text-indigo-500 transition-colors duration-200">Blog</Link>
             </nav>
           </div>
@@ -283,12 +284,16 @@ export default function LandingPage() {
         {mobileMenuOpen && (
           <div className="absolute top-16 left-0 right-0 border border-slate-200 bg-white/95 backdrop-blur-lg rounded-3xl p-6 space-y-4 shadow-xl animate-in fade-in slide-in-from-top duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]">
             <nav className="flex flex-col gap-3 text-sm font-bold text-slate-600">
+              <Link href="/demo" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors flex items-center justify-between">
+                <span>Watch Demo</span>
+                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md bg-indigo-600 text-white font-extrabold">LIVE</span>
+              </Link>
               <a href="#features" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-50 transition-colors">Features</a>
               <a href="#loyalty" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl text-amber-600 bg-amber-50 hover:bg-amber-100 transition-colors">Loyalty</a>
               <a href="#themes" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-50 transition-colors">QR Templates</a>
               <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-50 transition-colors">Pricing</a>
               <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl hover:bg-slate-50 transition-colors">How it Works</a>
-              <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors">Blog</Link>
+              <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className="px-4 py-2.5 rounded-xl text-slate-700 hover:bg-slate-50 transition-colors">Blog</Link>
             </nav>
             <hr className="border-slate-100" />
             <div className="flex flex-col gap-2.5">
