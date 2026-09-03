@@ -126,21 +126,30 @@ export default function PartnersLandingPage() {
           </div>
 
           <div className="grid sm:grid-cols-3 gap-6">
-            <div className="bg-white rounded-3xl p-8 border border-slate-200 text-center shadow-sm">
-              <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Pro Plan</h3>
-              <div className="text-4xl font-black text-slate-950 mb-4">$19</div>
-              <p className="text-sm text-slate-500 font-medium">Earned per restaurant</p>
+            <div className="bg-white rounded-3xl p-8 border border-slate-200 text-center shadow-sm flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Pro Plan</h3>
+                <div className="text-4xl font-black text-slate-950 mb-2">$35</div>
+                <p className="text-xs text-amber-600 font-bold uppercase tracking-wider mb-4">Cash Bounty</p>
+              </div>
+              <p className="text-xs text-slate-500 font-medium border-t border-slate-100 pt-4">Earned when referred restaurant upgrades to Pro Annual ($19/mo)</p>
             </div>
-            <div className="bg-white rounded-3xl p-8 border-2 border-amber-400 text-center shadow-xl shadow-amber-500/5 relative scale-105">
+            <div className="bg-white rounded-3xl p-8 border-2 border-amber-400 text-center shadow-xl shadow-amber-500/5 relative scale-105 flex flex-col justify-between">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-400 text-amber-950 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">Most Popular</div>
-              <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Elite Plan</h3>
-              <div className="text-5xl font-black text-slate-950 mb-4">$49</div>
-              <p className="text-sm text-slate-500 font-medium">Earned per restaurant</p>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Elite Plan</h3>
+                <div className="text-5xl font-black text-slate-950 mb-2">$75</div>
+                <p className="text-xs text-amber-600 font-bold uppercase tracking-wider mb-4">Cash Bounty</p>
+              </div>
+              <p className="text-xs text-slate-500 font-medium border-t border-slate-100 pt-4">Earned when referred restaurant upgrades to Elite Annual ($49/mo)</p>
             </div>
-            <div className="bg-white rounded-3xl p-8 border border-slate-200 text-center shadow-sm">
-              <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Enterprise Plan</h3>
-              <div className="text-4xl font-black text-slate-950 mb-4">$79</div>
-              <p className="text-sm text-slate-500 font-medium">Earned per restaurant</p>
+            <div className="bg-white rounded-3xl p-8 border border-slate-200 text-center shadow-sm flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wider mb-2">Enterprise Plan</h3>
+                <div className="text-4xl font-black text-slate-950 mb-2">$100</div>
+                <p className="text-xs text-amber-600 font-bold uppercase tracking-wider mb-4">Cash Bounty</p>
+              </div>
+              <p className="text-xs text-slate-500 font-medium border-t border-slate-100 pt-4">Earned when referred restaurant upgrades to Enterprise Annual ($79/mo)</p>
             </div>
           </div>
         </div>
