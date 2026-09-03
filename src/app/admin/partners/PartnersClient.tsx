@@ -221,29 +221,47 @@ export function PartnersClient({ pending, approved, rejected }: PartnersClientPr
                   <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-xs border-b border-slate-100">
                     <tr>
                       <th className="px-6 py-4">Partner</th>
-                      <th className="px-6 py-4">Code</th>
-                      <th className="px-6 py-4">Stripe</th>
+                      <th className="px-6 py-4">Details</th>
+                      <th className="px-6 py-4">Strategy</th>
+                      <th className="px-6 py-4">Code & Stripe</th>
                       <th className="px-6 py-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {filteredApproved.map((p) => (
                       <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="px-6 py-4">
+                        <td className="px-6 py-4 align-top">
                           <p className="font-bold text-slate-900">{p.name}</p>
-                          <p className="text-slate-500 text-xs">{p.email}</p>
+                          <a href={`mailto:${p.email}`} className="text-blue-600 text-xs hover:underline block mt-0.5">{p.email}</a>
+                          {p.phone && <p className="text-xs text-slate-500 font-medium mt-0.5">{p.phone}</p>}
+                          <div className="mt-2 text-[11px] text-slate-400 font-medium">
+                            Joined {p.created_at ? formatDistanceToNow(new Date(p.created_at), { addSuffix: true }) : 'N/A'}
+                          </div>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="font-mono font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs">{p.referral_code}</span>
+                        <td className="px-6 py-4 align-top text-xs space-y-2">
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Exp:</span> <span className="font-medium text-slate-700">{p.expertise || "N/A"}</span></p>
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Size:</span> <span className="font-medium text-slate-700">{p.social_influence || "N/A"}</span></p>
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Loc:</span> <span className="font-medium text-slate-700">{p.location || "N/A"}</span></p>
+                          <p className="truncate max-w-[150px]" title={p.social_media_details || ""}><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Link:</span> <span className="font-medium text-slate-700">{p.social_media_details || "N/A"}</span></p>
                         </td>
-                        <td className="px-6 py-4">
-                          {p.stripe_account_id ? (
-                            <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">Connected</Badge>
-                          ) : (
-                            <Badge variant="outline" className="text-slate-400 border-slate-200">Pending</Badge>
-                          )}
+                        <td className="px-6 py-4 align-top">
+                          <p className="text-slate-600 italic text-xs max-w-[250px] line-clamp-4 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100" title={p.purpose || "N/A"}>
+                            "{p.purpose || "N/A"}"
+                          </p>
                         </td>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-6 py-4 align-top space-y-2">
+                          <div>
+                            <span className="font-mono font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs">{p.referral_code}</span>
+                          </div>
+                          <div>
+                            {p.stripe_account_id ? (
+                              <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">Stripe Connected</Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-slate-400 border-slate-200">Stripe Pending</Badge>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 align-top text-right">
                           <RejectPartnerForm id={p.id} email={p.email} label="Revoke" />
                         </td>
                       </tr>
@@ -272,19 +290,51 @@ export function PartnersClient({ pending, approved, rejected }: PartnersClientPr
               <p className="text-slate-500 text-sm mt-1">There are no rejected applications to show.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-wrap gap-3">
-              {filteredRejected.map((p) => (
-                <div key={p.id} className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm min-w-[250px] flex-1 max-w-sm">
-                  <span className="font-bold text-slate-900 block">{p.name}</span> 
-                  <span className="text-slate-500 text-xs block mb-3">{p.email}</span>
-                  
-                  <form action={approvePartnerAction.bind(null, p.id, p.email)}>
-                    <Button variant="outline" size="sm" className="w-full h-8 text-xs bg-white font-bold text-slate-700 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50">
-                      Undo & Approve
-                    </Button>
-                  </form>
-                </div>
-              ))}
+            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-xs border-b border-slate-100">
+                    <tr>
+                      <th className="px-6 py-4">Partner</th>
+                      <th className="px-6 py-4">Details</th>
+                      <th className="px-6 py-4">Strategy</th>
+                      <th className="px-6 py-4">Code</th>
+                      <th className="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {filteredRejected.map((p) => (
+                      <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-6 py-4 align-top">
+                          <p className="font-bold text-slate-900">{p.name}</p>
+                          <a href={`mailto:${p.email}`} className="text-blue-600 text-xs hover:underline block mt-0.5">{p.email}</a>
+                          {p.phone && <p className="text-xs text-slate-500 font-medium mt-0.5">{p.phone}</p>}
+                        </td>
+                        <td className="px-6 py-4 align-top text-xs space-y-2">
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Exp:</span> <span className="font-medium text-slate-700">{p.expertise || "N/A"}</span></p>
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Size:</span> <span className="font-medium text-slate-700">{p.social_influence || "N/A"}</span></p>
+                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Loc:</span> <span className="font-medium text-slate-700">{p.location || "N/A"}</span></p>
+                        </td>
+                        <td className="px-6 py-4 align-top">
+                          <p className="text-slate-600 italic text-xs max-w-[250px] line-clamp-4 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100" title={p.purpose || "N/A"}>
+                            "{p.purpose || "N/A"}"
+                          </p>
+                        </td>
+                        <td className="px-6 py-4 align-top">
+                          <span className="font-mono font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs">{p.referral_code}</span>
+                        </td>
+                        <td className="px-6 py-4 align-top text-right">
+                          <form action={approvePartnerAction.bind(null, p.id, p.email)}>
+                            <Button variant="outline" size="sm" className="h-8 text-xs bg-white font-bold text-slate-700 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50">
+                              Undo & Approve
+                            </Button>
+                          </form>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
