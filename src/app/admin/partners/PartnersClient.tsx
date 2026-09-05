@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
-import { createBrowserClient } from "@supabase/ssr";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Check, Search, UserPlus, X } from "lucide-react";
+import { Check, Search, UserPlus, X, Mail, Phone, Calendar, Briefcase, Users, MapPin, Globe, ExternalLink } from "lucide-react";
 import { approvePartnerAction, manuallyCreatePartnerAction } from "./actions";
 import { RejectPartnerForm } from "./RejectPartnerForm";
 
@@ -61,7 +60,6 @@ export function PartnersClient({ pending, approved, rejected }: PartnersClientPr
     try {
       await manuallyCreatePartnerAction(formData);
       setIsInviteModalOpen(false);
-      // Optional: show a success toast here
     } catch (err) {
       console.error(err);
       toast.error("Failed to invite partner");
@@ -69,6 +67,135 @@ export function PartnersClient({ pending, approved, rejected }: PartnersClientPr
       setIsSubmitting(false);
     }
   }
+
+  const renderPartnerCard = (p: Partner, tabStatus: "pending" | "approved" | "rejected") => {
+    return (
+      <div key={p.id} className="bg-white rounded-3xl border border-slate-200/80 p-6 md:p-8 shadow-sm hover:shadow-md transition-all space-y-6">
+        {/* Top Row: Partner Profile, Code, Status & Actions */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div className="flex items-start md:items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 font-extrabold text-lg flex items-center justify-center border border-indigo-100 shadow-inner shrink-0">
+              {p.name ? p.name.charAt(0).toUpperCase() : "P"}
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h3 className="text-xl font-bold text-slate-900">{p.name}</h3>
+                <span className="font-mono text-xs font-black bg-slate-100 text-slate-800 px-3 py-1 rounded-lg border border-slate-200/80">
+                  {p.referral_code}
+                </span>
+                {tabStatus === "approved" && (
+                  p.stripe_account_id ? (
+                    <Badge variant="outline" className="text-emerald-700 border-emerald-300 bg-emerald-50 font-bold text-[11px] px-2.5 py-0.5">
+                      Stripe Connected
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="text-amber-700 border-amber-200 bg-amber-50 font-bold text-[11px] px-2.5 py-0.5">
+                      Stripe Pending
+                    </Badge>
+                  )
+                )}
+                {tabStatus === "pending" && (
+                  <Badge variant="outline" className="text-amber-700 border-amber-200 bg-amber-50 font-bold text-[11px] px-2.5 py-0.5">
+                    Needs Review
+                  </Badge>
+                )}
+                {tabStatus === "rejected" && (
+                  <Badge variant="outline" className="text-rose-700 border-rose-200 bg-rose-50 font-bold text-[11px] px-2.5 py-0.5">
+                    Rejected
+                  </Badge>
+                )}
+              </div>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 font-medium mt-1.5">
+                <a href={`mailto:${p.email}`} className="text-indigo-600 font-bold hover:underline flex items-center gap-1">
+                  <Mail className="w-3.5 h-3.5" /> {p.email}
+                </a>
+                {p.phone && (
+                  <span className="flex items-center gap-1 text-slate-600">
+                    • <Phone className="w-3.5 h-3.5 text-slate-400" /> {p.phone}
+                  </span>
+                )}
+                <span className="flex items-center gap-1 text-slate-400">
+                  • <Calendar className="w-3.5 h-3.5" /> Applied {p.created_at ? formatDistanceToNow(new Date(p.created_at), { addSuffix: true }) : 'N/A'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {tabStatus === "pending" && (
+              <>
+                <form action={approvePartnerAction.bind(null, p.id, p.email)}>
+                  <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-9 px-4 rounded-xl shadow-sm" type="submit">
+                    <Check className="w-4 h-4 mr-1.5" /> Approve
+                  </Button>
+                </form>
+                <RejectPartnerForm id={p.id} email={p.email} label="Reject" />
+              </>
+            )}
+            {tabStatus === "approved" && (
+              <RejectPartnerForm id={p.id} email={p.email} label="Revoke Access" />
+            )}
+            {tabStatus === "rejected" && (
+              <form action={approvePartnerAction.bind(null, p.id, p.email)}>
+                <Button variant="outline" size="sm" className="h-9 px-4 text-xs bg-white font-bold text-slate-700 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50 rounded-xl">
+                  Undo & Approve
+                </Button>
+              </form>
+            )}
+          </div>
+        </div>
+
+        {/* Grid of Metadata */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-slate-50/80 p-4.5 rounded-2xl border border-slate-100">
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1 mb-1">
+              <Briefcase className="w-3 h-3" /> Expertise / Role
+            </span>
+            <span className="text-xs font-bold text-slate-800 leading-snug block">{p.expertise || "N/A"}</span>
+          </div>
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1 mb-1">
+              <Users className="w-3 h-3" /> Audience / Reach
+            </span>
+            <span className="text-xs font-bold text-slate-800 leading-snug block">{p.social_influence || "N/A"}</span>
+          </div>
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1 mb-1">
+              <MapPin className="w-3 h-3" /> Location
+            </span>
+            <span className="text-xs font-bold text-slate-800 leading-snug block">{p.location || "N/A"}</span>
+          </div>
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1 mb-1">
+              <Globe className="w-3 h-3" /> Website / Social Link
+            </span>
+            {p.social_media_details ? (
+              <a 
+                href={p.social_media_details.startsWith("http") ? p.social_media_details : `https://${p.social_media_details}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs font-bold text-indigo-600 hover:underline inline-flex items-center gap-1 break-all"
+              >
+                {p.social_media_details} <ExternalLink className="w-3 h-3 shrink-0" />
+              </a>
+            ) : (
+              <span className="text-xs font-medium text-slate-400">N/A</span>
+            )}
+          </div>
+        </div>
+
+        {/* Strategy / Purpose Section (FULL UNCUT TEXT) */}
+        <div>
+          <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2">
+            Strategy & Audience Pitch
+          </span>
+          <div className="bg-slate-50/90 p-4 rounded-2xl border border-slate-200/70 text-slate-800 text-sm leading-relaxed font-normal whitespace-pre-wrap">
+            {p.purpose ? `"${p.purpose}"` : "No strategy statement provided."}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -141,57 +268,8 @@ export function PartnersClient({ pending, approved, rejected }: PartnersClientPr
               <p className="text-slate-500 text-sm mt-1">There are no pending applications waiting for your review.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-xs border-b border-slate-100">
-                    <tr>
-                      <th className="px-6 py-4">Partner</th>
-                      <th className="px-6 py-4">Details</th>
-                      <th className="px-6 py-4">Strategy</th>
-                      <th className="px-6 py-4">Code</th>
-                      <th className="px-6 py-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {filteredPending.map((p) => (
-                      <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="px-6 py-4 align-top">
-                          <p className="font-bold text-slate-900">{p.name}</p>
-                          <a href={`mailto:${p.email}`} className="text-blue-600 text-xs hover:underline block mt-0.5">{p.email}</a>
-                          <div className="mt-3 text-[11px] text-slate-400 font-medium">
-                            Applied {p.created_at ? formatDistanceToNow(new Date(p.created_at), { addSuffix: true }) : 'N/A'}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 align-top text-xs space-y-2">
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Exp:</span> <span className="font-medium text-slate-700">{p.expertise || "N/A"}</span></p>
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Size:</span> <span className="font-medium text-slate-700">{p.social_influence || "N/A"}</span></p>
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Loc:</span> <span className="font-medium text-slate-700">{p.location || "N/A"}</span></p>
-                          <p className="truncate max-w-[150px]" title={p.social_media_details || ""}><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Link:</span> <span className="font-medium text-slate-700">{p.social_media_details || "N/A"}</span></p>
-                        </td>
-                        <td className="px-6 py-4 align-top">
-                          <p className="text-slate-600 italic text-xs max-w-[250px] line-clamp-4 leading-relaxed bg-slate-50 p-2 rounded-lg border border-slate-100" title={p.purpose || "N/A"}>
-                            "{p.purpose || "N/A"}"
-                          </p>
-                        </td>
-                        <td className="px-6 py-4 align-top">
-                          <span className="font-mono font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-md text-xs">{p.referral_code}</span>
-                        </td>
-                        <td className="px-6 py-4 align-top text-right">
-                          <div className="flex flex-col items-end gap-2">
-                            <form action={approvePartnerAction.bind(null, p.id, p.email)}>
-                              <Button size="sm" className="w-28 bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-8 rounded-lg" type="submit">
-                                <Check className="w-4 h-4 mr-1" /> Approve
-                              </Button>
-                            </form>
-                            <RejectPartnerForm id={p.id} email={p.email} label="Reject" />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <div className="space-y-4">
+              {filteredPending.map((p) => renderPartnerCard(p, "pending"))}
             </div>
           )}
         </div>
@@ -215,60 +293,8 @@ export function PartnersClient({ pending, approved, rejected }: PartnersClientPr
               </p>
             </div>
           ) : (
-            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-xs border-b border-slate-100">
-                    <tr>
-                      <th className="px-6 py-4">Partner</th>
-                      <th className="px-6 py-4">Details</th>
-                      <th className="px-6 py-4">Strategy</th>
-                      <th className="px-6 py-4">Code & Stripe</th>
-                      <th className="px-6 py-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {filteredApproved.map((p) => (
-                      <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="px-6 py-4 align-top">
-                          <p className="font-bold text-slate-900">{p.name}</p>
-                          <a href={`mailto:${p.email}`} className="text-blue-600 text-xs hover:underline block mt-0.5">{p.email}</a>
-                          {p.phone && <p className="text-xs text-slate-500 font-medium mt-0.5">{p.phone}</p>}
-                          <div className="mt-2 text-[11px] text-slate-400 font-medium">
-                            Joined {p.created_at ? formatDistanceToNow(new Date(p.created_at), { addSuffix: true }) : 'N/A'}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 align-top text-xs space-y-2">
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Exp:</span> <span className="font-medium text-slate-700">{p.expertise || "N/A"}</span></p>
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Size:</span> <span className="font-medium text-slate-700">{p.social_influence || "N/A"}</span></p>
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Loc:</span> <span className="font-medium text-slate-700">{p.location || "N/A"}</span></p>
-                          <p className="truncate max-w-[150px]" title={p.social_media_details || ""}><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Link:</span> <span className="font-medium text-slate-700">{p.social_media_details || "N/A"}</span></p>
-                        </td>
-                        <td className="px-6 py-4 align-top">
-                          <p className="text-slate-600 italic text-xs max-w-[250px] line-clamp-4 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100" title={p.purpose || "N/A"}>
-                            "{p.purpose || "N/A"}"
-                          </p>
-                        </td>
-                        <td className="px-6 py-4 align-top space-y-2">
-                          <div>
-                            <span className="font-mono font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs">{p.referral_code}</span>
-                          </div>
-                          <div>
-                            {p.stripe_account_id ? (
-                              <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">Stripe Connected</Badge>
-                            ) : (
-                              <Badge variant="outline" className="text-slate-400 border-slate-200">Stripe Pending</Badge>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 align-top text-right">
-                          <RejectPartnerForm id={p.id} email={p.email} label="Revoke" />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <div className="space-y-4">
+              {filteredApproved.map((p) => renderPartnerCard(p, "approved"))}
             </div>
           )}
         </div>
@@ -290,51 +316,8 @@ export function PartnersClient({ pending, approved, rejected }: PartnersClientPr
               <p className="text-slate-500 text-sm mt-1">There are no rejected applications to show.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-xs border-b border-slate-100">
-                    <tr>
-                      <th className="px-6 py-4">Partner</th>
-                      <th className="px-6 py-4">Details</th>
-                      <th className="px-6 py-4">Strategy</th>
-                      <th className="px-6 py-4">Code</th>
-                      <th className="px-6 py-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {filteredRejected.map((p) => (
-                      <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="px-6 py-4 align-top">
-                          <p className="font-bold text-slate-900">{p.name}</p>
-                          <a href={`mailto:${p.email}`} className="text-blue-600 text-xs hover:underline block mt-0.5">{p.email}</a>
-                          {p.phone && <p className="text-xs text-slate-500 font-medium mt-0.5">{p.phone}</p>}
-                        </td>
-                        <td className="px-6 py-4 align-top text-xs space-y-2">
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Exp:</span> <span className="font-medium text-slate-700">{p.expertise || "N/A"}</span></p>
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Size:</span> <span className="font-medium text-slate-700">{p.social_influence || "N/A"}</span></p>
-                          <p><span className="font-bold text-slate-400 uppercase tracking-wider text-[10px]">Loc:</span> <span className="font-medium text-slate-700">{p.location || "N/A"}</span></p>
-                        </td>
-                        <td className="px-6 py-4 align-top">
-                          <p className="text-slate-600 italic text-xs max-w-[250px] line-clamp-4 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100" title={p.purpose || "N/A"}>
-                            "{p.purpose || "N/A"}"
-                          </p>
-                        </td>
-                        <td className="px-6 py-4 align-top">
-                          <span className="font-mono font-bold bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs">{p.referral_code}</span>
-                        </td>
-                        <td className="px-6 py-4 align-top text-right">
-                          <form action={approvePartnerAction.bind(null, p.id, p.email)}>
-                            <Button variant="outline" size="sm" className="h-8 text-xs bg-white font-bold text-slate-700 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50">
-                              Undo & Approve
-                            </Button>
-                          </form>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <div className="space-y-4">
+              {filteredRejected.map((p) => renderPartnerCard(p, "rejected"))}
             </div>
           )}
         </div>
